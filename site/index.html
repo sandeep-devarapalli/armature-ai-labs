@@ -20,7 +20,11 @@
     document.documentElement.style.colorScheme = theme === 'dark' ? 'dark' : 'light';
   })();
 </script>
-<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="%23FFFEFA" stroke="%230A1220" stroke-width="1"/><circle cx="16" cy="6.5" r="2.8" fill="%230A1220"/><circle cx="16" cy="6.5" r="1" fill="%23FFFEFA"/><line x1="14.6" y1="12.5" x2="10" y2="26" stroke="%230A1220" stroke-width="2.7" stroke-linecap="round"/><line x1="17.4" y1="12.5" x2="22" y2="26" stroke="%230A1220" stroke-width="2.7" stroke-linecap="round"/><line x1="12.6" y1="20" x2="19.4" y2="20" stroke="%230A1220" stroke-width="2.4" stroke-linecap="round"/></svg>'>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="alternate icon" href="favicon.ico">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Newsreader:ital,opsz,wght@1,18,400;1,18,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -85,7 +89,7 @@
   nav .wrap{display:flex;align-items:center;justify-content:space-between;height:66px;gap:12px}
   .brand{display:flex;align-items:center;gap:11px;flex:none}
   .brand svg{flex:none}
-  .brand .word{font-family:var(--display);font-weight:700;font-size:20px;letter-spacing:-0.6px;color:var(--ink)}
+  .brand .word{font-family:var(--display);font-weight:500;font-size:20px;letter-spacing:-0.012em;color:var(--ink)}
   .navlinks{display:flex;gap:4px;align-items:center;justify-content:flex-end;overflow-x:auto;min-width:0;flex:1}
   .navlinks button{font-family:var(--mono);text-transform:uppercase;letter-spacing:0.08em;font-size:11px;color:var(--fg-3);background:none;border:none;cursor:pointer;padding:9px 11px;border-radius:6px;transition:color .12s var(--ease),background .12s var(--ease);white-space:nowrap}
   .navlinks button:hover{color:var(--ink)}
@@ -316,13 +320,10 @@
   /* animated hero */
   .kernel{position:absolute;top:0;right:0;height:100%;width:56%;pointer-events:none;-webkit-mask-image:linear-gradient(to right,transparent,#000 38%);mask-image:linear-gradient(to right,transparent,#000 38%)}
   @media(max-width:860px){.kernel{width:100%;opacity:0.5;-webkit-mask-image:linear-gradient(to bottom,transparent 30%,#000 75%);mask-image:linear-gradient(to bottom,transparent 30%,#000 75%)}}
-  @keyframes mkApex{0%,100%{transform:translateY(0)}50%{transform:translateY(7px)}}
-  @keyframes mkFeet{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
-  @keyframes mkBar{0%,100%{transform:translateY(0)}50%{transform:translateY(2px)}}
-  .mk-apex{animation:mkApex 5.5s var(--ease) infinite}
-  .mk-feet{animation:mkFeet 5.5s var(--ease) infinite}
-  .mk-bar{animation:mkBar 5.5s var(--ease) infinite}
-  @media(prefers-reduced-motion:reduce){.mk-apex,.mk-feet,.mk-bar{animation:none}}
+  @keyframes brand-mark-commutate{0%,24.999%{color:#E89A2C}25%,100%{color:var(--mark-ink)}}
+  .mk-segment{color:var(--mark-ink);animation:brand-mark-commutate 3.6s steps(1,end) infinite}
+  .mk-pair-1{animation-delay:-2.7s}.mk-pair-2{animation-delay:-1.8s}.mk-pair-3{animation-delay:-.9s}
+  @media(prefers-reduced-motion:reduce){.mk-segment{animation:none;color:var(--mark-ink)}.mk-live{color:#E89A2C}}
   .viewtabs{display:flex;gap:8px;margin-top:26px}
   .viewtabs button{font-family:var(--mono);text-transform:uppercase;letter-spacing:0.08em;font-size:11px;padding:8px 16px;border:1px solid var(--hair-ink);border-radius:999px;background:var(--panel);color:var(--fg-3);cursor:pointer;transition:all .12s var(--ease)}
   .viewtabs button.on{background:var(--saffron);color:var(--accent-ink);border-color:var(--saffron)}
@@ -343,16 +344,13 @@
 
 <nav>
   <div class="wrap">
-    <a class="brand" href="#" onclick="go('home');return false" aria-label="armature, The Physical AI and Robotics Lab">
-      <svg class="theme-mark" width="34" height="34" viewBox="-4 -6 108 112" aria-hidden="true" style="overflow:visible">
-        <line x1="50" y1="4" x2="50" y2="96" stroke="#9AA1AC" stroke-width="1.4" stroke-dasharray="1.5 4"/>
-        <circle cx="50" cy="15" r="7" fill="#0A1220"/><circle cx="50" cy="15" r="2.6" fill="#FFFEFA"/>
-        <line x1="45.5" y1="34" x2="31" y2="82" stroke="#0A1220" stroke-width="8" stroke-linecap="round"/>
-        <line x1="54.5" y1="34" x2="69" y2="82" stroke="#0A1220" stroke-width="8" stroke-linecap="round"/>
-        <line x1="41" y1="61" x2="59" y2="61" stroke="#0A1220" stroke-width="7" stroke-linecap="round"/>
-        <circle cx="31" cy="90" r="3.8" fill="#0A1220"/><circle cx="69" cy="90" r="3.8" fill="#0A1220"/>
+    <a class="brand" href="#" onclick="go('home');return false" aria-label="armature lab, The Physical AI and Robotics Lab">
+      <svg class="theme-mark" width="34" height="34" viewBox="0 0 100 100" aria-hidden="true">
+        <path d="M69.31 22.62 A33.5 33.5 0 0 1 77.38 30.69 L74.69 32.09 A30.5 30.5 0 0 0 67.91 25.31 Z M77.38 69.31 A33.5 33.5 0 0 1 69.31 77.38 L67.91 74.69 A30.5 30.5 0 0 0 74.69 67.91 Z M55.70 83.01 A33.5 33.5 0 0 1 44.30 83.01 L45.20 80.12 A30.5 30.5 0 0 0 54.80 80.12 Z M30.69 77.38 A33.5 33.5 0 0 1 22.62 69.31 L25.31 67.91 A30.5 30.5 0 0 0 32.09 74.69 Z M22.62 30.69 A33.5 33.5 0 0 1 30.69 22.62 L32.09 25.31 A30.5 30.5 0 0 0 25.31 32.09 Z M44.30 16.99 A33.5 33.5 0 0 1 55.70 16.99 L54.80 19.88 A30.5 30.5 0 0 0 45.20 19.88 Z" fill="#0A1220" stroke="#0A1220" stroke-width="9" stroke-linejoin="round"/>
+        <path d="M83.01 44.30 A33.5 33.5 0 0 1 83.01 55.70 L80.12 54.80 A30.5 30.5 0 0 0 80.12 45.20 Z M16.99 55.70 A33.5 33.5 0 0 1 16.99 44.30 L19.88 45.20 A30.5 30.5 0 0 0 19.88 54.80 Z" fill="#E89A2C" stroke="#E89A2C" stroke-width="9" stroke-linejoin="round"/>
+        <circle cx="50" cy="50" r="9.5" fill="#0A1220"/>
       </svg>
-      <span class="word">armature</span>
+      <span class="word">armature lab</span>
     </a>
     <div class="navlinks">
       <button data-p="home" class="active" onclick="go('home')">The lab</button>
@@ -378,13 +376,16 @@
     <div class="wrap">
       <div class="eyebrow mono">The Physical AI and Robotics Lab · HSR Layout, Bengaluru · armaturelab.org</div>
       <div class="hero-lockup" style="display:flex;align-items:center;gap:26px;flex-wrap:wrap">
-        <svg class="theme-mark" width="104" height="104" viewBox="-4 -6 108 112" role="img" aria-label="armature mark: the letter A as an exploded assembly, gently settling together" style="flex:none;overflow:visible">
-          <line x1="50" y1="4" x2="50" y2="96" stroke="#9AA1AC" stroke-width="1.1" stroke-dasharray="1.5 4"/>
-          <g class="mk-apex"><circle cx="50" cy="15" r="6.5" fill="#0A1220"/><circle cx="50" cy="15" r="2.4" fill="#FFFEFA"/></g>
-          <line x1="45.5" y1="34" x2="31" y2="82" stroke="#0A1220" stroke-width="7" stroke-linecap="round"/>
-          <line x1="54.5" y1="34" x2="69" y2="82" stroke="#0A1220" stroke-width="7" stroke-linecap="round"/>
-          <g class="mk-bar"><line x1="41" y1="61" x2="59" y2="61" stroke="#0A1220" stroke-width="6" stroke-linecap="round"/></g>
-          <g class="mk-feet"><circle cx="31" cy="90" r="3.4" fill="#0A1220"/><circle cx="69" cy="90" r="3.4" fill="#0A1220"/></g>
+        <svg class="theme-mark" width="104" height="104" viewBox="0 0 100 100" role="img" aria-label="armature lab mark" style="flex:none;color:var(--mark-ink)">
+          <path class="mk-segment mk-pair-3" d="M69.31 22.62 A33.5 33.5 0 0 1 77.38 30.69 L74.69 32.09 A30.5 30.5 0 0 0 67.91 25.31 Z" fill="currentColor" stroke="currentColor" stroke-width="9" stroke-linejoin="round"/>
+          <path class="mk-segment mk-live" d="M83.01 44.30 A33.5 33.5 0 0 1 83.01 55.70 L80.12 54.80 A30.5 30.5 0 0 0 80.12 45.20 Z" fill="currentColor" stroke="currentColor" stroke-width="9" stroke-linejoin="round"/>
+          <path class="mk-segment mk-pair-1" d="M77.38 69.31 A33.5 33.5 0 0 1 69.31 77.38 L67.91 74.69 A30.5 30.5 0 0 0 74.69 67.91 Z" fill="currentColor" stroke="currentColor" stroke-width="9" stroke-linejoin="round"/>
+          <path class="mk-segment mk-pair-2" d="M55.70 83.01 A33.5 33.5 0 0 1 44.30 83.01 L45.20 80.12 A30.5 30.5 0 0 0 54.80 80.12 Z" fill="currentColor" stroke="currentColor" stroke-width="9" stroke-linejoin="round"/>
+          <path class="mk-segment mk-pair-3" d="M30.69 77.38 A33.5 33.5 0 0 1 22.62 69.31 L25.31 67.91 A30.5 30.5 0 0 0 32.09 74.69 Z" fill="currentColor" stroke="currentColor" stroke-width="9" stroke-linejoin="round"/>
+          <path class="mk-segment mk-live" d="M16.99 55.70 A33.5 33.5 0 0 1 16.99 44.30 L19.88 45.20 A30.5 30.5 0 0 0 19.88 54.80 Z" fill="currentColor" stroke="currentColor" stroke-width="9" stroke-linejoin="round"/>
+          <path class="mk-segment mk-pair-1" d="M22.62 30.69 A33.5 33.5 0 0 1 30.69 22.62 L32.09 25.31 A30.5 30.5 0 0 0 25.31 32.09 Z" fill="currentColor" stroke="currentColor" stroke-width="9" stroke-linejoin="round"/>
+          <path class="mk-segment mk-pair-2" d="M44.30 16.99 A33.5 33.5 0 0 1 55.70 16.99 L54.80 19.88 A30.5 30.5 0 0 0 45.20 19.88 Z" fill="currentColor" stroke="currentColor" stroke-width="9" stroke-linejoin="round"/>
+          <circle cx="50" cy="50" r="9.5" fill="currentColor"/>
         </svg>
         <div>
           <h1>armature</h1>
@@ -1060,14 +1061,12 @@
 <footer>
   <div class="wrap">
     <span class="brand" style="display:flex;align-items:center;gap:10px">
-      <svg class="theme-mark" width="26" height="26" viewBox="-4 -6 108 112" aria-hidden="true" style="overflow:visible">
-        <circle cx="50" cy="15" r="7" fill="#0A1220"/><circle cx="50" cy="15" r="2.6" fill="#FFFEFA"/>
-        <line x1="45.5" y1="34" x2="31" y2="82" stroke="#0A1220" stroke-width="8" stroke-linecap="round"/>
-        <line x1="54.5" y1="34" x2="69" y2="82" stroke="#0A1220" stroke-width="8" stroke-linecap="round"/>
-        <line x1="41" y1="61" x2="59" y2="61" stroke="#0A1220" stroke-width="7" stroke-linecap="round"/>
-        <circle cx="31" cy="90" r="3.8" fill="#0A1220"/><circle cx="69" cy="90" r="3.8" fill="#0A1220"/>
+      <svg class="theme-mark" width="26" height="26" viewBox="0 0 100 100" aria-hidden="true">
+        <path d="M69.31 22.62 A33.5 33.5 0 0 1 77.38 30.69 L74.69 32.09 A30.5 30.5 0 0 0 67.91 25.31 Z M77.38 69.31 A33.5 33.5 0 0 1 69.31 77.38 L67.91 74.69 A30.5 30.5 0 0 0 74.69 67.91 Z M55.70 83.01 A33.5 33.5 0 0 1 44.30 83.01 L45.20 80.12 A30.5 30.5 0 0 0 54.80 80.12 Z M30.69 77.38 A33.5 33.5 0 0 1 22.62 69.31 L25.31 67.91 A30.5 30.5 0 0 0 32.09 74.69 Z M22.62 30.69 A33.5 33.5 0 0 1 30.69 22.62 L32.09 25.31 A30.5 30.5 0 0 0 25.31 32.09 Z M44.30 16.99 A33.5 33.5 0 0 1 55.70 16.99 L54.80 19.88 A30.5 30.5 0 0 0 45.20 19.88 Z" fill="#0A1220" stroke="#0A1220" stroke-width="9" stroke-linejoin="round"/>
+        <path d="M83.01 44.30 A33.5 33.5 0 0 1 83.01 55.70 L80.12 54.80 A30.5 30.5 0 0 0 80.12 45.20 Z M16.99 55.70 A33.5 33.5 0 0 1 16.99 44.30 L19.88 45.20 A30.5 30.5 0 0 0 19.88 54.80 Z" fill="#E89A2C" stroke="#E89A2C" stroke-width="9" stroke-linejoin="round"/>
+        <circle cx="50" cy="50" r="9.5" fill="#0A1220"/>
       </svg>
-      <span class="word" style="font-size:17px;font-family:var(--display);font-weight:700;color:var(--ink)">armature</span>
+      <span class="word" style="font-size:17px;font-family:var(--display);font-weight:500;letter-spacing:-0.012em;color:var(--ink)">armature lab</span>
     </span>
     <div class="mono">The Physical AI and Robotics Lab &middot; HSR Layout, Bengaluru &middot; armaturelab.org</div>
   </div>

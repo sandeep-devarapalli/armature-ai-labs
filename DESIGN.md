@@ -4,7 +4,7 @@
 
 armature should feel like a real lab floor: precise, physical, useful, and quietly ambitious. The design should avoid generic AI startup polish, vague futurism, and decorative marketing gloss. It should make robotics, fabrication, compute, and safety feel inspectable.
 
-The first screen should make the lab identity obvious: lowercase `armature`, the exploded-A mark, HSR Layout, Bengaluru, and the physical lab offer.
+The first screen should make the lab identity obvious: lowercase `armature`, the commutator mark, HSR Layout, Bengaluru, and the physical lab offer.
 
 ## Brand Hierarchy
 
@@ -23,7 +23,7 @@ Use the current site as the source of truth.
 - Dark uses near-black workshop surfaces with warm text and keeps saffron, brick, and moss as operational accents.
 - Sepia uses a restrained drafting-paper palette with deep brown ink; it must not become a flat beige wash.
 - Dark/ink feature sections remain darker than the surrounding page in every mode.
-- The mark is the exploded-A assembly. Keep it mechanical and constructed, not mascot-like or decorative.
+- The mark is the commutator (eight rounded segments, saffron live pair at 3 and 9, ink shaft); geometry is fixed and lives in `brand/armature-lab/`; never rotate it; saffron only on the live pair; all-ink on saffron backgrounds.
 - Prefer grids, measured lines, diagrams, tables, chips, boards, and floor-plan language.
 - Use real lab/equipment/photo assets when available. Until then, reserved photo slots must remain clearly marked as placeholders.
 - Avoid generic gradient hero art, blob backgrounds, glossy SaaS cards, stock-office imagery, or abstract AI smoke.

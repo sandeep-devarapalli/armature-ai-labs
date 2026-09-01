@@ -3,7 +3,7 @@
 The Apache License 2.0 in `LICENSE` applies to this repository's source code
 and documentation.
 
-It does not grant permission to use the Armature name, the Exploded-A mark,
+It does not grant permission to use the Armature name, the commutator mark and the retired Exploded-A mark,
 logos, lockups, favicons, social-media artwork, or other Armature identity
 assets. Those materials, including the contents of `brand/`, `linkedin/`, and
 the branded application icons under `site/`, are reserved and are not licensed

@@ -10,7 +10,7 @@ brand assets and planning documents.
 - `supabase/`: database migrations, RLS/RPC tests, seed data, and Edge Functions.
 - `tests/`: frontend and browser tests.
 - `site/`: preserved legacy static site; do not deploy it over the React app.
-- `brand/`: finalized SVG mark, favicon, and lockups.
+- `brand/armature-lab/`: finalized identity; older files in `brand/` are retired and retained for history.
 - `linkedin/`: company page logo and banner assets.
 - `docs/`: financial model and phased capex plan.
 - `README.md`: application setup, deploy notes, and known open placeholders.
@@ -22,6 +22,7 @@ identity, approvals, resources, bookings, attendance, and integration state.
 ## Brand And Naming Rules
 
 - The canonical public website and email domain is `armaturelab.org` (singular). Do not substitute `armaturelabs.org`.
+- The commutator mark geometry in `brand/armature-lab/` is fixed; the exploded-A mark is retired.
 - Keep the parent and lab identities separate. The larger parent plan is `Institute for Physical AI`; the lab identity is `Armature - The Physical AI and Robotics Lab`.
 - The current public site and asset pack style the lab name as lowercase `armature`. Preserve that styling in existing site copy and SVG text unless the user explicitly asks for capitalization changes.
 - Do not flatten the hierarchy into a vague umbrella name like "Armature Institute" unless the user explicitly asks.
@@ -86,7 +87,7 @@ placeholder note in `README.md`.
 - Keep the site's light, dark, and sepia modes structurally identical. Theme
   work must use the shared CSS-variable system, persist the visitor's choice,
   and remain consistent across public, member, staff, and kiosk routes.
-- Preserve the home hero's animated canvas kernel wavefront and subtle exploded-A
+- Preserve the home hero's animated canvas kernel wavefront and subtle commutator
   motion. Verify the canvas changes over time unless reduced motion is requested.
 - When migrating or substantially editing a public page, compare it with the
   preserved `site/` version first. Keep useful operational sections, diagrams,
