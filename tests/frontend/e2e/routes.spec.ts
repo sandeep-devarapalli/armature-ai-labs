@@ -518,11 +518,61 @@ test("OpenTouch Glove uses official media and an exact project build list", asyn
 test("home hero restores the mechanical kernel animation", async ({ page }) => {
   await page.goto("/");
   const canvas = page.locator(".hero-kernel-field");
+  const heroMark = page.locator(".hero-lockup .brand-mark");
+  const heroSegments = heroMark.locator(".brand-mark-segment");
   await expect(canvas).toBeVisible();
-  await expect(page.locator(".hero-lockup .brand-mark-apex")).toHaveCSS(
+  await expect(heroMark).toHaveAttribute("viewBox", "0 0 100 100");
+  await expect(heroMark).toHaveCSS("transform", "none");
+  await expect(heroSegments).toHaveCount(8);
+  expect(await heroSegments.evaluateAll((segments) =>
+    segments.map((segment) => segment.getAttribute("stroke-width"))
+  )).toEqual(Array(8).fill("9"));
+  await expect(heroMark.locator(".brand-mark-segment--east")).toHaveCSS(
     "animation-name",
-    "brand-mark-apex"
+    "brand-mark-commutate"
   );
+  await expect(page.locator(".brand-mark--animated")).toHaveCount(1);
+  await expect(page.locator(".topbar .brand-lockup")).toHaveAttribute("aria-label", "armature lab");
+  await expect(page.locator(".topbar .brand-mark")).toHaveAttribute("aria-label", "armature lab mark");
+  await expect(page.locator(".topbar .brand-lockup > span")).toHaveText("armature lab");
+  expect(await page.evaluate(async () => {
+    await document.fonts.load('500 21px "Armature Space Grotesk"');
+    return document.fonts.check('500 21px "Armature Space Grotesk"');
+  })).toBe(true);
+
+  const commutationSequence = await heroMark.evaluate((mark) => {
+    const segments = Array.from(mark.querySelectorAll<SVGPathElement>(".brand-mark-segment"));
+    const directions = [
+      "north", "north-east", "east", "south-east",
+      "south", "south-west", "west", "north-west"
+    ];
+    const probe = document.createElement("span");
+    probe.style.color = "var(--saffron)";
+    document.body.append(probe);
+    const saffron = getComputedStyle(probe).color;
+    probe.remove();
+
+    return [0, 900, 1800, 2700, 3600].map((time) => {
+      segments.forEach((segment) => {
+        const animation = segment.getAnimations()[0];
+        animation.pause();
+        animation.currentTime = time;
+      });
+      return segments
+        .filter((segment) => getComputedStyle(segment).color === saffron)
+        .map((segment) => directions.find((direction) =>
+          segment.classList.contains(`brand-mark-segment--${direction}`)
+        ))
+        .sort();
+    });
+  });
+  expect(commutationSequence).toEqual([
+    ["east", "west"],
+    ["north-west", "south-east"],
+    ["north", "south"],
+    ["north-east", "south-west"],
+    ["east", "west"]
+  ]);
 
   const firstFrame = await canvas.evaluate((element) =>
     (element as HTMLCanvasElement).toDataURL()
@@ -537,6 +587,33 @@ test("home hero restores the mechanical kernel animation", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.reload();
   const reducedCanvas = page.locator(".hero-kernel-field");
+  const reducedMark = page.locator(".hero-lockup .brand-mark");
+  await expect(reducedMark.locator(".brand-mark-segment--east")).toHaveCSS(
+    "animation-name",
+    "none"
+  );
+  const reducedColors = await reducedMark.evaluate((mark) => {
+    const color = (selector: string) =>
+      getComputedStyle(mark.querySelector<SVGElement>(selector)!).color;
+    const resolveColor = (value: string) => {
+      const probe = document.createElement("span");
+      probe.style.color = value;
+      document.body.append(probe);
+      const resolved = getComputedStyle(probe).color;
+      probe.remove();
+      return resolved;
+    };
+    return {
+      east: color(".brand-mark-segment--east"),
+      west: color(".brand-mark-segment--west"),
+      north: color(".brand-mark-segment--north"),
+      saffron: resolveColor("var(--saffron)"),
+      ink: resolveColor("var(--ink)")
+    };
+  });
+  expect(reducedColors.east).toBe(reducedColors.saffron);
+  expect(reducedColors.west).toBe(reducedColors.saffron);
+  expect(reducedColors.north).toBe(reducedColors.ink);
   const reducedFrame = await reducedCanvas.evaluate((element) =>
     (element as HTMLCanvasElement).toDataURL()
   );

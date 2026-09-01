@@ -15,7 +15,11 @@
     document.documentElement.style.colorScheme = theme === 'dark' ? 'dark' : 'light';
   })();
 </script>
-<link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="%23FFFEFA" stroke="%230A1220" stroke-width="1"/><circle cx="16" cy="6.5" r="2.8" fill="%230A1220"/><circle cx="16" cy="6.5" r="1" fill="%23FFFEFA"/><line x1="14.6" y1="12.5" x2="10" y2="26" stroke="%230A1220" stroke-width="2.7" stroke-linecap="round"/><line x1="17.4" y1="12.5" x2="22" y2="26" stroke="%230A1220" stroke-width="2.7" stroke-linecap="round"/><line x1="12.6" y1="20" x2="19.4" y2="20" stroke="%230A1220" stroke-width="2.4" stroke-linecap="round"/></svg>'>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="alternate icon" href="favicon.ico">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Newsreader:ital,opsz,wght@1,18,400;1,18,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -67,7 +71,7 @@
   nav{position:sticky;top:0;z-index:50;background:var(--nav-bg);backdrop-filter:blur(12px);border-bottom:1px solid var(--hair-ink)}
   nav .wrap{display:flex;align-items:center;justify-content:space-between;height:66px;gap:12px}
   .brand{display:flex;align-items:center;gap:11px;flex:none}
-  .brand .word{font-family:var(--display);font-weight:700;font-size:20px;letter-spacing:-0.6px;color:var(--ink)}
+  .brand .word{font-family:var(--display);font-weight:500;font-size:20px;letter-spacing:-0.012em;color:var(--ink)}
   .navlinks{display:flex;gap:4px;align-items:center;justify-content:flex-end;overflow-x:auto;min-width:0;flex:1}
   .navlinks a{font-family:var(--mono);text-transform:uppercase;letter-spacing:0.08em;font-size:11px;color:var(--fg-3);padding:9px 11px;border-radius:6px;white-space:nowrap}
   .navlinks a:hover{color:var(--ink)}
@@ -158,9 +162,13 @@
 <body>
 <nav>
   <div class="wrap">
-    <a class="brand" href="index.html" aria-label="armature home">
-      <svg class="theme-mark" width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#FFFEFA" stroke="#0A1220"/><circle cx="16" cy="6.5" r="2.8" fill="#0A1220"/><circle cx="16" cy="6.5" r="1" fill="#FFFEFA"/><line x1="14.6" y1="12.5" x2="10" y2="26" stroke="#0A1220" stroke-width="2.7" stroke-linecap="round"/><line x1="17.4" y1="12.5" x2="22" y2="26" stroke="#0A1220" stroke-width="2.7" stroke-linecap="round"/><line x1="12.6" y1="20" x2="19.4" y2="20" stroke="#0A1220" stroke-width="2.4" stroke-linecap="round"/></svg>
-      <div class="word">armature</div>
+    <a class="brand" href="index.html" aria-label="armature lab home">
+      <svg class="theme-mark" width="30" height="30" viewBox="0 0 100 100" aria-hidden="true">
+        <path d="M69.31 22.62 A33.5 33.5 0 0 1 77.38 30.69 L74.69 32.09 A30.5 30.5 0 0 0 67.91 25.31 Z M77.38 69.31 A33.5 33.5 0 0 1 69.31 77.38 L67.91 74.69 A30.5 30.5 0 0 0 74.69 67.91 Z M55.70 83.01 A33.5 33.5 0 0 1 44.30 83.01 L45.20 80.12 A30.5 30.5 0 0 0 54.80 80.12 Z M30.69 77.38 A33.5 33.5 0 0 1 22.62 69.31 L25.31 67.91 A30.5 30.5 0 0 0 32.09 74.69 Z M22.62 30.69 A33.5 33.5 0 0 1 30.69 22.62 L32.09 25.31 A30.5 30.5 0 0 0 25.31 32.09 Z M44.30 16.99 A33.5 33.5 0 0 1 55.70 16.99 L54.80 19.88 A30.5 30.5 0 0 0 45.20 19.88 Z" fill="#0A1220" stroke="#0A1220" stroke-width="9" stroke-linejoin="round"/>
+        <path d="M83.01 44.30 A33.5 33.5 0 0 1 83.01 55.70 L80.12 54.80 A30.5 30.5 0 0 0 80.12 45.20 Z M16.99 55.70 A33.5 33.5 0 0 1 16.99 44.30 L19.88 45.20 A30.5 30.5 0 0 0 19.88 54.80 Z" fill="#E89A2C" stroke="#E89A2C" stroke-width="9" stroke-linejoin="round"/>
+        <circle cx="50" cy="50" r="9.5" fill="#0A1220"/>
+      </svg>
+      <div class="word">armature lab</div>
     </a>
     <div class="navlinks">
       <a href="index.html#projects">Projects</a>

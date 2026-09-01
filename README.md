@@ -93,10 +93,9 @@ for provisioning, kiosk, Google Workspace, release, and rollback procedures.
   revalidating HTML shell.
 
 ## brand/
-Exploded-A mark and lockups. Light (monochrome ink) is the primary; ink/dark
-versions are for dark surfaces. Favicon SVG matches the in-site favicon.
-Note: lockup SVGs reference Space Grotesk and JetBrains Mono web fonts; convert
-text to outlines before print use.
+The finalized commutator identity lives in `brand/armature-lab/`, with SVG
+sources and PNG exports for the mark, wordmark, lockups, icons, and favicon.
+Older Exploded-A files remain in `brand/` as retired historical assets.
 
 ## linkedin/
 Company page assets. Banner 2256x382 (2x retina for 1128x191), logo 800x800.
