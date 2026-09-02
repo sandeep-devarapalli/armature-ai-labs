@@ -12,7 +12,6 @@ import {
   LockKeyhole,
   PackageOpen,
   Printer,
-  RadioTower,
   ScanLine,
   ShieldCheck,
   ShoppingBasket,
@@ -67,8 +66,8 @@ export function HomePage() {
           <p className="hero-copy">
             The armature is the core of every motor: the part that moves. Ours is
             a 3,500 sq ft lab built for the full path from idea to working machine:
-            arms, a netted drone cage, prototyping, ESD-safe benches, and GPU
-            compute, all bookable by the hour.
+            arms, prototyping, machining, ESD-safe benches, and GPU compute, all
+            bookable by the hour.
           </p>
           <div className="button-row">
             {memberPlatformAvailable ? (
@@ -170,11 +169,11 @@ export function HomePage() {
             <strong>Robot arm cell</strong>
             <span>Guarded · interlocked</span>
           </div>
-          <div className="floor-zone floor-drone" data-floor-zone>
+          <div className="floor-zone floor-test" data-floor-zone>
             <Cctv className="floor-camera" aria-label="Camera coverage" />
-            <RadioTower aria-hidden="true" />
-            <strong>Drone cage</strong>
-            <span>Netted · indoor flight</span>
+            <Boxes aria-hidden="true" />
+            <strong>Flexible test bay</strong>
+            <span>Supervised · reconfigurable</span>
           </div>
           <div className="floor-zone floor-electronics" data-floor-zone>
             <Cctv className="floor-camera" aria-label="Camera coverage" />
@@ -212,7 +211,7 @@ export function HomePage() {
           <article>
             <Cctv aria-hidden="true" />
             <h3>Whole-floor coverage</h3>
-            <p>The arm cell, cage, machine shop, prototyping, pods, benches, demo floor, storage, and compute feed the on-site NVR.</p>
+            <p>The arm cell, test bay, machine shop, prototyping, pods, benches, demo floor, storage, and compute feed the on-site NVR.</p>
           </article>
           <article>
             <ShieldCheck aria-hidden="true" />
@@ -236,7 +235,7 @@ export function HomePage() {
           {[
             ["Sketch", "Define the job and the test."],
             ["Build", "Use benches, printers, and tools."],
-            ["Test", "Move into the arm cell or cage."],
+            ["Test", "Move into the arm cell or flexible test bay."],
             ["Show", "Run the prototype on the demo floor."],
             ["Ship", "Document it and take it into the world."]
           ].map(([title, copy], index) => (
@@ -302,8 +301,8 @@ export function HomePage() {
       <div className="quote-band">
         <div className="wrap">
           <p>
-            Most builders will never own a six-axis arm, a drone cage, and a
-            machine shop. <strong>Here you book them by the hour.</strong>
+            Most builders will never own a six-axis arm, a machine shop, and
+            dedicated GPU compute. <strong>Here you book them by the hour.</strong>
           </p>
           <Link to="/join">
             Join the floor <ArrowRight aria-hidden="true" />

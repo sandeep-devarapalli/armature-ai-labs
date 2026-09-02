@@ -61,6 +61,7 @@ placeholder note in `README.md`.
 ## Editing Rules
 
 - Make small, focused edits. Prefer editing existing files over creating new ones.
+- Do not advertise or list a dedicated indoor flight enclosure as a site zone, member resource, service, project-testing location, or planning item unless the user explicitly restores it.
 - In the building-vision presentation, the photos previously labelled `Main café hall`, `Café flex room`, and `Lower stair landing` show the basement or basement access and must stay excluded unless the user explicitly restores basement scope. Do not infer floor labels from image appearance when the user has supplied the floor mapping.
 - In the building-vision presentation, photo `18` is the first room inside the main entrance on the ground floor. Treat it as reception, visitor check-in, and a compact Armature goodies store—not as a second-floor meeting room—and keep it immediately after the frontage in presentation order.
 - The canonical `/building-vision` visual set is exactly the 21 PNGs numbered `00` through `20` in `/Users/dev/Downloads/Armature Lab Building rework project/Armature Lab Building rework v2/`, mirrored under `public/building-vision/rework-v2/`. Render those views once, in numeric order, and do not restore or mix in the legacy `/before/` and `/after/` assets unless the user explicitly changes the set.

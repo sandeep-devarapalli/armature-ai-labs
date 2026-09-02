@@ -23,7 +23,7 @@ const equipmentRows = [
   ["Robot arm cell", "6-axis industrial arm, controller, safety PLC, light curtains", "3-phase 415V · dedicated · interlocked", "DB-A"],
   ["Machine shop", "CNC router, grinder, drill press, metrology, extraction", "3-phase 415V + extraction", "DB-A"],
   ["Rapid prototyping", "FDM and resin printers, laser cutter, hand finishing", "1-phase 230V · four 16A circuits", "DB-B"],
-  ["Drone cage", "PX4 flight rigs, charging, cage lighting, spotter station", "1-phase 230V · dedicated charging", "DB-B"],
+  ["Flexible test bay", "Reconfigurable test fixtures and portable safety barriers", "1-phase 230V · general circuits", "DB-B"],
   ["Storage + batteries", "Fire-rated LiPo charging cabinet, shelving, safe bags", "1-phase 230V · dedicated charging", "DB-B"],
   ["Electronics + assembly", "ESD benches, scopes, supplies, soldering", "1-phase 230V · clean isolated ground", "DB-C"],
   ["Compute + control", "GPU nodes, DGX Spark, Jetsons, NAS, NVR, networking", "1-phase 230V · UPS-backed", "DB-C"],
@@ -161,10 +161,10 @@ export function ServicesPage() {
     [Box, "Prototyping as a service", "Brief in, working prototype out: engineering, printers, CNC, electronics, and test equipment.", "Planning estimate · Rs 2-15 L per project"],
     [Camera, "Commissioned datasets", "Manipulation, vision, and site-specific datasets collected on lab rigs and annotated to a defined specification.", "Per project"],
     [Sparkles, "Research residencies", "Bench, equipment, and collaboration for research professionals and corporate R&D teams.", "Monthly residency"],
-    [Wrench, "Equipment with operator", "The arm, drone cage, or camera rigs with a lab engineer operating the test and safety process.", "Day rate"],
+    [Wrench, "Equipment with operator", "The arm or camera rigs with a lab engineer operating the test and safety process.", "Day rate"],
     [Cable, "Member maker desk", "Secure project lockers, build-sized consumables, and complete portable toolkits for everyday fabrication work.", "Member pickup + rental"],
     [Gauge, "Hardware sourcing and BOM", "Component specification, vendor comparison, imports, compliance checks, and assembly planning so teams can start building.", "Fee + approved procurement margin"],
-    [Radio, "Zone sponsorships", "Hardware brands can support a bench, the cage, or a workshop series used by the builder community.", "Annual plan"]
+    [Radio, "Zone sponsorships", "Hardware brands can support a bench, a demonstration station, or a workshop series used by the builder community.", "Annual plan"]
   ] as const;
 
   return (
@@ -341,7 +341,7 @@ export function JoinPage() {
           <article className="service-card">
             <Cpu aria-hidden="true" />
             <h3>Equipment and compute</h3>
-            <p>Book electronics benches, fabrication equipment, robot cells, the drone cage, GPUs, or edge AI kits when the required induction is current.</p>
+            <p>Book electronics benches, fabrication equipment, robot cells, GPUs, or edge AI kits when the required induction is current.</p>
           </article>
           <article className="service-card">
             <Sparkles aria-hidden="true" />

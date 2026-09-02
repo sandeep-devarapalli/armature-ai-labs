@@ -67,12 +67,6 @@ values
     'Robot cell operator',
     'Robot work envelope, payload limits, safe speeds, guarding, and emergency stop.',
     180
-  ),
-  (
-    'drone-cage',
-    'Drone cage pilot',
-    'Battery handling, arming, failsafes, cage procedure, spotter duties, and incident response.',
-    90
   )
 on conflict (slug) do update
 set
@@ -359,20 +353,6 @@ cross join (
       '{"zone":"robot-cell","platform":"SO-ARM101"}'::jsonb
     ),
     (
-      'drone-cage',
-      'Netted drone cage',
-      'Indoor netted flight area for supervised PX4 and ArduPilot experiments.',
-      'room',
-      'hazardous',
-      1,
-      0,
-      false,
-      60,
-      15,
-      120,
-      '{"zone":"drone-cage","spotter_required":true}'::jsonb
-    ),
-    (
       'gpu-autonomous-computer',
       'GPU Autonomous Computer',
       'Shared multi-GPU workstation for model training, simulation, vision, and local inference.',
@@ -592,8 +572,7 @@ join (
     ('collaborative-arm-cell', 'robot-cell'),
     ('so-arm-cell-01', 'robot-cell'),
     ('so-arm-cell-02', 'robot-cell'),
-    ('mobile-robot-bay', 'robot-cell'),
-    ('drone-cage', 'drone-cage')
+    ('mobile-robot-bay', 'robot-cell')
 ) mapping(resource_slug, certification_slug) on mapping.resource_slug = resource.slug
 join public.certification_types certification
   on certification.slug = mapping.certification_slug

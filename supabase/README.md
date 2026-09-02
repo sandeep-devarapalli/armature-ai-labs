@@ -92,8 +92,8 @@ consumable lots, and tagged toolkit kits before those offers become available.
 
 The seed creates the HSR Layout location, safety certifications, sixteen
 builder pods, electronics benches, fabrication equipment, robot cells, the
-drone cage, GPU systems, six Jetson kits, vision benches, a mobile robot bay,
-and the demo floor. It does not create staff accounts or calendar links.
+GPU systems, six Jetson kits, vision benches, a mobile robot bay, and the demo
+floor. It does not create staff accounts or calendar links.
 
 ## Edge Function Secrets
 

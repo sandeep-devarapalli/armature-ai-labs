@@ -253,7 +253,7 @@ export const projects: Project[] = [
     category: "Drones",
     priority: "P1",
     status: "Building Soon",
-    description: "A compact Wi-Fi quadcopter built around an ESP32-WROOM, MPU6050, structural custom PCB, and four coreless motors for supervised flight-control and PID-tuning work in the netted drone cage.",
+    description: "A compact Wi-Fi quadcopter built around an ESP32-WROOM, MPU6050, structural custom PCB, and four coreless motors for supervised flight-control and PID-tuning work.",
     image: "/project-images/esp32-drone-circuit-digest-official.jpg",
     sourceUrl: "https://github.com/Circuit-Digest/ESP-Drone",
     tags: ["ESP32-WROOM", "MPU6050", "Wi-Fi control", "custom PCB", "supervised flight"]
@@ -264,7 +264,7 @@ export const projects: Project[] = [
     category: "Drones",
     priority: "P1",
     status: "Research Track",
-    description: "A flight-control and simulation stack for the lab's netted drone cage, with deliberate safety boundaries.",
+    description: "A flight-control and simulation stack with deliberate safety boundaries.",
     image: "/project-images/px4-x500-official.jpg",
     sourceUrl: "https://px4.io/",
     tags: ["autopilot", "simulation", "flight"]

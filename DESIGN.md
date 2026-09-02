@@ -88,7 +88,7 @@ Mono labels should stay short, uppercase, and functional. Avoid long prose in mo
 
 Copy should be specific and grounded.
 
-- Say what is in the room: arms, drone cage, benches, pods, machine shop, cameras, GPU compute.
+- Say what is in the room: arms, benches, pods, machine shop, cameras, and GPU compute.
 - Prefer concrete operating claims over hype.
 - Keep planning estimates labeled as estimates, not quotes.
 - Do not invent pricing, founder names, photos, booking URLs, or final CTA destinations.

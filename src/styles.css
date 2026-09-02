@@ -934,7 +934,7 @@ h3 {
 }
 
 .floor-arm,
-.floor-drone {
+.floor-test {
   background: rgba(196, 74, 42, 0.16);
   border-color: rgba(196, 74, 42, 0.55);
 }
@@ -992,7 +992,7 @@ h3 {
   grid-row: 1 / 3;
 }
 
-.floor-map-complete .floor-drone {
+.floor-map-complete .floor-test {
   grid-column: 4;
   grid-row: 3 / 5;
 }
