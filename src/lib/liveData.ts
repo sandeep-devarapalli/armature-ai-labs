@@ -19,10 +19,16 @@ type PublicResourceRow =
   Database["public"]["Views"]["public_resources"]["Row"];
 type ProfileRow = Database["public"]["Tables"]["profiles"]["Row"];
 type MembershipRow = Database["public"]["Tables"]["memberships"]["Row"];
+type StaffRole = Database["public"]["Enums"]["staff_role"];
 
 interface LiveSnapshot {
   state: DemoState;
   isStaff: boolean;
+  isAdmin: boolean;
+}
+
+export function hasAdminRole(roles: Array<{ role: StaffRole }>) {
+  return roles.some(({ role }) => role === "admin" || role === "super_admin");
 }
 
 function throwOnError(error: { message: string } | null) {
@@ -210,6 +216,7 @@ export async function loadLiveSnapshot(
   if (!session) {
     return {
       isStaff: false,
+      isAdmin: false,
       state: {
         currentUserId: null,
         profiles: publicProfiles,
@@ -228,7 +235,9 @@ export async function loadLiveSnapshot(
     .select("role")
     .eq("user_id", session.user.id);
   throwOnError(rolesResult.error);
-  const isStaff = Boolean(rolesResult.data?.length);
+  const roles = rolesResult.data ?? [];
+  const isStaff = roles.length > 0;
+  const isAdmin = hasAdminRole(roles);
 
   const [
     profilesResult,
@@ -388,6 +397,7 @@ export async function loadLiveSnapshot(
 
   return {
     isStaff,
+    isAdmin,
     state: {
       currentUserId: session.user.id,
       profiles: Array.from(profileById.values()),

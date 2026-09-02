@@ -31,7 +31,7 @@ transactional member features closed. Keep `VITE_MEMBER_PLATFORM_ENABLED` and
 direct visits to member, booking, check-in, kiosk, admin, inventory-custody,
 locker, toolkit, and request routes must render the shared opening-soon state.
 
-Public project pages, components, procurement, Maker Desk descriptions,
+Public project pages, components, Maker Desk descriptions,
 anonymous resource availability, the member directory, ecosystem map, and
 Building Vision remain available. A missing Supabase URL or key is a
 configuration error in production, never permission to enter demo mode.
@@ -65,7 +65,9 @@ new migrations. A frontend rollback never rewinds database history.
 
 ## Google Workspace
 
-Use a dedicated identity such as `bookings@armaturelab.org`.
+Use `hello@armaturelab.org` as the public inbound mailbox for information and
+membership enquiries. Keep calendar operations, reminders, and transactional
+booking mail on a separate identity such as `bookings@armaturelab.org`.
 
 - Create one private Google Calendar per reservable resource.
 - Store each calendar identifier in the protected calendar link table.

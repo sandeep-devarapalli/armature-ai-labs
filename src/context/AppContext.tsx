@@ -12,7 +12,9 @@ import { addMinutes, isAfter, isBefore, parseISO } from "date-fns";
 import { initialDemoState } from "../data/demo";
 import { hasOpenDemoLoans } from "../data/inventoryDemo";
 import { hasOpenDemoToolkitRental } from "../data/makerServices";
+import { safeAuthReturnPath } from "../lib/authReturnPath";
 import { loadLiveSnapshot } from "../lib/liveData";
+import { membershipApplicationConflictMessage } from "../lib/membershipApplicationError";
 import { dataMode, googleAuthEnabled, supabase } from "../lib/supabase";
 import type {
   AvailabilitySlot,
@@ -32,6 +34,12 @@ interface BookingInput {
   durationMinutes: number;
   purpose: string;
   guestNames: string[];
+}
+
+interface MembershipApplicationInput {
+  name: string;
+  handle: string;
+  summary: string;
 }
 
 interface ResourceBlockInput {
@@ -61,16 +69,17 @@ interface AppContextValue {
   online: boolean;
   loading: boolean;
   isStaff: boolean;
+  isAdmin: boolean;
   notice: string;
   clearNotice: () => void;
   refresh: () => Promise<void>;
   signInDemo: () => void;
   signOut: () => Promise<void>;
-  requestOtp: (email: string) => Promise<void>;
-  signInGoogle: () => Promise<void>;
+  requestOtp: (email: string, returnTo?: string) => Promise<void>;
+  signInGoogle: (returnTo?: string) => Promise<void>;
   uploadAvatar: (file: File) => Promise<void>;
   updateProfile: (updates: Partial<MemberProfile>) => Promise<void>;
-  submitApplication: (summary: string) => Promise<void>;
+  submitApplication: (input: MembershipApplicationInput) => Promise<void>;
   listAvailability: (
     resourceId: string,
     from: string,
@@ -145,6 +154,12 @@ function linksObject(links: MemberProfile["socialLinks"]) {
   return Object.fromEntries(links.map((link) => [link.label, link.url]));
 }
 
+function authCallbackUrl(returnTo = "/dashboard") {
+  const callback = new URL("/auth/callback", window.location.origin);
+  callback.searchParams.set("next", safeAuthReturnPath(returnTo));
+  return callback.toString();
+}
+
 function validateDemoBooking(
   state: DemoState,
   member: MemberProfile,
@@ -196,11 +211,15 @@ export function AppProvider({ children }: PropsWithChildren) {
   const [isStaff, setIsStaff] = useState(
     () => dataMode === "demo" && Boolean(readState().currentUserId)
   );
+  const [isAdmin, setIsAdmin] = useState(
+    () => dataMode === "demo" && Boolean(readState().currentUserId)
+  );
   const [notice, setNotice] = useState("");
 
   useEffect(() => {
     if (dataMode === "demo") {
       setIsStaff(Boolean(state.currentUserId));
+      setIsAdmin(Boolean(state.currentUserId));
     }
   }, [state.currentUserId]);
 
@@ -223,11 +242,14 @@ export function AppProvider({ children }: PropsWithChildren) {
 
   const hydrate = useCallback(async (session: Session | null) => {
     if (!supabase) return;
+    setIsStaff(false);
+    setIsAdmin(false);
     setLoading(true);
     try {
       const snapshot = await loadLiveSnapshot(supabase, session);
       setState(snapshot.state);
       setIsStaff(snapshot.isStaff);
+      setIsAdmin(snapshot.isAdmin);
     } catch (error) {
       setNotice(
         error instanceof Error ? error.message : "Could not load live data."
@@ -274,6 +296,7 @@ export function AppProvider({ children }: PropsWithChildren) {
     if (dataMode !== "demo") return;
     setState((value) => ({ ...value, currentUserId: "member-demo" }));
     setIsStaff(true);
+    setIsAdmin(true);
     setNotice("Demo member session started.");
   }, []);
 
@@ -285,17 +308,18 @@ export function AppProvider({ children }: PropsWithChildren) {
     } else {
       setState((value) => ({ ...value, currentUserId: null }));
       setIsStaff(false);
+      setIsAdmin(false);
     }
     setNotice("Signed out.");
   }, [hydrate]);
 
   const requestOtp = useCallback(
-    async (email: string) => {
+    async (email: string, returnTo?: string) => {
       if (supabase) {
         const { error } = await supabase.auth.signInWithOtp({
           email,
           options: {
-            emailRedirectTo: `${window.location.origin}/auth/callback`,
+            emailRedirectTo: authCallbackUrl(returnTo),
             shouldCreateUser: true
           }
         });
@@ -311,7 +335,7 @@ export function AppProvider({ children }: PropsWithChildren) {
     [signInDemo]
   );
 
-  const signInGoogle = useCallback(async () => {
+  const signInGoogle = useCallback(async (returnTo?: string) => {
     if (supabase) {
       if (!googleAuthEnabled) {
         throw new Error(
@@ -320,7 +344,7 @@ export function AppProvider({ children }: PropsWithChildren) {
       }
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "google",
-        options: { redirectTo: `${window.location.origin}/auth/callback` }
+        options: { redirectTo: authCallbackUrl(returnTo) }
       });
       if (error) throw error;
       return;
@@ -413,12 +437,25 @@ export function AppProvider({ children }: PropsWithChildren) {
   );
 
   const submitApplication = useCallback(
-    async (summary: string) => {
+    async ({ name, handle, summary }: MembershipApplicationInput) => {
       if (!currentMember) throw new Error("Sign in before applying.");
+      const displayName = name.trim();
+      const profileHandle = handle.trim().toLowerCase();
+      const buildSummary = summary.trim();
+      if (displayName.length < 2) throw new Error("Enter your full name.");
+      if (!/^[a-z0-9][a-z0-9_-]{1,28}[a-z0-9]$/.test(profileHandle)) {
+        throw new Error("Use 3–30 lowercase letters, numbers, underscores, or hyphens for your handle.");
+      }
+      if (!buildSummary) throw new Error("Tell us what you are building.");
+      if (state.applications.some(
+        (application) => application.memberId === currentMember.id && application.state === "pending"
+      )) {
+        throw new Error("Your membership application is already under review.");
+      }
       if (supabase) {
         const { error } = await supabase.rpc("submit_application", {
-          p_display_name: currentMember.name,
-          p_handle: currentMember.handle,
+          p_display_name: displayName,
+          p_handle: profileHandle,
           p_bio: currentMember.bio,
           p_phone: currentMember.phone || undefined,
           p_emergency_contact: currentMember.emergencyContact
@@ -428,8 +465,10 @@ export function AppProvider({ children }: PropsWithChildren) {
           p_skills: currentMember.skills,
           p_project_links: currentMember.projectLinks,
           p_social_links: linksObject(currentMember.socialLinks),
-          p_applicant_notes: summary
+          p_applicant_notes: buildSummary
         });
+        const conflictMessage = error && membershipApplicationConflictMessage(error);
+        if (conflictMessage) throw new Error(conflictMessage);
         if (error) throw error;
         await refresh();
         setNotice("Membership application submitted for staff review.");
@@ -439,14 +478,20 @@ export function AppProvider({ children }: PropsWithChildren) {
         const existing = value.applications.find(
           (application) => application.memberId === value.currentUserId
         );
+        const profiles = value.profiles.map((profile) =>
+          profile.id === value.currentUserId
+            ? { ...profile, name: displayName, handle: profileHandle }
+            : profile
+        );
         if (existing) {
           return {
             ...value,
+            profiles,
             applications: value.applications.map((application) =>
               application.id === existing.id
                 ? {
                     ...application,
-                    buildSummary: summary,
+                    buildSummary,
                     state: "pending"
                   }
                 : application
@@ -455,12 +500,13 @@ export function AppProvider({ children }: PropsWithChildren) {
         }
         return {
           ...value,
+          profiles,
           applications: [
             ...value.applications,
             {
               id: randomId("application"),
               memberId: value.currentUserId ?? "",
-              buildSummary: summary,
+              buildSummary,
               requestedAt: new Date().toISOString(),
               state: "pending"
             }
@@ -469,7 +515,7 @@ export function AppProvider({ children }: PropsWithChildren) {
       });
       setNotice("Membership application submitted for staff review.");
     },
-    [currentMember, refresh]
+    [currentMember, refresh, state.applications]
   );
 
   const listAvailability = useCallback(
@@ -1125,6 +1171,7 @@ export function AppProvider({ children }: PropsWithChildren) {
     if (dataMode !== "demo") return;
     setState(initialDemoState);
     setIsStaff(false);
+    setIsAdmin(false);
     setNotice("Demo data reset.");
   }, []);
 
@@ -1136,6 +1183,7 @@ export function AppProvider({ children }: PropsWithChildren) {
       online,
       loading,
       isStaff,
+      isAdmin,
       notice,
       clearNotice: () => setNotice(""),
       refresh,
@@ -1168,6 +1216,7 @@ export function AppProvider({ children }: PropsWithChildren) {
       online,
       loading,
       isStaff,
+      isAdmin,
       notice,
       refresh,
       signInDemo,

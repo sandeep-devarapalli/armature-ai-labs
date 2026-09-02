@@ -24,7 +24,7 @@ export function OpeningSoonPage() {
       <Section
         number="01"
         title="The public floor stays open"
-        lede="Projects, services, procurement, the component catalog, Maker Desk information, and the Bengaluru ecosystem remain available while operational systems are staged."
+        lede="Projects, services, the component catalog, Maker Desk information, and the Bengaluru ecosystem remain available while operational systems are staged."
       />
     </>
   );

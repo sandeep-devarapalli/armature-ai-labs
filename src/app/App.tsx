@@ -3,7 +3,7 @@ import { lazy, Suspense, type ReactNode } from "react";
 import { OpeningSoonPage, ReleaseGate, RouteFailurePage } from "../components/OpeningSoonPage";
 import { PwaUpdatePrompt } from "../components/PwaUpdatePrompt";
 import { Shell } from "../components/Shell";
-import { MemberRoute, StaffRoute } from "../components/RouteGuard";
+import { AdminRoute, MemberRoute, StaffRoute } from "../components/RouteGuard";
 import { HomePage } from "../pages/HomePage";
 import {
   componentRequestsAvailable,
@@ -18,7 +18,6 @@ const BuildingVisionPage = lazy(() => import("../pages/BuildingVisionPage").then
 const EcosystemPage = lazy(() => import("../pages/EcosystemPage").then((module) => ({ default: module.EcosystemPage })));
 const KioskPage = lazy(() => import("../pages/KioskPage").then((module) => ({ default: module.KioskPage })));
 const FinancialsPage = lazy(() => import("../pages/PlanningPages").then((module) => ({ default: module.FinancialsPage })));
-const ProcurementPage = lazy(() => import("../pages/PlanningPages").then((module) => ({ default: module.ProcurementPage })));
 const ComponentsPage = lazy(() => import("../pages/ComponentsPages").then((module) => ({ default: module.ComponentsPage })));
 const ComponentDetailPage = lazy(() => import("../pages/ComponentsPages").then((module) => ({ default: module.ComponentDetailPage })));
 const PublicComponentRequestPage = lazy(() => import("../pages/InventoryPages").then((module) => ({ default: module.PublicComponentRequestPage })));
@@ -34,7 +33,6 @@ const ConsumablesPage = lazy(() => import("../pages/MakerDeskPages").then((modul
 const ToolkitsPage = lazy(() => import("../pages/MakerDeskPages").then((module) => ({ default: module.ToolkitsPage })));
 const AdminMakerServicesPage = lazy(() => import("../pages/MakerDeskPages").then((module) => ({ default: module.AdminMakerServicesPage })));
 const EquipmentPage = lazy(() => import("../pages/PublicPages").then((module) => ({ default: module.EquipmentPage })));
-const MembershipPage = lazy(() => import("../pages/PublicPages").then((module) => ({ default: module.MembershipPage })));
 const ServicesPage = lazy(() => import("../pages/PublicPages").then((module) => ({ default: module.ServicesPage })));
 const JoinPage = lazy(() => import("../pages/PublicPages").then((module) => ({ default: module.JoinPage })));
 const NotFoundPage = lazy(() => import("../pages/PublicPages").then((module) => ({ default: module.NotFoundPage })));
@@ -61,6 +59,9 @@ const protectedPage = (page: ReactNode) => (
 const staffPage = (page: ReactNode) => (
   <MemberRoute><StaffRoute>{page}</StaffRoute></MemberRoute>
 );
+const adminPage = (page: ReactNode) => (
+  <MemberRoute><AdminRoute>{page}</AdminRoute></MemberRoute>
+);
 const memberFeature = (page: ReactNode) => (
   <ReleaseGate enabled={memberPlatformAvailable}>{page}</ReleaseGate>
 );
@@ -84,15 +85,14 @@ export const router = createBrowserRouter([
     children: [
       { path: "/", element: <HomePage /> },
       { path: "/equipment", element: equipmentPageAvailable ? <EquipmentPage /> : <Navigate to="/" replace /> },
-      { path: "/membership", element: <MembershipPage /> },
+      { path: "/membership", element: <Navigate to="/join" replace /> },
       { path: "/services", element: <ServicesPage /> },
       { path: "/projects", element: <ProjectsPage /> },
       { path: "/branding", element: <BrandingPage /> },
       { path: "/projects/electrofluidic-fiber-muscles", element: <ElectrofluidicMusclesPage /> },
       { path: "/building-vision", element: <BuildingVisionPage /> },
       { path: "/ecosystem", element: <EcosystemPage /> },
-      { path: "/financials", element: <FinancialsPage /> },
-      { path: "/procurement", element: <ProcurementPage /> },
+      { path: "/financials", element: memberFeature(adminPage(<FinancialsPage />)) },
       { path: "/components", element: <ComponentsPage /> },
       { path: "/components/request", element: componentRequestFeature(<PublicComponentRequestPage />) },
       { path: "/components/:slug", element: <ComponentDetailPage /> },

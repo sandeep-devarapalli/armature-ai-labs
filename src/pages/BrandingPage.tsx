@@ -352,6 +352,9 @@ export function BrandingPage() {
               Do not imply endorsement, affiliation, or operation of an
               official Armature lab without permission.
             </p>
+            <p>
+              Request written permission at <a className="text-link" href="mailto:hello@armaturelab.org">hello@armaturelab.org</a>.
+            </p>
           </div>
           <a
             className="button button-quiet"

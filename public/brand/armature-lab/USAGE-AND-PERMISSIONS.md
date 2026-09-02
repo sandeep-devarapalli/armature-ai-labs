@@ -8,6 +8,7 @@ identity assets.
 Reasonable use of the name and supplied, unmodified marks to identify Armature,
 link to [armaturelab.org](https://armaturelab.org), or describe the origin of an
 unmodified copy is permitted. Any other use requires prior written permission.
+Request written permission at [hello@armaturelab.org](mailto:hello@armaturelab.org).
 
 Do not imply endorsement, affiliation, or operation of an official Armature lab
 without permission.

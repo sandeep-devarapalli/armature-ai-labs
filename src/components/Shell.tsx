@@ -3,6 +3,7 @@ import {
   BookOpen,
   Boxes,
   CalendarDays,
+  CircleDollarSign,
   ClipboardList,
   ClipboardCheck,
   LogIn,
@@ -27,13 +28,11 @@ import { BrandMark } from "./BrandMark";
 const publicLinks = [
   ["/", "The lab"],
   ...(equipmentPageAvailable ? [["/equipment", "Equipment"]] : []),
-  ["/membership", "Membership"],
+  ["/join", "Membership"],
   ["/services", "Services"],
   ["/projects", "Projects"],
   ["/ecosystem", "Ecosystem"],
   ["/components", "Components"],
-  ["/financials", "Financials"],
-  ["/join", "Join"]
 ] as const;
 
 const memberLinks = [
@@ -76,7 +75,7 @@ function ScrollToTop() {
 }
 
 export function Shell({ children }: PropsWithChildren) {
-  const { currentMember, isStaff, mode, online, notice, clearNotice, signOut } = useApp();
+  const { currentMember, isAdmin, isStaff, mode, online, notice, clearNotice, signOut } = useApp();
   const { pathname } = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const workspaceLinksRef = useRef<HTMLDivElement>(null);
@@ -86,7 +85,7 @@ export function Shell({ children }: PropsWithChildren) {
     workspaceLinksRef.current
       ?.querySelector<HTMLAnchorElement>("a.active")
       ?.scrollIntoView({ block: "nearest", inline: "center" });
-  }, [pathname, currentMember, isStaff]);
+  }, [pathname, currentMember, isAdmin, isStaff]);
 
   return (
     <div className="app-shell">
@@ -171,6 +170,10 @@ export function Shell({ children }: PropsWithChildren) {
                 <Wrench aria-hidden="true" />
                 Operations
               </NavLink>}
+              {isAdmin && <NavLink to="/financials">
+                <CircleDollarSign aria-hidden="true" />
+                Financials
+              </NavLink>}
             </div>
             <div className="environment-state mono">
               <span className={online ? "dot dot-good" : "dot dot-bad"} />
@@ -199,8 +202,8 @@ export function Shell({ children }: PropsWithChildren) {
             <p>The Physical AI and Robotics Lab · HSR Layout, Bengaluru</p>
           </div>
           <div className="footer-links">
+            <a href="mailto:hello@armaturelab.org">hello@armaturelab.org</a>
             <Link to="/members">Members</Link>
-            <Link to="/procurement">Procurement</Link>
             <Link to="/maker-desk">Maker desk</Link>
             <Link to="/branding">Brand assets</Link>
             {componentRequestsAvailable && <Link to="/components/request">Request a component</Link>}

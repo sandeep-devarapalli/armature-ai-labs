@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { initialDemoState } from "../../../src/data/demo";
 
 async function signInDemo(page: import("@playwright/test").Page) {
   await page.goto("/auth");
@@ -535,6 +536,7 @@ test("home hero restores the mechanical kernel animation", async ({ page }) => {
   await expect(page.locator(".topbar .brand-lockup")).toHaveAttribute("aria-label", "armature lab");
   await expect(page.locator(".topbar .brand-mark")).toHaveAttribute("aria-label", "armature lab mark");
   await expect(page.locator(".topbar .brand-lockup > span")).toHaveText("armature lab");
+  await expect(page.locator(".hero-lockup h1")).toHaveText("armature lab");
   expect(await page.evaluate(async () => {
     await document.fonts.load('500 21px "Armature Space Grotesk"');
     return document.fonts.check('500 21px "Armature Space Grotesk"');
@@ -633,15 +635,19 @@ test("public routes preserve the useful legacy lab sections", async ({ page }) =
   await expectNoHorizontalOverflow(page);
 
   await page.goto("/membership");
-  await expect(page.getByRole("heading", { name: "Workstation choices" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Edge AI invention workshops" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Access and use flow" })).toBeVisible();
+  await expect(page).toHaveURL(/\/join$/);
+  await expect(page.getByRole("heading", { name: "Join the lab. Book what you need." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "One membership journey" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "What members can reserve" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Start your membership" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Workstation choices" })).toHaveCount(0);
   await expectNoHorizontalOverflow(page);
 
   await page.goto("/services");
   await expect(page.getByRole("heading", { name: "Talent and training" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Design, build, and run a local AI data centre" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Who it is for" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Discuss a project" })).toHaveAttribute("href", "mailto:hello@armaturelab.org");
   await expectNoHorizontalOverflow(page);
 
   await page.goto("/projects");
@@ -655,14 +661,66 @@ test("public routes preserve the useful legacy lab sections", async ({ page }) =
   expect(new Set(featuredCovers).size).toBe(featuredCovers.length);
   await expectNoHorizontalOverflow(page);
 
-  await page.goto("/financials");
-  await expect(page.getByRole("heading", { name: "What the capex buys" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Where the monthly money goes" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Every revenue stream has a home" })).toBeVisible();
-  await expectNoHorizontalOverflow(page);
+  await page.goto("/components");
+  await expect(page.locator('a[href="/procurement"]')).toHaveCount(0);
 
   await page.goto("/procurement");
-  await expect(page.getByRole("heading", { name: "Five shared build stations" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "That bench is not on the floor plan." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Buy for ten builders, not ten isolated labs." })).toHaveCount(0);
+  await expect(page.locator('a[href="/procurement"]')).toHaveCount(0);
+  await expectNoHorizontalOverflow(page);
+});
+
+test("a pending member completes the membership application and keeps its status after reload", async ({ page }, testInfo) => {
+  const applicantState = structuredClone(initialDemoState);
+  applicantState.currentUserId = "member-pending";
+  applicantState.applications = [];
+  const applicant = applicantState.profiles.find((profile) => profile.id === "member-pending");
+  if (!applicant) throw new Error("Pending member fixture is missing.");
+  applicant.name = "";
+  applicant.handle = "";
+
+  await page.addInitScript(({ state }) => {
+    const key = "armature-demo-state-v1";
+    if (!window.localStorage.getItem(key)) {
+      window.localStorage.setItem(key, JSON.stringify(state));
+    }
+  }, { state: applicantState });
+
+  await page.goto("/join");
+  await expect(page.getByLabel("Your name")).toBeVisible();
+  await expect(page.getByLabel("Public profile handle")).toBeVisible();
+  await expect(page.getByLabel("What are you building?")).toBeVisible();
+  if (testInfo.project.name === "mobile") await expectMobileFormsAvoidZoom(page);
+  await expectNoHorizontalOverflow(page);
+
+  await page.getByLabel("Your name").fill("New Member");
+  await page.getByLabel("Public profile handle").fill("new-member");
+  await page.getByLabel("What are you building?").fill("A modular mobile robot for indoor mapping.");
+  await page.getByRole("button", { name: "Submit membership application" }).click();
+
+  await expect(page.getByText("Application under review", { exact: true })).toBeVisible();
+  await page.reload();
+  await expect(page.getByText("Application under review", { exact: true })).toBeVisible();
+  await expect(page.getByLabel("What are you building?")).toHaveCount(0);
+  await expectNoHorizontalOverflow(page);
+});
+
+test("financials is hidden publicly and available to an admin", async ({ page }) => {
+  await page.goto("/");
+  const primaryNavigation = page.locator(".public-nav");
+  await expect(primaryNavigation.locator('a[href="/financials"]')).toHaveCount(0);
+  await expect(primaryNavigation.locator('a[href="/join"]')).toHaveCount(1);
+  await expect(primaryNavigation.locator('a[href="/membership"]')).toHaveCount(0);
+
+  await page.goto("/financials");
+  await expect(page).toHaveURL(/\/auth$/);
+  await expect(page.getByRole("heading", { name: "Create your member account." })).toBeVisible();
+  await page.getByRole("button", { name: "Open the local member demo" }).click();
+
+  await expect(page).toHaveURL(/\/financials$/);
+  await expect(page.getByRole("heading", { name: "What the capex buys" })).toBeVisible();
+  await expect(page.getByRole("navigation", { name: "Member workspace" }).getByRole("link", { name: "Financials" })).toBeVisible();
   await expectNoHorizontalOverflow(page);
 });
 
@@ -800,16 +858,7 @@ test("printer fleet keeps three Amazon-audited fabrication options", async ({ pa
     "href",
     "https://www.amazon.in/dp/B0DPXBT99W"
   );
-
-  await page.goto("/procurement");
-  await expect(page.getByText("Bambu Lab A1 open-frame FDM printer")).toBeVisible();
-  await expect(page.getByText("Bambu Lab P1S Combo enclosed FDM printer").first()).toBeVisible();
-  await expect(page.getByText("ELEGOO Neptune 4 Plus large-format FDM printer").first()).toBeVisible();
-  expect(
-    await page.evaluate(() =>
-      document.documentElement.scrollWidth > document.documentElement.clientWidth
-    )
-  ).toBe(false);
+  await expect(page.locator('a[href="/procurement"]')).toHaveCount(0);
 });
 
 test("member casts only one vote per request", async ({ page }) => {
@@ -889,17 +938,17 @@ test("PWA keeps transactional traffic out of Cache Storage", async ({ page, cont
   expect(cachedUrls.some((url) => /\/assets\/index-[^/]+\.js$/.test(url))).toBe(true);
 
   await page.goto("/");
-  await expect(page.getByRole("heading", { name: "armature", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "armature lab", exact: true })).toBeVisible();
   await context.setOffline(true);
   await page.reload();
-  await expect(page.getByRole("heading", { name: "armature", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "armature lab", exact: true })).toBeVisible();
 });
 
 test("mobile route families stay contained and avoid iOS form zoom", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "mobile");
   const publicRoutes = [
-    "/", "/membership", "/services", "/projects", "/branding", "/ecosystem", "/financials",
-    "/procurement", "/components", "/components/bno055-imu", "/components/request",
+    "/", "/membership", "/services", "/projects", "/branding", "/ecosystem",
+    "/components", "/components/bno055-imu", "/components/request",
     "/maker-desk", "/join", "/members", "/auth", "/kiosk"
   ];
   const memberRoutes = [
@@ -907,6 +956,7 @@ test("mobile route families stay contained and avoid iOS form zoom", async ({ pa
     "/component-requests", "/inventory", "/lockers", "/consumables", "/toolkits"
   ];
   const adminRoutes = [
+    "/financials",
     "/admin/members", "/admin/resources", "/admin/bookings", "/admin/attendance",
     "/admin/integrations", "/admin/components", "/admin/inventory",
     "/admin/component-requests", "/admin/cabinets", "/admin/maker-services"

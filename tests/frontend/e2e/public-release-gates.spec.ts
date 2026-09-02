@@ -11,21 +11,32 @@ test("public-first production gates operational routes", async ({ page }) => {
 
   await page.goto("/");
   await expect(page.getByTitle("Sign in")).toHaveCount(0);
+  await expect(page.getByRole("navigation", { name: "Primary navigation" }).locator('a[href="/financials"]')).toHaveCount(0);
+  await expect(page.locator('a[href="/procurement"]')).toHaveCount(0);
   await expect(page.getByRole("link", { name: "Kiosk" })).toHaveCount(0);
   await expect(page.getByRole("link", { name: "Request a component" })).toHaveCount(0);
   await expect(page.getByRole("link", { name: "Book a workstation" })).toHaveCount(0);
+  await expect(page.locator("footer").getByRole("link", { name: "hello@armaturelab.org" })).toHaveAttribute("href", "mailto:hello@armaturelab.org");
 
   await page.goto("/maker-desk");
   await expect(page.getByRole("link", { name: /Sign in|Request secure storage|Build a pickup order|Rent a toolkit/ })).toHaveCount(0);
 
   await page.goto("/components");
   await expect(page.getByRole("link", { name: "Request a component" })).toHaveCount(0);
+  await expect(page.locator('a[href="/procurement"]')).toHaveCount(0);
+
+  await page.goto("/procurement");
+  await expect(page.getByRole("heading", { name: "That bench is not on the floor plan." })).toBeVisible();
 
   await page.goto("/join");
-  await expect(page.getByRole("link", { name: "Sign in to apply" })).toHaveCount(0);
-  await expect(page.getByRole("button", { name: /contact to be published|intake to be published/ })).toHaveCount(0);
-  await expect(page.getByText("Partnership inquiries opening soon")).toBeVisible();
-  await expect(page.getByText("Assessment intake opening soon")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Join the lab. Book what you need." })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Create member account" })).toHaveCount(0);
+  await expect(page.getByText("Online signup is not live yet")).toBeVisible();
+  await expect(page.getByRole("link", { name: "Email the lab" })).toHaveAttribute("href", "mailto:hello@armaturelab.org");
+
+  await page.goto("/membership");
+  await expect(page).toHaveURL(/\/join$/);
+  await expect(page.getByRole("heading", { name: "One membership journey" })).toBeVisible();
 
   for (const path of [
     "/auth",
@@ -33,6 +44,7 @@ test("public-first production gates operational routes", async ({ page }) => {
     "/bookings",
     "/check-in",
     "/inventory",
+    "/financials",
     "/admin/members",
     "/kiosk",
     "/components/request"
@@ -60,7 +72,7 @@ test("equipment page stays hidden", async ({ page }, testInfo) => {
 
   await page.goto("/equipment");
   await expect(page).toHaveURL(/\/$/);
-  await expect(page.getByRole("heading", { name: "armature", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "armature lab", exact: true })).toBeVisible();
 });
 
 test("public catalogs remain available", async ({ page }) => {
@@ -104,6 +116,9 @@ test("mobile public navigation remains usable with member controls disabled", as
 
   const menu = page.getByRole("navigation", { name: "Mobile navigation" });
   await expect(menu).toBeVisible();
+  await expect(menu.locator('a[href="/financials"]')).toHaveCount(0);
+  await expect(menu.locator('a[href="/procurement"]')).toHaveCount(0);
+  await expect(menu.getByRole("link", { name: "Membership" })).toHaveAttribute("href", "/join");
   await expect(menu.getByRole("link", { name: "Projects" })).toBeVisible();
   await expect(menu.getByRole("link", { name: "Components" })).toBeVisible();
 });

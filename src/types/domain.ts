@@ -211,19 +211,3 @@ export interface ProjectComponentLink {
   componentSlug: string;
   role: ProjectComponentRole;
 }
-
-export interface ProcurementRow {
-  item: string;
-  quantity: string;
-  indicativeInr: string;
-  supports: string;
-  sourceLabel: string;
-  sourceUrl: string;
-  state: "buy_first" | "validate";
-}
-
-export interface ProcurementGroup {
-  title: string;
-  icon: "storage" | "compute" | "camera" | "safety";
-  rows: ProcurementRow[];
-}

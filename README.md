@@ -2,6 +2,8 @@
 
 Website: [armaturelab.org](https://armaturelab.org)
 
+Contact: [hello@armaturelab.org](mailto:hello@armaturelab.org)
+
 React/Vite member, booking, maker-desk inventory, and check-in PWA for the
 physical AI and robotics lab in HSR Layout, Bengaluru.
 
@@ -44,7 +46,7 @@ VITE_COMPONENT_REQUESTS_ENABLED=false
 VITE_GOOGLE_AUTH_ENABLED=false
 ```
 
-The public site, projects, component catalog, procurement board, Maker Desk
+The public site, projects, component catalog, Maker Desk
 catalog, ecosystem map, member directory, and Building Vision remain visible.
 Member, booking, check-in, kiosk, admin, inventory-custody, locker, toolkit, and
 component-request actions must render the shared opening-soon state while their

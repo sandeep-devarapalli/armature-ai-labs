@@ -12,6 +12,7 @@ test("brand resources are discoverable, usable and downloadable", async ({ page,
   await expect(page.getByText("armature is a 3,500 sq ft physical AI and robotics lab in HSR Layout, Bengaluru.")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Logo system" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Usage and permissions" })).toBeVisible();
+  await expect(page.locator(".branding-permissions").getByRole("link", { name: "hello@armaturelab.org" })).toHaveAttribute("href", "mailto:hello@armaturelab.org");
 
   const downloadLinks = page.locator('main a[download][href^="/brand/"]');
   expect(await downloadLinks.count()).toBeGreaterThanOrEqual(20);
@@ -30,6 +31,10 @@ test("brand resources are discoverable, usable and downloadable", async ({ page,
     expect(response.ok(), path).toBe(true);
     expect(response.headers()["content-type"], path).toContain(contentType);
   }
+
+  const usageNote = await request.get(new URL("/brand/armature-lab/USAGE-AND-PERMISSIONS.md", page.url()).href);
+  expect(usageNote.ok()).toBe(true);
+  expect(await usageNote.text()).toContain("hello@armaturelab.org");
 
   const [pack] = await Promise.all([
     page.waitForEvent("download"),

@@ -4,7 +4,7 @@
 
 armature should feel like a real lab floor: precise, physical, useful, and quietly ambitious. The design should avoid generic AI startup polish, vague futurism, and decorative marketing gloss. It should make robotics, fabrication, compute, and safety feel inspectable.
 
-The first screen should make the lab identity obvious: lowercase `armature`, the commutator mark, HSR Layout, Bengaluru, and the physical lab offer.
+The first screen should make the lab identity obvious: the lowercase `armature lab` hero wordmark, the commutator mark, HSR Layout, Bengaluru, and the physical lab offer.
 
 ## Brand Hierarchy
 
@@ -51,7 +51,7 @@ Theme behavior:
 - Use the existing CSS variables and semantic surface tokens instead of duplicating page markup.
 - Persist an explicit visitor choice in `localStorage` under `armature-theme`.
 - When no choice exists, respect `prefers-color-scheme`; dark may follow the system, while sepia is always explicit.
-- Keep the three-swatch theme control in the main navigation and procurement navigation.
+- Keep the three-swatch theme control in the main navigation.
 - Verify inline marks, diagrams, form controls, cards, tables, and the animated hero field in every mode.
 
 ## Typography

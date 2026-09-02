@@ -6,6 +6,7 @@ import { AppProvider, useApp } from "../../src/context/AppContext";
 import { InventoryProvider, useInventory } from "../../src/context/InventoryContext";
 import { ThemeProvider, useTheme } from "../../src/context/ThemeContext";
 import { componentOffers, components } from "../../src/data/components";
+import { initialDemoState } from "../../src/data/demo";
 
 vi.mock("../../src/lib/supabase", () => ({
   dataMode: "demo",
@@ -50,6 +51,30 @@ function BookingHarness() {
         }}
       >
         Book
+      </button>
+    </>
+  );
+}
+
+function ApplicationHarness() {
+  const { currentMember, state, submitApplication } = useApp();
+  const [error, setError] = useState("");
+  const application = state.applications.find((item) => item.memberId === currentMember?.id);
+  return (
+    <>
+      <output data-testid="applicant-name">{currentMember?.name}</output>
+      <output data-testid="applicant-handle">{currentMember?.handle}</output>
+      <output data-testid="application-state">{application?.state ?? "none"}</output>
+      <output data-testid="application-error">{error}</output>
+      <button
+        type="button"
+        onClick={() => void submitApplication({
+          name: "New Member",
+          handle: "new-member",
+          summary: "A modular mobile robot for indoor mapping."
+        }).catch((reason: Error) => setError(reason.message))}
+      >
+        Apply
       </button>
     </>
   );
@@ -161,6 +186,26 @@ describe("frontend foundation", () => {
     expect(screen.getByTestId("count")).toHaveTextContent(String(initial + 1));
     await user.click(screen.getByRole("button", { name: "Book" }));
     expect(screen.getByTestId("error")).toHaveTextContent("overlaps");
+  });
+
+  it("completes an empty member profile with the application and prevents a duplicate", async () => {
+    const user = userEvent.setup();
+    const applicantState = JSON.parse(JSON.stringify(initialDemoState));
+    applicantState.currentUserId = "member-pending";
+    applicantState.applications = [];
+    applicantState.profiles = applicantState.profiles.map((profile: { id: string; name: string; handle: string }) =>
+      profile.id === "member-pending" ? { ...profile, name: "", handle: "" } : profile
+    );
+    window.localStorage.setItem("armature-demo-state-v1", JSON.stringify(applicantState));
+
+    render(<AppProvider><ApplicationHarness /></AppProvider>);
+    await user.click(screen.getByRole("button", { name: "Apply" }));
+    expect(screen.getByTestId("applicant-name")).toHaveTextContent("New Member");
+    expect(screen.getByTestId("applicant-handle")).toHaveTextContent("new-member");
+    expect(screen.getByTestId("application-state")).toHaveTextContent("pending");
+
+    await user.click(screen.getByRole("button", { name: "Apply" }));
+    expect(screen.getByTestId("application-error")).toHaveTextContent("already under review");
   });
 
   it("enforces one member vote per component request", async () => {

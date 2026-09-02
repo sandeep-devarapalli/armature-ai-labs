@@ -86,13 +86,10 @@ export function ComponentsPage() {
         meta="Component catalog · audited 26 July 2026"
         title={selectedProject ? `Build list for ${selectedProject.title}.` : "Know what the lab can build with."}
         description="A project-linked catalog of assembled systems, controllers, motion parts, sensors, compute, and sourcing gaps. Availability is intentionally coarse; prices are dated snapshots, not live quotes."
-        actions={
+        actions={(componentRequestsAvailable || selectedProject) ? (
           <>
-            <Link className="button button-primary" to="/procurement">
-              Procurement board <ArrowRight aria-hidden="true" />
-            </Link>
             {componentRequestsAvailable && (
-              <Link className="button button-quiet" to="/components/request">
+              <Link className="button button-primary" to="/components/request">
                 Request a component
               </Link>
             )}
@@ -102,7 +99,7 @@ export function ComponentsPage() {
               </Link>
             )}
           </>
-        }
+        ) : undefined}
       />
       <section className="procurement-summary">
         <div className="wrap metrics-strip">
@@ -270,14 +267,9 @@ export function ComponentDetailPage() {
         title={component.name}
         description={component.description}
         actions={
-          <>
-            <Link className="button button-primary" to="/procurement">
-              Procurement board <ArrowRight aria-hidden="true" />
-            </Link>
-            <Link className="button button-quiet" to="/components">
-              <ArrowLeft aria-hidden="true" /> All components
-            </Link>
-          </>
+          <Link className="button button-primary" to="/components">
+            <ArrowLeft aria-hidden="true" /> All components
+          </Link>
         }
       />
       <section className="procurement-summary">
