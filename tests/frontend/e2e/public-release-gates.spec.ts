@@ -72,7 +72,7 @@ test("equipment page stays hidden", async ({ page }, testInfo) => {
 
   await page.goto("/equipment");
   await expect(page).toHaveURL(/\/$/);
-  await expect(page.getByRole("heading", { name: "armature", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "armature lab", exact: true })).toBeVisible();
 });
 
 test("public catalogs remain available", async ({ page }) => {

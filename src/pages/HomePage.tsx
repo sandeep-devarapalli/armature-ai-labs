@@ -60,7 +60,7 @@ export function HomePage() {
           <div className="hero-lockup">
             <BrandMark compact animated />
             <div>
-              <h1>armature</h1>
+              <h1>armature lab</h1>
               <span className="mono">The physical AI and robotics lab</span>
             </div>
           </div>

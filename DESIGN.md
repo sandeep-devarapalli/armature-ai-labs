@@ -4,7 +4,7 @@
 
 armature should feel like a real lab floor: precise, physical, useful, and quietly ambitious. The design should avoid generic AI startup polish, vague futurism, and decorative marketing gloss. It should make robotics, fabrication, compute, and safety feel inspectable.
 
-The first screen should make the lab identity obvious: lowercase `armature`, the commutator mark, HSR Layout, Bengaluru, and the physical lab offer.
+The first screen should make the lab identity obvious: the lowercase `armature lab` hero wordmark, the commutator mark, HSR Layout, Bengaluru, and the physical lab offer.
 
 ## Brand Hierarchy
 
