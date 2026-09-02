@@ -5,7 +5,6 @@ import {
   Box,
   Cable,
   Camera,
-  CircleDollarSign,
   Cpu,
   ExternalLink,
   Gauge,
@@ -39,22 +38,6 @@ const distributionBoards = [
   [BatteryCharging, "DB-B", "Prototyping + batteries", "Printing, drone charging, and the battery cabinet on separated circuits."],
   [Cpu, "DB-C", "Clean / UPS", "Isolated grounded power for electronics, compute, networking, and NVR."],
   [Users, "DB-D", "General / demo / pods", "Demo-floor outlets, builder pods, general sockets, lighting, and HVAC."]
-] as const;
-
-const workstationChoices = [
-  [Box, "Dedicated builder pod", "Your own desk with a locker, monitor, clean power, and approved extended access.", "Rs [rate] / month"],
-  [Wrench, "Robotic arm bay", "The guarded 6-axis arm cell and controller. Current safety certification is required.", "From Rs [rate] / hour"],
-  [Cable, "Electronics bench", "An ESD-safe bench with soldering, oscilloscope, and bench supplies.", "From Rs [rate] / hour"],
-  [Sparkles, "Prototyping station", "3D printers, laser cutter, or CNC by the hour; materials are additional.", "From Rs [rate] / hour"],
-  [Radio, "Drone cage slot", "The netted flight cage, booked in supervised slots for safe indoor testing.", "From Rs [rate] / slot"],
-  [Cpu, "GPU and edge compute", "On-site GPU workstations and edge AI kits for training, inference, and data runs.", "From Rs [rate] / hour"],
-  [Users, "Day pass + membership", "A full day on the floor, or monthly access with member booking priority.", "Day pass · monthly tiers"]
-] as const;
-
-const edgeAiWorkshops = [
-  [Camera, "Vision on Jetson", "Half-day camera capture, model deployment, and embedded inference on Jetson Orin Nano kits."],
-  [Cpu, "A day on the DGX", "A full day running, tuning, and serving models on DGX Spark while learning what local AI operation requires."],
-  [Sparkles, "Build an AI prototype", "Small-batch robot arm, drone autonomy, and sensor builds that finish with a working demonstration."]
 ] as const;
 
 export function EquipmentPage() {
@@ -164,104 +147,13 @@ export function EquipmentPage() {
   );
 }
 
-export function MembershipPage() {
-  return (
-    <>
-      <PageHeader
-        meta="Membership · access · pods"
-        title="Choose the amount of floor you need."
-        description="Start with shared access, add dedicated space when the build becomes real, and graduate into a company residency without moving the project out of the lab."
-        actions={<Link className="button button-primary" to="/join">Apply for membership</Link>}
-      />
-      <Section number="01" title="Member pathways">
-        <div className="plan-list">
-          {[
-            ["Starter", "Shared floor access, community build days, and bookable workstations.", "Rs [rate] / month", "For learning and early prototypes"],
-            ["Serious builder", "More booking access, project storage, and priority workshop registration.", "Rs [rate] / month", "For a build that is moving every week"],
-            ["Dedicated pod", "A persistent desk and lockable project footprint inside the working floor.", "Rs [rate] / month", "For hardware that cannot live in a backpack"],
-            ["Company residency", "Pods, equipment allocation, hosted demos, and operating support for a small team.", "quoted monthly", "For 2-3 company tenants at a time"]
-          ].map(([name, copy, rate, note]) => (
-            <article className="plan-row" key={name}>
-              <div><span className="mono">{note}</span><h3>{name}</h3></div>
-              <p>{copy}</p>
-              <strong>{rate}</strong>
-            </article>
-          ))}
-        </div>
-      </Section>
-      <Section number="02" title="Workstation choices" lede="Members reserve the floor they need instead of owning every machine. Final rates remain placeholders until the operating tariff is approved.">
-        <div className="service-grid">
-          {workstationChoices.map(([Icon, title, copy, rate]) => (
-            <article className="service-card" key={title}>
-              <Icon aria-hidden="true" />
-              <h3>{title}</h3>
-              <p>{copy}</p>
-              <span className="mono">{rate}</span>
-            </article>
-          ))}
-        </div>
-      </Section>
-      <Section number="03" title="Edge AI invention workshops" lede="Challenge-led formats use Jetson Orin Nano kits, cameras, sensors, robots, and DGX Spark." dark>
-        <div className="service-grid">
-          {edgeAiWorkshops.map(([Icon, title, copy]) => (
-            <article className="service-card" key={title}>
-              <Icon aria-hidden="true" />
-              <h3>{title}</h3>
-              <p>{copy}</p>
-            </article>
-          ))}
-        </div>
-        <p className="lede">Indicative planning range: Rs 5,000-10,000 per seat, 12-15 seats per batch. Corporate editions are planned on request; these are estimates, not quotes.</p>
-      </Section>
-      <Section number="04" title="Storage and tool add-ons">
-        <div className="plan-list">
-          {[
-            ["Small parts locker", "Controllers, sensors, hand tools, and project boxes.", "Rs [rate] / week, month, or year", "Secure storage"],
-            ["Project locker", "Robot subassemblies, cases, and labelled work in progress.", "Rs [rate] / week, month, or year", "Medium or tall"],
-            ["Portable toolkit", "A checked electronics, mechanical, soldering, precision, or diagnostics case.", "Rs [rate] / session", "Lab-only rental"]
-          ].map(([name, copy, rate, note]) => (
-            <article className="plan-row" key={name}>
-              <div><span className="mono">{note}</span><h3>{name}</h3></div>
-              <p>{copy}</p>
-              <strong>{rate}</strong>
-            </article>
-          ))}
-        </div>
-        <div className="section-actions">
-          <Link className="button button-quiet" to="/maker-desk">See the maker desk <ArrowRight aria-hidden="true" /></Link>
-        </div>
-      </Section>
-      <Section number="05" title="Access and use flow">
-        <div className="process-list">
-          {[
-            ["01", "Apply", "Create an account, submit the build plan, and complete the one-time floor induction."],
-            ["02", "Book", "Reserve the workstation or equipment unit online for the time needed."],
-            ["03", "Check in", "Use the one-time member QR at the lab kiosk; access and attendance are recorded."],
-            ["04", "Build", "Use the booked floor with staff, shared tools, and the room available around the work."],
-            ["05", "Check out", "Return toolkits and checked-out parts, close attendance, and leave the resource ready."]
-          ].map(([number, title, copy]) => (
-            <div className="process-row" key={number}><span className="mono">{number}</span><h3>{title}</h3><p>{copy}</p></div>
-          ))}
-        </div>
-      </Section>
-      <Section number="06" title="Approval and safe access" dark>
-        <div className="feature-grid">
-          <article><Users aria-hidden="true" /><h3>Member approval</h3><p>New accounts remain pending until staff review what they intend to build and how they will use the floor.</p></article>
-          <article><ShieldCheck aria-hidden="true" /><h3>Equipment certification</h3><p>Hazardous resources unlock only after the relevant induction is issued and remains current.</p></article>
-          <article><Gauge aria-hidden="true" /><h3>Usage accountability</h3><p>Every reservation has one responsible member, declared guests, and an attendance trail.</p></article>
-        </div>
-      </Section>
-    </>
-  );
-}
-
 export function ServicesPage() {
   const talentServices = [
     [Users, "Hackathon-based hiring", "Run an invention challenge on the lab floor with a real problem statement, arms, sensors, Jetsons, and GPUs; assess candidates through working prototypes.", "Planning estimate · Rs 2-5 L per edition + per-hire fee"],
     [Gauge, "Employee training", "Private invention-lab cohorts covering edge AI, embedded systems, Jetson vision, local LLMs, and robotics fundamentals, ending in a demonstration.", "Planning estimate · Rs 1.5-4 L per cohort"],
     [Sparkles, "Student research programs", "Semester-long, industry-linked edge AI and physical AI projects supervised in the lab with colleges and companies.", "Per student · per batch"],
     [ShieldCheck, "Edge AI invention sprints", "Four-week evening programs using Jetsons, cameras, sensors, and DGX Spark, ending in a certified capstone build.", "Rs [rate] per seat"],
-    [Camera, "Public workshops", "One-day hands-on formats for small batches. The workstation and workshop choices remain visible on the Membership page.", "Planning estimate · Rs 5,000-10,000 per seat"],
+    [Camera, "Public workshops", "One-day hands-on formats for small batches. Member booking options remain visible on the Membership page.", "Planning estimate · Rs 5,000-10,000 per seat"],
     [Radio, "Demo days and meetups", "Use the demo floor, AV, and working equipment as the setting for launches, meetups, and live demonstrations.", "Planning estimate · Rs 25,000-75,000 per evening"]
   ] as const;
 
@@ -281,7 +173,7 @@ export function ServicesPage() {
         meta="Services · deployments · research"
         title="Build here, or bring the lab to the site."
         description="Armature combines a bookable robotics floor with engineering services for organizations that need working hardware, private AI infrastructure, or credible physical datasets."
-        actions={<Link className="button button-primary" to="/join">Request an assessment <ArrowRight aria-hidden="true" /></Link>}
+        actions={<Link className="button button-primary" to="/join">Become a member <ArrowRight aria-hidden="true" /></Link>}
       />
       <Section number="01" title="Talent and training" lede="The fastest way to find, grow, and test hardware talent is to watch it build. Armature runs that room.">
         <div className="service-grid">
@@ -309,7 +201,7 @@ export function ServicesPage() {
         </div>
         <div className="section-actions">
           <Link className="button button-quiet" to="/maker-desk">Open the maker desk <ArrowRight aria-hidden="true" /></Link>
-          <Link className="button button-quiet" to="/membership">See member workstations <ArrowRight aria-hidden="true" /></Link>
+          <Link className="button button-quiet" to="/join">See membership and booking <ArrowRight aria-hidden="true" /></Link>
         </div>
       </Section>
       <Section number="03" title="Design, build, and run a local AI data centre" lede="For organizations that want GPUs on their own premises, Armature can take a deployment from workload sizing and bill of materials through burn-in and ongoing operation.">
@@ -397,67 +289,115 @@ export function ServicesPage() {
 }
 
 export function JoinPage() {
-  const { currentMember, submitApplication } = useApp();
+  const { currentMember, state, submitApplication } = useApp();
+  const pendingApplication = state.applications.find(
+    (application) => application.memberId === currentMember?.id && application.state === "pending"
+  );
+  const membershipActive = currentMember?.membershipState === "active";
+
+  const actions = !memberPlatformAvailable ? (
+    <span className="mono">Online applications opening soon</span>
+  ) : membershipActive ? (
+    <Link className="button button-primary" to="/book">Book a resource <ArrowRight aria-hidden="true" /></Link>
+  ) : pendingApplication ? (
+    <Link className="button button-primary" to="/dashboard">Open member workspace <ArrowRight aria-hidden="true" /></Link>
+  ) : currentMember ? (
+    <a className="button button-primary" href="#membership-application">Complete your application <ArrowRight aria-hidden="true" /></a>
+  ) : (
+    <Link className="button button-primary" to="/auth" state={{ from: "/join" }}>Create member account <ArrowRight aria-hidden="true" /></Link>
+  );
+
   return (
     <>
       <PageHeader
-        meta="Membership · partnerships · deployments"
-        title="Bring the prototype."
-        description="Tell us what you are building, what needs to move, and which part of the floor will unblock it."
+        meta="Membership · booking · HSR Layout"
+        title="Join the lab. Book what you need."
+        description="Create one member account, tell us what you are building, and complete staff approval. Approved members can reserve builder pods, equipment, compute, and the Demo floor from one workspace."
+        actions={actions}
       />
-      <Section number="01" title="Choose a way in">
-        <div className="join-grid">
-          <article>
+      <Section number="01" title="One membership journey">
+        <div className="process-list">
+          {[
+            ["01", "Create an account", "Use a secure email link, add your public name and handle, and tell us what you plan to build."],
+            ["02", "Complete approval", "Staff review the application and issue any safety inductions required by the resources you intend to use."],
+            ["03", "Book and build", "Choose an available resource, reserve the time, and manage the booking from your member workspace."]
+          ].map(([number, title, copy]) => (
+            <div className="process-row" key={number}><span className="mono">{number}</span><h3>{title}</h3><p>{copy}</p></div>
+          ))}
+        </div>
+      </Section>
+      <Section number="02" title="What members can reserve" lede="The booking screen follows the live resource board, so members see the capacity, duration, availability, and safety requirements before choosing a time." dark>
+        <div className="service-grid">
+          <article className="service-card">
             <Users aria-hidden="true" />
-            <span className="mono">Builders</span>
-            <h3>Become a member</h3>
-            <p>Book arms, benches, the cage, and compute. Complete inductions as the project reaches hazardous equipment.</p>
-            {currentMember ? (
-              <ApplicationForm onSubmit={submitApplication} />
-            ) : memberPlatformAvailable ? (
-              <Link className="button button-primary" to="/auth">Sign in to apply</Link>
-            ) : (
-              <p className="mono">Membership applications opening soon</p>
-            )}
+            <h3>A builder pod</h3>
+            <p>Reserve one of sixteen two-person builder pods with a desk, power, monitor, locker, and access to the shared floor.</p>
           </article>
-          <article>
-            <CircleDollarSign aria-hidden="true" />
-            <span className="mono">Backers</span>
-            <h3>Back the lab</h3>
-            <p>Sponsor hardware, a zone, or a workshop series and help builders access equipment they would not own alone.</p>
-            <p className="mono">Partnership inquiries opening soon</p>
-          </article>
-          <article>
+          <article className="service-card">
             <Cpu aria-hidden="true" />
-            <span className="mono">Businesses</span>
-            <h3>Deploy physical AI</h3>
-            <p>Request an on-prem GPU, camera, or local-LLM assessment backed by the engineering floor.</p>
-            <p className="mono">Assessment intake opening soon</p>
+            <h3>Equipment and compute</h3>
+            <p>Book electronics benches, fabrication equipment, robot cells, the drone cage, GPUs, or edge AI kits when the required induction is current.</p>
+          </article>
+          <article className="service-card">
+            <Sparkles aria-hidden="true" />
+            <h3>The Demo floor</h3>
+            <p>Reserve the 50-person demonstration and event area for a member event, working session, or live prototype demonstration.</p>
           </article>
         </div>
+        <p className="lede">Meeting-room reservations will appear in the same booking screen after a room is commissioned and its capacity and operating hours are approved.</p>
+      </Section>
+      <Section number="03" title="Start your membership">
+        {!memberPlatformAvailable ? (
+          <>
+            <Status tone="warn">Online signup is not live yet</Status>
+            <p className="lede">Applications and bookings will open here after the secure email and end-to-end member journey pass the production launch check.</p>
+          </>
+        ) : membershipActive ? (
+          <>
+            <Status tone="good">Membership active</Status>
+            <p className="lede">Your member workspace is ready. Choose a live resource and reserve the time you need.</p>
+            <div className="section-actions"><Link className="button button-primary" to="/book">Book a resource <ArrowRight aria-hidden="true" /></Link></div>
+          </>
+        ) : pendingApplication ? (
+          <>
+            <Status tone="warn">Application under review</Status>
+            <p className="lede">Your application has been submitted. Booking opens after staff approval and any required induction.</p>
+            <div className="section-actions"><Link className="button button-quiet" to="/dashboard">Open member workspace <ArrowRight aria-hidden="true" /></Link></div>
+          </>
+        ) : currentMember ? (
+          <ApplicationForm member={currentMember} onSubmit={submitApplication} />
+        ) : (
+          <>
+            <p className="lede">Create an account or sign in with a secure email link. You will return here to complete the short membership application.</p>
+            <div className="section-actions"><Link className="button button-primary" to="/auth" state={{ from: "/join" }}>Create account or sign in <ArrowRight aria-hidden="true" /></Link></div>
+          </>
+        )}
       </Section>
     </>
   );
 }
 
 function ApplicationForm({
+  member,
   onSubmit
 }: {
-  onSubmit: (summary: string) => Promise<void>;
+  member: { name: string; handle: string };
+  onSubmit: (input: { name: string; handle: string; summary: string }) => Promise<void>;
 }) {
   const [working, setWorking] = useState(false);
-  const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setWorking(true);
-    setSent(false);
     setError("");
     const data = new FormData(event.currentTarget);
     try {
-      await onSubmit(String(data.get("summary")));
-      setSent(true);
+      await onSubmit({
+        name: String(data.get("name")),
+        handle: String(data.get("handle")),
+        summary: String(data.get("summary"))
+      });
     } catch (reason) {
       setError(
         reason instanceof Error ? reason.message : "Application failed."
@@ -469,15 +409,34 @@ function ApplicationForm({
 
   return (
     <form
+      id="membership-application"
       className="inline-form"
       onSubmit={submit}
     >
+      <div className="form-grid">
+        <Field label="Your name">
+          <input name="name" required maxLength={120} autoComplete="name" defaultValue={member.name} />
+        </Field>
+        <Field label="Public profile handle" hint="3–30 lowercase letters, numbers, underscores, or hyphens.">
+          <input
+            name="handle"
+            required
+            minLength={3}
+            maxLength={30}
+            pattern="[a-z0-9][a-z0-9_-]{1,28}[a-z0-9]"
+            autoCapitalize="none"
+            autoComplete="username"
+            spellCheck={false}
+            defaultValue={member.handle}
+            placeholder="your-name"
+          />
+        </Field>
+      </div>
       <Field label="What are you building?">
         <textarea name="summary" required rows={4} placeholder="The prototype, its current state, and the equipment you expect to use." />
       </Field>
       {error && <p className="form-error" role="alert">{error}</p>}
-      {sent && <p className="success-message">Application submitted for staff review.</p>}
-      <button className="button button-primary" type="submit" disabled={working}>{working ? "Submitting…" : "Submit for review"}</button>
+      <button className="button button-primary" type="submit" disabled={working}>{working ? "Submitting…" : "Submit membership application"}</button>
     </form>
   );
 }

@@ -24,3 +24,12 @@ export function StaffRoute({ children }: PropsWithChildren) {
   }
   return children;
 }
+
+export function AdminRoute({ children }: PropsWithChildren) {
+  const { isAdmin, loading } = useApp();
+  if (loading) return <div className="route-loading mono">Checking admin role…</div>;
+  if (!isAdmin) {
+    return <Navigate to="/dashboard" replace />;
+  }
+  return children;
+}
