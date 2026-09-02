@@ -2,6 +2,8 @@
 
 Website: [armaturelab.org](https://armaturelab.org)
 
+Contact: [hello@armaturelab.org](mailto:hello@armaturelab.org)
+
 React/Vite member, booking, maker-desk inventory, and check-in PWA for the
 physical AI and robotics lab in HSR Layout, Bengaluru.
 

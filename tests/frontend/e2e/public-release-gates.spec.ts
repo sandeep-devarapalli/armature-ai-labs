@@ -16,6 +16,7 @@ test("public-first production gates operational routes", async ({ page }) => {
   await expect(page.getByRole("link", { name: "Kiosk" })).toHaveCount(0);
   await expect(page.getByRole("link", { name: "Request a component" })).toHaveCount(0);
   await expect(page.getByRole("link", { name: "Book a workstation" })).toHaveCount(0);
+  await expect(page.locator("footer").getByRole("link", { name: "hello@armaturelab.org" })).toHaveAttribute("href", "mailto:hello@armaturelab.org");
 
   await page.goto("/maker-desk");
   await expect(page.getByRole("link", { name: /Sign in|Request secure storage|Build a pickup order|Rent a toolkit/ })).toHaveCount(0);
@@ -31,6 +32,7 @@ test("public-first production gates operational routes", async ({ page }) => {
   await expect(page.getByRole("heading", { name: "Join the lab. Book what you need." })).toBeVisible();
   await expect(page.getByRole("link", { name: "Create member account" })).toHaveCount(0);
   await expect(page.getByText("Online signup is not live yet")).toBeVisible();
+  await expect(page.getByRole("link", { name: "Email the lab" })).toHaveAttribute("href", "mailto:hello@armaturelab.org");
 
   await page.goto("/membership");
   await expect(page).toHaveURL(/\/join$/);

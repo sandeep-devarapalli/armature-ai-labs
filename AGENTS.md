@@ -22,6 +22,7 @@ identity, approvals, resources, bookings, attendance, and integration state.
 ## Brand And Naming Rules
 
 - The canonical public website and email domain is `armaturelab.org` (singular). Do not substitute `armaturelabs.org`.
+- The canonical public information and membership mailbox is `hello@armaturelab.org`. Keep private booking-calendar and transactional identities separate.
 - The commutator mark geometry in `brand/armature-lab/` is fixed; the exploded-A mark is retired.
 - Keep the parent and lab identities separate. The larger parent plan is `Institute for Physical AI`; the lab identity is `Armature - The Physical AI and Robotics Lab`.
 - The current public site and asset pack style the lab name as lowercase `armature`. Preserve that styling in existing site copy and SVG text unless the user explicitly asks for capitalization changes.

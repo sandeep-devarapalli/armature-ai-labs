@@ -11,8 +11,9 @@ under Apache-2.0.
 
 Reasonable use of the name and marks to identify this project, link to it, or
 describe the origin of an unmodified copy is permitted. Any other use requires
-prior written permission. Do not imply endorsement, affiliation, or operation
-of an official Armature lab without permission.
+prior written permission at [hello@armaturelab.org](mailto:hello@armaturelab.org).
+Do not imply endorsement, affiliation, or operation of an official Armature lab
+without permission.
 
 Project media under `site/project-images/` and `public/project-images/` is
 outside the repository's Apache-2.0 grant. A project code or hardware license

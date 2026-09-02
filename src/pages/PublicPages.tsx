@@ -173,7 +173,12 @@ export function ServicesPage() {
         meta="Services · deployments · research"
         title="Build here, or bring the lab to the site."
         description="Armature combines a bookable robotics floor with engineering services for organizations that need working hardware, private AI infrastructure, or credible physical datasets."
-        actions={<Link className="button button-primary" to="/join">Become a member <ArrowRight aria-hidden="true" /></Link>}
+        actions={(
+          <>
+            <Link className="button button-primary" to="/join">Become a member <ArrowRight aria-hidden="true" /></Link>
+            <a className="button button-quiet" href="mailto:hello@armaturelab.org">Discuss a project</a>
+          </>
+        )}
       />
       <Section number="01" title="Talent and training" lede="The fastest way to find, grow, and test hardware talent is to watch it build. Armature runs that room.">
         <div className="service-grid">
@@ -296,7 +301,7 @@ export function JoinPage() {
   const membershipActive = currentMember?.membershipState === "active";
 
   const actions = !memberPlatformAvailable ? (
-    <span className="mono">Online applications opening soon</span>
+    <a className="button button-primary" href="mailto:hello@armaturelab.org">Email the lab</a>
   ) : membershipActive ? (
     <Link className="button button-primary" to="/book">Book a resource <ArrowRight aria-hidden="true" /></Link>
   ) : pendingApplication ? (
@@ -350,7 +355,9 @@ export function JoinPage() {
         {!memberPlatformAvailable ? (
           <>
             <Status tone="warn">Online signup is not live yet</Status>
-            <p className="lede">Applications and bookings will open here after the secure email and end-to-end member journey pass the production launch check.</p>
+            <p className="lede">
+              Applications and bookings will open here after secure member sign-in and the end-to-end member journey pass the production launch check. For membership questions or a visit, email <a className="text-link" href="mailto:hello@armaturelab.org">hello@armaturelab.org</a>.
+            </p>
           </>
         ) : membershipActive ? (
           <>

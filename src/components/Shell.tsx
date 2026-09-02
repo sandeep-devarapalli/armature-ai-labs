@@ -202,6 +202,7 @@ export function Shell({ children }: PropsWithChildren) {
             <p>The Physical AI and Robotics Lab · HSR Layout, Bengaluru</p>
           </div>
           <div className="footer-links">
+            <a href="mailto:hello@armaturelab.org">hello@armaturelab.org</a>
             <Link to="/members">Members</Link>
             <Link to="/maker-desk">Maker desk</Link>
             <Link to="/branding">Brand assets</Link>

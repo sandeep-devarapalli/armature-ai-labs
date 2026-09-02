@@ -646,6 +646,7 @@ test("public routes preserve the useful legacy lab sections", async ({ page }) =
   await expect(page.getByRole("heading", { name: "Talent and training" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Design, build, and run a local AI data centre" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Who it is for" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Discuss a project" })).toHaveAttribute("href", "mailto:hello@armaturelab.org");
   await expectNoHorizontalOverflow(page);
 
   await page.goto("/projects");

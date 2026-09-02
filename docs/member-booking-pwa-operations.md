@@ -65,7 +65,9 @@ new migrations. A frontend rollback never rewinds database history.
 
 ## Google Workspace
 
-Use a dedicated identity such as `bookings@armaturelab.org`.
+Use `hello@armaturelab.org` as the public inbound mailbox for information and
+membership enquiries. Keep calendar operations, reminders, and transactional
+booking mail on a separate identity such as `bookings@armaturelab.org`.
 
 - Create one private Google Calendar per reservable resource.
 - Store each calendar identifier in the protected calendar link table.
