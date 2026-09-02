@@ -1,5 +1,13 @@
 import { expect, test } from "@playwright/test";
 
+test("footer publishes direct contact links", async ({ page }) => {
+  await page.goto("/");
+  const footer = page.locator("footer");
+
+  await expect(footer.getByRole("link", { name: "hello@armaturelab.org" })).toHaveAttribute("href", "mailto:hello@armaturelab.org");
+  await expect(footer.getByRole("link", { name: "+91 9748485583" })).toHaveAttribute("href", "tel:+919748485583");
+});
+
 test("public-first production gates operational routes", async ({ page }) => {
   await page.goto("/auth");
   const directRouteHeading = page.getByRole("heading", { level: 1 });
@@ -16,7 +24,6 @@ test("public-first production gates operational routes", async ({ page }) => {
   await expect(page.getByRole("link", { name: "Kiosk" })).toHaveCount(0);
   await expect(page.getByRole("link", { name: "Request a component" })).toHaveCount(0);
   await expect(page.getByRole("link", { name: "Book a workstation" })).toHaveCount(0);
-  await expect(page.locator("footer").getByRole("link", { name: "hello@armaturelab.org" })).toHaveAttribute("href", "mailto:hello@armaturelab.org");
 
   await page.goto("/maker-desk");
   await expect(page.getByRole("link", { name: /Sign in|Request secure storage|Build a pickup order|Rent a toolkit/ })).toHaveCount(0);

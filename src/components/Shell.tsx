@@ -203,6 +203,7 @@ export function Shell({ children }: PropsWithChildren) {
           </div>
           <div className="footer-links">
             <a href="mailto:hello@armaturelab.org">hello@armaturelab.org</a>
+            <a href="tel:+919748485583">+91 9748485583</a>
             <Link to="/members">Members</Link>
             <Link to="/maker-desk">Maker desk</Link>
             <Link to="/branding">Brand assets</Link>
