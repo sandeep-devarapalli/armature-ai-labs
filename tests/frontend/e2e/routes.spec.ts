@@ -861,6 +861,13 @@ test("printer fleet keeps three Amazon-audited fabrication options", async ({ pa
   await expect(page.locator('a[href="/procurement"]')).toHaveCount(0);
 });
 
+test("public routes omit retired flight-enclosure copy", async ({ page }) => {
+  for (const path of ["/", "/branding", "/join", "/projects", "/services"]) {
+    await page.goto(path);
+    await expect(page.locator("body")).not.toContainText(/\bcages?\b/i);
+  }
+});
+
 test("member casts only one vote per request", async ({ page }) => {
   await signInDemo(page);
   await page.goto("/component-requests");

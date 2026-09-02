@@ -172,7 +172,7 @@ export function FinancialsPage() {
               <tr><th>Machine shop</th><td>Drill press, grinder, hand tools, power tools, and metrology.</td><td>Benchtop CNC and upgraded extraction.</td></tr>
               <tr><th>Electronics + PCB</th><td>Four ESD benches, soldering stations, scope, supplies, and stocked components.</td><td>Reflow, pick-and-place, another scope, and deeper stock.</td></tr>
               <tr><th>Sensors</th><td>Depth cameras, 2D LiDAR, IMUs, calibration targets, and camera rigs.</td><td>3D LiDAR, RTK GNSS, force/torque, and tactile equipment.</td></tr>
-              <tr><th>Robotics</th><td>Collaborative arm, drone cage, starter drones, and low-cost training arms.</td><td>Additional arms, an AMR, and larger autonomy rigs.</td></tr>
+              <tr><th>Robotics</th><td>Collaborative arm, starter drones, and low-cost training arms.</td><td>Additional arms, an AMR, and larger autonomy rigs.</td></tr>
               <tr><th>Fit-out</th><td>Five boards, three-phase service, UPS, HVAC, extraction, nine cameras, access control, fire safety, and furniture.</td><td>More lockers, AV, and operating capacity.</td></tr>
             </tbody>
           </table>

@@ -8,7 +8,7 @@ const COMPLETE_PACK = "/brand/armature-lab-assets.zip";
 const oneLineDescription =
   "armature is a 3,500 sq ft physical AI and robotics lab in HSR Layout, Bengaluru.";
 const paragraphDescription =
-  "The armature is the core of every motor: the part that moves. Ours is a 3,500 sq ft physical AI and robotics lab in HSR Layout, Bengaluru, built for the full path from idea to working machine: arms, a netted drone cage, prototyping, ESD-safe benches, and GPU compute, all bookable by the hour.";
+  "The armature is the core of every motor: the part that moves. Ours is a 3,500 sq ft physical AI and robotics lab in HSR Layout, Bengaluru, built for the full path from idea to working machine: arms, prototyping, machining, ESD-safe benches, and GPU compute, all bookable by the hour.";
 type AssetDownload = { label: string; path: string };
 type LogoAsset = { title: string; use: string; preview: string; alt: string; downloads: AssetDownload[] };
 const logoAssets: LogoAsset[] = [

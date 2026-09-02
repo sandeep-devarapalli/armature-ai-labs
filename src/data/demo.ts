@@ -37,23 +37,6 @@ export const resources: Resource[] = [
     image: "/project-images/lerobot-so-arm-official.webp"
   },
   {
-    id: "res-drone",
-    slug: "drone-cage",
-    name: "Netted drone cage",
-    kind: "flight",
-    zone: "Zone 07",
-    description: "Indoor flight volume with netting, spotter station, PX4 tools, and motion capture markers.",
-    capacity: 3,
-    maxGuests: 0,
-    durationMinutes: 60,
-    maxDurationMinutes: 120,
-    bookingHorizonDays: 21,
-    certifications: ["Drone cage induction"],
-    hazardous: true,
-    available: true,
-    image: "/project-images/px4-x500-official.jpg"
-  },
-  {
     id: "res-gpu",
     slug: "gpu-compute",
     name: "GPU compute node",
@@ -123,7 +106,7 @@ export const initialDemoState: DemoState = {
       phone: "+91 90000 00000",
       emergencyContact: "Demo contact · +91 90000 00001",
       membershipState: "active",
-      certifications: ["Lab induction", "Arm cell induction", "Drone cage induction"]
+      certifications: ["Lab induction", "Arm cell induction"]
     },
     {
       id: "member-pending",
