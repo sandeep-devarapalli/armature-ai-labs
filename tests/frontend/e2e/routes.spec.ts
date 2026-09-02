@@ -898,7 +898,7 @@ test("PWA keeps transactional traffic out of Cache Storage", async ({ page, cont
 test("mobile route families stay contained and avoid iOS form zoom", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "mobile");
   const publicRoutes = [
-    "/", "/membership", "/services", "/projects", "/ecosystem", "/financials",
+    "/", "/membership", "/services", "/projects", "/branding", "/ecosystem", "/financials",
     "/procurement", "/components", "/components/bno055-imu", "/components/request",
     "/maker-desk", "/join", "/members", "/auth", "/kiosk"
   ];

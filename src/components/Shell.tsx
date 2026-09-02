@@ -202,6 +202,7 @@ export function Shell({ children }: PropsWithChildren) {
             <Link to="/members">Members</Link>
             <Link to="/procurement">Procurement</Link>
             <Link to="/maker-desk">Maker desk</Link>
+            <Link to="/branding">Brand assets</Link>
             {componentRequestsAvailable && <Link to="/components/request">Request a component</Link>}
             {memberPlatformAvailable && <Link to="/kiosk">Kiosk</Link>}
             <Link to="/join">Join the floor</Link>
