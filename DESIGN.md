@@ -51,7 +51,7 @@ Theme behavior:
 - Use the existing CSS variables and semantic surface tokens instead of duplicating page markup.
 - Persist an explicit visitor choice in `localStorage` under `armature-theme`.
 - When no choice exists, respect `prefers-color-scheme`; dark may follow the system, while sepia is always explicit.
-- Keep the three-swatch theme control in the main navigation and procurement navigation.
+- Keep the three-swatch theme control in the main navigation.
 - Verify inline marks, diagrams, form controls, cards, tables, and the animated hero field in every mode.
 
 ## Typography

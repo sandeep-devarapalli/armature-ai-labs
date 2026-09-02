@@ -18,7 +18,6 @@ const BuildingVisionPage = lazy(() => import("../pages/BuildingVisionPage").then
 const EcosystemPage = lazy(() => import("../pages/EcosystemPage").then((module) => ({ default: module.EcosystemPage })));
 const KioskPage = lazy(() => import("../pages/KioskPage").then((module) => ({ default: module.KioskPage })));
 const FinancialsPage = lazy(() => import("../pages/PlanningPages").then((module) => ({ default: module.FinancialsPage })));
-const ProcurementPage = lazy(() => import("../pages/PlanningPages").then((module) => ({ default: module.ProcurementPage })));
 const ComponentsPage = lazy(() => import("../pages/ComponentsPages").then((module) => ({ default: module.ComponentsPage })));
 const ComponentDetailPage = lazy(() => import("../pages/ComponentsPages").then((module) => ({ default: module.ComponentDetailPage })));
 const PublicComponentRequestPage = lazy(() => import("../pages/InventoryPages").then((module) => ({ default: module.PublicComponentRequestPage })));
@@ -94,7 +93,6 @@ export const router = createBrowserRouter([
       { path: "/building-vision", element: <BuildingVisionPage /> },
       { path: "/ecosystem", element: <EcosystemPage /> },
       { path: "/financials", element: memberFeature(adminPage(<FinancialsPage />)) },
-      { path: "/procurement", element: <ProcurementPage /> },
       { path: "/components", element: <ComponentsPage /> },
       { path: "/components/request", element: componentRequestFeature(<PublicComponentRequestPage />) },
       { path: "/components/:slug", element: <ComponentDetailPage /> },

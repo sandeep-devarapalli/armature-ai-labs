@@ -203,7 +203,6 @@ export function Shell({ children }: PropsWithChildren) {
           </div>
           <div className="footer-links">
             <Link to="/members">Members</Link>
-            <Link to="/procurement">Procurement</Link>
             <Link to="/maker-desk">Maker desk</Link>
             <Link to="/branding">Brand assets</Link>
             {componentRequestsAvailable && <Link to="/components/request">Request a component</Link>}

@@ -659,8 +659,13 @@ test("public routes preserve the useful legacy lab sections", async ({ page }) =
   expect(new Set(featuredCovers).size).toBe(featuredCovers.length);
   await expectNoHorizontalOverflow(page);
 
+  await page.goto("/components");
+  await expect(page.locator('a[href="/procurement"]')).toHaveCount(0);
+
   await page.goto("/procurement");
-  await expect(page.getByRole("heading", { name: "Five shared build stations" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "That bench is not on the floor plan." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Buy for ten builders, not ten isolated labs." })).toHaveCount(0);
+  await expect(page.locator('a[href="/procurement"]')).toHaveCount(0);
   await expectNoHorizontalOverflow(page);
 });
 
@@ -851,16 +856,7 @@ test("printer fleet keeps three Amazon-audited fabrication options", async ({ pa
     "href",
     "https://www.amazon.in/dp/B0DPXBT99W"
   );
-
-  await page.goto("/procurement");
-  await expect(page.getByText("Bambu Lab A1 open-frame FDM printer")).toBeVisible();
-  await expect(page.getByText("Bambu Lab P1S Combo enclosed FDM printer").first()).toBeVisible();
-  await expect(page.getByText("ELEGOO Neptune 4 Plus large-format FDM printer").first()).toBeVisible();
-  expect(
-    await page.evaluate(() =>
-      document.documentElement.scrollWidth > document.documentElement.clientWidth
-    )
-  ).toBe(false);
+  await expect(page.locator('a[href="/procurement"]')).toHaveCount(0);
 });
 
 test("member casts only one vote per request", async ({ page }) => {
@@ -950,7 +946,7 @@ test("mobile route families stay contained and avoid iOS form zoom", async ({ pa
   test.skip(testInfo.project.name !== "mobile");
   const publicRoutes = [
     "/", "/membership", "/services", "/projects", "/branding", "/ecosystem",
-    "/procurement", "/components", "/components/bno055-imu", "/components/request",
+    "/components", "/components/bno055-imu", "/components/request",
     "/maker-desk", "/join", "/members", "/auth", "/kiosk"
   ];
   const memberRoutes = [

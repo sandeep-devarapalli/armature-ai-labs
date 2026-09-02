@@ -1756,8 +1756,7 @@ input[type="range"] {
   border-radius: 8px;
 }
 
-.panel-title,
-.procurement-title {
+.panel-title {
   display: flex;
   align-items: center;
   gap: 10px;
@@ -1766,8 +1765,7 @@ input[type="range"] {
   border-bottom: 1px solid var(--hair);
 }
 
-.panel-title svg,
-.procurement-title svg {
+.panel-title svg {
   color: var(--saffron-deep);
 }
 
@@ -1847,81 +1845,6 @@ input[type="range"] {
 
 .procurement-summary .metrics-strip {
   margin-top: 0;
-}
-
-.station-grid {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 9px;
-  margin-top: 32px;
-}
-
-.station-grid article {
-  min-width: 0;
-  padding: 18px;
-  background: var(--panel);
-  border: 1px solid var(--hair);
-  border-radius: 7px;
-}
-
-.station-grid .mono {
-  color: var(--saffron-deep);
-}
-
-.station-grid h3 {
-  margin-top: 18px;
-  font-size: 17px;
-}
-
-.station-grid p {
-  margin-top: 8px;
-  color: var(--fg-2);
-  font-size: 13px;
-}
-
-.procurement-group {
-  margin-top: 35px;
-}
-
-.procurement-title {
-  margin: 0;
-}
-
-.procurement-group .table-wrap {
-  margin-top: 14px;
-}
-
-.gpu-comparison {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
-  margin-top: 34px;
-}
-
-.gpu-comparison article {
-  padding: 22px;
-  background: var(--feature-panel);
-  border: 1px solid var(--feature-hair);
-  border-radius: 8px;
-}
-
-.gpu-comparison .mono {
-  color: var(--saffron);
-}
-
-.gpu-comparison h3 {
-  margin-top: 20px;
-}
-
-.gpu-comparison p {
-  margin-top: 12px;
-}
-
-.gpu-comparison strong {
-  display: block;
-  margin-top: 20px;
-  color: var(--saffron-soft);
-  font-size: 13px;
 }
 
 .source-grid {
@@ -4642,10 +4565,6 @@ footer p {
     grid-template-columns: 1fr;
   }
 
-  .station-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .maker-offering-grid,
   .toolkit-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -4667,8 +4586,7 @@ footer p {
 
   .feature-grid,
   .service-grid,
-  .join-grid,
-  .gpu-comparison {
+  .join-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -4987,7 +4905,6 @@ footer p {
   .feature-grid,
   .service-grid,
   .join-grid,
-  .gpu-comparison,
   .source-grid,
   .cert-list,
   .profile-public-grid {
@@ -5077,8 +4994,7 @@ footer p {
     grid-template-columns: 1fr;
   }
 
-  .financial-controls-grid,
-  .station-grid {
+  .financial-controls-grid {
     grid-template-columns: 1fr;
   }
 

@@ -2,7 +2,6 @@ import type {
   CatalogComponent,
   ComponentAvailability,
   ComponentOffer,
-  ProcurementGroup,
   ProjectComponentLink,
   ProjectComponentRole
 } from "../types/domain";
@@ -2840,62 +2839,6 @@ export const projectComponentLinks: ProjectComponentLink[] = [
   componentSlug,
   role: role as ProjectComponentRole
 }));
-
-export const procurementGroups: ProcurementGroup[] = [
-  {
-    title: "Shared compute and storage",
-    icon: "storage",
-    rows: [
-      { item: "Primary NAS / ZFS storage node", quantity: "1", indicativeInr: "Rs 6L-10L", supports: "Datasets, video, CAD, checkpoints, DVC", sourceLabel: "TrueNAS", sourceUrl: "https://www.truenas.com/", state: "buy_first" },
-      { item: "Backup NAS / offline set", quantity: "1", indicativeInr: "Rs 3L-6L", supports: "Dataset survivability and recovery", sourceLabel: "OpenZFS", sourceUrl: "https://openzfs.org/", state: "buy_first" },
-      { item: "10GbE switch + NIC links", quantity: "1 + 8-12", indicativeInr: "Rs 1.5L-4L", supports: "Shared ingest and GPU/NAS traffic", sourceLabel: "MikroTik", sourceUrl: "https://mikrotik.com/products/group/switches", state: "buy_first" },
-      { item: "2-GPU autonomous workstation", quantity: "1", indicativeInr: "Rs 9L-24L", supports: "Training, vision, simulation, local inference", sourceLabel: "Build notes", sourceUrl: "https://www.shikhar.gg/blog/gpu-pc-build", state: "buy_first" },
-      { item: "NVIDIA DGX Spark", quantity: "1", indicativeInr: "Rs 4.5L-6L", supports: "Shared local AI and robotics software", sourceLabel: "NVIDIA", sourceUrl: "https://www.nvidia.com/en-us/products/workstations/dgx-spark/", state: "validate" },
-      { item: "RTX 5090 32GB", quantity: "2", indicativeInr: "Rs 3.4L-5L+ each", supports: "Primary CUDA training and inference", sourceLabel: "NVIDIA", sourceUrl: "https://www.nvidia.com/en-us/geforce/graphics-cards/50-series/rtx-5090/", state: "validate" },
-      { item: "RTX PRO 6000 Blackwell 96GB", quantity: "1 optional", indicativeInr: "About Rs 11.9L before landing", supports: "High-VRAM funded workloads", sourceLabel: "NVIDIA", sourceUrl: "https://www.nvidia.com/en-us/design-visualization/rtx-pro-6000/", state: "validate" }
-    ]
-  },
-  {
-    title: "Robot and edge-compute stations",
-    icon: "compute",
-    rows: [
-      { item: "Jetson Orin Nano", quantity: "6", indicativeInr: "Rs 48k observed", supports: "Edge AI and camera stations", sourceLabel: "GetSet Robotics", sourceUrl: "https://getsetrobotics.com/product/jetson-orin-nano/", state: "validate" },
-      { item: "Jetson Thor", quantity: "1 pilot", indicativeInr: "Rs 3.19L observed", supports: "High-end multi-camera physical AI", sourceLabel: "GetSet Robotics", sourceUrl: "https://getsetrobotics.com/product/jetson-thor/", state: "validate" },
-      { item: "SO-101 leader / follower sets", quantity: "5 + 10 spare servos", indicativeInr: "Rs 27.5k-33k per set", supports: "Ten builders working in pairs", sourceLabel: "GetSet Robotics", sourceUrl: "https://getsetrobotics.com/product/so-101-robotic-arm/", state: "buy_first" },
-      { item: "Raspberry Pi 5 8GB boards", quantity: "12", indicativeInr: "Rs 19,617.50 each", supports: "Rovers, vacuum, logging, controllers", sourceLabel: "Thingbits", sourceUrl: "https://www.thingbits.in/products/raspberry-pi-5-computer", state: "buy_first" },
-      { item: "Microcontroller and motor-control drawer", quantity: "20 ESP32 + 12 Arduino", indicativeInr: "SKU table below", supports: "Fast controls and sensor work", sourceLabel: "Thingbits", sourceUrl: "https://www.thingbits.in/", state: "buy_first" },
-      { item: "Pixhawk 6C-class autopilot sets", quantity: "2", indicativeInr: "Quote in INR", supports: "Rovers first, drones after cage readiness", sourceLabel: "PX4 guide", sourceUrl: "https://docs.px4.io/main/en/assembly/quick_start_pixhawk6c.html", state: "validate" }
-    ]
-  },
-  {
-    title: "Cameras and navigation sensors",
-    icon: "camera",
-    rows: [
-      { item: "Raspberry Pi Camera V2", quantity: "12", indicativeInr: "Rs 1,829 each", supports: "Arm stations, tactile vision, mobile robots", sourceLabel: "Thingbits", sourceUrl: "https://www.thingbits.in/products/raspberry-pi-camera-v2-8mp", state: "buy_first" },
-      { item: "Luxonis OAK-D Lite", quantity: "6", indicativeInr: "About Rs 15k before landing", supports: "Stereo depth and onboard AI", sourceLabel: "Luxonis", sourceUrl: "https://shop.luxonis.com/products/oak-d-lite-1", state: "validate" },
-      { item: "Luxonis OAK-D Pro", quantity: "4", indicativeInr: "About Rs 39k before landing", supports: "Active stereo and low-light tests", sourceLabel: "Luxonis", sourceUrl: "https://shop.luxonis.com/products/oak-d-pro", state: "validate" },
-      { item: "RealSense D455-class pair", quantity: "2", indicativeInr: "Quote current stock", supports: "RGB-D compatibility for project pipelines", sourceLabel: "RealSense", sourceUrl: "https://www.realsenseai.com/products/depth-camera-d455/", state: "validate" },
-      { item: "RPLIDAR A1 / C1", quantity: "4", indicativeInr: "Rs 9k-18k each", supports: "Rovers and indoor mapping", sourceLabel: "SLAMTEC", sourceUrl: "https://www.slamtec.com/en/lidar/a1", state: "validate" },
-      { item: "RTK GNSS base + rover", quantity: "2 pairs", indicativeInr: "Rs 20k-50k+ per kit", supports: "OpenMower and outdoor autonomy", sourceLabel: "ArduSimple", sourceUrl: "https://www.ardusimple.com/product/simplertk2b-basic-starter-kit-ip65/", state: "validate" },
-      { item: "AprilTag / Charuco boards", quantity: "10 sets", indicativeInr: "Rs 20k-60k total", supports: "Calibration, pose, and data collection", sourceLabel: "AprilTag", sourceUrl: "https://github.com/AprilRobotics/apriltag", state: "buy_first" }
-    ]
-  },
-  {
-    title: "Fabrication, bench, motion, and safety stock",
-    icon: "safety",
-    rows: [
-      { item: "Bambu Lab A1 open-frame FDM printer", quantity: "1", indicativeInr: "Rs 35,199", supports: "Routine PLA, PETG, and TPU robotics parts", sourceLabel: "Amazon.in · 5.0/5 (14)", sourceUrl: "https://www.amazon.in/dp/B0DPXBT99W", state: "buy_first" },
-      { item: "Bambu Lab P1S Combo enclosed FDM printer", quantity: "1", indicativeInr: "Rs 81,999", supports: "ABS, ASA, and functional heat-resistant parts", sourceLabel: "Amazon.in · 4.6/5 (10)", sourceUrl: "https://www.amazon.in/dp/B0DSLLGZ3L", state: "validate" },
-      { item: "ELEGOO Neptune 4 Plus large-format FDM printer", quantity: "1", indicativeInr: "Rs 38,999", supports: "Large rover panels, fixtures, and robot structures", sourceLabel: "Amazon.in · 4.7/5 (5)", sourceUrl: "https://www.amazon.in/dp/B0CN4GDF1D", state: "validate" },
-      { item: "Electronics bench tooling", quantity: "10 mats + 5 solder stations", indicativeInr: "Rs 3L-6L", supports: "Ten builders without tool bottlenecks", sourceLabel: "element14 India", sourceUrl: "https://in.element14.com/", state: "buy_first" },
-      { item: "Force / torque and load-cell starter kits", quantity: "2", indicativeInr: "Rs 50k-3L", supports: "Gripper force and manipulation safety", sourceLabel: "Mouser India", sourceUrl: "https://www.mouser.in/", state: "validate" },
-      { item: "LiPo batteries, chargers, safe bags", quantity: "Shared safety set", indicativeInr: "Rs 1L-2L", supports: "Drones, rovers, and mobile robots", sourceLabel: "Robu", sourceUrl: "https://robu.in/", state: "validate" },
-      { item: "Servo and motor-control drawer", quantity: "12 drivers + 42 servos", indicativeInr: "SKU table below", supports: "Fast mechanism work and motion spares", sourceLabel: "Thingbits", sourceUrl: "https://www.thingbits.in/", state: "buy_first" },
-      { item: "Spare belts, bearings, fasteners", quantity: "15% motion spares", indicativeInr: "Rs 1L-2L initial", supports: "Keep active builds moving", sourceLabel: "Robu", sourceUrl: "https://robu.in/", state: "buy_first" },
-      { item: "Emergency stops, barriers, extinguishers", quantity: "Per hazard zone", indicativeInr: "Rs 1L-2.5L", supports: "Guarded commissioning and incident response", sourceLabel: "BIS reference", sourceUrl: "https://bis.gov.in/", state: "validate" }
-    ]
-  }
-];
 
 export function getComponent(slug: string) {
   return components.find((component) => component.slug === slug);

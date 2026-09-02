@@ -44,7 +44,7 @@ VITE_COMPONENT_REQUESTS_ENABLED=false
 VITE_GOOGLE_AUTH_ENABLED=false
 ```
 
-The public site, projects, component catalog, procurement board, Maker Desk
+The public site, projects, component catalog, Maker Desk
 catalog, ecosystem map, member directory, and Building Vision remain visible.
 Member, booking, check-in, kiosk, admin, inventory-custody, locker, toolkit, and
 component-request actions must render the shared opening-soon state while their
