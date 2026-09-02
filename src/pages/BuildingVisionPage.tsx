@@ -10,22 +10,21 @@ const filters: Array<"All" | BuildingVisionFloor> = [
   "All",
   "Frontage",
   "Ground floor",
-  "First floor",
-  "Second floor",
-  "Circulation"
+  "First floor"
 ];
 
 const buildingVisionAgentPrompt = `Please propose a revision to the Building Vision page.
 
-View: [exact card title]
+View: [00–20 · exact card title]
 Requested change: [one clear change]
 Reason: [what this improves]
-Must preserve: [walls, doors, windows, stairs, floor levels, trees, gate and drainage]
-Allowed work: paint, floor repair or finish, lighting, removable signage and movable furniture only.
+Must preserve: [the exact walls, doors, windows, stairs, floor levels, storage, trees, gate, drainage and circulation shown]
+Reference: [attach the matching approved PNG from public/building-vision/rework-v2]
+Set rule: Keep the canonical Building Vision set at exactly 21 PNGs unless I explicitly approve adding, removing or replacing a view.
 
 Before doing any work, read AGENTS.md and DESIGN.md.
 First describe the proposed change in words. Do not edit files until I approve.
-After approval, keep the original before image unchanged, update the relevant after image and website note, and add or update the focused test.
+After approval, update only the named approved concept image and its website note. Do not restore the legacy before/after assets or change another view.
 Show me the revised local /building-vision page before committing or publishing.
 Run npm test, npm run build and the building-vision browser test.`;
 
@@ -71,55 +70,55 @@ export function BuildingVisionPage() {
       <PageHeader
         meta="1426, 20th Main Road · HSR Layout"
         title="The building, without rebuilding it."
-        description="A finish-only vision for the street arrival, ground-floor reception, store and café, plus two floors of Armature Lab: new flooring, paint, lighting, removable signage and movable furniture, while the walls, doors, windows, stairs and levels stay where they are."
+        description="A coordinated 21-view concept for adapting the existing HSR building into Armature's coworking, meeting and presentation spaces. The approved sequence shows the frontage, ground floor and first floor with targeted access, glazing, flooring, furniture, lighting and identity upgrades."
       >
         <div className="building-vision-summary" aria-label="Concept summary">
           <div><strong>{buildingVisionItems.length}</strong><span className="mono">Building views</span></div>
-          <div><strong>0</strong><span className="mono">Structural changes proposed</span></div>
-          <div><strong>4</strong><span className="mono">Fit-out layers</span></div>
+          <div><strong>2</strong><span className="mono">Floors + frontage</span></div>
+          <div><strong>1</strong><span className="mono">Coordinated concept set</span></div>
         </div>
       </PageHeader>
 
       <div className="building-vision-guardrail">
         <div className="wrap">
-          <span className="mono">Non-negotiable scope</span>
-          <p>No wall demolition, new openings, stair changes or major remodelling. Every “after” is a visual concept, not a measured construction drawing.</p>
+          <span className="mono">Concept boundary</span>
+          <p>These images communicate design intent, not measured construction details. Retain the primary shell and stair geometry; survey every glass door, partition, balcony enclosure, egress route, waterproofing and service requirement before procurement.</p>
         </div>
       </div>
 
       <Section
         number="01"
-        title="One palette, four practical fit-out layers."
-        lede="A co-working atmosphere can come from consistency and useful furniture—not from erasing the character of the house."
+        title="One building, four coordinated decisions."
+        lede="The new sequence keeps every room recognisable while resolving how people arrive, work, meet, present and move through the building."
       >
         <div className="building-vision-principles">
           <article>
-            <span className="mono">Flooring</span>
-            <h3>Commercial LVT and outdoor tile</h3>
-            <p>Warm oak in café and meeting areas; soft grey in harder-working lab rooms and circulation.</p>
+            <span className="mono">Existing shell</span>
+            <h3>Keep the building legible</h3>
+            <p>Respect the true walls, openings, stair turns, floor levels, fixed storage and balcony contours shown in the source photographs.</p>
           </article>
           <article>
-            <span className="mono">Painting</span>
-            <h3>Warm white, ink and a little saffron</h3>
-            <p>A calm base, darker work surfaces and small colour signals for floor and room identity.</p>
+            <span className="mono">Access + glazing</span>
+            <h3>Separate without closing in</h3>
+            <p>Use glass access doors, stair partitions and carefully fitted balcony enclosures while keeping adjacent doors and egress clear.</p>
           </article>
           <article>
-            <span className="mono">Furniture</span>
-            <h3>Movable by default</h3>
-            <p>Tables on castors, freestanding storage, stackable chairs and mobile screens let rooms change over time.</p>
+            <span className="mono">Work-ready interiors</span>
+            <h3>Power, comfort and continuity</h3>
+            <p>Continuous workbars, powered round tables, acoustic flooring and compact furniture support daily work without wasting circulation.</p>
           </article>
           <article>
-            <span className="mono">Lighting</span>
-            <h3>Surface-mounted and task-led</h3>
-            <p>Track, pendants and task lights improve usability without rebuilding ceilings or hiding the existing structure.</p>
+            <span className="mono">Technical verification</span>
+            <h3>Measure before building</h3>
+            <p>Confirm dimensions, structure, waterproofing, HVAC, electrical capacity, fire safety and accessibility with qualified local professionals.</p>
           </article>
         </div>
       </Section>
 
       <Section
         number="02"
-        title="Every in-scope building view, before and after."
-        lede="Filter by area, then use the notes below each pair as a practical first-pass fit-out brief."
+        title="The complete 21-view Building Vision."
+        lede="The numbered sequence below uses only the approved PNG set. Filter by area, then use each concept and note as a first-pass fit-out brief."
         id="comparisons"
       >
         <div className="building-vision-filters" role="toolbar" aria-label="Filter building views">
@@ -150,36 +149,25 @@ export function BuildingVisionPage() {
                 <p>{item.proposedUse}</p>
               </header>
 
-              <div className="building-vision-comparison">
+              <div className="building-vision-concept">
                 <figure>
                   <div className="building-vision-image-frame">
                     <img
-                      src={item.before}
-                      alt={item.beforeAlt ?? `${item.title} before the proposed finish-only fit-out`}
+                      src={item.image}
+                      alt={item.alt}
+                      width={item.imageWidth}
+                      height={item.imageHeight}
                       loading="lazy"
                       decoding="async"
                     />
                   </div>
-                  <figcaption><span className="mono">Before</span> {item.beforeCaption ?? "Existing photograph"}</figcaption>
-                </figure>
-                <figure>
-                  <div className="building-vision-image-frame">
-                    <img
-                      src={item.after}
-                      alt={item.afterAlt ?? `${item.title} visual concept with new finishes and movable furniture`}
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </div>
-                  <figcaption><span className="mono">After</span> {item.afterCaption ?? "Finish-only visual concept"}</figcaption>
+                  <figcaption><span className="mono">View {item.sequence}</span> {item.caption}</figcaption>
                 </figure>
               </div>
 
               <div className="building-vision-spec">
-                <div><span className="mono">Flooring</span><p>{item.flooring}</p></div>
-                <div><span className="mono">Paint</span><p>{item.paint}</p></div>
-                <div><span className="mono">Furniture</span><p>{item.furniture}</p></div>
-                <div><span className="mono">Lighting</span><p>{item.lighting}</p></div>
+                <div><span className="mono">Design intent</span><p>{item.designIntent}</p></div>
+                <div><span className="mono">Key elements</span><p>{item.keyElements}</p></div>
                 <div className="building-vision-preserve"><span className="mono">Must remain</span><p>{item.preserve}</p></div>
               </div>
             </article>
@@ -212,9 +200,10 @@ export function BuildingVisionPage() {
           </div>
           <p className="building-vision-agent-paths">
             <span className="mono">Building Vision files</span>
+            <code>/Users/dev/Downloads/Armature Lab Building rework project/Armature Lab Building rework v2/</code>
             <code>src/pages/BuildingVisionPage.tsx</code>
             <code>src/data/buildingVision.ts</code>
-            <code>public/building-vision/</code>
+            <code>public/building-vision/rework-v2/</code>
           </p>
         </div>
 
@@ -230,10 +219,10 @@ export function BuildingVisionPage() {
           </article>
           <article>
             <span className="mono">02 · Review safely</span>
-            <h3>Keep every proposal reversible.</h3>
+            <h3>Keep one coordinated image set.</h3>
             <ol>
               <li>Ask for a written proposal before allowing file edits or image generation.</li>
-              <li>Keep the original before image unchanged; revise only the corresponding after concept and its note.</li>
+              <li>Revise only the named concept and its note; keep the canonical sequence at exactly 21 PNGs unless a set change is explicitly approved.</li>
               <li>Review the local page on desktop and mobile, then approve any commit or publication separately.</li>
             </ol>
           </article>
