@@ -177,13 +177,7 @@
   font-style: italic;
 }
 
-.building-vision-comparison {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.building-vision-comparison figure {
+.building-vision-concept figure {
   min-width: 0;
   margin: 0;
 }
@@ -191,18 +185,22 @@
 .building-vision-image-frame {
   display: grid;
   overflow: hidden;
+  padding: clamp(8px, 2vw, 24px);
   place-items: center;
   background: var(--feature-bg);
   border: 1px solid var(--hair-strong);
 }
 
 .building-vision-image-frame img {
-  width: 100%;
+  display: block;
+  width: auto;
   height: auto;
+  max-width: 100%;
+  max-height: min(82svh, 960px);
   object-fit: contain;
 }
 
-.building-vision-comparison figcaption {
+.building-vision-concept figcaption {
   display: flex;
   justify-content: space-between;
   gap: 16px;
@@ -211,7 +209,7 @@
   font-size: 13px;
 }
 
-.building-vision-comparison figcaption span {
+.building-vision-concept figcaption span {
   color: var(--ink);
 }
 
@@ -510,11 +508,6 @@
 
   .building-vision-room h3 {
     font-size: 25px;
-  }
-
-  .building-vision-comparison {
-    grid-template-columns: 1fr;
-    gap: 30px;
   }
 
   .building-vision-image-frame {
