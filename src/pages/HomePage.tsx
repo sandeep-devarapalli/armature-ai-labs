@@ -9,6 +9,7 @@ import {
   CircuitBoard,
   Cpu,
   DraftingCompass,
+  ExternalLink,
   LockKeyhole,
   PackageOpen,
   Printer,
@@ -87,6 +88,24 @@ export function HomePage() {
                 <ArrowRight aria-hidden="true" />
               </Link>
             )}
+            <a
+              className="button button-quiet"
+              href="https://discord.gg/qGNXGmF8z"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Join Discord
+              <ExternalLink aria-hidden="true" />
+            </a>
+            <a
+              className="button button-quiet"
+              href="https://www.linkedin.com/company/armature-lab/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Follow on LinkedIn
+              <ExternalLink aria-hidden="true" />
+            </a>
           </div>
           <div className="metrics-strip">
             <Metric label="Footprint" value="3,500 sq ft" />
