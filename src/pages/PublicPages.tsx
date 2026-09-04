@@ -300,7 +300,7 @@ export function JoinPage() {
   );
   const membershipActive = currentMember?.membershipState === "active";
 
-  const actions = !memberPlatformAvailable ? (
+  const membershipAction = !memberPlatformAvailable ? (
     <a className="button button-primary" href="mailto:hello@armaturelab.org">Email the lab</a>
   ) : membershipActive ? (
     <Link className="button button-primary" to="/book">Book a resource <ArrowRight aria-hidden="true" /></Link>
@@ -310,6 +310,30 @@ export function JoinPage() {
     <a className="button button-primary" href="#membership-application">Complete your application <ArrowRight aria-hidden="true" /></a>
   ) : (
     <Link className="button button-primary" to="/auth" state={{ from: "/join" }}>Create member account <ArrowRight aria-hidden="true" /></Link>
+  );
+
+  const actions = (
+    <>
+      {membershipAction}
+      <a
+        className="button button-quiet"
+        href="https://discord.gg/qGNXGmF8z"
+        target="_blank"
+        rel="noreferrer"
+      >
+        Join Discord
+        <ExternalLink aria-hidden="true" />
+      </a>
+      <a
+        className="button button-quiet"
+        href="https://www.linkedin.com/company/armature-lab/"
+        target="_blank"
+        rel="noreferrer"
+      >
+        Follow on LinkedIn
+        <ExternalLink aria-hidden="true" />
+      </a>
+    </>
   );
 
   return (

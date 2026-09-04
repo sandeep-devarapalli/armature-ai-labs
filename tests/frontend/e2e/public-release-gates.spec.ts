@@ -3,9 +3,43 @@ import { expect, test } from "@playwright/test";
 test("footer publishes direct contact links", async ({ page }) => {
   await page.goto("/");
   const footer = page.locator("footer");
+  const discord = footer.getByRole("link", { name: "Discord", exact: true });
+  const linkedIn = footer.getByRole("link", { name: "LinkedIn", exact: true });
 
   await expect(footer.getByRole("link", { name: "hello@armaturelab.org" })).toHaveAttribute("href", "mailto:hello@armaturelab.org");
   await expect(footer.getByRole("link", { name: "+91 9748485583" })).toHaveAttribute("href", "tel:+919748485583");
+  await expect(discord).toHaveAttribute("href", "https://discord.gg/qGNXGmF8z");
+  await expect(discord).toHaveAttribute("target", "_blank");
+  await expect(discord).toHaveAttribute("rel", "noreferrer");
+  await expect(linkedIn).toHaveAttribute("href", "https://www.linkedin.com/company/armature-lab/");
+  await expect(linkedIn).toHaveAttribute("target", "_blank");
+  await expect(linkedIn).toHaveAttribute("rel", "noreferrer");
+});
+
+test("landing and membership pages publish verified community links", async ({ page }) => {
+  await page.goto("/");
+  const homeHero = page.locator(".home-hero");
+  const homeDiscord = homeHero.getByRole("link", { name: "Join Discord" });
+  const homeLinkedIn = homeHero.getByRole("link", { name: "Follow on LinkedIn" });
+
+  await expect(homeDiscord).toHaveAttribute("href", "https://discord.gg/qGNXGmF8z");
+  await expect(homeDiscord).toHaveAttribute("target", "_blank");
+  await expect(homeDiscord).toHaveAttribute("rel", "noreferrer");
+  await expect(homeLinkedIn).toHaveAttribute("href", "https://www.linkedin.com/company/armature-lab/");
+  await expect(homeLinkedIn).toHaveAttribute("target", "_blank");
+  await expect(homeLinkedIn).toHaveAttribute("rel", "noreferrer");
+
+  await page.goto("/join");
+  const joinHero = page.locator(".page-hero");
+  const joinDiscord = joinHero.getByRole("link", { name: "Join Discord" });
+  const joinLinkedIn = joinHero.getByRole("link", { name: "Follow on LinkedIn" });
+
+  await expect(joinDiscord).toHaveAttribute("href", "https://discord.gg/qGNXGmF8z");
+  await expect(joinDiscord).toHaveAttribute("target", "_blank");
+  await expect(joinDiscord).toHaveAttribute("rel", "noreferrer");
+  await expect(joinLinkedIn).toHaveAttribute("href", "https://www.linkedin.com/company/armature-lab/");
+  await expect(joinLinkedIn).toHaveAttribute("target", "_blank");
+  await expect(joinLinkedIn).toHaveAttribute("rel", "noreferrer");
 });
 
 test("public-first production gates operational routes", async ({ page }) => {
