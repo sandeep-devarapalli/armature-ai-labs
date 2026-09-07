@@ -1,6 +1,6 @@
-# Contributing to armature
+# Contributing to Armature AI Labs
 
-Thanks for helping improve armature, the physical AI and robotics lab in HSR
+Thanks for helping improve Armature AI Labs, the physical AI and robotics lab in HSR
 Layout, Bengaluru.
 
 ## Before you start
@@ -75,5 +75,5 @@ validation you ran and screenshots for visual changes. Do not commit API keys,
 Supabase temporary state, private source material, or other machine-local files.
 
 Contributions to source code and documentation are submitted under the Apache
-License 2.0. Do not add or modify reserved Armature identity assets unless a
+License 2.0. Do not add or modify reserved Armature AI Labs identity assets unless a
 maintainer has explicitly requested the change. See `BRAND-ASSETS.md`.

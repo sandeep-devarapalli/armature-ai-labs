@@ -1,6 +1,6 @@
-# armature lab logo
+# armature ai labs logo
 
-Final identity for the Armature Lab co-working space and robotics lab in HSR Layout, Bengaluru. The commutator replaces the retired exploded-A mark.
+Final identity for Armature AI Labs, the physical AI and robotics lab in HSR Layout, Bengaluru. The commutator replaces the retired exploded-A mark.
 
 ## The mark
 
@@ -8,7 +8,7 @@ A DC motor commutator seen end-on: eight copper segments around the shaft, with 
 
 ## Wordmark
 
-"armature lab", always lowercase, Space Grotesk Medium, tracking -12/1000. Text is outlined to paths in every SVG so no font is needed to render them.
+"armature ai labs", always lowercase, Space Grotesk Medium, tracking -12/1000. Text is outlined to paths in every SVG so no font is needed to render them.
 
 ## Colours
 
@@ -20,6 +20,8 @@ A DC motor commutator seen end-on: eight copper segments around the shaft, with 
 ## Files
 
 `svg/` is the source of truth. `png/` are exports. `svg/bw/` and `png/bw/` are the pure black-and-white set.
+The existing `armature-lab-*` filenames are retained as stable download URLs;
+the artwork and embedded titles use the current Armature AI Labs name.
 
 | File | Use |
 | --- | --- |

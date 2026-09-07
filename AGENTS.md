@@ -2,10 +2,10 @@
 
 ## Project Scope
 
-This folder is the Armature member, booking, and check-in PWA plus the lab's
+This folder is the Armature AI Labs member, booking, and check-in PWA plus the lab's
 brand assets and planning documents.
 
-- `src/`: React, Vite, and TypeScript application for `armaturelab.org`.
+- `src/`: React, Vite, and TypeScript application for `armatureailabs.com`.
 - `public/`: PWA icons, route fallback, and project media.
 - `supabase/`: database migrations, RLS/RPC tests, seed data, and Edge Functions.
 - `tests/`: frontend and browser tests.
@@ -21,12 +21,12 @@ identity, approvals, resources, bookings, attendance, and integration state.
 
 ## Brand And Naming Rules
 
-- The canonical public website and email domain is `armaturelab.org` (singular). Do not substitute `armaturelabs.org`.
-- The canonical public information and membership mailbox is `hello@armaturelab.org`. Keep private booking-calendar and transactional identities separate.
+- The canonical public website domain is `armatureailabs.com`. Do not substitute the legacy `armaturelab.org` domain or near-match domains.
+- The public information and membership mailbox remains `hello@armaturelab.org` during the domain transition. Keep it and `bookings@armaturelab.org` working as transitional mailboxes until replacement addresses are configured and verified; keep private booking-calendar and transactional identities separate.
 - The commutator mark geometry in `brand/armature-lab/` is fixed; the exploded-A mark is retired.
-- Keep the parent and lab identities separate. The larger parent plan is `Institute for Physical AI`; the lab identity is `Armature - The Physical AI and Robotics Lab`.
+- Keep the parent and lab identities separate. The larger parent plan is `Institute for Physical AI`; the lab identity is `Armature AI Labs - The Physical AI and Robotics Lab`.
 - The current public site and asset pack style the lab name in lowercase. Preserve that capitalization in existing site copy and SVG text unless the user explicitly asks for a change.
-- The home hero's visible wordmark must read lowercase `armature lab`. Do not shorten it to `armature`, and preserve its existing type, size, spacing, and mark.
+- The home hero's visible wordmark must read lowercase `armature ai labs`. Do not shorten it, and preserve its existing type, size, spacing, and mark.
 - Do not flatten the hierarchy into a vague umbrella name like "Armature Institute" unless the user explicitly asks.
 - Keep HSR Layout, Bengaluru as the location signal unless the user gives a replacement.
 - Light assets are the primary assets. Ink/dark variants are for dark surfaces.
@@ -63,10 +63,10 @@ placeholder note in `README.md`.
 - Make small, focused edits. Prefer editing existing files over creating new ones.
 - Do not advertise or list a dedicated indoor flight enclosure as a site zone, member resource, service, project-testing location, or planning item unless the user explicitly restores it.
 - In the building-vision presentation, the photos previously labelled `Main café hall`, `Café flex room`, and `Lower stair landing` show the basement or basement access and must stay excluded unless the user explicitly restores basement scope. Do not infer floor labels from image appearance when the user has supplied the floor mapping.
-- In the building-vision presentation, photo `18` is the first room inside the main entrance on the ground floor. Treat it as reception, visitor check-in, and a compact Armature goodies store—not as a second-floor meeting room—and keep it immediately after the frontage in presentation order.
+- In the building-vision presentation, photo `18` is the first room inside the main entrance on the ground floor. Treat it as reception, visitor check-in, and a compact Armature AI Labs goodies store—not as a second-floor meeting room—and keep it immediately after the frontage in presentation order.
 - The canonical `/building-vision` visual set is exactly the 21 PNGs numbered `00` through `20` in `/Users/dev/Downloads/Armature Lab Building rework project/Armature Lab Building rework v2/`, mirrored under `public/building-vision/rework-v2/`. Render those views once, in numeric order, and do not restore or mix in the legacy `/before/` and `/after/` assets unless the user explicitly changes the set.
 - In the building-vision frontage concept, provide shaded outdoor café seating with freestanding, weighted umbrellas only. Keep the entrance route, stairs, gate, trees, drainage and cycle parking clear; do not imply fixed shade structures or structural work.
-- In the wide building-vision street approach, use a shallow illuminated lightbox reading `HSR FOUNDERS` / `CLUB` on the existing boundary wall, plus a separate slim programmable LED information strip. Keep both signs modest, within the existing wall profile, clear of the gate and footpath, and do not turn either into a billboard, pylon or structural wall addition. The closer frontage view may retain the separate armature entrance identity.
+- In the wide building-vision street approach, use a shallow illuminated lightbox reading `HSR FOUNDERS` / `CLUB` on the existing boundary wall, plus a separate slim programmable LED information strip. Keep both signs modest, within the existing wall profile, clear of the gate and footpath, and do not turn either into a billboard, pylon or structural wall addition. The closer frontage view may retain the separate Armature AI Labs entrance identity.
 - In building-vision rooms where the existing photograph shows marble flooring, retain the marble and its border pattern, showing repair, cleaning and polishing only. This specifically includes `Window café lounge` and `Existing kitchen`. Do not replace it visually or in copy with LVT, vinyl, terrazzo, tile or another floor finish unless the user explicitly asks.
 - Keep every visible staircase in the building-vision concepts white or a very pale warm grey, including treads, risers, sides and undersides. Do not add rainbow risers or adjacent decorative colour blocks; retain the existing railing geometry and finish unless the user explicitly asks for a change.
 - Keep the building-vision contributor section practical: include the verified public GitHub repository, direct links to `AGENTS.md` and `DESIGN.md`, the relevant local source paths, and an accessible copy-prompt control with visible success or failure feedback. Verify the links and clipboard interaction before handoff.
@@ -87,7 +87,7 @@ placeholder note in `README.md`.
 - Preserve the current asset filenames unless the user asks for a rename.
 - Do not reuse one project-card cover for different projects unless the shared
   system is the subject of both cards. Prefer distinct official media, then a
-  clearly attributed Armature reference illustration.
+  clearly attributed Armature AI Labs reference illustration.
 - Keep the site's light, dark, and sepia modes structurally identical. Theme
   work must use the shared CSS-variable system, persist the visitor's choice,
   and remain consistent across public, member, staff, and kiosk routes.

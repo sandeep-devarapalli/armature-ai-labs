@@ -11,7 +11,7 @@ test("footer publishes direct contact links", async ({ page }) => {
   await expect(discord).toHaveAttribute("href", "https://discord.gg/qGNXGmF8z");
   await expect(discord).toHaveAttribute("target", "_blank");
   await expect(discord).toHaveAttribute("rel", "noreferrer");
-  await expect(linkedIn).toHaveAttribute("href", "https://www.linkedin.com/company/armature-lab/");
+  await expect(linkedIn).toHaveAttribute("href", "https://www.linkedin.com/company/armature-ai-labs/");
   await expect(linkedIn).toHaveAttribute("target", "_blank");
   await expect(linkedIn).toHaveAttribute("rel", "noreferrer");
 });
@@ -25,7 +25,7 @@ test("landing and membership pages publish verified community links", async ({ p
   await expect(homeDiscord).toHaveAttribute("href", "https://discord.gg/qGNXGmF8z");
   await expect(homeDiscord).toHaveAttribute("target", "_blank");
   await expect(homeDiscord).toHaveAttribute("rel", "noreferrer");
-  await expect(homeLinkedIn).toHaveAttribute("href", "https://www.linkedin.com/company/armature-lab/");
+  await expect(homeLinkedIn).toHaveAttribute("href", "https://www.linkedin.com/company/armature-ai-labs/");
   await expect(homeLinkedIn).toHaveAttribute("target", "_blank");
   await expect(homeLinkedIn).toHaveAttribute("rel", "noreferrer");
 
@@ -37,7 +37,7 @@ test("landing and membership pages publish verified community links", async ({ p
   await expect(joinDiscord).toHaveAttribute("href", "https://discord.gg/qGNXGmF8z");
   await expect(joinDiscord).toHaveAttribute("target", "_blank");
   await expect(joinDiscord).toHaveAttribute("rel", "noreferrer");
-  await expect(joinLinkedIn).toHaveAttribute("href", "https://www.linkedin.com/company/armature-lab/");
+  await expect(joinLinkedIn).toHaveAttribute("href", "https://www.linkedin.com/company/armature-ai-labs/");
   await expect(joinLinkedIn).toHaveAttribute("target", "_blank");
   await expect(joinLinkedIn).toHaveAttribute("rel", "noreferrer");
 });
@@ -113,7 +113,7 @@ test("equipment page stays hidden", async ({ page }, testInfo) => {
 
   await page.goto("/equipment");
   await expect(page).toHaveURL(/\/$/);
-  await expect(page.getByRole("heading", { name: "armature lab", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "armature ai labs", exact: true })).toBeVisible();
 });
 
 test("public catalogs remain available", async ({ page }) => {

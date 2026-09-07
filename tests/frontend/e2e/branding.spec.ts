@@ -9,7 +9,7 @@ test("brand resources are discoverable, usable and downloadable", async ({ page,
 
   await expect(page).toHaveURL(/\/branding$/);
   await expect(page.getByRole("heading", { level: 1, name: "Brand resources" })).toBeVisible();
-  await expect(page.getByText("armature is a 3,500 sq ft physical AI and robotics lab in HSR Layout, Bengaluru.")).toBeVisible();
+  await expect(page.getByText("Armature AI Labs is a 3,500 sq ft physical AI and robotics lab in HSR Layout, Bengaluru.")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Logo system" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Usage and permissions" })).toBeVisible();
   await expect(page.locator(".branding-permissions").getByRole("link", { name: "hello@armaturelab.org" })).toHaveAttribute("href", "mailto:hello@armaturelab.org");

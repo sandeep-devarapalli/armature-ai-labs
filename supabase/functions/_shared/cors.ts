@@ -1,7 +1,7 @@
 const configuredOrigins = (
   Deno.env.get("ALLOWED_ORIGINS") ??
   Deno.env.get("ALLOWED_ORIGIN") ??
-  "https://armaturelab.org"
+  "https://armatureailabs.com,https://armaturelab.org"
 )
   .split(",")
   .map((origin) => origin.trim())

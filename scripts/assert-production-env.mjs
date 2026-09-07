@@ -15,8 +15,8 @@ if (process.env.VITE_DEMO_MODE === "true") {
   throw new Error("Production builds cannot enable VITE_DEMO_MODE.");
 }
 
-if (process.env.VITE_SITE_URL !== "https://armaturelab.org") {
-  throw new Error("VITE_SITE_URL must be https://armaturelab.org for production.");
+if (process.env.VITE_SITE_URL !== "https://armatureailabs.com") {
+  throw new Error("VITE_SITE_URL must be https://armatureailabs.com for production.");
 }
 
 for (const key of [

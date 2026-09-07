@@ -1,8 +1,8 @@
-# armature - The Physical AI and Robotics Lab
+# Armature AI Labs - The Physical AI and Robotics Lab
 
-Website: [armaturelab.org](https://armaturelab.org)
+Website: [armatureailabs.com](https://armatureailabs.com)
 
-Contact: [hello@armaturelab.org](mailto:hello@armaturelab.org)
+Contact during the domain transition: [hello@armaturelab.org](mailto:hello@armaturelab.org)
 
 React/Vite member, booking, maker-desk inventory, and check-in PWA for the
 physical AI and robotics lab in HSR Layout, Bengaluru.
@@ -130,5 +130,5 @@ Contributions are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) and
 ## License
 
 Source code and documentation are licensed under the
-[Apache License 2.0](LICENSE). The Armature name and identity assets are
+[Apache License 2.0](LICENSE). The Armature AI Labs name and identity assets are
 reserved; see [BRAND-ASSETS.md](BRAND-ASSETS.md) for the boundary.

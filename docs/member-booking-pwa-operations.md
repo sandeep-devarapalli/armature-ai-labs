@@ -1,6 +1,6 @@
-# Armature member, booking, and check-in operations
+# Armature AI Labs member, booking, and check-in operations
 
-This document is the production runbook for the Armature member PWA. Supabase
+This document is the production runbook for the Armature AI Labs member PWA. Supabase
 is authoritative for identity, membership, safety, resources, bookings, and
 attendance. Google Calendar is an operational mirror only.
 
@@ -12,7 +12,7 @@ only the project URL and publishable key:
 ```text
 VITE_SUPABASE_URL
 VITE_SUPABASE_PUBLISHABLE_KEY
-VITE_SITE_URL=https://armaturelab.org
+VITE_SITE_URL=https://armatureailabs.com
 VITE_MEMBER_PLATFORM_ENABLED=false
 VITE_COMPONENT_REQUESTS_ENABLED=false
 VITE_GOOGLE_AUTH_ENABLED=false
@@ -65,9 +65,11 @@ new migrations. A frontend rollback never rewinds database history.
 
 ## Google Workspace
 
-Use `hello@armaturelab.org` as the public inbound mailbox for information and
-membership enquiries. Keep calendar operations, reminders, and transactional
-booking mail on a separate identity such as `bookings@armaturelab.org`.
+Keep `hello@armaturelab.org` working as the public inbound mailbox for
+information and membership enquiries during the domain transition. Keep
+`bookings@armaturelab.org` working separately for calendar operations,
+reminders, and transactional booking mail until replacement addresses are
+configured and verified.
 
 - Create one private Google Calendar per reservable resource.
 - Store each calendar identifier in the protected calendar link table.
@@ -93,14 +95,14 @@ ALLOWED_ORIGINS
 ## Auth and email
 
 Enable Google OAuth and email OTP in Supabase Auth. Production OTP mail should
-use a dedicated Armature Google Workspace sender through custom SMTP.
+use a dedicated Armature AI Labs Google Workspace sender through custom SMTP.
 
 Members can enroll a TOTP authenticator from `/profile`. Operations actions
 that alter attendance or kiosk enrollment require the resulting `aal2` session.
 Public avatars upload to `{auth.uid()}/avatar` in the `avatars` bucket; the
 bucket policy permits members to write only inside their own folder.
 
-The approved redirect origins should contain only controlled Armature domains
+The approved redirect origins should contain only controlled Armature AI Labs domains
 and explicit local development URLs. Avoid wildcard production redirects.
 
 Google sign-in remains disabled during the public-first release. Enable the
@@ -113,8 +115,8 @@ Keep `VITE_COMPONENT_REQUESTS_ENABLED=false` and do not deploy the public
 `component-request` function until all of these secrets and controls exist:
 
 ```text
-APP_ORIGIN=https://armaturelab.org
-ALLOWED_ORIGINS=https://armaturelab.org
+APP_ORIGIN=https://armatureailabs.com
+ALLOWED_ORIGINS=https://armatureailabs.com,https://armaturelab.org
 TURNSTILE_SECRET_KEY
 COMPONENT_REQUEST_FROM_EMAIL
 COMPONENT_REQUEST_EMAIL_PROVIDER
@@ -209,7 +211,7 @@ Before production promotion:
   maintainer review before promotion.
 - Supabase logs and integration outbox show no unexplained failures.
 
-Promote the verified Cloudflare Pages artifact to `armaturelab.org`, purge stale
+Promote the verified Cloudflare Pages artifact to `armatureailabs.com`, purge stale
 cache, and smoke-test `/`, `/projects`, project details, `/components`,
 `/ecosystem`, `/building-vision`, opening-soon route guards, all three themes,
 and 390px layouts. Keep the previous deployment available until these checks

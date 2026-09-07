@@ -51,11 +51,11 @@ async function deliverReminder(reminder: ReminderRow): Promise<void> {
       to: email,
       template: reminder.reminder_kind,
       data: {
-        member_name: profile?.display_name || "Armature member",
-        resource_name: resource?.name || "Armature resource",
+        member_name: profile?.display_name || "Armature AI Labs member",
+        resource_name: resource?.name || "Armature AI Labs resource",
         starts_at: booking.starts_at,
         ends_at: booking.ends_at,
-        booking_url: `https://armaturelab.org/bookings/${booking.id}`,
+        booking_url: `https://armatureailabs.com/bookings/${booking.id}`,
       },
     }),
   });

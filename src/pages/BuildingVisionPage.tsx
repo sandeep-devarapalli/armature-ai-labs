@@ -31,18 +31,18 @@ Run npm test, npm run build and the building-vision browser test.`;
 const buildingVisionResources = [
   {
     label: "GitHub repository",
-    detail: "Browse or clone the public Armature Lab project.",
-    href: "https://github.com/sandeep-devarapalli/armature-lab"
+    detail: "Browse or clone the public Armature AI Labs project.",
+    href: "https://github.com/sandeep-devarapalli/armature-ai-labs"
   },
   {
     label: "Agent instructions",
     detail: "Read the project scope, constraints and validation rules.",
-    href: "https://github.com/sandeep-devarapalli/armature-lab/blob/main/AGENTS.md"
+    href: "https://github.com/sandeep-devarapalli/armature-ai-labs/blob/main/AGENTS.md"
   },
   {
     label: "Design system",
     detail: "Check the palette, typography and layout rules before editing.",
-    href: "https://github.com/sandeep-devarapalli/armature-lab/blob/main/DESIGN.md"
+    href: "https://github.com/sandeep-devarapalli/armature-ai-labs/blob/main/DESIGN.md"
   }
 ] as const;
 
@@ -70,7 +70,7 @@ export function BuildingVisionPage() {
       <PageHeader
         meta="1426, 20th Main Road · HSR Layout"
         title="The building, without rebuilding it."
-        description="A coordinated 21-view concept for adapting the existing HSR building into Armature's coworking, meeting and presentation spaces. The approved sequence shows the frontage, ground floor and first floor with targeted access, glazing, flooring, furniture, lighting and identity upgrades."
+        description="A coordinated 21-view concept for adapting the existing HSR building into Armature AI Labs' coworking, meeting and presentation spaces. The approved sequence shows the frontage, ground floor and first floor with targeted access, glazing, flooring, furniture, lighting and identity upgrades."
       >
         <div className="building-vision-summary" aria-label="Concept summary">
           <div><strong>{buildingVisionItems.length}</strong><span className="mono">Building views</span></div>
@@ -212,7 +212,7 @@ export function BuildingVisionPage() {
             <span className="mono">01 · Give context</span>
             <h3>Start the agent in this project.</h3>
             <ol>
-              <li>Open the Armature Lab project in Codex or Claude and ask it to read <code>AGENTS.md</code> and <code>DESIGN.md</code>.</li>
+              <li>Open the Armature AI Labs project in Codex or Claude and ask it to read <code>AGENTS.md</code> and <code>DESIGN.md</code>.</li>
               <li>Name the exact Building Vision card and attach the relevant screenshot or concept image.</li>
               <li>Describe one requested change and list every wall, opening, stair, tree or circulation route that must remain.</li>
             </ol>

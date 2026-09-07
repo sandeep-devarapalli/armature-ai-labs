@@ -205,7 +205,7 @@ export function Shell({ children }: PropsWithChildren) {
             <a href="mailto:hello@armaturelab.org">hello@armaturelab.org</a>
             <a href="tel:+919748485583">+91 9748485583</a>
             <a href="https://discord.gg/qGNXGmF8z" target="_blank" rel="noreferrer">Discord</a>
-            <a href="https://www.linkedin.com/company/armature-lab/" target="_blank" rel="noreferrer">LinkedIn</a>
+            <a href="https://www.linkedin.com/company/armature-ai-labs/" target="_blank" rel="noreferrer">LinkedIn</a>
             <Link to="/members">Members</Link>
             <Link to="/maker-desk">Maker desk</Link>
             <Link to="/branding">Brand assets</Link>
@@ -214,7 +214,7 @@ export function Shell({ children }: PropsWithChildren) {
             <Link to="/join">Join the floor</Link>
           </div>
           <p className="license-note">
-            Code and docs Apache-2.0. Armature name and brand assets reserved.
+            Code and docs Apache-2.0. Armature AI Labs name and brand assets reserved.
             Third-party project media remains subject to its source terms.
           </p>
         </div>

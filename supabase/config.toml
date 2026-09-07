@@ -31,11 +31,12 @@ file_size_limit = "25MiB"
 
 [auth]
 enabled = true
-site_url = "https://armaturelab.org"
+site_url = "https://armatureailabs.com"
 additional_redirect_urls = [
   "http://localhost:5173/auth/callback",
   "http://localhost:4173/auth/callback",
   "https://codex-member-booking-pwa.armature-lab.pages.dev/auth/callback",
+  "https://armatureailabs.com/auth/callback",
   "https://armaturelab.org/auth/callback",
 ]
 jwt_expiry = 3600

@@ -9,7 +9,7 @@ export function OpeningSoonPage() {
       <PageHeader
         meta="Public launch · operations staged"
         title="Operational access is opening soon."
-        description="The public Armature site is available now. Accounts, reservations, check-in, equipment checkout, and verified component requests will open after their production services complete final validation."
+        description="The public Armature AI Labs site is available now. Accounts, reservations, check-in, equipment checkout, and verified component requests will open after their production services complete final validation."
         actions={(
           <>
             <Link className="button button-primary" to="/projects">

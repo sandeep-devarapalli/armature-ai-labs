@@ -31,7 +31,7 @@ const allSectors = ["All", ...ecosystemSectors] as const;
 type SectorFilter = (typeof allSectors)[number];
 
 const ecosystemContributionUrl =
-  "https://github.com/sandeep-devarapalli/armature-lab";
+  "https://github.com/sandeep-devarapalli/armature-ai-labs";
 
 function publicLocality(entity: EcosystemEntity) {
   if (

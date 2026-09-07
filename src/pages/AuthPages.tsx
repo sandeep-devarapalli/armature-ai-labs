@@ -50,7 +50,7 @@ export function AuthPage() {
         <div className="auth-points">
           <span><ShieldCheck aria-hidden="true" /> Staff approval before booking</span>
           <span><KeyRound aria-hidden="true" /> Equipment-specific certification gates</span>
-          <span><LogIn aria-hidden="true" /> No password stored by Armature</span>
+          <span><LogIn aria-hidden="true" /> No password stored by Armature AI Labs</span>
         </div>
       </div>
       <div className="auth-form-panel">

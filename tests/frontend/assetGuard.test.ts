@@ -8,7 +8,7 @@ describe("Cloudflare asset guard", () => {
     }));
 
     const response = await onRequest({
-      request: new Request("https://armaturelab.org/assets/missing.js"),
+      request: new Request("https://armatureailabs.com/assets/missing.js"),
       env: { ASSETS: { fetch } }
     });
 
@@ -26,7 +26,7 @@ describe("Cloudflare asset guard", () => {
     });
 
     const response = await onRequest({
-      request: new Request("https://armaturelab.org/assets/index-hash.js"),
+      request: new Request("https://armatureailabs.com/assets/index-hash.js"),
       env: { ASSETS: { fetch: vi.fn().mockResolvedValue(asset) } }
     });
 

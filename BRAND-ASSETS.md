@@ -1,10 +1,10 @@
-# Armature brand assets
+# Armature AI Labs brand assets
 
 The Apache License 2.0 in `LICENSE` applies to this repository's source code
 and documentation.
 
-It does not grant permission to use the Armature name, the commutator mark and the retired Exploded-A mark,
-logos, lockups, favicons, social-media artwork, or other Armature identity
+It does not grant permission to use the Armature AI Labs name, the commutator mark and the retired Exploded-A mark,
+logos, lockups, favicons, social-media artwork, or other Armature AI Labs identity
 assets. Those materials, including the contents of `brand/`, `linkedin/`, and
 the branded application icons under `site/`, are reserved and are not licensed
 under Apache-2.0.
@@ -12,7 +12,7 @@ under Apache-2.0.
 Reasonable use of the name and marks to identify this project, link to it, or
 describe the origin of an unmodified copy is permitted. Any other use requires
 prior written permission at [hello@armaturelab.org](mailto:hello@armaturelab.org).
-Do not imply endorsement, affiliation, or operation of an official Armature lab
+Do not imply endorsement, affiliation, or operation of an official Armature AI Labs facility
 without permission.
 
 Project media under `site/project-images/` and `public/project-images/` is

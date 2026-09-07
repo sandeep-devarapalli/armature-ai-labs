@@ -733,8 +733,8 @@ export function AppProvider({ children }: PropsWithChildren) {
           p_application_id: applicationId,
           p_decision: approved ? "approved" : "rejected",
           p_notes: approved
-            ? "Approved in Armature operations"
-            : "Declined in Armature operations"
+            ? "Approved in Armature AI Labs operations"
+            : "Declined in Armature AI Labs operations"
         });
         if (error) throw error;
         await refresh();

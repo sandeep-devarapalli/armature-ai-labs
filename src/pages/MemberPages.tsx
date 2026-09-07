@@ -114,7 +114,7 @@ export function DashboardPage() {
       <Section number="02" title="Safety access" dark>
         <div className="cert-list">
           {currentMember.certifications.map((certification) => (
-            <div key={certification}><BadgeCheck aria-hidden="true" /><div><strong>{certification}</strong><span>Active · issued by Armature staff</span></div></div>
+            <div key={certification}><BadgeCheck aria-hidden="true" /><div><strong>{certification}</strong><span>Active · issued by Armature AI Labs staff</span></div></div>
           ))}
         </div>
       </Section>
@@ -257,7 +257,7 @@ function MfaPanel({ mode }: { mode: "demo" | "supabase" }) {
     try {
       const { data, error: enrollError } = await supabase.auth.mfa.enroll({
         factorType: "totp",
-        friendlyName: "Armature authenticator"
+        friendlyName: "Armature AI Labs authenticator"
       });
       if (enrollError) throw enrollError;
       setEnrollment({
@@ -664,7 +664,7 @@ export function CheckInPage() {
         )}
         <div className="qr-layout">
             <div className="qr-frame">
-              {image && seconds > 0 ? <img src={image} alt="One-use Armature check-in QR code" /> : <QrCode aria-hidden="true" />}
+              {image && seconds > 0 ? <img src={image} alt="One-use Armature AI Labs check-in QR code" /> : <QrCode aria-hidden="true" />}
             </div>
             <div className="qr-instructions">
               <span className="mono">60-second one-use {action.replace("_", "-")} intent</span>

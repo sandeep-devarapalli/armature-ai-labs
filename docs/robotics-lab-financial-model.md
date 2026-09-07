@@ -280,7 +280,7 @@ This is a planned loss. You will burn roughly ₹4.75 lakh a month early on, so 
 | Arm / drone / CNC hourly usage and events | | ₹1,00,000 |
 | **Total** | | **~₹11,77,000** |
 
-This mirrors the default position of the calculator on armaturelab.org. It clears the ₹7.65 lakh cash opex and the ₹1.04 lakh Phase 1 depreciation with roughly ₹3.1 lakh to spare. Note that the three company tenants alone (₹4.5 lakh) cover more than half of cash opex.
+This mirrors the default position of the calculator on armatureailabs.com. It clears the ₹7.65 lakh cash opex and the ₹1.04 lakh Phase 1 depreciation with roughly ₹3.1 lakh to spare. Note that the three company tenants alone (₹4.5 lakh) cover more than half of cash opex.
 
 ## Optimistic (mature, year 2)
 

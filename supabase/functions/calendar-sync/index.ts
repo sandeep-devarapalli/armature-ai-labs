@@ -54,11 +54,11 @@ async function eventPayload(
 
   return {
     id: providerEventId(booking.id),
-    summary: `${resource.name} - ${profile?.display_name || "Armature member"}`,
+    summary: `${resource.name} - ${profile?.display_name || "Armature AI Labs member"}`,
     description: [
-      "Armature resource booking",
+      "Armature AI Labs resource booking",
       `Booking: ${booking.id}`,
-      `Manage: https://armaturelab.org/bookings/${booking.id}`,
+      `Manage: https://armatureailabs.com/bookings/${booking.id}`,
     ].join("\n"),
     start: { dateTime: booking.starts_at },
     end: { dateTime: booking.ends_at },

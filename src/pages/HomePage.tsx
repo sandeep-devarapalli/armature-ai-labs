@@ -60,7 +60,7 @@ export function HomePage() {
           <div className="hero-lockup">
             <BrandMark compact animated />
             <div>
-              <h1>armature lab</h1>
+              <h1>armature ai labs</h1>
               <span className="mono">The physical AI and robotics lab</span>
             </div>
           </div>
@@ -99,7 +99,7 @@ export function HomePage() {
             </a>
             <a
               className="button button-quiet"
-              href="https://www.linkedin.com/company/armature-lab/"
+              href="https://www.linkedin.com/company/armature-ai-labs/"
               target="_blank"
               rel="noreferrer"
             >
@@ -140,7 +140,7 @@ export function HomePage() {
             <span>Partner communities</span>
           </div>
           <p>
-            Armature is the first working facility in a larger plan: the
+            Armature AI Labs is the first working facility in a larger plan: the
             Institute for Physical AI.
           </p>
         </div>
@@ -152,7 +152,7 @@ export function HomePage() {
         lede="Ten zones run from visitor-facing demonstrations to guarded motion, with clean electronics and compute kept grounded and separated."
         dark
       >
-        <div className="floor-map floor-map-complete" aria-label="Armature lab's ten zones">
+        <div className="floor-map floor-map-complete" aria-label="Armature AI Labs' ten zones">
           <div className="floor-zone floor-entry" data-floor-zone>
             <ShieldCheck aria-hidden="true" />
             <strong>Entry + safety</strong>

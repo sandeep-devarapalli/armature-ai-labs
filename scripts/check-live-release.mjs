@@ -1,7 +1,7 @@
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 
-const baseUrl = new URL(process.argv[2] ?? "https://armaturelab.org");
+const baseUrl = new URL(process.argv[2] ?? "https://armatureailabs.com");
 const wait = (milliseconds) => new Promise((resolve) => setTimeout(resolve, milliseconds));
 
 async function listBuiltCode(directory, prefix = "") {

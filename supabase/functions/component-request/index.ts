@@ -85,11 +85,11 @@ async function sendVerificationEmail(
   url.searchParams.set("request", requestId);
   url.searchParams.set("verify", token);
   const from = requiredEnv("COMPONENT_REQUEST_FROM_EMAIL");
-  const subject = "Verify your Armature component request";
+  const subject = "Verify your Armature AI Labs component request";
   const text =
     `Open this one-use link within 24 hours to publish your component request:\n\n${url.toString()}`;
   const html =
-    `<p>Open this one-use link within 24 hours to publish your Armature component request.</p><p><a href="${url.toString()}">Verify component request</a></p>`;
+    `<p>Open this one-use link within 24 hours to publish your Armature AI Labs component request.</p><p><a href="${url.toString()}">Verify component request</a></p>`;
 
   const provider = (
     Deno.env.get("COMPONENT_REQUEST_EMAIL_PROVIDER") ??
