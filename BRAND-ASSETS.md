@@ -11,7 +11,7 @@ under Apache-2.0.
 
 Reasonable use of the name and marks to identify this project, link to it, or
 describe the origin of an unmodified copy is permitted. Any other use requires
-prior written permission at [hello@armaturelab.org](mailto:hello@armaturelab.org).
+prior written permission at [hello@armatureailabs.com](mailto:hello@armatureailabs.com).
 Do not imply endorsement, affiliation, or operation of an official Armature AI Labs facility
 without permission.
 

@@ -3,7 +3,7 @@ import { extname, join } from "node:path";
 
 const sourceRoot = join(process.cwd(), "src");
 const sourceExtensions = new Set([".css", ".ts", ".tsx"]);
-const retiredCopy = /\bcages?\b|drone-cage|floor-drone|res-drone/i;
+const retiredCopy = /\bcages?\b|drone-cage|floor-drone|res-drone|hello@armaturelab\.org/i;
 
 function sourceFiles(directory: string): string[] {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {

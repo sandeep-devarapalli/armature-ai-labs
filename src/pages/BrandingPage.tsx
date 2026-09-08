@@ -353,7 +353,7 @@ export function BrandingPage() {
               official Armature AI Labs facility without permission.
             </p>
             <p>
-              Request written permission at <a className="text-link" href="mailto:hello@armaturelab.org">hello@armaturelab.org</a>.
+              Request written permission at <a className="text-link" href="mailto:hello@armatureailabs.com">hello@armatureailabs.com</a>.
             </p>
           </div>
           <a
