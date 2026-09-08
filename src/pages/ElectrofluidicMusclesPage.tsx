@@ -104,7 +104,7 @@ export function ElectrofluidicMusclesPage() {
       <PageHeader
         meta="Running research · P1 · safety-gated"
         title="Electrofluidic Fiber Muscles"
-        description="Armature's replication track for millimeter-scale artificial muscles that combine an embedded electrohydrodynamic pump with thin fluidic actuators. The first goal is an instrumented bench coupon, not a wearable demo."
+        description="Armature AI Labs' replication track for millimeter-scale artificial muscles that combine an embedded electrohydrodynamic pump with thin fluidic actuators. The first goal is an instrumented bench coupon, not a wearable demo."
         actions={(
           <>
             <Link className="button button-quiet" to="/projects">
@@ -168,7 +168,7 @@ export function ElectrofluidicMusclesPage() {
 
       <Section
         number="02"
-        title="Armature's research objective"
+        title="Armature AI Labs' research objective"
         lede="Reproduce the mechanism in evidence-producing stages, then determine whether it is reliable enough for a robot joint or textile structure."
       >
         <div className="research-objectives">
@@ -280,7 +280,7 @@ export function ElectrofluidicMusclesPage() {
       <Section
         number="06"
         title="Open research record"
-        lede="The project is published with strong scientific evidence and released data, but not as a turnkey fabrication kit. Armature's contribution is a traceable path from source to repeatable bench result."
+        lede="The project is published with strong scientific evidence and released data, but not as a turnkey fabrication kit. Armature AI Labs' contribution is a traceable path from source to repeatable bench result."
       >
         <div className="source-grid">
           {sources.map((source) => (
@@ -292,7 +292,7 @@ export function ElectrofluidicMusclesPage() {
           ))}
         </div>
         <div className="research-output-list">
-          <span className="mono">Armature outputs</span>
+          <span className="mono">Armature AI Labs outputs</span>
           <p>SOP · versioned BOM · fixture CAD · analysis notebooks · test data · failure register · build logs</p>
         </div>
       </Section>

@@ -2,17 +2,17 @@
 
 ## Design Intent
 
-armature should feel like a real lab floor: precise, physical, useful, and quietly ambitious. The design should avoid generic AI startup polish, vague futurism, and decorative marketing gloss. It should make robotics, fabrication, compute, and safety feel inspectable.
+Armature AI Labs should feel like a real lab floor: precise, physical, useful, and quietly ambitious. The design should avoid generic AI startup polish, vague futurism, and decorative marketing gloss. It should make robotics, fabrication, compute, and safety feel inspectable.
 
-The first screen should make the lab identity obvious: the lowercase `armature lab` hero wordmark, the commutator mark, HSR Layout, Bengaluru, and the physical lab offer.
+The first screen should make the lab identity obvious: the lowercase `armature ai labs` hero wordmark, the commutator mark, HSR Layout, Bengaluru, and the physical lab offer.
 
 ## Brand Hierarchy
 
-- Current public styling uses lowercase `armature`.
-- Formal lab identity: `Armature - The Physical AI and Robotics Lab`.
+- The visible wordmark uses lowercase `armature ai labs`.
+- Formal lab identity: `Armature AI Labs - The Physical AI and Robotics Lab`.
 - Parent plan: `Institute for Physical AI`.
 - Do not collapse the parent institute and lab floor into one vague brand.
-- If both institute and lab surfaces are present, the institute carries the broader research identity and armature carries the working-floor identity.
+- If both institute and lab surfaces are present, the institute carries the broader research identity and Armature AI Labs carries the working-floor identity.
 
 ## Visual Language
 

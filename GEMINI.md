@@ -4,7 +4,7 @@ Read `AGENTS.md` first. It is the canonical project guidance for this folder. Fo
 
 Gemini-specific guidance:
 
-- Preserve the brand hierarchy and current lowercase `armature` styling in existing assets.
+- Preserve the brand hierarchy and lowercase `armature ai labs` wordmark styling in existing assets.
 - Keep site, docs, and README financial assumptions aligned.
 - Do not replace intentional placeholders without user-provided final values.
 - Avoid broad rewrites or new tooling unless explicitly requested.

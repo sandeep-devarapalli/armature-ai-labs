@@ -2,14 +2,14 @@
 
 > Source snapshot: [Circuit Digest Electronics Projects](https://circuitdigest.com/electronics-projects), checked 7 August 2026.
 
-This is an Armature research index for finding practical build references. It records the linked project title and published date from the source catalog. The **lab lane**, **platform signals**, and **safety gate** are Armature heuristics inferred from the title and URL; they are not Circuit Digest metadata or an approval to build.
+This is an Armature AI Labs research index for finding practical build references. It records the linked project title and published date from the source catalog. The **lab lane**, **platform signals**, and **safety gate** are Armature AI Labs heuristics inferred from the title and URL; they are not Circuit Digest metadata or an approval to build.
 
 ## How to use this index
 
 1. Start with a lab lane, then search this file for a platform, component, or application.
 2. Open the source article and verify its circuit, code, bill of materials, datasheets, software versions, and current component availability before planning a build.
-3. Treat every safety label as a minimum review trigger. Mains/high voltage, batteries, rotating or flying mechanisms, intentional RF, biomedical claims, heat, and lasers require the matching Armature supervision and equipment controls. Entries marked `Restricted/weapon` are references only and are not Armature build candidates.
-4. Add a project to the Armature Projects page only after checking source availability, licensing, reproducibility, component coverage, and fit with the lab roadmap.
+3. Treat every safety label as a minimum review trigger. Mains/high voltage, batteries, rotating or flying mechanisms, intentional RF, biomedical claims, heat, and lasers require the matching Armature AI Labs supervision and equipment controls. Entries marked `Restricted/weapon` are references only and are not Armature AI Labs build candidates.
+4. Add a project to the Armature AI Labs Projects page only after checking source availability, licensing, reproducibility, component coverage, and fit with the lab roadmap.
 
 ## Coverage
 
@@ -24,7 +24,7 @@ A successful catalog crawl does not prove that every historical build is safe, c
 
 ## Lab-lane summary
 
-| Lab lane | Projects | Typical Armature use |
+| Lab lane | Projects | Typical Armature AI Labs use |
 | --- | ---: | --- |
 | Robotics & motion | 139 | Prototype mechanisms, motor control, mobile robots, manipulators, and flight systems. |
 | Vision & AI | 61 | Prototype perception, camera systems, image processing, and edge-AI workflows. |
@@ -34,7 +34,7 @@ A successful catalog crawl does not prove that every historical build is safe, c
 | Communications & audio | 78 | Build RF, wired communications, audio, and signal-chain projects. |
 | Fabrication & test | 15 | Build PCB, workshop, test, and manufacturing-support tools. |
 | General electronics | 183 | Use as a reference circuit, teaching exercise, or general bench build. |
-| Restricted references | 3 | Keep as source references only; these entries are not Armature build candidates. |
+| Restricted references | 3 | Keep as source references only; these entries are not Armature AI Labs build candidates. |
 
 ## Source-section summary
 
@@ -1735,7 +1735,7 @@ Use as a reference circuit, teaching exercise, or general bench build.
 
 ## Restricted references
 
-Keep as source references only; these entries are not Armature build candidates.
+Keep as source references only; these entries are not Armature AI Labs build candidates.
 
 | Project | Published | Source section | Platform signals | Safety gate |
 | --- | --- | --- | --- | --- |
@@ -1745,4 +1745,4 @@ Keep as source references only; these entries are not Armature build candidates.
 
 ## Refresh notes
 
-When refreshing this index, crawl every pagination page, de-duplicate by canonical project URL, compare added and removed entries, and manually review changed classifications. Do not silently replace this dated snapshot with runtime scraping in the Armature website.
+When refreshing this index, crawl every pagination page, de-duplicate by canonical project URL, compare added and removed entries, and manually review changed classifications. Do not silently replace this dated snapshot with runtime scraping in the Armature AI Labs website.

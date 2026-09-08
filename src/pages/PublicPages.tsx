@@ -172,7 +172,7 @@ export function ServicesPage() {
       <PageHeader
         meta="Services · deployments · research"
         title="Build here, or bring the lab to the site."
-        description="Armature combines a bookable robotics floor with engineering services for organizations that need working hardware, private AI infrastructure, or credible physical datasets."
+        description="Armature AI Labs combines a bookable robotics floor with engineering services for organizations that need working hardware, private AI infrastructure, or credible physical datasets."
         actions={(
           <>
             <Link className="button button-primary" to="/join">Become a member <ArrowRight aria-hidden="true" /></Link>
@@ -180,7 +180,7 @@ export function ServicesPage() {
           </>
         )}
       />
-      <Section number="01" title="Talent and training" lede="The fastest way to find, grow, and test hardware talent is to watch it build. Armature runs that room.">
+      <Section number="01" title="Talent and training" lede="The fastest way to find, grow, and test hardware talent is to watch it build. Armature AI Labs runs that room.">
         <div className="service-grid">
           {talentServices.map(([Icon, title, copy, rate]) => (
             <article className="service-card" key={title}>
@@ -209,7 +209,7 @@ export function ServicesPage() {
           <Link className="button button-quiet" to="/join">See membership and booking <ArrowRight aria-hidden="true" /></Link>
         </div>
       </Section>
-      <Section number="03" title="Design, build, and run a local AI data centre" lede="For organizations that want GPUs on their own premises, Armature can take a deployment from workload sizing and bill of materials through burn-in and ongoing operation.">
+      <Section number="03" title="Design, build, and run a local AI data centre" lede="For organizations that want GPUs on their own premises, Armature AI Labs can take a deployment from workload sizing and bill of materials through burn-in and ongoing operation.">
         <div className="service-grid">
           {([
             [Gauge, "Design", "Size the GPU, storage, networking, power, and cooling for the workload and budget, from a two-GPU workstation to a larger rack."],
@@ -236,7 +236,7 @@ export function ServicesPage() {
             ["01", "Continuous video stays local", "An on-site GPU processes camera streams in real time without round-the-clock cloud transfer."],
             ["02", "Footage remains inside", "Sensitive video, documents, and model queries stay within the organization's premises and access policies."],
             ["03", "One stack serves many jobs", "The same local compute can support safety analytics, dashboards, document search, assistants, and site-specific models."],
-            ["04", "The lab remains behind it", "Armature specifies, deploys, tests, and maintains the system as workloads and operational needs change."]
+            ["04", "The lab remains behind it", "Armature AI Labs specifies, deploys, tests, and maintains the system as workloads and operational needs change."]
           ].map(([number, title, copy]) => (
             <div className="process-row" key={number}><span className="mono">{number}</span><h3>{title}</h3><p>{copy}</p></div>
           ))}
@@ -326,7 +326,7 @@ export function JoinPage() {
       </a>
       <a
         className="button button-quiet"
-        href="https://www.linkedin.com/company/armature-lab/"
+        href="https://www.linkedin.com/company/armature-ai-labs/"
         target="_blank"
         rel="noreferrer"
       >

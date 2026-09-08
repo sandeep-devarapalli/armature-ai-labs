@@ -341,7 +341,7 @@ export function KioskLinkPage() {
   return (
     <PageHeader
       meta="Trusted on-site device"
-      title="Armature check-in kiosk."
+      title="Armature AI Labs check-in kiosk."
       description="Enroll this device from staff operations before scanning member codes. Production enrollment binds a device key and rejects unsigned, replayed, expired, or off-site requests."
       actions={<Link className="button button-primary" to="/kiosk">Open kiosk <ArrowRight aria-hidden="true" /></Link>}
     />

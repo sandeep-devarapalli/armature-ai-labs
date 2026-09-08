@@ -99,7 +99,7 @@ function ProjectCard({ project, anchor = true }: { project: Project; anchor?: bo
             {mediaCredit ? (
               <a href={mediaCredit[1]} target="_blank" rel="noreferrer">Image: {mediaCredit[0]}</a>
             ) : (
-              "Armature reference illustration"
+              "Armature AI Labs reference illustration"
             )}
           </figcaption>
         </figure>

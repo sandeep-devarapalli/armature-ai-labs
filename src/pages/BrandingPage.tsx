@@ -6,9 +6,9 @@ import "./BrandingPage.css";
 const BRAND_BASE = "/brand/armature-lab";
 const COMPLETE_PACK = "/brand/armature-lab-assets.zip";
 const oneLineDescription =
-  "armature is a 3,500 sq ft physical AI and robotics lab in HSR Layout, Bengaluru.";
+  "Armature AI Labs is a 3,500 sq ft physical AI and robotics lab in HSR Layout, Bengaluru.";
 const paragraphDescription =
-  "The armature is the core of every motor: the part that moves. Ours is a 3,500 sq ft physical AI and robotics lab in HSR Layout, Bengaluru, built for the full path from idea to working machine: arms, prototyping, machining, ESD-safe benches, and GPU compute, all bookable by the hour.";
+  "The armature is the core of every motor: the part that moves. Armature AI Labs is a 3,500 sq ft physical AI and robotics lab in HSR Layout, Bengaluru, built for the full path from idea to working machine: arms, prototyping, machining, ESD-safe benches, and GPU compute, all bookable by the hour.";
 type AssetDownload = { label: string; path: string };
 type LogoAsset = { title: string; use: string; preview: string; alt: string; downloads: AssetDownload[] };
 const logoAssets: LogoAsset[] = [
@@ -16,7 +16,7 @@ const logoAssets: LogoAsset[] = [
     title: "Horizontal lockup",
     use: "The default for website headers, email signatures and signage.",
     preview: "svg/armature-lab-lockup-h.svg",
-    alt: "Horizontal armature lab logo",
+    alt: "Horizontal Armature AI Labs logo",
     downloads: [
       { label: "SVG · transparent", path: "svg/armature-lab-lockup-h.svg" },
       { label: "SVG · dark surface", path: "svg/armature-lab-lockup-h-on-ink.svg" },
@@ -28,7 +28,7 @@ const logoAssets: LogoAsset[] = [
     title: "Vertical lockup",
     use: "For stacked layouts, social graphics, print and the front door.",
     preview: "svg/armature-lab-lockup-v.svg",
-    alt: "Vertical armature lab logo",
+    alt: "Vertical Armature AI Labs logo",
     downloads: [
       { label: "SVG · transparent", path: "svg/armature-lab-lockup-v.svg" },
       { label: "SVG · dark surface", path: "svg/armature-lab-lockup-v-on-ink.svg" },
@@ -38,9 +38,9 @@ const logoAssets: LogoAsset[] = [
   },
   {
     title: "Commutator mark",
-    use: "Use the symbol alone where the Armature name is already clear.",
+    use: "Use the symbol alone where the Armature AI Labs name is already clear.",
     preview: "svg/armature-lab-mark.svg",
-    alt: "Armature commutator mark",
+    alt: "Armature AI Labs commutator mark",
     downloads: [
       { label: "SVG · transparent", path: "svg/armature-lab-mark.svg" },
       { label: "SVG · dark surface", path: "svg/armature-lab-mark-cream.svg" },
@@ -52,7 +52,7 @@ const logoAssets: LogoAsset[] = [
     title: "Wordmark",
     use: "Use the lowercase name without the mark only when space is constrained.",
     preview: "svg/armature-lab-wordmark.svg",
-    alt: "armature lab wordmark",
+    alt: "armature ai labs wordmark",
     downloads: [
       { label: "SVG · transparent", path: "svg/armature-lab-wordmark.svg" },
       { label: "SVG · dark surface", path: "svg/armature-lab-wordmark-cream.svg" },
@@ -155,10 +155,10 @@ export function BrandingPage() {
       <header className="branding-hero">
         <div className="wrap branding-hero-grid">
           <div className="branding-hero-copy">
-            <div className="eyebrow mono">armature · brand resources</div>
+            <div className="eyebrow mono">armature ai labs · brand resources</div>
             <h1>Brand resources</h1>
             <p className="hero-copy">
-              Download the approved armature lab logos, app icons and browser
+              Download the approved Armature AI Labs logos, app icons and browser
               assets, then use them with the spacing, colour and permission
               guidance below.
             </p>
@@ -173,7 +173,7 @@ export function BrandingPage() {
             </div>
           </div>
           <figure className="branding-hero-preview">
-            <img src={`${BRAND_BASE}/svg/armature-lab-lockup-h-on-paper.svg`} alt="Horizontal armature lab lockup" />
+            <img src={`${BRAND_BASE}/svg/armature-lab-lockup-h-on-paper.svg`} alt="Horizontal Armature AI Labs lockup" />
             <figcaption className="mono">Primary lockup · on paper</figcaption>
           </figure>
         </div>
@@ -181,7 +181,7 @@ export function BrandingPage() {
 
       <Section
         number="01"
-        title="About armature"
+        title="About Armature AI Labs"
         lede="Use this approved copy when a publication, event listing or partner page needs a short lab description."
       >
         <div className="branding-copy-list">
@@ -317,7 +317,7 @@ export function BrandingPage() {
           </article>
         </div>
 
-        <div className="branding-color-grid" aria-label="Armature brand colours">
+        <div className="branding-color-grid" aria-label="Armature AI Labs brand colours">
           {brandColors.map((color) => (
             <article key={color.name}>
               <span
@@ -338,7 +338,7 @@ export function BrandingPage() {
       <Section
         number="05"
         title="Usage and permissions"
-        lede="The repository's Apache-2.0 license covers source code and documentation, not the Armature identity assets."
+        lede="The repository's Apache-2.0 license covers source code and documentation, not the Armature AI Labs identity assets."
         dark
       >
         <div className="branding-permissions">
@@ -350,7 +350,7 @@ export function BrandingPage() {
             </p>
             <p>
               Do not imply endorsement, affiliation, or operation of an
-              official Armature lab without permission.
+              official Armature AI Labs facility without permission.
             </p>
             <p>
               Request written permission at <a className="text-link" href="mailto:hello@armaturelab.org">hello@armaturelab.org</a>.

@@ -125,7 +125,7 @@ export const components: CatalogComponent[] = [
     quantityTarget: 1,
     quantityUnit: "machine-cell safety sets",
     tags: ["IndyMill", "emergency stop", "limit switches", "Z probe", "guarding", "extraction"],
-    validationNotes: ["The project documents limit switches, a Z probe, emergency button, and dust collection as upgrades; Armature requires them plus physical guarding before member use.", "A competent person must approve electrical isolation, interlocks, extraction, fire response, material rules, toolholding, training, maintenance, and supervised access before commissioning."]
+    validationNotes: ["The project documents limit switches, a Z probe, emergency button, and dust collection as upgrades; Armature AI Labs requires them plus physical guarding before member use.", "A competent person must approve electrical isolation, interlocks, extraction, fire response, material rules, toolholding, training, maintenance, and supervised access before commissioning."]
   },
   {
     slug: "indymill-1-5kw-spindle-upgrade",
@@ -2544,7 +2544,7 @@ export const componentOffers: ComponentOffer[] = [
     taxNote: "No verified India offer exists; obtain a compliant INR landed quote including dangerous-goods freight, duty, and GST.",
     stockState: "quote_required",
     warrantyNote: "Confirm cell documentation, BMS, charger, connector, shipping eligibility, warranty, and end-of-life handling.",
-    validationNotes: ["Do not order internationally until the vendor confirms legal delivery to the lab and Armature's battery storage and charging controls are active."]
+    validationNotes: ["Do not order internationally until the vendor confirms legal delivery to the lab and Armature AI Labs battery storage and charging controls are active."]
   },
   {
     id: "microcenter-yor-raspberry-pi-5-16gb",

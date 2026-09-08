@@ -74,7 +74,7 @@ Deno.serve(async (request) => {
     const lines = [
       "BEGIN:VCALENDAR",
       "VERSION:2.0",
-      "PRODID:-//Armature Lab//Booking//EN",
+      "PRODID:-//Armature AI Labs//Booking//EN",
       "CALSCALE:GREGORIAN",
       "METHOD:PUBLISH",
       "BEGIN:VEVENT",
@@ -82,13 +82,13 @@ Deno.serve(async (request) => {
       `DTSTAMP:${icsDate(booking.updated_at)}`,
       `DTSTART:${icsDate(booking.starts_at)}`,
       `DTEND:${icsDate(booking.ends_at)}`,
-      `SUMMARY:${icsEscape(`armature - ${resource.name}`)}`,
-      `DESCRIPTION:${icsEscape(`Manage this booking at https://armaturelab.org/bookings/${booking.id}`)}`,
+      `SUMMARY:${icsEscape(`Armature AI Labs - ${resource.name}`)}`,
+      `DESCRIPTION:${icsEscape(`Manage this booking at https://armatureailabs.com/bookings/${booking.id}`)}`,
       `LOCATION:${icsEscape(
         [location?.name, location?.address].filter(Boolean).join(", "),
       )}`,
       `STATUS:${status}`,
-      `URL:https://armaturelab.org/bookings/${booking.id}`,
+      `URL:https://armatureailabs.com/bookings/${booking.id}`,
       "END:VEVENT",
       "END:VCALENDAR",
       "",
@@ -99,7 +99,7 @@ Deno.serve(async (request) => {
       headers: {
         ...corsHeaders(request),
         "content-type": "text/calendar; charset=utf-8",
-        "content-disposition": `attachment; filename="armature-booking-${booking.id}.ics"`,
+        "content-disposition": `attachment; filename="armature-ai-labs-booking-${booking.id}.ics"`,
         "cache-control": "private, no-store",
       },
     });

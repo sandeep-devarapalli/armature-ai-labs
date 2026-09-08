@@ -8,7 +8,7 @@ insert into public.locations (
 values (
   '10000000-0000-4000-8000-000000000001',
   'hsr-layout',
-  'armature HSR Layout',
+  'Armature AI Labs HSR Layout',
   'HSR Layout, Bengaluru, Karnataka, India',
   'Asia/Kolkata'
 )

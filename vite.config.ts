@@ -33,10 +33,10 @@ export default defineConfig(({ mode }) => {
     VitePWA({
       registerType: "prompt",
       manifest: {
-        name: "armature - The Physical AI and Robotics Lab",
-        short_name: "armature",
+        name: "Armature AI Labs - The Physical AI and Robotics Lab",
+        short_name: "Armature AI Labs",
         description:
-          "Explore robotics, fabrication, compute, and lab projects at armature in HSR Layout, Bengaluru.",
+          "Explore robotics, fabrication, compute, and lab projects at Armature AI Labs in HSR Layout, Bengaluru.",
         id: "/",
         start_url: "/",
         scope: "/",

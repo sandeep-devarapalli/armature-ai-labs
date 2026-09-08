@@ -4,8 +4,8 @@ Read `AGENTS.md` first. It is the canonical project guidance for this folder. Fo
 
 Claude-specific guidance:
 
-- Preserve the current public styling of the lab name as lowercase `armature` in existing site and asset copy.
-- Keep `Institute for Physical AI` as the parent plan and `Armature - The Physical AI and Robotics Lab` as the lab identity.
+- Preserve the public wordmark styling as lowercase `armature ai labs` in site and asset copy.
+- Keep `Institute for Physical AI` as the parent plan and `Armature AI Labs - The Physical AI and Robotics Lab` as the lab identity.
 - Do not invent prices, founder names, CTA URLs, or photo assets for existing placeholders.
 - Treat financial numbers as planning estimates, not quotes or advice.
 - Keep the current light, dark, and sepia modes aligned: content, structure, navigation, project data, and calculator logic must remain identical unless the user asks for a real split.

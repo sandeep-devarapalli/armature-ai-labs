@@ -8,7 +8,7 @@ or private inventory evidence in GitHub issues or pull requests.
 
 As of 7 August 2026, `react-router-dom` 7.18.2 is the latest published release.
 `npm audit` reports `GHSA-qwww-vcr4-c8h2` for React Server Components action
-handling. Armature is a browser-only Vite SPA and does not expose React Router
+handling. Armature AI Labs is a browser-only Vite SPA and does not expose React Router
 RSC actions or a server action endpoint, so that path is not reachable here.
 
 `npm run audit:production` permits only that advisory and expires the exception

@@ -49,7 +49,7 @@ test("building vision presents the canonical 21-image set without overflow", asy
   await page.getByRole("button", { name: "Frontage", exact: true }).click();
   await expect(page.getByText("Showing 1 of 21 views")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Exterior building frontage" })).toBeVisible();
-  await expect(page.getByText("Updated Armature identity, weighted café umbrellas, loose tables and chairs, and planted pots; remove visual clutter and cycles from this presentation view.")).toBeVisible();
+  await expect(page.getByText("Updated Armature AI Labs identity, weighted café umbrellas, loose tables and chairs, and planted pots; remove visual clutter and cycles from this presentation view.")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Ground floor entrance and reception" })).toHaveCount(0);
 
   await page.getByRole("button", { name: "Ground floor", exact: true }).click();
@@ -73,15 +73,15 @@ test("building vision presents the canonical 21-image set without overflow", asy
   await expect(page.getByRole("heading", { name: "Repository and working references." })).toBeVisible();
   await expect(page.getByRole("link", { name: /GitHub repository/ })).toHaveAttribute(
     "href",
-    "https://github.com/sandeep-devarapalli/armature-lab"
+    "https://github.com/sandeep-devarapalli/armature-ai-labs"
   );
   await expect(page.getByRole("link", { name: /Agent instructions/ })).toHaveAttribute(
     "href",
-    "https://github.com/sandeep-devarapalli/armature-lab/blob/main/AGENTS.md"
+    "https://github.com/sandeep-devarapalli/armature-ai-labs/blob/main/AGENTS.md"
   );
   await expect(page.getByRole("link", { name: /Design system/ })).toHaveAttribute(
     "href",
-    "https://github.com/sandeep-devarapalli/armature-lab/blob/main/DESIGN.md"
+    "https://github.com/sandeep-devarapalli/armature-ai-labs/blob/main/DESIGN.md"
   );
   await expect(page.getByText("/Users/dev/Downloads/Armature Lab Building rework project/Armature Lab Building rework v2/", { exact: true })).toBeVisible();
   await expect(page.getByText("public/building-vision/rework-v2/", { exact: true })).toBeVisible();

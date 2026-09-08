@@ -78,7 +78,7 @@ test("ecosystem map filters and preserves a selected organization", async ({ pag
   await expect(page.locator(".ecosystem-method h2")).toHaveText("Built to be useful.");
   await expect(page.locator(".ecosystem-method").getByText("Contribute on GitHub")).toHaveAttribute(
     "href",
-    "https://github.com/sandeep-devarapalli/armature-lab"
+    "https://github.com/sandeep-devarapalli/armature-ai-labs"
   );
   await expect(page.getByText("Robotics lead workbook")).toHaveCount(0);
   await expect(page.getByText("directory record")).toHaveCount(0);
@@ -533,10 +533,10 @@ test("home hero restores the mechanical kernel animation", async ({ page }) => {
     "brand-mark-commutate"
   );
   await expect(page.locator(".brand-mark--animated")).toHaveCount(1);
-  await expect(page.locator(".topbar .brand-lockup")).toHaveAttribute("aria-label", "armature lab");
-  await expect(page.locator(".topbar .brand-mark")).toHaveAttribute("aria-label", "armature lab mark");
-  await expect(page.locator(".topbar .brand-lockup > span")).toHaveText("armature lab");
-  await expect(page.locator(".hero-lockup h1")).toHaveText("armature lab");
+  await expect(page.locator(".topbar .brand-lockup")).toHaveAttribute("aria-label", "armature ai labs");
+  await expect(page.locator(".topbar .brand-mark")).toHaveAttribute("aria-label", "armature ai labs mark");
+  await expect(page.locator(".topbar .brand-lockup > span")).toHaveText("armature ai labs");
+  await expect(page.locator(".hero-lockup h1")).toHaveText("armature ai labs");
   expect(await page.evaluate(async () => {
     await document.fonts.load('500 21px "Armature Space Grotesk"');
     return document.fonts.check('500 21px "Armature Space Grotesk"');
@@ -945,10 +945,10 @@ test("PWA keeps transactional traffic out of Cache Storage", async ({ page, cont
   expect(cachedUrls.some((url) => /\/assets\/index-[^/]+\.js$/.test(url))).toBe(true);
 
   await page.goto("/");
-  await expect(page.getByRole("heading", { name: "armature lab", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "armature ai labs", exact: true })).toBeVisible();
   await context.setOffline(true);
   await page.reload();
-  await expect(page.getByRole("heading", { name: "armature lab", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "armature ai labs", exact: true })).toBeVisible();
 });
 
 test("mobile route families stay contained and avoid iOS form zoom", async ({ page }, testInfo) => {

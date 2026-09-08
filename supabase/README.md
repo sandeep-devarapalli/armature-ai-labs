@@ -1,6 +1,6 @@
-# Armature Supabase Backend
+# Armature AI Labs Supabase Backend
 
-This directory is the authoritative backend for Armature membership, resource
+This directory is the authoritative backend for Armature AI Labs membership, resource
 booking, attendance, and operational calendar mirroring.
 
 ## Security Model
@@ -114,8 +114,8 @@ Scheduled functions:
 Google Calendar (`calendar-sync`):
 
 - `GOOGLE_SERVICE_ACCOUNT_JSON`: complete Google service-account JSON.
-- `GOOGLE_WORKSPACE_SUBJECT`: delegated Workspace identity, normally
-  `bookings@armaturelab.org`.
+- `GOOGLE_WORKSPACE_SUBJECT`: delegated Workspace identity, currently the
+  transitional `bookings@armaturelab.org` mailbox.
 - `GOOGLE_SEND_UPDATES`: `all` by default; use `none` only for controlled
   testing.
 
@@ -129,7 +129,8 @@ Reminders (`retry-reminders`):
 
 - `REMINDER_WEBHOOK_URL`: server-side email delivery endpoint.
 - `REMINDER_WEBHOOK_SECRET`: bearer credential for that endpoint.
-- `REMINDER_FROM`: defaults to `bookings@armaturelab.org`.
+- `REMINDER_FROM`: defaults to the transitional `bookings@armaturelab.org`
+  mailbox until a replacement sender is configured and verified.
 
 The webhook receives an idempotency key, recipient, template name, and booking
 data. It should deliver through the approved Google Workspace sender or the
@@ -138,7 +139,7 @@ separately in the project dashboard for OTP and account email.
 
 Public component requests (`component-request`):
 
-- `APP_ORIGIN`: `https://armaturelab.org`.
+- `APP_ORIGIN`: `https://armatureailabs.com`.
 - `TURNSTILE_SECRET_KEY`: Cloudflare Turnstile server secret.
 - `COMPONENT_REQUEST_FROM_EMAIL`: verified transactional sender.
 - `COMPONENT_REQUEST_EMAIL_PROVIDER`: `resend` or `postmark`.
@@ -228,7 +229,7 @@ An `aal2` operations/admin user can revoke an enrolled device with
 1. Link the intended Supabase project and review `supabase db diff` before
    pushing migrations.
 2. Configure custom SMTP for OTP email. Enable Google OAuth and
-   `https://armaturelab.org/auth/callback` only before the member-platform
+   `https://armatureailabs.com/auth/callback` only before the member-platform
    launch, after its production flow tests pass.
 3. Create the first staff role through a reviewed SQL/admin operation. Never
    expose staff-role mutation to member clients.

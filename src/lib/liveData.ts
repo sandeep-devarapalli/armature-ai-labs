@@ -126,7 +126,7 @@ function privateProfile(
   return {
     id: profile.id,
     handle: profile.handle ?? "",
-    name: profile.display_name || email.split("@")[0] || "Armature member",
+    name: profile.display_name || email.split("@")[0] || "Armature AI Labs member",
     avatarUrl: profile.avatar_url ?? "",
     bio: profile.bio,
     skills: profile.skills,
