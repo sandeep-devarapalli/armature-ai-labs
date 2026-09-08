@@ -22,7 +22,7 @@ identity, approvals, resources, bookings, attendance, and integration state.
 ## Brand And Naming Rules
 
 - The canonical public website domain is `armatureailabs.com`. Do not substitute the legacy `armaturelab.org` domain or near-match domains.
-- The public information and membership mailbox remains `hello@armaturelab.org` during the domain transition. Keep it and `bookings@armaturelab.org` working as transitional mailboxes until replacement addresses are configured and verified; keep private booking-calendar and transactional identities separate.
+- The canonical public information, membership, and brand-permissions mailbox is `hello@armatureailabs.com`; sending, receiving, SPF, and DKIM were verified on 8 September 2026. Keep `hello@armaturelab.org` working for existing contacts, but do not publish it as the public contact address. Keep `bookings@armaturelab.org` and private booking-calendar and transactional identities separate until their replacements are configured and verified.
 - The commutator mark geometry in `brand/armature-lab/` is fixed; the exploded-A mark is retired.
 - Keep the parent and lab identities separate. The larger parent plan is `Institute for Physical AI`; the lab identity is `Armature AI Labs - The Physical AI and Robotics Lab`.
 - The current public site and asset pack style the lab name in lowercase. Preserve that capitalization in existing site copy and SVG text unless the user explicitly asks for a change.

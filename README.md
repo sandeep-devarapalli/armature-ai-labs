@@ -2,7 +2,7 @@
 
 Website: [armatureailabs.com](https://armatureailabs.com)
 
-Contact during the domain transition: [hello@armaturelab.org](mailto:hello@armaturelab.org)
+Contact: [hello@armatureailabs.com](mailto:hello@armatureailabs.com)
 
 React/Vite member, booking, maker-desk inventory, and check-in PWA for the
 physical AI and robotics lab in HSR Layout, Bengaluru.

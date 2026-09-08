@@ -65,8 +65,10 @@ new migrations. A frontend rollback never rewinds database history.
 
 ## Google Workspace
 
-Keep `hello@armaturelab.org` working as the public inbound mailbox for
-information and membership enquiries during the domain transition. Keep
+Use `hello@armatureailabs.com` as the public inbound mailbox for information,
+membership enquiries, and brand permissions. Sending, receiving, SPF, and DKIM
+were verified on 8 September 2026. Keep `hello@armaturelab.org` working for
+existing contacts without publishing it as the public contact address. Keep
 `bookings@armaturelab.org` working separately for calendar operations,
 reminders, and transactional booking mail until replacement addresses are
 configured and verified.

@@ -176,7 +176,7 @@ export function ServicesPage() {
         actions={(
           <>
             <Link className="button button-primary" to="/join">Become a member <ArrowRight aria-hidden="true" /></Link>
-            <a className="button button-quiet" href="mailto:hello@armaturelab.org">Discuss a project</a>
+            <a className="button button-quiet" href="mailto:hello@armatureailabs.com">Discuss a project</a>
           </>
         )}
       />
@@ -301,7 +301,7 @@ export function JoinPage() {
   const membershipActive = currentMember?.membershipState === "active";
 
   const membershipAction = !memberPlatformAvailable ? (
-    <a className="button button-primary" href="mailto:hello@armaturelab.org">Email the lab</a>
+    <a className="button button-primary" href="mailto:hello@armatureailabs.com">Email the lab</a>
   ) : membershipActive ? (
     <Link className="button button-primary" to="/book">Book a resource <ArrowRight aria-hidden="true" /></Link>
   ) : pendingApplication ? (
@@ -380,7 +380,7 @@ export function JoinPage() {
           <>
             <Status tone="warn">Online signup is not live yet</Status>
             <p className="lede">
-              Applications and bookings will open here after secure member sign-in and the end-to-end member journey pass the production launch check. For membership questions or a visit, email <a className="text-link" href="mailto:hello@armaturelab.org">hello@armaturelab.org</a>.
+              Applications and bookings will open here after secure member sign-in and the end-to-end member journey pass the production launch check. For membership questions or a visit, email <a className="text-link" href="mailto:hello@armatureailabs.com">hello@armatureailabs.com</a>.
             </p>
           </>
         ) : membershipActive ? (
