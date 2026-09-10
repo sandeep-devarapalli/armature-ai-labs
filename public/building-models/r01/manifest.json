@@ -1,0 +1,304 @@
+{
+  "schema": "armature.building-web-assets.v1",
+  "release": "Coordinated Selected Layout R01",
+  "date": "2026-09-10",
+  "status": "PASS_GEOMETRY_REIMPORT_AND_EXACT_COPY_CHECKS",
+  "sourceNativeSha256": "ddd17b71d22614ef91a6fefda959f183793492f3ed41afd124145b2bdf35c7fd",
+  "sourcePreserved": true,
+  "developmentB01Included": false,
+  "floors": [
+    {
+      "id": "ground-floor",
+      "label": "Ground floor",
+      "model": "/building-models/r01/ground-floor.glb",
+      "preview": "/building-models/r01/ground-floor.png",
+      "bytes": 14713836,
+      "sha256": "9a7ee8fa9904183e5556797410c923a4ef7491323de05defce36a9efe6b99a05",
+      "physicalObjects": 1680,
+      "triangles": 310374,
+      "materials": 53,
+      "boundsGltfYUpMetres": [
+        [
+          -6.730601787567139,
+          9.543726921081543
+        ],
+        [
+          -1.1257041692733765,
+          4.490421295166016
+        ],
+        [
+          -6.9683966636657715,
+          4.965869903564453
+        ]
+      ],
+      "boundsBlenderZUpMetres": [
+        [
+          -6.730601787567139,
+          9.543726921081543
+        ],
+        [
+          -4.965869903564453,
+          6.9683966636657715
+        ],
+        [
+          -1.1257041692733765,
+          4.490421295166016
+        ]
+      ],
+      "sourceScene": "R01 | 01 Ground floor selected layout",
+      "sourceCamera": {
+        "position_blender_z_up_m": [
+          18.799102783203125,
+          24.275028228759766,
+          33.53144073486328
+        ],
+        "rotation_quaternion_blender": [
+          0.29272305965423584,
+          0.11195819079875946,
+          0.33923661708831787,
+          0.8869594931602478
+        ],
+        "ortho_scale_m": 23.251846313476562,
+        "projection": "ORTHO"
+      },
+      "retainedRoomNames": true,
+      "excludedCamerasLightsLabelsAndEmptyRoots": 113,
+      "previewSha256": "7592558c5cc33ec41def0575a366976fcf69aca7c54b9d5a988773af79c81707",
+      "sourcePreviewSha256": "db7f7ac24f1a93294fd100ccb90a599c6909b31c4faaf97455ac99a856fbe565"
+    },
+    {
+      "id": "first-floor",
+      "label": "First floor",
+      "model": "/building-models/r01/first-floor.glb",
+      "preview": "/building-models/r01/first-floor.png",
+      "bytes": 2313112,
+      "sha256": "3dc88ec418ba7d1427a332a4e0fa857d7c7df423e91fc579c12e9e0afe640ab8",
+      "physicalObjects": 916,
+      "triangles": 58956,
+      "materials": 14,
+      "boundsGltfYUpMetres": [
+        [
+          -8.584599494934082,
+          9.905726432800293
+        ],
+        [
+          -0.11900000274181366,
+          7.688281059265137
+        ],
+        [
+          -6.9683966636657715,
+          6.15752649307251
+        ]
+      ],
+      "boundsBlenderZUpMetres": [
+        [
+          -8.584599494934082,
+          9.905726432800293
+        ],
+        [
+          -6.15752649307251,
+          6.9683966636657715
+        ],
+        [
+          -0.11900000274181366,
+          7.688281059265137
+        ]
+      ],
+      "sourceScene": "R01 | 02 First floor selected layout",
+      "sourceCamera": {
+        "position_blender_z_up_m": [
+          19.253076553344727,
+          25.449230194091797,
+          37.268096923828125
+        ],
+        "rotation_quaternion_blender": [
+          0.2927229106426239,
+          0.11195816099643707,
+          0.33923670649528503,
+          0.8869594931602478
+        ],
+        "ortho_scale_m": 27.35390853881836,
+        "projection": "ORTHO"
+      },
+      "retainedRoomNames": true,
+      "excludedCamerasLightsLabelsAndEmptyRoots": 15,
+      "previewSha256": "c59091e6d7d4a8d67678ed82e98d9230914f0520ff2e22bcb2a0a7600d37bf68",
+      "sourcePreviewSha256": "2b6e7bd060eb170aa5c24b3c24b3960186a07b62c9380d754b8aaa1da1f48303"
+    }
+  ],
+  "downloads": [
+    {
+      "id": "native-blender",
+      "label": "Native Blender — both floors and all retained R01 scenes",
+      "url": "/building-models/r01/selected-layout.blend",
+      "bytes": 2889314,
+      "sha256": "5d34a641bf787ef9aa5cdb8cdbf9882af3b99dcc6d164da8c3d1e6e699505e2d",
+      "exactNativeCopy": false,
+      "sourceFilename": "Armature - Selected Ground and First Floor Layouts - R01.blend",
+      "units": "metres",
+      "sourceSha256": "ddd17b71d22614ef91a6fefda959f183793492f3ed41afd124145b2bdf35c7fd",
+      "metadataSanitized": true
+    },
+    {
+      "id": "native-cad-ground",
+      "label": "Ground floor — native FreeCAD",
+      "url": "/building-models/r01/ground-floor.FCStd",
+      "bytes": 4373783,
+      "sha256": "351a61d5e6e59667a98a319583ae3ac72168ff5db8688b4f76d29d0f73bc099a",
+      "exactNativeCopy": false,
+      "sourceFilename": "Ground Floor - Coordinated Planning R01.FCStd",
+      "units": "millimetres",
+      "sourceSha256": "145082c570bb32572b96a83886545c1118a37b6a9f5e64bf76d6511a38e7abfc",
+      "metadataSanitized": true
+    },
+    {
+      "id": "native-cad-first",
+      "label": "First floor — native FreeCAD",
+      "url": "/building-models/r01/first-floor.FCStd",
+      "bytes": 2491934,
+      "sha256": "b49e95617c7d6db5dbb9b5bcd7abb33e5ee1d38ffa2c3ebe0b418d00a9a833c3",
+      "exactNativeCopy": false,
+      "sourceFilename": "First Floor - Coordinated Planning R01.FCStd",
+      "units": "millimetres",
+      "sourceSha256": "4c8c65dbf487ba996e61ec38a3640ef5b5e97587f980dac338b09f3ac406a971",
+      "metadataSanitized": true
+    },
+    {
+      "id": "step-partition-ground",
+      "label": "Ground-floor stair partition only — STEP",
+      "url": "/building-models/r01/ground-floor-stair-partition-r01.step",
+      "bytes": 8054747,
+      "sha256": "30191cd5542c7229e4e3afec928d6435ac13e3ec72032d693d62c4c668a7be76",
+      "exactNativeCopy": true,
+      "sourceFilename": "Ground Floor - Stair Partition Geometry R01.step",
+      "units": "millimetres"
+    },
+    {
+      "id": "step-partition-first",
+      "label": "First-floor stair partition only — STEP",
+      "url": "/building-models/r01/first-floor-stair-partition-r01.step",
+      "bytes": 8069651,
+      "sha256": "743f9e0f1cb4ab9575104cb9e0b0dfb6d1776677b55de72cc9dc7609ff96ea57",
+      "exactNativeCopy": true,
+      "sourceFilename": "First Floor - Stair Partition Geometry R01.step",
+      "units": "millimetres"
+    }
+  ],
+  "browserUnits": "metres",
+  "browserAxes": "glTF Y-up; (X,Y,Z) = Blender (X,Z,-Y)",
+  "caveats": [
+    "Selected planning geometry, not measured as-built or installation/occupancy certification.",
+    "GLBs are mesh viewing derivatives; editable CAD and source Blender remain separate downloads.",
+    "Source procedural wood/marble and complex transparency are simplified to portable source-derived PBR values; native renders retain original appearance.",
+    "Lighting rigs, cameras, room-label text, empty parents and hidden planning overlays are excluded from GLBs; source names and room hints remain in node extras.",
+    "STEP downloads contain only selected stair-partition solids, not full-floor architecture.",
+    "First-floor native CAD mixes inherited Z=0 plan linework with partition solids at the world-floor datum; its units are millimetres.",
+    "R01 contains no developmental private-cabin B01 desks, new workshop roof or GF01 cabin."
+  ],
+  "materialRepresentations": [
+    {
+      "source": "Photo 01 - existing pale marble",
+      "browser": "Photo 01 - existing pale marble | browser",
+      "procedural_nodes": [
+        "TEX_NOISE"
+      ],
+      "source_surface": "BSDF_PRINCIPLED",
+      "representation": "Procedural patterns replaced by stored source PBR scalar/base-color values; glass/transparent shader represented by source-weight alpha/transmission where needed."
+    },
+    {
+      "source": "Photo 01 - balcony existing grey stone",
+      "browser": "Photo 01 - balcony existing grey stone | browser",
+      "procedural_nodes": [
+        "TEX_NOISE"
+      ],
+      "source_surface": "BSDF_PRINCIPLED",
+      "representation": "Procedural patterns replaced by stored source PBR scalar/base-color values; glass/transparent shader represented by source-weight alpha/transmission where needed."
+    },
+    {
+      "source": "Photo 01 - existing brown wood-look finish",
+      "browser": "Photo 01 - existing brown wood-look finish | browser",
+      "procedural_nodes": [
+        "TEX_BRICK"
+      ],
+      "source_surface": "BSDF_PRINCIPLED",
+      "representation": "Procedural patterns replaced by stored source PBR scalar/base-color values; glass/transparent shader represented by source-weight alpha/transmission where needed."
+    },
+    {
+      "source": "P02 | muted taupe olive woven upholstery",
+      "browser": "P02 | muted taupe olive woven upholstery | browser",
+      "procedural_nodes": [
+        "TEX_NOISE"
+      ],
+      "source_surface": "BSDF_PRINCIPLED",
+      "representation": "Procedural patterns replaced by stored source PBR scalar/base-color values; glass/transparent shader represented by source-weight alpha/transmission where needed."
+    },
+    {
+      "source": "P02 | warm timber surface",
+      "browser": "P02 | warm timber surface | browser",
+      "procedural_nodes": [
+        "TEX_NOISE"
+      ],
+      "source_surface": "BSDF_PRINCIPLED",
+      "representation": "Procedural patterns replaced by stored source PBR scalar/base-color values; glass/transparent shader represented by source-weight alpha/transmission where needed."
+    },
+    {
+      "source": "R01 | warm oak",
+      "browser": "R01 | warm oak | browser",
+      "procedural_nodes": [
+        "TEX_NOISE",
+        "TEX_COORD"
+      ],
+      "source_surface": "BSDF_PRINCIPLED",
+      "representation": "Procedural patterns replaced by stored source PBR scalar/base-color values; glass/transparent shader represented by source-weight alpha/transmission where needed."
+    },
+    {
+      "source": "GF07 P01 | wood",
+      "browser": "GF07 P01 | wood | browser",
+      "procedural_nodes": [
+        "TEX_COORD",
+        "TEX_NOISE"
+      ],
+      "source_surface": "BSDF_PRINCIPLED",
+      "representation": "Procedural patterns replaced by stored source PBR scalar/base-color values; glass/transparent shader represented by source-weight alpha/transmission where needed."
+    },
+    {
+      "source": "GF07 P01 | glass",
+      "browser": "GF07 P01 | glass | browser",
+      "procedural_nodes": [],
+      "source_surface": "BSDF_TRANSPARENT",
+      "representation": "Procedural patterns replaced by stored source PBR scalar/base-color values; glass/transparent shader represented by source-weight alpha/transmission where needed."
+    },
+    {
+      "source": "GF08 P01 | glass",
+      "browser": "GF08 P01 | glass | browser",
+      "procedural_nodes": [],
+      "source_surface": "BSDF_TRANSPARENT",
+      "representation": "Procedural patterns replaced by stored source PBR scalar/base-color values; glass/transparent shader represented by source-weight alpha/transmission where needed."
+    },
+    {
+      "source": "GF08 P01 | wood",
+      "browser": "GF08 P01 | wood | browser",
+      "procedural_nodes": [
+        "TEX_NOISE"
+      ],
+      "source_surface": "BSDF_PRINCIPLED",
+      "representation": "Procedural patterns replaced by stored source PBR scalar/base-color values; glass/transparent shader represented by source-weight alpha/transmission where needed."
+    },
+    {
+      "source": "OPTION | clear glazing concept",
+      "browser": "OPTION | clear glazing concept | browser",
+      "procedural_nodes": [],
+      "source_surface": "MIX_SHADER",
+      "representation": "Procedural patterns replaced by stored source PBR scalar/base-color values; glass/transparent shader represented by source-weight alpha/transmission where needed."
+    }
+  ],
+  "verification": {
+    "geometryToleranceMetres": 0.000002,
+    "freshReimport": true,
+    "physicalObjectAndRawGlbTriangleCountsMatch": true,
+    "nativeDownloadHashesMatch": true,
+    "sourceNativePreserved": true,
+    "browserVisualReview": "Pending website integration review",
+    "importerNote": "Blender reimport drops one inherited zero-area first-floor wall triangle; raw GLB retains all source triangles. Nonzero-area counts and world geometry pass."
+  }
+}

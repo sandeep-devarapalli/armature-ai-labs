@@ -1,0 +1,124 @@
+{
+  "revision": "R01-image-alignment-01",
+  "date": "2026-09-10",
+  "authority": "Latest approved Blender design, then coordinated CAD, then appearance concepts",
+  "sourceRelease": "Coordinated Selected Layout R01",
+  "sourceNative": "Armature - Selected Ground and First Floor Layouts - R01.blend",
+  "sourceNativeSha256": "ddd17b71d22614ef91a6fefda959f183793492f3ed41afd124145b2bdf35c7fd",
+  "sourcePreserved": true,
+  "geometryChanged": false,
+  "aiGenerated": false,
+  "appearanceOnlyShell": false,
+  "originalConceptsChanged": false,
+  "limits": "Direct Blender cutaways, not photographs of completed work. Existing unmeasured geometry, service assumptions and access conflicts remain. Cameras differ from earlier concepts; studio illumination is not a lighting installation design.",
+  "images": [
+    {
+      "card": "02",
+      "file": "gf10-layout.png",
+      "width": 2100,
+      "height": 1550,
+      "sha256": "f810d4bb9fd3a58c3d5d9d928856a109b1d806de5b15475ccb5e79ebd228f6fc",
+      "source": "Previews/03 - GF10 coworking and GF09 presentation.png",
+      "scene": "R01 | 03 GF10 coworking and GF09",
+      "method": "Unmodified issued R01 preview",
+      "sourceImageSha256": "e6165d818aeb3b14a00380a22c68b7743d4284b0cb7afb2bcbc8869ec04bb30a",
+      "pixelChunksSha256": "d9650f932aa5fa4726a4724b3044996a9e1a1e99d9127012f38e0edfc6633950",
+      "metadataSanitization": "PNG text chunks removed; original pixel and color-profile chunks preserved byte-for-byte"
+    },
+    {
+      "card": "03",
+      "file": "gf10-workbar.png",
+      "width": 1200,
+      "height": 1000,
+      "sha256": "eee860b6800783967d4e03aaf85a9cbad3e560b7a189101ce31b55f2833d4ed2",
+      "scene": "R01 | 03 GF10 coworking and GF09",
+      "cameraPosition": [
+        0.6,
+        7.5,
+        13.5
+      ],
+      "cameraTarget": [
+        0.1,
+        -2.45,
+        0.45
+      ],
+      "orthoScale": 10.2,
+      "method": "Fresh whole-floor Cycles CPU render, 48 samples; camera/render settings only",
+      "sourceImageSha256": "d6534f11a7c2648c43ca699228690c60d20e5bbee5d3ee5fe18660798e4f5a52",
+      "pixelChunksSha256": "0b0fc897e156e5443d82a21d42fe1ea6c171b61c5a565a34205b76739d7c07e0",
+      "metadataSanitization": "PNG text chunks removed; original pixel and color-profile chunks preserved byte-for-byte"
+    },
+    {
+      "card": "06",
+      "file": "gf09-presentation.png",
+      "width": 1200,
+      "height": 1000,
+      "sha256": "da2575c23c41767c01a668ff0aa86bbefa98b779013c2b26d7050e8f9ae97f95",
+      "scene": "R01 | 03 GF10 coworking and GF09",
+      "cameraPosition": [
+        6.2,
+        -7.8,
+        12.8
+      ],
+      "cameraTarget": [
+        0.65,
+        2,
+        1.35
+      ],
+      "orthoScale": 8.8,
+      "method": "Fresh whole-floor Cycles CPU render, 48 samples; camera/render settings only",
+      "sourceImageSha256": "57474afa2ef4397e883b51dae84122a38c023bd6eca1741ac5a42c2233bef394",
+      "pixelChunksSha256": "e61f66dc23542618c3fea88887ae32ffc1ef23c077f1e5f2f5f9fae031679cd5",
+      "metadataSanitization": "PNG text chunks removed; original pixel and color-profile chunks preserved byte-for-byte"
+    },
+    {
+      "card": "10",
+      "file": "gf08-balcony.png",
+      "width": 1200,
+      "height": 1000,
+      "sha256": "bb754960e0e8aced4faeb26899656036ad53ac0591c5456c166ab4f5e9ccb012",
+      "scene": "R01 | 03 GF10 coworking and GF09",
+      "cameraPosition": [
+        12,
+        -8,
+        10.5
+      ],
+      "cameraTarget": [
+        6.55,
+        -2,
+        1
+      ],
+      "orthoScale": 8.3,
+      "method": "Fresh whole-floor Cycles CPU render, 48 samples; camera/render settings only",
+      "sourceImageSha256": "fcd2fc6c8b34c7425f6035fc988193775f6c12ac15e6bbedf3caeef3a3876e6c",
+      "pixelChunksSha256": "5e8735fb62bf2918c9aabb199b9576fcca4189b7362746706187e37dd3e3f46c",
+      "metadataSanitization": "PNG text chunks removed; original pixel and color-profile chunks preserved byte-for-byte"
+    },
+    {
+      "card": "11",
+      "file": "gf09-stair.png",
+      "width": 2100,
+      "height": 1550,
+      "sha256": "3d54977d9d3f8df9788c4c2b5a3a2e07969829696545d515d8b16295b5bef7aa",
+      "source": "Previews/04 - GF09 - selected curved partition.png",
+      "scene": "R01 | 04 GF09 curved partition",
+      "method": "Unmodified issued R01 preview",
+      "sourceImageSha256": "d1341b812280f1d1f0a41514251c6cc270bceaa13cc1f688fc9c73db7fd474c6",
+      "pixelChunksSha256": "87b2733ca6d13ea404b8bd7f145abf8636ba032ecdfba2f4f1745cbca69c8cfb",
+      "metadataSanitization": "PNG text chunks removed; original pixel and color-profile chunks preserved byte-for-byte"
+    },
+    {
+      "card": "13",
+      "file": "ff04-stair.png",
+      "width": 2100,
+      "height": 1550,
+      "sha256": "e66d662451369e6139c14e71e51cf3cca8635f6aa5d6378c015d7beb6753ce16",
+      "source": "Previews/05 - First floor - selected curved partition.png",
+      "scene": "R01 | 05 First floor curved partition",
+      "method": "Unmodified issued R01 preview",
+      "sourceImageSha256": "badc851ed01d2df77c7dc805b21e5298bb7cf79c2a8772918790e0013fd23bcc",
+      "pixelChunksSha256": "de9bb9df0d8f6c48996344588c088d29238e80189efbbf27d9f53e7abad36b85",
+      "metadataSanitization": "PNG text chunks removed; original pixel and color-profile chunks preserved byte-for-byte"
+    }
+  ]
+}

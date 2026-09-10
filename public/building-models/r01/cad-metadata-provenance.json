@@ -1,0 +1,20 @@
+{
+  "files": [
+    {
+      "file": "ground-floor.FCStd",
+      "sourceSha256": "145082c570bb32572b96a83886545c1118a37b6a9f5e64bf76d6511a38e7abfc",
+      "publicSha256": "351a61d5e6e59667a98a319583ae3ac72168ff5db8688b4f76d29d0f73bc099a",
+      "nonXmlPayloadsUnchanged": true,
+      "metadataOnly": true,
+      "nativeSaveReopen": "PASS"
+    },
+    {
+      "file": "first-floor.FCStd",
+      "sourceSha256": "4c8c65dbf487ba996e61ec38a3640ef5b5e97587f980dac338b09f3ac406a971",
+      "publicSha256": "b49e95617c7d6db5dbb9b5bcd7abb33e5ee1d38ffa2c3ebe0b418d00a9a833c3",
+      "nonXmlPayloadsUnchanged": true,
+      "metadataOnly": true,
+      "nativeSaveReopen": "PASS"
+    }
+  ]
+}

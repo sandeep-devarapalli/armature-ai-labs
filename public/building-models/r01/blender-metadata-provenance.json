@@ -1,0 +1,105 @@
+{
+  "schema": "armature.blender-public-metadata.v1",
+  "release": "R01",
+  "status": "PASS",
+  "authoritativeSourcesUnchanged": true,
+  "exactNativeCopy": false,
+  "description": "Public metadata-sanitized derivatives; native geometry, materials, memberships and saved review views unchanged.",
+  "blender": {
+    "file": "selected-layout.blend",
+    "sourceFilename": "Armature - Selected Ground and First Floor Layouts - R01.blend",
+    "sourceSha256": "ddd17b71d22614ef91a6fefda959f183793492f3ed41afd124145b2bdf35c7fd",
+    "publicSha256": "5d34a641bf787ef9aa5cdb8cdbf9882af3b99dcc6d164da8c3d1e6e699505e2d",
+    "publicBytes": 2889314,
+    "changes": {
+      "sceneRenderPathsCleared": 13,
+      "consoleLinesCleared": 4,
+      "weakSourceReferencesBasenameOnly": 580,
+      "fileBrowserPathsCleared": 0
+    },
+    "serializedPrivatePathScan": "PASS",
+    "verification": {
+      "status": "PASS",
+      "counts": {
+        "objects": 3561,
+        "meshes": 2467,
+        "curves": 924,
+        "materials": 68,
+        "collections": 23,
+        "scenes": 21,
+        "worlds": 16,
+        "cameras": 28,
+        "lights": 46,
+        "screens": 4,
+        "workspaces": 2
+      },
+      "fingerprints": {
+        "counts": "cbf12be74492621971d9dc61f1216f41aaae63f2d390953e7c9235eb2f106c9a",
+        "objects": "521bf2131dd86f8db3f78408ed6dc278750cec978542229bc980aa8de1e2c113",
+        "meshes": "89c74cfb3bce75d3eda51b738eb1cf460ffc084a201e6c4c78468bad156788c1",
+        "curves": "f3caad6602bf8e1847ea4a6215f819fc9cc3f55cc0daad98b99532453aa47210",
+        "materials": "929f8bbadf4e5e833d62bf9c97815243752414d347c612c5753419aba81a5416",
+        "worlds": "eddabe50b5677b2045807bf5747156f2e0f58341b17012325374227b5e1f05dd",
+        "collections": "e9984e88cbbe12b348fdc6ea64465ea870792c29606caad5a496e4b2359392a4",
+        "scenes": "e0272c7a40de8782dc16684524176bddd338e1e924408c07de9b1899425ea600",
+        "cameras": "82f460756e425b8e37f6e7783ce79008158944623a8cc8b01250453bb8e778d5",
+        "lights": "dc571ce0a286b0b0353ba1dae21511b4d93db7ee4304bc4e4838c1fce8d99828",
+        "review_views": "aa45a302624c1c0ff893fb0558ca7948267770cb343eb24cd07b62b1194b8cec",
+        "workspaces": "c33c97a9e0c37ca7b595a5b618148d004142be2d19e342c05f256b0b4a853f21",
+        "active_window": "e8e96294fa8317e809a50032b2ef3af0656fddf5d2afca0616e02301e967cdcf"
+      },
+      "nativeSaveReopen": true,
+      "geometryMaterialsMembershipsAndReviewViewsEqual": true,
+      "embeddedImages": 0,
+      "embeddedTexts": 0,
+      "linkedLibraries": 0
+    }
+  },
+  "images": [
+    {
+      "file": "ground-floor.png",
+      "sourceFilename": "01 - Ground floor - selected layout.png",
+      "sourceSha256": "db7f7ac24f1a93294fd100ccb90a599c6909b31c4faaf97455ac99a856fbe565",
+      "publicSha256": "7592558c5cc33ec41def0575a366976fcf69aca7c54b9d5a988773af79c81707",
+      "removedTextChunks": 12,
+      "allNonTextChunksByteIdentical": true,
+      "nonTextChunksSha256": "be1847ddc050bbb26ef327e9c4d9f13ad88f0d3514bfb78ee732b8823d6ac1ba",
+      "publicBytes": 3023599
+    },
+    {
+      "file": "first-floor.png",
+      "sourceFilename": "02 - First floor - selected partition.png",
+      "sourceSha256": "2b6e7bd060eb170aa5c24b3c24b3960186a07b62c9380d754b8aaa1da1f48303",
+      "publicSha256": "c59091e6d7d4a8d67678ed82e98d9230914f0520ff2e22bcb2a0a7600d37bf68",
+      "removedTextChunks": 12,
+      "allNonTextChunksByteIdentical": true,
+      "nonTextChunksSha256": "a78ae110e088610b3a4ccfde6fb775cb7b52109ea1f60b91c191dd7145258978",
+      "publicBytes": 2738060
+    }
+  ],
+  "files": [
+    {
+      "file": "selected-layout.blend",
+      "sourceSha256": "ddd17b71d22614ef91a6fefda959f183793492f3ed41afd124145b2bdf35c7fd",
+      "publicSha256": "5d34a641bf787ef9aa5cdb8cdbf9882af3b99dcc6d164da8c3d1e6e699505e2d",
+      "metadataOnly": true,
+      "nativeSaveReopen": "PASS",
+      "geometryMaterialsMembershipsUnchanged": true,
+      "reviewViewsUnchanged": true
+    },
+    {
+      "file": "ground-floor.png",
+      "sourceSha256": "db7f7ac24f1a93294fd100ccb90a599c6909b31c4faaf97455ac99a856fbe565",
+      "publicSha256": "7592558c5cc33ec41def0575a366976fcf69aca7c54b9d5a988773af79c81707",
+      "metadataOnly": true,
+      "pixelChunksUnchanged": true
+    },
+    {
+      "file": "first-floor.png",
+      "sourceSha256": "2b6e7bd060eb170aa5c24b3c24b3960186a07b62c9380d754b8aaa1da1f48303",
+      "publicSha256": "c59091e6d7d4a8d67678ed82e98d9230914f0520ff2e22bcb2a0a7600d37bf68",
+      "metadataOnly": true,
+      "pixelChunksUnchanged": true
+    }
+  ]
+}

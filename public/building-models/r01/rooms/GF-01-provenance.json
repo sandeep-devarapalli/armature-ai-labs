@@ -1,0 +1,182 @@
+{
+  "id": "GF-01",
+  "purpose": "Cupboard room / private-cabin planning",
+  "floor": "GF",
+  "revision": "R01",
+  "sourceFile": "Ground Floor - Coordinated Planning R01.FCStd",
+  "sourceSha256": "145082c570bb32572b96a83886545c1118a37b6a9f5e64bf76d6511a38e7abfc",
+  "files": {
+    "freecad": {
+      "url": "/building-models/r01/rooms/GF-01.FCStd",
+      "filename": "GF-01.FCStd",
+      "bytes": 20115,
+      "sha256": "b626a928e791349ddff7fbb85d3edeee0b56101c5fd4ca28d07c83954a85921a"
+    },
+    "step": {
+      "url": "/building-models/r01/rooms/GF-01.step",
+      "filename": "GF-01.step",
+      "bytes": 16834,
+      "sha256": "a1342b3c752b3ccac819e9ddbe7a0a84fdefcbee6017548b06556ae3f640e254"
+    },
+    "preview": {
+      "url": "/building-models/r01/rooms/GF-01.svg",
+      "filename": "GF-01.svg",
+      "bytes": 10273,
+      "sha256": "d3138656c14943d039c2be0d5acca15b58710a7bbf62971f8258122c6a2aa98c"
+    },
+    "previewPng": {
+      "url": "/building-models/r01/rooms/GF-01.png",
+      "filename": "GF-01.png",
+      "bytes": 38485,
+      "sha256": "a6f4be4da1b4bd038f8b9612fafc83bd771e6d14b2e8e049ff78189d685d395e"
+    }
+  },
+  "shapeCount": 14,
+  "solidCount": 0,
+  "geometryKind": "2D plan/reference geometry",
+  "verification": {
+    "nativeSaveReopen": "PASS",
+    "exactWorldShapes": 14,
+    "stepReadback": "PASS",
+    "stepChecks": {
+      "valid": true,
+      "solids": true,
+      "bounds": true,
+      "volume": true,
+      "area": true,
+      "summed_edge_length": true
+    }
+  },
+  "notes": [
+    "No new private-cabin furniture/enclosure is included. Retained cupboard remains unlocated in R01; absence of a footprint does not authorize removal.",
+    "This room has source plan/reference geometry only: its STEP contains curves/wires, not a volumetric room model."
+  ],
+  "objects": [
+    {
+      "sourceObjectId": "GF_01___GF_01_A___wall",
+      "label": "GF-01 / GF-01-A / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "c2ef74eb2cb04aed3708660244fd08c2f766f7fb9f55e99d2b43fb716775cec7"
+    },
+    {
+      "sourceObjectId": "GF_01___GF_01_A___wall___provisional_120_mm_offset",
+      "label": "GF-01 / GF-01-A / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "fdecae2a2109171ab94d89be6af3a0ca8f1df5ad6bfab36191f8a61025eeef6b"
+    },
+    {
+      "sourceObjectId": "GF_01___GF_01_B___wall",
+      "label": "GF-01 / GF-01-B / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "05e5469115ede26dbf0f99969cef8bf8c71d0deb8e617a53ec7afbe9ac614d92"
+    },
+    {
+      "sourceObjectId": "GF_01___GF_01_B___wall___provisional_120_mm_offset",
+      "label": "GF-01 / GF-01-B / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "ae6e9edd21be28693c58eaf9d917816213a40b1fc7e3723bde55c5a3ac41baa6"
+    },
+    {
+      "sourceObjectId": "GF_01___GF_01_C___wall",
+      "label": "GF-01 / GF-01-C / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "eff75ea390c06a48dff96452488b69b6bb3d015b1a4b78f74521563b606e3345"
+    },
+    {
+      "sourceObjectId": "GF_01___GF_01_C___wall___provisional_120_mm_offset",
+      "label": "GF-01 / GF-01-C / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "78a8c7f8c634d25ec910a42e8d85e27f0dc0ebd839450fb88c4b57812d6d41dc"
+    },
+    {
+      "sourceObjectId": "GF_01___GF_01_D___wall",
+      "label": "GF-01 / GF-01-D / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "1ae0aafada25a8c60ad0b0a85ec582091a747f0b13126a4f538eda17d8cf383b"
+    },
+    {
+      "sourceObjectId": "GF_01___GF_01_D___wall___provisional_120_mm_offset",
+      "label": "GF-01 / GF-01-D / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "52842eb6c42b28949bcb985fee5b63368b3d3653b02f6d9caa6cf7513b997564"
+    },
+    {
+      "sourceObjectId": "GF_W06___window",
+      "label": "GF-W06 / window",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "87d1ff323e0441c80ad4d7bdb02110111920cb16dc412280cb0cd63bfd8cb59d"
+    },
+    {
+      "sourceObjectId": "GF_W07___window",
+      "label": "GF-W07 / window",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "588dbf9734e3dc59af8637bf1cea63bc1a7cdbc43b5ba21073770e583b1e75d8"
+    },
+    {
+      "sourceObjectId": "GF_01_GAP1___door",
+      "label": "GF-01-GAP1 / door",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "0dd1daa9d9bf6f6423e36a21ebd9deae78fc83c4c3eb9046a1fac8983dfcfe1a"
+    },
+    {
+      "sourceObjectId": "GF_D07___door",
+      "label": "GF-D07 / door",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "ef7b3fd722d0f92b3c2be7e6dd7263dbdc27a5522666435fcb09bc0cd9d2e51e"
+    },
+    {
+      "sourceObjectId": "GF_D06___door",
+      "label": "GF-D06 / door",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "9ff2032258b5d538c25df43b979d036a31fbabf1f40fde9689b936f51ca310e8"
+    },
+    {
+      "sourceObjectId": "GF_O02___opening",
+      "label": "GF-O02 / opening",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "0f8ae00bf01ad7d9379794ed42945e61d173047168382b119a0e0c752b56c6d6"
+    }
+  ]
+}

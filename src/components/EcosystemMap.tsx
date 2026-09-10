@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import * as maplibregl from "maplibre-gl";
+import mapWorkerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url";
 import type {
   GeoJSONSource,
   MapLayerMouseEvent
@@ -13,6 +14,7 @@ import {
 } from "../data/bengaluruEcosystem";
 
 const sourceId = "bengaluru-ecosystem";
+maplibregl.setWorkerUrl(mapWorkerUrl);
 const clusterLayerId = "ecosystem-clusters";
 const clusterCountLayerId = "ecosystem-cluster-count";
 const pointHaloLayerId = "ecosystem-point-halo";

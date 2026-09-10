@@ -1,0 +1,835 @@
+{
+  "revision": "R01",
+  "status": "VERIFIED_SOURCE_EXTRACTS / PLANNING_REFERENCE_ONLY",
+  "rooms": [
+    {
+      "id": "GF-01",
+      "purpose": "Cupboard room / private-cabin planning",
+      "floor": "GF",
+      "revision": "R01",
+      "sourceFile": "Ground Floor - Coordinated Planning R01.FCStd",
+      "sourceSha256": "145082c570bb32572b96a83886545c1118a37b6a9f5e64bf76d6511a38e7abfc",
+      "files": {
+        "freecad": {
+          "url": "/building-models/r01/rooms/GF-01.FCStd",
+          "filename": "GF-01.FCStd",
+          "bytes": 20115,
+          "sha256": "b626a928e791349ddff7fbb85d3edeee0b56101c5fd4ca28d07c83954a85921a"
+        },
+        "step": {
+          "url": "/building-models/r01/rooms/GF-01.step",
+          "filename": "GF-01.step",
+          "bytes": 16834,
+          "sha256": "a1342b3c752b3ccac819e9ddbe7a0a84fdefcbee6017548b06556ae3f640e254"
+        },
+        "preview": {
+          "url": "/building-models/r01/rooms/GF-01.svg",
+          "filename": "GF-01.svg",
+          "bytes": 10273,
+          "sha256": "d3138656c14943d039c2be0d5acca15b58710a7bbf62971f8258122c6a2aa98c"
+        },
+        "previewPng": {
+          "url": "/building-models/r01/rooms/GF-01.png",
+          "filename": "GF-01.png",
+          "bytes": 38485,
+          "sha256": "a6f4be4da1b4bd038f8b9612fafc83bd771e6d14b2e8e049ff78189d685d395e"
+        }
+      },
+      "shapeCount": 14,
+      "solidCount": 0,
+      "geometryKind": "2D plan/reference geometry",
+      "verification": {
+        "nativeSaveReopen": "PASS",
+        "exactWorldShapes": 14,
+        "stepReadback": "PASS",
+        "stepChecks": {
+          "valid": true,
+          "solids": true,
+          "bounds": true,
+          "volume": true,
+          "area": true,
+          "summed_edge_length": true
+        }
+      },
+      "notes": [
+        "No new private-cabin furniture/enclosure is included. Retained cupboard remains unlocated in R01; absence of a footprint does not authorize removal.",
+        "This room has source plan/reference geometry only: its STEP contains curves/wires, not a volumetric room model."
+      ],
+      "provenanceUrl": "/building-models/r01/rooms/GF-01-provenance.json"
+    },
+    {
+      "id": "GF-02",
+      "purpose": "Reception and display",
+      "floor": "GF",
+      "revision": "R01",
+      "sourceFile": "Ground Floor - Coordinated Planning R01.FCStd",
+      "sourceSha256": "145082c570bb32572b96a83886545c1118a37b6a9f5e64bf76d6511a38e7abfc",
+      "files": {
+        "freecad": {
+          "url": "/building-models/r01/rooms/GF-02.FCStd",
+          "filename": "GF-02.FCStd",
+          "bytes": 128834,
+          "sha256": "bbea57ca0000a9043c2539838d0b93079f533f4d84a8e4dce27fd25a6b295c6b"
+        },
+        "step": {
+          "url": "/building-models/r01/rooms/GF-02.step",
+          "filename": "GF-02.step",
+          "bytes": 359414,
+          "sha256": "05eaee44f6be9e0eadb4f84742fcd0bc7c9ab350b139bf3ff2f00c6b30f492e6"
+        },
+        "preview": {
+          "url": "/building-models/r01/rooms/GF-02.svg",
+          "filename": "GF-02.svg",
+          "bytes": 36618,
+          "sha256": "7db0a312abbf42446d9ca0b4ea12f8c4d8ffdf06e16b53ee19cf54918d4de5b4"
+        },
+        "previewPng": {
+          "url": "/building-models/r01/rooms/GF-02.png",
+          "filename": "GF-02.png",
+          "bytes": 41242,
+          "sha256": "08f6da643c83cad86624522b612b43c3ae3787ecaed336b0784791c631202940"
+        }
+      },
+      "shapeCount": 90,
+      "solidCount": 78,
+      "geometryKind": "mixed 2D references and 3D fit-out",
+      "verification": {
+        "nativeSaveReopen": "PASS",
+        "exactWorldShapes": 90,
+        "stepReadback": "PASS",
+        "stepChecks": {
+          "valid": true,
+          "solids": true,
+          "bounds": true,
+          "volume": true,
+          "area": true,
+          "summed_edge_length": true
+        }
+      },
+      "notes": [],
+      "provenanceUrl": "/building-models/r01/rooms/GF-02-provenance.json"
+    },
+    {
+      "id": "GF-03",
+      "purpose": "Rear small room",
+      "floor": "GF",
+      "revision": "R01",
+      "sourceFile": "Ground Floor - Coordinated Planning R01.FCStd",
+      "sourceSha256": "145082c570bb32572b96a83886545c1118a37b6a9f5e64bf76d6511a38e7abfc",
+      "files": {
+        "freecad": {
+          "url": "/building-models/r01/rooms/GF-03.FCStd",
+          "filename": "GF-03.FCStd",
+          "bytes": 15939,
+          "sha256": "fa2104e76b949931c5d914b7153380353abdc1f621364f28ef6ce37c6e5b29ec"
+        },
+        "step": {
+          "url": "/building-models/r01/rooms/GF-03.step",
+          "filename": "GF-03.step",
+          "bytes": 12207,
+          "sha256": "fe5212a10d31dd3a4d15b8a264018ab6ac60fb4dfbe1a02aecbd60fe27fa0ba2"
+        },
+        "preview": {
+          "url": "/building-models/r01/rooms/GF-03.svg",
+          "filename": "GF-03.svg",
+          "bytes": 7394,
+          "sha256": "0b905a7d68252c6ff9f9288f31af9b6ee63dc98262ed550c81767a3cfe9e0d9c"
+        },
+        "previewPng": {
+          "url": "/building-models/r01/rooms/GF-03.png",
+          "filename": "GF-03.png",
+          "bytes": 34066,
+          "sha256": "c7dfb0371ce92430f1b54831d023cbb8cc9cf4aa4daf4385bee6158a79695709"
+        }
+      },
+      "shapeCount": 11,
+      "solidCount": 0,
+      "geometryKind": "2D plan/reference geometry",
+      "verification": {
+        "nativeSaveReopen": "PASS",
+        "exactWorldShapes": 11,
+        "stepReadback": "PASS",
+        "stepChecks": {
+          "valid": true,
+          "solids": true,
+          "bounds": true,
+          "volume": true,
+          "area": true,
+          "summed_edge_length": true
+        }
+      },
+      "notes": [
+        "This room has source plan/reference geometry only: its STEP contains curves/wires, not a volumetric room model."
+      ],
+      "provenanceUrl": "/building-models/r01/rooms/GF-03-provenance.json"
+    },
+    {
+      "id": "GF-04",
+      "purpose": "Kitchen",
+      "floor": "GF",
+      "revision": "R01",
+      "sourceFile": "Ground Floor - Coordinated Planning R01.FCStd",
+      "sourceSha256": "145082c570bb32572b96a83886545c1118a37b6a9f5e64bf76d6511a38e7abfc",
+      "files": {
+        "freecad": {
+          "url": "/building-models/r01/rooms/GF-04.FCStd",
+          "filename": "GF-04.FCStd",
+          "bytes": 21014,
+          "sha256": "ce09d9feed23f882eec130d58425a663c9c6d1792ecc95e5a7906191426f8cd4"
+        },
+        "step": {
+          "url": "/building-models/r01/rooms/GF-04.step",
+          "filename": "GF-04.step",
+          "bytes": 19377,
+          "sha256": "e7207773b06474a25792b75acee9e48e56c080a2340cea0a8a9c53389692be84"
+        },
+        "preview": {
+          "url": "/building-models/r01/rooms/GF-04.svg",
+          "filename": "GF-04.svg",
+          "bytes": 10903,
+          "sha256": "720ba172cc35c5b711918f6f62d94af12e3957387329df9f949ce409a684b496"
+        },
+        "previewPng": {
+          "url": "/building-models/r01/rooms/GF-04.png",
+          "filename": "GF-04.png",
+          "bytes": 33354,
+          "sha256": "bfa400000cf664b7685169a3bc39ec2df83c8d495585200d1b90535618d8300c"
+        }
+      },
+      "shapeCount": 16,
+      "solidCount": 0,
+      "geometryKind": "2D plan/reference geometry",
+      "verification": {
+        "nativeSaveReopen": "PASS",
+        "exactWorldShapes": 16,
+        "stepReadback": "PASS",
+        "stepChecks": {
+          "valid": true,
+          "solids": true,
+          "bounds": true,
+          "volume": true,
+          "area": true,
+          "summed_edge_length": true
+        }
+      },
+      "notes": [
+        "This room has source plan/reference geometry only: its STEP contains curves/wires, not a volumetric room model."
+      ],
+      "provenanceUrl": "/building-models/r01/rooms/GF-04-provenance.json"
+    },
+    {
+      "id": "GF-06",
+      "purpose": "Bathroom reference",
+      "floor": "GF",
+      "revision": "R01",
+      "sourceFile": "Ground Floor - Coordinated Planning R01.FCStd",
+      "sourceSha256": "145082c570bb32572b96a83886545c1118a37b6a9f5e64bf76d6511a38e7abfc",
+      "files": {
+        "freecad": {
+          "url": "/building-models/r01/rooms/GF-06.FCStd",
+          "filename": "GF-06.FCStd",
+          "bytes": 14978,
+          "sha256": "9b531812a52cbd524cf0b947112c30da3c6cee3d7955811975ead8b8e0e96115"
+        },
+        "step": {
+          "url": "/building-models/r01/rooms/GF-06.step",
+          "filename": "GF-06.step",
+          "bytes": 12177,
+          "sha256": "5a1f788f50097e64aae06bb99fd7f6fea3ba881c7693f4fddc8d090edcb0e26d"
+        },
+        "preview": {
+          "url": "/building-models/r01/rooms/GF-06.svg",
+          "filename": "GF-06.svg",
+          "bytes": 6550,
+          "sha256": "aa130c4110ea5d7b8f3602d8a7a14e7e5361928a3d78c0a290dc9c917b58f658"
+        },
+        "previewPng": {
+          "url": "/building-models/r01/rooms/GF-06.png",
+          "filename": "GF-06.png",
+          "bytes": 34267,
+          "sha256": "edb61700a0ffc93e420832177c7d3063277e4c2437404f5276f2eddfa41b0064"
+        }
+      },
+      "shapeCount": 10,
+      "solidCount": 0,
+      "geometryKind": "2D plan/reference geometry",
+      "verification": {
+        "nativeSaveReopen": "PASS",
+        "exactWorldShapes": 10,
+        "stepReadback": "PASS",
+        "stepChecks": {
+          "valid": true,
+          "solids": true,
+          "bounds": true,
+          "volume": true,
+          "area": true,
+          "summed_edge_length": true
+        }
+      },
+      "notes": [
+        "This room has source plan/reference geometry only: its STEP contains curves/wires, not a volumetric room model."
+      ],
+      "provenanceUrl": "/building-models/r01/rooms/GF-06-provenance.json"
+    },
+    {
+      "id": "GF-07",
+      "purpose": "Glass booth",
+      "floor": "GF",
+      "revision": "R01",
+      "sourceFile": "Ground Floor - Coordinated Planning R01.FCStd",
+      "sourceSha256": "145082c570bb32572b96a83886545c1118a37b6a9f5e64bf76d6511a38e7abfc",
+      "files": {
+        "freecad": {
+          "url": "/building-models/r01/rooms/GF-07.FCStd",
+          "filename": "GF-07.FCStd",
+          "bytes": 107115,
+          "sha256": "2a9828ea304b4549fe1b58a14c6acef8757cad8c4d6c947912382dbfde56faf7"
+        },
+        "step": {
+          "url": "/building-models/r01/rooms/GF-07.step",
+          "filename": "GF-07.step",
+          "bytes": 407418,
+          "sha256": "719ae784960c3155ad34ca7e0d3ece38a6e8fcd7f5b39f0faef97e1a63871ddf"
+        },
+        "preview": {
+          "url": "/building-models/r01/rooms/GF-07.svg",
+          "filename": "GF-07.svg",
+          "bytes": 37669,
+          "sha256": "d422edb80e9051c685021786e2cc7ad816f80ba12ee79fa8b8a602e86f093958"
+        },
+        "previewPng": {
+          "url": "/building-models/r01/rooms/GF-07.png",
+          "filename": "GF-07.png",
+          "bytes": 35137,
+          "sha256": "090582e401fc92f6b378620c8d4e76f6f1bfcb680f02dfc161b50a93b3e11eda"
+        }
+      },
+      "shapeCount": 58,
+      "solidCount": 48,
+      "geometryKind": "mixed 2D references and 3D fit-out",
+      "verification": {
+        "nativeSaveReopen": "PASS",
+        "exactWorldShapes": 58,
+        "stepReadback": "PASS",
+        "stepChecks": {
+          "valid": true,
+          "solids": true,
+          "bounds": true,
+          "volume": true,
+          "area": true,
+          "summed_edge_length": true
+        }
+      },
+      "notes": [
+        "Shared GF07/GF10 wall band includes its exact 6 in source end remainder. Booth door reduces the original opening; compact internal clearances remain."
+      ],
+      "provenanceUrl": "/building-models/r01/rooms/GF-07-provenance.json"
+    },
+    {
+      "id": "GF-08",
+      "purpose": "Enclosed balcony seating",
+      "floor": "GF",
+      "revision": "R01",
+      "sourceFile": "Ground Floor - Coordinated Planning R01.FCStd",
+      "sourceSha256": "145082c570bb32572b96a83886545c1118a37b6a9f5e64bf76d6511a38e7abfc",
+      "files": {
+        "freecad": {
+          "url": "/building-models/r01/rooms/GF-08.FCStd",
+          "filename": "GF-08.FCStd",
+          "bytes": 658732,
+          "sha256": "66ffd18452afba1a0b6a778154df88ad0431bbca3f77f1b5f10649658bbc1900"
+        },
+        "step": {
+          "url": "/building-models/r01/rooms/GF-08.step",
+          "filename": "GF-08.step",
+          "bytes": 2239052,
+          "sha256": "635386badba8e3094d8099d5273ca3fa706cf05d017b930d127dacf450bbdffc"
+        },
+        "preview": {
+          "url": "/building-models/r01/rooms/GF-08.svg",
+          "filename": "GF-08.svg",
+          "bytes": 180539,
+          "sha256": "13fe19eebd303dc3c125cf3aca488bfa16f0cfe5a6a19445977a45e7f211f663"
+        },
+        "previewPng": {
+          "url": "/building-models/r01/rooms/GF-08.png",
+          "filename": "GF-08.png",
+          "bytes": 51818,
+          "sha256": "f292a4044435981909b9e57662290fc9610bb7b03f1bfc6f382b39c975e6bbe9"
+        }
+      },
+      "shapeCount": 339,
+      "solidCount": 322,
+      "geometryKind": "mixed 2D references and 3D fit-out",
+      "verification": {
+        "nativeSaveReopen": "PASS",
+        "exactWorldShapes": 339,
+        "stepReadback": "PASS",
+        "stepChecks": {
+          "valid": true,
+          "solids": true,
+          "bounds": true,
+          "volume": true,
+          "area": true,
+          "summed_edge_length": true
+        }
+      },
+      "notes": [
+        "Includes P02 existing-door and curved-step approximation, 2 cafe tables, 4 chairs, bar and 2 stools. Frame/roof heights and installation details remain provisional."
+      ],
+      "provenanceUrl": "/building-models/r01/rooms/GF-08-provenance.json"
+    },
+    {
+      "id": "GF-09",
+      "purpose": "Presentation lounge and stair access",
+      "floor": "GF",
+      "revision": "R01",
+      "sourceFile": "Ground Floor - Coordinated Planning R01.FCStd",
+      "sourceSha256": "145082c570bb32572b96a83886545c1118a37b6a9f5e64bf76d6511a38e7abfc",
+      "files": {
+        "freecad": {
+          "url": "/building-models/r01/rooms/GF-09.FCStd",
+          "filename": "GF-09.FCStd",
+          "bytes": 2528809,
+          "sha256": "d9443f49171f54c430598c0d1e7914ba7fa2ea53172acc696b1582935db75f39"
+        },
+        "step": {
+          "url": "/building-models/r01/rooms/GF-09.step",
+          "filename": "GF-09.step",
+          "bytes": 10488273,
+          "sha256": "ba3d1f73c4ac39eab3d65bd57ea149cacbaa883690a6c0813f1c3b7d7bb337fc"
+        },
+        "preview": {
+          "url": "/building-models/r01/rooms/GF-09.svg",
+          "filename": "GF-09.svg",
+          "bytes": 681636,
+          "sha256": "cf02868401aa61f0620b1b9a051c8a474c2f92920b8815b08cbdf12a92b94e6b"
+        },
+        "previewPng": {
+          "url": "/building-models/r01/rooms/GF-09.png",
+          "filename": "GF-09.png",
+          "bytes": 47377,
+          "sha256": "8fb95810a9f5199c66da555751997e70f2a07ab2fedf623c33e9e60ddead1570"
+        }
+      },
+      "shapeCount": 684,
+      "solidCount": 659,
+      "geometryKind": "mixed 2D references and 3D fit-out",
+      "verification": {
+        "nativeSaveReopen": "PASS",
+        "exactWorldShapes": 684,
+        "stepReadback": "PASS",
+        "stepChecks": {
+          "valid": true,
+          "solids": true,
+          "bounds": true,
+          "volume": true,
+          "area": true,
+          "summed_edge_length": true
+        }
+      },
+      "notes": [
+        "Includes Forward Shift01 furniture/AV and selected stair partition A01. Outward-door kitchen restriction, GF06 approach and reduced step-head clearance remain."
+      ],
+      "provenanceUrl": "/building-models/r01/rooms/GF-09-provenance.json"
+    },
+    {
+      "id": "GF-10",
+      "purpose": "Coworking commons",
+      "floor": "GF",
+      "revision": "R01",
+      "sourceFile": "Ground Floor - Coordinated Planning R01.FCStd",
+      "sourceSha256": "145082c570bb32572b96a83886545c1118a37b6a9f5e64bf76d6511a38e7abfc",
+      "files": {
+        "freecad": {
+          "url": "/building-models/r01/rooms/GF-10.FCStd",
+          "filename": "GF-10.FCStd",
+          "bytes": 415010,
+          "sha256": "b636d48ef5201175615e5249261684cbf1b1e5ea1fa573ed3d62299c45ff528b"
+        },
+        "step": {
+          "url": "/building-models/r01/rooms/GF-10.step",
+          "filename": "GF-10.step",
+          "bytes": 2016601,
+          "sha256": "6c4a2927c6d412ad4934713dbb1f16ed72721348d72ea8b5fbb6c2501edf2a6e"
+        },
+        "preview": {
+          "url": "/building-models/r01/rooms/GF-10.svg",
+          "filename": "GF-10.svg",
+          "bytes": 153195,
+          "sha256": "a4142b2f163645f8f81c7b0bcb7a218516dd068f520825e91b3cd5a95574bbb0"
+        },
+        "previewPng": {
+          "url": "/building-models/r01/rooms/GF-10.png",
+          "filename": "GF-10.png",
+          "bytes": 49627,
+          "sha256": "d75067a6deb443e95f4b871c060aa2e6631601347bb68ad0b4ad3172532324f7"
+        }
+      },
+      "shapeCount": 187,
+      "solidCount": 354,
+      "geometryKind": "mixed 2D references and 3D fit-out",
+      "verification": {
+        "nativeSaveReopen": "PASS",
+        "exactWorldShapes": 187,
+        "stepReadback": "PASS",
+        "stepChecks": {
+          "valid": true,
+          "solids": true,
+          "bounds": true,
+          "volume": true,
+          "area": true,
+          "summed_edge_length": true
+        }
+      },
+      "notes": [
+        "9 T-01 tables, 17 counter chairs and 21 table chairs are selected model positions, not a certified 38-person simultaneous usable layout. Includes only the shared GF08 doorway from that adjacent-room fit-out."
+      ],
+      "provenanceUrl": "/building-models/r01/rooms/GF-10-provenance.json"
+    },
+    {
+      "id": "FF-01",
+      "purpose": "Rear small room reference",
+      "floor": "FF",
+      "revision": "R01",
+      "sourceFile": "First Floor - Coordinated Planning R01.FCStd",
+      "sourceSha256": "4c8c65dbf487ba996e61ec38a3640ef5b5e97587f980dac338b09f3ac406a971",
+      "files": {
+        "freecad": {
+          "url": "/building-models/r01/rooms/FF-01.FCStd",
+          "filename": "FF-01.FCStd",
+          "bytes": 17507,
+          "sha256": "c4d9a7f01fc5ebfeab8491f83aacb3d26429123df5df2cd96ebf548dd9ba5ab7"
+        },
+        "step": {
+          "url": "/building-models/r01/rooms/FF-01.step",
+          "filename": "FF-01.step",
+          "bytes": 14205,
+          "sha256": "a44a7201d9b1b08749ba0d680624f36f96e30dbc401c5140b373f1912e697438"
+        },
+        "preview": {
+          "url": "/building-models/r01/rooms/FF-01.svg",
+          "filename": "FF-01.svg",
+          "bytes": 8253,
+          "sha256": "6d01d08182851fbca28015d6a594ed3f084ae998719f0c72c5c6cf00158c1169"
+        },
+        "previewPng": {
+          "url": "/building-models/r01/rooms/FF-01.png",
+          "filename": "FF-01.png",
+          "bytes": 34090,
+          "sha256": "0f9779dc898b50054e352db319cac8d2845c00ed03802ca573d002dddeca1c02"
+        }
+      },
+      "shapeCount": 13,
+      "solidCount": 0,
+      "geometryKind": "2D plan/reference geometry",
+      "verification": {
+        "nativeSaveReopen": "PASS",
+        "exactWorldShapes": 13,
+        "stepReadback": "PASS",
+        "stepChecks": {
+          "valid": true,
+          "solids": true,
+          "bounds": true,
+          "volume": true,
+          "area": true,
+          "summed_edge_length": true
+        }
+      },
+      "notes": [
+        "This room has source plan/reference geometry only: its STEP contains curves/wires, not a volumetric room model."
+      ],
+      "provenanceUrl": "/building-models/r01/rooms/FF-01-provenance.json"
+    },
+    {
+      "id": "FF-02",
+      "purpose": "Exterior balcony / workshop brief",
+      "floor": "FF",
+      "revision": "R01",
+      "sourceFile": "First Floor - Coordinated Planning R01.FCStd",
+      "sourceSha256": "4c8c65dbf487ba996e61ec38a3640ef5b5e97587f980dac338b09f3ac406a971",
+      "files": {
+        "freecad": {
+          "url": "/building-models/r01/rooms/FF-02.FCStd",
+          "filename": "FF-02.FCStd",
+          "bytes": 25704,
+          "sha256": "9720436932e199f137f00f8dd0846269c7f98ac0e40408b91ddab4e02d1708aa"
+        },
+        "step": {
+          "url": "/building-models/r01/rooms/FF-02.step",
+          "filename": "FF-02.step",
+          "bytes": 8554,
+          "sha256": "f9baaf8a54f5df911c8cb82e5afd744e6fb407bc4b0b823a585b67aabd06aef8"
+        },
+        "preview": {
+          "url": "/building-models/r01/rooms/FF-02.svg",
+          "filename": "FF-02.svg",
+          "bytes": 9049,
+          "sha256": "4e4c1cd20101cfb556497dcd21da99a3a76950cdc3972ab328a1c3c111b4ab73"
+        },
+        "previewPng": {
+          "url": "/building-models/r01/rooms/FF-02.png",
+          "filename": "FF-02.png",
+          "bytes": 38648,
+          "sha256": "11e4553036a6e71aaebbf03f268f7c1d12aee74de6de2c01bd94f887ff8455ec"
+        }
+      },
+      "shapeCount": 14,
+      "solidCount": 0,
+      "geometryKind": "2D plan/reference geometry",
+      "verification": {
+        "nativeSaveReopen": "PASS",
+        "exactWorldShapes": 14,
+        "stepReadback": "PASS",
+        "stepChecks": {
+          "valid": true,
+          "solids": true,
+          "bounds": true,
+          "volume": true,
+          "area": true,
+          "summed_edge_length": true
+        }
+      },
+      "notes": [
+        "Balcony R01 outline only; preliminary glass route is retained as hidden native paths. New workshop bench and new weatherproof cover are not implemented in this extract.",
+        "This room has source plan/reference geometry only: its STEP contains curves/wires, not a volumetric room model."
+      ],
+      "provenanceUrl": "/building-models/r01/rooms/FF-02-provenance.json"
+    },
+    {
+      "id": "FF-03",
+      "purpose": "Two-person private-office programme",
+      "floor": "FF",
+      "revision": "R01",
+      "sourceFile": "First Floor - Coordinated Planning R01.FCStd",
+      "sourceSha256": "4c8c65dbf487ba996e61ec38a3640ef5b5e97587f980dac338b09f3ac406a971",
+      "files": {
+        "freecad": {
+          "url": "/building-models/r01/rooms/FF-03.FCStd",
+          "filename": "FF-03.FCStd",
+          "bytes": 23192,
+          "sha256": "eee6a2a441d6cb5b68a0ec7b8a0c94ffb88a39fd96bde5fb5a38e4ebfc9eb157"
+        },
+        "step": {
+          "url": "/building-models/r01/rooms/FF-03.step",
+          "filename": "FF-03.step",
+          "bytes": 15134,
+          "sha256": "ddc0fba9a2539fdf511536167b247c8c2f8628cc8cb8028e52a826579b86b087"
+        },
+        "preview": {
+          "url": "/building-models/r01/rooms/FF-03.svg",
+          "filename": "FF-03.svg",
+          "bytes": 10341,
+          "sha256": "530fcbd106575979170fbea096a79ea4d4f089594c71b754deaa9cf92b317bb6"
+        },
+        "previewPng": {
+          "url": "/building-models/r01/rooms/FF-03.png",
+          "filename": "FF-03.png",
+          "bytes": 39459,
+          "sha256": "e7b44526d2894cc6777b93eab51695db63a593a13054c53278d1ff7704876fd0"
+        }
+      },
+      "shapeCount": 19,
+      "solidCount": 0,
+      "geometryKind": "2D plan/reference geometry",
+      "verification": {
+        "nativeSaveReopen": "PASS",
+        "exactWorldShapes": 19,
+        "stepReadback": "PASS",
+        "stepChecks": {
+          "valid": true,
+          "solids": true,
+          "bounds": true,
+          "volume": true,
+          "area": true,
+          "summed_edge_length": true
+        }
+      },
+      "notes": [
+        "Private-office programme is a current intended use, but the later development desk draft is excluded. This R01 reference contains no new office desks. FF06 dresser location/retention remains an outstanding model issue.",
+        "This room has source plan/reference geometry only: its STEP contains curves/wires, not a volumetric room model."
+      ],
+      "provenanceUrl": "/building-models/r01/rooms/FF-03-provenance.json"
+    },
+    {
+      "id": "FF-04",
+      "purpose": "Stair hall and gallery",
+      "floor": "FF",
+      "revision": "R01",
+      "sourceFile": "First Floor - Coordinated Planning R01.FCStd",
+      "sourceSha256": "4c8c65dbf487ba996e61ec38a3640ef5b5e97587f980dac338b09f3ac406a971",
+      "files": {
+        "freecad": {
+          "url": "/building-models/r01/rooms/FF-04.FCStd",
+          "filename": "FF-04.FCStd",
+          "bytes": 2310617,
+          "sha256": "5e7e5aa80b7b6ff040c5fe20a8cc91a7286742e97492c9743cf57f1e457295b6"
+        },
+        "step": {
+          "url": "/building-models/r01/rooms/FF-04.step",
+          "filename": "FF-04.step",
+          "bytes": 9887412,
+          "sha256": "b9bc7312ff78f41003f3085fb2da6c4f031f7a275a00d8e53fbab1621f9ea767"
+        },
+        "preview": {
+          "url": "/building-models/r01/rooms/FF-04.svg",
+          "filename": "FF-04.svg",
+          "bytes": 637158,
+          "sha256": "869e5c608d45881e7fb81703577e90eef8696ee3fb70614fb1798bc651627714"
+        },
+        "previewPng": {
+          "url": "/building-models/r01/rooms/FF-04.png",
+          "filename": "FF-04.png",
+          "bytes": 41351,
+          "sha256": "de3cd2118e917d363a1d1b3d5f433742eea9a941e0c559f090017d3a3d7ca51f"
+        }
+      },
+      "shapeCount": 578,
+      "solidCount": 556,
+      "geometryKind": "mixed 2D references and 3D fit-out",
+      "verification": {
+        "nativeSaveReopen": "PASS",
+        "exactWorldShapes": 578,
+        "stepReadback": "PASS",
+        "stepChecks": {
+          "valid": true,
+          "solids": true,
+          "bounds": true,
+          "volume": true,
+          "area": true,
+          "summed_edge_length": true
+        }
+      },
+      "notes": [
+        "Includes selected P01 stair partition and source stair/void references. Does not fill the gallery void or add the opposite exterior wall as room furniture."
+      ],
+      "provenanceUrl": "/building-models/r01/rooms/FF-04-provenance.json"
+    },
+    {
+      "id": "FF-05",
+      "purpose": "Bathroom reference",
+      "floor": "FF",
+      "revision": "R01",
+      "sourceFile": "First Floor - Coordinated Planning R01.FCStd",
+      "sourceSha256": "4c8c65dbf487ba996e61ec38a3640ef5b5e97587f980dac338b09f3ac406a971",
+      "files": {
+        "freecad": {
+          "url": "/building-models/r01/rooms/FF-05.FCStd",
+          "filename": "FF-05.FCStd",
+          "bytes": 17383,
+          "sha256": "9f836ce2edc349e8d8ed43bc06245b3a82447ee29e9cc6316b0e6573b167dc16"
+        },
+        "step": {
+          "url": "/building-models/r01/rooms/FF-05.step",
+          "filename": "FF-05.step",
+          "bytes": 15134,
+          "sha256": "62d4ba8418bede19b1df5c0ab7c42b8b0ec540653559f09ccccbf666307e9ef4"
+        },
+        "preview": {
+          "url": "/building-models/r01/rooms/FF-05.svg",
+          "filename": "FF-05.svg",
+          "bytes": 7879,
+          "sha256": "7d38d6e2b91794bbdd0b54bb2a13532e68e7daf6a33d00518b29cce5ccab6b3a"
+        },
+        "previewPng": {
+          "url": "/building-models/r01/rooms/FF-05.png",
+          "filename": "FF-05.png",
+          "bytes": 33680,
+          "sha256": "eb6a246f6ed2dcb84a02658533d34ea5a74d21759d666fa71f2785d06b6f23f5"
+        }
+      },
+      "shapeCount": 13,
+      "solidCount": 0,
+      "geometryKind": "2D plan/reference geometry",
+      "verification": {
+        "nativeSaveReopen": "PASS",
+        "exactWorldShapes": 13,
+        "stepReadback": "PASS",
+        "stepChecks": {
+          "valid": true,
+          "solids": true,
+          "bounds": true,
+          "volume": true,
+          "area": true,
+          "summed_edge_length": true
+        }
+      },
+      "notes": [
+        "This room has source plan/reference geometry only: its STEP contains curves/wires, not a volumetric room model."
+      ],
+      "provenanceUrl": "/building-models/r01/rooms/FF-05-provenance.json"
+    },
+    {
+      "id": "FF-06",
+      "purpose": "Four-person private-office programme",
+      "floor": "FF",
+      "revision": "R01",
+      "sourceFile": "First Floor - Coordinated Planning R01.FCStd",
+      "sourceSha256": "4c8c65dbf487ba996e61ec38a3640ef5b5e97587f980dac338b09f3ac406a971",
+      "files": {
+        "freecad": {
+          "url": "/building-models/r01/rooms/FF-06.FCStd",
+          "filename": "FF-06.FCStd",
+          "bytes": 27441,
+          "sha256": "01de021096c3d1a69e175beb9df3be9f016b73a1ff40ad585dd60321b0deaebf"
+        },
+        "step": {
+          "url": "/building-models/r01/rooms/FF-06.step",
+          "filename": "FF-06.step",
+          "bytes": 21174,
+          "sha256": "c1b3ea8c19b4c052bfc1a25278446c16e5575bd39629480c964e7785329f2fdf"
+        },
+        "preview": {
+          "url": "/building-models/r01/rooms/FF-06.svg",
+          "filename": "FF-06.svg",
+          "bytes": 13255,
+          "sha256": "1a64b55ceba95758446f33f58a19bcc9157c6d02bf676ee35160736339b69900"
+        },
+        "previewPng": {
+          "url": "/building-models/r01/rooms/FF-06.png",
+          "filename": "FF-06.png",
+          "bytes": 40567,
+          "sha256": "2a81bcc316b5144118cae7ac863435a64a1a514222e035c63a142cbab145fd6d"
+        }
+      },
+      "shapeCount": 22,
+      "solidCount": 0,
+      "geometryKind": "2D plan/reference geometry",
+      "verification": {
+        "nativeSaveReopen": "PASS",
+        "exactWorldShapes": 22,
+        "stepReadback": "PASS",
+        "stepChecks": {
+          "valid": true,
+          "solids": true,
+          "bounds": true,
+          "volume": true,
+          "area": true,
+          "summed_edge_length": true
+        }
+      },
+      "notes": [
+        "Private-office programme is a current intended use, but the later development desk draft is excluded. This R01 reference contains no new office desks. FF06 dresser location/retention remains an outstanding model issue.",
+        "This room has source plan/reference geometry only: its STEP contains curves/wires, not a volumetric room model."
+      ],
+      "provenanceUrl": "/building-models/r01/rooms/FF-06-provenance.json"
+    }
+  ],
+  "excludedRoomIds": [
+    "GF-05"
+  ],
+  "sourceGeometrySha256": "13003e5f259aa46845c260a18a641c9d8a72d3e1ba6425918f0b06d4385683e9",
+  "extractionMethod": "Exact room-qualified source B-reps and room-specific fit-out leaves, transformed once by source global placement. No geometry inferred from preview images.",
+  "protectedSourcesUnchanged": true,
+  "limitations": [
+    "Source-derived R01 room-reference extract, not a new room design or complete parametric dependency tree.",
+    "FCStd contains exact source world-space B-reps as individually named editable Part features; analytic curves and solids are retained.",
+    "Architecture/openings and fixed furniture references remain 2D source linework at Z0. Proposed fit-out solids retain source world heights. These are not fabricated full-height room shells.",
+    "Shared openings and relevant boundary objects can appear in both adjoining-room files. Neighbouring furniture and unrelated floor geometry are excluded.",
+    "Hidden primitive construction operands and duplicate profile sketches are excluded. Native optional references are retained hidden and excluded from STEP and previews.",
+    "STEP retains source shapes, not FreeCAD property/group history or approval metadata. Read this manifest with exchanged geometry.",
+    "Source approximations, unmeasured heights, 60 mm wall-reference convention differences and outstanding installation/access checks remain.",
+    "Visual layout selection is not fire, accessibility, structural, electrical, occupancy or simultaneous-workstation certification."
+  ],
+  "visualReview": "All 15 native-derived plan previews reviewed; output text bounds checked; SVG valid XML."
+}

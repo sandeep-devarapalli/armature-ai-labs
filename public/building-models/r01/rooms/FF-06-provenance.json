@@ -1,0 +1,254 @@
+{
+  "id": "FF-06",
+  "purpose": "Four-person private-office programme",
+  "floor": "FF",
+  "revision": "R01",
+  "sourceFile": "First Floor - Coordinated Planning R01.FCStd",
+  "sourceSha256": "4c8c65dbf487ba996e61ec38a3640ef5b5e97587f980dac338b09f3ac406a971",
+  "files": {
+    "freecad": {
+      "url": "/building-models/r01/rooms/FF-06.FCStd",
+      "filename": "FF-06.FCStd",
+      "bytes": 27441,
+      "sha256": "01de021096c3d1a69e175beb9df3be9f016b73a1ff40ad585dd60321b0deaebf"
+    },
+    "step": {
+      "url": "/building-models/r01/rooms/FF-06.step",
+      "filename": "FF-06.step",
+      "bytes": 21174,
+      "sha256": "c1b3ea8c19b4c052bfc1a25278446c16e5575bd39629480c964e7785329f2fdf"
+    },
+    "preview": {
+      "url": "/building-models/r01/rooms/FF-06.svg",
+      "filename": "FF-06.svg",
+      "bytes": 13255,
+      "sha256": "1a64b55ceba95758446f33f58a19bcc9157c6d02bf676ee35160736339b69900"
+    },
+    "previewPng": {
+      "url": "/building-models/r01/rooms/FF-06.png",
+      "filename": "FF-06.png",
+      "bytes": 40567,
+      "sha256": "2a81bcc316b5144118cae7ac863435a64a1a514222e035c63a142cbab145fd6d"
+    }
+  },
+  "shapeCount": 22,
+  "solidCount": 0,
+  "geometryKind": "2D plan/reference geometry",
+  "verification": {
+    "nativeSaveReopen": "PASS",
+    "exactWorldShapes": 22,
+    "stepReadback": "PASS",
+    "stepChecks": {
+      "valid": true,
+      "solids": true,
+      "bounds": true,
+      "volume": true,
+      "area": true,
+      "summed_edge_length": true
+    }
+  },
+  "notes": [
+    "Private-office programme is a current intended use, but the later development desk draft is excluded. This R01 reference contains no new office desks. FF06 dresser location/retention remains an outstanding model issue.",
+    "This room has source plan/reference geometry only: its STEP contains curves/wires, not a volumetric room model."
+  ],
+  "objects": [
+    {
+      "sourceObjectId": "FF_01_GAP1___opening",
+      "label": "FF-01-GAP1 / opening",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "b39dfefd10ea3f4d14f360f5afd128e04aab36f456e0df571c12490975d7f31d"
+    },
+    {
+      "sourceObjectId": "FF_D03___door",
+      "label": "FF-D03 / door",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "6b996ffcac3ae8979e46bff877afbd9415070c8b5e9cba61fd0116c00d33e133"
+    },
+    {
+      "sourceObjectId": "FF_06___FF_06_A_structural___wall",
+      "label": "FF-06 / FF-06-A.structural / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "ff339acb0b92d73db9a735ec29a393788201ba9d20f99bd9a81eb10dcb2e8e88"
+    },
+    {
+      "sourceObjectId": "FF_06___FF_06_A_structural___wall___provisional_120_mm_offset",
+      "label": "FF-06 / FF-06-A.structural / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "a22b9dbce4d205fdad500ba06d7602e36814a2ccdb71c1bd0b02907c320f74c0"
+    },
+    {
+      "sourceObjectId": "FF_06___FF_06_B___wall",
+      "label": "FF-06 / FF-06-B / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "ea1c423e2e652a309fa1ba46b0548677368eb965d41912c72990e590581f2547"
+    },
+    {
+      "sourceObjectId": "FF_06___FF_06_C___wall",
+      "label": "FF-06 / FF-06-C / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "8d4b920cf89fd744d39341f987c9a96f13cb3b3bd9eb1b932828fd8bccfb409d"
+    },
+    {
+      "sourceObjectId": "FF_06___FF_06_D___wall",
+      "label": "FF-06 / FF-06-D / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "9b7be7ecdf72f086cd8e3ba3dc2615e978387e75dbdd2c0cd6a729f2aee31048"
+    },
+    {
+      "sourceObjectId": "FF_06___FF_06_D___wall___provisional_120_mm_offset",
+      "label": "FF-06 / FF-06-D / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "05d27ee72ff3955f08474c2dd9bd9a7f14d434a4097c2384f6968ba0f89f03bc"
+    },
+    {
+      "sourceObjectId": "FF_06___FF_06_E___wall",
+      "label": "FF-06 / FF-06-E / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "94e68bbfb08bb20c38010c0abc6d6f861486d1a765335b2a4e98d8089c802048"
+    },
+    {
+      "sourceObjectId": "FF_06___FF_06_E___wall___provisional_120_mm_offset",
+      "label": "FF-06 / FF-06-E / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "bba9978aaf697a2ac27a7c16ae11d7334bbc2df58d2ed9236725344aff08352a"
+    },
+    {
+      "sourceObjectId": "FF_06___FF_06_F___wall",
+      "label": "FF-06 / FF-06-F / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "faaf00d16707cb9281a2f617235351fdfbe620ec70d2b37d775cb399da9cd592"
+    },
+    {
+      "sourceObjectId": "FF_06___FF_06_F___wall___provisional_120_mm_offset",
+      "label": "FF-06 / FF-06-F / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "7450a0bd37eead689deb7edf642b3b5b0498255b39685a270a61c8926c8b49b3"
+    },
+    {
+      "sourceObjectId": "FF_06___FF_06_G___wall",
+      "label": "FF-06 / FF-06-G / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "54d65f517faa6b668e64923eefbc5a08ed2ecb265b73b667a5421241c8ffeec7"
+    },
+    {
+      "sourceObjectId": "FF_06___FF_06_G___wall___provisional_120_mm_offset",
+      "label": "FF-06 / FF-06-G / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "eeea71a85393679b1ac42297ba5a6afa1510c674f903c9b497d7f75149f531c9"
+    },
+    {
+      "sourceObjectId": "FF_06___FF_06_H___wall",
+      "label": "FF-06 / FF-06-H / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "6650c4d41b55ff58cbbb66f9261709d8020964519679383d4b715cc905919b0e"
+    },
+    {
+      "sourceObjectId": "FF_06___FF_06_H___wall___provisional_120_mm_offset",
+      "label": "FF-06 / FF-06-H / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "16a9d920370904611a4cf00a563c67b19a6fff4a0221875bf84b5eafa1ec2fdb"
+    },
+    {
+      "sourceObjectId": "FF_06___FF_06_I___wall",
+      "label": "FF-06 / FF-06-I / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "5e8dd3f4a93bc9fa4fd7f28a69aef0cc5959e3027346e038fcae761dc1e92c6a"
+    },
+    {
+      "sourceObjectId": "FF_W03___window",
+      "label": "FF-W03 / window",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "df39d90cee967c537c40ee0dd7f66141a06defd74a590690f089fdb3b23edc54"
+    },
+    {
+      "sourceObjectId": "FF_W04___window",
+      "label": "FF-W04 / window",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "09c7ee30b4cd8c66a123976cd8b6028a2f2abd9321d6d148462b01dfbe46359d"
+    },
+    {
+      "sourceObjectId": "FF_W05___window",
+      "label": "FF-W05 / window",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "af2926984a64060362601041d283ef8502859eb41c80b05c13028470d9dcc1e4"
+    },
+    {
+      "sourceObjectId": "FF_O01___window_door",
+      "label": "FF-O01 / window_door",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "5e51bb88a4d8d70304d08bc84dba173e07cd89ca1612df0b34ce97dccecab152"
+    },
+    {
+      "sourceObjectId": "FF_06_fixed_0",
+      "label": "FF-06 fixed 0",
+      "role": "FixedReferences",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "9ba84fa4d691b4d43cff81b6c4df1ca64d0158a454218e4648475fbb489e7c51"
+    }
+  ]
+}
