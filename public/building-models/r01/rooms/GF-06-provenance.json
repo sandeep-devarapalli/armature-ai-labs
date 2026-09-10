@@ -1,0 +1,145 @@
+{
+  "id": "GF-06",
+  "purpose": "Bathroom reference",
+  "floor": "GF",
+  "revision": "R01",
+  "sourceFile": "Ground Floor - Coordinated Planning R01.FCStd",
+  "sourceSha256": "145082c570bb32572b96a83886545c1118a37b6a9f5e64bf76d6511a38e7abfc",
+  "files": {
+    "freecad": {
+      "url": "/building-models/r01/rooms/GF-06.FCStd",
+      "filename": "GF-06.FCStd",
+      "bytes": 14978,
+      "sha256": "9b531812a52cbd524cf0b947112c30da3c6cee3d7955811975ead8b8e0e96115"
+    },
+    "step": {
+      "url": "/building-models/r01/rooms/GF-06.step",
+      "filename": "GF-06.step",
+      "bytes": 12177,
+      "sha256": "5a1f788f50097e64aae06bb99fd7f6fea3ba881c7693f4fddc8d090edcb0e26d"
+    },
+    "preview": {
+      "url": "/building-models/r01/rooms/GF-06.svg",
+      "filename": "GF-06.svg",
+      "bytes": 6550,
+      "sha256": "aa130c4110ea5d7b8f3602d8a7a14e7e5361928a3d78c0a290dc9c917b58f658"
+    },
+    "previewPng": {
+      "url": "/building-models/r01/rooms/GF-06.png",
+      "filename": "GF-06.png",
+      "bytes": 34267,
+      "sha256": "edb61700a0ffc93e420832177c7d3063277e4c2437404f5276f2eddfa41b0064"
+    }
+  },
+  "shapeCount": 10,
+  "solidCount": 0,
+  "geometryKind": "2D plan/reference geometry",
+  "verification": {
+    "nativeSaveReopen": "PASS",
+    "exactWorldShapes": 10,
+    "stepReadback": "PASS",
+    "stepChecks": {
+      "valid": true,
+      "solids": true,
+      "bounds": true,
+      "volume": true,
+      "area": true,
+      "summed_edge_length": true
+    }
+  },
+  "notes": [
+    "This room has source plan/reference geometry only: its STEP contains curves/wires, not a volumetric room model."
+  ],
+  "objects": [
+    {
+      "sourceObjectId": "GF_06___GF_06_A___wall",
+      "label": "GF-06 / GF-06-A / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "7e952ad645253d66108283625c38be7f17c2475716bf39c626e94e2b1ff3872e"
+    },
+    {
+      "sourceObjectId": "GF_06___GF_06_A___wall___provisional_120_mm_offset",
+      "label": "GF-06 / GF-06-A / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "87a3dc62d0fac0fa0571870fa27b232b7ce293d37f0811c54595859afef4ff69"
+    },
+    {
+      "sourceObjectId": "GF_06___GF_06_B___wall",
+      "label": "GF-06 / GF-06-B / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "3ff8714ced17b9cd65029337accbdfa8b69ffff42f1f518a811a979b3208c3f3"
+    },
+    {
+      "sourceObjectId": "GF_06___GF_06_C___wall",
+      "label": "GF-06 / GF-06-C / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "0e3f826d55d997c70f76de956eb96f0e779b01f869aff68bdea0dc40bb838520"
+    },
+    {
+      "sourceObjectId": "GF_06___GF_06_D___wall",
+      "label": "GF-06 / GF-06-D / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "14f20461b91e75a4ceeef95d5674bf707a3e68aeeecd4c112e0569986c9e1ac0"
+    },
+    {
+      "sourceObjectId": "GF_06___GF_06_D___wall___provisional_120_mm_offset",
+      "label": "GF-06 / GF-06-D / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "d73e4bb11d760779559993cc106a0386c0dc53157279bf35cb7ca19d8bdc2571"
+    },
+    {
+      "sourceObjectId": "GF_W09___window",
+      "label": "GF-W09 / window",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "ecf7293841eb1f2666a66b9399a2dab6ecb9a2df11a589c0adb8814e78e1357d"
+    },
+    {
+      "sourceObjectId": "GF_D01___door",
+      "label": "GF-D01 / door",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "9624aa8365e5621612353d68431daa872ce640f218d7aab8ee3759a5c29c3b56"
+    },
+    {
+      "sourceObjectId": "GF_06___retained_Corrected_Ground_Floor___sink_F1_2",
+      "label": "GF-06 / retained Corrected Ground Floor | sink_F1_2",
+      "role": "FixedReferences",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "d273f8727b9c4632fb61c06808ca89f707073cd9bc66657b009a6bd48900ebbf"
+    },
+    {
+      "sourceObjectId": "GF_06___retained_Corrected_Ground_Floor___toilet_F1_0",
+      "label": "GF-06 / retained Corrected Ground Floor | toilet_F1_0",
+      "role": "FixedReferences",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "eeba501e5211dbf81660b199680a7d3df54d279f6579eeb4d9eb1f56b8422392"
+    }
+  ]
+}

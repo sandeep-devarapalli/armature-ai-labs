@@ -1,0 +1,182 @@
+{
+  "id": "FF-02",
+  "purpose": "Exterior balcony / workshop brief",
+  "floor": "FF",
+  "revision": "R01",
+  "sourceFile": "First Floor - Coordinated Planning R01.FCStd",
+  "sourceSha256": "4c8c65dbf487ba996e61ec38a3640ef5b5e97587f980dac338b09f3ac406a971",
+  "files": {
+    "freecad": {
+      "url": "/building-models/r01/rooms/FF-02.FCStd",
+      "filename": "FF-02.FCStd",
+      "bytes": 25704,
+      "sha256": "9720436932e199f137f00f8dd0846269c7f98ac0e40408b91ddab4e02d1708aa"
+    },
+    "step": {
+      "url": "/building-models/r01/rooms/FF-02.step",
+      "filename": "FF-02.step",
+      "bytes": 8554,
+      "sha256": "f9baaf8a54f5df911c8cb82e5afd744e6fb407bc4b0b823a585b67aabd06aef8"
+    },
+    "preview": {
+      "url": "/building-models/r01/rooms/FF-02.svg",
+      "filename": "FF-02.svg",
+      "bytes": 9049,
+      "sha256": "4e4c1cd20101cfb556497dcd21da99a3a76950cdc3972ab328a1c3c111b4ab73"
+    },
+    "previewPng": {
+      "url": "/building-models/r01/rooms/FF-02.png",
+      "filename": "FF-02.png",
+      "bytes": 38648,
+      "sha256": "11e4553036a6e71aaebbf03f268f7c1d12aee74de6de2c01bd94f887ff8455ec"
+    }
+  },
+  "shapeCount": 14,
+  "solidCount": 0,
+  "geometryKind": "2D plan/reference geometry",
+  "verification": {
+    "nativeSaveReopen": "PASS",
+    "exactWorldShapes": 14,
+    "stepReadback": "PASS",
+    "stepChecks": {
+      "valid": true,
+      "solids": true,
+      "bounds": true,
+      "volume": true,
+      "area": true,
+      "summed_edge_length": true
+    }
+  },
+  "notes": [
+    "Balcony R01 outline only; preliminary glass route is retained as hidden native paths. New workshop bench and new weatherproof cover are not implemented in this extract.",
+    "This room has source plan/reference geometry only: its STEP contains curves/wires, not a volumetric room model."
+  ],
+  "objects": [
+    {
+      "sourceObjectId": "FF_02___FF_02_A___wall",
+      "label": "FF-02 / FF-02-A / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "10e5597de21012214732c7eb083f33038ea0b5e1dd35d24f0843aa58e2a4e2ef"
+    },
+    {
+      "sourceObjectId": "FF_02___FF_02_A___wall___provisional_120_mm_offset",
+      "label": "FF-02 / FF-02-A / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "23a0f9cac533e29d824bf1f32e7842a369d70da9617df58149f1bd8806f94a72"
+    },
+    {
+      "sourceObjectId": "FF_02___FF_02_B___wall",
+      "label": "FF-02 / FF-02-B / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "5d30581dc6a160453f1aab4b045801805d2ee38006d4db880083dacdd542406a"
+    },
+    {
+      "sourceObjectId": "FF_02___FF_02_B___wall___provisional_120_mm_offset",
+      "label": "FF-02 / FF-02-B / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "a688ae634b0eabde2ceff4346f51f4ef0487c0cca7d9751632260ad7c1b9c294"
+    },
+    {
+      "sourceObjectId": "FF_02___FF_02_C___railing",
+      "label": "FF-02 / FF-02-C / railing",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "af92095092dc016e86327f7fffa31c6980fee1796ebc26deebeb8f1652f8ae94"
+    },
+    {
+      "sourceObjectId": "FF_02___FF_02_D_curve___railing",
+      "label": "FF-02 / FF-02-D.curve / railing",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "39d60345394a0a956220c56901a00ac077bcfd820123db6a4ba6f21e69dedd1c"
+    },
+    {
+      "sourceObjectId": "FF_02___FF_02_E___railing",
+      "label": "FF-02 / FF-02-E / railing",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "dcb045d67ccfd7423c2718e09bd6869b047620b8320f1375ea0cf1b47ffc1584"
+    },
+    {
+      "sourceObjectId": "FF_02___FF_02_F___railing",
+      "label": "FF-02 / FF-02-F / railing",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "a7de363db4cf7d5fa988ed5402542a99d483849aa6503125c39aac94bd57ff45"
+    },
+    {
+      "sourceObjectId": "FF_D04___door",
+      "label": "FF-D04 / door",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "3b41ba88ffee1e38e3369c94c7f768083afcef523f5dd8a5f613d23903b6ce08"
+    },
+    {
+      "sourceObjectId": "FF_O02___opening",
+      "label": "FF-O02 / opening",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "9f2d0c7ea08d57d1b431c345a7045fc90a7876b5184912e604bad8c940bc0e56"
+    },
+    {
+      "sourceObjectId": "FF02_GLASS___path_1",
+      "label": "FF02-GLASS / path 1",
+      "role": "OptionalReferences",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room preliminary proposal path, retained hidden",
+      "worldShapeSignatureSha256": "0215c96cdd185b5ecee8cca4b2647c54ea4e58591747a9be9f1e59c0c4ac41db"
+    },
+    {
+      "sourceObjectId": "FF02_GLASS___path_2",
+      "label": "FF02-GLASS / path 2",
+      "role": "OptionalReferences",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room preliminary proposal path, retained hidden",
+      "worldShapeSignatureSha256": "6fd939ddc00fa40a948973ed7582159b4d9fb7f8da260a5f964e6099969249ff"
+    },
+    {
+      "sourceObjectId": "FF02_GLASS___path_3",
+      "label": "FF02-GLASS / path 3",
+      "role": "OptionalReferences",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room preliminary proposal path, retained hidden",
+      "worldShapeSignatureSha256": "dcb045d67ccfd7423c2718e09bd6869b047620b8320f1375ea0cf1b47ffc1584"
+    },
+    {
+      "sourceObjectId": "FF02_GLASS___path_4",
+      "label": "FF02-GLASS / path 4",
+      "role": "OptionalReferences",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room preliminary proposal path, retained hidden",
+      "worldShapeSignatureSha256": "a7de363db4cf7d5fa988ed5402542a99d483849aa6503125c39aac94bd57ff45"
+    }
+  ]
+}

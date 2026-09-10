@@ -20,6 +20,8 @@
   max-width: 780px;
 }
 
+.building-vision-quick-links { margin-top: 24px; }
+
 .building-vision-summary {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -211,6 +213,23 @@
 
 .building-vision-concept figcaption span {
   color: var(--ink);
+}
+
+.building-vision-reference {
+  margin-top: 18px;
+  padding: 16px;
+  color: var(--fg-2);
+  background: var(--panel-2);
+  border: 1px solid var(--hair);
+}
+
+.building-vision-reference summary {
+  cursor: pointer;
+  min-height: 28px;
+}
+
+.building-vision-reference[open] summary {
+  margin-bottom: 16px;
 }
 
 .building-vision-spec {

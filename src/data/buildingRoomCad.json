@@ -1,0 +1,77 @@
+[
+  {
+    "id": "GF-01",
+    "geometryKind": "2D plan/reference geometry",
+    "solidCount": 0
+  },
+  {
+    "id": "GF-02",
+    "geometryKind": "mixed 2D references and 3D fit-out",
+    "solidCount": 78
+  },
+  {
+    "id": "GF-03",
+    "geometryKind": "2D plan/reference geometry",
+    "solidCount": 0
+  },
+  {
+    "id": "GF-04",
+    "geometryKind": "2D plan/reference geometry",
+    "solidCount": 0
+  },
+  {
+    "id": "GF-06",
+    "geometryKind": "2D plan/reference geometry",
+    "solidCount": 0
+  },
+  {
+    "id": "GF-07",
+    "geometryKind": "mixed 2D references and 3D fit-out",
+    "solidCount": 48
+  },
+  {
+    "id": "GF-08",
+    "geometryKind": "mixed 2D references and 3D fit-out",
+    "solidCount": 322
+  },
+  {
+    "id": "GF-09",
+    "geometryKind": "mixed 2D references and 3D fit-out",
+    "solidCount": 659
+  },
+  {
+    "id": "GF-10",
+    "geometryKind": "mixed 2D references and 3D fit-out",
+    "solidCount": 354
+  },
+  {
+    "id": "FF-01",
+    "geometryKind": "2D plan/reference geometry",
+    "solidCount": 0
+  },
+  {
+    "id": "FF-02",
+    "geometryKind": "2D plan/reference geometry",
+    "solidCount": 0
+  },
+  {
+    "id": "FF-03",
+    "geometryKind": "2D plan/reference geometry",
+    "solidCount": 0
+  },
+  {
+    "id": "FF-04",
+    "geometryKind": "mixed 2D references and 3D fit-out",
+    "solidCount": 556
+  },
+  {
+    "id": "FF-05",
+    "geometryKind": "2D plan/reference geometry",
+    "solidCount": 0
+  },
+  {
+    "id": "FF-06",
+    "geometryKind": "2D plan/reference geometry",
+    "solidCount": 0
+  }
+]

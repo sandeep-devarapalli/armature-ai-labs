@@ -1,0 +1,577 @@
+{
+  "id": "GF-07",
+  "purpose": "Glass booth",
+  "floor": "GF",
+  "revision": "R01",
+  "sourceFile": "Ground Floor - Coordinated Planning R01.FCStd",
+  "sourceSha256": "145082c570bb32572b96a83886545c1118a37b6a9f5e64bf76d6511a38e7abfc",
+  "files": {
+    "freecad": {
+      "url": "/building-models/r01/rooms/GF-07.FCStd",
+      "filename": "GF-07.FCStd",
+      "bytes": 107115,
+      "sha256": "2a9828ea304b4549fe1b58a14c6acef8757cad8c4d6c947912382dbfde56faf7"
+    },
+    "step": {
+      "url": "/building-models/r01/rooms/GF-07.step",
+      "filename": "GF-07.step",
+      "bytes": 407418,
+      "sha256": "719ae784960c3155ad34ca7e0d3ece38a6e8fcd7f5b39f0faef97e1a63871ddf"
+    },
+    "preview": {
+      "url": "/building-models/r01/rooms/GF-07.svg",
+      "filename": "GF-07.svg",
+      "bytes": 37669,
+      "sha256": "d422edb80e9051c685021786e2cc7ad816f80ba12ee79fa8b8a602e86f093958"
+    },
+    "previewPng": {
+      "url": "/building-models/r01/rooms/GF-07.png",
+      "filename": "GF-07.png",
+      "bytes": 35137,
+      "sha256": "090582e401fc92f6b378620c8d4e76f6f1bfcb680f02dfc161b50a93b3e11eda"
+    }
+  },
+  "shapeCount": 58,
+  "solidCount": 48,
+  "geometryKind": "mixed 2D references and 3D fit-out",
+  "verification": {
+    "nativeSaveReopen": "PASS",
+    "exactWorldShapes": 58,
+    "stepReadback": "PASS",
+    "stepChecks": {
+      "valid": true,
+      "solids": true,
+      "bounds": true,
+      "volume": true,
+      "area": true,
+      "summed_edge_length": true
+    }
+  },
+  "notes": [
+    "Shared GF07/GF10 wall band includes its exact 6 in source end remainder. Booth door reduces the original opening; compact internal clearances remain."
+  ],
+  "objects": [
+    {
+      "sourceObjectId": "GF_07___GF_07_A___wall",
+      "label": "GF-07 / GF-07-A / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "938a5fa9d8ba56e83a8e39999cb2a0ec15ecc914084e4669bd400835a5d2c04f"
+    },
+    {
+      "sourceObjectId": "GF_07___GF_07_B___wall",
+      "label": "GF-07 / GF-07-B / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "e0bf131fe4a65a5dd410337c56b1d0ef2ecb44dd5e1c2d323e7232b550f86ca3"
+    },
+    {
+      "sourceObjectId": "GF_07___GF_07_B___wall___provisional_120_mm_offset",
+      "label": "GF-07 / GF-07-B / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "33570cdd14b53421054d5c54a882b48fc42d3e4058c2d00e5a562476cca61e84"
+    },
+    {
+      "sourceObjectId": "GF_07___GF_07_C___wall___source_reference_path",
+      "label": "GF-07 / GF-07-C / wall / source reference path",
+      "role": "OptionalReferences",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "00243889c7f9a0286345ae0d8b803f4c612b6433e1b1a3dae8a5d80a4cade4ea"
+    },
+    {
+      "sourceObjectId": "GF_07___GF_07_D___wall",
+      "label": "GF-07 / GF-07-D / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "35932c1246fc6b8e4fd28f06308ff0c05aeac0a716f9c3bd2aa6a5ed8c3a8459"
+    },
+    {
+      "sourceObjectId": "GF_07___GF_07_D___wall___provisional_120_mm_offset",
+      "label": "GF-07 / GF-07-D / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "1ddcd2eb342cdf1325d5d457f2064f10465dceda48cefbb783a0b2bae7156016"
+    },
+    {
+      "sourceObjectId": "GF_O04___door",
+      "label": "GF-O04 / door",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "5f744ae1ecb28301f148efa737dd3389a09bfed93e16532da8cdfc29d64bbc0a"
+    },
+    {
+      "sourceObjectId": "Centred_wall_band___GF_10_A",
+      "label": "Shared wall / GF07-C and GF10-A / one 120 mm band",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Exact shared GF07/GF10 native wall band, includes source 6 in end remainder",
+      "worldShapeSignatureSha256": "c0fe2d7dea3fe9415f7800f8f7f43717fbb402c6e6d4b9bc0dc05b94916477cc"
+    },
+    {
+      "sourceObjectId": "GF07_B01_base",
+      "label": "GF07-B01-base / bench",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "4304b3d1458d763dbb512040e1a44337dd2f9cfc12565cec2d5e6dcfcce47c69"
+    },
+    {
+      "sourceObjectId": "GF07_B01_toe",
+      "label": "GF07-B01-toe / bench",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "66969eaa3326d5a02aadefe7c8f14481b0bda184472032720e35b0d6373cf93a"
+    },
+    {
+      "sourceObjectId": "GF07_B01_seat1",
+      "label": "GF07-B01-seat1 / bench",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Fillet",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "67f0df29ce74379e6198532b4b496662a964ad5daeb1f93559c03f3a7d289773"
+    },
+    {
+      "sourceObjectId": "GF07_B01_back1",
+      "label": "GF07-B01-back1 / bench",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Fillet",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6e1c1d4d95d5b1d3b451c47cb24db0b603f215142c454c832f331beacbf67788"
+    },
+    {
+      "sourceObjectId": "GF07_B01_seat2",
+      "label": "GF07-B01-seat2 / bench",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Fillet",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "8fa623f71bdd634dfbffcebbce97282042793f4bfcb5f668b3a4f1624bf3f0b2"
+    },
+    {
+      "sourceObjectId": "GF07_B01_back2",
+      "label": "GF07-B01-back2 / bench",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Fillet",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "2d5160d5d8f295de613335e397867cbb0df15fd225956a2274a63f14811daaad"
+    },
+    {
+      "sourceObjectId": "GF07_T01_top",
+      "label": "GF07-T01-top / table",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Fillet",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "9993b99b69aacb74b005204d8d544852ca82adcd7c33d67587029c0d56970d46"
+    },
+    {
+      "sourceObjectId": "GF07_T01_base",
+      "label": "GF07-T01-base / table",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c7df94b323063955a1f76451441e3bbdb054aa39863ebb4cc54b1f992bc455eb"
+    },
+    {
+      "sourceObjectId": "GF07_T01_column",
+      "label": "GF07-T01-column / table",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "4982437368fee0ea0a6d78d789202b6cb1c9da696f67f9fbd11e911ba93bb93c"
+    },
+    {
+      "sourceObjectId": "GF07_T01_underplate",
+      "label": "GF07-T01-underplate / table",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e65a1f5f87ef25a569d62912c6736709ce40df8405ba337abc462e7a343500c4"
+    },
+    {
+      "sourceObjectId": "GF07_W01_panel1",
+      "label": "GF07-W01-panel1 / panelling",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "de6ce03352e39c1eb7e44f79edab10d43faf60e702f21c70320a25c134124e10"
+    },
+    {
+      "sourceObjectId": "GF07_W01_panel2",
+      "label": "GF07-W01-panel2 / panelling",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "f994a7a99878f66d2de54606d93420d05d033908aea22fcd74d57146aad43256"
+    },
+    {
+      "sourceObjectId": "GF07_W01_panel3",
+      "label": "GF07-W01-panel3 / panelling",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "114ce5588bffdd5c8780d23a0a55b917f3c2f99cb22e1d3366c540d57a0ee7be"
+    },
+    {
+      "sourceObjectId": "GF07_W01_panel4",
+      "label": "GF07-W01-panel4 / panelling",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "41b025587c627de93b0a029fbb88a2660ee88e604134cb867f14db4289eebeac"
+    },
+    {
+      "sourceObjectId": "GF07_W01_panel5",
+      "label": "GF07-W01-panel5 / panelling",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "33914bfa41bf25b01c816619ca1d3eb3db2896efec8fadb2eece5c0fced4ac76"
+    },
+    {
+      "sourceObjectId": "GF07_W01_panel6",
+      "label": "GF07-W01-panel6 / panelling",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a15a395def0ce03a21b98ab9704abf7770265ace4f950d3600cb7d20d86a5bcc"
+    },
+    {
+      "sourceObjectId": "GF07_W01_panel7",
+      "label": "GF07-W01-panel7 / panelling",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "7438b9f8cbd6e43eb75d8931aabee208033ad66d02f6794eee4b1b4ee0cea4e5"
+    },
+    {
+      "sourceObjectId": "GF07_W01_panel8",
+      "label": "GF07-W01-panel8 / panelling",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b3ac44200083f9e77510b2f6e3c212c9cba832f74d172f63c698db4163bccee2"
+    },
+    {
+      "sourceObjectId": "GF07_W01_top_band",
+      "label": "GF07-W01-top-band / panelling",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "013672932950db2b2ab3286724af557057bec6d8997d909841a4b344c8218549"
+    },
+    {
+      "sourceObjectId": "GF07_L01_profile",
+      "label": "GF07-L01-profile / lighting",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "f797fa6750c73e9c60497c97b2a70d8fef0f102194d9649326cf4fb6aab9e03c"
+    },
+    {
+      "sourceObjectId": "GF07_L01_diffuser",
+      "label": "GF07-L01-diffuser / lighting",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "f133aa7944b058b3c1740ecff05beaee14d873aa7a97e03f92c70fa030580e05"
+    },
+    {
+      "sourceObjectId": "GF07_G01_south_jamb",
+      "label": "GF07-G01-south-jamb / glass_fixed",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6cab8f864596cb79eabb0889f44acbfe429cae705b623613c7d200076a351536"
+    },
+    {
+      "sourceObjectId": "GF07_G01_north_jamb",
+      "label": "GF07-G01-north-jamb / glass_fixed",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "3310e9a0635dacd9dffc9a72c5fa0224bffb6b9b004e1c5efa652f8fb2e17ee3"
+    },
+    {
+      "sourceObjectId": "GF07_G01_header",
+      "label": "GF07-G01-header / glass_fixed",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "3702004e4d18665ca880b572884b2898b47b8b385d288d8397bc4170be0e8078"
+    },
+    {
+      "sourceObjectId": "GF07_G01_sill",
+      "label": "GF07-G01-sill / glass_fixed",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "ecb3a948b5707cbb49bddc4dffb15f30bc49445131e384aa3a60efd4646d61b0"
+    },
+    {
+      "sourceObjectId": "GF07_G01_fixed_mullion",
+      "label": "GF07-G01-fixed-mullion / glass_fixed",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c0991475d7b8d910cb1b917128dd297a46929fba2d200285a80d62a1fcc76965"
+    },
+    {
+      "sourceObjectId": "GF07_G01_fixed_glass",
+      "label": "GF07-G01-fixed-glass / glass_fixed",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e21ec3896e1e68585cc2086543e82ffa774543a628333ccc8890bb5ffd541d54"
+    },
+    {
+      "sourceObjectId": "GF07_G02_hinge_stile",
+      "label": "GF07-G02-hinge-stile / glass_door",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "face991e98ea903a4b527ddfd8d7fd62a11182246497824dd5b873a3e7545a20"
+    },
+    {
+      "sourceObjectId": "GF07_G02_latch_stile",
+      "label": "GF07-G02-latch-stile / glass_door",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "abf8235cdbe4e87e56cca3ce2d3dd25781772383b0d08de389cdb4c6103740a4"
+    },
+    {
+      "sourceObjectId": "GF07_G02_bottom_rail",
+      "label": "GF07-G02-bottom-rail / glass_door",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "d69753436a65e78d279e2b8383f2417c30901fd95bcd4e65599604b28e89bb93"
+    },
+    {
+      "sourceObjectId": "GF07_G02_top_rail",
+      "label": "GF07-G02-top-rail / glass_door",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "af6e4d062181c051b1bbd73e0b212980aef9f866f7dd30be51e567f8eb6c3983"
+    },
+    {
+      "sourceObjectId": "GF07_G02_glass",
+      "label": "GF07-G02-glass / glass_door",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "67027ca8a2f90e7e9350ab19824bbb4ca082b6fc77c35cff332c7a25b1842d44"
+    },
+    {
+      "sourceObjectId": "GF07_G02_hinge1",
+      "label": "GF07-G02-hinge1 / glass_door",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c0caf1501c60e067575e0c462b649bd2d900ba7481679979c93a03ac9faf91dd"
+    },
+    {
+      "sourceObjectId": "GF07_G01_hinge_bracket1",
+      "label": "GF07-G01-hinge-bracket1 / glass_fixed",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "16d9fc3abbc28937efc511012ed4419af3f10a74f462ffc14f4b8a3641c2d399"
+    },
+    {
+      "sourceObjectId": "GF07_G02_hinge2",
+      "label": "GF07-G02-hinge2 / glass_door",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "fc43ef8b97f23442db3b5dcda800bdb8b481197d780f6acf55f5242fa1109e37"
+    },
+    {
+      "sourceObjectId": "GF07_G01_hinge_bracket2",
+      "label": "GF07-G01-hinge-bracket2 / glass_fixed",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b14d0de53a0963be28da8a6d9d514307ee0271ba001c73066deaf713a72d8593"
+    },
+    {
+      "sourceObjectId": "GF07_G02_handle_1",
+      "label": "GF07-G02-handle-1 / glass_door",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a4f8365072008cd45e4c734ef1fe4eaf73803a592ce643ef425e11fea2eb1aa2"
+    },
+    {
+      "sourceObjectId": "GF07_G02_handle_fixing_1_0",
+      "label": "GF07-G02-handle-fixing-1-0 / glass_door",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "8619850ba8df0fe3f39fe2c3e06badf3c69063016c477930ccfc4cfb3261b7f0"
+    },
+    {
+      "sourceObjectId": "GF07_G02_handle_fixing_1_1",
+      "label": "GF07-G02-handle-fixing-1-1 / glass_door",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "671cf75e940f51a7a7d6d1d12659b366d99dd11991d38de3b1c249e88dd754dd"
+    },
+    {
+      "sourceObjectId": "GF07_G02_handle1",
+      "label": "GF07-G02-handle1 / glass_door",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "4cc42411f7ebd7a00c76c9ca455cb2bea5ea42795f10791d518e1052fe36ef3e"
+    },
+    {
+      "sourceObjectId": "GF07_G02_handle_fixing1_0",
+      "label": "GF07-G02-handle-fixing1-0 / glass_door",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c649cd7c89e8a4f59dcb3f12706c72c3c5fea8a43a7fea95e8bddb7ebc41a391"
+    },
+    {
+      "sourceObjectId": "GF07_G02_handle_fixing1_1",
+      "label": "GF07-G02-handle-fixing1-1 / glass_door",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "42962ac040c514c2c81662ab252d406c2a6092b5dd4a2541653903a807e018a3"
+    },
+    {
+      "sourceObjectId": "GF07_V01_laptop_base",
+      "label": "GF07-V01-laptop-base / visual_props",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Fillet",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "5c508d27fe4a0ba2126cb6d90051fb72ea765e339f1c1aacb6ab19dc0fc47d78"
+    },
+    {
+      "sourceObjectId": "GF07_V01_laptop_lid",
+      "label": "GF07-V01-laptop-lid / visual_props",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Fillet",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "028e455425bb6707bd7b964ed6a038dee22db1c4f3ae7b5f08799d380b41fb39"
+    },
+    {
+      "sourceObjectId": "GF07_P02_table_grommet",
+      "label": "GF07-P02-table-grommet / power",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "d1a867d5236c3dd26a8c3490b0c509bc3e27b4098f9ba2ab76658e76d0450c54"
+    },
+    {
+      "sourceObjectId": "GF07_P01_plate",
+      "label": "GF07-P01-plate / power",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "880625996c68706d78b894b5dd2420d510e126410c404ef4b05ecbc40f9c9f14"
+    },
+    {
+      "sourceObjectId": "GF07_P01_socket1",
+      "label": "GF07-P01-socket1 / power",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "61ea129d58419a817125a44cb58c334815d4ea77a4fbf36000abaeb4a33911f3"
+    },
+    {
+      "sourceObjectId": "GF07_P01_socket2",
+      "label": "GF07-P01-socket2 / power",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "9570e1ddc72702a4d80dae7dbe8d48dc2a65bad49e470432ae19e1162b999c78"
+    },
+    {
+      "sourceObjectId": "GF07_REF_Proposed_inward_swing",
+      "label": "GF07 / Proposed inward swing",
+      "role": "OptionalReferences",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Room-specific approximate door operation reference",
+      "worldShapeSignatureSha256": "63cbdd93feef7b39a15b4b5ec620705d054a37e42121212ce7099ce470c7ffd2"
+    },
+    {
+      "sourceObjectId": "GF07_REF_Door_open_90deg",
+      "label": "GF07 / Door open 90deg",
+      "role": "OptionalReferences",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Room-specific approximate door operation reference",
+      "worldShapeSignatureSha256": "5b29327af14f3e80b16a391a01ee63678c51c364aa80c608854c77839713e284"
+    }
+  ]
+}

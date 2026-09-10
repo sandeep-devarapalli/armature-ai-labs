@@ -1,0 +1,154 @@
+{
+  "id": "GF-03",
+  "purpose": "Rear small room",
+  "floor": "GF",
+  "revision": "R01",
+  "sourceFile": "Ground Floor - Coordinated Planning R01.FCStd",
+  "sourceSha256": "145082c570bb32572b96a83886545c1118a37b6a9f5e64bf76d6511a38e7abfc",
+  "files": {
+    "freecad": {
+      "url": "/building-models/r01/rooms/GF-03.FCStd",
+      "filename": "GF-03.FCStd",
+      "bytes": 15939,
+      "sha256": "fa2104e76b949931c5d914b7153380353abdc1f621364f28ef6ce37c6e5b29ec"
+    },
+    "step": {
+      "url": "/building-models/r01/rooms/GF-03.step",
+      "filename": "GF-03.step",
+      "bytes": 12207,
+      "sha256": "fe5212a10d31dd3a4d15b8a264018ab6ac60fb4dfbe1a02aecbd60fe27fa0ba2"
+    },
+    "preview": {
+      "url": "/building-models/r01/rooms/GF-03.svg",
+      "filename": "GF-03.svg",
+      "bytes": 7394,
+      "sha256": "0b905a7d68252c6ff9f9288f31af9b6ee63dc98262ed550c81767a3cfe9e0d9c"
+    },
+    "previewPng": {
+      "url": "/building-models/r01/rooms/GF-03.png",
+      "filename": "GF-03.png",
+      "bytes": 34066,
+      "sha256": "c7dfb0371ce92430f1b54831d023cbb8cc9cf4aa4daf4385bee6158a79695709"
+    }
+  },
+  "shapeCount": 11,
+  "solidCount": 0,
+  "geometryKind": "2D plan/reference geometry",
+  "verification": {
+    "nativeSaveReopen": "PASS",
+    "exactWorldShapes": 11,
+    "stepReadback": "PASS",
+    "stepChecks": {
+      "valid": true,
+      "solids": true,
+      "bounds": true,
+      "volume": true,
+      "area": true,
+      "summed_edge_length": true
+    }
+  },
+  "notes": [
+    "This room has source plan/reference geometry only: its STEP contains curves/wires, not a volumetric room model."
+  ],
+  "objects": [
+    {
+      "sourceObjectId": "GF_D07___door",
+      "label": "GF-D07 / door",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "ef7b3fd722d0f92b3c2be7e6dd7263dbdc27a5522666435fcb09bc0cd9d2e51e"
+    },
+    {
+      "sourceObjectId": "GF_03___GF_03_A___wall",
+      "label": "GF-03 / GF-03-A / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "70bd39132edc60757eea019619b01feacceaa2d598f885f0bd4d7570870ee9a9"
+    },
+    {
+      "sourceObjectId": "GF_03___GF_03_A___wall___provisional_120_mm_offset",
+      "label": "GF-03 / GF-03-A / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "1d916c64850f5048989a9386beaca014ca526d64b0b7355e401bd6fd1844db5b"
+    },
+    {
+      "sourceObjectId": "GF_03___GF_03_B___wall",
+      "label": "GF-03 / GF-03-B / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "ad0af905bdea7816a441aeb8b08cfa7684b213341747f2ed94734ea8dc342f90"
+    },
+    {
+      "sourceObjectId": "GF_03___GF_03_B___wall___provisional_120_mm_offset",
+      "label": "GF-03 / GF-03-B / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "24bc4770e7267ff6a9059a4be8d24890df6112389e0a4df2861922f51072431e"
+    },
+    {
+      "sourceObjectId": "GF_03___GF_03_C___wall",
+      "label": "GF-03 / GF-03-C / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "6d2715651462764b324d1ad270f86918564945070335421c7e44fe134a6d58a4"
+    },
+    {
+      "sourceObjectId": "GF_03___GF_03_D___wall",
+      "label": "GF-03 / GF-03-D / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "7bc3f23e668ae819b88e08033cf3ceaea9dec784e6eeb696fe53b310af4278d1"
+    },
+    {
+      "sourceObjectId": "GF_03___GF_03_D___wall___provisional_120_mm_offset",
+      "label": "GF-03 / GF-03-D / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "103be0ecfda9be71c31f1f0d799fad547d2554b47b1c9bd5e3d287c820f904d1"
+    },
+    {
+      "sourceObjectId": "GF_W05___window",
+      "label": "GF-W05 / window",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "bd2e0293cb231d236dbd4ac2b9d0c110328e0c3c7c17f81c3eb0a8540a400aa2"
+    },
+    {
+      "sourceObjectId": "GF_03___retained_Corrected_Ground_Floor___sink_F1_1",
+      "label": "GF-03 / retained Corrected Ground Floor | sink_F1_1",
+      "role": "FixedReferences",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "0d59fcdd8064167556ec53305ee6ee9f5bfa4b58fd1f116c5bd38e8fac7eceaf"
+    },
+    {
+      "sourceObjectId": "GF_03___retained_Corrected_Ground_Floor___storage_cabinet_mid3_F1_1",
+      "label": "GF-03 / retained Corrected Ground Floor | storage_cabinet_mid3_F1_1",
+      "role": "FixedReferences",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "a64a63c98bb9c5a23469feab7a69df02b01d99018f6cb12f72a6b24468cf6e8d"
+    }
+  ]
+}

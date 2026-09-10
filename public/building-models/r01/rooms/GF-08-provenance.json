@@ -1,0 +1,3106 @@
+{
+  "id": "GF-08",
+  "purpose": "Enclosed balcony seating",
+  "floor": "GF",
+  "revision": "R01",
+  "sourceFile": "Ground Floor - Coordinated Planning R01.FCStd",
+  "sourceSha256": "145082c570bb32572b96a83886545c1118a37b6a9f5e64bf76d6511a38e7abfc",
+  "files": {
+    "freecad": {
+      "url": "/building-models/r01/rooms/GF-08.FCStd",
+      "filename": "GF-08.FCStd",
+      "bytes": 658732,
+      "sha256": "66ffd18452afba1a0b6a778154df88ad0431bbca3f77f1b5f10649658bbc1900"
+    },
+    "step": {
+      "url": "/building-models/r01/rooms/GF-08.step",
+      "filename": "GF-08.step",
+      "bytes": 2239052,
+      "sha256": "635386badba8e3094d8099d5273ca3fa706cf05d017b930d127dacf450bbdffc"
+    },
+    "preview": {
+      "url": "/building-models/r01/rooms/GF-08.svg",
+      "filename": "GF-08.svg",
+      "bytes": 180539,
+      "sha256": "13fe19eebd303dc3c125cf3aca488bfa16f0cfe5a6a19445977a45e7f211f663"
+    },
+    "previewPng": {
+      "url": "/building-models/r01/rooms/GF-08.png",
+      "filename": "GF-08.png",
+      "bytes": 51818,
+      "sha256": "f292a4044435981909b9e57662290fc9610bb7b03f1bfc6f382b39c975e6bbe9"
+    }
+  },
+  "shapeCount": 339,
+  "solidCount": 322,
+  "geometryKind": "mixed 2D references and 3D fit-out",
+  "verification": {
+    "nativeSaveReopen": "PASS",
+    "exactWorldShapes": 339,
+    "stepReadback": "PASS",
+    "stepChecks": {
+      "valid": true,
+      "solids": true,
+      "bounds": true,
+      "volume": true,
+      "area": true,
+      "summed_edge_length": true
+    }
+  },
+  "notes": [
+    "Includes P02 existing-door and curved-step approximation, 2 cafe tables, 4 chairs, bar and 2 stools. Frame/roof heights and installation details remain provisional."
+  ],
+  "objects": [
+    {
+      "sourceObjectId": "GF_D06___door",
+      "label": "GF-D06 / door",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "9ff2032258b5d538c25df43b979d036a31fbabf1f40fde9689b936f51ca310e8"
+    },
+    {
+      "sourceObjectId": "GF_O02___opening",
+      "label": "GF-O02 / opening",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "0f8ae00bf01ad7d9379794ed42945e61d173047168382b119a0e0c752b56c6d6"
+    },
+    {
+      "sourceObjectId": "GF_08___GF_08_A___wall",
+      "label": "GF-08 / GF-08-A / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "3997c6423b81194706e1b59e2546d1f9ddf7bbf8b872f5ea4952b212371e99f3"
+    },
+    {
+      "sourceObjectId": "GF_08___GF_08_B___railing",
+      "label": "GF-08 / GF-08-B / railing",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "67994679b2e67fa31ca1f4b6f52e77f7e35a14f9a83ac71e5f01e71d2cbfb3eb"
+    },
+    {
+      "sourceObjectId": "GF_08___GF_08_C_1___railing",
+      "label": "GF-08 / GF-08-C.1 / railing",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "fac68d73e18d64e17c9e3fbd4ce0f3b6785ca202c9fa4c1dc24320c3ded032e9"
+    },
+    {
+      "sourceObjectId": "GF_08___GF_08_C_2___railing",
+      "label": "GF-08 / GF-08-C.2 / railing",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "601ee0cea91059cf1a228877466c473787624634adc7a75491e6c5a833bfa47a"
+    },
+    {
+      "sourceObjectId": "GF_08___GF_08_C_3___railing",
+      "label": "GF-08 / GF-08-C.3 / railing",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "70dfa6e994924d3a91f814aceaf08699c2bd0bb7d1a3b5ed2f26c52cbe86a3d5"
+    },
+    {
+      "sourceObjectId": "GF_08___GF_08_D_curve___railing",
+      "label": "GF-08 / GF-08-D.curve / railing",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "03ed9658c7e9393c73f1af1c28b368489e074b3426ee07af648a7ea3aebe19da"
+    },
+    {
+      "sourceObjectId": "GF_08___GF_08_D_1___railing",
+      "label": "GF-08 / GF-08-D.1 / railing",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "c63db2ffc10c682aaa56f5249c55fafbea3147f8789313f6718f6b9dd7a11e29"
+    },
+    {
+      "sourceObjectId": "GF_08___GF_08_D_2___railing",
+      "label": "GF-08 / GF-08-D.2 / railing",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "a035bf0be880bca7e66e1cddc1c1f061f8eed32115c47c7561869e5c86235639"
+    },
+    {
+      "sourceObjectId": "GF_08___GF_08_D_3___railing",
+      "label": "GF-08 / GF-08-D.3 / railing",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "4dc62686af2e6a1e52a00408dc3d59f76290e21b5b2cde72fee8618a6df33b43"
+    },
+    {
+      "sourceObjectId": "GF_08___GF_08_E___wall",
+      "label": "GF-08 / GF-08-E / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "5a0445fc79b028aa79409381c79b2527d6b1eb30d83f977b0e5045b573a78f04"
+    },
+    {
+      "sourceObjectId": "GF_08___GF_08_E___wall___provisional_120_mm_offset",
+      "label": "GF-08 / GF-08-E / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "5d2f0836edcef9ce9be8b697d0c0daa5b5736846cbe882117671119d67b2b55d"
+    },
+    {
+      "sourceObjectId": "GF_W02___window",
+      "label": "GF-W02 / window",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "ceb993d18fa4575126d600d46ccb9c5fbbc7f9e8de5e64b3b8ac5832cd151924"
+    },
+    {
+      "sourceObjectId": "GF_W08___window",
+      "label": "GF-W08 / window",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "024f0367dd8b7e66d5f7b87ac63c900ae96a92ee99cf83929ee2f42a81753e68"
+    },
+    {
+      "sourceObjectId": "GF08_G_R1_sill",
+      "label": "GF08-G-R1-sill / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "afb33a37ffc87a827884518727670932cd005c852f824c9458d3c98643c433a8"
+    },
+    {
+      "sourceObjectId": "GF08_G_R1_head",
+      "label": "GF08-G-R1-head / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "1cce989765c01eea65db48ea99f3386f650b835024c1c969defcb6f0fc76069b"
+    },
+    {
+      "sourceObjectId": "GF08_G_R1_panel1",
+      "label": "GF08-G-R1-panel1 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "ba21d487d2b68cc7ab9ca6a9ad4752c8733cdb85cc71954ebce98bbfa86074ac"
+    },
+    {
+      "sourceObjectId": "GF08_G_R1_panel2",
+      "label": "GF08-G-R1-panel2 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "901422f9e3dc4ccad4462762cadb0153867e928eb91740aefd7f3a3b20ff30b9"
+    },
+    {
+      "sourceObjectId": "GF08_G_R1_panel3",
+      "label": "GF08-G-R1-panel3 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a25adce55291cfe6a5e42144b2dc5b9b1eb1d81b37f7e8b82f1d7eebb05cb66e"
+    },
+    {
+      "sourceObjectId": "GF08_G_R2_sill",
+      "label": "GF08-G-R2-sill / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b80713f38910331cf57f587d56c05a8161ff452c10c9c5885eef4b7fead3ad9c"
+    },
+    {
+      "sourceObjectId": "GF08_G_R2_head",
+      "label": "GF08-G-R2-head / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b2c974987b53a579494c30b56f7f2f54ab4f5406f5b3a6d7f84a8b07d8baf9da"
+    },
+    {
+      "sourceObjectId": "GF08_G_R2_panel1",
+      "label": "GF08-G-R2-panel1 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "7a0c693997642a15c20c94add039a9dce8d1f97da6636884fb95e845b5a6bb5b"
+    },
+    {
+      "sourceObjectId": "GF08_G_R2_panel2",
+      "label": "GF08-G-R2-panel2 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b161acf1dbd8ad6dc3e6ce3705e46a8e300ae885de89df5e1ae121b0f5a53ec0"
+    },
+    {
+      "sourceObjectId": "GF08_G_R3_sill",
+      "label": "GF08-G-R3-sill / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "841dc8729c23da86a887934c1884b0f801e0f12e5ad7466089ad2e423d05b2c2"
+    },
+    {
+      "sourceObjectId": "GF08_G_R3_head",
+      "label": "GF08-G-R3-head / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "74ba4ed7ade2bf0ec4f5220e15aa176318a5b3f5648f776f39a488e43c4f56fb"
+    },
+    {
+      "sourceObjectId": "GF08_G_R3_panel1",
+      "label": "GF08-G-R3-panel1 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e0b53e5dffcae86d2093f66a43c6feed27f40df7e2c4ed0cd128e8634d62bf97"
+    },
+    {
+      "sourceObjectId": "GF08_G_R4_sill",
+      "label": "GF08-G-R4-sill / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "f1a5d04310ce543cc08f2187189fd8c09401ae755ce7822aa7dd5d08734f90b6"
+    },
+    {
+      "sourceObjectId": "GF08_G_R4_head",
+      "label": "GF08-G-R4-head / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "f6d194442b684ca9f8e7f8828c0756c2b92c3ce07a1e0621599d57a15a1d7526"
+    },
+    {
+      "sourceObjectId": "GF08_G_R4_panel1",
+      "label": "GF08-G-R4-panel1 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c6b05a831a243bbb047dd6e0f21f0ef03092b2fb9f157e51762ae57b2995ea40"
+    },
+    {
+      "sourceObjectId": "GF08_G_L1_sill",
+      "label": "GF08-G-L1-sill / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "aa4e7c3d7c1cecbc9ad1b232e860b1931b6ddea88a71e5d2da2554d28984ae66"
+    },
+    {
+      "sourceObjectId": "GF08_G_L1_head",
+      "label": "GF08-G-L1-head / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "f8bb5e3011659b523fa14423c8d1607a0550befeb3b57ec24bddade52a7562a2"
+    },
+    {
+      "sourceObjectId": "GF08_G_L1_panel1",
+      "label": "GF08-G-L1-panel1 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "bb7eaeece5f97b3bd5d40d1d2ce31b4dde5acbfe7438029561331ce08d7aa3ce"
+    },
+    {
+      "sourceObjectId": "GF08_G_L2_sill",
+      "label": "GF08-G-L2-sill / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "4661f711e317bed04f51b0e6869c00d56b9a031386c5e0b2d4fb1ef76e9c9515"
+    },
+    {
+      "sourceObjectId": "GF08_G_L2_head",
+      "label": "GF08-G-L2-head / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "0577c53c3a490c6dc5f9b3b462a9be5f603ac5d46bb8ad63d8f004692b1021c6"
+    },
+    {
+      "sourceObjectId": "GF08_G_L2_panel1",
+      "label": "GF08-G-L2-panel1 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "5cafd4fc27b4de342fc7a3a7e2a6c788a876a7006ed839cf47a0bf2496bee889"
+    },
+    {
+      "sourceObjectId": "GF08_G_L3_sill",
+      "label": "GF08-G-L3-sill / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "29bfef9d95e823aa21baced22ec831df630c6a4f966927f47987fdb4bd9f0d2b"
+    },
+    {
+      "sourceObjectId": "GF08_G_L3_head",
+      "label": "GF08-G-L3-head / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "ecd153e0a01ba0c9578d6bb56987eaa2220e00d545c1ca6ad5eff6b2695030f0"
+    },
+    {
+      "sourceObjectId": "GF08_G_L3_panel1",
+      "label": "GF08-G-L3-panel1 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "901305c9c42950f34deb5dd46d529c93ae5ef7777e3b022cd0e6c3cec2a3fb09"
+    },
+    {
+      "sourceObjectId": "GF08_G_L3_panel2",
+      "label": "GF08-G-L3-panel2 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "da7b324cd8f5a1296676c80cff63ff7151d463493ef87c7bb7313d24dacd9d90"
+    },
+    {
+      "sourceObjectId": "GF08_G_curve_sill",
+      "label": "GF08-G-curve-sill / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cut",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "263e3396b681818d14ee0cc7d69172c6439cb465272e5b966a368c647924ffd8"
+    },
+    {
+      "sourceObjectId": "GF08_G_curve_head",
+      "label": "GF08-G-curve-head / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cut",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c38f982dc9830aa9a20e984daba85972e73b36cdcec645631a59038a248ba26e"
+    },
+    {
+      "sourceObjectId": "GF08_G_curve_panel1",
+      "label": "GF08-G-curve-panel1 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cut",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "350d8759d43a205575ae29a95b1e536a52219ad8639449024919d441cd6760e0"
+    },
+    {
+      "sourceObjectId": "GF08_G_curve_panel2",
+      "label": "GF08-G-curve-panel2 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cut",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "de8e3788272ca63f7a9bf2f250e36a3159e24f3197174d154a42859dafdb50b1"
+    },
+    {
+      "sourceObjectId": "GF08_G_curve_panel3",
+      "label": "GF08-G-curve-panel3 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cut",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a7954982b19dcf9d3c00be16dd811663e312d7d4a1cc169145853502d32c17a7"
+    },
+    {
+      "sourceObjectId": "GF08_G_curve_panel4",
+      "label": "GF08-G-curve-panel4 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cut",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "f3a30aa034b3376a0b14830f3bf7666362da5468316868bfe445b8f2fcf98a66"
+    },
+    {
+      "sourceObjectId": "GF08_G_curve_panel5",
+      "label": "GF08-G-curve-panel5 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cut",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "3dcadf7fdcb54ec3f833c1db8c20a74c17d06d76dcd25d80b17b2b3a81230bdc"
+    },
+    {
+      "sourceObjectId": "GF08_G_curve_panel6",
+      "label": "GF08-G-curve-panel6 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cut",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c8684768faebfef6ccbf022ab46b6f4e8d6480b38499a67df799438afa48cbc5"
+    },
+    {
+      "sourceObjectId": "GF08_G_curve_panel7",
+      "label": "GF08-G-curve-panel7 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cut",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "2c20718edc6f8f8af3feedcdae901d73ff253610f691f9a3a8858a38b889dfbb"
+    },
+    {
+      "sourceObjectId": "GF08_G_post1",
+      "label": "GF08-G-post1 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b6396f6ffd2a4d0100750378abea2bbac02d8df98275c72c53b2206e9efeb743"
+    },
+    {
+      "sourceObjectId": "GF08_G_post2",
+      "label": "GF08-G-post2 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "d1d096e53b7dd23046b76a56cff65340fa9cce1a98b21cc0f99954f4da10d810"
+    },
+    {
+      "sourceObjectId": "GF08_G_post3",
+      "label": "GF08-G-post3 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "f1ba128f9dc9dfe31992c7a67b60208542cfd73d6c1151114af128275ec08542"
+    },
+    {
+      "sourceObjectId": "GF08_G_post4",
+      "label": "GF08-G-post4 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "7e2fba174f63a48e3f2b7fcbe4cde61df895b757f0139ab282115860f83c3cce"
+    },
+    {
+      "sourceObjectId": "GF08_G_post5",
+      "label": "GF08-G-post5 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "8e87f4421b98deb5620f6dc1bf3bb78afaa241bc8171ad6829936990cb9b18e9"
+    },
+    {
+      "sourceObjectId": "GF08_G_post6",
+      "label": "GF08-G-post6 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "df58c144013c6e3ea4d3bb5bbc7919f8124cac4b38af37aa5203d785e749d843"
+    },
+    {
+      "sourceObjectId": "GF08_G_post7",
+      "label": "GF08-G-post7 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "261125fe8a5e6895391b5b81a5db6df41d21762a4bfecb6e1038891ca3993c96"
+    },
+    {
+      "sourceObjectId": "GF08_G_post8",
+      "label": "GF08-G-post8 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "f1336f14a395141a71a013d938783844a8ad2615965239824a58a999293bc438"
+    },
+    {
+      "sourceObjectId": "GF08_G_post9",
+      "label": "GF08-G-post9 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a64e8944330c1b0f2dbf8f29122373bb067b8275adae77ca0b55fba999eb1e4d"
+    },
+    {
+      "sourceObjectId": "GF08_G_post10",
+      "label": "GF08-G-post10 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "311a39b4beff722100ac2efb9413c9a642896c0aecc0bda63ba4e0c29503e0de"
+    },
+    {
+      "sourceObjectId": "GF08_G_post11",
+      "label": "GF08-G-post11 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "be894f137f17f0ddd7bc477c59cc965233fd5037f80ecf3f495ba594bf1825f3"
+    },
+    {
+      "sourceObjectId": "GF08_G_post12",
+      "label": "GF08-G-post12 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b9da363ed32c05402b65228261b774d71088535782b09867558013c14a4d7647"
+    },
+    {
+      "sourceObjectId": "GF08_G_post13",
+      "label": "GF08-G-post13 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "ae795fa6ee08e220468d5c43cc502e419b22b6bdef6ab5e06bd98a9ba03b9735"
+    },
+    {
+      "sourceObjectId": "GF08_G_post14",
+      "label": "GF08-G-post14 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a66d32ac1ebccb963e3d65f1dedb37ba15105d4db83e9fef8df384d4450dd28a"
+    },
+    {
+      "sourceObjectId": "GF08_G_post15",
+      "label": "GF08-G-post15 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "fbe5943dded0647ddf1c7751a99d3d13303b421b74c2c0b866490b280102f8c6"
+    },
+    {
+      "sourceObjectId": "GF08_G_post16",
+      "label": "GF08-G-post16 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "5e130bc73ed9a80d31bea40fc562a7a2e3dbae12703875fecda75727bcf8fab1"
+    },
+    {
+      "sourceObjectId": "GF08_G_post17",
+      "label": "GF08-G-post17 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "458d153dd951d4eebc0bc98613663f4975113b3f3b816c96c8d36f18a28121de"
+    },
+    {
+      "sourceObjectId": "GF08_G_post18",
+      "label": "GF08-G-post18 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "81afb9930bdfcbcf3ddd58691eb2d66cdb313c6ce495cf060a03e596158fd0c3"
+    },
+    {
+      "sourceObjectId": "GF08_G_post19",
+      "label": "GF08-G-post19 / Enclosure",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "5bf2de687650ebf5542e1126b0fbe5430f42baf32c15272f6015357e69fe1910"
+    },
+    {
+      "sourceObjectId": "GF08_T1_top",
+      "label": "GF08-T1-top / Cafe_T1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c59c3689be6aaa1885b6a4bd7a97460046c73340d83e83e3e002d72ff331a481"
+    },
+    {
+      "sourceObjectId": "GF08_T1_base",
+      "label": "GF08-T1-base / Cafe_T1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "46de846ff8742a88b5f4cf04d9441f0e413cd5f08dfee7f52353716c5a8e7f30"
+    },
+    {
+      "sourceObjectId": "GF08_T1_pedestal",
+      "label": "GF08-T1-pedestal / Cafe_T1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "066d932c08817fa04e3963bf78cb9c7ee020d4fa12aa2746de2fd5b6eeec9455"
+    },
+    {
+      "sourceObjectId": "GF08_C1_leg0",
+      "label": "GF08-C1-leg0 / Cafe_C1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6f289b1e77da4ec7aa6cd8ab96248ce7dfa01c31435fa2ecdaabef5a25120ceb"
+    },
+    {
+      "sourceObjectId": "GF08_C1_foot0",
+      "label": "GF08-C1-foot0 / Cafe_C1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "85509c8ffdee6d7027242a409df97c5194676c5dfb38158b774d92e559174fc2"
+    },
+    {
+      "sourceObjectId": "GF08_C1_leg1",
+      "label": "GF08-C1-leg1 / Cafe_C1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b7522d16ccc7a0f776efbbcd14642d3fe9a87aca2316260f15b1c7e3f0cdcedb"
+    },
+    {
+      "sourceObjectId": "GF08_C1_foot1",
+      "label": "GF08-C1-foot1 / Cafe_C1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "44eba7edbc30603d7cf1ef9afe728be121ee887a3d864bb5227e5ff318d186b7"
+    },
+    {
+      "sourceObjectId": "GF08_C1_leg2",
+      "label": "GF08-C1-leg2 / Cafe_C1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "fe00163a08c03883546b47fc16ca8ee3dbcf5eccde150adaf97db8abf4f24d6d"
+    },
+    {
+      "sourceObjectId": "GF08_C1_foot2",
+      "label": "GF08-C1-foot2 / Cafe_C1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "3bc605f47e80fa7ea74a3e8f362b524a44a9bbbd3f6c0deb59a6905905e8373e"
+    },
+    {
+      "sourceObjectId": "GF08_C1_leg3",
+      "label": "GF08-C1-leg3 / Cafe_C1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "885920b2a52352a2df92fa0a59f505262fcd61bbd4ad27e2e7e54f69bcb3f9b4"
+    },
+    {
+      "sourceObjectId": "GF08_C1_foot3",
+      "label": "GF08-C1-foot3 / Cafe_C1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "882c44c5b7edfe9cb2b36c996b0395c238ba7e66b297846a17b251d067480448"
+    },
+    {
+      "sourceObjectId": "GF08_C1_seat",
+      "label": "GF08-C1-seat / Cafe_C1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "40af5edb06d57a897ea93a520cd549b400068cc74e49725f882d76df40749073"
+    },
+    {
+      "sourceObjectId": "GF08_C1_rear0",
+      "label": "GF08-C1-rear0 / Cafe_C1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "83bfd3333cfa71d6d1f4fa923f3c4da811054f8eda4c87e470cc2ffc21a4d467"
+    },
+    {
+      "sourceObjectId": "GF08_C1_arm0",
+      "label": "GF08-C1-arm0 / Cafe_C1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "8a2ec7a921fc149af2d7e7a9af677c9b9b6823463f4d4d7e5633a413a3ce6760"
+    },
+    {
+      "sourceObjectId": "GF08_C1_armupright0",
+      "label": "GF08-C1-armupright0 / Cafe_C1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "7ee4ab2154554a92a4520afa612dab9033908569f294a194d32ed707b499b7c5"
+    },
+    {
+      "sourceObjectId": "GF08_C1_rear1",
+      "label": "GF08-C1-rear1 / Cafe_C1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "d5115b2822065de2107f5d5d36ee3a9bed3aef1aade848c7e7c19149c2a19f69"
+    },
+    {
+      "sourceObjectId": "GF08_C1_arm1",
+      "label": "GF08-C1-arm1 / Cafe_C1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "9a3fcc3eec43e44175925e63f169426a6fd04a9920b3014cde861cc6fe3ee14d"
+    },
+    {
+      "sourceObjectId": "GF08_C1_armupright1",
+      "label": "GF08-C1-armupright1 / Cafe_C1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "480eee87a200cf2fbf99450fc3d711c874535d7c7a900891e6ca1b6d371e8bfe"
+    },
+    {
+      "sourceObjectId": "GF08_C1_backslat0",
+      "label": "GF08-C1-backslat0 / Cafe_C1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cut",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c8997a0c7939869aab5e4a2b518d4606d6a27264604c7465e6c3cb71a414b0d5"
+    },
+    {
+      "sourceObjectId": "GF08_C1_backslat1",
+      "label": "GF08-C1-backslat1 / Cafe_C1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cut",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c1abc9d87903addebe8ea026a2666327b410a19c14797a37a57a0fa158e1e34e"
+    },
+    {
+      "sourceObjectId": "GF08_C1_backslat2",
+      "label": "GF08-C1-backslat2 / Cafe_C1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cut",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "5df2c0ab2d3536fd32ce3faea841c8e9e293fc186613ab624dcc0f721e65e5e8"
+    },
+    {
+      "sourceObjectId": "GF08_C1_backslat3",
+      "label": "GF08-C1-backslat3 / Cafe_C1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cut",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "ae9c31e33e3a040e413c60c52239d5c831682cf0bef1f70a03b7151380651bbc"
+    },
+    {
+      "sourceObjectId": "GF08_C2_leg0",
+      "label": "GF08-C2-leg0 / Cafe_C2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6985849121fe7a6d8a3ccc6ed9102115de71ce8ccf60d1a8508aea26d6509623"
+    },
+    {
+      "sourceObjectId": "GF08_C2_foot0",
+      "label": "GF08-C2-foot0 / Cafe_C2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "4620bb06de07e72e79834f11edfb5fc8fcfde3e4bbabebb0e221bb29622773e0"
+    },
+    {
+      "sourceObjectId": "GF08_C2_leg1",
+      "label": "GF08-C2-leg1 / Cafe_C2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a349649ee88c09a90eaa096645504b5bb6f776a060cbcb62ba681c8719d05ffa"
+    },
+    {
+      "sourceObjectId": "GF08_C2_foot1",
+      "label": "GF08-C2-foot1 / Cafe_C2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "7af7b2bad14e8942ec2839a6117fa7ce790f1ad592898ab26a66b463506168b0"
+    },
+    {
+      "sourceObjectId": "GF08_C2_leg2",
+      "label": "GF08-C2-leg2 / Cafe_C2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "3a7dac38633eb4c77a01a8782d54d7dca6db7099b88f017006c6daf276498097"
+    },
+    {
+      "sourceObjectId": "GF08_C2_foot2",
+      "label": "GF08-C2-foot2 / Cafe_C2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "89bdda3ed7541dba56f912fc2271eb865366b5e48546d9dfd11fbb6e64746446"
+    },
+    {
+      "sourceObjectId": "GF08_C2_leg3",
+      "label": "GF08-C2-leg3 / Cafe_C2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "7130635d2608549c6b11bc838c5acb5b6c79a8a024c2b62ae6aee55498b1dd2b"
+    },
+    {
+      "sourceObjectId": "GF08_C2_foot3",
+      "label": "GF08-C2-foot3 / Cafe_C2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6974812e2b19f9be40b09ce97f4b4ef6ee6d8186933599b25cafca499e09034b"
+    },
+    {
+      "sourceObjectId": "GF08_C2_seat",
+      "label": "GF08-C2-seat / Cafe_C2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b3d5176155ec5ff8ca5563002d0f78591b9dc10cb10e52325f7eb493c532a393"
+    },
+    {
+      "sourceObjectId": "GF08_C2_rear0",
+      "label": "GF08-C2-rear0 / Cafe_C2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6bdf829120d745b1180553c57c6a74c8cd6c26eed4a0bc6e0edf53f0b7ab3d89"
+    },
+    {
+      "sourceObjectId": "GF08_C2_arm0",
+      "label": "GF08-C2-arm0 / Cafe_C2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "cd9a66b7b85a094ce8401244e0eaaf997cbf06d6f475dd2af287ed9d71a5e717"
+    },
+    {
+      "sourceObjectId": "GF08_C2_armupright0",
+      "label": "GF08-C2-armupright0 / Cafe_C2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c51e3c4e839eba684dcab4eb79c930b6c4058d23f09bca6563f6d2e96734b17e"
+    },
+    {
+      "sourceObjectId": "GF08_C2_rear1",
+      "label": "GF08-C2-rear1 / Cafe_C2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "72597430599e0de291d8d5b540efa47c10294a3f123c5de44b060c330046f449"
+    },
+    {
+      "sourceObjectId": "GF08_C2_arm1",
+      "label": "GF08-C2-arm1 / Cafe_C2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "dda9efb350bc1c7cf56b1748046c205b554719eac01b5d8d4f3d32533f213d73"
+    },
+    {
+      "sourceObjectId": "GF08_C2_armupright1",
+      "label": "GF08-C2-armupright1 / Cafe_C2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "30a570bdf785ceb635e628e5698958cc30f5497dc58af13ae613eeb15ba72412"
+    },
+    {
+      "sourceObjectId": "GF08_C2_backslat0",
+      "label": "GF08-C2-backslat0 / Cafe_C2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cut",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "797b3ece63be91efb3f9508f2c70d3a84b49ad22aa5b86888bd020390b9b5690"
+    },
+    {
+      "sourceObjectId": "GF08_C2_backslat1",
+      "label": "GF08-C2-backslat1 / Cafe_C2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cut",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "8de0785cb48166671d8ea16372536e70e2c00951505c054776a3fc70572250a0"
+    },
+    {
+      "sourceObjectId": "GF08_C2_backslat2",
+      "label": "GF08-C2-backslat2 / Cafe_C2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cut",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "8e4d8a1e7f33952c2411f6c4b906c87c95741cf2fb26a4858a8bb347cc66c785"
+    },
+    {
+      "sourceObjectId": "GF08_C2_backslat3",
+      "label": "GF08-C2-backslat3 / Cafe_C2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cut",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "433aacc672e5816128c06c8d6b70fb42a50b8f054ef857e45a48a8391e482675"
+    },
+    {
+      "sourceObjectId": "GF08_T2_top",
+      "label": "GF08-T2-top / Cafe_T2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "02f88f6e8515b5018cf27c2d5798ebc1648e04b03c01163dbad6d62c29500908"
+    },
+    {
+      "sourceObjectId": "GF08_T2_base",
+      "label": "GF08-T2-base / Cafe_T2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "0358821fbfc77a413bcf2f87326731d40db9c0c4bd1143aea4e494db68239bf9"
+    },
+    {
+      "sourceObjectId": "GF08_T2_pedestal",
+      "label": "GF08-T2-pedestal / Cafe_T2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "406287cbdba17f10ccb61ba58c8c06b982895f71dc9c438abd305f54b4c19d07"
+    },
+    {
+      "sourceObjectId": "GF08_C3_leg0",
+      "label": "GF08-C3-leg0 / Cafe_C3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c49c340c267937b5a0aa01ad4c32f5f53b4a806b2c1f768dbff0020bef11373b"
+    },
+    {
+      "sourceObjectId": "GF08_C3_foot0",
+      "label": "GF08-C3-foot0 / Cafe_C3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "87ee6802aa1389b616b9337675137c7cb7dd98538597883caaaccdcd5f5543a2"
+    },
+    {
+      "sourceObjectId": "GF08_C3_leg1",
+      "label": "GF08-C3-leg1 / Cafe_C3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "91f1817106bed6794c59981fd51564587ed392767e821b7ec4fdcd8e9a0c399a"
+    },
+    {
+      "sourceObjectId": "GF08_C3_foot1",
+      "label": "GF08-C3-foot1 / Cafe_C3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "8d16bf338682d7a3f73b04d4fcaea2fba16d6186a0e29014cbcf5243673aaf1e"
+    },
+    {
+      "sourceObjectId": "GF08_C3_leg2",
+      "label": "GF08-C3-leg2 / Cafe_C3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "8860bb49de61a6c6a9bd3bf6c0b01d7beb9b9a9b99e2bcb67943e613cab8dedf"
+    },
+    {
+      "sourceObjectId": "GF08_C3_foot2",
+      "label": "GF08-C3-foot2 / Cafe_C3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "ba416025bcdd0df6d227455eaaeb75a751b9689e0bb8afd0b4f0b814df4c7f45"
+    },
+    {
+      "sourceObjectId": "GF08_C3_leg3",
+      "label": "GF08-C3-leg3 / Cafe_C3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "73832eea105a4aa3b44a949a6d893c89dcf7362a34a428aeaffb582ba6ff4ce4"
+    },
+    {
+      "sourceObjectId": "GF08_C3_foot3",
+      "label": "GF08-C3-foot3 / Cafe_C3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a5692d50c149e4656704abeca1721f45fcfe375b753194ebbf8b3a3143b45efb"
+    },
+    {
+      "sourceObjectId": "GF08_C3_seat",
+      "label": "GF08-C3-seat / Cafe_C3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a23d4c1e831db19a377628cec14674384bbec3f1701448c56cd541ef270e253a"
+    },
+    {
+      "sourceObjectId": "GF08_C3_rear0",
+      "label": "GF08-C3-rear0 / Cafe_C3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "989ff03da46351193b33fcc33a7f723ec104f184144d54b32fe1b7f3c154dad0"
+    },
+    {
+      "sourceObjectId": "GF08_C3_arm0",
+      "label": "GF08-C3-arm0 / Cafe_C3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "1e90ada980a01de11cfe9ecb6530a0d825be469006acc0ffd91f6f3eda9c81d7"
+    },
+    {
+      "sourceObjectId": "GF08_C3_armupright0",
+      "label": "GF08-C3-armupright0 / Cafe_C3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "0acb0c6c6652ed256b0a11233f51b72666e4dbcde868b9e5d3403c4925aea685"
+    },
+    {
+      "sourceObjectId": "GF08_C3_rear1",
+      "label": "GF08-C3-rear1 / Cafe_C3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "69785f3d6e55a84dd0e5ba202c79e2aeddae3c278827838140c529a945b59bb2"
+    },
+    {
+      "sourceObjectId": "GF08_C3_arm1",
+      "label": "GF08-C3-arm1 / Cafe_C3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b6d28a075af74788a53121f27d9fbb7768080cabd17bbb4dc5a1846fc9ab3f26"
+    },
+    {
+      "sourceObjectId": "GF08_C3_armupright1",
+      "label": "GF08-C3-armupright1 / Cafe_C3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "76a9a4c0fa0d03bdffcd007ef612456c20d7fcbda255027f207ceab1ae315c7d"
+    },
+    {
+      "sourceObjectId": "GF08_C3_backslat0",
+      "label": "GF08-C3-backslat0 / Cafe_C3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cut",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e5b25de8788c6b6a19a0baccf5e58425ba0f37e6a33577cadef2bcfd9b9ad88b"
+    },
+    {
+      "sourceObjectId": "GF08_C3_backslat1",
+      "label": "GF08-C3-backslat1 / Cafe_C3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cut",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "502b083eecbd7a787f76bbb46676161532fc8a31074057e85628184e5ed2ceb1"
+    },
+    {
+      "sourceObjectId": "GF08_C3_backslat2",
+      "label": "GF08-C3-backslat2 / Cafe_C3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cut",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "0cf80c886c3602de61fa691103f79bee406960883eab399c3f9ab4e81fc68d29"
+    },
+    {
+      "sourceObjectId": "GF08_C3_backslat3",
+      "label": "GF08-C3-backslat3 / Cafe_C3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cut",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "528a63f197aea5150c9d036b8d9b55a329f2212cc5872dd9254c665e8248048f"
+    },
+    {
+      "sourceObjectId": "GF08_C4_leg0",
+      "label": "GF08-C4-leg0 / Cafe_C4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "2a4e6b504b073fa3d9702c659af0472fe24c0472e7651ad9f62b8e1aa67618d1"
+    },
+    {
+      "sourceObjectId": "GF08_C4_foot0",
+      "label": "GF08-C4-foot0 / Cafe_C4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c86bfa6e8985a85458c187ec193f5011733f915bcd99a103cc52a0b2e05ec50a"
+    },
+    {
+      "sourceObjectId": "GF08_C4_leg1",
+      "label": "GF08-C4-leg1 / Cafe_C4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "8ada0370321ce7784a4291d5d3e697d35d3207efb33eeef1cb6c7637047e4a35"
+    },
+    {
+      "sourceObjectId": "GF08_C4_foot1",
+      "label": "GF08-C4-foot1 / Cafe_C4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "9f61d4935e88e472cd23764ad8f04e45ff457631172b31c6a9ea86058ba4ffee"
+    },
+    {
+      "sourceObjectId": "GF08_C4_leg2",
+      "label": "GF08-C4-leg2 / Cafe_C4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "535823982bcd8b00337f770f50e7fbbb59dab8ab4e3890053f92a13a529e5722"
+    },
+    {
+      "sourceObjectId": "GF08_C4_foot2",
+      "label": "GF08-C4-foot2 / Cafe_C4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "86a9d961da88dacec0e6d18bb7017cec03b1e37dbe9db38e19f868ec70bdae4b"
+    },
+    {
+      "sourceObjectId": "GF08_C4_leg3",
+      "label": "GF08-C4-leg3 / Cafe_C4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "64af43e4536f0cdb2e47bb989e54a8f8ecf198fb8fd59c5cd0c42cb2bf5d4321"
+    },
+    {
+      "sourceObjectId": "GF08_C4_foot3",
+      "label": "GF08-C4-foot3 / Cafe_C4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "659cf9949e3f0082335299852db45fff0edac444a6f46697a722e0862ac767fe"
+    },
+    {
+      "sourceObjectId": "GF08_C4_seat",
+      "label": "GF08-C4-seat / Cafe_C4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "bec19f919accb3fb5222f57fb14a4415af8b202662e70ff0c1e1d2a38c11de8c"
+    },
+    {
+      "sourceObjectId": "GF08_C4_rear0",
+      "label": "GF08-C4-rear0 / Cafe_C4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "30ce575bcb87f1c72e6aab2c8b53e23b1a7c968d94e984e6bce08b968cf038d7"
+    },
+    {
+      "sourceObjectId": "GF08_C4_arm0",
+      "label": "GF08-C4-arm0 / Cafe_C4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6327e070f0397bbff681e05b531cf982f2892fbfb24f247fe73a4f309d379646"
+    },
+    {
+      "sourceObjectId": "GF08_C4_armupright0",
+      "label": "GF08-C4-armupright0 / Cafe_C4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a16ea09e7726381d8d9032e7e4552ce215e94d4ae24dd85a9165074c2ff24c79"
+    },
+    {
+      "sourceObjectId": "GF08_C4_rear1",
+      "label": "GF08-C4-rear1 / Cafe_C4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "f63eef7127d2fda88b58c63c8c7b102e4225d17861e5e9c95f5eb2cc3b5908a2"
+    },
+    {
+      "sourceObjectId": "GF08_C4_arm1",
+      "label": "GF08-C4-arm1 / Cafe_C4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "77dc0624f13b2ce75c0d8ce590cbf2646cd8cab4d2c7dc1f7ee42f6c2d62259a"
+    },
+    {
+      "sourceObjectId": "GF08_C4_armupright1",
+      "label": "GF08-C4-armupright1 / Cafe_C4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6ad34b654a19363c32aefe89b682b8c25f96d49cfdc522d8af35cb09ba6c837f"
+    },
+    {
+      "sourceObjectId": "GF08_C4_backslat0",
+      "label": "GF08-C4-backslat0 / Cafe_C4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cut",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "f3352f87a950f3eebb15c491c76d88094fa503beb0f27a6ad25133072bcbf9f3"
+    },
+    {
+      "sourceObjectId": "GF08_C4_backslat1",
+      "label": "GF08-C4-backslat1 / Cafe_C4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cut",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "15126a5bfd505a4aa1ea913bcd5894c03d966418c263d7aff519b688a7a5f3fd"
+    },
+    {
+      "sourceObjectId": "GF08_C4_backslat2",
+      "label": "GF08-C4-backslat2 / Cafe_C4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cut",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "2859828356caa6e11238e50d651369580df2da0337921d63841a9ed498658824"
+    },
+    {
+      "sourceObjectId": "GF08_C4_backslat3",
+      "label": "GF08-C4-backslat3 / Cafe_C4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cut",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e5b341322100b2a8034d13ac483cf86afff27c32fcae33f914f6024b06e23a7a"
+    },
+    {
+      "sourceObjectId": "GF08_BAR_top",
+      "label": "GF08-BAR-top / Bar",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "713423de7243b1253bc7aab358e4cf9c9b54035c5d3f9ee6144ebc005d2c4762"
+    },
+    {
+      "sourceObjectId": "GF08_BAR_leg0",
+      "label": "GF08-BAR-leg0 / Bar",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "da5da275528f3206e4954feede03096feb8506ea6f3e8585f618ce88a01d8b17"
+    },
+    {
+      "sourceObjectId": "GF08_BAR_leg1",
+      "label": "GF08-BAR-leg1 / Bar",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6614ff76dbef0d0c7e1529a96b4f9a55447e130b0792c613c0089fcb6025fe45"
+    },
+    {
+      "sourceObjectId": "GF08_BAR_leg2",
+      "label": "GF08-BAR-leg2 / Bar",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "7d9520d8fcf35d2125c6335d76cd26b0ed107af9f8017868c83db08c760b93c4"
+    },
+    {
+      "sourceObjectId": "GF08_BAR_leg3",
+      "label": "GF08-BAR-leg3 / Bar",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "01fe8bba7494d267c1913b74393ffc6cf98fa91ac7af2914de3dd25be1b5bf26"
+    },
+    {
+      "sourceObjectId": "GF08_S1_seat",
+      "label": "GF08-S1-seat / Stool_1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "9dbea040e9a7336e1eb0488228a37c5ffaf60cd14e9b41cb974aff02893e3c17"
+    },
+    {
+      "sourceObjectId": "GF08_S1_leg0",
+      "label": "GF08-S1-leg0 / Stool_1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "bba4893e0ef0a2a74c91a9f86b8af5ed967bb1eb60d20ef07863f95b54faf0ff"
+    },
+    {
+      "sourceObjectId": "GF08_S1_pad0",
+      "label": "GF08-S1-pad0 / Stool_1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "f33bfe67f1d5bb45e809b377b32aa0d53b6cbf270680b56374055bde073d893b"
+    },
+    {
+      "sourceObjectId": "GF08_S1_leg1",
+      "label": "GF08-S1-leg1 / Stool_1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6d85703f67ee2d3d2d197c9c9957b90b09e204239cc5b5ad0cbb10ad972f8904"
+    },
+    {
+      "sourceObjectId": "GF08_S1_pad1",
+      "label": "GF08-S1-pad1 / Stool_1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b278e9ee2eb8e32603aeca157eb96fcb82544c82874cff991e712584b0f64ef7"
+    },
+    {
+      "sourceObjectId": "GF08_S1_leg2",
+      "label": "GF08-S1-leg2 / Stool_1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "83d5361a735e78ba82381b8f2f726e09509855bd5281818c5b969c90b7c2f4b5"
+    },
+    {
+      "sourceObjectId": "GF08_S1_pad2",
+      "label": "GF08-S1-pad2 / Stool_1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "06d43d692d878f96fcf6c042c0743be40672590932fa964f5bf54f9178ff28a3"
+    },
+    {
+      "sourceObjectId": "GF08_S1_leg3",
+      "label": "GF08-S1-leg3 / Stool_1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a9cc9985c2564282a2f4ba6d9961a71d557fb24dc3666cf9d030b23f91c3b274"
+    },
+    {
+      "sourceObjectId": "GF08_S1_pad3",
+      "label": "GF08-S1-pad3 / Stool_1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "ad33fd4678fcd9ba52a657a58999ea08904e509a82343fe2883d328ac7bc5a62"
+    },
+    {
+      "sourceObjectId": "GF08_S1_foot0",
+      "label": "GF08-S1-foot0 / Stool_1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "20ac4da25dda150c9528e3082e9d413b11fb250dd7341c9b9510645b283cbb4c"
+    },
+    {
+      "sourceObjectId": "GF08_S1_foot1",
+      "label": "GF08-S1-foot1 / Stool_1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e7acbe093c292ec4efbb6f802255da546c13a5e78e62e74abc2c5f09328d03f8"
+    },
+    {
+      "sourceObjectId": "GF08_S1_foot2",
+      "label": "GF08-S1-foot2 / Stool_1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "8f24c1ce3aed9f276279184ad7ea1a277f8efb6d59eb0931f25fdc4009beb17e"
+    },
+    {
+      "sourceObjectId": "GF08_S1_foot3",
+      "label": "GF08-S1-foot3 / Stool_1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "4ef44a6388ed452f18510c061e84cb7e10d142b97b41d2d3790a6f05929c3d76"
+    },
+    {
+      "sourceObjectId": "GF08_S2_seat",
+      "label": "GF08-S2-seat / Stool_2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "50dad23a2f1b7adb59df80ed6298d1141175ec2f7b9675f033c7eed2af708e82"
+    },
+    {
+      "sourceObjectId": "GF08_S2_leg0",
+      "label": "GF08-S2-leg0 / Stool_2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "49324767e71118b7ae71b63dad4b2b513d4bbff22b11d498066ae8cb23e2eb41"
+    },
+    {
+      "sourceObjectId": "GF08_S2_pad0",
+      "label": "GF08-S2-pad0 / Stool_2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "3fbb89e4ecbc1f522322e2d5fa261e5f030d230e22871bc9ac3ae91d39ee6d5e"
+    },
+    {
+      "sourceObjectId": "GF08_S2_leg1",
+      "label": "GF08-S2-leg1 / Stool_2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "4a23749269123338f9ae5f0b90f412fadd656bed4005dffbae563d6f4c5c5aba"
+    },
+    {
+      "sourceObjectId": "GF08_S2_pad1",
+      "label": "GF08-S2-pad1 / Stool_2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "3a41f1f0ef72753dccfbcf5f7ca9a2b00dd89ec63c2ddb511aeb951527771730"
+    },
+    {
+      "sourceObjectId": "GF08_S2_leg2",
+      "label": "GF08-S2-leg2 / Stool_2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "3fff10e0c87764a1fd4fe46c1f7e2c1ee61502c40654d7c5f6046b338e34380f"
+    },
+    {
+      "sourceObjectId": "GF08_S2_pad2",
+      "label": "GF08-S2-pad2 / Stool_2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "39a0fca41cd4b5206c4d5ad60f0be9424cd019447910e30cf29f0dc1d8dbc316"
+    },
+    {
+      "sourceObjectId": "GF08_S2_leg3",
+      "label": "GF08-S2-leg3 / Stool_2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a2b61f7f3e28340e4116e43a635901aacfb6f4adb8419ee8744b2e1b2116eb84"
+    },
+    {
+      "sourceObjectId": "GF08_S2_pad3",
+      "label": "GF08-S2-pad3 / Stool_2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "9a34220195b355774394dbfba8099e271fbcd4e3d630c6c544bff473dca3b5e3"
+    },
+    {
+      "sourceObjectId": "GF08_S2_foot0",
+      "label": "GF08-S2-foot0 / Stool_2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "7e83355c857912b7a07dca6d9e68cbed5105588ec26182bfcd11e50410e6c2d1"
+    },
+    {
+      "sourceObjectId": "GF08_S2_foot1",
+      "label": "GF08-S2-foot1 / Stool_2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b10710047a3201246889a1196d74667a65386f8e482d08c98dd9dc6b31fb88ca"
+    },
+    {
+      "sourceObjectId": "GF08_S2_foot2",
+      "label": "GF08-S2-foot2 / Stool_2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a75d772fa18d56e9bcbbeddbfc1cb224d0feb2e092c716e2809b71a07c5d929e"
+    },
+    {
+      "sourceObjectId": "GF08_S2_foot3",
+      "label": "GF08-S2-foot3 / Stool_2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "34dc957ea3bc8d3103e6e319a4510377a412dd66e505b4c387daaabce5f6b161"
+    },
+    {
+      "sourceObjectId": "GF08_P1_pot",
+      "label": "GF08-P1-pot / Plant_P1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "7514b52a35e680b2ede816654d231bfea65efdbc61c674031a315aebb658bd09"
+    },
+    {
+      "sourceObjectId": "GF08_P1_soil",
+      "label": "GF08-P1-soil / Plant_P1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "aa83ef8e8e7de28a61299b1edd6c920dddb81660f6e39759ed59fd32326a228f"
+    },
+    {
+      "sourceObjectId": "GF08_P1_stem0",
+      "label": "GF08-P1-stem0 / Plant_P1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "8f23f3da8d07f7d700e0336829b0f05553c100f15fcadc8917564d3177814bd0"
+    },
+    {
+      "sourceObjectId": "GF08_P1_leaf0",
+      "label": "GF08-P1-leaf0 / Plant_P1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "dd59a3eadd54ac6a3586a0e37f92b2c7c92a09fd9e980cc690b3c06de7188731"
+    },
+    {
+      "sourceObjectId": "GF08_P1_stem1",
+      "label": "GF08-P1-stem1 / Plant_P1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a9396188103af0fe2e07fa29b73bde4330c483c6116f31c18f3348a37381b9aa"
+    },
+    {
+      "sourceObjectId": "GF08_P1_leaf1",
+      "label": "GF08-P1-leaf1 / Plant_P1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "343fb7e357782c27218e9aedc3715b82f4d9e62671c92ed3e020b763ea0033d2"
+    },
+    {
+      "sourceObjectId": "GF08_P1_stem2",
+      "label": "GF08-P1-stem2 / Plant_P1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "2f97cb4133768fd4e9c8a928b9b8eaa2c607eeeae34482e1fe83ae203e6d8316"
+    },
+    {
+      "sourceObjectId": "GF08_P1_leaf2",
+      "label": "GF08-P1-leaf2 / Plant_P1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "163830ef9733af3e90cca32a8f82d3beb36aef60946d6ca8886705bd0d57fa8e"
+    },
+    {
+      "sourceObjectId": "GF08_P1_stem3",
+      "label": "GF08-P1-stem3 / Plant_P1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "7ef5cd2acd5f4b8160d5a500747e6c26250e2721687328c1404b9246181000cd"
+    },
+    {
+      "sourceObjectId": "GF08_P1_leaf3",
+      "label": "GF08-P1-leaf3 / Plant_P1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "437effff086249019b1b44957caca1ca0072090c277ed7d279035ce55d4f114d"
+    },
+    {
+      "sourceObjectId": "GF08_P1_stem4",
+      "label": "GF08-P1-stem4 / Plant_P1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6919626f919069776261e2e7678df417d7c0ecd524b20f6f7f9b90b0c07b09c0"
+    },
+    {
+      "sourceObjectId": "GF08_P1_leaf4",
+      "label": "GF08-P1-leaf4 / Plant_P1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "24d52586ff0e702ad8a2032f44296c69cdd680e8cb8fe93ecb4ad14d8a5f58d5"
+    },
+    {
+      "sourceObjectId": "GF08_P1_stem5",
+      "label": "GF08-P1-stem5 / Plant_P1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "798ed16c401b5ec36c778b89e72dd23957ba3b45223a3e8911481be2470ceb1a"
+    },
+    {
+      "sourceObjectId": "GF08_P1_leaf5",
+      "label": "GF08-P1-leaf5 / Plant_P1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "f64a317f1efd2d336d1afc1157ce5cdc2a51d91bfceaebd96c0aa2429583e31d"
+    },
+    {
+      "sourceObjectId": "GF08_P1_stem6",
+      "label": "GF08-P1-stem6 / Plant_P1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "800e5be5e4367c6c3b8d9f54aad75ee0e67d3793a2f31feed040fb125be77755"
+    },
+    {
+      "sourceObjectId": "GF08_P1_leaf6",
+      "label": "GF08-P1-leaf6 / Plant_P1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "12ab162c883e7b0cc2e4a328f568c6b016b3d00f589f316bd2b2df929138abc9"
+    },
+    {
+      "sourceObjectId": "GF08_P1_stem7",
+      "label": "GF08-P1-stem7 / Plant_P1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "d8949b9b177fcc33771779dd02d1f33f17a979275efdef17da76275a59385c99"
+    },
+    {
+      "sourceObjectId": "GF08_P1_leaf7",
+      "label": "GF08-P1-leaf7 / Plant_P1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c071b6a27a2e3c79169cee412d82f9708e0cb3a19e5d4e025e125b57e0a87d68"
+    },
+    {
+      "sourceObjectId": "GF08_P1_stem8",
+      "label": "GF08-P1-stem8 / Plant_P1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "236d10a7e89362697081d974d52930527d5d7d86fe9e0da80325add57f6f9e81"
+    },
+    {
+      "sourceObjectId": "GF08_P1_leaf8",
+      "label": "GF08-P1-leaf8 / Plant_P1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "5333d3d9a318c3705dad763f07bf773f5855db758e695c0e242652e7e0bd3a7f"
+    },
+    {
+      "sourceObjectId": "GF08_P2_pot",
+      "label": "GF08-P2-pot / Plant_P2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "3109ba3fd7b8e824eeb5e91f198bde898c21b7083aced869fba47fa7914f4287"
+    },
+    {
+      "sourceObjectId": "GF08_P2_soil",
+      "label": "GF08-P2-soil / Plant_P2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "af6dd555f39ca34cd8cf48191a21667361f6c3f632eb984c56828c0b5f462fa3"
+    },
+    {
+      "sourceObjectId": "GF08_P2_stem0",
+      "label": "GF08-P2-stem0 / Plant_P2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "54d6bf37e2c1935ecc32f7ba313cbefacee3f2c9b5124de57b0c3cd4ca400ae8"
+    },
+    {
+      "sourceObjectId": "GF08_P2_leaf0",
+      "label": "GF08-P2-leaf0 / Plant_P2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "4259450486bda33fef6896ec2539032281f08ca2454fb60cd3abd445c64dbc5b"
+    },
+    {
+      "sourceObjectId": "GF08_P2_stem1",
+      "label": "GF08-P2-stem1 / Plant_P2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "0e39c7eda5553f6265b728eb79aa9ff04fa7fdcf3825a5b25392dd97889ad827"
+    },
+    {
+      "sourceObjectId": "GF08_P2_leaf1",
+      "label": "GF08-P2-leaf1 / Plant_P2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a01d6ec2442e6b78482ab8c73295ca880ab176aaef8625aa92d7dc40464e3651"
+    },
+    {
+      "sourceObjectId": "GF08_P2_stem2",
+      "label": "GF08-P2-stem2 / Plant_P2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "d3e865c3e782432baa4b63db6d23e3e076579db0c65cfb25d8b23c0c0c43acbe"
+    },
+    {
+      "sourceObjectId": "GF08_P2_leaf2",
+      "label": "GF08-P2-leaf2 / Plant_P2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "51d250bddcd438564f75796f67344e2e80c015bc68ec744e2440371e70ea3120"
+    },
+    {
+      "sourceObjectId": "GF08_P2_stem3",
+      "label": "GF08-P2-stem3 / Plant_P2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "474abf2f17eaa10a5fad5d5051b1105c989512468594f1d6832cecc01cafc558"
+    },
+    {
+      "sourceObjectId": "GF08_P2_leaf3",
+      "label": "GF08-P2-leaf3 / Plant_P2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a46c50f4942f8a431cad6c02a26c779b9a1c343789284a1593b0633e1c48608a"
+    },
+    {
+      "sourceObjectId": "GF08_P2_stem4",
+      "label": "GF08-P2-stem4 / Plant_P2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "2d81a19de81ba6ab5491f0cfa74d7eff1ffc362800c5f5496a202a31978a6327"
+    },
+    {
+      "sourceObjectId": "GF08_P2_leaf4",
+      "label": "GF08-P2-leaf4 / Plant_P2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "302411f056999b4f350c07323e89d3ec6216e3df482c81f0e1065cd94539b32e"
+    },
+    {
+      "sourceObjectId": "GF08_P2_stem5",
+      "label": "GF08-P2-stem5 / Plant_P2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6fa3ebe63a74b8a98d8cfff67b30826f852f4ff4a74fcd41c0ad073e7eb4bb5a"
+    },
+    {
+      "sourceObjectId": "GF08_P2_leaf5",
+      "label": "GF08-P2-leaf5 / Plant_P2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a094a3c6b51ce2ca6293dc13ea24685a58ac61f34fda344eb44c4bd6db7f5cbf"
+    },
+    {
+      "sourceObjectId": "GF08_P2_stem6",
+      "label": "GF08-P2-stem6 / Plant_P2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "5fee08d2252171ea5c11b417f836890b3b5957ef61876b052f265f1c7c173c3b"
+    },
+    {
+      "sourceObjectId": "GF08_P2_leaf6",
+      "label": "GF08-P2-leaf6 / Plant_P2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "da14e65a1788fa4bcd8b6f32ebbbe42013b9d6ca9ad7b2976572c9d162b21fda"
+    },
+    {
+      "sourceObjectId": "GF08_P2_stem7",
+      "label": "GF08-P2-stem7 / Plant_P2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "8a7e7cd6c78d6bdf84d286cb33068b64a0f8304a573be3f9de2e7ab8c40b8d17"
+    },
+    {
+      "sourceObjectId": "GF08_P2_leaf7",
+      "label": "GF08-P2-leaf7 / Plant_P2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a922dba38fe4be149c43e710b22ac368068780d4eb9b08b83693e3c5943e056e"
+    },
+    {
+      "sourceObjectId": "GF08_P2_stem8",
+      "label": "GF08-P2-stem8 / Plant_P2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "04f87db71323b94b9aca715dff82f36ab7239c78eacb9545e6ffc15b0b4392c5"
+    },
+    {
+      "sourceObjectId": "GF08_P2_leaf8",
+      "label": "GF08-P2-leaf8 / Plant_P2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b1d3c87f7557660c541dae6f3d1e605c2bbb41d755ba57c1b44687b017358d7a"
+    },
+    {
+      "sourceObjectId": "GF08_P3_pot",
+      "label": "GF08-P3-pot / Plant_P3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "becacd2d00f8f2baf33dc5f4b85d43cd28e03cc16d3b9fd5a85f0c1b754504ba"
+    },
+    {
+      "sourceObjectId": "GF08_P3_soil",
+      "label": "GF08-P3-soil / Plant_P3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "34c99a67827f5061639f3fd4c90f0a1b2739f71af3cce241f2c530d633ab12fd"
+    },
+    {
+      "sourceObjectId": "GF08_P3_stem0",
+      "label": "GF08-P3-stem0 / Plant_P3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c6e553df545dc0ab95483d2d299bc51b6ebed0a8b360fd7f36fc7a4f36094654"
+    },
+    {
+      "sourceObjectId": "GF08_P3_leaf0",
+      "label": "GF08-P3-leaf0 / Plant_P3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "973362717f12899410ee96b49f1a1b6504c7abc33ed3f522bf7a8bf911ca739a"
+    },
+    {
+      "sourceObjectId": "GF08_P3_stem1",
+      "label": "GF08-P3-stem1 / Plant_P3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "0eb8eff8aadbf6b30a778a4b264afcee72c02b1a672591816e99cd27e5c78cf0"
+    },
+    {
+      "sourceObjectId": "GF08_P3_leaf1",
+      "label": "GF08-P3-leaf1 / Plant_P3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "dd76018475c9603f2202b9c864fe5d15035f07d62adff9b3d56251d246963756"
+    },
+    {
+      "sourceObjectId": "GF08_P3_stem2",
+      "label": "GF08-P3-stem2 / Plant_P3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "bca0de24a5574bbb66d98d74e199a750512b08d8accee7651b9a70a4ccb8f5f2"
+    },
+    {
+      "sourceObjectId": "GF08_P3_leaf2",
+      "label": "GF08-P3-leaf2 / Plant_P3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b53680c2443dd8bba6a412587b54e4168e2de2983a7571ef368bcbf72834900d"
+    },
+    {
+      "sourceObjectId": "GF08_P3_stem3",
+      "label": "GF08-P3-stem3 / Plant_P3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "854b3c254733b522f7199799dc626859edef974afa76d0c5e69ed79c0df8a2da"
+    },
+    {
+      "sourceObjectId": "GF08_P3_leaf3",
+      "label": "GF08-P3-leaf3 / Plant_P3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "da3e57e264df96402f85e08fceda77f0622cc44f440bb9963bfb3ea77a4d8f44"
+    },
+    {
+      "sourceObjectId": "GF08_P3_stem4",
+      "label": "GF08-P3-stem4 / Plant_P3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "3766f9ee051c0d00bb164ecf0016dbff592b56346e550ec4d6f84e814a6c8053"
+    },
+    {
+      "sourceObjectId": "GF08_P3_leaf4",
+      "label": "GF08-P3-leaf4 / Plant_P3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "578149d65620c3ebcc0ef0f7f721c04cdfd0994a3a7103eb13d51186f50994a9"
+    },
+    {
+      "sourceObjectId": "GF08_P3_stem5",
+      "label": "GF08-P3-stem5 / Plant_P3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a1007bfd0e10d1476616801a1495eb2b189c282104258b7ec306ea002cb664f8"
+    },
+    {
+      "sourceObjectId": "GF08_P3_leaf5",
+      "label": "GF08-P3-leaf5 / Plant_P3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b1dd23ac20e15be8c91dadaec92b0d7bd0d0ac43ce331e901609a09d08bfc9c7"
+    },
+    {
+      "sourceObjectId": "GF08_P3_stem6",
+      "label": "GF08-P3-stem6 / Plant_P3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "10dbed8d51add5d5b92e57e5999fa441cb0f0d0506402f97aef09c23c28b1870"
+    },
+    {
+      "sourceObjectId": "GF08_P3_leaf6",
+      "label": "GF08-P3-leaf6 / Plant_P3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "45f14e405524b93b49a2fb55ef963eee3de4c99a719ef55b117486b54dc4b54a"
+    },
+    {
+      "sourceObjectId": "GF08_P3_stem7",
+      "label": "GF08-P3-stem7 / Plant_P3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "13432132fe771e676dcc23c0df823d3fd4382966911094457534d81f55f88482"
+    },
+    {
+      "sourceObjectId": "GF08_P3_leaf7",
+      "label": "GF08-P3-leaf7 / Plant_P3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "4292c11f088274d199b15b5c1e37543ce10f7557f0ab487bf3866946236a4668"
+    },
+    {
+      "sourceObjectId": "GF08_P3_stem8",
+      "label": "GF08-P3-stem8 / Plant_P3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "89ff579bac3d866c40337489071a5f5a1298a897681054113b44665faf8e195c"
+    },
+    {
+      "sourceObjectId": "GF08_P3_leaf8",
+      "label": "GF08-P3-leaf8 / Plant_P3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b0dd72dd0dd71110a638da85ac54f15aeb25147910bf510e9f985af19abbab62"
+    },
+    {
+      "sourceObjectId": "GF08_P4_pot",
+      "label": "GF08-P4-pot / Plant_P4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "f83cacf30627bcdd7d92543a4d96fc69545314cd56359dc067323fccc469f884"
+    },
+    {
+      "sourceObjectId": "GF08_P4_soil",
+      "label": "GF08-P4-soil / Plant_P4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b018e8fb527dd68556984dfae0a893151deaa154b0436a87a52c98d339372af2"
+    },
+    {
+      "sourceObjectId": "GF08_P4_stem0",
+      "label": "GF08-P4-stem0 / Plant_P4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "8a05e647cb7d0f62785d20ac6e61fbd2931d9011318487c23bd4d279b07bc652"
+    },
+    {
+      "sourceObjectId": "GF08_P4_leaf0",
+      "label": "GF08-P4-leaf0 / Plant_P4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e87fd112d1ff9341a9df9243b9b5f3366654f34268d2e1766a14d419dcb65199"
+    },
+    {
+      "sourceObjectId": "GF08_P4_stem1",
+      "label": "GF08-P4-stem1 / Plant_P4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "5efc9d68f624219fdc1aa71591bb5114f2ad26ab7e9cc631356ab626d645aa95"
+    },
+    {
+      "sourceObjectId": "GF08_P4_leaf1",
+      "label": "GF08-P4-leaf1 / Plant_P4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e7ed0febab9677bd254b0b5c54faf9b7d88e1882dbe1ad9d66048dc31e1ece66"
+    },
+    {
+      "sourceObjectId": "GF08_P4_stem2",
+      "label": "GF08-P4-stem2 / Plant_P4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "53699b961dd0017bc339786285711bb032cae681afe5b8d07e8b6b3caf0c74a1"
+    },
+    {
+      "sourceObjectId": "GF08_P4_leaf2",
+      "label": "GF08-P4-leaf2 / Plant_P4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "14d5ee940a9f8e406b31b479cc321fc81d718cad0057563487c9026724c5c795"
+    },
+    {
+      "sourceObjectId": "GF08_P4_stem3",
+      "label": "GF08-P4-stem3 / Plant_P4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "2708d8b1220b06a9d05a8a33b8cb862419ce6462946973d164eef8320cb52f05"
+    },
+    {
+      "sourceObjectId": "GF08_P4_leaf3",
+      "label": "GF08-P4-leaf3 / Plant_P4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "bc1c94ab74e8d1895635ddc3ae1e41172b6eb2781c7565790e05655f3b1a36ed"
+    },
+    {
+      "sourceObjectId": "GF08_P4_stem4",
+      "label": "GF08-P4-stem4 / Plant_P4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "48c6f4613d147b4bd18e0ce99b6d3bd7e3df33960e4ded857d2d046abb035902"
+    },
+    {
+      "sourceObjectId": "GF08_P4_leaf4",
+      "label": "GF08-P4-leaf4 / Plant_P4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a7751041919618d4a448165bec7bd8279dd224e46a6e193aebc1ee7eb07b9636"
+    },
+    {
+      "sourceObjectId": "GF08_P4_stem5",
+      "label": "GF08-P4-stem5 / Plant_P4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "5b05f138c148c74f7bc192a02f74ed40953530a35242befff96a4f0b21f93837"
+    },
+    {
+      "sourceObjectId": "GF08_P4_leaf5",
+      "label": "GF08-P4-leaf5 / Plant_P4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "443a59b32af8f5fe43de1895ce69c25a3ac9e78c34957a4fa21e6d02c2046504"
+    },
+    {
+      "sourceObjectId": "GF08_P4_stem6",
+      "label": "GF08-P4-stem6 / Plant_P4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "ec1c892fa1c55ac8065448f7d55455188b4372239662bb229f348f633f19e18a"
+    },
+    {
+      "sourceObjectId": "GF08_P4_leaf6",
+      "label": "GF08-P4-leaf6 / Plant_P4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b28b6d6d28b515ca4f2e35ac5c5423019be79a33ab06a67b1ea5975bfea044ab"
+    },
+    {
+      "sourceObjectId": "GF08_P4_stem7",
+      "label": "GF08-P4-stem7 / Plant_P4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "eefe132aa23bcde369700c3312ee63e9691e1c549c516e3f6e107d0bcebecd83"
+    },
+    {
+      "sourceObjectId": "GF08_P4_leaf7",
+      "label": "GF08-P4-leaf7 / Plant_P4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "5f5d91fb44e043890c2bf8f5337ad119e07277262389bf2f8b9d6e2ff2171782"
+    },
+    {
+      "sourceObjectId": "GF08_P4_stem8",
+      "label": "GF08-P4-stem8 / Plant_P4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "f67012da0fc3bbbf4589dd19bdeaeb321d112408daab4646312579b024a9d6ad"
+    },
+    {
+      "sourceObjectId": "GF08_P4_leaf8",
+      "label": "GF08-P4-leaf8 / Plant_P4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "365ac6736f8cf94ff7a1b1666612fb7c96fdc7ae8757256b17763d678e30776d"
+    },
+    {
+      "sourceObjectId": "GF08_P5_pot",
+      "label": "GF08-P5-pot / Plant_P5",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "40380c9c2bed70b4b468d5a1bea131954af6cb9a1396976f22b814c85dae944d"
+    },
+    {
+      "sourceObjectId": "GF08_P5_soil",
+      "label": "GF08-P5-soil / Plant_P5",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "d3b12973d0428f30c059e5d7d038eb5e6cbc5dbf16c464067d7c493a11f1b09e"
+    },
+    {
+      "sourceObjectId": "GF08_P5_stem0",
+      "label": "GF08-P5-stem0 / Plant_P5",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "59faf6f240d4f5e1e2a42a51b5c0514b15e8bc047c117af37742e6e7a95006d3"
+    },
+    {
+      "sourceObjectId": "GF08_P5_leaf0",
+      "label": "GF08-P5-leaf0 / Plant_P5",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "cb82a1ea0290050288aeb971ad0851c64c5d69833553a41d111e04e9d1616b77"
+    },
+    {
+      "sourceObjectId": "GF08_P5_stem1",
+      "label": "GF08-P5-stem1 / Plant_P5",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "4cc06a6cb21331c3fb6e3914d0e01c02f5ae3519e1813ecbc757515978dfe5bb"
+    },
+    {
+      "sourceObjectId": "GF08_P5_leaf1",
+      "label": "GF08-P5-leaf1 / Plant_P5",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "9c6610b3c4fd8cb6b6f661e68231484b37e47c1427da026f2b2ffec609e9072d"
+    },
+    {
+      "sourceObjectId": "GF08_P5_stem2",
+      "label": "GF08-P5-stem2 / Plant_P5",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "0489258a6881695e992b801ecc570ba60c1b0c3e5bd8a8fb29d885dc0cfb6362"
+    },
+    {
+      "sourceObjectId": "GF08_P5_leaf2",
+      "label": "GF08-P5-leaf2 / Plant_P5",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c3a0853d16d1a1f1573e7ab278f6124e727d06840483f8472a2d6fbc539d6071"
+    },
+    {
+      "sourceObjectId": "GF08_P5_stem3",
+      "label": "GF08-P5-stem3 / Plant_P5",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "572650e69f5cf62a949c7711a30b32d76b74bf7d73a063815d9fa951e46b6a67"
+    },
+    {
+      "sourceObjectId": "GF08_P5_leaf3",
+      "label": "GF08-P5-leaf3 / Plant_P5",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "f607d04290d7fce12b7c5a18e0afc2399151369f4f268d56f12b1186588ed741"
+    },
+    {
+      "sourceObjectId": "GF08_P5_stem4",
+      "label": "GF08-P5-stem4 / Plant_P5",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "478987086cfa8b17d123ed66aabda90f4054bfede071a10568632ac76f339f2d"
+    },
+    {
+      "sourceObjectId": "GF08_P5_leaf4",
+      "label": "GF08-P5-leaf4 / Plant_P5",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "58a34d9e048c2789810929164edc771778e767c46af2346f1708aa738730d7ff"
+    },
+    {
+      "sourceObjectId": "GF08_P5_stem5",
+      "label": "GF08-P5-stem5 / Plant_P5",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "2203692131aaf96eb4eb221764b5780c4c57fe91b606aeca2c47050f83b7b758"
+    },
+    {
+      "sourceObjectId": "GF08_P5_leaf5",
+      "label": "GF08-P5-leaf5 / Plant_P5",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "1a6feda2a8a2e93bb1b9845b215ca58d22dbd562c4e1156ee2fdd55583513be3"
+    },
+    {
+      "sourceObjectId": "GF08_P5_stem6",
+      "label": "GF08-P5-stem6 / Plant_P5",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "fa9b60f1a571affc7e6149219ac9d83f1d1bbb6a2c575f81e44c91e905b57036"
+    },
+    {
+      "sourceObjectId": "GF08_P5_leaf6",
+      "label": "GF08-P5-leaf6 / Plant_P5",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "80404424d837953cc8376217c85efa735d7d65bd9fc78191a15e3ecdc799cc03"
+    },
+    {
+      "sourceObjectId": "GF08_P5_stem7",
+      "label": "GF08-P5-stem7 / Plant_P5",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "071ceeb70374dbd08d42ce2167b76fd111ef583e0fefb230c8833face81166b2"
+    },
+    {
+      "sourceObjectId": "GF08_P5_leaf7",
+      "label": "GF08-P5-leaf7 / Plant_P5",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "ec05d5251d175a1383314fce032eb7952b87beca389f4aa469678e7f1be4ff2b"
+    },
+    {
+      "sourceObjectId": "GF08_P5_stem8",
+      "label": "GF08-P5-stem8 / Plant_P5",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "8bc0a8007a23a14aef177f7004d48d10828292964066a13915c156f9a4f52f3a"
+    },
+    {
+      "sourceObjectId": "GF08_P5_leaf8",
+      "label": "GF08-P5-leaf8 / Plant_P5",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "80f8b5fbdf10b3d2d5df64be5f464e03f9b606563b5ed5ce735db6c4b503ecad"
+    },
+    {
+      "sourceObjectId": "GF08_P6_pot",
+      "label": "GF08-P6-pot / Plant_P6",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "9b573fa9bfa00292dda7a4cf038bb1cf0e7b29319032112a829290b2bb57ea58"
+    },
+    {
+      "sourceObjectId": "GF08_P6_soil",
+      "label": "GF08-P6-soil / Plant_P6",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6b1fc82fec32c6e873ce2dfd88ae56546724796dd5bd788d4542d15b38477dd8"
+    },
+    {
+      "sourceObjectId": "GF08_P6_stem0",
+      "label": "GF08-P6-stem0 / Plant_P6",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "80b930c79bd433371332023e6bbb482f06044febd27c86781dae57fa5def88b4"
+    },
+    {
+      "sourceObjectId": "GF08_P6_leaf0",
+      "label": "GF08-P6-leaf0 / Plant_P6",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "feddff3b4e85cd74c9460021ca9609673ebe02ff3d27fa0a50f90b965684634b"
+    },
+    {
+      "sourceObjectId": "GF08_P6_stem1",
+      "label": "GF08-P6-stem1 / Plant_P6",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "765ca00e54068b616ec1cc158125bd31e9f0797e1351909aa3808dd92e5f3833"
+    },
+    {
+      "sourceObjectId": "GF08_P6_leaf1",
+      "label": "GF08-P6-leaf1 / Plant_P6",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "f41cf616bd488812e7a0880a35e1742c4189c306becf839496a6c09ba9f0ea27"
+    },
+    {
+      "sourceObjectId": "GF08_P6_stem2",
+      "label": "GF08-P6-stem2 / Plant_P6",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e2b14f71a6fe76acff98d3e3a4e2f93dd9a0d60f66483f739f2fdb8e233ce17a"
+    },
+    {
+      "sourceObjectId": "GF08_P6_leaf2",
+      "label": "GF08-P6-leaf2 / Plant_P6",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6b0689f71b689417cfe5572e4d21c3a9c7e6990c7b355ec414195398350e37e8"
+    },
+    {
+      "sourceObjectId": "GF08_P6_stem3",
+      "label": "GF08-P6-stem3 / Plant_P6",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b41ac02e3f3c87c346ff7b7add18c895a676b8a9534bc34d76630c18d0a315d6"
+    },
+    {
+      "sourceObjectId": "GF08_P6_leaf3",
+      "label": "GF08-P6-leaf3 / Plant_P6",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "f4a9436828fd8b708643a70bd3419e16b16520c7eb9f0f00a674b98cf42cc0fb"
+    },
+    {
+      "sourceObjectId": "GF08_P6_stem4",
+      "label": "GF08-P6-stem4 / Plant_P6",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "d2ce8181277d2cb1671fdbece42520d4a5293afe7ca13a6531f622b983f5c6c3"
+    },
+    {
+      "sourceObjectId": "GF08_P6_leaf4",
+      "label": "GF08-P6-leaf4 / Plant_P6",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "3674a249b9dcff98c6ffdc25c94fc968cd94a18e33cd1f9d9f106e7e2ba95740"
+    },
+    {
+      "sourceObjectId": "GF08_P6_stem5",
+      "label": "GF08-P6-stem5 / Plant_P6",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "fa337606651d12a51bdcf15de133c405ce3182139ff7da74a44f2caf52b2c1ee"
+    },
+    {
+      "sourceObjectId": "GF08_P6_leaf5",
+      "label": "GF08-P6-leaf5 / Plant_P6",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "4de48aff0ba5e3e95c5e185c0bcee1ec146906b567add7d1fe093b288b316eb4"
+    },
+    {
+      "sourceObjectId": "GF08_P6_stem6",
+      "label": "GF08-P6-stem6 / Plant_P6",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "ba5ec2579bc1308734550dbc5490037c51f6c5887648999af4f4c27c5b0cd286"
+    },
+    {
+      "sourceObjectId": "GF08_P6_leaf6",
+      "label": "GF08-P6-leaf6 / Plant_P6",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "949ff427cac6fbbf74d34422d18aaa2cb95fc52a9ababc9c4c1d55b146535d1a"
+    },
+    {
+      "sourceObjectId": "GF08_P6_stem7",
+      "label": "GF08-P6-stem7 / Plant_P6",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "10e6b5a95adfb9fca371cd52b6eee05870998f0fc76c35208bf306156f74a052"
+    },
+    {
+      "sourceObjectId": "GF08_P6_leaf7",
+      "label": "GF08-P6-leaf7 / Plant_P6",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "71b37e14ca6529ece6d75992c5de16d34ab21d117ca4c92632af9f2d1a0684c8"
+    },
+    {
+      "sourceObjectId": "GF08_P6_stem8",
+      "label": "GF08-P6-stem8 / Plant_P6",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "93b90892a6cd8a6d148c2962a0bb1f46900efc24f9ee74207bbbe269afbca0a6"
+    },
+    {
+      "sourceObjectId": "GF08_P6_leaf8",
+      "label": "GF08-P6-leaf8 / Plant_P6",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a728de8ce814016d82103017f165ec6d358bc5942965e92b02c0fb445f014cc3"
+    },
+    {
+      "sourceObjectId": "GF08_P6_hanger",
+      "label": "GF08-P6-hanger / Plant_P6",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6a4fb68855907ae688b0d3baa43c1efba03a7eca000216608eb08a93080ed462"
+    },
+    {
+      "sourceObjectId": "GF08_L1_body",
+      "label": "GF08-L1-body / Lighting",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "bdf0b5c480a1fbeb95386cec550e1f5277e57b8fc0c6a6da27785e189dee0fa5"
+    },
+    {
+      "sourceObjectId": "GF08_L1_lens",
+      "label": "GF08-L1-lens / Lighting",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "d9b43e9fd409e656cfdf60b1e4c45f3f01266a5caf2b35bc045897ad1dcc34a6"
+    },
+    {
+      "sourceObjectId": "GF08_L1_mount",
+      "label": "GF08-L1-mount / Lighting",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a85221f592c52d303168ab97623a83684116b26c8c24e3ba980d0f7525b9f923"
+    },
+    {
+      "sourceObjectId": "GF08_L2_body",
+      "label": "GF08-L2-body / Lighting",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "1960a8ca199d85924d957a6005c79643475a8d023bbd37a2464d9ccd1334537e"
+    },
+    {
+      "sourceObjectId": "GF08_L2_lens",
+      "label": "GF08-L2-lens / Lighting",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "418d2adf498226d91f37329f1b5edf0920f732150f1d2713686e4b086a812bfb"
+    },
+    {
+      "sourceObjectId": "GF08_L2_mount",
+      "label": "GF08-L2-mount / Lighting",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b7ef06606729c89b9e5b660684bf43506e3a16f081051b0f4838ffe83fcd46f6"
+    },
+    {
+      "sourceObjectId": "GF08_L3_body",
+      "label": "GF08-L3-body / Lighting",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "420424a51d0f0a4ebfef0acbcd128122dffce76af3f9812bd72c965209a91552"
+    },
+    {
+      "sourceObjectId": "GF08_L3_lens",
+      "label": "GF08-L3-lens / Lighting",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b5e99ea22a51389c6345866bbe760286701adb682b69411f3183e42d846fd40f"
+    },
+    {
+      "sourceObjectId": "GF08_L3_mount",
+      "label": "GF08-L3-mount / Lighting",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "73dd10c76cd38eecf118159a024e070a74780af5af1464735e40f3c571728a0a"
+    },
+    {
+      "sourceObjectId": "GF08_L4_body",
+      "label": "GF08-L4-body / Lighting",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "4f0c6b1bd6f887a1a25cdf8c8ed1da7458aadc6c830d1f6e30d8fd20e0ea7c4c"
+    },
+    {
+      "sourceObjectId": "GF08_L4_lens",
+      "label": "GF08-L4-lens / Lighting",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "d91a6eb59d0b9f19e5863d50779cd0ffebb6104167496fb283ee4c9ba2c06bf1"
+    },
+    {
+      "sourceObjectId": "GF08_L4_mount",
+      "label": "GF08-L4-mount / Lighting",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a4af4a5e7acd272c4b1ab6d91a18126d845d8eefe0cb2433c0f595ce0698f1c2"
+    },
+    {
+      "sourceObjectId": "GF08_PW1",
+      "label": "GF08-PW1 / Power_reservations",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "db2d701accb2d39e34c6beccee37f059a162c2f3c1dcdebcea851fad00fdf1fe"
+    },
+    {
+      "sourceObjectId": "GF08_PW2",
+      "label": "GF08-PW2 / Power_reservations",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "399c15bdc925aa279044596db37dd426c14634a99c3c81eb5525f9b67a144a1d"
+    },
+    {
+      "sourceObjectId": "GF08_P02_step_tier_1",
+      "label": "GF08-P02-step-tier-1 / selected approximate Option B",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Extrusion",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "106d4bc5528beed226a79584ca07845ac6a27c9084ada5815badd509d01f0d55"
+    },
+    {
+      "sourceObjectId": "GF08_P02_step_tier_2",
+      "label": "GF08-P02-step-tier-2 / selected approximate Option B",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Extrusion",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "213a96c863b923ba9ca23ab561c0c5cdca2178f98630bb822264d7c55e14265c"
+    },
+    {
+      "sourceObjectId": "GF08_P02_step_tier_3",
+      "label": "GF08-P02-step-tier-3 / selected approximate Option B",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Extrusion",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "54f85ef4695e358d126218f07c84840210edbc93e4ee504ef146ebd67b728591"
+    },
+    {
+      "sourceObjectId": "GF08_P02_frame_hinge",
+      "label": "GF08-P02-frame-hinge / selected approximate Option B",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "cb0663571ffb2c180aa226bd55f694ea6722877d197ed71904ba3b0e34233cf6"
+    },
+    {
+      "sourceObjectId": "GF08_P02_frame_latch",
+      "label": "GF08-P02-frame-latch / selected approximate Option B",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "59aae8b774488c992115f4eb2aa857a48542efdbdd69517301fdf633bc9c3655"
+    },
+    {
+      "sourceObjectId": "GF08_P02_frame_head",
+      "label": "GF08-P02-frame-head / selected approximate Option B",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "2d514e539fe9927f9ddaf1940234daaed81247f005260b013b28a2843d4f5854"
+    },
+    {
+      "sourceObjectId": "GF08_P02_door_leaf",
+      "label": "GF08-P02-door-leaf / selected approximate Option B",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "2c4aa67a4d5ef203634e4f875275ebfe106c9094edb178744766f3d63030c2b4"
+    },
+    {
+      "sourceObjectId": "GF08_P02_door_panel_front_1",
+      "label": "GF08-P02-door-panel-front-1 / selected approximate Option B",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "d473e1d9d1c7b0728c3e43f56bbca443f00f7ce585587ed07b1965094e065526"
+    },
+    {
+      "sourceObjectId": "GF08_P02_door_panel_back_1",
+      "label": "GF08-P02-door-panel-back-1 / selected approximate Option B",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "34ec327d51977524795a1c4bfc4b7f6853b5d821a1d329cbbc4e06f0cf723984"
+    },
+    {
+      "sourceObjectId": "GF08_P02_door_panel_front_2",
+      "label": "GF08-P02-door-panel-front-2 / selected approximate Option B",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "eb5b11479249b9f096bfde23618c48b72970246956ab0d4c7de79513e2110cda"
+    },
+    {
+      "sourceObjectId": "GF08_P02_door_panel_back_2",
+      "label": "GF08-P02-door-panel-back-2 / selected approximate Option B",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "620cf20fbf12cde13d1ad146cf269d41acce868b53f7d241996204dae912a7c7"
+    },
+    {
+      "sourceObjectId": "GF08_P02_door_panel_front_3",
+      "label": "GF08-P02-door-panel-front-3 / selected approximate Option B",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "8670c81a740d237a9eea63746868d0a6390a73907a93dc4153ffefbb7c5ed60a"
+    },
+    {
+      "sourceObjectId": "GF08_P02_door_panel_back_3",
+      "label": "GF08-P02-door-panel-back-3 / selected approximate Option B",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a5aaae1cc2d05e6824ce672ea0c4981d11ebebf44a6311f6c10733dd900a89cc"
+    },
+    {
+      "sourceObjectId": "GF08_P02_door_handle_front",
+      "label": "GF08-P02-door-handle-front / selected approximate Option B",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "89654965417fad250cf7c9f53425f063b7d128d2152c80ce8ea5c47c17ebaad3"
+    },
+    {
+      "sourceObjectId": "GF08_P02_door_handle_back",
+      "label": "GF08-P02-door-handle-back / selected approximate Option B",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "eb6b823e08127067f17532a7e62038825d42cd43b14883245c88851b227b9482"
+    },
+    {
+      "sourceObjectId": "GF08_P02_door_hinge_1",
+      "label": "GF08-P02-door-hinge-1 / selected approximate Option B",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6ae9918eb5daa1d836bbfe8da0c76a5191600c9fddd8e9a938f8c0ba31453f1c"
+    },
+    {
+      "sourceObjectId": "GF08_P02_hinge_mount_1",
+      "label": "GF08-P02-hinge-mount-1 / selected approximate Option B",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "7f85167e2ec313b2df265da57f8e8edb7768a855ba9a3d8db4979354f8225d15"
+    },
+    {
+      "sourceObjectId": "GF08_P02_door_hinge_2",
+      "label": "GF08-P02-door-hinge-2 / selected approximate Option B",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c2538cb9b246576690e8ab9753ba3a1c3e0faf2bfbc34a88974a341ef9315535"
+    },
+    {
+      "sourceObjectId": "GF08_P02_hinge_mount_2",
+      "label": "GF08-P02-hinge-mount-2 / selected approximate Option B",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "8ddf105df163b6b273d272d88811d476a37f1b30c9103bbebe8ed515fa635dd2"
+    },
+    {
+      "sourceObjectId": "GF08_P02_door_hinge_3",
+      "label": "GF08-P02-door-hinge-3 / selected approximate Option B",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Cylinder",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e7105ac98349459f4b4ac39f62f3d5ce8a61ff10857ab7afcac2c19ad0a709e4"
+    },
+    {
+      "sourceObjectId": "GF08_P02_hinge_mount_3",
+      "label": "GF08-P02-hinge-mount-3 / selected approximate Option B",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Box",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e0616ba69f21b3afaa37dd1ed6e592f6229e2ca9a5249cf361def745914d94d2"
+    },
+    {
+      "sourceObjectId": "GF08_P02_Rough_Jamb_Connectors",
+      "label": "GF08 / coordinated GF10 doorway rough jambs",
+      "role": "OptionalReferences",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-specific approximate door operation reference",
+      "worldShapeSignatureSha256": "6d07577277895747a6b0802ab18ff6e9d1fb5316bb84f3f0c7c1c48faa1c74ba"
+    },
+    {
+      "sourceObjectId": "GF08_P02_Door_Swing_Approximate",
+      "label": "GF08 / door opens into balcony / approximate sweep",
+      "role": "OptionalReferences",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-specific approximate door operation reference",
+      "worldShapeSignatureSha256": "dac23a33f287fe228f93e022c5dbfcbea8acd02b3cc1f470fe8accbe0fd5e3a2"
+    }
+  ]
+}

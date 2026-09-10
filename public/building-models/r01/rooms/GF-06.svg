@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="960" viewBox="0 0 1100 960" role="img" aria-label="GF-06 R01 room reference plan">
+<rect width="100%" height="100%" fill="#FFFEFA"/>
+<text x="48" y="47" font-family="Arial, sans-serif" font-size="27" fill="#1F2D38" font-weight="700">GF-06 / Bathroom reference</text>
+<text x="48" y="75" font-family="Arial, sans-serif" font-size="15" fill="#3A4655">COORDINATED R01 · source-derived room reference · no new design</text>
+<text x="48" y="101" font-family="Arial, sans-serif" font-size="14" fill="#6B7585">Ink: existing reference geometry   Blue: openings   Brown: selected fit-out   Grid: 1 ft</text>
+<polyline points="48.00,120.00 1052.00,120.00" fill="none" stroke="#C5C9CB" stroke-width="1" stroke-linejoin="round"/>
+<polyline points="181.93,697.46 181.93,217.54" fill="none" stroke="#E8EBE8" stroke-width="0.7" stroke-linejoin="round"/>
+<polyline points="270.37,697.46 270.37,217.54" fill="none" stroke="#E8EBE8" stroke-width="0.7" stroke-linejoin="round"/>
+<polyline points="358.81,697.46 358.81,217.54" fill="none" stroke="#E8EBE8" stroke-width="0.7" stroke-linejoin="round"/>
+<polyline points="447.25,697.46 447.25,217.54" fill="none" stroke="#E8EBE8" stroke-width="0.7" stroke-linejoin="round"/>
+<polyline points="535.70,697.46 535.70,217.54" fill="none" stroke="#E8EBE8" stroke-width="0.7" stroke-linejoin="round"/>
+<polyline points="624.14,697.46 624.14,217.54" fill="none" stroke="#E8EBE8" stroke-width="0.7" stroke-linejoin="round"/>
+<polyline points="712.58,697.46 712.58,217.54" fill="none" stroke="#E8EBE8" stroke-width="0.7" stroke-linejoin="round"/>
+<polyline points="801.02,697.46 801.02,217.54" fill="none" stroke="#E8EBE8" stroke-width="0.7" stroke-linejoin="round"/>
+<polyline points="889.46,697.46 889.46,217.54" fill="none" stroke="#E8EBE8" stroke-width="0.7" stroke-linejoin="round"/>
+<polyline points="236.62,700.85 863.38,700.85" fill="none" stroke="#E8EBE8" stroke-width="0.7" stroke-linejoin="round"/>
+<polyline points="236.62,612.41 863.38,612.41" fill="none" stroke="#E8EBE8" stroke-width="0.7" stroke-linejoin="round"/>
+<polyline points="236.62,523.97 863.38,523.97" fill="none" stroke="#E8EBE8" stroke-width="0.7" stroke-linejoin="round"/>
+<polyline points="236.62,435.53 863.38,435.53" fill="none" stroke="#E8EBE8" stroke-width="0.7" stroke-linejoin="round"/>
+<polyline points="236.62,347.09 863.38,347.09" fill="none" stroke="#E8EBE8" stroke-width="0.7" stroke-linejoin="round"/>
+<polyline points="236.62,258.65 863.38,258.65" fill="none" stroke="#E8EBE8" stroke-width="0.7" stroke-linejoin="round"/>
+<polyline points="236.62,170.20 863.38,170.20" fill="none" stroke="#E8EBE8" stroke-width="0.7" stroke-linejoin="round"/>
+<polyline points="689.86,665.61 799.81,665.61" fill="none" stroke="#5B7046" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="799.81,665.61 799.81,557.34" fill="none" stroke="#5B7046" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="799.81,557.34 689.86,557.34" fill="none" stroke="#5B7046" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="689.86,557.34 689.86,665.61" fill="none" stroke="#5B7046" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="584.64,419.02 793.55,419.02" fill="none" stroke="#5B7046" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="793.55,419.02 793.55,327.98" fill="none" stroke="#5B7046" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="793.55,327.98 584.64,327.98" fill="none" stroke="#5B7046" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="584.64,327.98 584.64,419.02" fill="none" stroke="#5B7046" stroke-width="0.9" stroke-linejoin="round"/>
+<polyline points="273.61,252.36 389.46,252.93" fill="none" stroke="#1F2D38" stroke-width="1.45" stroke-linejoin="round"/>
+<polyline points="634.72,254.13 863.21,255.26" fill="none" stroke="#1F2D38" stroke-width="1.45" stroke-linejoin="round"/>
+<polyline points="273.78,217.54 389.63,218.11" fill="none" stroke="#1F2D38" stroke-width="1.45" stroke-linejoin="round"/>
+<polyline points="634.89,219.32 863.38,220.44" fill="none" stroke="#1F2D38" stroke-width="1.45" stroke-linejoin="round"/>
+<polyline points="863.21,255.26 861.04,697.46" fill="none" stroke="#1F2D38" stroke-width="1.45" stroke-linejoin="round"/>
+<polyline points="861.04,697.46 271.44,694.56" fill="none" stroke="#1F2D38" stroke-width="1.45" stroke-linejoin="round"/>
+<polyline points="271.44,694.56 271.80,620.01" fill="none" stroke="#1F2D38" stroke-width="1.45" stroke-linejoin="round"/>
+<polyline points="272.60,458.36 273.61,252.36" fill="none" stroke="#1F2D38" stroke-width="1.45" stroke-linejoin="round"/>
+<polyline points="236.62,694.39 236.98,619.84" fill="none" stroke="#1F2D38" stroke-width="1.45" stroke-linejoin="round"/>
+<polyline points="237.78,458.19 238.79,252.19" fill="none" stroke="#1F2D38" stroke-width="1.45" stroke-linejoin="round"/>
+<polyline points="389.33,279.04 389.58,226.81" fill="none" stroke="#216B92" stroke-width="1.45" stroke-linejoin="round"/>
+<polyline points="634.60,280.25 634.85,228.02" fill="none" stroke="#216B92" stroke-width="1.45" stroke-linejoin="round"/>
+<polyline points="389.46,252.93 634.72,254.13" fill="none" stroke="#216B92" stroke-width="1.45" stroke-linejoin="round"/>
+<polyline points="246.48,458.23 298.71,458.49" fill="none" stroke="#216B92" stroke-width="1.45" stroke-linejoin="round"/>
+<polyline points="245.69,619.89 297.92,620.14" fill="none" stroke="#216B92" stroke-width="1.45" stroke-linejoin="round"/>
+<polyline points="65.00,795.00 330.32,795.00" fill="none" stroke="#1F2D38" stroke-width="2" stroke-linejoin="round"/>
+<polyline points="65.00,790.00 65.00,800.00" fill="none" stroke="#1F2D38" stroke-width="1" stroke-linejoin="round"/>
+<polyline points="330.32,790.00 330.32,800.00" fill="none" stroke="#1F2D38" stroke-width="1" stroke-linejoin="round"/>
+<text x="65" y="822" font-family="Arial, sans-serif" font-size="13" fill="#1F2D38">3 ft model scale</text>
+<text x="48" y="851" font-family="Arial, sans-serif" font-size="13" fill="#216B92">Model opening spans (not net clear): GF-09 1 ft 9.9 in</text>
+<text x="48" y="905" font-family="Arial, sans-serif" font-size="13" fill="#6B7585">Exact extracted shapes. Walls/openings are 2D references at Z0; proposal solids retain their original world heights.</text>
+<text x="48" y="929" font-family="Arial, sans-serif" font-size="13" fill="#9A5639">Planning reference only. Measured, fitted and unmeasured conditions remain distinct; installation/access checks outstanding.</text>
+</svg>

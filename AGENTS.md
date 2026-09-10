@@ -104,6 +104,11 @@ placeholder note in `README.md`.
 
 ## Validation Checklist
 
+- Building Vision authority correction, 10 September 2026: use the latest user-approved Blender design first, coordinated CAD second, and illustrative/concept photos third. Align conflicting presentation images to the approved Blender layout rather than altering models to fit older images. Preserve original site photos and prior concepts; label edited images as proposals, not photographs of completed work or surveyed evidence. Record the source release and review geometry, furniture counts, doors, stair/void access and partition paths before promoting a replacement. Unissued office/workshop drafts do not supersede the approved release, and photo alignment does not authorize publication or unresolved design decisions.
+
+- Building Vision now includes versioned Blender-derived 3D, full-floor native CAD downloads and room-by-room CAD extracts plus a separately labelled proposed service schedule. After any verified model change, follow `docs/building-model-publication.md` to regenerate affected exports, review room services and publish the page together. Preserve the 21-image concept set. Do not silently publish draft/private-office geometry, count proposed sockets as installed, relabel ground/first floor as first/second, or imply local file saves automatically update the website.
+- Before public model uploads, inspect compressed CAD/Blender metadata and PNG text chunks for private local paths. Sanitize public copies only, preserve original sources, verify geometry/materials/object membership and native reopen, and record separate source/public hashes. Do not push earlier unsanitized commits into public history. A local preview or an HTTP 200 HTML fallback is not proof that downloadable files are live; verify production bytes against the release manifest.
+
 Use the narrowest checks that match the edit:
 
 - For site copy, placeholder, or CTA changes, inspect the known placeholders:

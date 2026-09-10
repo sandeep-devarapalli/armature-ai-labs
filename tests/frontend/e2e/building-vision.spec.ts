@@ -9,8 +9,10 @@ test("building vision presents the canonical 21-image set without overflow", asy
   await expect(page.getByRole("heading", { name: "The building, without rebuilding it." })).toBeVisible({ timeout: 15_000 });
   await expect(page.getByText("Showing 21 of 21 views")).toBeVisible();
   await expect(page.getByRole("heading", { name: "The complete 21-view Building Vision." })).toBeVisible();
+  await expect(page.getByText(/Latest approved Blender → coordinated CAD → aligned concept photos/)).toBeVisible();
+  await expect(page.locator(".building-vision-room figcaption").filter({ hasText: "Earlier appearance reference" })).toHaveCount(21);
 
-  const conceptImages = page.locator(".building-vision-concept img");
+  const conceptImages = page.locator(".building-vision-reference-image img");
   await expect(conceptImages).toHaveCount(21);
   await expect(conceptImages.first()).toHaveAttribute("loading", "lazy");
   await expect(conceptImages.first()).toHaveAttribute("width", "1086");
@@ -46,6 +48,25 @@ test("building vision presents the canonical 21-image set without overflow", asy
     "/building-vision/rework-v2/20 - First Floor Workspace - Storage Wall and Balcony View.png"
   ]);
 
+  const modelImages = page.locator(".building-vision-model-image img");
+  await expect(modelImages).toHaveCount(6);
+  const stair = page.locator("#first-floor-glass-stair-partition");
+  await expect(stair.locator(".building-vision-model-image img")).toHaveAttribute("src", "/building-vision/model-aligned-r01/ff04-stair.png");
+  await expect(stair.locator(".building-vision-reference")).not.toHaveAttribute("open", "");
+  await stair.locator("summary").click();
+  await expect(stair.locator(".building-vision-reference-image img")).toBeVisible();
+  await stair.locator("summary").click();
+  await expect(stair.locator(".building-vision-reference-image img")).not.toBeVisible();
+  for (const image of await modelImages.all()) {
+    await image.scrollIntoViewIfNeeded();
+    await expect.poll(() => image.evaluate((node) => (node as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+    await expect.poll(() => image.evaluate((node) => {
+      const imageBounds = node.getBoundingClientRect();
+      const frameBounds = node.parentElement!.getBoundingClientRect();
+      return imageBounds.width > 0 && imageBounds.left >= frameBounds.left && imageBounds.right <= frameBounds.right && frameBounds.right <= innerWidth;
+    })).toBe(true);
+  }
+
   await page.getByRole("button", { name: "Frontage", exact: true }).click();
   await expect(page.getByText("Showing 1 of 21 views")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Exterior building frontage" })).toBeVisible();
@@ -57,14 +78,23 @@ test("building vision presents the canonical 21-image set without overflow", asy
   await expect(page.getByRole("heading", { name: "Ground floor entrance and reception" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Ground floor presentation area — audience view" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Ground floor kitchen" })).toBeVisible();
-  await expect(page.getByText("One power-ready eight-seat table, ergonomic chairs, polished marble with its dark border, warm lighting and minimal plants or wall art.")).toBeVisible();
-  await expect(page.getByText("Conditioned coworking for two compact table settings")).toBeVisible();
+  await expect(page.locator("#ground-floor-coworking-commons-wide-view")).toContainText("nine 2 ft 6 in square T01 modules, 17 counter chairs and 21 table chairs");
+  await expect(page.locator("#ground-floor-coworking-curved-workbar-overview")).toContainText("selected counter is 17 in deep");
+  await expect(page.locator("#ground-floor-presentation-area-audience-view")).toContainText("four individual lounge chairs, not a couch");
+  await expect(page.locator("#ground-floor-open-workspace-attached-washroom")).toContainText("three- or four-person cabin remains unselected and is not added to issued R01");
+  await expect(page.locator("#ground-floor-glass-stair-partition")).toContainText("left flat nominal 3 ft access door");
+  await expect(page.getByText("GF08 enclosed balcony café and work seating — AC undecided")).toBeVisible();
   await expect(page.getByText("Existing marble and border pattern, plumbing wall, counters, cupboards, windows, doors, ceiling and service points.")).toBeVisible();
   await expect(page.getByRole("heading", { name: "First floor glass stair partition" })).toHaveCount(0);
 
   await page.getByRole("button", { name: "First floor", exact: true }).click();
   await expect(page.getByText("Showing 8 of 21 views")).toBeVisible();
   await expect(page.getByRole("heading", { name: "First floor glass stair partition" })).toBeVisible();
+  await expect(page.locator("#first-floor-glass-stair-partition")).toContainText("central flat nominal 3 ft access door");
+  await expect(page.locator("#first-floor-enclosed-right-balcony-door-view")).toContainText("workshop and new weatherproof cover are not implemented in issued R01");
+  await expect(page.locator("#first-floor-workspace-three-desks-dresser")).toContainText("Option B is not issued in R01");
+  await expect(page.locator("#first-floor-workspace-three-desks-dresser")).toContainText("dresser and mirror must stay");
+  await expect(page.locator("#first-floor-workspace-storage-wall-entry")).toContainText("Image-to-room registration is pending");
   await expect(page.getByRole("heading", { name: "First floor workspace — storage wall and balcony view" })).toBeVisible();
   await expect(page.getByText("Retained full-height storage, acoustic carpet, refreshed warm-white walls, open central floor area and a clearly visible balcony opening.")).toBeVisible();
   await expect(page.getByText("All cabinets and cupboards, balcony opening, door position, windows, wall proportions, services and an unobstructed route outdoors.")).toBeVisible();
@@ -94,6 +124,9 @@ test("building vision presents the canonical 21-image set without overflow", asy
   await expect(page.getByRole("button", { name: "Copied" })).toBeVisible();
   await expect.poll(() => page.evaluate(() => navigator.clipboard.readText())).toContain(
     "Set rule: Keep the canonical Building Vision set at exactly 21 PNGs"
+  );
+  await expect.poll(() => page.evaluate(() => navigator.clipboard.readText())).toContain(
+    "Design authority: Latest approved Blender first, coordinated CAD second"
   );
 
   expect(await page.evaluate(() =>

@@ -1,0 +1,41 @@
+.building-planning-notice, .building-services-boundary { margin-top: 28px; padding: 24px; border-left: 3px solid var(--brick); background: var(--panel); color: var(--fg-2); }
+.building-floor-tabs, .building-model-controls, .building-plan-downloads { display: flex; flex-wrap: wrap; gap: 10px; margin: 22px 0; }
+.building-floor-tabs button, .building-model-controls button, .building-model-poster button, .building-plan-downloads a { padding: 12px 16px; min-height: 44px; border: 1px solid var(--hair-strong); border-radius: 5px; color: var(--ink); background: var(--panel); cursor: pointer; font: inherit; text-decoration: none; }
+.building-floor-tabs button[aria-pressed="true"], .building-model-poster button { background: var(--ink); color: var(--paper); }
+.building-model-stage { border: 1px solid var(--hair-strong); background: var(--panel); padding: 24px; }
+.building-model-stage header { display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: center; }
+.building-model-stage header span, .building-model-help { color: var(--fg-3); }
+.building-model-poster { text-align: center; }
+.building-model-poster img { display: block; width: 100%; height: clamp(280px, 45vw, 600px); object-fit: contain; margin-top: 16px; background: #ece9e3; }
+.building-model-poster p, .building-model-help { font-size: 13px; margin-top: 12px; }
+.building-model-canvas model-viewer { display: block; width: 100%; height: clamp(320px, 48vw, 620px); background: #ece9e3; }
+.building-fallback-image { width: 100%; height: auto; object-fit: contain; }
+.building-viewer-close { margin: 16px 0; padding: 12px; cursor: pointer; border: 1px solid var(--hair-strong); border-radius: 4px; color: var(--ink); background: var(--panel); font: inherit; }
+.building-room-browser { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 32px; margin-top: 48px; }
+.building-room-browser aside p { margin: 18px 0; color: var(--fg-3); font-size: 14px; }
+.building-room-browser select { display: block; width: 100%; margin-top: 12px; padding: 12px 8px; background: var(--panel); color: var(--ink); border: 1px solid var(--hair-strong); border-radius: 4px; font: inherit; font-size: 14px; }
+.building-room-title { border-top: 2px solid var(--ink); padding-top: 22px; }
+.building-room-title .mono { color: var(--brick); }
+.building-room-title h3 { font-size: 30px; margin: 12px 0; }
+.building-room-detail > p, .building-room-title p { margin: 14px 0; color: var(--fg-2); }
+.building-room-model-note { padding: 14px; background: var(--bg-2, var(--panel)); border: 1px solid var(--hair); }
+.building-room-preview { display: block; background: #fff; border: 1px solid var(--hair); margin-top: 24px; }
+.building-room-preview img { width: 100%; height: auto; max-height: 620px; object-fit: contain; display: block; }
+.building-room-detail h4 { margin: 28px 0 18px; font-size: 19px; }
+.building-service-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border-top: 1px solid var(--hair); border-left: 1px solid var(--hair); }
+.building-service-grid > div { padding: 22px; border-bottom: 1px solid var(--hair); border-right: 1px solid var(--hair); }
+.building-service-grid dt { color: var(--fg-3); font-size: 13px; }
+.building-service-grid dd { margin: 10px 0; font-family: var(--display); font-size: 30px; }
+.building-service-grid p { font-size: 14px; color: var(--fg-2); }
+.building-room-detail details, .building-release-details { margin-top: 24px; padding: 20px 0; border-top: 1px solid var(--hair); }
+.building-room-detail summary, .building-release-details summary { cursor: pointer; font-weight: 600; }
+.building-room-detail details p, .building-release-details p, .building-services-boundary p { margin: 16px 0; }
+.building-room-detail ul { padding-left: 20px; }
+.building-room-detail li { margin: 8px 0; }
+@media (max-width: 720px) {
+  .building-room-browser { grid-template-columns: 1fr; gap: 22px; }
+  .building-model-stage { padding: 14px; }
+  .building-service-grid { grid-template-columns: 1fr; }
+  .building-plan-downloads a { flex: 1 1 190px; }
+  .building-model-stage h3 { font-size: 22px; }
+}

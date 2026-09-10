@@ -1,0 +1,172 @@
+{
+  "id": "FF-05",
+  "purpose": "Bathroom reference",
+  "floor": "FF",
+  "revision": "R01",
+  "sourceFile": "First Floor - Coordinated Planning R01.FCStd",
+  "sourceSha256": "4c8c65dbf487ba996e61ec38a3640ef5b5e97587f980dac338b09f3ac406a971",
+  "files": {
+    "freecad": {
+      "url": "/building-models/r01/rooms/FF-05.FCStd",
+      "filename": "FF-05.FCStd",
+      "bytes": 17383,
+      "sha256": "9f836ce2edc349e8d8ed43bc06245b3a82447ee29e9cc6316b0e6573b167dc16"
+    },
+    "step": {
+      "url": "/building-models/r01/rooms/FF-05.step",
+      "filename": "FF-05.step",
+      "bytes": 15134,
+      "sha256": "62d4ba8418bede19b1df5c0ab7c42b8b0ec540653559f09ccccbf666307e9ef4"
+    },
+    "preview": {
+      "url": "/building-models/r01/rooms/FF-05.svg",
+      "filename": "FF-05.svg",
+      "bytes": 7879,
+      "sha256": "7d38d6e2b91794bbdd0b54bb2a13532e68e7daf6a33d00518b29cce5ccab6b3a"
+    },
+    "previewPng": {
+      "url": "/building-models/r01/rooms/FF-05.png",
+      "filename": "FF-05.png",
+      "bytes": 33680,
+      "sha256": "eb6a246f6ed2dcb84a02658533d34ea5a74d21759d666fa71f2785d06b6f23f5"
+    }
+  },
+  "shapeCount": 13,
+  "solidCount": 0,
+  "geometryKind": "2D plan/reference geometry",
+  "verification": {
+    "nativeSaveReopen": "PASS",
+    "exactWorldShapes": 13,
+    "stepReadback": "PASS",
+    "stepChecks": {
+      "valid": true,
+      "solids": true,
+      "bounds": true,
+      "volume": true,
+      "area": true,
+      "summed_edge_length": true
+    }
+  },
+  "notes": [
+    "This room has source plan/reference geometry only: its STEP contains curves/wires, not a volumetric room model."
+  ],
+  "objects": [
+    {
+      "sourceObjectId": "FF_D02___door",
+      "label": "FF-D02 / door",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "d629b6673a37c12801ffef381df0f48a18877d5f139a1430af068e2cd30c4ec9"
+    },
+    {
+      "sourceObjectId": "FF_05___FF_05_A___wall",
+      "label": "FF-05 / FF-05-A / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "a8da52aec44e7e9c3567c9068e9be288116c1a314716f738c9d7ebbe0d22ca5f"
+    },
+    {
+      "sourceObjectId": "FF_05___FF_05_A___wall___provisional_120_mm_offset",
+      "label": "FF-05 / FF-05-A / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "b50be42d1b5b9558bd9a11d7e0206164b5f2e618aad8c7c39528d7bb5e0666c6"
+    },
+    {
+      "sourceObjectId": "FF_05___FF_05_B___wall",
+      "label": "FF-05 / FF-05-B / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "6b3bb72fb8388b6edd96f4ca0e3afe606e017d367f38664a26f00dd22215bc9d"
+    },
+    {
+      "sourceObjectId": "FF_05___FF_05_B___wall___provisional_120_mm_offset",
+      "label": "FF-05 / FF-05-B / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "978b640d9a74bf4aded231af294b5e6171e1972bca9a477cf90d18516786d242"
+    },
+    {
+      "sourceObjectId": "FF_05___FF_05_C___wall",
+      "label": "FF-05 / FF-05-C / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "6537fc77eb047c637f1aed3886fc334268e6a065498b776d26bfb8ccca8eaddc"
+    },
+    {
+      "sourceObjectId": "FF_05___FF_05_D___wall",
+      "label": "FF-05 / FF-05-D / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "1e8952878a031c3b9f651a1aec620244acef485d9dd4f9075307c5441ee46f2e"
+    },
+    {
+      "sourceObjectId": "FF_05___FF_05_D___wall___provisional_120_mm_offset",
+      "label": "FF-05 / FF-05-D / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "b7485947d7bb4c18c58d3ae7f78eee9614919051a8b219073d892ee1dda1b049"
+    },
+    {
+      "sourceObjectId": "FF_W02___window",
+      "label": "FF-W02 / window",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "f2ce798a913736c6926e3a20cebefc6b150122f2ac179964f8a767dc8531f9b2"
+    },
+    {
+      "sourceObjectId": "FF_05___retained_Corrected_First_Floor___sink_F2_1",
+      "label": "FF-05 / retained Corrected First Floor | sink_F2_1",
+      "role": "FixedReferences",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "09636fdf924c67882522d2ff641885131f26b3bd34242ab02f47f246be5c41ac"
+    },
+    {
+      "sourceObjectId": "FF_05___retained_Corrected_First_Floor___storage_cabinet_mid2_F2_1",
+      "label": "FF-05 / retained Corrected First Floor | storage_cabinet_mid2_F2_1",
+      "role": "FixedReferences",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "3f8d710c383e8ce42edc2549b303a4a02bff1204c37371c299d82a2337142409"
+    },
+    {
+      "sourceObjectId": "FF_05___retained_Corrected_First_Floor___storage_cabinet_mid2_F2_2",
+      "label": "FF-05 / retained Corrected First Floor | storage_cabinet_mid2_F2_2",
+      "role": "FixedReferences",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "39c694369c5c05070cab3db1ec41d6d52c678ff0fba976d804e82c8c3f68be89"
+    },
+    {
+      "sourceObjectId": "FF_05___retained_Corrected_First_Floor___toilet_F2_1",
+      "label": "FF-05 / retained Corrected First Floor | toilet_F2_1",
+      "role": "FixedReferences",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "23680737f191cf651e43d181fe44b5d15c1b061b84e83c5479e41c7f0c90e3fa"
+    }
+  ]
+}

@@ -1,8 +1,10 @@
 import { useMemo, useState } from "react";
 import { PageHeader, Section } from "../components/Primitives";
+import { BuildingPlanning } from "../components/BuildingPlanning";
 import {
   buildingVisionItems,
-  type BuildingVisionFloor
+  type BuildingVisionFloor,
+  type BuildingVisionItem
 } from "../data/buildingVision";
 import "./BuildingVisionPage.css";
 
@@ -18,13 +20,14 @@ const buildingVisionAgentPrompt = `Please propose a revision to the Building Vis
 View: [00–20 · exact card title]
 Requested change: [one clear change]
 Reason: [what this improves]
-Must preserve: [the exact walls, doors, windows, stairs, floor levels, storage, trees, gate, drainage and circulation shown]
-Reference: [attach the matching approved PNG from public/building-vision/rework-v2]
+Must preserve: [the approved model geometry, furniture, doors, stairs, floor levels, retained storage and access constraints]
+Design authority: Latest approved Blender first, coordinated CAD second; align concept photos to them, never the reverse.
+Reference: [identify the approved Blender release and matching CAD; attach the relevant earlier PNG from public/building-vision/rework-v2]
 Set rule: Keep the canonical Building Vision set at exactly 21 PNGs unless I explicitly approve adding, removing or replacing a view.
 
 Before doing any work, read AGENTS.md and DESIGN.md.
 First describe the proposed change in words. Do not edit files until I approve.
-After approval, update only the named approved concept image and its website note. Do not restore the legacy before/after assets or change another view.
+After approval, align only the named concept image and its website note to the approved model. Keep unresolved proposals labelled; do not restore the legacy before/after assets or change another view.
 Show me the revised local /building-vision page before committing or publishing.
 Run npm test, npm run build and the building-vision browser test.`;
 
@@ -68,44 +71,45 @@ export function BuildingVisionPage() {
   return (
     <div className="building-vision-page">
       <PageHeader
-        meta="1426, 20th Main Road · HSR Layout"
+        meta="Armature AI Labs · HSR 1490 · HSR Layout, Bengaluru"
         title="The building, without rebuilding it."
-        description="A coordinated 21-view concept for adapting the existing HSR building into Armature AI Labs' coworking, meeting and presentation spaces. The approved sequence shows the frontage, ground floor and first floor with targeted access, glazing, flooring, furniture, lighting and identity upgrades."
+        description="Explore the selected ground- and first-floor layouts for Armature AI Labs. The latest approved Blender model governs the design, coordinated CAD follows it, and current model renders are distinguished from the 21 earlier appearance references."
       >
+        <p className="building-vision-quick-links"><a href="#planning-model">Explore 3D + room CAD</a> · <a href="#comparisons">Browse concept photos</a></p>
         <div className="building-vision-summary" aria-label="Concept summary">
           <div><strong>{buildingVisionItems.length}</strong><span className="mono">Building views</span></div>
           <div><strong>2</strong><span className="mono">Floors + frontage</span></div>
-          <div><strong>1</strong><span className="mono">Coordinated concept set</span></div>
+          <div><strong>1</strong><span className="mono">Model-led design hierarchy</span></div>
         </div>
       </PageHeader>
 
       <div className="building-vision-guardrail">
         <div className="wrap">
-          <span className="mono">Concept boundary</span>
-          <p>These images communicate design intent, not measured construction details. Retain the primary shell and stair geometry; survey every glass door, partition, balcony enclosure, egress route, waterproofing and service requirement before procurement.</p>
+          <span className="mono">Design authority</span>
+          <p>Latest approved Blender → coordinated CAD → aligned concept photos. Current model images below are direct R01 Blender renders; earlier photo concepts are labelled separately. Neither selection nor a successful export establishes construction readiness, safe occupancy or measured service capacity. AC and installation details remain proposals requiring site and professional checks.</p>
         </div>
       </div>
 
       <Section
         number="01"
         title="One building, four coordinated decisions."
-        lede="The new sequence keeps every room recognisable while resolving how people arrive, work, meet, present and move through the building."
+        lede="Use the approved models for the selected layout, and the room-status notes for decisions that remain open. Appearance references must follow that distinction."
       >
         <div className="building-vision-principles">
           <article>
             <span className="mono">Existing shell</span>
             <h3>Keep the building legible</h3>
-            <p>Respect the true walls, openings, stair turns, floor levels, fixed storage and balcony contours shown in the source photographs.</p>
+            <p>Preserve the existing shell, openings, stair turns, floor levels and retained storage in the approved Blender model. Coordinate CAD to it; use site evidence to resolve discrepancies rather than inferring geometry from a styled image.</p>
           </article>
           <article>
             <span className="mono">Access + glazing</span>
             <h3>Separate without closing in</h3>
-            <p>Use glass access doors, stair partitions and carefully fitted balcony enclosures while keeping adjacent doors and egress clear.</p>
+            <p>The selected curved stair partitions use a left flat door at GF09 A01 and a central flat door at FF04 P01. Retain their distinct floor layouts and recorded door-approach restrictions; verify operation and egress on site.</p>
           </article>
           <article>
             <span className="mono">Work-ready interiors</span>
             <h3>Power, comfort and continuity</h3>
-            <p>Continuous workbars, powered round tables, acoustic flooring and compact furniture support daily work without wasting circulation.</p>
+            <p>GF10 uses nine 2 ft 6 in square table modules, 17 counter chairs and 21 table chairs. Its counter is 17 in deep. These are selected positions, not a certified comfortable capacity; occupied-chair and movement checks remain visible in the planning review.</p>
           </article>
           <article>
             <span className="mono">Technical verification</span>
@@ -115,10 +119,12 @@ export function BuildingVisionPage() {
         </div>
       </Section>
 
+      <BuildingPlanning />
+
       <Section
-        number="02"
+        number="03"
         title="The complete 21-view Building Vision."
-        lede="The numbered sequence below uses only the approved PNG set. Filter by area, then use each concept and note as a first-pass fit-out brief."
+        lede="Six current-layout views now use direct R01 Blender renders. Expand the earlier concepts to compare; conflicting or unfinished concepts stay folded away. All 21 original references are preserved. Use Blender first, CAD second."
         id="comparisons"
       >
         <div className="building-vision-filters" role="toolbar" aria-label="Filter building views">
@@ -150,22 +156,29 @@ export function BuildingVisionPage() {
               </header>
 
               <div className="building-vision-concept">
-                <figure>
-                  <div className="building-vision-image-frame">
-                    <img
-                      src={item.image}
-                      alt={item.alt}
-                      width={item.imageWidth}
-                      height={item.imageHeight}
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </div>
-                  <figcaption><span className="mono">View {item.sequence}</span> {item.caption}</figcaption>
-                </figure>
+                {item.modelImage ? (
+                  <>
+                    <figure className="building-vision-model-image">
+                      <div className="building-vision-image-frame">
+                        <img src={item.modelImage.src} alt={item.modelImage.alt} width={item.modelImage.width} height={item.modelImage.height} loading="lazy" decoding="async" />
+                      </div>
+                      <figcaption><span className="mono">View {item.sequence} · R01 Blender render</span> {item.modelImage.caption}</figcaption>
+                    </figure>
+                    <details className="building-vision-reference">
+                      <summary>Earlier concept image — not the current layout</summary>
+                      <EarlierConceptImage item={item} />
+                    </details>
+                  </>
+                ) : item.modelNote ? (
+                  <details className="building-vision-reference">
+                    <summary>Earlier concept image — not the current layout</summary>
+                    <EarlierConceptImage item={item} />
+                  </details>
+                ) : <EarlierConceptImage item={item} />}
               </div>
 
               <div className="building-vision-spec">
+                <div className="building-vision-preserve"><span className="mono">Current design / reference status</span><p>{item.modelNote ?? "Earlier appearance reference, not a verified R01 render. Align any revision to the latest approved Blender model and coordinated CAD; finishes and service details shown are not installation approvals."}</p></div>
                 <div><span className="mono">Design intent</span><p>{item.designIntent}</p></div>
                 <div><span className="mono">Key elements</span><p>{item.keyElements}</p></div>
                 <div className="building-vision-preserve"><span className="mono">Must remain</span><p>{item.preserve}</p></div>
@@ -176,7 +189,7 @@ export function BuildingVisionPage() {
       </Section>
 
       <Section
-        number="03"
+        number="04"
         title="Use Codex or Claude to propose a revision."
         lede="A useful request names one view, one change and the parts of the building that must remain. The agent should propose first and edit only after approval."
         id="suggest-a-change"
@@ -213,7 +226,7 @@ export function BuildingVisionPage() {
             <h3>Start the agent in this project.</h3>
             <ol>
               <li>Open the Armature AI Labs project in Codex or Claude and ask it to read <code>AGENTS.md</code> and <code>DESIGN.md</code>.</li>
-              <li>Name the exact Building Vision card and attach the relevant screenshot or concept image.</li>
+              <li>Name the exact Building Vision card, identify the latest approved Blender release and coordinated CAD, then attach the relevant concept image.</li>
               <li>Describe one requested change and list every wall, opening, stair, tree or circulation route that must remain.</li>
             </ol>
           </article>
@@ -222,7 +235,7 @@ export function BuildingVisionPage() {
             <h3>Keep one coordinated image set.</h3>
             <ol>
               <li>Ask for a written proposal before allowing file edits or image generation.</li>
-              <li>Revise only the named concept and its note; keep the canonical sequence at exactly 21 PNGs unless a set change is explicitly approved.</li>
+              <li>Align the named concept and its note to Blender first and CAD second; keep the canonical sequence at exactly 21 PNGs unless a set change is explicitly approved.</li>
               <li>Review the local page on desktop and mobile, then approve any commit or publication separately.</li>
             </ol>
           </article>
@@ -250,9 +263,20 @@ export function BuildingVisionPage() {
       <section className="building-vision-note">
         <div className="wrap">
           <span className="mono">Before procurement</span>
-          <p>Confirm the remaining floor labels and all dimensions against a measured survey; check landlord permissions, waterproofing, electrical capacity, fire egress and accessibility with qualified local professionals. The concepts intentionally do not resolve those technical checks.</p>
+          <p>Confirm dimensions and unresolved door, storage and service constraints on site; check landlord permissions, waterproofing, electrical capacity, HVAC, fire egress and accessibility with qualified local professionals. Ground and first floor are the verified scope. Layout approval does not settle these technical checks.</p>
         </div>
       </section>
     </div>
+  );
+}
+
+function EarlierConceptImage({ item }: { item: BuildingVisionItem }) {
+  return (
+    <figure className="building-vision-reference-image">
+      <div className="building-vision-image-frame">
+        <img src={item.image} alt={item.alt} width={item.imageWidth} height={item.imageHeight} loading="lazy" decoding="async" />
+      </div>
+      <figcaption><span className="mono">View {item.sequence} · Earlier appearance reference</span> {item.caption}</figcaption>
+    </figure>
   );
 }
