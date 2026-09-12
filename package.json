@@ -12,9 +12,9 @@
     "build:production": "node scripts/assert-production-env.mjs && tsc -b && vite build && npm run materialize:route-shells && npm run check:release-artifacts",
     "build:demo": "tsc -b && VITE_DEMO_MODE=true vite build && npm run materialize:route-shells && npm run check:release-artifacts",
     "materialize:route-shells": "node scripts/materialize-route-shells.mjs",
-    "check:release-artifacts": "node scripts/check-building-models.mjs && node scripts/check-release-artifacts.mjs",
+    "check:release-artifacts": "node scripts/check-building-models.mjs && node scripts/check-electrical-plan.mjs && node scripts/check-release-artifacts.mjs",
     "check:pages-runtime": "node scripts/check-pages-runtime.mjs",
-    "check:live-release": "node scripts/check-live-release.mjs && node scripts/check-live-building-models.mjs",
+    "check:live-release": "node scripts/check-live-release.mjs && node scripts/check-live-building-models.mjs && node scripts/check-live-electrical-plan.mjs",
     "audit:production": "node scripts/check-production-audit.mjs",
     "audit:all": "npm audit --audit-level=high",
     "preview": "vite preview",
@@ -23,7 +23,7 @@
     "test:e2e": "npm run build:demo && playwright test",
     "test:e2e:production": "playwright test tests/frontend/e2e/public-release-gates.spec.ts tests/frontend/e2e/building-vision.spec.ts tests/frontend/e2e/reliability.spec.ts --project=chromium --project=mobile",
     "prepare:building-models": "node scripts/building-vision/release-manifest.mjs",
-    "check:building-models": "node scripts/check-building-models.mjs"
+    "check:building-models": "node scripts/check-building-models.mjs && node scripts/check-electrical-plan.mjs"
   },
   "dependencies": {
     "@google/model-viewer": "^4.3.1",

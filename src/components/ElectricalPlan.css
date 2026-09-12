@@ -1,0 +1,34 @@
+.electrical-summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--hair); border-left: 1px solid var(--hair); margin-top: 26px; }
+.electrical-summary > div { padding: 20px; border-bottom: 1px solid var(--hair); border-right: 1px solid var(--hair); background: var(--panel); }
+.electrical-summary span { color: var(--fg-3); font-size: 12px; text-transform: uppercase; }
+.electrical-summary strong { display: block; margin: 8px 0 6px; font-family: var(--display); font-size: 24px; line-height: 1.15; }
+.electrical-summary p { margin: 0; font-size: 13px; color: var(--fg-2); }
+.electrical-drawing { margin: 0; }
+.electrical-drawing figcaption { margin-top: 12px; font-size: 13px; color: var(--fg-3); }
+.electrical-table-wrap { overflow-x: auto; margin-top: 28px; border: 1px solid var(--hair); }
+.electrical-table { width: 100%; min-width: 760px; border-collapse: collapse; font-size: 13px; background: var(--panel); }
+.electrical-table caption { padding: 12px 14px; text-align: left; color: var(--fg-3); font-size: 11px; text-transform: uppercase; }
+.electrical-table th, .electrical-table td { padding: 10px 12px; border-top: 1px solid var(--hair); text-align: left; vertical-align: top; }
+.electrical-table thead th { color: var(--fg-3); font-weight: 600; font-size: 12px; white-space: nowrap; }
+.electrical-table tbody th { font-weight: 600; }
+.electrical-table tbody th .mono { color: var(--brick); margin-right: 6px; }
+.electrical-table td:nth-child(n + 2) { white-space: nowrap; }
+.electrical-details { margin-top: 24px; padding: 20px 0; border-top: 1px solid var(--hair); }
+.electrical-details summary { cursor: pointer; font-weight: 600; }
+.electrical-details p, .electrical-details li { margin: 12px 0; color: var(--fg-2); font-size: 14px; }
+.electrical-details ul, .electrical-details ol { padding-left: 20px; }
+.electrical-scenarios { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 12px; }
+.electrical-scenarios article { padding: 16px 18px; border: 1px solid var(--hair); background: var(--panel); }
+.electrical-scenarios h4 { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; margin: 0 0 8px; font-size: 15px; }
+.electrical-scenarios h4 .mono { color: var(--brick); font-size: 14px; white-space: nowrap; }
+.electrical-scenarios li { margin: 6px 0; font-size: 13px; }
+@media (max-width: 900px) {
+  .electrical-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 720px) {
+  .electrical-scenarios { grid-template-columns: 1fr; }
+  .electrical-summary strong { font-size: 20px; }
+}
+@media (max-width: 440px) {
+  .electrical-summary { grid-template-columns: 1fr; }
+}

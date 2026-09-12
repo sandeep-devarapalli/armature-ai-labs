@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { PageHeader, Section } from "../components/Primitives";
 import { BuildingPlanning } from "../components/BuildingPlanning";
+import { ElectricalPlan } from "../components/ElectricalPlan";
 import release from "../data/buildingModelRelease.json";
 import "./BuildingVisionPage.css";
 
@@ -27,7 +28,7 @@ export function BuildingVisionPage() {
   return <div className="building-vision-page">
     <PageHeader meta="Armature AI Labs · HSR 1490" title="Building Vision"
       description="Explore our ground- and first-floor layouts, room views, and downloadable Blender and CAD designs.">
-      <p className="building-vision-quick-links"><a href="#planning-model">Explore models and downloads</a> · <a href="#comparisons">Browse building views</a></p>
+      <p className="building-vision-quick-links"><a href="#planning-model">Explore models and downloads</a> · <a href="#comparisons">Browse building views</a> · <a href="#electrical-plan">Electrical and setup plan</a></p>
       <p>1490, 11th Cross, 20th Main, 1st Sector, HSR Layout, Bengaluru – 560034, Karnataka.</p>
     </PageHeader>
     <BuildingPlanning />
@@ -50,5 +51,6 @@ export function BuildingVisionPage() {
         </article>)}
       </div>
     </Section>
+    <ElectricalPlan />
   </div>;
 }

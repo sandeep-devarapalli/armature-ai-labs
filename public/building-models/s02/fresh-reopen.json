@@ -1,0 +1,28 @@
+{
+ "revision": "S02",
+ "nativeSaveReopen": "PASS",
+ "documents": {
+  "Ground Floor - Electrical S02": {
+   "file": "Ground Floor - Electrical S02.FCStd",
+   "fcstd_sha256": "f680270b0082d53ec012e8c70cd797e070571272a8b694cb4ad1e366a700b323",
+   "bytes": 285761,
+   "symbols": 130,
+   "reference_shapes": 88,
+   "invalid": [],
+   "step": "Ground Floor - Electrical S02 - symbols.step",
+   "step_sha256": "afd055300a1964fe678f906da6ead1045360f9965a6d4ea8209906e6a20adabf",
+   "step_bytes": 543791
+  },
+  "First Floor - Electrical S02": {
+   "file": "First Floor - Electrical S02.FCStd",
+   "fcstd_sha256": "09d87ba48a64bf2e456178822178f1608d1b07e4be36f0a65bba509402e46b91",
+   "bytes": 857924,
+   "symbols": 126,
+   "reference_shapes": 52,
+   "invalid": [],
+   "step": "First Floor - Electrical S02 - symbols.step",
+   "step_sha256": "95cf3c0def7012518ac2f73aa91f9553785cfbd719ee8953a15defe643d0ace5",
+   "step_bytes": 589146
+  }
+ }
+}
