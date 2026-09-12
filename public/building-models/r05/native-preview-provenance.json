@@ -1,0 +1,82 @@
+{
+  "release": "R05",
+  "aiGenerated": false,
+  "note": "Direct native renders only. The FF02 enclosure is a concept for the user's review, not a structural, thermal or fabrication design.",
+  "images": [
+    {
+      "file": "first-floor.png",
+      "sha256": "4d19fb10c47f6310b3a7a99bf73c6ac404dd00770d1a5134069cd9611cc0aa03",
+      "sourceImageSha256": "4e1a5d64762896048d3699e03dfd19f75d23c6983ee0ccd76f7d7ac1239aca9f",
+      "sourceNative": "selected-layout.blend",
+      "sourceNativeSha256": "5cd3c6657441982c8a0fa4d92711d140d14d52ebd0c4776370053c2f88d61a42",
+      "renderer": "Native Blender Cycles",
+      "samples": 64,
+      "device": "METAL",
+      "camera": "P03 current first-floor review camera",
+      "width": 1450,
+      "height": 1200,
+      "displayChanges": [
+        "Camera and lighting for review; no native geometry saved."
+      ],
+      "metadataOnly": true,
+      "pixelChunksUnchanged": true
+    },
+    {
+      "file": "ff02-enclosure.png",
+      "sha256": "7038b0d466798a0389cb6a32302e64f9fbd378459a7677e43256eca9dcfcaaad",
+      "sourceImageSha256": "50152ab9cb924aaba87236fdb59033d5287a7dda9b638c00ad813bb111f6677e",
+      "sourceNative": "selected-layout.blend",
+      "sourceNativeSha256": "5cd3c6657441982c8a0fa4d92711d140d14d52ebd0c4776370053c2f88d61a42",
+      "renderer": "Native Blender Cycles",
+      "samples": 64,
+      "device": "METAL",
+      "camera": "FF02 C03 | review camera",
+      "width": 1450,
+      "height": 1200,
+      "displayChanges": [
+        "New orthographic review camera inside the FF02 C03 collection; no other change."
+      ],
+      "metadataOnly": true,
+      "pixelChunksUnchanged": true
+    },
+    {
+      "file": "ff02-enclosure-cad.png",
+      "sha256": "93b548e844bdb74845960e2a21228b4bf80d343bdfefdf4b049459e6329b4084",
+      "sourceImageSha256": "48a979803093519883b2c00d0caa302bd9461fc23bac0989cb40700345ffc180",
+      "sourceNative": "ff02-enclosure.FCStd",
+      "sourceNativeSha256": "28fab8d70bffa3c43202d02c49f533cb4bf8f7740ae13cc3ec13463c364ee1ce",
+      "renderer": "Native FreeCAD 3D view (orthographic, saveImage)",
+      "view": "exterior axonometric from the south-west",
+      "width": 1600,
+      "height": 1100,
+      "metadataOnly": true,
+      "pixelChunksUnchanged": true
+    },
+    {
+      "file": "ff02-enclosure-cad-cutaway.png",
+      "sha256": "55d844144a4e2b0e8a615205aad98a95e418f655338f8a9c8b7360b1d59e42aa",
+      "sourceImageSha256": "924f22d5b150a77bf9b977271168a78dcdbe77784a22d54341006bd040173dc4",
+      "sourceNative": "ff02-enclosure.FCStd",
+      "sourceNativeSha256": "28fab8d70bffa3c43202d02c49f533cb4bf8f7740ae13cc3ec13463c364ee1ce",
+      "renderer": "Native FreeCAD 3D view (orthographic, saveImage)",
+      "view": "roof and panels 70-75 % transparent to show the frame and layout",
+      "width": 1600,
+      "height": 1100,
+      "metadataOnly": true,
+      "pixelChunksUnchanged": true
+    },
+    {
+      "file": "ff02-enclosure-plan.png",
+      "sha256": "b7e1b90c8d46ed3c7b4e77a1553156bf8868177a502e9f83d2c837522917586d",
+      "sourceImageSha256": "ede5de5522fd7f545acee145194a1da172127858632e1b80ae56df5f1484489c",
+      "sourceNative": "ff02-enclosure.FCStd",
+      "sourceNativeSha256": "28fab8d70bffa3c43202d02c49f533cb4bf8f7740ae13cc3ec13463c364ee1ce",
+      "renderer": "Native FreeCAD 3D view (orthographic, saveImage)",
+      "view": "top view without the roof",
+      "width": 1400,
+      "height": 1400,
+      "metadataOnly": true,
+      "pixelChunksUnchanged": true
+    }
+  ]
+}

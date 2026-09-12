@@ -1,0 +1,71 @@
+{
+  "files": [
+    {
+      "file": "ff02-enclosure.FCStd",
+      "sourceSha256": "28fab8d70bffa3c43202d02c49f533cb4bf8f7740ae13cc3ec13463c364ee1ce",
+      "publicSha256": "28fab8d70bffa3c43202d02c49f533cb4bf8f7740ae13cc3ec13463c364ee1ce",
+      "publicBytes": 264283,
+      "nativeSaveReopen": "PASS",
+      "transformationKind": "verified-current-design-copy",
+      "serializedPrivatePathScan": "PASS",
+      "scope": "FF02 C03 room-level concept: simplified existing slab, north and east walls and balcony guard as references, plus the steel frame, panels, roof, openings and lab layout. Not a full-floor document; the R04 full first-floor CAD is retained unchanged and predates the enclosure.",
+      "objects": 170,
+      "solids": 164,
+      "invalidShapes": 0,
+      "groups": {
+        "Existing": 65,
+        "Frame": 29,
+        "Openings": 9,
+        "Panels": 9,
+        "Roof": 7,
+        "Furniture": 45
+      },
+      "boundsMm": [
+        -8755,
+        -6320,
+        3326,
+        -3494,
+        406,
+        6526
+      ],
+      "units": "millimetres",
+      "datumMm": 3475.768
+    },
+    {
+      "file": "ff02-enclosure.step",
+      "sourceSha256": "c0a8068e058c3d979091addfb761b154192a29bf1026c6637c3fbc892a9b9071",
+      "publicSha256": "c0a8068e058c3d979091addfb761b154192a29bf1026c6637c3fbc892a9b9071",
+      "publicBytes": 1205429,
+      "transformationKind": "native-step-export",
+      "serializedPrivatePathScan": "PASS",
+      "header": "ISO-10303"
+    },
+    {
+      "file": "ff02-enclosure-cad.png",
+      "sourceSha256": "48a979803093519883b2c00d0caa302bd9461fc23bac0989cb40700345ffc180",
+      "publicSha256": "93b548e844bdb74845960e2a21228b4bf80d343bdfefdf4b049459e6329b4084",
+      "metadataOnly": true,
+      "pixelChunksUnchanged": true,
+      "retainedColorProfile": true,
+      "removedTextChunks": 5
+    },
+    {
+      "file": "ff02-enclosure-cad-cutaway.png",
+      "sourceSha256": "924f22d5b150a77bf9b977271168a78dcdbe77784a22d54341006bd040173dc4",
+      "publicSha256": "55d844144a4e2b0e8a615205aad98a95e418f655338f8a9c8b7360b1d59e42aa",
+      "metadataOnly": true,
+      "pixelChunksUnchanged": true,
+      "retainedColorProfile": true,
+      "removedTextChunks": 5
+    },
+    {
+      "file": "ff02-enclosure-plan.png",
+      "sourceSha256": "ede5de5522fd7f545acee145194a1da172127858632e1b80ae56df5f1484489c",
+      "publicSha256": "b7e1b90c8d46ed3c7b4e77a1553156bf8868177a502e9f83d2c837522917586d",
+      "metadataOnly": true,
+      "pixelChunksUnchanged": true,
+      "retainedColorProfile": true,
+      "removedTextChunks": 5
+    }
+  ]
+}

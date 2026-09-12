@@ -1,0 +1,30 @@
+{
+  "evidence": {
+    "blender-metadata-provenance.json": "f52ab94b346e76a22852cfba053e129cd08c559c54ca35d8d323d1e029e8c64f",
+    "cad-metadata-provenance.json": "9092db7c2a1f0f422ee9d3a4cec3b3e81524da700aff3d20421e97c845763308",
+    "native-preview-provenance.json": "2fc0e0cd0ab28b196215e23ee16e6e28b1418ebbe9ad8b4c2e7e84b7fc907feb",
+    "design-verification.json": "828574c73c0c10e3df28a9dee41446193dadd53b084e3de572b2a063ed668afb",
+    "manifest.json": "af2fee03fe19093d20c3cc601fc682e6c489aa1385e927cbc3508d1a8a677736"
+  },
+  "native": {
+    "selected-layout.blend": {
+      "sourceSha256": "5cd3c6657441982c8a0fa4d92711d140d14d52ebd0c4776370053c2f88d61a42",
+      "publicSha256": "5cd3c6657441982c8a0fa4d92711d140d14d52ebd0c4776370053c2f88d61a42"
+    },
+    "ff02-enclosure.FCStd": {
+      "sourceSha256": "28fab8d70bffa3c43202d02c49f533cb4bf8f7740ae13cc3ec13463c364ee1ce",
+      "publicSha256": "28fab8d70bffa3c43202d02c49f533cb4bf8f7740ae13cc3ec13463c364ee1ce"
+    }
+  },
+  "firstFloorScene": "First floor - R05 FF02 enclosure",
+  "previousSourceNativeSha256": "9962e93c7cb587f6355a74d6e62bafd046ec5b26b44a4290b2511e6f75a5d4f8",
+  "geometryRevision": {
+    "retainedObjectCount": 1299,
+    "replacedObjectCount": 295,
+    "addedObjectCount": 83,
+    "movedObjectCount": 14
+  },
+  "retainedRooms": "/building-models/r04/rooms/manifest.json",
+  "retainedRoomsSha256": "ce1105a794a5e47aa5db924b0744262f4898e9208c96bd9af2849cc1da8b663a",
+  "acceptedBy": "Reviewed native previews, GLB reimport and preservation records on 12 September 2026 before publication."
+}

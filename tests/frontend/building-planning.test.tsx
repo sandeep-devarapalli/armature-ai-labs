@@ -52,6 +52,14 @@ describe("coordinated building planning", () => {
     expect(screen.getByRole("link", { name: "FF-06 · FreeCAD extract" })).toHaveAttribute("href", "/building-models/r03/rooms/FF-06.FCStd");
     expect(screen.getByText(/Selected twin cabins — dedicated lower balcony/)).toBeInTheDocument();
     expect(screen.getByRole("img", { name: "FF-06 selected cabin Blender proposal R03" })).toHaveAttribute("src", "/building-models/r03/ff06-cabins.png");
+    expect(screen.queryByRole("heading", { name: /Enclosure proposal/ })).not.toBeInTheDocument();
+    fireEvent.change(screen.getByRole("combobox"), { target: { value: "FF-02" } });
+    expect(screen.getByRole("heading", { name: "Enclosure proposal C03 · Blender" })).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: /FF-02 proposed steel-frame insulated-panel enclosure/ })).toHaveAttribute("src", release.enclosure.blender);
+    expect(screen.getByRole("link", { name: "FF-02 · enclosure FreeCAD" })).toHaveAttribute("href", release.enclosure.freecad);
+    expect(screen.getByRole("link", { name: "FF-02 · enclosure STEP" })).toHaveAttribute("href", release.enclosure.step);
+    expect(screen.getByRole("link", { name: "FF-02 · FreeCAD extract" })).toHaveAttribute("href", "/building-models/r03/rooms/FF-02.FCStd");
+    expect(screen.getByText(/not a structural, thermal or fabrication design/)).toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: "Earlier S01 service estimate · not recalculated for R04" })).not.toBeInTheDocument();
     fireEvent.change(screen.getByRole("combobox"), { target: { value: "FF-03" } });
     expect(screen.getByRole("heading", { name: "Two- and four-person cabins" })).toBeInTheDocument();

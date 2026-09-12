@@ -5,10 +5,13 @@ import { resolve } from "node:path";
 export const hash = (data) => createHash("sha256").update(data).digest("hex");
 export const check = (condition, message) => { if (!condition) throw new Error(message); };
 export const json = (path) => JSON.parse(readFileSync(path, "utf8"));
-export const previousRoot = "/building-models/r03";
-export const previousReleaseSha256 = "e5cd418b324c13c7a6dc7b2101fb16fef6f6a7ecb607f89346b4aac4fa4f0b6f";
+// The previous publication (R04) is immutable; R05 retains every asset it published, including the R03 files R04 retained.
+export const previousRoot = "/building-models/r04";
+export const previousReleaseSha256 = "5751d4c478275dc9e0195aff2f570d900e72d9f778d88f711b817ac223e32df0";
+export const earlierRoot = "/building-models/r03";
+export const earlierReleaseSha256 = "e5cd418b324c13c7a6dc7b2101fb16fef6f6a7ecb607f89346b4aac4fa4f0b6f";
 export function publicPath(url) {
-  check(/^\/building-models\/r0[34]\/[\w./-]+$/.test(url), "Unexpected public model URL: " + url);
+  check(/^\/building-models\/r0[345]\/[\w./-]+$/.test(url), "Unexpected public model URL: " + url);
   const root = resolve("public/building-models");
   const path = resolve("public" + url);
   check(path.startsWith(root + "/"), "Model path escapes public assets");
@@ -16,28 +19,35 @@ export function publicPath(url) {
 }
 export function previousRelease() {
   const bytes = readFileSync(publicPath(previousRoot + "/release.json"));
-  check(hash(bytes) === previousReleaseSha256, "Immutable R03 manifest changed");
-  return JSON.parse(bytes);
+  check(hash(bytes) === previousReleaseSha256, "Immutable R04 manifest changed");
+  const earlier = readFileSync(publicPath(earlierRoot + "/release.json"));
+  check(hash(earlier) === earlierReleaseSha256, "Immutable R03 manifest changed");
+  const previous = JSON.parse(bytes);
+  check(previous.retainedRelease.url === earlierRoot + "/release.json" && previous.retainedRelease.sha256 === earlierReleaseSha256, "R04 no longer points at the immutable R03 manifest");
+  return previous;
 }
 export function previousAsset(url, previous = previousRelease()) {
-  const file = url.startsWith(previousRoot + "/")
-    ? previous.files.find((entry) => url === previousRoot + "/" + entry.path)
-    : previous.externalDownloads.find((entry) => entry.url === url);
-  check(file, "Asset is not registered in immutable R03: " + url);
-  return { url, bytes: file.bytes, sha256: file.sha256, sourceRelease: "R03" };
+  if (url.startsWith(previousRoot + "/")) {
+    const file = previous.files.find((entry) => url === previousRoot + "/" + entry.path);
+    check(file, "Asset is not registered in immutable R04: " + url);
+    return { url, bytes: file.bytes, sha256: file.sha256, sourceRelease: "R04" };
+  }
+  const retained = previous.retainedAssets.find((entry) => entry.url === url) ?? previous.externalDownloads.find((entry) => entry.url === url);
+  check(retained, "Asset is not registered in immutable R04 or its retained R03 set: " + url);
+  return { url, bytes: retained.bytes, sha256: retained.sha256, sourceRelease: retained.sourceRelease ?? "R04" };
 }
 export function verifyBytes(path, record) {
   const data = readFileSync(path);
   check(data.length === record.bytes && hash(data) === record.sha256, "Asset byte/hash mismatch: " + path);
   return data;
 }
-export function expectedRetainedAssets(roomAudit) {
-  const prior = previousRelease();
-  const urls = new Set(["ground-floor.glb", "ground-floor.png", "ground-floor.FCStd", "ff04-cabins.png", "ff04-cad.png", "ff06-cabins.png", "ff06-cad.png"].map((file) => previousRoot + "/" + file));
-  for (const room of roomAudit.rooms.filter((entry) => entry.id !== "FF-03")) {
-    for (const asset of Object.values(room.files)) if (asset.url.startsWith("/")) urls.add(asset.url);
-    urls.add(room.provenanceUrl);
-    urls.add(`${previousRoot}/rooms/${room.id}-README.md`);
-  }
-  return [...urls].sort().map((url) => previousAsset(url, prior));
+export function expectedRetainedAssets(previous = previousRelease()) {
+  const own = previous.files.map((file) => ({ url: previousRoot + "/" + file.path, bytes: file.bytes, sha256: file.sha256, sourceRelease: "R04" }));
+  const earlier = previous.retainedAssets.map((asset) => ({ url: asset.url, bytes: asset.bytes, sha256: asset.sha256, sourceRelease: asset.sourceRelease }));
+  const all = [...own, ...earlier].sort((a, b) => a.url.localeCompare(b.url));
+  check(new Set(all.map((asset) => asset.url)).size === all.length, "Duplicate retained asset URL");
+  return all;
+}
+export function expectedExternalDownloads(previous = previousRelease()) {
+  return previous.externalDownloads.map((asset) => ({ file: asset.file, url: asset.url, bytes: asset.bytes, sha256: asset.sha256, sourceRelease: asset.sourceRelease ?? "R04" }));
 }

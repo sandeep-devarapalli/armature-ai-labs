@@ -13,6 +13,12 @@ const views = [
     src: release.floors[floor].preview, alt: `${floor === "ground" ? "Ground" : "First"} floor selected native Blender layout`,
     caption: `Current ${floor}-floor model overview.`, width: release.floors[floor].width, height: release.floors[floor].height
   })),
+  {
+    id: "ff-02-enclosure", floor: "First floor", title: "FF-02 · Enclosure proposal",
+    src: release.enclosure.blender, alt: "FF-02 proposed steel-frame enclosure with skylight strip, native Blender render",
+    caption: "Proposed steel-frame insulated-panel enclosure of the workshop terrace, with the curved balcony kept open. Concept for review.",
+    width: 1450, height: 1200
+  },
   ...(["FF-03", "FF-04", "FF-06"] as const).map((id) => ({
     id: `${id.toLowerCase()}-cabins`, floor: "First floor", title: `${id} · Cabin layout`,
     src: release.roomPreviews[id].blender, alt: `${id} selected cabin layout${id === "FF-03" ? " with sliding doors open" : ""}`,
