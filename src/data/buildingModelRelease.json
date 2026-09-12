@@ -1,11 +1,11 @@
 {
-  "revision": "r05",
-  "label": "R05",
+  "revision": "r06",
+  "label": "R06",
   "date": "2026-09-12",
-  "root": "/building-models/r05",
+  "root": "/building-models/r06",
   "floors": {
     "ground": { "model": "/building-models/r03/ground-floor.glb", "preview": "/building-models/r03/ground-floor.png", "revision": "R03", "width": 1250, "height": 1100 },
-    "first": { "model": "/building-models/r05/first-floor.glb", "preview": "/building-models/r05/first-floor.png", "revision": "R05", "width": 1450, "height": 1200 }
+    "first": { "model": "/building-models/r06/first-floor.glb", "preview": "/building-models/r06/first-floor.png", "revision": "R06", "width": 1450, "height": 1200 }
   },
   "roomPreviews": {
     "FF-03": { "revision": "R04", "blender": "/building-models/r04/ff03-cabins.png", "closed": "/building-models/r04/ff03-closed.png", "plan": "/building-models/r04/ff03-plan.png", "cad": "/building-models/r04/ff03-cad.png" },
@@ -14,17 +14,19 @@
   },
   "enclosure": {
     "roomId": "FF-02",
-    "revision": "C03",
-    "blender": "/building-models/r05/ff02-enclosure.png",
-    "cad": "/building-models/r05/ff02-enclosure-cad.png",
-    "cutaway": "/building-models/r05/ff02-enclosure-cad-cutaway.png",
-    "plan": "/building-models/r05/ff02-enclosure-plan.png",
-    "freecad": "/building-models/r05/ff02-enclosure.FCStd",
-    "step": "/building-models/r05/ff02-enclosure.step"
+    "revision": "C04",
+    "blender": "/building-models/r06/ff02-enclosure.png",
+    "roof": "/building-models/r06/ff02-roof.png",
+    "layout": "/building-models/r06/ff02-layout.png",
+    "cad": "/building-models/r06/ff02-enclosure-cad.png",
+    "cutaway": "/building-models/r06/ff02-enclosure-cad-cutaway.png",
+    "plan": "/building-models/r06/ff02-enclosure-plan.png",
+    "freecad": "/building-models/r06/ff02-enclosure.FCStd",
+    "step": "/building-models/r06/ff02-enclosure.step"
   },
   "downloads": {
     "groundCad": { "url": "/building-models/r03/ground-floor.FCStd" },
-    "firstCad": { "url": "https://github.com/sandeep-devarapalli/armature-ai-labs/releases/download/building-models-r04/first-floor.FCStd" },
-    "blender": { "url": "/building-models/r05/selected-layout.blend" }
+    "firstCad": { "url": "https://github.com/sandeep-devarapalli/armature-ai-labs/releases/download/building-models-r06/first-floor.FCStd" },
+    "blender": { "url": "/building-models/r06/selected-layout.blend" }
   }
 }

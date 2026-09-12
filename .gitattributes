@@ -1,2 +1,4 @@
 # Preserve this verified native export byte-for-byte, including FreeCAD formatting.
 public/building-models/r04/rooms/FF-03.step binary
+public/building-models/r06/ff02-enclosure.step binary
+public/building-models/r06/rooms/FF-02.step binary

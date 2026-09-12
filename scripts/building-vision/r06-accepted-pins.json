@@ -1,0 +1,36 @@
+{
+  "release": "R06",
+  "acceptanceScope": "Reviewed saved native geometry and images; browser QA status is separately recorded in the pinned evidence. Not engineering approval or proof of website deployment.",
+  "native": {
+    "selected-layout.blend": {
+      "sourceSha256": "704fdc25180377362b1b81446287de2d3fcb91ef5993c785a70a7534b08f9d62",
+      "publicSha256": "704fdc25180377362b1b81446287de2d3fcb91ef5993c785a70a7534b08f9d62"
+    },
+    "first-floor.FCStd": {
+      "sourceSha256": "ceec2bffac84d367a0c20db508da3273573efd6b3cca632b18b2f248ced6eb08",
+      "publicSha256": "ceec2bffac84d367a0c20db508da3273573efd6b3cca632b18b2f248ced6eb08"
+    },
+    "ff02-enclosure.FCStd": {
+      "sourceSha256": "06af7359df1fe8b7e2a60db2974541343ed1dd952ec2e4c7c060ec0b14f194d1",
+      "publicSha256": "06af7359df1fe8b7e2a60db2974541343ed1dd952ec2e4c7c060ec0b14f194d1"
+    }
+  },
+  "previousSourceNativeSha256": "5cd3c6657441982c8a0fa4d92711d140d14d52ebd0c4776370053c2f88d61a42",
+  "firstFloorScene": "First floor - R06 FF02 glass enclosure",
+  "geometryRevision": {
+    "retainedObjectCount": 3297,
+    "replacedObjectCount": 53,
+    "addedObjectCount": 184,
+    "movedObjectCount": 0
+  },
+  "retainedRooms": "/building-models/r04/rooms/manifest.json",
+  "retainedRoomsSha256": "ce1105a794a5e47aa5db924b0744262f4898e9208c96bd9af2849cc1da8b663a",
+  "evidence": {
+    "blender-metadata-provenance.json": "f3eb778f12b2ff623f20a529a5d5d5c762cd84c57e3d01e788793b0e3fd8b0a9",
+    "cad-metadata-provenance.json": "930cad833f8a70a4934a546d6417bd4decbd8d9d3a331535f15221f75df7a9d6",
+    "native-preview-provenance.json": "334ef74ba6b42ba938bb43edb5759cae5c62797abe8047452e88f997901913f0",
+    "design-verification.json": "2fd04bc6ea2cbacc743e5b766a3d3955298ac990e9588eca51cd28859ed7d712",
+    "manifest.json": "e326a89e06f93103b6313fc2aa9a3e03299e680f89762774b35805c1ee16c047",
+    "rooms/manifest.json": "edf91ab5127e63890042709ac8363ae797e49763c7337611cc7d2af947f54eab"
+  }
+}

@@ -2,19 +2,19 @@ import { readFileSync, readdirSync, statSync, writeFileSync } from "node:fs";
 import { resolve, relative } from "node:path";
 import { check, expectedExternalDownloads, expectedRetainedAssets, hash, json, previousAsset, previousRelease, previousReleaseSha256, previousRoot, publicPath, verifyBytes } from "./release-assets.mjs";
 
-// R05: FF02 C03 enclosure. Regenerates only the first-floor browser model, its preview, the Blender public copy and the
-// room-level enclosure CAD; every R04 and R03 asset is retained by exact bytes. Run after the native records are reviewed.
+// R06: FF02 C04 glass enclosure, coordinated first-floor CAD and one updated room extract.
+// Run only after the native records and new external CAD download have been reviewed.
 const configPath = "src/data/buildingModelRelease.json";
 const config = json(configPath);
-check(config.revision === "r05" && config.label === "R05" && config.root === "/building-models/r05", "Active release mismatch");
+check(config.revision === "r06" && config.label === "R06" && config.root === "/building-models/r06", "Active release mismatch");
 const root = publicPath(config.root + "/release.json").replace(/\/release.json$/, "");
 const previous = previousRelease();
-const roomAudit = json(publicPath(previousRoot + "/rooms/manifest.json"));
-check(roomAudit.revision === "R04" && roomAudit.rooms.length === 15, "Retained R04 room set incomplete");
+const roomAudit = json(root + "/rooms/manifest.json");
+check(roomAudit.revision === "R06" && roomAudit.rooms.length === 15 && JSON.stringify(roomAudit.changedRoomIds) === '["FF-02"]', "R06 room set incomplete");
 const blenderCopies = json(root + "/blender-metadata-provenance.json").files;
 const cadCopies = json(root + "/cad-metadata-provenance.json").files;
 const exportAudit = json(root + "/manifest.json");
-check(exportAudit.status === "PASS_GEOMETRY_REIMPORT_AND_EXACT_COPY_CHECKS" && exportAudit.release === "Coordinated Selected Layout R05", "Fresh GLB verification is required");
+check(exportAudit.status === "PASS_GEOMETRY_REIMPORT_AND_EXACT_COPY_CHECKS" && exportAudit.release === "Coordinated Selected Layout R06", "Fresh GLB verification is required");
 function curated(copies, file) {
   const records = copies.filter((copy) => copy.file === file);
   check(records.length === 1, "Missing/duplicate native curation record: " + file);
@@ -33,11 +33,16 @@ for (const [file, key] of [["ground-floor.FCStd", "groundCad"], ["first-floor.FC
     check(download.sha256 === copy.publicSha256 && download.bytes === copy.publicBytes && exportAudit.sourceNativeSha256 === copy.publicSha256, "Blender download/provenance drift");
     continue;
   }
+  if (key === "firstCad") {
+    const copy = curated(cadCopies, file);
+    check(copy.sourceBlenderSha256 === exportAudit.sourceNativeSha256 && copy.invalidShapes === 0 && copy.solids > 0, "Full-floor CAD must match the saved Blender revision");
+    check(download.sha256 === copy.publicSha256 && download.bytes === copy.publicBytes && !download.retainedFrom, "New full-floor CAD download/provenance drift");
+    continue;
+  }
   const retained = previousAsset(url, previous);
   check(download.sha256 === retained.sha256 && download.bytes === retained.bytes, "Retained CAD download drift: " + file);
   const old = json(publicPath(previousRoot + "/manifest.json")).downloads.find((entry) => entry.file === file);
   check(old && old.url === url && old.sha256 === download.sha256 && old.sourceSha256 === download.sourceSha256, "Retained CAD provenance drift: " + file);
-  if (key === "firstCad") check(download.retainedFrom?.release === "R04" && download.retainedFrom.releaseSha256 === previousReleaseSha256, "First-floor CAD must be attributed to R04");
 }
 for (const [file, key] of [["ff02-enclosure.FCStd", "freecad"], ["ff02-enclosure.step", "step"]]) {
   const copy = cadCopies.find((entry) => entry.file === file);
@@ -53,7 +58,7 @@ writeFileSync("src/data/buildingRoomCad.json", JSON.stringify(roomAudit.rooms.ma
 })), null, 2) + "\n");
 const retainedAssets = expectedRetainedAssets(previous);
 for (const asset of retainedAssets) verifyBytes(publicPath(asset.url), asset);
-const externalDownloads = expectedExternalDownloads(previous);
+const externalDownloads = expectedExternalDownloads(previous, exportAudit.downloads);
 const files = [];
 function walk(path) {
   for (const name of readdirSync(path).sort()) {
@@ -69,8 +74,8 @@ function walk(path) {
 walk(root);
 const manifest = {
   release: config.label, date: config.date, serviceRevision: "S02", floors: ["ground", "first"],
-  serviceStatus: "S02 electrical and setup plan (12 September) is the current service authority; S01 counts are historical.",
-  scope: "FF02 C03 steel-frame insulated-panel enclosure and lab layout, published as a proposal for review; not a structural, thermal or fabrication design and not an as-built survey or construction approval. All other rooms, the ground floor and the R04 full first-floor CAD are retained.",
+  serviceStatus: "S02 remains the published electrical and setup plan and is not recalculated for the glass enclosure; S01 counts are historical and S03 is not published.",
+  scope: "FF02 C04 aluminium-framed glass enclosure and glass-roof proposal with provisional solar-control film. Existing masonry, doorways, balcony, furniture and all other rooms are retained. First-floor native CAD and the FF02 extract are coordinated with the saved Blender design. Not a structural, thermal, fabrication or as-built design.",
   releaseConfigSha256: hash(readFileSync(configPath)), servicesSha256: hash(readFileSync("src/data/buildingRoomServices.json")),
   roomCatalogSha256: hash(readFileSync("src/data/buildingRoomCad.json")),
   retainedRelease: { url: previousRoot + "/release.json", sha256: previousReleaseSha256 },
@@ -78,4 +83,4 @@ const manifest = {
   files, retainedAssets, externalDownloads
 };
 writeFileSync(root + "/release.json", JSON.stringify(manifest, null, 2) + "\n");
-console.log(`R05: ${files.length} new assets, ${retainedAssets.length} retained assets, ${externalDownloads.length} retained external downloads.`);
+console.log(`R06: ${files.length} new assets, ${retainedAssets.length} retained assets, ${externalDownloads.length} verified external downloads.`);

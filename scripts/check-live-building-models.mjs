@@ -40,7 +40,7 @@ const retainedManifest = await readFile(resolve(`public${manifest.retainedReleas
 if (hash(retainedManifest) !== manifest.retainedRelease.sha256) throw new Error("Retained release manifest drift");
 assets.push({ url: new URL(manifest.retainedRelease.url, base), bytes: retainedManifest.length, sha256: manifest.retainedRelease.sha256 });
 for (const asset of manifest.retainedAssets) {
-  const expectedRoot = { R03: "/building-models/r03/", R04: "/building-models/r04/" }[asset.sourceRelease];
+  const expectedRoot = { R03: "/building-models/r03/", R04: "/building-models/r04/", R05: "/building-models/r05/" }[asset.sourceRelease];
   if (!expectedRoot || !asset.url.startsWith(expectedRoot)) throw new Error("Unexpected retained asset URL");
   assets.push({ url: new URL(asset.url, base), bytes: asset.bytes, sha256: asset.sha256 });
 }
