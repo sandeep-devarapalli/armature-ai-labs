@@ -1,6 +1,9 @@
 import { expect, test } from "@playwright/test";
 import release from "../../../src/data/buildingModelRelease.json" with { type: "json" };
 import electrical from "../../../src/data/buildingElectricalS02.json" with { type: "json" };
+import rooms from "../../../src/data/buildingRooms";
+import roomCad from "../../../src/data/buildingRoomCad.json" with { type: "json" };
+import roomViews from "../../../src/data/buildingRoomViews.json" with { type: "json" };
 
 test("R06 shows the FF02 glass enclosure with coordinated CAD while retaining earlier previews and lazy floor models", async ({ page }, testInfo) => {
   test.setTimeout(120_000);
@@ -93,7 +96,59 @@ test("a failed model request retains previews and native downloads", async ({ pa
   await expect(page.getByRole("button", { name: "Open interactive 3D" })).toBeVisible();
 });
 
+test("all fifteen rooms have Blender previews, CAD references and downloads without loading 3D", async ({ page }, testInfo) => {
+  test.setTimeout(120_000);
+  const models: string[] = [];
+  const errors: string[] = [];
+  page.on("request", (request) => { if (request.url().endsWith(".glb")) models.push(request.url()); });
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.goto("/building-vision/");
+  const details = page.getByRole("article", { name: "Selected room planning details" });
+  for (const floor of ["ground", "first"]) {
+    await page.getByRole("button", { name: `${floor === "ground" ? "Ground" : "First"} floor model`, exact: true }).click();
+    const floorRooms = rooms.filter((room) => room.floor === floor);
+    await expect(page.getByLabel("Choose a room").locator("option")).toHaveCount(floorRooms.length);
+    for (const room of floorRooms) {
+      await page.getByLabel("Choose a room").selectOption(room.id);
+      await expect(details.getByRole("heading", { name: room.name, exact: true })).toBeVisible();
+      const view = roomViews.find((item) => item.id === room.id);
+      const preview = details.getByRole("link", { name: `Open ${room.id}${room.id === "FF-02" ? " enclosure" : ""} Blender render`, exact: true }).locator("img");
+      await preview.scrollIntoViewIfNeeded();
+      await expect.poll(() => preview.evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+      await expect(preview).toHaveAttribute("loading", "lazy");
+      const imageUrl = await preview.getAttribute("src");
+      const download = details.getByRole("link", { name: `${room.id} · Blender PNG`, exact: true });
+      await expect(download).toHaveAttribute("href", imageUrl!);
+      await expect(download).toHaveAttribute("download", "");
+      if (view) {
+        await expect(preview).toHaveAttribute("src", view.image);
+        await expect(preview).toHaveJSProperty("naturalWidth", view.width);
+        await expect(preview).toHaveJSProperty("naturalHeight", view.height);
+        await expect(details).toContainText(view.caption);
+      }
+      const cad = roomCad.find((item) => item.id === room.id)!;
+      const wireframe = details.locator("details").filter({ has: page.getByText("Unsectioned CAD wireframe · SVG reference", { exact: true }) });
+      if ((await wireframe.getAttribute("open")) === null) await wireframe.locator("summary").click();
+      const plan = details.getByRole("link", { name: `Open ${room.id} plan preview`, exact: true }).locator("img");
+      await plan.scrollIntoViewIfNeeded();
+      await expect.poll(() => plan.evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+      for (const [label, url] of [["FreeCAD extract", cad.downloads.freecad.url], ["STEP extract", cad.downloads.step.url], ["plan SVG", cad.downloads.svg.url]]) {
+        await expect(details.getByRole("link", { name: `${room.id} · ${label}`, exact: true })).toHaveAttribute("href", url);
+      }
+      expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
+      if (["GF-02", "GF-10", "FF-01", "FF-05"].includes(room.id)) {
+        await preview.scrollIntoViewIfNeeded();
+        await page.screenshot({ path: testInfo.outputPath(`${room.id}-room-view.png`) });
+      }
+    }
+  }
+  expect(models).toEqual([]);
+  await expect(page.locator("model-viewer")).toHaveCount(0);
+  expect(errors).toEqual([]);
+});
+
 test("building vision shows current layouts with a simple gallery and full contact address", async ({ page }) => {
+  test.setTimeout(120_000);
   await page.goto("/building-vision/");
   await expect(page.getByRole("heading", { name: "Building Vision", exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Building views.", exact: true })).toBeVisible();
@@ -107,23 +162,27 @@ test("building vision shows current layouts with a simple gallery and full conta
   ]) await expect(page.getByText(text, { exact: false })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Copy prompt" })).toHaveCount(0);
   await expect(page.locator(".building-vision-reference")).toHaveCount(0);
-  await expect(page.getByText("Showing 6 of 6 views")).toBeVisible();
+  await expect(page.getByText("Showing 17 of 17 views")).toBeVisible();
   const gallery = page.locator(".building-vision-model-image img");
-  await expect(gallery).toHaveCount(6);
+  await expect(gallery).toHaveCount(17);
   for (const image of await gallery.all()) {
     await image.scrollIntoViewIfNeeded();
     await expect.poll(() => image.evaluate(node => (node as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+    await expect(image).toHaveAttribute("loading", "lazy");
     const bounds = await image.boundingBox();
     expect(bounds!.width).toBeGreaterThan(0);
     expect(bounds!.x).toBeGreaterThanOrEqual(0);
     expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(page.viewportSize()!.width + 1);
   }
+  for (const view of roomViews) {
+    await expect(page.locator(`#${view.id.toLowerCase()}-room img`)).toHaveAttribute("src", view.image);
+  }
   await page.getByRole("button", { name: "Ground floor", exact: true }).click();
-  await expect(page.getByText("Showing 1 of 6 views")).toBeVisible();
-  await expect(gallery).toHaveCount(1);
+  await expect(page.getByText("Showing 10 of 17 views")).toBeVisible();
+  await expect(gallery).toHaveCount(10);
   await page.getByRole("button", { name: "First floor", exact: true }).click();
-  await expect(page.getByText("Showing 5 of 6 views")).toBeVisible();
-  await expect(gallery).toHaveCount(5);
+  await expect(page.getByText("Showing 7 of 17 views")).toBeVisible();
+  await expect(gallery).toHaveCount(7);
   await expect(page.locator("#ff-02-enclosure img")).toHaveAttribute("src", release.enclosure.blender);
   for (const id of ["FF-03", "FF-04", "FF-06"] as const) {
     await expect(page.locator("#" + id.toLowerCase() + "-cabins img")).toHaveAttribute("src", release.roomPreviews[id].blender);

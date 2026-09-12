@@ -1,8 +1,12 @@
 import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { BuildingPlanning } from "../../src/components/BuildingPlanning";
+import { BuildingVisionPage } from "../../src/pages/BuildingVisionPage";
 import { ModelBoundary } from "../../src/components/ModelBoundary";
-import rooms from "../../src/data/buildingRoomServices.json";
+import rooms from "../../src/data/buildingRooms";
+import releasedRooms from "../../src/data/buildingRoomServices.json";
+import roomCad from "../../src/data/buildingRoomCad.json";
+import roomViews from "../../src/data/buildingRoomViews.json";
 import { buildingVisionItems } from "../../src/data/buildingVision";
 import imageProvenance from "../../public/building-vision/model-aligned-r01/provenance.json";
 import release from "../../src/data/buildingModelRelease.json";
@@ -11,6 +15,22 @@ vi.mock("../../src/components/BuildingModelViewer", () => ({ default: () => <div
 afterEach(cleanup);
 
 describe("coordinated building planning", () => {
+  it("labels GF-03 as the confirmed bathroom without changing released service allowances", () => {
+    const room = rooms.find((item) => item.id === "GF-03")!;
+    const released = releasedRooms.find((item) => item.id === room.id)!;
+    expect(room.name).toBe("Bathroom");
+    expect(room.status).toBe("Confirmed bathroom");
+    for (const key of ["sockets", "lights", "lightWatts", "equipmentWatts"] as const) expect(room[key]).toBe(released[key]);
+    expect(rooms.filter((item) => item.id !== room.id)).toEqual(releasedRooms.filter((item) => item.id !== room.id));
+    render(<BuildingVisionPage />);
+    fireEvent.change(screen.getByRole("combobox"), { target: { value: room.id } });
+    expect(screen.getByRole("heading", { name: "Bathroom" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "GF-03 · Bathroom" })).toBeInTheDocument();
+    expect(screen.getByRole("option", { name: "GF-03 · Bathroom" })).toBeInTheDocument();
+    expect(screen.queryByText(/PB09 sanitary classification is not field-confirmed/)).not.toBeInTheDocument();
+    expect(screen.queryByText("Verify sanitary use without inferring fixtures.")).not.toBeInTheDocument();
+  });
+
   it("keeps model-led images bound to native provenance and preserves all earlier references", () => {
     expect(buildingVisionItems).toHaveLength(21);
     expect(new Set(buildingVisionItems.map((item) => item.image)).size).toBe(21);
@@ -32,6 +52,49 @@ describe("coordinated building planning", () => {
     expect(rooms.filter((room) => room.floor === "first")).toHaveLength(6);
     expect(rooms.find((room) => room.id === "GF-10")?.sockets).toBe(52);
     expect(rooms.reduce((sum, room) => sum + room.lightWatts, 0)).toBe(807);
+  });
+
+  it("provides an individual Blender view and native CAD downloads for all fifteen included rooms", () => {
+    expect(roomViews.map((view) => view.id).sort()).toEqual(["FF-01", "FF-05", "GF-01", "GF-02", "GF-03", "GF-04", "GF-06", "GF-07", "GF-08", "GF-09", "GF-10"]);
+    for (const view of roomViews) {
+      expect(view.image).toBe(`/building-vision/room-views-r01/${view.id}.png`);
+      expect(view.sourceSha256).toMatch(/^[a-f0-9]{64}$/);
+      expect(view.width).toBeGreaterThan(0);
+      expect(view.height).toBeGreaterThan(0);
+      expect(view.caption.length).toBeGreaterThan(0);
+    }
+    render(<BuildingPlanning />);
+    for (const room of rooms) {
+      fireEvent.click(screen.getByRole("button", { name: `${room.floor === "ground" ? "Ground" : "First"} floor model` }));
+      fireEvent.change(screen.getByRole("combobox"), { target: { value: room.id } });
+      const view = roomViews.find((item) => item.id === room.id);
+      const source = view?.image ?? (room.id === "FF-02" ? release.enclosure.blender : release.roomPreviews[room.id as keyof typeof release.roomPreviews].blender);
+      const cad = roomCad.find((item) => item.id === room.id)!;
+      expect(screen.getByRole("heading", { name: room.name })).toBeInTheDocument();
+      expect(screen.getByRole("link", { name: `${room.id} · Blender PNG` })).toHaveAttribute("href", source);
+      expect(screen.getByRole("link", { name: `${room.id} · FreeCAD extract` })).toHaveAttribute("href", cad.downloads.freecad.url);
+      expect(screen.getByRole("link", { name: `${room.id} · STEP extract` })).toHaveAttribute("href", cad.downloads.step.url);
+      expect(screen.getByRole("link", { name: `${room.id} · plan SVG` })).toHaveAttribute("href", cad.downloads.svg.url);
+      if (view) {
+        expect(screen.getByRole("heading", { name: "Room view · Blender" })).toBeInTheDocument();
+        expect(screen.getByRole("img", { name: `${room.id} · ${room.name} · native Blender room view` })).toHaveAttribute("loading", "lazy");
+        expect(screen.getByText(view.caption)).toBeInTheDocument();
+      }
+      expect(screen.queryByText("Test 3D viewer")).not.toBeInTheDocument();
+    }
+  });
+
+  it("filters fifteen room views and two floor overviews without a fixed historical count", () => {
+    const { container } = render(<BuildingVisionPage />);
+    expect(container.querySelectorAll(".building-vision-model-image img")).toHaveLength(17);
+    expect(screen.getByText("Showing 17 of 17 views")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Ground floor" }));
+    expect(container.querySelectorAll(".building-vision-model-image img")).toHaveLength(10);
+    expect(screen.getByText("Showing 10 of 17 views")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "First floor" }));
+    expect(container.querySelectorAll(".building-vision-model-image img")).toHaveLength(7);
+    expect(screen.getByText("Showing 7 of 17 views")).toBeInTheDocument();
+    expect(screen.queryByText("Test 3D viewer")).not.toBeInTheDocument();
   });
 
   it("loads 3D only on request and switches room CAD with the selected floor", async () => {

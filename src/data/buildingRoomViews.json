@@ -1,0 +1,90 @@
+[
+  {
+    "id": "GF-01",
+    "image": "/building-vision/room-views-r01/GF-01.png",
+    "caption": "Current four-person cabin with glazing and desk positions. Neighbouring rooms remain visible for context.",
+    "width": 1280,
+    "height": 1100,
+    "sourceSha256": "704fdc25180377362b1b81446287de2d3fcb91ef5993c785a70a7534b08f9d62"
+  },
+  {
+    "id": "GF-02",
+    "image": "/building-vision/room-views-r01/GF-02.png",
+    "caption": "Current reception desk and merchandise racks, with the existing entrances retained.",
+    "width": 1280,
+    "height": 1100,
+    "sourceSha256": "704fdc25180377362b1b81446287de2d3fcb91ef5993c785a70a7534b08f9d62"
+  },
+  {
+    "id": "GF-03",
+    "image": "/building-vision/room-views-r01/GF-03.png",
+    "caption": "Existing bathroom. Its use is confirmed; dimensions and fixture details remain approximate.",
+    "width": 1280,
+    "height": 1100,
+    "sourceSha256": "704fdc25180377362b1b81446287de2d3fcb91ef5993c785a70a7534b08f9d62"
+  },
+  {
+    "id": "GF-04",
+    "image": "/building-vision/room-views-r01/GF-04.png",
+    "caption": "Existing kitchen with retained cabinetry and access to GF-09. Details remain schematic.",
+    "width": 1280,
+    "height": 1100,
+    "sourceSha256": "704fdc25180377362b1b81446287de2d3fcb91ef5993c785a70a7534b08f9d62"
+  },
+  {
+    "id": "GF-06",
+    "image": "/building-vision/room-views-r01/GF-06.png",
+    "caption": "Existing stair-side support space with schematic retained fixtures. Neighbouring context remains visible.",
+    "width": 1280,
+    "height": 1100,
+    "sourceSha256": "704fdc25180377362b1b81446287de2d3fcb91ef5993c785a70a7534b08f9d62"
+  },
+  {
+    "id": "GF-07",
+    "image": "/building-vision/room-views-r01/GF-07.png",
+    "caption": "Current upholstered bench booth and framed glass enclosure beside the lounge.",
+    "width": 1280,
+    "height": 1100,
+    "sourceSha256": "704fdc25180377362b1b81446287de2d3fcb91ef5993c785a70a7534b08f9d62"
+  },
+  {
+    "id": "GF-08",
+    "image": "/building-vision/room-views-r01/GF-08.png",
+    "caption": "Current balcony seating within the selected stepped-and-curved perimeter.",
+    "width": 1280,
+    "height": 1100,
+    "sourceSha256": "704fdc25180377362b1b81446287de2d3fcb91ef5993c785a70a7534b08f9d62"
+  },
+  {
+    "id": "GF-09",
+    "image": "/building-vision/room-views-r01/GF-09.png",
+    "caption": "Current presentation seating and stair enclosure, with neighbouring rooms retained for context.",
+    "width": 1280,
+    "height": 1100,
+    "sourceSha256": "704fdc25180377362b1b81446287de2d3fcb91ef5993c785a70a7534b08f9d62"
+  },
+  {
+    "id": "GF-10",
+    "image": "/building-vision/room-views-r01/GF-10.png",
+    "caption": "Selected commons tables and wraparound counter. Existing seating and access limitations remain unchanged.",
+    "width": 1280,
+    "height": 1100,
+    "sourceSha256": "704fdc25180377362b1b81446287de2d3fcb91ef5993c785a70a7534b08f9d62"
+  },
+  {
+    "id": "FF-01",
+    "image": "/building-vision/room-views-r01/FF-01.png",
+    "caption": "Existing rear support space with schematic retained fixtures. Access through FF-06 is retained.",
+    "width": 1280,
+    "height": 1100,
+    "sourceSha256": "704fdc25180377362b1b81446287de2d3fcb91ef5993c785a70a7534b08f9d62"
+  },
+  {
+    "id": "FF-05",
+    "image": "/building-vision/room-views-r01/FF-05.png",
+    "caption": "Retained bathroom and its existing access. Fixtures and dimensions remain approximate.",
+    "width": 1280,
+    "height": 1100,
+    "sourceSha256": "704fdc25180377362b1b81446287de2d3fcb91ef5993c785a70a7534b08f9d62"
+  }
+]
