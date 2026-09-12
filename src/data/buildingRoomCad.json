@@ -3,12 +3,16 @@
     "id": "GF-01",
     "geometryKind": "mixed 2D references and 3D fit-out",
     "solidCount": 189,
+    "provenance": "/building-models/r03/rooms/GF-01-provenance.json",
     "downloads": {
       "freecad": {
         "url": "/building-models/r03/rooms/GF-01.FCStd"
       },
       "step": {
         "url": "/building-models/r03/rooms/GF-01.step"
+      },
+      "svg": {
+        "url": "/building-models/r03/rooms/GF-01.svg"
       }
     }
   },
@@ -16,12 +20,16 @@
     "id": "GF-02",
     "geometryKind": "mixed 2D references and 3D fit-out",
     "solidCount": 78,
+    "provenance": "/building-models/r03/rooms/GF-02-provenance.json",
     "downloads": {
       "freecad": {
         "url": "/building-models/r03/rooms/GF-02.FCStd"
       },
       "step": {
         "url": "/building-models/r03/rooms/GF-02.step"
+      },
+      "svg": {
+        "url": "/building-models/r03/rooms/GF-02.svg"
       }
     }
   },
@@ -29,12 +37,16 @@
     "id": "GF-03",
     "geometryKind": "2D plan/reference geometry",
     "solidCount": 0,
+    "provenance": "/building-models/r03/rooms/GF-03-provenance.json",
     "downloads": {
       "freecad": {
         "url": "/building-models/r03/rooms/GF-03.FCStd"
       },
       "step": {
         "url": "/building-models/r03/rooms/GF-03.step"
+      },
+      "svg": {
+        "url": "/building-models/r03/rooms/GF-03.svg"
       }
     }
   },
@@ -42,12 +54,16 @@
     "id": "GF-04",
     "geometryKind": "2D plan/reference geometry",
     "solidCount": 0,
+    "provenance": "/building-models/r03/rooms/GF-04-provenance.json",
     "downloads": {
       "freecad": {
         "url": "/building-models/r03/rooms/GF-04.FCStd"
       },
       "step": {
         "url": "/building-models/r03/rooms/GF-04.step"
+      },
+      "svg": {
+        "url": "/building-models/r03/rooms/GF-04.svg"
       }
     }
   },
@@ -55,12 +71,16 @@
     "id": "GF-06",
     "geometryKind": "2D plan/reference geometry",
     "solidCount": 0,
+    "provenance": "/building-models/r03/rooms/GF-06-provenance.json",
     "downloads": {
       "freecad": {
         "url": "/building-models/r03/rooms/GF-06.FCStd"
       },
       "step": {
         "url": "/building-models/r03/rooms/GF-06.step"
+      },
+      "svg": {
+        "url": "/building-models/r03/rooms/GF-06.svg"
       }
     }
   },
@@ -68,12 +88,16 @@
     "id": "GF-07",
     "geometryKind": "mixed 2D references and 3D fit-out",
     "solidCount": 48,
+    "provenance": "/building-models/r03/rooms/GF-07-provenance.json",
     "downloads": {
       "freecad": {
         "url": "/building-models/r03/rooms/GF-07.FCStd"
       },
       "step": {
         "url": "/building-models/r03/rooms/GF-07.step"
+      },
+      "svg": {
+        "url": "/building-models/r03/rooms/GF-07.svg"
       }
     }
   },
@@ -81,12 +105,16 @@
     "id": "GF-08",
     "geometryKind": "mixed 2D references and 3D fit-out",
     "solidCount": 322,
+    "provenance": "/building-models/r03/rooms/GF-08-provenance.json",
     "downloads": {
       "freecad": {
         "url": "/building-models/r03/rooms/GF-08.FCStd"
       },
       "step": {
         "url": "/building-models/r03/rooms/GF-08.step"
+      },
+      "svg": {
+        "url": "/building-models/r03/rooms/GF-08.svg"
       }
     }
   },
@@ -94,12 +122,16 @@
     "id": "GF-09",
     "geometryKind": "mixed 2D references and 3D fit-out",
     "solidCount": 659,
+    "provenance": "/building-models/r03/rooms/GF-09-provenance.json",
     "downloads": {
       "freecad": {
         "url": "/building-models/r03/rooms/GF-09.FCStd"
       },
       "step": {
         "url": "/building-models/r03/rooms/GF-09.step"
+      },
+      "svg": {
+        "url": "/building-models/r03/rooms/GF-09.svg"
       }
     }
   },
@@ -107,12 +139,16 @@
     "id": "GF-10",
     "geometryKind": "mixed 2D references and 3D fit-out",
     "solidCount": 354,
+    "provenance": "/building-models/r03/rooms/GF-10-provenance.json",
     "downloads": {
       "freecad": {
         "url": "/building-models/r03/rooms/GF-10.FCStd"
       },
       "step": {
         "url": "/building-models/r03/rooms/GF-10.step"
+      },
+      "svg": {
+        "url": "/building-models/r03/rooms/GF-10.svg"
       }
     }
   },
@@ -120,12 +156,16 @@
     "id": "FF-01",
     "geometryKind": "2D plan/reference geometry",
     "solidCount": 0,
+    "provenance": "/building-models/r03/rooms/FF-01-provenance.json",
     "downloads": {
       "freecad": {
         "url": "/building-models/r03/rooms/FF-01.FCStd"
       },
       "step": {
         "url": "/building-models/r03/rooms/FF-01.step"
+      },
+      "svg": {
+        "url": "/building-models/r03/rooms/FF-01.svg"
       }
     }
   },
@@ -133,25 +173,33 @@
     "id": "FF-02",
     "geometryKind": "mixed 2D references and 3D fit-out",
     "solidCount": 336,
+    "provenance": "/building-models/r03/rooms/FF-02-provenance.json",
     "downloads": {
       "freecad": {
         "url": "/building-models/r03/rooms/FF-02.FCStd"
       },
       "step": {
         "url": "/building-models/r03/rooms/FF-02.step"
+      },
+      "svg": {
+        "url": "/building-models/r03/rooms/FF-02.svg"
       }
     }
   },
   {
     "id": "FF-03",
     "geometryKind": "mixed 2D references and 3D fit-out",
-    "solidCount": 192,
+    "solidCount": 231,
+    "provenance": "/building-models/r04/rooms/FF-03-provenance.json",
     "downloads": {
       "freecad": {
-        "url": "/building-models/r03/rooms/FF-03.FCStd"
+        "url": "/building-models/r04/rooms/FF-03.FCStd"
       },
       "step": {
-        "url": "/building-models/r03/rooms/FF-03.step"
+        "url": "/building-models/r04/rooms/FF-03.step"
+      },
+      "svg": {
+        "url": "/building-models/r04/rooms/FF-03.svg"
       }
     }
   },
@@ -159,12 +207,16 @@
     "id": "FF-04",
     "geometryKind": "mixed source context and 3D fit-out",
     "solidCount": 438,
+    "provenance": "/building-models/r03/rooms/FF-04-provenance.json",
     "downloads": {
       "freecad": {
         "url": "/building-models/r03/rooms/FF-04.FCStd"
       },
       "step": {
         "url": "https://github.com/sandeep-devarapalli/armature-ai-labs/releases/download/building-models-r03/FF-04.step"
+      },
+      "svg": {
+        "url": "/building-models/r03/rooms/FF-04.svg"
       }
     }
   },
@@ -172,12 +224,16 @@
     "id": "FF-05",
     "geometryKind": "2D plan/reference geometry",
     "solidCount": 0,
+    "provenance": "/building-models/r03/rooms/FF-05-provenance.json",
     "downloads": {
       "freecad": {
         "url": "/building-models/r03/rooms/FF-05.FCStd"
       },
       "step": {
         "url": "/building-models/r03/rooms/FF-05.step"
+      },
+      "svg": {
+        "url": "/building-models/r03/rooms/FF-05.svg"
       }
     }
   },
@@ -185,12 +241,16 @@
     "id": "FF-06",
     "geometryKind": "mixed source context and 3D fit-out",
     "solidCount": 378,
+    "provenance": "/building-models/r03/rooms/FF-06-provenance.json",
     "downloads": {
       "freecad": {
         "url": "/building-models/r03/rooms/FF-06.FCStd"
       },
       "step": {
         "url": "https://github.com/sandeep-devarapalli/armature-ai-labs/releases/download/building-models-r03/FF-06.step"
+      },
+      "svg": {
+        "url": "/building-models/r03/rooms/FF-06.svg"
       }
     }
   }

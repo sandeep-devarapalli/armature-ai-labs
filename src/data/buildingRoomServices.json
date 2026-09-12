@@ -100,12 +100,12 @@
   },
   {
     "id": "FF-03", "floor": "first", "name": "Two- and four-person cabins", "purpose": "Selected P01 two-person cabin A and four-table row, with a shared cross-route and retained storage/bathroom access.",
-    "seating": "Six modeled tables/chairs across two cabins; not six verified comfortable workstations.", "status": "Selected P01 layout — circulation constrained", "modelNote": "R03 retains both cabins. Shared cross-route is nominally 2 ft; the four-person cabin has a west outward door, and the FF05 bathroom door opens inward. These separate FF03 doors are unchanged by the FF04/FF06 sliding-entrance revision.",
+    "seating": "Six modeled tables/chairs across two cabins; not six verified comfortable workstations.", "status": "Four-person sliding entrance — circulation constrained", "modelNote": "R04 changes only the four-person cabin's west entrance to sliding. Both cabins, all six tables/chairs, fixed partitions and cupboard remain. The two-person cabin door and inward-opening FF05 bathroom access are unchanged. The nominal 2 ft shared cross-route is not an occupied-access approval.",
     "sockets": 6, "socketNote": "Hypothetical 2 desks × 2 receptacles + 2 common/spare positions; target quantity, not installed hardware.",
     "lights": 4, "lightWatts": 46, "lightingBasis": "Hypothetical 2 general × 18 W + 2 integrated task × 5 W.",
     "equipmentWatts": 190, "equipmentBasis": "Hypothetical 2 × (65 W laptop + 30 W monitor); excludes lighting/HVAC/heating.",
     "ac": "Proposed", "acNote": "Private-office cooling/ventilation study; no installed unit, quantity or capacity claim.",
-    "holds": ["Approximately 1 ft behind the occupied four-person row leaves no demonstrated pull-back route.", "West outward door obstructs the shared passage; modeled bypass at 90 degrees is only about 9.3 in. Retain this unresolved restriction.", "Preserve storage and FF02/FF05 access. S01 below is the superseded two-desk allowance, not a service design for six desks."]
+    "holds": ["Approximately 1 ft behind the occupied four-person row leaves no demonstrated pull-back route.", "Parked panels project 40 mm (about 1.6 in) beyond the fixed frame beside the opening; the overhead track projects 52.5 mm beyond that fixed-frame face, above the door head. Removal of the outward swing is not a whole-corridor nonreduction or access approval.", "The four-person slider supersedes the old west outward swing; hardware support, operating forces, tolerances and usable occupied routes still require site and fabricator review.", "Preserve storage and FF02/FF05 access. Archived S01 is the superseded two-desk allowance, not a service design for six desks."]
   },
   {
     "id": "FF-04", "floor": "first", "name": "Stair landing and gallery", "purpose": "Circulation and gallery overlooking the commons, with selected curved stair separation.",

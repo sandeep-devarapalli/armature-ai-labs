@@ -1,0 +1,28 @@
+{
+  "evidence": {
+    "cad-metadata-provenance.json": "b67ed1ee9f6f6d70edc6433d27ef5600270003c885965fbec436be07c859ec9a",
+    "blender-metadata-provenance.json": "a36603ed04c5f8808ced112bf25802e9487d82345b795eb2f054deac6c2913dc",
+    "native-preview-provenance.json": "0478261b61b19e6ccc71143344152537257615eb769f84a06cfb921df9cf9198",
+    "design-verification.json": "2b2c57a4672e865698ff9d93b52c6036f9f96fbd1d1cd43096e7853ceacb496d",
+    "manifest.json": "b0149231e41f5e1a8faca09d4c5b7d85d80fce3a8fb3c18080ae6a1414bbb171",
+    "rooms/manifest.json": "ce1105a794a5e47aa5db924b0744262f4898e9208c96bd9af2849cc1da8b663a",
+    "rooms/FF-03-provenance.json": "f7a5852b0fb909883fa10a6e26bd2ca2d6ebc056b0a31492e1fd1a878741c613",
+    "external-download-verification.json": "397bab9b06d8661ec7e3c5a14a86c6265c871da8a76c9c33403d8570e6081cb5"
+  },
+  "native": {
+    "first-floor.FCStd": {
+      "sourceSha256": "ad1397f6b855e309b0093e64baf582db559be5b4ebab1e22ef3f428a3b77d5e9",
+      "publicSha256": "ad1397f6b855e309b0093e64baf582db559be5b4ebab1e22ef3f428a3b77d5e9"
+    },
+    "selected-layout.blend": {
+      "sourceSha256": "9962e93c7cb587f6355a74d6e62bafd046ec5b26b44a4290b2511e6f75a5d4f8",
+      "publicSha256": "9962e93c7cb587f6355a74d6e62bafd046ec5b26b44a4290b2511e6f75a5d4f8"
+    }
+  },
+  "firstFloorScene": "First floor - R04 FF03 sliding door",
+  "roomSelectionSha256": "f95e63905d6e46d9092bd45d073b8601aa0f03510011554c630a0be37a260004",
+  "roomMembers": {
+    "fitout": "5fe18cf06ca88e408064b5a76dccc15f9d85cbc7a9abad831c86b6adeff5784e",
+    "context": "932437c1c94e5cae1be24822d224257a1ba679e165b5780f25e63d2d979b69b0"
+  }
+}

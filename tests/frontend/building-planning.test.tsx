@@ -43,17 +43,20 @@ describe("coordinated building planning", () => {
     expect(await screen.findByText("Test 3D viewer")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "First floor model" }));
     expect(screen.queryByText("Test 3D viewer")).not.toBeInTheDocument();
-    expect(screen.getByRole("combobox", { name: "Choose a room" })).toHaveValue("FF-04");
+    expect(screen.getByRole("combobox", { name: "Choose a room" })).toHaveValue("FF-03");
     expect(screen.getByRole("link", { name: "Full first floor · FreeCAD" })).toHaveAttribute("href", release.downloads.firstCad.url);
-    expect(screen.getByRole("img", { name: "FF-04 selected twin-cabin Blender proposal R03" })).toHaveAttribute("src", `${release.root}/ff04-cabins.png`);
+    expect(screen.getByRole("img", { name: "FF-03 selected cabin Blender proposal R04" })).toHaveAttribute("src", release.roomPreviews["FF-03"].blender);
+    fireEvent.change(screen.getByRole("combobox"), { target: { value: "FF-04" } });
+    expect(screen.getByRole("img", { name: "FF-04 selected cabin Blender proposal R03" })).toHaveAttribute("src", "/building-models/r03/ff04-cabins.png");
     fireEvent.change(screen.getByRole("combobox"), { target: { value: "FF-06" } });
-    expect(screen.getByRole("link", { name: "FF-06 · FreeCAD extract" })).toHaveAttribute("href", `${release.root}/rooms/FF-06.FCStd`);
+    expect(screen.getByRole("link", { name: "FF-06 · FreeCAD extract" })).toHaveAttribute("href", "/building-models/r03/rooms/FF-06.FCStd");
     expect(screen.getByText(/Selected twin cabins — dedicated lower balcony/)).toBeInTheDocument();
-    expect(screen.getByRole("img", { name: "FF-06 selected twin-cabin Blender proposal R03" })).toHaveAttribute("src", `${release.root}/ff06-cabins.png`);
-    expect(screen.getByRole("heading", { name: "Earlier S01 service estimate · not recalculated for R03" })).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: "FF-06 selected cabin Blender proposal R03" })).toHaveAttribute("src", "/building-models/r03/ff06-cabins.png");
+    expect(screen.queryByRole("heading", { name: "Earlier S01 service estimate · not recalculated for R04" })).not.toBeInTheDocument();
     fireEvent.change(screen.getByRole("combobox"), { target: { value: "FF-03" } });
     expect(screen.getByRole("heading", { name: "Two- and four-person cabins" })).toBeInTheDocument();
-    expect(screen.getByText(/9.3 in/)).not.toBeVisible();
+    expect(screen.queryByText(/9.3 in/)).not.toBeInTheDocument();
+    expect(screen.getByText(/two-person cabin door and inward-opening FF05/)).toBeInTheDocument();
     expect(screen.getByText(/superseded two-desk allowance/)).not.toBeVisible();
   });
 

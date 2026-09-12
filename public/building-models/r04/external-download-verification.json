@@ -1,0 +1,14 @@
+{
+  "release": "R04",
+  "files": [
+    {
+      "file": "first-floor.FCStd",
+      "url": "https://github.com/sandeep-devarapalli/armature-ai-labs/releases/download/building-models-r04/first-floor.FCStd",
+      "bytes": 50172007,
+      "sha256": "ad1397f6b855e309b0093e64baf582db559be5b4ebab1e22ef3f428a3b77d5e9",
+      "status": "PASS",
+      "method": "download-sha256",
+      "checkedAt": "2026-09-12T03:18:13.834Z"
+    }
+  ]
+}

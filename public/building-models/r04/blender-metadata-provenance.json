@@ -1,0 +1,69 @@
+{
+  "files": [
+    {
+      "file": "selected-layout.blend",
+      "sourceSha256": "9962e93c7cb587f6355a74d6e62bafd046ec5b26b44a4290b2511e6f75a5d4f8",
+      "publicSha256": "9962e93c7cb587f6355a74d6e62bafd046ec5b26b44a4290b2511e6f75a5d4f8",
+      "publicBytes": 2804748,
+      "previousReleaseSourceSha256": "2bf4638a5d4ec2eaca76316debf06f290d69afe36f667fc8329247460f130a70",
+      "nativeSaveReopen": "PASS",
+      "transformationKind": "verified-current-design-copy",
+      "curation": {
+        "retainedGeometryUnchanged": true,
+        "materialsUnchanged": true,
+        "selectedMembershipVerified": true,
+        "reviewViewsVerified": true,
+        "selectedAllowlistSha256": "94e936d2f66133724680178a83ec52ddc3f214504c774bb7ce6154d232757b84",
+        "privateAuditSha256": "86a7e8665e2213895ea7976c5d4cd6d442079af5af1b77b92f1b4795d94aaf60",
+        "removedObjects": 0,
+        "removedScenes": 0,
+        "displayChanges": [],
+        "dependencyDisclosure": [
+          "Exact copy of the freshly reopened current-only R04 native; earlier R03 and other historical files remain unchanged.",
+          "R04 replaces only the eight four-seat FF03 swinging-door meshes and their pivot with forty-seven sliding-door/hardware meshes.",
+          "Includes both selected floors, required parent dependencies, materials, lights and native review cameras; no historical scenes, embedded scripts or source paths."
+        ]
+      },
+      "serializedPrivatePathScan": "PASS",
+      "geometryRevision": {
+        "retainedObjectCount": 3514,
+        "replacedObjectCount": 9,
+        "addedObjectCount": 47,
+        "retainedGeometryMaterialsUVAndPlacementsUnchanged": true
+      },
+      "sourceVerificationSha256": "a00cbb806ce9be14acc1bd2924c83299c0e10262fad62a6a40dbb958eb501333"
+    },
+    {
+      "file": "ff03-cabins.png",
+      "sourceSha256": "2449b772c875cbdc1787604521dd12b44fcf43a4ff8d1685e20256869b3baac2",
+      "publicSha256": "1c780e626cecb4c59cb8d36824be824a68cb402e13f9704e51b5a40434e31c13",
+      "metadataOnly": true,
+      "pixelChunksUnchanged": true,
+      "retainedColorProfile": true
+    },
+    {
+      "file": "ff03-closed.png",
+      "sourceSha256": "cf41feba098efaa6bb192b19d30f90a0f46470adc7cd010b93584e23eb0c0782",
+      "publicSha256": "9b3c7d8d791084d15d9ddf52809ab3514fc4451e287ed15de5dc727fc187d42d",
+      "metadataOnly": true,
+      "pixelChunksUnchanged": true,
+      "retainedColorProfile": true
+    },
+    {
+      "file": "ff03-plan.png",
+      "sourceSha256": "f9bfee0da1344a455e6f3827396e395cff5c9b5ef50fcf40aadf3f4762dba090",
+      "publicSha256": "b8ed64dbcfbcb969623e97828726ec0eefb243de1c1c11413e00b3a451fdd85c",
+      "metadataOnly": true,
+      "pixelChunksUnchanged": true,
+      "retainedColorProfile": true
+    },
+    {
+      "file": "first-floor.png",
+      "sourceSha256": "30da7b81b53fc2ba02ce64dceef08bb7c5e07396059932f374715e46dfba0d0f",
+      "publicSha256": "ecf6c25d38124ac390c57f75993040b736df253c19a1930e647dd254de3bdc81",
+      "metadataOnly": true,
+      "pixelChunksUnchanged": true,
+      "retainedColorProfile": true
+    }
+  ]
+}

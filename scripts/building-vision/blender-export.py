@@ -34,7 +34,8 @@ def sha(path):
 assert sha(source) == args.expected_sha
 assert sha(bpy.data.filepath) == args.expected_sha, 'Open only the frozen input copy'
 assert Path(bpy.data.filepath).resolve() != source.resolve()
-assert config['release'] == 'R03'
+assert config['release'] in {'R03', 'R04'}
+release_root = '/building-models/' + config['release'].lower()
 assert config['sourceNativeSha256'] == args.expected_sha
 assert len(config['floors']) == 2
 assert {f['id'] for f in config['floors']} == {'ground-floor', 'first-floor'}
@@ -44,7 +45,11 @@ curation = json.loads(Path(config['curationProvenance']).read_text())
 blender_copy = next(f for f in curation['files'] if f['file'] == 'selected-layout.blend')
 assert blender_copy['publicSha256'] == args.expected_sha
 assert blender_copy['nativeSaveReopen'] == 'PASS'
-assert blender_copy['transformationKind'] == 'current-design-curation-and-metadata-sanitization'
+expected_copy_kind = 'verified-current-design-copy' if config['release'] == 'R04' else 'current-design-curation-and-metadata-sanitization'
+assert blender_copy['transformationKind'] == expected_copy_kind
+if config['release'] == 'R04':
+    assert blender_copy['sourceSha256'] == blender_copy['publicSha256']
+    assert blender_copy['serializedPrivatePathScan'] == 'PASS'
 assert config['originalSourceNativeSha256'] == blender_copy['sourceSha256']
 material_cache = {}
 material_notes = []
@@ -126,7 +131,7 @@ for floor_config in config['floors']:
     scene = bpy.data.scenes.new('Browser export | ' + floor_id)
     scene.unit_settings.system = 'METRIC'
     scene.unit_settings.scale_length = 1
-    scene['release'] = 'Coordinated Selected Layout R03'
+    scene['release'] = 'Coordinated Selected Layout ' + config['release']
     scene['sourceSha256'] = args.expected_sha
     per_object = {}
     points = []
@@ -167,8 +172,17 @@ for floor_config in config['floors']:
                                 'bounds_blender_z_up_m':[[min(p[i] for p in coordinates),max(p[i] for p in coordinates)] for i in range(3)]}
     bpy.context.window.scene = scene
     bpy.context.view_layer.update()
-    path = output/(floor_id+'.glb')
-    bpy.ops.export_scene.gltf(filepath=str(path),export_format='GLB',use_active_scene=True,
+    retained = floor_config.get('retained')
+    path = Path(retained['modelPath']) if retained else output/(floor_id+'.glb')
+    if retained:
+        assert config['release'] == 'R04' and floor_id == 'ground-floor'
+        assert sha(retained['manifestPath']) == retained['manifestSha256']
+        previous = json.loads(Path(retained['manifestPath']).read_text())
+        previous_floor = next(f for f in previous['floors'] if f['id'] == floor_id)
+        assert previous['release'] == 'Coordinated Selected Layout R03'
+        assert sha(path) == previous_floor['sha256']
+    else:
+        bpy.ops.export_scene.gltf(filepath=str(path),export_format='GLB',use_active_scene=True,
                               use_visible=True,export_apply=False,export_yup=True,
                               export_extras=True,export_materials='EXPORT',export_cameras=False,
                               export_lights=False,export_animations=False,export_draco_mesh_compression_enable=False)
@@ -188,18 +202,25 @@ for floor_config in config['floors']:
     pose = {'position_blender_z_up_m':list(camera.matrix_world.translation),
             'rotation_quaternion_blender':list(camera.matrix_world.to_quaternion()),
             'ortho_scale_m':camera.data.ortho_scale,'projection':camera.data.type}
-    preview = output/(floor_id+'.png')
+    preview = Path(floor_config['preview']) if retained else output/(floor_id+'.png')
     preview_source, preview_sha = Path(floor_config['preview']), floor_config['previewSha256']
     assert sha(preview_source) == preview_sha
-    shutil.copy2(preview_source, preview)
-    floors.append({'id':floor_id,'label':'Ground floor' if floor_id=='ground-floor' else 'First floor',
-                   'model':'/building-models/r03/'+path.name,'preview':'/building-models/r03/'+preview.name,
+    if not retained:
+        shutil.copy2(preview_source, preview)
+    entry = {'id':floor_id,'label':'Ground floor' if floor_id=='ground-floor' else 'First floor',
+                   'model':release_root+'/'+path.name,'preview':release_root+'/'+preview.name,
                    'bytes':path.stat().st_size,'sha256':sha(path),'physicalObjects':len(per_object),
                    'triangles':sum(r['triangles'] for r in per_object.values()),'materials':len(gltf.get('materials',[])),
                    'boundsGltfYUpMetres':gltf_bounds,'boundsBlenderZUpMetres':bounds,
                    'sourceScene':scene_name,'sourceCamera':pose,'retainedRoomNames':True,
-                   'excludedCamerasLightsLabelsAndEmptyRoots':len(excluded),'previewSha256':sha(preview)})
-    expected[floor_id] = {'objects':per_object,'excluded':excluded,'semantic_roots':sorted(semantic_roots),'bounds':bounds}
+                   'excludedCamerasLightsLabelsAndEmptyRoots':len(excluded),'previewSha256':sha(preview)}
+    if retained:
+        assert sha(preview) == previous_floor['previewSha256']
+        entry = dict(previous_floor, retainedFrom={'release':'R03','manifestSha256':retained['manifestSha256'],
+                                                 'sourceNativeSha256':previous['sourceNativeSha256']})
+    floors.append(entry)
+    expected[floor_id] = {'objects':per_object,'excluded':excluded,'semantic_roots':sorted(semantic_roots),'bounds':bounds,
+                          'model_path':str(path),'preview_path':str(preview),'current_source_scene':scene_name}
     print('EXPORTED',floor_id,len(per_object),path.stat().st_size,flush=True)
 
 downloads=[]
@@ -208,22 +229,29 @@ for item in config['downloads']:
     src, name = Path(item['path']), item['file']
     before=sha(src)
     assert before == item['publicSha256']
-    target = output/name if item['url'].startswith('/building-models/r03/') else audit_dir/'external-downloads'/name
+    retained = item.get('retainedFrom')
+    if retained:
+        assert config['release'] == 'R04' and name == 'ground-floor.FCStd'
+        assert item['url'] == '/building-models/r03/ground-floor.FCStd'
+    target = src if retained else (output/name if item['url'].startswith(release_root+'/') else audit_dir/'external-downloads'/name)
     target.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(src,target)
+    if target != src:
+        shutil.copy2(src,target)
     assert sha(src)==before==sha(target)
     if target.parent == output:
         assert target.stat().st_size<LIMIT
-    else:
-        assert item['url'].startswith('https://github.com/sandeep-devarapalli/armature-ai-labs/releases/download/building-models-r03/')
+    elif not retained:
+        assert item['url'].startswith('https://github.com/sandeep-devarapalli/armature-ai-labs/releases/download/building-models-'+config['release'].lower()+'/')
     downloads.append({'id':item['id'],'label':item['label'],'url':item['url'],
                       'bytes':target.stat().st_size,'sha256':before,'sourceSha256':item['sourceSha256'],
-                      'exactNativeCopy':True,'copyBasis':'curated-current-design-source',
-                      'transformationKind':'current-design-curation-and-metadata-sanitization',
+                      'exactNativeCopy':True,'copyBasis':'verified-current-design-source' if config['release'] == 'R04' else 'curated-current-design-source',
+                      'transformationKind':expected_copy_kind,
                       'units':'metres' if name.endswith('.blend') else 'millimetres'})
+    if retained:
+        downloads[-1]['retainedFrom'] = retained
 
 assert sha(source)==args.expected_sha
-manifest={'schema':'armature.building-web-assets.v1','release':'Coordinated Selected Layout R03','date':config['date'],
+manifest={'schema':'armature.building-web-assets.v1','release':'Coordinated Selected Layout '+config['release'],'date':config['date'],
           'status':'EXPORTED / AWAITING INDEPENDENT GLB REIMPORT CHECK',
           'sourceNativeSha256':args.expected_sha,'originalSourceNativeSha256':config['originalSourceNativeSha256'],
           'sourcePreserved':True,'currentDesignOnly':True,'selectedTwinCabinsIncluded':True,'slidingEntrancesRevision':'P03',
@@ -239,6 +267,9 @@ manifest={'schema':'armature.building-web-assets.v1','release':'Coordinated Sele
                      'Public native copies contain only selected current design; private source releases and failed earlier trials are preserved separately.',
                      'Previews are direct native renders of the selected scenes; no generated image is used as geometry evidence.'],
           'materialRepresentations':material_notes}
+if config['release'] == 'R04':
+    manifest['ff03EntranceRevision'] = 'P02'
+    manifest['caveats'].append('R04 changes only the FF03 four-person entrance to a sliding proposal; its two-person door, furniture, shared bathroom access and all other-room designs are retained.')
 (output/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
 (audit_dir/'Expected GLB geometry.json').write_text(json.dumps(expected,indent=2)+'\n')
 (audit_dir/'Export source audit.json').write_text(json.dumps({'status':'PASS','source_path':str(source),

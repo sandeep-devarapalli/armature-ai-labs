@@ -1,0 +1,1661 @@
+{
+  "release": "R04",
+  "status": "PASS / MODELED GEOMETRY ONLY",
+  "sourceNativeSha256": "9962e93c7cb587f6355a74d6e62bafd046ec5b26b44a4290b2511e6f75a5d4f8",
+  "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f",
+  "firstFloorCadSha256": "ad1397f6b855e309b0093e64baf582db559be5b4ebab1e22ef3f428a3b77d5e9",
+  "roomCadSha256": "452fafd1f345ef268616a241933826073a62fd4a95b6f9098851cdf3523b5695",
+  "nativeSaveReopen": "PASS",
+  "sourcesUnchanged": true,
+  "visualReview": "PASS",
+  "scope": "Only FF03 four-seat sliding entrance; all other designs retained. Full travel and original aperture verified, not occupied-use, corridor, structural or installation approval.",
+  "motion": {
+    "status": "PASS / COMPLETE TRANSLATIONAL SWEPT SOLIDS",
+    "numerical_margin_mm": 0.001,
+    "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f",
+    "sourceNativeSha256": "9962e93c7cb587f6355a74d6e62bafd046ec5b26b44a4290b2511e6f75a5d4f8",
+    "method": "Exact complete translational swept solids for verified axis-aligned source boxes; independent leaf travels, not finite pose sampling.",
+    "new_shape_checks": [
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH recessed pull below",
+        "bounds_mm": [
+          -4965.000152587891,
+          1281.3000679016113,
+          3490.7679557800293,
+          -4935.000419616699,
+          1321.3000297546387,
+          4255.767822265625
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 7.279450073838234e-7,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH recessed pull above",
+        "bounds_mm": [
+          -4965.000152587891,
+          1281.3000679016113,
+          4415.768146514893,
+          -4935.000419616699,
+          1321.3000297546387,
+          5580.76810836792
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 0.0000013727694749832153,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH recessed pull end",
+        "bounds_mm": [
+          -4965.000152587891,
+          1317.3000812530518,
+          4255.767822265625,
+          -4935.000419616699,
+          1321.3000297546387,
+          4415.768146514893
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 0.0000020415609469637275,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH recessed pull grip",
+        "bounds_mm": [
+          -4965.000152587891,
+          1281.3000679016113,
+          4255.767822265625,
+          -4935.000419616699,
+          1285.3000164031982,
+          4415.768146514893
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 0.000001446023816242814,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH recessed pull web",
+        "bounds_mm": [
+          -4955.000400543213,
+          1285.3000164031982,
+          4255.767822265625,
+          -4945.000171661377,
+          1317.3000812530518,
+          4415.768146514893
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 0.0000025035697035491467,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH stile 1",
+        "bounds_mm": [
+          -4965.000152587891,
+          837.5999927520752,
+          3490.7679557800293,
+          -4935.000419616699,
+          877.6000142097473,
+          5580.76810836792
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 0.0000014225952327251434,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH rail 0",
+        "bounds_mm": [
+          -4965.000152587891,
+          837.5999927520752,
+          3490.7679557800293,
+          -4935.000419616699,
+          1321.3000297546387,
+          3530.7679176330566
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 9.82312485575676e-7,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH rail 1",
+        "bounds_mm": [
+          -4965.000152587891,
+          837.5999927520752,
+          4490.767955780029,
+          -4935.000419616699,
+          1321.3000297546387,
+          4530.767917633057
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 5.359761416912079e-7,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH rail 2",
+        "bounds_mm": [
+          -4965.000152587891,
+          837.5999927520752,
+          5540.768146514893,
+          -4935.000419616699,
+          1321.3000297546387,
+          5580.76810836792
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 3.1886156648397446e-7,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH clear 0",
+        "bounds_mm": [
+          -4955.000400543213,
+          877.6000142097473,
+          3530.7679176330566,
+          -4945.000171661377,
+          1281.3000679016113,
+          4490.767955780029
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 0.0000022207386791706085,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH clear 1",
+        "bounds_mm": [
+          -4955.000400543213,
+          877.6000142097473,
+          4530.767917633057,
+          -4945.000171661377,
+          1281.3000679016113,
+          5540.768146514893
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 0.0000015385448932647705,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH track bearing flange -1",
+        "bounds_mm": [
+          -4941.999912261963,
+          357.60000348091125,
+          5615.767955780029,
+          -4927.500247955322,
+          1301.300048828125,
+          5620.768070220947
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 0.0000017370912246406078,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH track side wall -1",
+        "bounds_mm": [
+          -4927.500247955322,
+          357.60000348091125,
+          5615.767955780029,
+          -4922.500133514404,
+          1301.300048828125,
+          5670.767784118652
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 0.0000012190721463412046,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH track bearing flange 1",
+        "bounds_mm": [
+          -4972.500324249268,
+          357.60000348091125,
+          5615.767955780029,
+          -4958.000183105469,
+          1301.300048828125,
+          5620.768070220947
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 7.208000170066953e-7,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH track side wall 1",
+        "bounds_mm": [
+          -4977.499961853027,
+          357.60000348091125,
+          5615.767955780029,
+          -4972.500324249268,
+          1301.300048828125,
+          5670.767784118652
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 8.796050678938627e-7,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH track roof",
+        "bounds_mm": [
+          -4977.499961853027,
+          357.60000348091125,
+          5670.767784118652,
+          -4922.500133514404,
+          1301.300048828125,
+          5675.76789855957
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 0.0000010852818377315998,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH fixed travel stop 0",
+        "bounds_mm": [
+          -4972.500324249268,
+          377.6000142097473,
+          5620.768070220947,
+          -4927.500247955322,
+          382.60000944137573,
+          5670.767784118652
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 8.679144229972735e-7,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH fixed travel stop 1",
+        "bounds_mm": [
+          -4972.500324249268,
+          1276.2999534606934,
+          5620.768070220947,
+          -4927.500247955322,
+          1281.2999486923218,
+          5670.767784118652
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 0.0000020098632376175374,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH captured sliding shoe 0",
+        "bounds_mm": [
+          -4967.50020980835,
+          882.6000094413757,
+          5620.768070220947,
+          -4932.499885559082,
+          912.5999808311462,
+          5640.768051147461
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 0.0000021415253286249936,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH rigid hanger stem 0",
+        "bounds_mm": [
+          -4953.000068664551,
+          891.6000127792358,
+          5575.767993927002,
+          -4947.000026702881,
+          903.5999774932861,
+          5630.767822265625
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 4.829898898606189e-7,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH captured sliding shoe 1",
+        "bounds_mm": [
+          -4967.50020980835,
+          1246.2999820709229,
+          5620.768070220947,
+          -4932.499885559082,
+          1276.2999534606934,
+          5640.768051147461
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 0.000004672274371841922,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH rigid hanger stem 1",
+        "bounds_mm": [
+          -4953.000068664551,
+          1255.3000450134277,
+          5575.767993927002,
+          -4947.000026702881,
+          1267.300009727478,
+          5630.767822265625
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 0.0000012922405403514858,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH recessed pull below",
+        "bounds_mm": [
+          -4965.000152587891,
+          1324.3000507354736,
+          3490.7679557800293,
+          -4935.000419616699,
+          1364.300012588501,
+          4255.767822265625
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 1.802109181880951e-7,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH recessed pull above",
+        "bounds_mm": [
+          -4965.000152587891,
+          1324.3000507354736,
+          4415.768146514893,
+          -4935.000419616699,
+          1364.300012588501,
+          5580.76810836792
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 3.2526440918445587e-7,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH recessed pull end",
+        "bounds_mm": [
+          -4965.000152587891,
+          1324.3000507354736,
+          4255.767822265625,
+          -4935.000419616699,
+          1328.2999992370605,
+          4415.768146514893
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 0.0000017420352378394455,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH recessed pull grip",
+        "bounds_mm": [
+          -4965.000152587891,
+          1360.300064086914,
+          4255.767822265625,
+          -4935.000419616699,
+          1364.300012588501,
+          4415.768146514893
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 2.6056295610032976e-7,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH recessed pull web",
+        "bounds_mm": [
+          -4955.000400543213,
+          1328.2999992370605,
+          4255.767822265625,
+          -4945.000171661377,
+          1360.300064086914,
+          4415.768146514893
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 0.0000010903968359343708,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH stile 1",
+        "bounds_mm": [
+          -4965.000152587891,
+          1768.0000066757202,
+          3490.7679557800293,
+          -4935.000419616699,
+          1807.9999685287476,
+          5580.76810836792
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 0.000005472451448440552,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH rail 0",
+        "bounds_mm": [
+          -4965.000152587891,
+          1324.3000507354736,
+          3490.7679557800293,
+          -4935.000419616699,
+          1807.9999685287476,
+          3530.7679176330566
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 8.812639862298965e-7,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH rail 1",
+        "bounds_mm": [
+          -4965.000152587891,
+          1324.3000507354736,
+          4490.767955780029,
+          -4935.000419616699,
+          1807.9999685287476,
+          4530.767917633057
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 0.0000014224788174033165,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH rail 2",
+        "bounds_mm": [
+          -4965.000152587891,
+          1324.3000507354736,
+          5540.768146514893,
+          -4935.000419616699,
+          1807.9999685287476,
+          5580.76810836792
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 0.000001893145963549614,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH clear 0",
+        "bounds_mm": [
+          -4955.000400543213,
+          1364.300012588501,
+          3530.7679176330566,
+          -4945.000171661377,
+          1768.0000066757202,
+          4490.767955780029
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 0.000001201871782541275,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH clear 1",
+        "bounds_mm": [
+          -4955.000400543213,
+          1364.300012588501,
+          4530.767917633057,
+          -4945.000171661377,
+          1768.0000066757202,
+          5540.768146514893
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 4.172325134277344e-7,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH track bearing flange -1",
+        "bounds_mm": [
+          -4941.999912261963,
+          1344.3000316619873,
+          5615.767955780029,
+          -4927.500247955322,
+          2288.0001068115234,
+          5620.768070220947
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 0.000001045700628310442,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH track side wall -1",
+        "bounds_mm": [
+          -4927.500247955322,
+          1344.3000316619873,
+          5615.767955780029,
+          -4922.500133514404,
+          2288.0001068115234,
+          5670.767784118652
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 0.0000034200202208012342,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH track bearing flange 1",
+        "bounds_mm": [
+          -4972.500324249268,
+          1344.3000316619873,
+          5615.767955780029,
+          -4958.000183105469,
+          2288.0001068115234,
+          5620.768070220947
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 5.744950613006949e-7,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH track side wall 1",
+        "bounds_mm": [
+          -4977.499961853027,
+          1344.3000316619873,
+          5615.767955780029,
+          -4972.500324249268,
+          2288.0001068115234,
+          5670.767784118652
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 0.000007713795639574528,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH track roof",
+        "bounds_mm": [
+          -4977.499961853027,
+          1344.3000316619873,
+          5670.767784118652,
+          -4922.500133514404,
+          2288.0001068115234,
+          5675.76789855957
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 0.0000014445686247199774,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH fixed travel stop 0",
+        "bounds_mm": [
+          -4972.500324249268,
+          1364.300012588501,
+          5620.768070220947,
+          -4927.500247955322,
+          1369.3000078201294,
+          5670.767784118652
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 7.258022378664464e-7,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH fixed travel stop 1",
+        "bounds_mm": [
+          -4972.500324249268,
+          2263.000011444092,
+          5620.768070220947,
+          -4927.500247955322,
+          2267.9998874664307,
+          5670.767784118652
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 0.000001158554368885234,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH captured sliding shoe 0",
+        "bounds_mm": [
+          -4967.50020980835,
+          1369.3000078201294,
+          5620.768070220947,
+          -4932.499885559082,
+          1399.2999792099,
+          5640.768051147461
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 8.216666174121201e-7,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH rigid hanger stem 0",
+        "bounds_mm": [
+          -4953.000068664551,
+          1378.2999515533447,
+          5575.767993927002,
+          -4947.000026702881,
+          1390.3000354766846,
+          5630.767822265625
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 3.0371029424713925e-7,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH captured sliding shoe 1",
+        "bounds_mm": [
+          -4967.50020980835,
+          1733.0000400543213,
+          5620.768070220947,
+          -4932.499885559082,
+          1763.0000114440918,
+          5640.768051147461
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 5.978945409879088e-7,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH rigid hanger stem 1",
+        "bounds_mm": [
+          -4953.000068664551,
+          1741.9999837875366,
+          5575.767993927002,
+          -4947.000026702881,
+          1753.999948501587,
+          5630.767822265625
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 0.000005492760465131141,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4 shared carrier header",
+        "bounds_mm": [
+          -4940.000057220459,
+          300.00001192092896,
+          5670.767784118652,
+          -4930.000305175781,
+          2349.9999046325684,
+          5715.767860412598
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 0.000005097710527479649,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4 jamb header attachment 0",
+        "bounds_mm": [
+          -4940.000057220459,
+          817.6000118255615,
+          5670.767784118652,
+          -4914.999961853027,
+          857.5999736785889,
+          5715.767860412598
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 0.0000031722229323349893,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P02 | FF03-C4 jamb header attachment 1",
+        "bounds_mm": [
+          -4940.000057220459,
+          1787.999987602234,
+          5670.767784118652,
+          -4914.999961853027,
+          1827.9999494552612,
+          5715.767860412598
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 0.000006008092896081507,
+        "solids": 1
+      }
+    ],
+    "reference_checks": [
+      {
+        "name": "First Floor - Planning Base 08 | joined wall display",
+        "bounds_mm": [
+          -8524.599075317383,
+          -4965.869903564453,
+          1.0000000474963477,
+          9905.726432800293,
+          5745.524883270264,
+          4925.767898559571
+        ],
+        "bounds_error_mm": 1.1035616864774056e-12,
+        "vertex_error_mm": 0,
+        "area_error_mm2": 0.0000010132789611816406,
+        "volume_error_mm3": 0,
+        "solids": 0,
+        "faces": 4032,
+        "source_triangles": 4064,
+        "degenerate_triangles_as_edges_and_vertices": 32,
+        "representation": "Valid source triangles retained as faces; degenerate or OCCT-invalid sliver triangles retained as exact source edges and vertices; no caps or solid claim.",
+        "omitted_interiors": [
+          {
+            "triangle": 411,
+            "inradius_and_skipped_edge_bound_mm": 0
+          },
+          {
+            "triangle": 412,
+            "inradius_and_skipped_edge_bound_mm": 0
+          },
+          {
+            "triangle": 451,
+            "inradius_and_skipped_edge_bound_mm": 0
+          },
+          {
+            "triangle": 455,
+            "inradius_and_skipped_edge_bound_mm": 0
+          },
+          {
+            "triangle": 468,
+            "inradius_and_skipped_edge_bound_mm": 0
+          },
+          {
+            "triangle": 476,
+            "inradius_and_skipped_edge_bound_mm": 0
+          },
+          {
+            "triangle": 536,
+            "inradius_and_skipped_edge_bound_mm": 0
+          },
+          {
+            "triangle": 537,
+            "inradius_and_skipped_edge_bound_mm": 0
+          },
+          {
+            "triangle": 755,
+            "inradius_and_skipped_edge_bound_mm": 0
+          },
+          {
+            "triangle": 758,
+            "inradius_and_skipped_edge_bound_mm": 0
+          },
+          {
+            "triangle": 761,
+            "inradius_and_skipped_edge_bound_mm": 0
+          },
+          {
+            "triangle": 791,
+            "inradius_and_skipped_edge_bound_mm": 0
+          },
+          {
+            "triangle": 844,
+            "inradius_and_skipped_edge_bound_mm": 0
+          },
+          {
+            "triangle": 852,
+            "inradius_and_skipped_edge_bound_mm": 0
+          },
+          {
+            "triangle": 857,
+            "inradius_and_skipped_edge_bound_mm": 0
+          },
+          {
+            "triangle": 1877,
+            "inradius_and_skipped_edge_bound_mm": 0
+          },
+          {
+            "triangle": 1886,
+            "inradius_and_skipped_edge_bound_mm": 0
+          },
+          {
+            "triangle": 1896,
+            "inradius_and_skipped_edge_bound_mm": 0
+          },
+          {
+            "triangle": 1897,
+            "inradius_and_skipped_edge_bound_mm": 0
+          },
+          {
+            "triangle": 2423,
+            "inradius_and_skipped_edge_bound_mm": 0.0000028309037270556216
+          },
+          {
+            "triangle": 2462,
+            "inradius_and_skipped_edge_bound_mm": 0
+          },
+          {
+            "triangle": 2471,
+            "inradius_and_skipped_edge_bound_mm": 0
+          },
+          {
+            "triangle": 2481,
+            "inradius_and_skipped_edge_bound_mm": 0
+          },
+          {
+            "triangle": 2482,
+            "inradius_and_skipped_edge_bound_mm": 0
+          },
+          {
+            "triangle": 2997,
+            "inradius_and_skipped_edge_bound_mm": 0.0000028309037270556216
+          },
+          {
+            "triangle": 3007,
+            "inradius_and_skipped_edge_bound_mm": 0.0000028309037270556216
+          },
+          {
+            "triangle": 3049,
+            "inradius_and_skipped_edge_bound_mm": 0
+          },
+          {
+            "triangle": 3060,
+            "inradius_and_skipped_edge_bound_mm": 0
+          },
+          {
+            "triangle": 3084,
+            "inradius_and_skipped_edge_bound_mm": 0
+          },
+          {
+            "triangle": 3085,
+            "inradius_and_skipped_edge_bound_mm": 0
+          },
+          {
+            "triangle": 3086,
+            "inradius_and_skipped_edge_bound_mm": 0
+          },
+          {
+            "triangle": 3087,
+            "inradius_and_skipped_edge_bound_mm": 0
+          }
+        ],
+        "conservative_surface_error_mm": 0.0000028309037270556216
+      },
+      {
+        "name": "FF03 P01 | C4 west lower post 1",
+        "bounds_mm": [
+          -4925.000190734863,
+          812.6000165939331,
+          3475.7680892944336,
+          -4875,
+          862.5999689102173,
+          5875.768184661865
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 3.0174851417541504e-7,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P01 | FF03-CABIN4-DOOR head",
+        "bounds_mm": [
+          -4925.000190734863,
+          865.5999898910522,
+          5585.768222808838,
+          -4875,
+          1779.9999713897705,
+          5635.767936706543
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 0.000002161134034395218,
+        "solids": 1
+      },
+      {
+        "name": "FF03 P01 | C4 west upper post 0",
+        "bounds_mm": [
+          -4925.000190734863,
+          1782.9999923706055,
+          3475.7680892944336,
+          -4875,
+          1832.9999446868896,
+          5875.768184661865
+        ],
+        "bounds_error_mm": 0,
+        "vertex_error_mm": 0,
+        "volume_error_mm3": 5.066394805908203e-7,
+        "solids": 1
+      }
+    ],
+    "pairs": [
+      {
+        "moving": "FF03 P02 | FF03-C4-SOUTH recessed pull below",
+        "fixed": "First Floor - Planning Base 08 | joined wall display",
+        "separation_mm": 545.5768406391144,
+        "source_surface_uncertainty_mm": 0.0000028309037270556216,
+        "status": "PASS / full swept-solid separation"
+      },
+      {
+        "moving": "FF03 P02 | FF03-C4-SOUTH recessed pull above",
+        "fixed": "First Floor - Planning Base 08 | joined wall display",
+        "separation_mm": 545.5768406391144,
+        "source_surface_uncertainty_mm": 0.0000028309037270556216,
+        "status": "PASS / full swept-solid separation"
+      },
+      {
+        "moving": "FF03 P02 | FF03-C4-SOUTH recessed pull end",
+        "fixed": "First Floor - Planning Base 08 | joined wall display",
+        "separation_mm": 581.5768539905548,
+        "source_surface_uncertainty_mm": 0.0000028309037270556216,
+        "status": "PASS / full swept-solid separation"
+      },
+      {
+        "moving": "FF03 P02 | FF03-C4-SOUTH recessed pull grip",
+        "fixed": "First Floor - Planning Base 08 | joined wall display",
+        "separation_mm": 545.5768406391144,
+        "source_surface_uncertainty_mm": 0.0000028309037270556216,
+        "status": "PASS / full swept-solid separation"
+      },
+      {
+        "moving": "FF03 P02 | FF03-C4-SOUTH recessed pull web",
+        "fixed": "First Floor - Planning Base 08 | joined wall display",
+        "separation_mm": 549.5797386149576,
+        "source_surface_uncertainty_mm": 0.0000028309037270556216,
+        "status": "PASS / full swept-solid separation"
+      },
+      {
+        "moving": "FF03 P02 | FF03-C4-SOUTH stile 1",
+        "fixed": "First Floor - Planning Base 08 | joined wall display",
+        "separation_mm": 101.87676548957825,
+        "source_surface_uncertainty_mm": 0.0000028309037270556216,
+        "status": "PASS / full swept-solid separation"
+      },
+      {
+        "moving": "FF03 P02 | FF03-C4-SOUTH rail 0",
+        "fixed": "First Floor - Planning Base 08 | joined wall display",
+        "separation_mm": 101.87676548957825,
+        "source_surface_uncertainty_mm": 0.0000028309037270556216,
+        "status": "PASS / full swept-solid separation"
+      },
+      {
+        "moving": "FF03 P02 | FF03-C4-SOUTH rail 1",
+        "fixed": "First Floor - Planning Base 08 | joined wall display",
+        "separation_mm": 101.87676548957825,
+        "source_surface_uncertainty_mm": 0.0000028309037270556216,
+        "status": "PASS / full swept-solid separation"
+      },
+      {
+        "moving": "FF03 P02 | FF03-C4-SOUTH clear 0",
+        "fixed": "First Floor - Planning Base 08 | joined wall display",
+        "separation_mm": 141.88821166100342,
+        "source_surface_uncertainty_mm": 0.0000028309037270556216,
+        "status": "PASS / full swept-solid separation"
+      },
+      {
+        "moving": "FF03 P02 | FF03-C4-SOUTH clear 1",
+        "fixed": "First Floor - Planning Base 08 | joined wall display",
+        "separation_mm": 141.88821166100342,
+        "source_surface_uncertainty_mm": 0.0000028309037270556216,
+        "status": "PASS / full swept-solid separation"
+      },
+      {
+        "moving": "FF03 P02 | FF03-C4-NORTH recessed pull below",
+        "fixed": "First Floor - Planning Base 08 | joined wall display",
+        "separation_mm": 1088.5768234729767,
+        "source_surface_uncertainty_mm": 0.0000028309037270556216,
+        "status": "PASS / full swept-solid separation"
+      },
+      {
+        "moving": "FF03 P02 | FF03-C4-NORTH recessed pull above",
+        "fixed": "First Floor - Planning Base 08 | joined wall display",
+        "separation_mm": 1088.5768234729767,
+        "source_surface_uncertainty_mm": 0.0000028309037270556216,
+        "status": "PASS / full swept-solid separation"
+      },
+      {
+        "moving": "FF03 P02 | FF03-C4-NORTH recessed pull end",
+        "fixed": "First Floor - Planning Base 08 | joined wall display",
+        "separation_mm": 1088.5768234729767,
+        "source_surface_uncertainty_mm": 0.0000028309037270556216,
+        "status": "PASS / full swept-solid separation"
+      },
+      {
+        "moving": "FF03 P02 | FF03-C4-NORTH recessed pull grip",
+        "fixed": "First Floor - Planning Base 08 | joined wall display",
+        "separation_mm": 1118.0784895788274,
+        "source_surface_uncertainty_mm": 0.0000028309037270556216,
+        "status": "PASS / full swept-solid separation"
+      },
+      {
+        "moving": "FF03 P02 | FF03-C4-NORTH recessed pull web",
+        "fixed": "First Floor - Planning Base 08 | joined wall display",
+        "separation_mm": 1092.5782555919004,
+        "source_surface_uncertainty_mm": 0.0000028309037270556216,
+        "status": "PASS / full swept-solid separation"
+      },
+      {
+        "moving": "FF03 P02 | FF03-C4-NORTH stile 1",
+        "fixed": "First Floor - Planning Base 08 | joined wall display",
+        "separation_mm": 1150.2618426517201,
+        "source_surface_uncertainty_mm": 0.0000028309037270556216,
+        "status": "PASS / full swept-solid separation"
+      },
+      {
+        "moving": "FF03 P02 | FF03-C4-NORTH rail 0",
+        "fixed": "First Floor - Planning Base 08 | joined wall display",
+        "separation_mm": 1088.5768234729767,
+        "source_surface_uncertainty_mm": 0.0000028309037270556216,
+        "status": "PASS / full swept-solid separation"
+      },
+      {
+        "moving": "FF03 P02 | FF03-C4-NORTH rail 1",
+        "fixed": "First Floor - Planning Base 08 | joined wall display",
+        "separation_mm": 1088.5768234729767,
+        "source_surface_uncertainty_mm": 0.0000028309037270556216,
+        "status": "PASS / full swept-solid separation"
+      },
+      {
+        "moving": "FF03 P02 | FF03-C4-NORTH clear 0",
+        "fixed": "First Floor - Planning Base 08 | joined wall display",
+        "separation_mm": 1128.1823144911755,
+        "source_surface_uncertainty_mm": 0.0000028309037270556216,
+        "status": "PASS / full swept-solid separation"
+      },
+      {
+        "moving": "FF03 P02 | FF03-C4-NORTH clear 1",
+        "fixed": "First Floor - Planning Base 08 | joined wall display",
+        "separation_mm": 1128.1823144911755,
+        "source_surface_uncertainty_mm": 0.0000028309037270556216,
+        "status": "PASS / full swept-solid separation"
+      }
+    ],
+    "contacts": [
+      {
+        "moving": "FF03 P02 | FF03-C4-SOUTH captured sliding shoe 0",
+        "fixed": "FF03 P02 | FF03-C4-SOUTH track bearing flange -1",
+        "status": "PASS / explicit bearing",
+        "maximum_boundary_penetration_mm": 0,
+        "plane_gap_mm": 0,
+        "minimum_contact_widths_mm": [
+          9.50002670288086,
+          29.999971389770508
+        ],
+        "continuous_proof": "Z separation is invariant; Y overlap minimum for interval translation occurs at an endpoint."
+      },
+      {
+        "moving": "FF03 P02 | FF03-C4-SOUTH captured sliding shoe 0",
+        "fixed": "FF03 P02 | FF03-C4-SOUTH track bearing flange 1",
+        "status": "PASS / explicit bearing",
+        "maximum_boundary_penetration_mm": 0,
+        "plane_gap_mm": 0,
+        "minimum_contact_widths_mm": [
+          9.50002670288086,
+          29.999971389770508
+        ],
+        "continuous_proof": "Z separation is invariant; Y overlap minimum for interval translation occurs at an endpoint."
+      },
+      {
+        "moving": "FF03 P02 | FF03-C4-SOUTH captured sliding shoe 0",
+        "fixed": "FF03 P02 | FF03-C4-SOUTH fixed travel stop 0",
+        "status": "PASS / endpoint stop",
+        "contact_phase": 1,
+        "endpoint_face_gap_mm": 0,
+        "other_endpoint_gap_mm": 500,
+        "maximum_boundary_penetration_mm": 0,
+        "continuous_proof": "Exact linear separating face gap is nonnegative throughout travel, with intended contact only at the named endpoint."
+      },
+      {
+        "moving": "FF03 P02 | FF03-C4-SOUTH captured sliding shoe 1",
+        "fixed": "FF03 P02 | FF03-C4-SOUTH track bearing flange -1",
+        "status": "PASS / explicit bearing",
+        "maximum_boundary_penetration_mm": 0,
+        "plane_gap_mm": 0,
+        "minimum_contact_widths_mm": [
+          9.50002670288086,
+          29.999971389770508
+        ],
+        "continuous_proof": "Z separation is invariant; Y overlap minimum for interval translation occurs at an endpoint."
+      },
+      {
+        "moving": "FF03 P02 | FF03-C4-SOUTH captured sliding shoe 1",
+        "fixed": "FF03 P02 | FF03-C4-SOUTH track bearing flange 1",
+        "status": "PASS / explicit bearing",
+        "maximum_boundary_penetration_mm": 0,
+        "plane_gap_mm": 0,
+        "minimum_contact_widths_mm": [
+          9.50002670288086,
+          29.999971389770508
+        ],
+        "continuous_proof": "Z separation is invariant; Y overlap minimum for interval translation occurs at an endpoint."
+      },
+      {
+        "moving": "FF03 P02 | FF03-C4-SOUTH captured sliding shoe 1",
+        "fixed": "FF03 P02 | FF03-C4-SOUTH fixed travel stop 1",
+        "status": "PASS / endpoint stop",
+        "contact_phase": 0,
+        "endpoint_face_gap_mm": 0,
+        "other_endpoint_gap_mm": 500,
+        "maximum_boundary_penetration_mm": 0,
+        "continuous_proof": "Exact linear separating face gap is nonnegative throughout travel, with intended contact only at the named endpoint."
+      },
+      {
+        "moving": "FF03 P02 | FF03-C4-NORTH captured sliding shoe 0",
+        "fixed": "FF03 P02 | FF03-C4-NORTH track bearing flange -1",
+        "status": "PASS / explicit bearing",
+        "maximum_boundary_penetration_mm": 0,
+        "plane_gap_mm": 0,
+        "minimum_contact_widths_mm": [
+          9.50002670288086,
+          29.999971389770508
+        ],
+        "continuous_proof": "Z separation is invariant; Y overlap minimum for interval translation occurs at an endpoint."
+      },
+      {
+        "moving": "FF03 P02 | FF03-C4-NORTH captured sliding shoe 0",
+        "fixed": "FF03 P02 | FF03-C4-NORTH track bearing flange 1",
+        "status": "PASS / explicit bearing",
+        "maximum_boundary_penetration_mm": 0,
+        "plane_gap_mm": 0,
+        "minimum_contact_widths_mm": [
+          9.50002670288086,
+          29.999971389770508
+        ],
+        "continuous_proof": "Z separation is invariant; Y overlap minimum for interval translation occurs at an endpoint."
+      },
+      {
+        "moving": "FF03 P02 | FF03-C4-NORTH captured sliding shoe 0",
+        "fixed": "FF03 P02 | FF03-C4-NORTH fixed travel stop 0",
+        "status": "PASS / endpoint stop",
+        "contact_phase": 0,
+        "endpoint_face_gap_mm": 0,
+        "other_endpoint_gap_mm": 500,
+        "maximum_boundary_penetration_mm": 0,
+        "continuous_proof": "Exact linear separating face gap is nonnegative throughout travel, with intended contact only at the named endpoint."
+      },
+      {
+        "moving": "FF03 P02 | FF03-C4-NORTH captured sliding shoe 1",
+        "fixed": "FF03 P02 | FF03-C4-NORTH track bearing flange -1",
+        "status": "PASS / explicit bearing",
+        "maximum_boundary_penetration_mm": 0,
+        "plane_gap_mm": 0,
+        "minimum_contact_widths_mm": [
+          9.50002670288086,
+          29.999971389770508
+        ],
+        "continuous_proof": "Z separation is invariant; Y overlap minimum for interval translation occurs at an endpoint."
+      },
+      {
+        "moving": "FF03 P02 | FF03-C4-NORTH captured sliding shoe 1",
+        "fixed": "FF03 P02 | FF03-C4-NORTH track bearing flange 1",
+        "status": "PASS / explicit bearing",
+        "maximum_boundary_penetration_mm": 0,
+        "plane_gap_mm": 0,
+        "minimum_contact_widths_mm": [
+          9.50002670288086,
+          29.999971389770508
+        ],
+        "continuous_proof": "Z separation is invariant; Y overlap minimum for interval translation occurs at an endpoint."
+      },
+      {
+        "moving": "FF03 P02 | FF03-C4-NORTH captured sliding shoe 1",
+        "fixed": "FF03 P02 | FF03-C4-NORTH fixed travel stop 1",
+        "status": "PASS / endpoint stop",
+        "contact_phase": 1,
+        "endpoint_face_gap_mm": 0,
+        "other_endpoint_gap_mm": 500,
+        "maximum_boundary_penetration_mm": 0,
+        "continuous_proof": "Exact linear separating face gap is nonnegative throughout travel, with intended contact only at the named endpoint."
+      }
+    ],
+    "connectivity": [
+      {
+        "id": "FF03-C4-SOUTH",
+        "status": "PASS / joined rigid geometry",
+        "components": 15
+      },
+      {
+        "id": "FF03-C4-NORTH",
+        "status": "PASS / joined rigid geometry",
+        "components": 15
+      }
+    ],
+    "fixed_assembly_contacts": [
+      {
+        "new": "FF03 P02 | FF03-C4-SOUTH track side wall -1",
+        "retained": "FF03 P01 | C4 west lower post 1",
+        "gap_mm": 0,
+        "volume_mm3": 6875.129341458606,
+        "area_mm2": 6024.988508215765
+      },
+      {
+        "new": "FF03 P02 | FF03-C4-SOUTH track side wall -1",
+        "retained": "FF03 P01 | FF03-CABIN4-DOOR head",
+        "gap_mm": 0,
+        "volume_mm3": 21785.4807897231,
+        "area_mm2": 19706.538086893095
+      },
+      {
+        "new": "FF03 P02 | FF03-C4-SOUTH track roof",
+        "retained": "FF03 P01 | C4 west lower post 1",
+        "gap_mm": 0,
+        "volume_mm3": 625.0280144831912,
+        "area_mm2": 775.0175952878711
+      },
+      {
+        "new": "FF03 P02 | FF03-C4-NORTH track side wall -1",
+        "retained": "FF03 P01 | C4 west upper post 0",
+        "gap_mm": 0,
+        "volume_mm3": 6875.1293414585525,
+        "area_mm2": 6024.988508215738
+      },
+      {
+        "new": "FF03 P02 | FF03-C4-NORTH track side wall -1",
+        "retained": "FF03 P01 | FF03-CABIN4-DOOR head",
+        "gap_mm": 0,
+        "volume_mm3": 21785.47482913041,
+        "area_mm2": 19706.5327224663
+      },
+      {
+        "new": "FF03 P02 | FF03-C4-NORTH track roof",
+        "retained": "FF03 P01 | C4 west upper post 0",
+        "gap_mm": 0,
+        "volume_mm3": 625.0280144831863,
+        "area_mm2": 775.0175952878666
+      },
+      {
+        "new": "FF03 P02 | FF03-C4 jamb header attachment 0",
+        "retained": "FF03 P01 | C4 west lower post 1",
+        "gap_mm": 0,
+        "volume_mm3": 18000.425339021604,
+        "area_mm2": 5300.04234315129
+      },
+      {
+        "new": "FF03 P02 | FF03-C4 jamb header attachment 1",
+        "retained": "FF03 P01 | C4 west upper post 0",
+        "gap_mm": 0,
+        "volume_mm3": 18000.425339021604,
+        "area_mm2": 5300.04234315129
+      }
+    ],
+    "errors": [],
+    "broadphase_pairs": 45390,
+    "separated_by_exact_source_bounds": 45358,
+    "limitations": [
+      "Custom bi-parting top-captured runner concept, not selected hardware; loads, wear, friction, anti-lift, locking, grasp and fixings require engineering.",
+      "Three millimetre meeting gap and ten millimetre frame-to-leaf gap remain unsealed; no acoustic, fire, security or accessibility certification.",
+      "Six FF03 tables/chair proxies and cupboard retained; approximately one-foot occupied rear gap and narrow shared route remain unresolved.",
+      "Retained unrelated doors use their saved geometry; their unchanged operation is not recertified. Static intended assembly joins are not load-bearing or hardware-product certification."
+    ],
+    "elapsed_s": 135.2272249580128,
+    "peak_rss_bytes_macos": 441155584,
+    "independent_leaves": {
+      "status": "PASS",
+      "exact_swept_pair_count": 225,
+      "minimum_complete_sweep_gap_mm": 3.000020980834961
+    },
+    "fixed_support_connectivity": {
+      "status": "PASS / connected geometry only",
+      "parts": 17,
+      "direct_retained_anchors": [
+        "FF03 P02 | FF03-C4 jamb header attachment 0",
+        "FF03 P02 | FF03-C4 jamb header attachment 1",
+        "FF03 P02 | FF03-C4-NORTH track roof",
+        "FF03 P02 | FF03-C4-NORTH track side wall -1",
+        "FF03 P02 | FF03-C4-SOUTH track roof",
+        "FF03 P02 | FF03-C4-SOUTH track side wall -1"
+      ],
+      "not_structural_capacity_certification": true
+    },
+    "sourceFilesUnchanged": true,
+    "verifierSha256": "a6c84f52307156e38eac6d1d2d51fd1bbb8b2f6fdabceb519f386bd2e58c04a4"
+  },
+  "aperture": {
+    "status": "PASS / UNCHANGED FRAME APERTURE AND RETAINED-DOOR SEPARATION",
+    "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f",
+    "original_jamb_faces_and_head_exactly_retained": true,
+    "frame_inside_face_span_mm": 920.4000234603882,
+    "aperture_y_m": [
+      0.8625999689102173,
+      1.7829999923706055
+    ],
+    "test_aperture_depth_x_m": [
+      -4.977499961853027,
+      -4.875
+    ],
+    "test_height_z_m": [
+      3.475768,
+      5.585768222808838
+    ],
+    "nominal_leaf_width_history_mm": 914.4,
+    "new_parked_geometry_intrusion_checks": [
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH recessed pull below",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH recessed pull above",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH recessed pull end",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH recessed pull grip",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH recessed pull web",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH stile 1",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH rail 0",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH rail 1",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH rail 2",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH clear 0",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH clear 1",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH track bearing flange -1",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH track side wall -1",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH track bearing flange 1",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH track side wall 1",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH track roof",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH fixed travel stop 0",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH fixed travel stop 1",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH captured sliding shoe 0",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH rigid hanger stem 0",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH captured sliding shoe 1",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-SOUTH rigid hanger stem 1",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH recessed pull below",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH recessed pull above",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH recessed pull end",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH recessed pull grip",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH recessed pull web",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH stile 1",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH rail 0",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH rail 1",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH rail 2",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH clear 0",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH clear 1",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH track bearing flange -1",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH track side wall -1",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH track bearing flange 1",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH track side wall 1",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH track roof",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH fixed travel stop 0",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH fixed travel stop 1",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH captured sliding shoe 0",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH rigid hanger stem 0",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH captured sliding shoe 1",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4-NORTH rigid hanger stem 1",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4 shared carrier header",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4 jamb header attachment 0",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      },
+      {
+        "name": "FF03 P02 | FF03-C4 jamb header attachment 1",
+        "open_pose_aperture_prism_intrusion_mm3": 0
+      }
+    ],
+    "retained_doors_full_motion_noninteraction": [
+      {
+        "door": "FF03-CABIN2-DOOR",
+        "whole_motion_bounds_m": [
+          -4.124999761581421,
+          3.1549994945526123,
+          3.4907679557800293,
+          -3.1903809787246264,
+          4.144619048995344,
+          5.58076810836792
+        ],
+        "new_hardware_and_complete_travel_gap_lower_bound_mm": 1127.8850367837217
+      },
+      {
+        "door": "FF05-INWARD-DOOR",
+        "whole_motion_bounds_m": [
+          -3.4240808486938477,
+          4.3902037143707275,
+          3.4907679557800293,
+          -2.7770548588936395,
+          5.037230169691329,
+          5.540768146514893
+        ],
+        "new_hardware_and_complete_travel_gap_lower_bound_mm": 2526.9094537108867
+      },
+      {
+        "door": "FF04-CURVED-STAIR-LEAF1",
+        "whole_motion_bounds_m": [
+          -0.8555425119364846,
+          3.5912866592407227,
+          3.4907679557800293,
+          -0.36198410391807556,
+          4.507865133483338,
+          5.58076810836792
+        ],
+        "new_hardware_and_complete_travel_gap_lower_bound_mm": 4244.995594208382
+      },
+      {
+        "door": "FF04-CURVED-STAIR-LEAF2",
+        "whole_motion_bounds_m": [
+          -0.9045059535974848,
+          3.243604898452759,
+          3.4907679557800293,
+          -0.026212619617581367,
+          4.497737069675425,
+          5.58076810836792
+        ],
+        "new_hardware_and_complete_travel_gap_lower_bound_mm": 4108.843155346039
+      },
+      {
+        "door": "H1-L1",
+        "whole_motion_bounds_m": [
+          5.432499885559082,
+          1.4300000667572021,
+          3.4907679557800293,
+          5.46750020980835,
+          2.896600067615509,
+          5.640768051147461
+        ],
+        "new_hardware_and_complete_travel_gap_lower_bound_mm": 10347.49984741211
+      },
+      {
+        "door": "H1-L2",
+        "whole_motion_bounds_m": [
+          5.482500076293945,
+          1.882200002670288,
+          3.4907679557800293,
+          5.517499923706055,
+          2.896600127220154,
+          5.640768051147461
+        ],
+        "new_hardware_and_complete_travel_gap_lower_bound_mm": 10397.500038146973
+      },
+      {
+        "door": "H2",
+        "whole_motion_bounds_m": [
+          5.432499885559082,
+          -1.2999999523162842,
+          3.4907679557800293,
+          5.46750020980835,
+          0.6388000249862671,
+          5.640768051147461
+        ],
+        "new_hardware_and_complete_travel_gap_lower_bound_mm": 10347.49984741211
+      },
+      {
+        "door": "H3",
+        "whole_motion_bounds_m": [
+          1.4950000047683716,
+          2.2896997928619385,
+          3.4907679557800293,
+          3.4344000816345215,
+          2.324699878692627,
+          5.640768051147461
+        ],
+        "new_hardware_and_complete_travel_gap_lower_bound_mm": 6409.999966621399
+      },
+      {
+        "door": "FF04-LEFT-SLIDER",
+        "whole_motion_bounds_m": [
+          -1.5199999660491943,
+          2.1049997806549072,
+          3.4907679557800293,
+          0.4588000178337097,
+          2.134999990463257,
+          5.58076810836792
+        ],
+        "new_hardware_and_complete_travel_gap_lower_bound_mm": 3394.999995803833
+      }
+    ],
+    "new_complete_hardware_and_travel_envelope_m": [
+      -4.977499961853027,
+      0.30000001192092896,
+      3.4907679557800293,
+      -4.914999961853027,
+      2.3499999046325684,
+      5.715767860412598
+    ],
+    "old_closed_door_including_pull_envelope_m": [
+      -5.020000457763672,
+      0.8655998706817627,
+      3.4907679557800293,
+      -4.925000071525574,
+      1.7799999713897705,
+      5.58076810836792
+    ],
+    "west_projection_past_fixed_frame": {
+      "leaf_and_recessed_pull_mm": 39.999961853027344,
+      "overhead_track_mm": 52.49977111816406,
+      "note": "Parked leaves occupy this depth along formerly leaf-free adjacent glazing runs. Removing the outward swing does not establish whole-corridor nonreduction or occupied-route compliance."
+    },
+    "meeting_gap_mm": 3,
+    "unsealed_frame_to_leaf_gap_mm": 10,
+    "limits": [
+      "Frame span and selected aperture prism are model checks, not effective user passage, fire, accessibility or construction certification.",
+      "Retained furniture/cupboard/door operating space remains approximate; original occupied-chair limitations are unchanged.",
+      "Full-motion bounds cover every retained modeled FF03/FF05/R03 door listed here; they do not validate the unchanged hardware systems themselves."
+    ],
+    "sourcesUnchanged": true,
+    "verifierSha256": "67f2298f2342778d6240811d31b6d2a2b77f115571a0f0a9838bf8ddf3463913"
+  },
+  "sourceEvidence": {
+    "cadReopenSha256": "c17b2378d82bbf0e19252048d8d25745a91427b95247af27f26da9b4158a05b7",
+    "motionSha256": "2f17f529d7c9f9ac85e231d15207c42a7db40f490635c431bc93ee396ad0c8b8",
+    "apertureSha256": "1759bb6bdb66b9fc69e60b5fe9404f5fda17e961ce503a28e9555ee897476be6",
+    "cadVisualReviewSha256": "04b07141176d7d24ab00581c625ee65bb295de09b23bd0fc5bf8cd0a5b09dbe3",
+    "blenderVisualReviewSha256": "97459bfc37a2a8a52afc41587601013f27a078b9e1a59bf022f47c41209920f3"
+  }
+}

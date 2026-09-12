@@ -54,17 +54,19 @@ def degenerates(triangles):
 
 results=[]
 for floor in manifest['floors']:
-    identifier=floor['id'];scene=bpy.data.scenes[floor['sourceScene']]
+    identifier=floor['id'];scene=bpy.data.scenes[expected[identifier].get('current_source_scene',floor['sourceScene'])]
     bpy.context.window.scene=scene;bpy.context.view_layer.update()
     graph=bpy.context.evaluated_depsgraph_get()
     names=set(expected[identifier]['objects'])
-    counts=raw_counts(out/(identifier+'.glb'))
+    model_path=Path(expected[identifier].get('model_path',out/(identifier+'.glb')))
+    assert sha(model_path)==floor['sha256']
+    counts=raw_counts(model_path)
     assert set(counts)==names
     assert all(counts[n]==expected[identifier]['objects'][n]['triangles'] for n in names), 'Raw GLB lost source triangles'
     originals={name:geometry(scene.objects[name],graph) for name in names}
     imported_scene=bpy.data.scenes.new('VERIFY '+identifier)
     bpy.context.window.scene=imported_scene
-    bpy.ops.import_scene.gltf(filepath=str(out/(identifier+'.glb')))
+    bpy.ops.import_scene.gltf(filepath=str(model_path))
     bpy.context.view_layer.update();graph=bpy.context.evaluated_depsgraph_get()
     imported={o.get('sourceName'):o for o in imported_scene.objects if o.type=='MESH'}
     assert set(imported)==names, (identifier,len(imported),len(names))
@@ -90,11 +92,12 @@ for floor in manifest['floors']:
                     'max_symmetric_vertex_error_m':max_vertex,'max_symmetric_triangle_centroid_error_m':max_centroid,
                     'source_object_names_preserved_in_extras':True,'failure_count':len(failures),'failures':failures,
                     'raw_glb_source_triangle_counts_exact':True,'importer_zero_area_changes':importer_degenerate_changes,
-                    'glb_sha256':sha(out/(identifier+'.glb')),'status':'PASS' if not failures else 'FAIL'})
+                    'glb_sha256':sha(model_path),'retainedFrom':floor.get('retainedFrom'),'status':'PASS' if not failures else 'FAIL'})
     print('CHECKED',identifier,len(imported),max_vertex,max_centroid,len(failures),flush=True)
 assert sha(source)==source_sha
-assert all(sha((out if d['url'].startswith('/') else stage/'external-downloads')/Path(d['url']).name)==d['sha256'] for d in manifest['downloads'])
-assert all(sha(out/Path(f['preview']).name)==f['previewSha256'] for f in manifest['floors'])
+public_root=out.parent.parent
+assert all(sha((public_root/str(d['url']).lstrip('/')) if d['url'].startswith('/') else stage/'external-downloads'/Path(d['url']).name)==d['sha256'] for d in manifest['downloads'])
+assert all(sha(Path(expected[f['id']].get('preview_path',out/Path(f['preview']).name)))==f['previewSha256'] for f in manifest['floors'])
 report={'status':'PASS' if all(r['status']=='PASS' for r in results) else 'FAIL','checks':results,
         'source_sha256_before_and_after':source_sha,'native_source_saved':False,'fresh_background_reopen':True,
         'geometry_tolerance_m':2e-6,'method':'Raw GLB index counts match every source object exactly. Fresh import checks symmetric vertices/triangle centroids and nonzero-area triangle counts; any importer zero-area removal is disclosed.',

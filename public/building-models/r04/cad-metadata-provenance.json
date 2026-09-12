@@ -1,0 +1,55 @@
+{
+  "release": "R04",
+  "files": [
+    {
+      "file": "first-floor.FCStd",
+      "sourceSha256": "ad1397f6b855e309b0093e64baf582db559be5b4ebab1e22ef3f428a3b77d5e9",
+      "publicSha256": "ad1397f6b855e309b0093e64baf582db559be5b4ebab1e22ef3f428a3b77d5e9",
+      "publicBytes": 50172007,
+      "nativeSaveReopen": "PASS",
+      "transformationKind": "verified-current-design-copy",
+      "serializedPrivatePathScan": "PASS",
+      "curation": {
+        "retainedGeometryUnchanged": true,
+        "materialsUnchanged": true,
+        "selectedMembershipVerified": true,
+        "reviewViewsVerified": true,
+        "selectedAllowlistSha256": "d2347fec7f4a752a581faa84e3b96b1f0c4878a14c6d798a793792e57becadfc",
+        "privateAuditSha256": "c17b2378d82bbf0e19252048d8d25745a91427b95247af27f26da9b4158a05b7",
+        "removedObjects": 0,
+        "removedScenes": 0,
+        "displayChanges": [],
+        "dependencyDisclosure": [
+          "Byte-identical copy of the freshly reopened P02 current design; public packaging does not alter geometry or display.",
+          "The design revision replaces eight FF03 four-seat swing components with forty-seven sliding-door and support components.",
+          "Existing room reference offsets and proposal limitations are retained; this is not an as-built survey or construction certification."
+        ]
+      }
+    },
+    {
+      "file": "rooms/FF-03.FCStd",
+      "sourceSha256": "452fafd1f345ef268616a241933826073a62fd4a95b6f9098851cdf3523b5695",
+      "publicSha256": "452fafd1f345ef268616a241933826073a62fd4a95b6f9098851cdf3523b5695",
+      "publicBytes": 2943768,
+      "nativeSaveReopen": "PASS",
+      "transformationKind": "verified-current-design-copy",
+      "serializedPrivatePathScan": "PASS",
+      "curation": {
+        "retainedGeometryUnchanged": true,
+        "materialsUnchanged": true,
+        "selectedMembershipVerified": true,
+        "reviewViewsVerified": true,
+        "selectedAllowlistSha256": "a2fa7a325b48d26b2db076a1d97c31aa4ca70a47c32795b1d44fd5e014da37c7",
+        "privateAuditSha256": "c17b2378d82bbf0e19252048d8d25745a91427b95247af27f26da9b4158a05b7",
+        "removedObjects": 0,
+        "removedScenes": 0,
+        "displayChanges": [],
+        "dependencyDisclosure": [
+          "Byte-identical copy of the freshly reopened P02 current design; public packaging does not alter geometry or display.",
+          "The design revision replaces eight FF03 four-seat swing components with forty-seven sliding-door and support components.",
+          "Existing room reference offsets and proposal limitations are retained; this is not an as-built survey or construction certification."
+        ]
+      }
+    }
+  ]
+}

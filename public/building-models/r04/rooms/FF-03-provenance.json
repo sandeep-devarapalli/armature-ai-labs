@@ -1,0 +1,3152 @@
+{
+  "id": "FF-03",
+  "purpose": "Two-person and four-person cabins",
+  "floor": "FF",
+  "revision": "R04",
+  "includedInRelease": "R04",
+  "sourceFile": "first-floor.FCStd",
+  "sourceSha256": "ad1397f6b855e309b0093e64baf582db559be5b4ebab1e22ef3f428a3b77d5e9",
+  "sourceBasis": "Coordinated P02 full-floor design and separately updated R03 room reference; inherited Z0 reference ancestry is recorded per object, not re-extracted from the curated full floor.",
+  "selectionSha256": "f95e63905d6e46d9092bd45d073b8601aa0f03510011554c630a0be37a260004",
+  "shapeCount": 221,
+  "solidCount": 231,
+  "geometryKind": "mixed 2D references and 3D fit-out",
+  "objects": [
+    {
+      "sourceObjectId": "FF_O02___opening",
+      "label": "FF-O02 / opening",
+      "role": "Openings",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "1bfc7fc3dfeae129ee9e4bab3c1c98e6e884aeff471a3fab61da4868f312efbc",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF_O02___opening"
+      }
+    },
+    {
+      "sourceObjectId": "FF_03___FF_03_A___wall",
+      "label": "FF-03 / FF-03-A / wall",
+      "role": "Architecture",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "4889776831da36ca1034d5baab943a099353783b480157f0089af82de4836a76",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF_03___FF_03_A___wall"
+      }
+    },
+    {
+      "sourceObjectId": "FF_03___FF_03_A___wall___provisional_120_mm_offset",
+      "label": "FF-03 / FF-03-A / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "676bd2f178534133e21b6651f51ff945a5b475309b62fcf40650f1b7e6781f40",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF_03___FF_03_A___wall___provisional_120_mm_offset"
+      }
+    },
+    {
+      "sourceObjectId": "FF_03___FF_03_B___wall",
+      "label": "FF-03 / FF-03-B / wall",
+      "role": "Architecture",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "a846781b85365ea487e881ae4788c4c124e80d981df77531a7ba09ffa705ca68",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF_03___FF_03_B___wall"
+      }
+    },
+    {
+      "sourceObjectId": "FF_03___FF_03_B___wall___provisional_120_mm_offset",
+      "label": "FF-03 / FF-03-B / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "a12a384bdffac375e8d700dd61f826cef9fa825b8aa7b7a88b84ad4bdf355248",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF_03___FF_03_B___wall___provisional_120_mm_offset"
+      }
+    },
+    {
+      "sourceObjectId": "FF_03___FF_03_C___wall",
+      "label": "FF-03 / FF-03-C / wall",
+      "role": "Architecture",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "e022ac15768310e8ebe39d14353e37e32bff74a7491e9d858be98d9d77d514d7",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF_03___FF_03_C___wall"
+      }
+    },
+    {
+      "sourceObjectId": "FF_03___FF_03_C___wall___provisional_120_mm_offset",
+      "label": "FF-03 / FF-03-C / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "55641f1c53b424f90e0af40495fb181513108dcef3f9ad8485abc598db4fb20a",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF_03___FF_03_C___wall___provisional_120_mm_offset"
+      }
+    },
+    {
+      "sourceObjectId": "FF_03___FF_03_D_2___wall",
+      "label": "FF-03 / FF-03-D.2 / wall",
+      "role": "Architecture",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "7c61cf34ad7a5ec2558a936397d7012ce8550cd019c1f8444747f49743346b0c",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF_03___FF_03_D_2___wall"
+      }
+    },
+    {
+      "sourceObjectId": "FF_03___FF_03_D_2___wall___provisional_120_mm_offset",
+      "label": "FF-03 / FF-03-D.2 / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "4244029eb28c699dd2e00959a40c83afbb43ce7e9bd3af686fbc9022e40b39d7",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF_03___FF_03_D_2___wall___provisional_120_mm_offset"
+      }
+    },
+    {
+      "sourceObjectId": "FF_03___FF_03_E_1___wall",
+      "label": "FF-03 / FF-03-E.1 / wall",
+      "role": "Architecture",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "5453e839bec3135277ff2e321220eff3ea73963f26ff513332c26f9175470990",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF_03___FF_03_E_1___wall"
+      }
+    },
+    {
+      "sourceObjectId": "FF_03___FF_03_E_3___wall",
+      "label": "FF-03 / FF-03-E.3 / wall",
+      "role": "Architecture",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "15a7c3428b0f2c56ea30c2fbbefa2d6fcbd6e1bbb7c5351debadea4f12a951d7",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF_03___FF_03_E_3___wall"
+      }
+    },
+    {
+      "sourceObjectId": "FF_03___FF_03_F_1___wall",
+      "label": "FF-03 / FF-03-F.1 / wall",
+      "role": "Architecture",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "6b6e559aa86c8fe8575bad7784a37a30021196a960d8e43cb8195941a622fe80",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF_03___FF_03_F_1___wall"
+      }
+    },
+    {
+      "sourceObjectId": "FF_03___FF_03_F_1___wall___provisional_120_mm_offset",
+      "label": "FF-03 / FF-03-F.1 / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "51a53522e472a494fa7523fa1809d9a00c593b703f2755a5394f83a18dd8afb8",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF_03___FF_03_F_1___wall___provisional_120_mm_offset"
+      }
+    },
+    {
+      "sourceObjectId": "FF_03___FF_03_F_2___wall",
+      "label": "FF-03 / FF-03-F.2 / wall",
+      "role": "Architecture",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "c5cbb6978c3017e2a32fec90874e2b1b9fda2add282726c400367d5dd7078a92",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF_03___FF_03_F_2___wall"
+      }
+    },
+    {
+      "sourceObjectId": "FF_03___FF_03_F_2___wall___provisional_120_mm_offset",
+      "label": "FF-03 / FF-03-F.2 / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "374b17c6e961b84b14297e6375587cd33139fa265fd527b1884a0cc25fd2fb28",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF_03___FF_03_F_2___wall___provisional_120_mm_offset"
+      }
+    },
+    {
+      "sourceObjectId": "FF_O03___opening",
+      "label": "FF-O03 / opening",
+      "role": "Openings",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "5d737cebd73c5462eec423aaf12819f6c7653dfc0b826f0e3e7a67cf495936bd",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF_O03___opening"
+      }
+    },
+    {
+      "sourceObjectId": "FF_D01___door",
+      "label": "FF-D01 / door",
+      "role": "Openings",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "b9681189de3c265ed5785288f24e421c0bc528484344c1e0983ab8280f210faf",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF_D01___door"
+      }
+    },
+    {
+      "sourceObjectId": "FF_D02___door",
+      "label": "FF-D02 / door",
+      "role": "Openings",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "2df642af42e6d8d9a3e5aca650daf98c76a29052ad00a6c48a1747a08a73086d",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF_D02___door"
+      }
+    },
+    {
+      "sourceObjectId": "FF_03_fixed_0",
+      "label": "FF-03 fixed 0",
+      "role": "FixedReferences",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "9bf6ba938e4369805293df07e26d53756a00fca7ed54b175aa10539fa5747a69",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF_03_fixed_0"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C001",
+      "label": "FF03 P01 | C2 south post 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "2a4599a8939acaf31dae258bd2f8a93de652788fa8c3beb4e56bc9614e7e8125",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C001"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C002",
+      "label": "FF03 P01 | C2 south post 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "ed8d7eeece0cd66e8a745991469f3245461da290dadd10be6d84fcdb29aa1af3",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C002"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C003",
+      "label": "FF03 P01 | C2 south post 2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "7253cf482129c993954fe9e4a47171091276ba3041e1d7365f9a97c580a828cc",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C003"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C004",
+      "label": "FF03 P01 | C2 south post 3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "81d7bd2604ee5af5853d8d421aa4a7a200fe868c26bae7edf2f178394d4fa41a",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C004"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C005",
+      "label": "FF03 P01 | C2 south rail 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "f1a5adeb6b74a85cacc151bc64c5ccb675a4141932d7a53906fb707f489fec15",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C005"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C006",
+      "label": "FF03 P01 | C2 south rail 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "4c01772128a3dd764185c3deabc5110256733ef1b264b672d96ca64942c7a84d",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C006"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C007",
+      "label": "FF03 P01 | C2 south rail 2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "f46b81b22ae6e260d973e41954ba1362c76dadb2178a9bee137e3454fb3e3794",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C007"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C008",
+      "label": "FF03 P01 | C2 south rail 3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "7098d7415bf0a040b57b003ba915288ec75f055ce9046d09f50310833df03bf4",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C008"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C009",
+      "label": "FF03 P01 | C2 south clear panel 0-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "15f0f157b4b113de9a1bb9ebfeaca070a4798089b204a93f18532894d7bbbe17",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C009"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C010",
+      "label": "FF03 P01 | C2 south clear panel 0-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "313fb7f9d79c229098f11ba833126f31d59124b0f1e164e525f269648bd36b19",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C010"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C011",
+      "label": "FF03 P01 | C2 south clear panel 0-2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "64afc4661c43026be2df9b1f7ba0936470803b7de0addffd503197d064d8b986",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C011"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C012",
+      "label": "FF03 P01 | C2 south clear panel 1-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "dd11116509f2116596f9008b85fabb7e8b9f70f2e16f8091832ae5667dd2f5d1",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C012"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C013",
+      "label": "FF03 P01 | C2 south clear panel 1-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "b4a379a12a6ef940e2e174a4835d40b740e79bdc283d104298bad1755fd7a956",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C013"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C014",
+      "label": "FF03 P01 | C2 south clear panel 1-2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "d96bc47c4577b19981869ca2f26451feaacc4f33a25470c68014956ecee05377",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C014"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C015",
+      "label": "FF03 P01 | C2 south clear panel 2-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "69bf66a71ade620430c0c25a9613c5394d8969b27357ec5e5b665c0b78614ca5",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C015"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C016",
+      "label": "FF03 P01 | C2 south clear panel 2-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "65f3a830f1604104a7f93489776c02897d5f38349c823758be150d3f68a8322f",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C016"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C017",
+      "label": "FF03 P01 | C2 south clear panel 2-2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "886eae53a87c418caea8368bc5c8cbb3cacfe6bf3d6be564492b9b301f9d8da5",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C017"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C018",
+      "label": "FF03 P01 | C2 east short post 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "3a6c34971b1a972f7b4c7c27a85930c629343e1b74d5eaf7978628dec18ff08f",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C018"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C019",
+      "label": "FF03 P01 | C2 east short post 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "cf11c798eaffa37ab9abc064af98555d71655de84c8be78be8f7b39346631f3a",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C019"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C020",
+      "label": "FF03 P01 | C2 east short rail 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "04e95c6ff70e9a984f789901eaf7acaa9fd94f65e431c420567d7bd2e58686e6",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C020"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C021",
+      "label": "FF03 P01 | C2 east short rail 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "1269d14978b0dd1cc5796e582a3e881c24d545b8f9f7bb5b39b8e8b1bee78575",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C021"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C022",
+      "label": "FF03 P01 | C2 east short rail 2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "69dfd387eea4a180b6afaffe162eb88ed68e4e84ab51089306e55f6383abf6cc",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C022"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C023",
+      "label": "FF03 P01 | C2 east short rail 3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "e7e35449fa86142d2624d12a6f348ef42d4862856719a8ca0c75d79d5364d6df",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C023"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C024",
+      "label": "FF03 P01 | C2 east short clear panel 0-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "62a9d947a061babef693cf3bbfaaf46209049120cc4932d7921f823a6ba5ac11",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C024"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C025",
+      "label": "FF03 P01 | C2 east short clear panel 0-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "d9db02ca25d146809f974c056aa7b329f40c0fb6be1fc63049db64f79720940b",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C025"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C026",
+      "label": "FF03 P01 | C2 east short clear panel 0-2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "af7b35c9af9fe9ea333898ad0ef6957669fa78218c5565f599c3abf34e77134c",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C026"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C027",
+      "label": "FF03 P01 | C2 east upper post 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "bd5551eb1c01869268464672ee4df43d9c3e2895286b9f9b2d6ddb4f96f9c2b0",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C027"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C028",
+      "label": "FF03 P01 | C2 east upper post 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "2cdfdf9a448aa758f7a90376fa778446609094af8840ec601c407aa036925842",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C028"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C029",
+      "label": "FF03 P01 | C2 east upper rail 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "f322b759c143ca1d65982333993defe2283f048d08ed0c124cf063764ed364ee",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C029"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C030",
+      "label": "FF03 P01 | C2 east upper rail 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "5fb7b30a1d3bcbc17c11de9b679f22f57fc6af425ca266174a425e66ef2f6184",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C030"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C031",
+      "label": "FF03 P01 | C2 east upper rail 2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "dd11e323b6680678f7bc557333fdf94312edda7cb00f1d668245a0756127d3a1",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C031"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C032",
+      "label": "FF03 P01 | C2 east upper rail 3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "7bb93cc732e2cddd68a282ff3db72e671a4637f8638e6d9c371f340164214adb",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C032"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C033",
+      "label": "FF03 P01 | C2 east upper clear panel 0-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "a8fa61045c28401297da50c689e4051d485addee4a6e3214a2f3a12d0bed743c",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C033"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C034",
+      "label": "FF03 P01 | C2 east upper clear panel 0-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "958f2509cf008c16beddf303c861acc9eea2b2a29ae6aa214179a14ff10315c8",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C034"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C035",
+      "label": "FF03 P01 | C2 east upper clear panel 0-2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "d9e55965af0b578ad2daa539fab625d7d2f60b4dc6cff54e3835760aca493fc2",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C035"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C036",
+      "label": "FF03 P01 | C4 north post 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "7d67b5c4234e58c7980966702164283bf5133c676c165aca34ff77b6ea86a3d1",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C036"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C037",
+      "label": "FF03 P01 | C4 north post 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "109d909f56c2bbeb080d743642cbc9c5431d13859719e99242e3b1679d53c120",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C037"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C038",
+      "label": "FF03 P01 | C4 north post 2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "bd825d500e2bd015ce31a015ba40db9b6fa14e8c9fb5dbe1b9c4790b554ec0ee",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C038"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C039",
+      "label": "FF03 P01 | C4 north post 3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "9524e910a07a7f415d8a6cdc8eda473f73b15df8f9a258c7727d1824a027951c",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C039"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C040",
+      "label": "FF03 P01 | C4 north post 4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "3dc3d057765cc388cc55ebb007b4299315aa83d8f1953db63dae327a1773cd20",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C040"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C041",
+      "label": "FF03 P01 | C4 north rail 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "d169c18d73aa0fb6bc029f9c8eabce9bbf329cca8e26f5a21190b7ccf3dcf7f4",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C041"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C042",
+      "label": "FF03 P01 | C4 north rail 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "4dad2ecf4c6d899cc3a3f8df2d854707638d9b3b27a12586b1ec6f6572eefcfb",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C042"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C043",
+      "label": "FF03 P01 | C4 north rail 2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "42ce20a68646a95be95225813b58736f818856596eddf84b8d7a8870a4c2c27f",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C043"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C044",
+      "label": "FF03 P01 | C4 north rail 3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "fb315235ccbb6ea0d73499214a5c6f1f5fe676b58a028bdb1c7dfdf3b4483d40",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C044"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C045",
+      "label": "FF03 P01 | C4 north clear panel 0-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "0211b9f02835047c73d7e81cae1d980a5cca62083ab96bc1cf1f94fa46c8c4be",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C045"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C046",
+      "label": "FF03 P01 | C4 north clear panel 0-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "2a92eed166bd30f9aa56ad9ce5d036aeb23bfca049ab0a9d79b730d6545af120",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C046"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C047",
+      "label": "FF03 P01 | C4 north clear panel 0-2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "e75405e2e5021d3d9cb2b21460b9138603ae1c7feb505dee8e31549a568a3e76",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C047"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C048",
+      "label": "FF03 P01 | C4 north clear panel 1-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "9e821d0c1154526a6c7256661071a4d94a504b12dc213efb6a4b49fc691fae8b",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C048"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C049",
+      "label": "FF03 P01 | C4 north clear panel 1-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "3e9b3f978917a497af902a082b3290d1e3c8c41dbdf6b454c85ed3e9835663f6",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C049"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C050",
+      "label": "FF03 P01 | C4 north clear panel 1-2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "460caa6257951e872528dcd6b09bb5d33792e50eab1017f14769edd068226bbb",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C050"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C051",
+      "label": "FF03 P01 | C4 north clear panel 2-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "b84d760d9b7f1736d0a207c7778fbc7c34728e1407491b0cbe33dd18e1219d01",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C051"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C052",
+      "label": "FF03 P01 | C4 north clear panel 2-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "7beda87b485975dcf613fb2658160a9cdbad9e6366040c51a15936882bafa7fb",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C052"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C053",
+      "label": "FF03 P01 | C4 north clear panel 2-2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "14fe725fc4f8008a0371dddeb30a34c9e2da897f32cc6e5f7612beeb7b16c65a",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C053"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C054",
+      "label": "FF03 P01 | C4 north clear panel 3-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "5d2986f81a08f3c03f8793368e9e9546d24233d4217432754ecf4852710a93f4",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C054"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C055",
+      "label": "FF03 P01 | C4 north clear panel 3-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "87d7bf95c1378ea888237e73ba19cc061ca584d92e540c6d675816a8545bc640",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C055"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C056",
+      "label": "FF03 P01 | C4 north clear panel 3-2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "d937d9ac1df2714dd37a63bd03754503a503feea9e1de48a0f325fd3bfbecc37",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C056"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C057",
+      "label": "FF03 P01 | C4 west lower post 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "369d18e92a5685d7561b21c1c77e4245954b0530d79747d83a68b924b1fa1400",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C057"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C058",
+      "label": "FF03 P01 | C4 west lower post 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "90ccc8f6f6f778b7a620b05f0f7a016f9c07d30fdce7992a7ff8e50f26ab3434",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C058"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C059",
+      "label": "FF03 P01 | C4 west lower rail 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "266c3f10b0086a8fecb39a415be5b6aa212f5ba6e15aa1a844129575e55ac1b5",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C059"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C060",
+      "label": "FF03 P01 | C4 west lower rail 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "e3d96a69e35278556ef9c591ad09adf76db0794aee87f75f4fe4a0c846f5457b",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C060"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C061",
+      "label": "FF03 P01 | C4 west lower rail 2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "2558458d9320bd6c23e3516e093cf1cd24fe4faac0750f714bbb249b8ca0c129",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C061"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C062",
+      "label": "FF03 P01 | C4 west lower rail 3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "7bdea3e7ee326fe7a9f7ffbaa83a41e24f8792cd44c7b4da34e280ab6132958d",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C062"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C063",
+      "label": "FF03 P01 | C4 west lower clear panel 0-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "cb733858c11a8b134e9d72611f532d15989a2fca227ed2df5073a34bea769920",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C063"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C064",
+      "label": "FF03 P01 | C4 west lower clear panel 0-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "0bc7923c78098569b59c2de585443df7571259a645bfb68cd05f9c5120815642",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C064"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C065",
+      "label": "FF03 P01 | C4 west lower clear panel 0-2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "74f538aef773751364ac0ba887723ec0323f24fd3acce9342a39e7a37e361ac7",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C065"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C066",
+      "label": "FF03 P01 | C4 west upper post 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "17fdc4528b132b29dfaa962456a73de34bfb856e7a994fc397faa724ed4b79c2",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C066"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C067",
+      "label": "FF03 P01 | C4 west upper post 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "68b056a5fef3fae571d93b32de160d6dbbdeb4505ae1f56a6bc5ea98afe5c47d",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C067"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C068",
+      "label": "FF03 P01 | C4 west upper rail 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "346e23bc112c7dd2bd44b9381d1ec2fe5f12b9d8a8fa20b376054470d9381f28",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C068"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C069",
+      "label": "FF03 P01 | C4 west upper rail 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "327e4511c7b1373649ff55e7a7712efef893053affc5dfe5902c6bf48a9313c5",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C069"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C070",
+      "label": "FF03 P01 | C4 west upper rail 2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "8dfe9fd4c2daff0a7c21bab12e2161ed513920e5d7708a61f8d2600adb2cb7ae",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C070"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C071",
+      "label": "FF03 P01 | C4 west upper rail 3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "455b48a8e0cda308209a4cb340f2f1c30132a06ce21d7eb891ab255c097e9524",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C071"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C072",
+      "label": "FF03 P01 | C4 west upper clear panel 0-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "c250758fc506e3ba7f410b51967e88797195acc7ad7b4e69212872869d674ee7",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C072"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C073",
+      "label": "FF03 P01 | C4 west upper clear panel 0-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "8188592011e040ccf990ca7f786b06e537562ff40919f37fb4f97bddce7dfb57",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C073"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C074",
+      "label": "FF03 P01 | C4 west upper clear panel 0-2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "ff087a774c2f361e95c137a4d75a40f2e9c783f055a5e2ceb4ac2742dd7e9b50",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C074"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C075",
+      "label": "FF03 P01 | FF03-CABIN2-DOOR hinge stile",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "80f447e7c2d45f7bd61c17bda987074e0ba02c854d8c0ef4619aa14e747ad63b",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C075"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C076",
+      "label": "FF03 P01 | FF03-CABIN2-DOOR latch stile",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "f2f2830e8edb0121f601d3a6703817af37cba94cc69e8ffcd9e70b2d7f27298b",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C076"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C077",
+      "label": "FF03 P01 | FF03-CABIN2-DOOR bottom rail",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "17d42d3c349e7b66ddda0c7dd3746370d1711c250ce2aa5f19bc518763069f53",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C077"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C078",
+      "label": "FF03 P01 | FF03-CABIN2-DOOR middle rail",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "ded8f99a088d800df74c42c94854d27fe8a12beaf9f760a0982567d94ca930d8",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C078"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C079",
+      "label": "FF03 P01 | FF03-CABIN2-DOOR top rail",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "75a6acec3b60c141ce693a43985a8dc88f0cb4211ec6ab8731afdb0f3c257d93",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C079"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C080",
+      "label": "FF03 P01 | FF03-CABIN2-DOOR lower infill",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "893f410417973da78fd4cae22c349b5ca6eadc31cb80a2184dd44811bb57305f",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C080"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C081",
+      "label": "FF03 P01 | FF03-CABIN2-DOOR upper infill",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "96c9b3502489361cfa689c538df839e32bd9a1938e0c7a743fbddc28316f0eec",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C081"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C082",
+      "label": "FF03 P01 | FF03-CABIN2-DOOR pull",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "1c8642531c566f9b1bcf7c94f441d52fe3291cf5e6e0b6eb02c0fada9c8626f4",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C082"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C083",
+      "label": "FF03 P01 | FF03-CABIN2-DOOR head",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "37f5721f10e75cb3c42b2c5c7884fa324968b240e31965fb10700d813cac7d73",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C083"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C084",
+      "label": "FF03 P01 | FF03-CABIN2-DOOR transom",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "b02aaa3da59d5a9610b8359953ec739598db3eb462e36527117e94b9f32cc7ad",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C084"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C085",
+      "label": "FF03 P01 | FF03-CABIN2-DOOR transom top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "ecf27e10b24529ebd58c5f1ed159895b3d7ce23ae0ad3345c5621ef4ff42bdf1",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C085"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C094",
+      "label": "FF03 P01 | FF03-CABIN4-DOOR head",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "a4eeb44da89372451d72132c1c39776150ab291e5d08f2f222c29a48c94a3eb7",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C094"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C095",
+      "label": "FF03 P01 | FF03-CABIN4-DOOR transom",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "ef9f8031a76181e6ca81fa83ab8f1d38f76e00887a6a73503552be99243dc004",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C095"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C096",
+      "label": "FF03 P01 | FF03-CABIN4-DOOR transom top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "0195042d075af2a5423da0c25f4c2a75d457cb3be28cfc78b22fba9b0f6330f9",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C096"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C097",
+      "label": "FF03 P01 | FF05-INWARD-DOOR leaf",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "d8d91d354168ceff7978f3b30156fa1371a1c9b59756ea2cd6d4edf27b4acda4",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C097"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C098",
+      "label": "FF03 P01 | FF03-T01 | T1_ApronX0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "c3ac406c2ad9e8539d57474b9b9289bf8ab602f268247f328ac40142227aa260",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C098"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C099",
+      "label": "FF03 P01 | FF03-T01 | T1_ApronX1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "f8392127721affec4a8b1e2234627ef2c2c36d350686bd90206d5f8c99d1bab0",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C099"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C100",
+      "label": "FF03 P01 | FF03-T01 | T1_ApronY0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "11b68e1b9310e3ebe07742d73829759e928a0efbc98218fd40973291ced54915",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C100"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C101",
+      "label": "FF03 P01 | FF03-T01 | T1_ApronY1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "f90113b1aa9c169eb3be2e4b3c9040d06d6c30a515401df7797e34b6d818bb22",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C101"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C102",
+      "label": "FF03 P01 | FF03-T01 | T1_Leg00",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "3d33912304a2e30143a41f02c818123701866f430547afa757a657f5fd2f46b8",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C102"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C103",
+      "label": "FF03 P01 | FF03-T01 | T1_Leg01",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "60e3725060ce35194d3f5aaf8cf41f58c90b1b96e532963e9a3494e794bb8476",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C103"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C104",
+      "label": "FF03 P01 | FF03-T01 | T1_Leg10",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "ec25ef89db4d222f18a36a7d126b9b9c063320fade7016cb29c53adbf6821bab",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C104"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C105",
+      "label": "FF03 P01 | FF03-T01 | T1_Leg11",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "e6d24bf648d2e3da6ebdcc92b8861ece89bc8e1bb67a698f92d01b49368618bd",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C105"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C106",
+      "label": "FF03 P01 | FF03-T01 | T1_Top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "06a984d6e916fbda0e2be2868507b41fa43ae4c7272525046c0591aea75e5f06",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C106"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C107",
+      "label": "FF03 P01 | FF03-C01 | PROPOSED_T1L_chair_placeholder",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 6,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "5cdb2125e01375ada9b490d2a0f56e404555fdc3e7b6fadbf88abd73b2ccb860",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C107"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C108",
+      "label": "FF03 P01 | FF03-T02 | T1_ApronX0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "6076ae1c784ad0f8993c7754d29fb979b1f57480287835694e98ed817bc502a7",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C108"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C109",
+      "label": "FF03 P01 | FF03-T02 | T1_ApronX1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "6c82bfd06f579acbfaca5d8d6dc1113c33142575eda701dfc91de35e97289db6",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C109"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C110",
+      "label": "FF03 P01 | FF03-T02 | T1_ApronY0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "7595a5926676c0521fc448ee198cfbafd4269056cdd7dd08c80ffbd897b034fe",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C110"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C111",
+      "label": "FF03 P01 | FF03-T02 | T1_ApronY1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "a7bcaf25746b0f376dc216245da5925ef15f254679b92a2468f9086b15341f89",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C111"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C112",
+      "label": "FF03 P01 | FF03-T02 | T1_Leg00",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "dfeb5d02276dded65f1b1697b3fd464134348b6c98be79ce1db881583f59bd5e",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C112"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C113",
+      "label": "FF03 P01 | FF03-T02 | T1_Leg01",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "8a7073a8dcee806c1e842833de1e6496cdc843fc4d62d302e81ab9434edc7767",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C113"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C114",
+      "label": "FF03 P01 | FF03-T02 | T1_Leg10",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "c492ddbcf1c10208619bc0300169ad54f20a1f01b23462d3de74f8e11293f698",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C114"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C115",
+      "label": "FF03 P01 | FF03-T02 | T1_Leg11",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "4af648b249aead6e68fd66dcf5b45d9063a5fdf3b62d5408b1683bc00c3933ee",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C115"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C116",
+      "label": "FF03 P01 | FF03-T02 | T1_Top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "e4d88b784e882469168228a6db1f65469be1bd4927b453e1de4c83011aecf99c",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C116"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C117",
+      "label": "FF03 P01 | FF03-C02 | PROPOSED_T1L_chair_placeholder",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 6,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "d89afc2673f4fef9b6901c05ed2d50107ce6ce93d962681cd2871216a907fd34",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C117"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C118",
+      "label": "FF03 P01 | FF03-T03 | T1_ApronX0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "643f622b75c23ebb1f9bbb6431e6297536fc5ee9519e5659d312219804a261c7",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C118"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C119",
+      "label": "FF03 P01 | FF03-T03 | T1_ApronX1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "08955363375a2c1cf0b38910b95fe21ce50664da471139cc1537f6d9bf89da42",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C119"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C120",
+      "label": "FF03 P01 | FF03-T03 | T1_ApronY0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "ed1f58db819c1579628ace439a1f05c1b94f26095b1d905560d20e9db2611f68",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C120"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C121",
+      "label": "FF03 P01 | FF03-T03 | T1_ApronY1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "de2844769bf778f2233968b9e2373c6b0316d4880dac319d2249b35380346ec6",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C121"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C122",
+      "label": "FF03 P01 | FF03-T03 | T1_Leg00",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "2ae5c2efd78283a35034be6c90f499c8f0d38fb5c378c8eb2c9278073ab4c32d",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C122"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C123",
+      "label": "FF03 P01 | FF03-T03 | T1_Leg01",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "0f8250fa87ac249db9ed44a899ef438714c75266f695a5e3e69ccfa5bb44e66e",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C123"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C124",
+      "label": "FF03 P01 | FF03-T03 | T1_Leg10",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "2e25e08e2135b3d0324821f75cb4c239ab4b09e952e28e19d182d07806c91b4b",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C124"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C125",
+      "label": "FF03 P01 | FF03-T03 | T1_Leg11",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "1c653b7c06217c962c74c823211f5fbfd2cc6a84ccc6e6fad9db3348a028d2c2",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C125"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C126",
+      "label": "FF03 P01 | FF03-T03 | T1_Top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "578bb9e6fe92528cc01890b8df0cb794591835cb68a9c65121478f8922907de3",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C126"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C127",
+      "label": "FF03 P01 | FF03-C03 | PROPOSED_T1L_chair_placeholder",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 6,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "afafd272eccbd8f5aeeac976f26cb56c7327e806070fff52014f6bc4e49fd4a0",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C127"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C128",
+      "label": "FF03 P01 | FF03-T04 | T1_ApronX0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "be723f8af176a6530c9149d232a70ed4ab2e1cfa6ff74ff45ae7cc892ec0e655",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C128"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C129",
+      "label": "FF03 P01 | FF03-T04 | T1_ApronX1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "022eed912649f51749f0f17cd613bee2bbf414e526cbf34ca47e5d1c3a71f965",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C129"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C130",
+      "label": "FF03 P01 | FF03-T04 | T1_ApronY0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "0ea07329a75ed5ea4a840fe02bb64a70b6f11bddeff99a33940ecb996035d1b7",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C130"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C131",
+      "label": "FF03 P01 | FF03-T04 | T1_ApronY1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "f4d1d18729769feda2d84956abafe5a71b686ec16ccde3f6e9718ddb3200bd0c",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C131"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C132",
+      "label": "FF03 P01 | FF03-T04 | T1_Leg00",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "bff9cf9431f9edf8d6ca341091d400c6700ad02dc697fa06d7c6cec04fe6809a",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C132"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C133",
+      "label": "FF03 P01 | FF03-T04 | T1_Leg01",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "1afb0442e0b954b571bf20e988dcd3bbbe594bc35c5072b528d37eb67edf31bd",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C133"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C134",
+      "label": "FF03 P01 | FF03-T04 | T1_Leg10",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "78d818922dc5455ae2d93b4d3076c3c785eb3ddb52cca50e191ec4fde6884d74",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C134"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C135",
+      "label": "FF03 P01 | FF03-T04 | T1_Leg11",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "f9a98177d7d8bda8de50f2f7c2f713cea323e7969db4ddb0599b66dfed28dd65",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C135"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C136",
+      "label": "FF03 P01 | FF03-T04 | T1_Top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "dc06317fec49a94ca2c5ccfbb3ecda1d807ce06dd900e40367b5753eee754256",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C136"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C137",
+      "label": "FF03 P01 | FF03-C04 | PROPOSED_T1L_chair_placeholder",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 6,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "7cb7c56e53250a0b23d0da8901e962123ca8dd5756ba5c9b7cfc62b15bb339be",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C137"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C138",
+      "label": "FF03 P01 | FF03-T05 | T1_ApronX0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "d3471dd839a577afb2ca82328a9c7a69cca233a5a1eab6708e5ed633dad8c40f",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C138"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C139",
+      "label": "FF03 P01 | FF03-T05 | T1_ApronX1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "aba279780bfb917c17565280746edaaeb23ca4bcb8bd743dfc162a96954e4c30",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C139"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C140",
+      "label": "FF03 P01 | FF03-T05 | T1_ApronY0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "c71398e91aec0c993f2d091e84e93379e12ae3839c4ca8ca9ee38de71d2e3827",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C140"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C141",
+      "label": "FF03 P01 | FF03-T05 | T1_ApronY1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "2b09fc14ffda1ec00fa6b6f7712ee65493912dabcf0415c2630373a9ddaaa2b2",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C141"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C142",
+      "label": "FF03 P01 | FF03-T05 | T1_Leg00",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "dbd059da6378141fb0a6d4a8e65509e4405be44428077f6a6baa29af92e4900c",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C142"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C143",
+      "label": "FF03 P01 | FF03-T05 | T1_Leg01",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "ae2775611105910b6d1403a9d166aa33ed533c685e7837db117ece44dc6b4d8c",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C143"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C144",
+      "label": "FF03 P01 | FF03-T05 | T1_Leg10",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "18b9093793f6329e5e5bb2886f36f6d6b0867c7d07b7b68bbcad6d4a614ee0e0",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C144"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C145",
+      "label": "FF03 P01 | FF03-T05 | T1_Leg11",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "5a0879ce3037c2434c28fd60aae3a0acfc0d358994685bcabbbd2b44c0f29e04",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C145"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C146",
+      "label": "FF03 P01 | FF03-T05 | T1_Top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "4d146b93b3cfd0fdd82c65b23ed89a93ff2b2fa6cb4bcb59332982059fd0b92e",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C146"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C147",
+      "label": "FF03 P01 | FF03-C05 | PROPOSED_T1L_chair_placeholder",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 6,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "731c987d5e5fe946c90f697d4ae902867b9534977df33e41ce640e31454ab478",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C147"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C148",
+      "label": "FF03 P01 | FF03-T06 | T1_ApronX0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "0f4e17094c2ccc41ce037ca23118e40e144e3f3d3b5f1698af6b155270025612",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C148"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C149",
+      "label": "FF03 P01 | FF03-T06 | T1_ApronX1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "2a57ba6370b609a94190027ddffa9b84b98a6ed86815bcde1ae2166a6ebf257c",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C149"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C150",
+      "label": "FF03 P01 | FF03-T06 | T1_ApronY0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "6e943761f4c12249eb9e8e8c873a9dda46d6aa443424d58de2166c79d7b51f47",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C150"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C151",
+      "label": "FF03 P01 | FF03-T06 | T1_ApronY1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "cac7144e7bdb327134467ceeef4ab188051fc7497a59ed6643a2c31190424359",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C151"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C152",
+      "label": "FF03 P01 | FF03-T06 | T1_Leg00",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "0ca59eb8af95cd21eb9dfaf78dc0a7397ddbb0631ff3eda0a33e138e3dc5c603",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C152"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C153",
+      "label": "FF03 P01 | FF03-T06 | T1_Leg01",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "7a597adf44666b1a50d254c50aab408655006c9716e6c86ca3b9b1671a32f330",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C153"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C154",
+      "label": "FF03 P01 | FF03-T06 | T1_Leg10",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "8c3a70fa4eb70fc3bd021016a90987713d46146482c8e4fbef34afd305e581e1",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C154"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C155",
+      "label": "FF03 P01 | FF03-T06 | T1_Leg11",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "5862200c2202c6adabdc6f5abafd934300d74369143d1da75c6ce6f60ee0cab3",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C155"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C156",
+      "label": "FF03 P01 | FF03-T06 | T1_Top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "257cb038980701e0ec4c434a3520924945e0b400bf548a8d0a047c86207dbc13",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C156"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_C157",
+      "label": "FF03 P01 | FF03-C06 | PROPOSED_T1L_chair_placeholder",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 6,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "9cdaca98a6bf0dcdf122f28182b6459dac2255b1f3c2786b15fe51ebe9b01d68",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_C157"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_Context001",
+      "label": "FF03 P01 | Existing crop | First Floor - Planning Base 08 | joined wall display",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "b6a4fa222638400066b15f868f1b43ee9bc5192fdd431cacc84705d47a0b1781",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_Context001"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_Context002",
+      "label": "FF-03 | floor",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "222b3100da95ecf4fb158f5db2eb143d646c9c6d13b6ba4fdb24139375254b6d",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_Context002"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_Context003",
+      "label": "FF03 P01 | Existing crop | FF-D01 | door threshold 000",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "052d678538db98074a07c1085d0c133f525c4af8005850d041a0ec6986a2b24f",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_Context003"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_Context004",
+      "label": "FF03 P01 | Existing crop | FF-D02 | door threshold 000",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "dd1571d72834f5f3227bdc8c26b14cf25dccb8489866bec22538a2c931b5ea04",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_Context004"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_Context005",
+      "label": "FF-03 | FF03-CUPBOARD",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "87c030df8fc09bc3646eede978258b5ec341f242e0e6fc8f0ad37e8e4103d8aa",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_Context005"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P01_Context006",
+      "label": "FF-05 | floor",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Unchanged R03 room member",
+      "worldShapeSignatureSha256": "f150c5074d17051d84fd966518c8f9d831318fb4a6f490529704d4adf4cd5f8f",
+      "retainedFrom": {
+        "release": "R03",
+        "roomNativeSha256": "2d24bd5607eb30c2b330b474d247c6186cfc5c8e26245c4d2ae335fc4b6244de",
+        "originalSourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+        "originalSourceObjectId": "FF03P01_Context006"
+      }
+    },
+    {
+      "sourceObjectId": "FF03P02_C001",
+      "label": "FF03 P02 | FF03-C4-SOUTH recessed pull below",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "3cd0d9a0dbe2a62deec4a837d0cf663f8ab053447601e54d6fdf3832823294bf",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C002",
+      "label": "FF03 P02 | FF03-C4-SOUTH recessed pull above",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "cf20f69dbd75c9ca25127ba14e1abe33e3eeafd259d75405fcc11d3efc2314f6",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C003",
+      "label": "FF03 P02 | FF03-C4-SOUTH recessed pull end",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "88794f6a09c62da5c2ff6e9dcce46e6461b796d59162bbdf1df3de3e18a60c25",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C004",
+      "label": "FF03 P02 | FF03-C4-SOUTH recessed pull grip",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "dd1725e8f3278786efd537d27e69577685bdf592e88e66e50c2c950ed01296cb",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C005",
+      "label": "FF03 P02 | FF03-C4-SOUTH recessed pull web",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "acc0340689992897ff5ff8ef76fa379281134b25caa435faf4d9dcbf94eb65b5",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C006",
+      "label": "FF03 P02 | FF03-C4-SOUTH stile 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "6d807e297cac836534f0ed28372f7d59f15a42443df0f46e0c26203117b460d2",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C007",
+      "label": "FF03 P02 | FF03-C4-SOUTH rail 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "3033d7a4f3547d99692d4acf33e816646aa784ffc809061073fbd0ae24437e39",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C008",
+      "label": "FF03 P02 | FF03-C4-SOUTH rail 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "8c185104f8237227996225ac39cd7970314b0143411bf5e5525b51181dff1836",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C009",
+      "label": "FF03 P02 | FF03-C4-SOUTH rail 2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "3347a1c4ca40672ff350ae2386b4736a5d99e9ff0a291a831b2b556de2384330",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C010",
+      "label": "FF03 P02 | FF03-C4-SOUTH clear 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "c720660e8a110df46cbacb148d7809bff813b41a7a0514dd881a5df2bd45b913",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C011",
+      "label": "FF03 P02 | FF03-C4-SOUTH clear 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "d407897643c431cfe6a6aa3d95555117c2bda8b6ad540b2434c856e202f5a387",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C012",
+      "label": "FF03 P02 | FF03-C4-SOUTH track bearing flange -1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "a4d103c739a050354ad6276d9f272e55421075a10e135f2fad7bfed8adce384c",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C013",
+      "label": "FF03 P02 | FF03-C4-SOUTH track side wall -1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "82255b6a1e7533b970c332fef05dac9d73fc23fcafb7942e108d657002fd4bbe",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C014",
+      "label": "FF03 P02 | FF03-C4-SOUTH track bearing flange 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "432a5553d9f32be91cecaa727bdec3671ae99b360e056e1ff2da4ecfeb89ec9d",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C015",
+      "label": "FF03 P02 | FF03-C4-SOUTH track side wall 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "cb966846d194174826d218566a1e975880ff91f764753cd149ed4c505f90a119",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C016",
+      "label": "FF03 P02 | FF03-C4-SOUTH track roof",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "0a295cb7bbe0474bb4839b5dd1c0b77f3083793b05f4cc051eaee412aac0906d",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C017",
+      "label": "FF03 P02 | FF03-C4-SOUTH fixed travel stop 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "64ae424c041eb272908dcbbfeb1b30f516ffeff9d2ea2883a4c7880df01dac82",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C018",
+      "label": "FF03 P02 | FF03-C4-SOUTH fixed travel stop 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "52e89d5cf93a65d6e09690103389313350650ca2c9c5209b938fe513f81f1758",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C019",
+      "label": "FF03 P02 | FF03-C4-SOUTH captured sliding shoe 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "661e1351b401e26dc3e63975aff5377562bf4c4b1ee1bd339957f37913d93f01",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C020",
+      "label": "FF03 P02 | FF03-C4-SOUTH rigid hanger stem 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "f271aab2435474206ea39f2c76e980ae6fb9d04afabaaec1e23a1653aac3c7e4",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C021",
+      "label": "FF03 P02 | FF03-C4-SOUTH captured sliding shoe 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "f42745486342625ff37a963edc4a592fb5a61d2500d0776a30d16e0b5bde237d",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C022",
+      "label": "FF03 P02 | FF03-C4-SOUTH rigid hanger stem 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "0c7c2b2b09380770ed07ff6c72207e3758bde6cf191f297aa271febb6d354394",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C023",
+      "label": "FF03 P02 | FF03-C4-NORTH recessed pull below",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "f2b1bba40d4e3361d60222ba00e347dc8239b56aab6aabb19d38f4ba16db0a07",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C024",
+      "label": "FF03 P02 | FF03-C4-NORTH recessed pull above",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "c2c6b1aabb4c1ceb36545da9c9e2e94935fcebcab53dfd3d2121d6e2138403e9",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C025",
+      "label": "FF03 P02 | FF03-C4-NORTH recessed pull end",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "3a4bf89b151d71555889a6970600a4d86f2f7e416aa2f4c065de28ea7681a667",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C026",
+      "label": "FF03 P02 | FF03-C4-NORTH recessed pull grip",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "98d5520679588918d1e791f5bf26a5c95d34d4bb7648fce1ea4a428193bd2730",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C027",
+      "label": "FF03 P02 | FF03-C4-NORTH recessed pull web",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "d08904033f897cfad2dfffa74820615ebcb94e06c60fb9c7674fc1c49d68ce08",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C028",
+      "label": "FF03 P02 | FF03-C4-NORTH stile 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "2d031a5264b72f1aed2eaf52cd3221472153e151cae46ccbeea6fdecc88762a7",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C029",
+      "label": "FF03 P02 | FF03-C4-NORTH rail 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "31d63a2496f218ad0ab49271b7a6fc7ba9724f880c96b74df8d2dee1d199c6a3",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C030",
+      "label": "FF03 P02 | FF03-C4-NORTH rail 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "6b0626bd447bf3442ae1bb84cf4fec4a6f00734c7483f6178510591599955479",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C031",
+      "label": "FF03 P02 | FF03-C4-NORTH rail 2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "22e7cdaa8ed0c7dbe700ae3da7299f98b7d4761a48b8ffe2ba8378d34acded50",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C032",
+      "label": "FF03 P02 | FF03-C4-NORTH clear 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "760cc8bf7e1d7fb907f2ba6e8f300881e557171aeeb98f80bfb68c8323978893",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C033",
+      "label": "FF03 P02 | FF03-C4-NORTH clear 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "2e4eeab36d4a96dc359cd1000a97b298f65363597257f340cbe7a90b95c0d959",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C034",
+      "label": "FF03 P02 | FF03-C4-NORTH track bearing flange -1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "8e8c9860faa958fb8c85b4a62b3191fd5163154cca49705a1cd187a4766221a2",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C035",
+      "label": "FF03 P02 | FF03-C4-NORTH track side wall -1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "e4612d80104a4aa5d65d2a5fe359bd5f764dd4160c251ce807d14d0342cf0c3a",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C036",
+      "label": "FF03 P02 | FF03-C4-NORTH track bearing flange 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "f35fe4bba2553b3047e6a86bf581492dfe862cc6ce703a158fde21815a929167",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C037",
+      "label": "FF03 P02 | FF03-C4-NORTH track side wall 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "4aeed9dcf08648093235293b46767511f03acf313de22cbea9e35a2699cd7a41",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C038",
+      "label": "FF03 P02 | FF03-C4-NORTH track roof",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "53b7c30a4ec800132b3f72c5511ad661c1fadc7c3c7b16ec8c608d1957222990",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C039",
+      "label": "FF03 P02 | FF03-C4-NORTH fixed travel stop 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "9948d10eebfb60345a54dfdb92bf1ab61b4da047ce2ce449473a6829fe8edfdc",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C040",
+      "label": "FF03 P02 | FF03-C4-NORTH fixed travel stop 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "5ecea3b71dda3de450d098f0f8cd96b9fdf95f8601c3c5d17042eeed5da1bc77",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C041",
+      "label": "FF03 P02 | FF03-C4-NORTH captured sliding shoe 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "fee8bb9e4ad70760eafbe6a47f1afed07efb29375963cf272a186716f1bd919a",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C042",
+      "label": "FF03 P02 | FF03-C4-NORTH rigid hanger stem 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "7582eb6b5448e4629a19fadcd8f4463aa03273b42fa72358d4344fc60c811472",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C043",
+      "label": "FF03 P02 | FF03-C4-NORTH captured sliding shoe 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "6b9eb57afce5a821599223c75d242201e0d5bd24877daef1a4ccc6c7fd91c91e",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C044",
+      "label": "FF03 P02 | FF03-C4-NORTH rigid hanger stem 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "db75ae0b352952bd2179d5c298e4b072129132e96348db4d235cc256b590e43d",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C045",
+      "label": "FF03 P02 | FF03-C4 shared carrier header",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "f12870b5f04b55599bf627bd62e9c2590d12303b2c4ea1ba4b5fa9e50ec09bcb",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C046",
+      "label": "FF03 P02 | FF03-C4 jamb header attachment 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "7e457a7bfb889b7dc2c7fca1f963b9f4aa5836a2317f8d878f39ae2fb1bbf527",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    },
+    {
+      "sourceObjectId": "FF03P02_C047",
+      "label": "FF03 P02 | FF03-C4 jamb header attachment 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact P02 Blender sliding-door component",
+      "worldShapeSignatureSha256": "b2599cd52bc028936510f2648c9a8e2978535d169b9fbd689e9a9c39db2bf932",
+      "sourceGeometrySha256": "1743c8febbbadebe40554578e0f7d8b6ccc3b0b9dc0a5fd45b38a5f235918b5f"
+    }
+  ],
+  "verification": {
+    "nativeSaveReopen": "PASS",
+    "exactWorldShapes": 221,
+    "stepReadback": "PASS",
+    "stepChecks": {
+      "valid": true,
+      "solids": true,
+      "bounds": true,
+      "volume": true,
+      "area": true,
+      "summed_edge_length": true
+    },
+    "stepMeasurements": {
+      "valid": true,
+      "solids": true,
+      "faces": true,
+      "edges": true,
+      "bounds_error_mm": 4.3382897274568677e-10,
+      "solid_volume_error_mm3": 0.027528762817382812,
+      "area_error_mm2": 0.00009816884994506836,
+      "edge_length_error_mm": 3.9301812648773193e-7
+    },
+    "freshReopenAuditSha256": "c17b2378d82bbf0e19252048d8d25745a91427b95247af27f26da9b4158a05b7"
+  },
+  "notes": [
+    "BlenderContext contains the exact latest native architecture context, including open/cropped faces; inherited Z0 CAD references are separately retained and shown grey in the preview. Model-derived context may include immediately adjoining doorway/floor pieces. No source offsets are silently reconciled.",
+    "Four-person west entrance has independent bi-parting sliding leaves, 500 mm travel each. Original 920.4 mm frame aperture retained; two-person and shared bathroom doors unchanged.",
+    "Parked leaves project 40 mm beyond the fixed glazing frame; overhead track projects 52.5 mm. No whole-corridor nonreduction or occupied-capacity claim. Narrow rear working space and installation details remain provisional."
+  ],
+  "files": {
+    "freecad": {
+      "url": "/building-models/r04/rooms/FF-03.FCStd",
+      "filename": "FF-03.FCStd",
+      "bytes": 2943768,
+      "sha256": "452fafd1f345ef268616a241933826073a62fd4a95b6f9098851cdf3523b5695"
+    },
+    "step": {
+      "url": "/building-models/r04/rooms/FF-03.step",
+      "filename": "FF-03.step",
+      "bytes": 15830737,
+      "sha256": "6a59d38a9a2b80c4241657dda8dd921a17a9a97e23a46b084d8567dcbd553d09"
+    },
+    "preview": {
+      "url": "/building-models/r04/rooms/FF-03.svg",
+      "filename": "FF-03.svg",
+      "bytes": 1293817,
+      "sha256": "f4127c204095832f2036505b2432b9ab05a87aaa78d150392c236df4278f25fc"
+    },
+    "previewPng": {
+      "url": "/building-models/r04/rooms/FF-03.png",
+      "filename": "FF-03.png",
+      "bytes": 53932,
+      "sha256": "c28342b59a6a0df4cc99094cce4f6d1aaf058208df8e8c80f5d79681b2e5ee0d"
+    }
+  },
+  "provenanceUrl": "/building-models/r04/rooms/FF-03-provenance.json"
+}

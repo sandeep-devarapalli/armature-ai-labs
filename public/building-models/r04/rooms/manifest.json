@@ -1,0 +1,1297 @@
+{
+  "revision": "R04",
+  "date": "2026-09-12",
+  "changedRoomIds": [
+    "FF-03"
+  ],
+  "protectedSourcesUnchanged": true,
+  "rooms": [
+    {
+      "id": "GF-01",
+      "purpose": "Four-person cabin A / retained cupboard",
+      "floor": "GF",
+      "revision": "R02",
+      "sourceFile": "Ground Floor - GF01 Cabin Approved Layout P01.FCStd",
+      "sourceSha256": "374df20b0b81f03790211ead98471353221c830b1a5cc98f4bdbcf052764c2fc",
+      "files": {
+        "freecad": {
+          "url": "/building-models/r03/rooms/GF-01.FCStd",
+          "filename": "GF-01.FCStd",
+          "bytes": 2373983,
+          "sha256": "7543833010231849af19a7fc7fb83a256a573c4c17389700d8c324992fc40fd1"
+        },
+        "step": {
+          "url": "/building-models/r03/rooms/GF-01.step",
+          "filename": "GF-01.step",
+          "bytes": 11186701,
+          "sha256": "98dc78538eb9ab71f473233734aa37bfd7f84926a53dc3663c22a278cf2d57a3"
+        },
+        "preview": {
+          "url": "/building-models/r03/rooms/GF-01.svg",
+          "filename": "GF-01.svg",
+          "bytes": 593431,
+          "sha256": "4da6a7746b10469862708f1d215b2bbe87f8045b2577eee39085dd04749eb822"
+        },
+        "previewPng": {
+          "url": "/building-models/r03/rooms/GF-01.png",
+          "filename": "GF-01.png",
+          "bytes": 53778,
+          "sha256": "c5b52cbd67a292e64744f082daa5935aefc85c3116b8bfc52e51d73ff176aebc"
+        }
+      },
+      "shapeCount": 184,
+      "solidCount": 189,
+      "geometryKind": "mixed 2D references and 3D fit-out",
+      "verification": {
+        "nativeSaveReopen": "PASS",
+        "exactWorldShapes": 184,
+        "stepReadback": "PASS",
+        "stepChecks": {
+          "valid": true,
+          "solids": true,
+          "bounds": true,
+          "volume": true,
+          "area": true,
+          "summed_edge_length": true
+        }
+      },
+      "notes": [
+        "BlenderContext contains the exact latest native architecture context, including open/cropped faces; inherited Z0 CAD references are separately retained and shown grey in the preview. Model-derived context may include immediately adjoining doorway/floor pieces. No source offsets are silently reconciled.",
+        "Includes selected four-person cabin A, four full-size tables/chairs and recessed outward door. Cupboard allowance is already factored; do not deduct it again. Occupied centre gap is about 3 ft 1 in, reducing to about 1 ft 1 in during simultaneous pullback; operator retreat and existing-door/hardware clearances remain unresolved."
+      ],
+      "provenanceUrl": "/building-models/r03/rooms/GF-01-provenance.json",
+      "includedInRelease": "R03",
+      "retainedFrom": {
+        "revision": "R02",
+        "releaseSha256": "224342c1a9f38354895693821a91a08820d31d62016e6f3043ec85572ae03cf3",
+        "roomManifestSha256": "7d54d5337a8eefa2192e9310c4ade86ab59bba7c4824155143b33ffd529d7a09",
+        "files": [
+          {
+            "filename": "GF-01-README.md",
+            "bytes": 2334,
+            "sha256": "8ff5a218d859543ce90ad91a08d9e5c077a3d0eab4a06d1ed688920bc4deea11"
+          },
+          {
+            "filename": "GF-01-provenance.json",
+            "bytes": 72500,
+            "sha256": "8ae9b3380fea04adf36ee8592b6afa57a6df2b926d68e87763841db960124126"
+          },
+          {
+            "filename": "GF-01.FCStd",
+            "bytes": 2373983,
+            "sha256": "7543833010231849af19a7fc7fb83a256a573c4c17389700d8c324992fc40fd1"
+          },
+          {
+            "filename": "GF-01.png",
+            "bytes": 53778,
+            "sha256": "c5b52cbd67a292e64744f082daa5935aefc85c3116b8bfc52e51d73ff176aebc"
+          },
+          {
+            "filename": "GF-01.step",
+            "bytes": 11186701,
+            "sha256": "98dc78538eb9ab71f473233734aa37bfd7f84926a53dc3663c22a278cf2d57a3"
+          },
+          {
+            "filename": "GF-01.svg",
+            "bytes": 593431,
+            "sha256": "4da6a7746b10469862708f1d215b2bbe87f8045b2577eee39085dd04749eb822"
+          }
+        ]
+      }
+    },
+    {
+      "id": "GF-02",
+      "purpose": "Reception and display",
+      "floor": "GF",
+      "revision": "R02",
+      "sourceFile": "Ground Floor - GF01 Cabin Approved Layout P01.FCStd",
+      "sourceSha256": "374df20b0b81f03790211ead98471353221c830b1a5cc98f4bdbcf052764c2fc",
+      "files": {
+        "freecad": {
+          "url": "/building-models/r03/rooms/GF-02.FCStd",
+          "filename": "GF-02.FCStd",
+          "bytes": 129067,
+          "sha256": "60d180e3829a1c73b7dfdd7c07a58f0d6740658ca72f72b86fcf3b262d55cf39"
+        },
+        "step": {
+          "url": "/building-models/r03/rooms/GF-02.step",
+          "filename": "GF-02.step",
+          "bytes": 359414,
+          "sha256": "5da7309ab5fbb0ff676b8e4f301777ca4653cf57c93874d7621f586c95853df6"
+        },
+        "preview": {
+          "url": "/building-models/r03/rooms/GF-02.svg",
+          "filename": "GF-02.svg",
+          "bytes": 36793,
+          "sha256": "6d2cfd5bfe61f902e14f1736523ef174bfd21672bcfc0e2a65822c631acc1ef6"
+        },
+        "previewPng": {
+          "url": "/building-models/r03/rooms/GF-02.png",
+          "filename": "GF-02.png",
+          "bytes": 44357,
+          "sha256": "3efc14b24a9b34775ec2e3de527fa8c342f47c6dc3912c7e629241240c6a9e77"
+        }
+      },
+      "shapeCount": 90,
+      "solidCount": 78,
+      "geometryKind": "mixed 2D references and 3D fit-out",
+      "verification": {
+        "nativeSaveReopen": "PASS",
+        "exactWorldShapes": 90,
+        "stepReadback": "PASS",
+        "stepChecks": {
+          "valid": true,
+          "solids": true,
+          "bounds": true,
+          "volume": true,
+          "area": true,
+          "summed_edge_length": true
+        }
+      },
+      "notes": [],
+      "provenanceUrl": "/building-models/r03/rooms/GF-02-provenance.json",
+      "includedInRelease": "R03",
+      "retainedFrom": {
+        "revision": "R02",
+        "releaseSha256": "224342c1a9f38354895693821a91a08820d31d62016e6f3043ec85572ae03cf3",
+        "roomManifestSha256": "7d54d5337a8eefa2192e9310c4ade86ab59bba7c4824155143b33ffd529d7a09",
+        "files": [
+          {
+            "filename": "GF-02-README.md",
+            "bytes": 1676,
+            "sha256": "129429e72d2b932ccf39f464912aa91adbba6ab2a918ff6c8ab348e6b538b858"
+          },
+          {
+            "filename": "GF-02-provenance.json",
+            "bytes": 35421,
+            "sha256": "d2a3e65f60b0b4b2246c425503dcd934130b4c9795a1bcfbf58dab2e70879036"
+          },
+          {
+            "filename": "GF-02.FCStd",
+            "bytes": 129067,
+            "sha256": "60d180e3829a1c73b7dfdd7c07a58f0d6740658ca72f72b86fcf3b262d55cf39"
+          },
+          {
+            "filename": "GF-02.png",
+            "bytes": 44357,
+            "sha256": "3efc14b24a9b34775ec2e3de527fa8c342f47c6dc3912c7e629241240c6a9e77"
+          },
+          {
+            "filename": "GF-02.step",
+            "bytes": 359414,
+            "sha256": "5da7309ab5fbb0ff676b8e4f301777ca4653cf57c93874d7621f586c95853df6"
+          },
+          {
+            "filename": "GF-02.svg",
+            "bytes": 36793,
+            "sha256": "6d2cfd5bfe61f902e14f1736523ef174bfd21672bcfc0e2a65822c631acc1ef6"
+          }
+        ]
+      }
+    },
+    {
+      "id": "GF-03",
+      "purpose": "Rear small room",
+      "floor": "GF",
+      "revision": "R02",
+      "sourceFile": "Ground Floor - GF01 Cabin Approved Layout P01.FCStd",
+      "sourceSha256": "374df20b0b81f03790211ead98471353221c830b1a5cc98f4bdbcf052764c2fc",
+      "files": {
+        "freecad": {
+          "url": "/building-models/r03/rooms/GF-03.FCStd",
+          "filename": "GF-03.FCStd",
+          "bytes": 16167,
+          "sha256": "255419dfcd31eeb715e97625e5cb67b3ea050322bb9086d95237d5dbd571c19b"
+        },
+        "step": {
+          "url": "/building-models/r03/rooms/GF-03.step",
+          "filename": "GF-03.step",
+          "bytes": 12207,
+          "sha256": "36cb9aa2876883181d161fec1b24f5293d28e68a036c774b27b93ba4f5ecde7c"
+        },
+        "preview": {
+          "url": "/building-models/r03/rooms/GF-03.svg",
+          "filename": "GF-03.svg",
+          "bytes": 7569,
+          "sha256": "76b9a83855de45997d2060590352ffc78563796c21a44f053ea62821a02cba58"
+        },
+        "previewPng": {
+          "url": "/building-models/r03/rooms/GF-03.png",
+          "filename": "GF-03.png",
+          "bytes": 37339,
+          "sha256": "3de5973bb489bbb8c1adac6ceee6c1c51c2497e566a2250e1fc0cd3ded383219"
+        }
+      },
+      "shapeCount": 11,
+      "solidCount": 0,
+      "geometryKind": "2D plan/reference geometry",
+      "verification": {
+        "nativeSaveReopen": "PASS",
+        "exactWorldShapes": 11,
+        "stepReadback": "PASS",
+        "stepChecks": {
+          "valid": true,
+          "solids": true,
+          "bounds": true,
+          "volume": true,
+          "area": true,
+          "summed_edge_length": true
+        }
+      },
+      "notes": [
+        "This room has source plan/reference geometry only: its STEP contains curves/wires, not a volumetric room model."
+      ],
+      "provenanceUrl": "/building-models/r03/rooms/GF-03-provenance.json",
+      "includedInRelease": "R03",
+      "retainedFrom": {
+        "revision": "R02",
+        "releaseSha256": "224342c1a9f38354895693821a91a08820d31d62016e6f3043ec85572ae03cf3",
+        "roomManifestSha256": "7d54d5337a8eefa2192e9310c4ade86ab59bba7c4824155143b33ffd529d7a09",
+        "files": [
+          {
+            "filename": "GF-03-README.md",
+            "bytes": 1784,
+            "sha256": "81eb2c307893ef4187aba71293b99dca359d822a6a6f2f3ea2be0cb202dd1c21"
+          },
+          {
+            "filename": "GF-03-provenance.json",
+            "bytes": 5960,
+            "sha256": "2168f468d816f3cfd3edb6191d2a5db6179abeeb8e9782d2b0666212a7268953"
+          },
+          {
+            "filename": "GF-03.FCStd",
+            "bytes": 16167,
+            "sha256": "255419dfcd31eeb715e97625e5cb67b3ea050322bb9086d95237d5dbd571c19b"
+          },
+          {
+            "filename": "GF-03.png",
+            "bytes": 37339,
+            "sha256": "3de5973bb489bbb8c1adac6ceee6c1c51c2497e566a2250e1fc0cd3ded383219"
+          },
+          {
+            "filename": "GF-03.step",
+            "bytes": 12207,
+            "sha256": "36cb9aa2876883181d161fec1b24f5293d28e68a036c774b27b93ba4f5ecde7c"
+          },
+          {
+            "filename": "GF-03.svg",
+            "bytes": 7569,
+            "sha256": "76b9a83855de45997d2060590352ffc78563796c21a44f053ea62821a02cba58"
+          }
+        ]
+      }
+    },
+    {
+      "id": "GF-04",
+      "purpose": "Kitchen",
+      "floor": "GF",
+      "revision": "R02",
+      "sourceFile": "Ground Floor - GF01 Cabin Approved Layout P01.FCStd",
+      "sourceSha256": "374df20b0b81f03790211ead98471353221c830b1a5cc98f4bdbcf052764c2fc",
+      "files": {
+        "freecad": {
+          "url": "/building-models/r03/rooms/GF-04.FCStd",
+          "filename": "GF-04.FCStd",
+          "bytes": 21235,
+          "sha256": "ca47f973a197bc092b2f36e552a6e5c0200742bef870f2d123ddf4a3606b9363"
+        },
+        "step": {
+          "url": "/building-models/r03/rooms/GF-04.step",
+          "filename": "GF-04.step",
+          "bytes": 19377,
+          "sha256": "a9bcf173b7dd8da24f37c7a7e909a0890e3e9f79a4866a91056cbf1e80f43100"
+        },
+        "preview": {
+          "url": "/building-models/r03/rooms/GF-04.svg",
+          "filename": "GF-04.svg",
+          "bytes": 11078,
+          "sha256": "e524fd1d3191e031e36852569d741d9754c54cee663c0d88a143b30793eaf14f"
+        },
+        "previewPng": {
+          "url": "/building-models/r03/rooms/GF-04.png",
+          "filename": "GF-04.png",
+          "bytes": 36674,
+          "sha256": "cd75467b084c0000f5d09f7f37d8323e5cde413a9db05c1f8af85afbcdc2d225"
+        }
+      },
+      "shapeCount": 16,
+      "solidCount": 0,
+      "geometryKind": "2D plan/reference geometry",
+      "verification": {
+        "nativeSaveReopen": "PASS",
+        "exactWorldShapes": 16,
+        "stepReadback": "PASS",
+        "stepChecks": {
+          "valid": true,
+          "solids": true,
+          "bounds": true,
+          "volume": true,
+          "area": true,
+          "summed_edge_length": true
+        }
+      },
+      "notes": [
+        "This room has source plan/reference geometry only: its STEP contains curves/wires, not a volumetric room model."
+      ],
+      "provenanceUrl": "/building-models/r03/rooms/GF-04-provenance.json",
+      "includedInRelease": "R03",
+      "retainedFrom": {
+        "revision": "R02",
+        "releaseSha256": "224342c1a9f38354895693821a91a08820d31d62016e6f3043ec85572ae03cf3",
+        "roomManifestSha256": "7d54d5337a8eefa2192e9310c4ade86ab59bba7c4824155143b33ffd529d7a09",
+        "files": [
+          {
+            "filename": "GF-04-README.md",
+            "bytes": 1776,
+            "sha256": "cd37276c64049419df3b578d31cf3cac5d6467e3ab6b8e830da8c9df9a0fa101"
+          },
+          {
+            "filename": "GF-04-provenance.json",
+            "bytes": 8091,
+            "sha256": "468a8d0395f2d6c3a05a6e91654a9af82abd5156835cd0c63e94691b40217fc9"
+          },
+          {
+            "filename": "GF-04.FCStd",
+            "bytes": 21235,
+            "sha256": "ca47f973a197bc092b2f36e552a6e5c0200742bef870f2d123ddf4a3606b9363"
+          },
+          {
+            "filename": "GF-04.png",
+            "bytes": 36674,
+            "sha256": "cd75467b084c0000f5d09f7f37d8323e5cde413a9db05c1f8af85afbcdc2d225"
+          },
+          {
+            "filename": "GF-04.step",
+            "bytes": 19377,
+            "sha256": "a9bcf173b7dd8da24f37c7a7e909a0890e3e9f79a4866a91056cbf1e80f43100"
+          },
+          {
+            "filename": "GF-04.svg",
+            "bytes": 11078,
+            "sha256": "e524fd1d3191e031e36852569d741d9754c54cee663c0d88a143b30793eaf14f"
+          }
+        ]
+      }
+    },
+    {
+      "id": "GF-06",
+      "purpose": "Bathroom reference",
+      "floor": "GF",
+      "revision": "R02",
+      "sourceFile": "Ground Floor - GF01 Cabin Approved Layout P01.FCStd",
+      "sourceSha256": "374df20b0b81f03790211ead98471353221c830b1a5cc98f4bdbcf052764c2fc",
+      "files": {
+        "freecad": {
+          "url": "/building-models/r03/rooms/GF-06.FCStd",
+          "filename": "GF-06.FCStd",
+          "bytes": 15209,
+          "sha256": "6e20b3ebc23c4f519c10c42f8d7e16d4b36e659a0b457f8a247ca7d465b3df25"
+        },
+        "step": {
+          "url": "/building-models/r03/rooms/GF-06.step",
+          "filename": "GF-06.step",
+          "bytes": 12177,
+          "sha256": "83cfd79638c5116c88459b28f76bb9be90ed8873c1fe44079c93cf7ef69abc81"
+        },
+        "preview": {
+          "url": "/building-models/r03/rooms/GF-06.svg",
+          "filename": "GF-06.svg",
+          "bytes": 6725,
+          "sha256": "5bf87c7897aa2df6e81770750e45ed5840d81ab6bf97c8176c6244fbf1dc96e2"
+        },
+        "previewPng": {
+          "url": "/building-models/r03/rooms/GF-06.png",
+          "filename": "GF-06.png",
+          "bytes": 37546,
+          "sha256": "192ec0cbca0c8c085462f924fa1f58beddb8763e32d16deaebc7a74e5b201560"
+        }
+      },
+      "shapeCount": 10,
+      "solidCount": 0,
+      "geometryKind": "2D plan/reference geometry",
+      "verification": {
+        "nativeSaveReopen": "PASS",
+        "exactWorldShapes": 10,
+        "stepReadback": "PASS",
+        "stepChecks": {
+          "valid": true,
+          "solids": true,
+          "bounds": true,
+          "volume": true,
+          "area": true,
+          "summed_edge_length": true
+        }
+      },
+      "notes": [
+        "This room has source plan/reference geometry only: its STEP contains curves/wires, not a volumetric room model."
+      ],
+      "provenanceUrl": "/building-models/r03/rooms/GF-06-provenance.json",
+      "includedInRelease": "R03",
+      "retainedFrom": {
+        "revision": "R02",
+        "releaseSha256": "224342c1a9f38354895693821a91a08820d31d62016e6f3043ec85572ae03cf3",
+        "roomManifestSha256": "7d54d5337a8eefa2192e9310c4ade86ab59bba7c4824155143b33ffd529d7a09",
+        "files": [
+          {
+            "filename": "GF-06-README.md",
+            "bytes": 1787,
+            "sha256": "7dcde58b5c8d1f1110d269c72cc0112a4af9cd5acedfd3251bfa947156c85455"
+          },
+          {
+            "filename": "GF-06-provenance.json",
+            "bytes": 5523,
+            "sha256": "8cc34714afe51a55664f1dcb811904e418a205746d53d94caa40f0282366ead7"
+          },
+          {
+            "filename": "GF-06.FCStd",
+            "bytes": 15209,
+            "sha256": "6e20b3ebc23c4f519c10c42f8d7e16d4b36e659a0b457f8a247ca7d465b3df25"
+          },
+          {
+            "filename": "GF-06.png",
+            "bytes": 37546,
+            "sha256": "192ec0cbca0c8c085462f924fa1f58beddb8763e32d16deaebc7a74e5b201560"
+          },
+          {
+            "filename": "GF-06.step",
+            "bytes": 12177,
+            "sha256": "83cfd79638c5116c88459b28f76bb9be90ed8873c1fe44079c93cf7ef69abc81"
+          },
+          {
+            "filename": "GF-06.svg",
+            "bytes": 6725,
+            "sha256": "5bf87c7897aa2df6e81770750e45ed5840d81ab6bf97c8176c6244fbf1dc96e2"
+          }
+        ]
+      }
+    },
+    {
+      "id": "GF-07",
+      "purpose": "Glass booth",
+      "floor": "GF",
+      "revision": "R02",
+      "sourceFile": "Ground Floor - GF01 Cabin Approved Layout P01.FCStd",
+      "sourceSha256": "374df20b0b81f03790211ead98471353221c830b1a5cc98f4bdbcf052764c2fc",
+      "files": {
+        "freecad": {
+          "url": "/building-models/r03/rooms/GF-07.FCStd",
+          "filename": "GF-07.FCStd",
+          "bytes": 107338,
+          "sha256": "85ac51dd5bd53c51fe2e79650aceff08fdd2a33aa687593fe7761462058c0043"
+        },
+        "step": {
+          "url": "/building-models/r03/rooms/GF-07.step",
+          "filename": "GF-07.step",
+          "bytes": 407418,
+          "sha256": "d7b503d6913770fbc9f3af2a6b76a3f67637c0f0cbd6a4d484f0e984be3a6530"
+        },
+        "preview": {
+          "url": "/building-models/r03/rooms/GF-07.svg",
+          "filename": "GF-07.svg",
+          "bytes": 37844,
+          "sha256": "5174eddee00795864c74b63d38809a0343c6eb781fd722b4bbab3172f7bb300f"
+        },
+        "previewPng": {
+          "url": "/building-models/r03/rooms/GF-07.png",
+          "filename": "GF-07.png",
+          "bytes": 38419,
+          "sha256": "aeed4297ee0c619e8f8376a02249885282f2c64c0148fb7568bc40bb66a036e8"
+        }
+      },
+      "shapeCount": 58,
+      "solidCount": 48,
+      "geometryKind": "mixed 2D references and 3D fit-out",
+      "verification": {
+        "nativeSaveReopen": "PASS",
+        "exactWorldShapes": 58,
+        "stepReadback": "PASS",
+        "stepChecks": {
+          "valid": true,
+          "solids": true,
+          "bounds": true,
+          "volume": true,
+          "area": true,
+          "summed_edge_length": true
+        }
+      },
+      "notes": [
+        "Shared GF07/GF10 wall band includes its exact 6 in source end remainder. Booth door reduces the original opening; compact internal clearances remain."
+      ],
+      "provenanceUrl": "/building-models/r03/rooms/GF-07-provenance.json",
+      "includedInRelease": "R03",
+      "retainedFrom": {
+        "revision": "R02",
+        "releaseSha256": "224342c1a9f38354895693821a91a08820d31d62016e6f3043ec85572ae03cf3",
+        "roomManifestSha256": "7d54d5337a8eefa2192e9310c4ade86ab59bba7c4824155143b33ffd529d7a09",
+        "files": [
+          {
+            "filename": "GF-07-README.md",
+            "bytes": 1818,
+            "sha256": "8ae836a57576cf33c11d9f2918c003858432fc42d33faa04c7c6126e033457ae"
+          },
+          {
+            "filename": "GF-07-provenance.json",
+            "bytes": 23607,
+            "sha256": "c0482b10e63b6f6db1775ed7dde17e60329fcba1c40cef09d0c0900e6f39e8b9"
+          },
+          {
+            "filename": "GF-07.FCStd",
+            "bytes": 107338,
+            "sha256": "85ac51dd5bd53c51fe2e79650aceff08fdd2a33aa687593fe7761462058c0043"
+          },
+          {
+            "filename": "GF-07.png",
+            "bytes": 38419,
+            "sha256": "aeed4297ee0c619e8f8376a02249885282f2c64c0148fb7568bc40bb66a036e8"
+          },
+          {
+            "filename": "GF-07.step",
+            "bytes": 407418,
+            "sha256": "d7b503d6913770fbc9f3af2a6b76a3f67637c0f0cbd6a4d484f0e984be3a6530"
+          },
+          {
+            "filename": "GF-07.svg",
+            "bytes": 37844,
+            "sha256": "5174eddee00795864c74b63d38809a0343c6eb781fd722b4bbab3172f7bb300f"
+          }
+        ]
+      }
+    },
+    {
+      "id": "GF-08",
+      "purpose": "Enclosed balcony seating",
+      "floor": "GF",
+      "revision": "R02",
+      "sourceFile": "Ground Floor - GF01 Cabin Approved Layout P01.FCStd",
+      "sourceSha256": "374df20b0b81f03790211ead98471353221c830b1a5cc98f4bdbcf052764c2fc",
+      "files": {
+        "freecad": {
+          "url": "/building-models/r03/rooms/GF-08.FCStd",
+          "filename": "GF-08.FCStd",
+          "bytes": 658987,
+          "sha256": "23881de3665b8e29346b874e95a81cfd938391e87959ff61fab500b142003806"
+        },
+        "step": {
+          "url": "/building-models/r03/rooms/GF-08.step",
+          "filename": "GF-08.step",
+          "bytes": 2239052,
+          "sha256": "3e40a7d2ea77e1b9c26316e36a38324e49c60822c9021bb6d5ab33e055bf6e9f"
+        },
+        "preview": {
+          "url": "/building-models/r03/rooms/GF-08.svg",
+          "filename": "GF-08.svg",
+          "bytes": 180714,
+          "sha256": "bce907d59b1eeb876a04ef1591573c74d0f7d1ea2047fb9f9914deb0ca7ce33e"
+        },
+        "previewPng": {
+          "url": "/building-models/r03/rooms/GF-08.png",
+          "filename": "GF-08.png",
+          "bytes": 54951,
+          "sha256": "6f9b1c98e902dda49d1c5cc3bf9d163e8b210fa15e335413b418729a2fd38722"
+        }
+      },
+      "shapeCount": 339,
+      "solidCount": 322,
+      "geometryKind": "mixed 2D references and 3D fit-out",
+      "verification": {
+        "nativeSaveReopen": "PASS",
+        "exactWorldShapes": 339,
+        "stepReadback": "PASS",
+        "stepChecks": {
+          "valid": true,
+          "solids": true,
+          "bounds": true,
+          "volume": true,
+          "area": true,
+          "summed_edge_length": true
+        }
+      },
+      "notes": [
+        "Includes P02 existing-door and curved-step approximation, 2 cafe tables, 4 chairs, bar and 2 stools. Frame/roof heights and installation details remain provisional."
+      ],
+      "provenanceUrl": "/building-models/r03/rooms/GF-08-provenance.json",
+      "includedInRelease": "R03",
+      "retainedFrom": {
+        "revision": "R02",
+        "releaseSha256": "224342c1a9f38354895693821a91a08820d31d62016e6f3043ec85572ae03cf3",
+        "roomManifestSha256": "7d54d5337a8eefa2192e9310c4ade86ab59bba7c4824155143b33ffd529d7a09",
+        "files": [
+          {
+            "filename": "GF-08-README.md",
+            "bytes": 1847,
+            "sha256": "89aed4c0f9be399c4928ca2f31f8fa5ec99101542f186baa219d375108a9e22f"
+          },
+          {
+            "filename": "GF-08-provenance.json",
+            "bytes": 127632,
+            "sha256": "a2358487ff0508a846178a99bc95f984ab66f05249eb4c8c7de618f20b7f98e5"
+          },
+          {
+            "filename": "GF-08.FCStd",
+            "bytes": 658987,
+            "sha256": "23881de3665b8e29346b874e95a81cfd938391e87959ff61fab500b142003806"
+          },
+          {
+            "filename": "GF-08.png",
+            "bytes": 54951,
+            "sha256": "6f9b1c98e902dda49d1c5cc3bf9d163e8b210fa15e335413b418729a2fd38722"
+          },
+          {
+            "filename": "GF-08.step",
+            "bytes": 2239052,
+            "sha256": "3e40a7d2ea77e1b9c26316e36a38324e49c60822c9021bb6d5ab33e055bf6e9f"
+          },
+          {
+            "filename": "GF-08.svg",
+            "bytes": 180714,
+            "sha256": "bce907d59b1eeb876a04ef1591573c74d0f7d1ea2047fb9f9914deb0ca7ce33e"
+          }
+        ]
+      }
+    },
+    {
+      "id": "GF-09",
+      "purpose": "Presentation lounge and stair access",
+      "floor": "GF",
+      "revision": "R02",
+      "sourceFile": "Ground Floor - GF01 Cabin Approved Layout P01.FCStd",
+      "sourceSha256": "374df20b0b81f03790211ead98471353221c830b1a5cc98f4bdbcf052764c2fc",
+      "files": {
+        "freecad": {
+          "url": "/building-models/r03/rooms/GF-09.FCStd",
+          "filename": "GF-09.FCStd",
+          "bytes": 2529106,
+          "sha256": "28d332020d6ab23d52be00ec6087997181f0495c8cdf383a8983f638891344d6"
+        },
+        "step": {
+          "url": "/building-models/r03/rooms/GF-09.step",
+          "filename": "GF-09.step",
+          "bytes": 10488273,
+          "sha256": "2f540c2f253b4223cd0999b176310705fe15296677a6c988f4cc1c075c6d8a90"
+        },
+        "preview": {
+          "url": "/building-models/r03/rooms/GF-09.svg",
+          "filename": "GF-09.svg",
+          "bytes": 681811,
+          "sha256": "dbb5703d807d8ee8dfe3d7acacc3b8744ca0ca08b486a9844e2828ca7691722d"
+        },
+        "previewPng": {
+          "url": "/building-models/r03/rooms/GF-09.png",
+          "filename": "GF-09.png",
+          "bytes": 50467,
+          "sha256": "4cba223fc69113e4ab70b1f0f9a6c683e1538732b20eaca518d79a09e83ce04c"
+        }
+      },
+      "shapeCount": 684,
+      "solidCount": 659,
+      "geometryKind": "mixed 2D references and 3D fit-out",
+      "verification": {
+        "nativeSaveReopen": "PASS",
+        "exactWorldShapes": 684,
+        "stepReadback": "PASS",
+        "stepChecks": {
+          "valid": true,
+          "solids": true,
+          "bounds": true,
+          "volume": true,
+          "area": true,
+          "summed_edge_length": true
+        }
+      },
+      "notes": [
+        "Includes Forward Shift01 furniture/AV and selected stair partition A01. Outward-door kitchen restriction, GF06 approach and reduced step-head clearance remain."
+      ],
+      "provenanceUrl": "/building-models/r03/rooms/GF-09-provenance.json",
+      "includedInRelease": "R03",
+      "retainedFrom": {
+        "revision": "R02",
+        "releaseSha256": "224342c1a9f38354895693821a91a08820d31d62016e6f3043ec85572ae03cf3",
+        "roomManifestSha256": "7d54d5337a8eefa2192e9310c4ade86ab59bba7c4824155143b33ffd529d7a09",
+        "files": [
+          {
+            "filename": "GF-09-README.md",
+            "bytes": 1854,
+            "sha256": "4ed003da70db1e963ebe34512553fcb159389700a3bc580a4ee31e7ea7dd089c"
+          },
+          {
+            "filename": "GF-09-provenance.json",
+            "bytes": 254848,
+            "sha256": "cab7ecdb5b7e984a9e14389711b73c3c6df0fff98917bca0260fd6107fe142dd"
+          },
+          {
+            "filename": "GF-09.FCStd",
+            "bytes": 2529106,
+            "sha256": "28d332020d6ab23d52be00ec6087997181f0495c8cdf383a8983f638891344d6"
+          },
+          {
+            "filename": "GF-09.png",
+            "bytes": 50467,
+            "sha256": "4cba223fc69113e4ab70b1f0f9a6c683e1538732b20eaca518d79a09e83ce04c"
+          },
+          {
+            "filename": "GF-09.step",
+            "bytes": 10488273,
+            "sha256": "2f540c2f253b4223cd0999b176310705fe15296677a6c988f4cc1c075c6d8a90"
+          },
+          {
+            "filename": "GF-09.svg",
+            "bytes": 681811,
+            "sha256": "dbb5703d807d8ee8dfe3d7acacc3b8744ca0ca08b486a9844e2828ca7691722d"
+          }
+        ]
+      }
+    },
+    {
+      "id": "GF-10",
+      "purpose": "Coworking commons",
+      "floor": "GF",
+      "revision": "R02",
+      "sourceFile": "Ground Floor - GF01 Cabin Approved Layout P01.FCStd",
+      "sourceSha256": "374df20b0b81f03790211ead98471353221c830b1a5cc98f4bdbcf052764c2fc",
+      "files": {
+        "freecad": {
+          "url": "/building-models/r03/rooms/GF-10.FCStd",
+          "filename": "GF-10.FCStd",
+          "bytes": 415226,
+          "sha256": "4144b577743a9488f3c0e698a8e558427189a62837592319988d35d98c0352c1"
+        },
+        "step": {
+          "url": "/building-models/r03/rooms/GF-10.step",
+          "filename": "GF-10.step",
+          "bytes": 2016601,
+          "sha256": "c8fcd49ce71af026d8f173b77a884f2e9419fdb981426d1e0e73d29e75499f85"
+        },
+        "preview": {
+          "url": "/building-models/r03/rooms/GF-10.svg",
+          "filename": "GF-10.svg",
+          "bytes": 153370,
+          "sha256": "a3d001999d428ebcb60d3eff8e4f0f52f638c4f56084dd34746cc1c2d1706a00"
+        },
+        "previewPng": {
+          "url": "/building-models/r03/rooms/GF-10.png",
+          "filename": "GF-10.png",
+          "bytes": 52720,
+          "sha256": "7542325846fe580dfe6577c8133ec8173bf8af20cb23b49d9dcac2eba42a1a15"
+        }
+      },
+      "shapeCount": 187,
+      "solidCount": 354,
+      "geometryKind": "mixed 2D references and 3D fit-out",
+      "verification": {
+        "nativeSaveReopen": "PASS",
+        "exactWorldShapes": 187,
+        "stepReadback": "PASS",
+        "stepChecks": {
+          "valid": true,
+          "solids": true,
+          "bounds": true,
+          "volume": true,
+          "area": true,
+          "summed_edge_length": true
+        }
+      },
+      "notes": [
+        "9 T-01 tables, 17 counter chairs and 21 table chairs are selected model positions, not a certified 38-person simultaneous usable layout. Includes only the shared GF08 doorway from that adjacent-room fit-out."
+      ],
+      "provenanceUrl": "/building-models/r03/rooms/GF-10-provenance.json",
+      "includedInRelease": "R03",
+      "retainedFrom": {
+        "revision": "R02",
+        "releaseSha256": "224342c1a9f38354895693821a91a08820d31d62016e6f3043ec85572ae03cf3",
+        "roomManifestSha256": "7d54d5337a8eefa2192e9310c4ade86ab59bba7c4824155143b33ffd529d7a09",
+        "files": [
+          {
+            "filename": "GF-10-README.md",
+            "bytes": 1883,
+            "sha256": "8544b10b2dd41d54369e883901a4d1d23624b05bb9793909b55c34c7a5fc56ed"
+          },
+          {
+            "filename": "GF-10-provenance.json",
+            "bytes": 75107,
+            "sha256": "fb4e466dd4dbd167d765ba0cd3aed1a0ccb43c09c7e5cf5a2f89b6c1145d0337"
+          },
+          {
+            "filename": "GF-10.FCStd",
+            "bytes": 415226,
+            "sha256": "4144b577743a9488f3c0e698a8e558427189a62837592319988d35d98c0352c1"
+          },
+          {
+            "filename": "GF-10.png",
+            "bytes": 52720,
+            "sha256": "7542325846fe580dfe6577c8133ec8173bf8af20cb23b49d9dcac2eba42a1a15"
+          },
+          {
+            "filename": "GF-10.step",
+            "bytes": 2016601,
+            "sha256": "c8fcd49ce71af026d8f173b77a884f2e9419fdb981426d1e0e73d29e75499f85"
+          },
+          {
+            "filename": "GF-10.svg",
+            "bytes": 153370,
+            "sha256": "a3d001999d428ebcb60d3eff8e4f0f52f638c4f56084dd34746cc1c2d1706a00"
+          }
+        ]
+      }
+    },
+    {
+      "id": "FF-01",
+      "purpose": "Rear small room reference",
+      "floor": "FF",
+      "revision": "R02",
+      "sourceFile": "First Floor - FF03 Cabins Approved Layout P01.FCStd",
+      "sourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+      "files": {
+        "freecad": {
+          "url": "/building-models/r03/rooms/FF-01.FCStd",
+          "filename": "FF-01.FCStd",
+          "bytes": 17736,
+          "sha256": "d6c02b00caa316c1d259d6ec14c8be06e044c85bd11900a9e97a7a43f0e672cf"
+        },
+        "step": {
+          "url": "/building-models/r03/rooms/FF-01.step",
+          "filename": "FF-01.step",
+          "bytes": 14205,
+          "sha256": "5c11b00eee2a1d709f23f3376c34d9bf62ca7484cf2d1249a760cf9293f21ed8"
+        },
+        "preview": {
+          "url": "/building-models/r03/rooms/FF-01.svg",
+          "filename": "FF-01.svg",
+          "bytes": 8428,
+          "sha256": "9b24757bb3d1c6af8ecc3971155ac152dfda4e75ec4bee0c8e63083edb498a6c"
+        },
+        "previewPng": {
+          "url": "/building-models/r03/rooms/FF-01.png",
+          "filename": "FF-01.png",
+          "bytes": 37376,
+          "sha256": "44f4cf7935a70f6e8818d603f579b440f905a902de4243420d3b27e6eb223fff"
+        }
+      },
+      "shapeCount": 13,
+      "solidCount": 0,
+      "geometryKind": "2D plan/reference geometry",
+      "verification": {
+        "nativeSaveReopen": "PASS",
+        "exactWorldShapes": 13,
+        "stepReadback": "PASS",
+        "stepChecks": {
+          "valid": true,
+          "solids": true,
+          "bounds": true,
+          "volume": true,
+          "area": true,
+          "summed_edge_length": true
+        }
+      },
+      "notes": [
+        "This room has source plan/reference geometry only: its STEP contains curves/wires, not a volumetric room model."
+      ],
+      "provenanceUrl": "/building-models/r03/rooms/FF-01-provenance.json",
+      "includedInRelease": "R03",
+      "retainedFrom": {
+        "revision": "R02",
+        "releaseSha256": "224342c1a9f38354895693821a91a08820d31d62016e6f3043ec85572ae03cf3",
+        "roomManifestSha256": "7d54d5337a8eefa2192e9310c4ade86ab59bba7c4824155143b33ffd529d7a09",
+        "files": [
+          {
+            "filename": "FF-01-README.md",
+            "bytes": 1794,
+            "sha256": "16aa3ffd1a5a65c55fdfc87dc58378ead51cec0f3b7c0cff6dc166342b5b67c5"
+          },
+          {
+            "filename": "FF-01-provenance.json",
+            "bytes": 6811,
+            "sha256": "dfcb28824f99769a796af5043a104a0a0b08e362854364c36d26e3edee99498b"
+          },
+          {
+            "filename": "FF-01.FCStd",
+            "bytes": 17736,
+            "sha256": "d6c02b00caa316c1d259d6ec14c8be06e044c85bd11900a9e97a7a43f0e672cf"
+          },
+          {
+            "filename": "FF-01.png",
+            "bytes": 37376,
+            "sha256": "44f4cf7935a70f6e8818d603f579b440f905a902de4243420d3b27e6eb223fff"
+          },
+          {
+            "filename": "FF-01.step",
+            "bytes": 14205,
+            "sha256": "5c11b00eee2a1d709f23f3376c34d9bf62ca7484cf2d1249a760cf9293f21ed8"
+          },
+          {
+            "filename": "FF-01.svg",
+            "bytes": 8428,
+            "sha256": "9b24757bb3d1c6af8ecc3971155ac152dfda4e75ec4bee0c8e63083edb498a6c"
+          }
+        ]
+      }
+    },
+    {
+      "id": "FF-02",
+      "purpose": "Workshop and proposed weatherproof cover",
+      "floor": "FF",
+      "revision": "R02",
+      "sourceFile": "First Floor - FF03 Cabins Approved Layout P01.FCStd",
+      "sourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+      "files": {
+        "freecad": {
+          "url": "/building-models/r03/rooms/FF-02.FCStd",
+          "filename": "FF-02.FCStd",
+          "bytes": 2950683,
+          "sha256": "90094bc074ac7e332bd1f082c2451eb485b759ccca25e14e353a4f6687de7935"
+        },
+        "step": {
+          "url": "/building-models/r03/rooms/FF-02.step",
+          "filename": "FF-02.step",
+          "bytes": 14526675,
+          "sha256": "560defa263de4951c5c70cd6a4d47dd9acb864fb0b928cf6f699082d35ea35cb"
+        },
+        "preview": {
+          "url": "/building-models/r03/rooms/FF-02.svg",
+          "filename": "FF-02.svg",
+          "bytes": 699295,
+          "sha256": "c2623b73cc0aa2d0e22135d481612e8b64b0e26d42ebab76aeed960ab9c4a76b"
+        },
+        "previewPng": {
+          "url": "/building-models/r03/rooms/FF-02.png",
+          "filename": "FF-02.png",
+          "bytes": 51253,
+          "sha256": "7ecd99330d61a45b9787032c9856264544d70684d81937a907ccd2e4d1b82a82"
+        }
+      },
+      "shapeCount": 325,
+      "solidCount": 336,
+      "geometryKind": "mixed 2D references and 3D fit-out",
+      "verification": {
+        "nativeSaveReopen": "PASS",
+        "exactWorldShapes": 325,
+        "stepReadback": "PASS",
+        "stepChecks": {
+          "valid": true,
+          "solids": true,
+          "bounds": true,
+          "volume": true,
+          "area": true,
+          "summed_edge_length": true
+        }
+      },
+      "notes": [
+        "Includes selected FF02 workshop P01: two tables, four chairs, workshop bench, outward door and provisional new cover. Retains the source balcony and adjoining approaches; roof/weatherproofing, ventilation/extraction, electrical design and occupied clearances are not approved."
+      ],
+      "provenanceUrl": "/building-models/r03/rooms/FF-02-provenance.json",
+      "includedInRelease": "R03",
+      "retainedFrom": {
+        "revision": "R02",
+        "releaseSha256": "224342c1a9f38354895693821a91a08820d31d62016e6f3043ec85572ae03cf3",
+        "roomManifestSha256": "7d54d5337a8eefa2192e9310c4ade86ab59bba7c4824155143b33ffd529d7a09",
+        "files": [
+          {
+            "filename": "FF-02-README.md",
+            "bytes": 1975,
+            "sha256": "fe12f87de110e40b65775bf40d6ebd45d94e50eafd8d80c0e2d62c0ee1b5b84c"
+          },
+          {
+            "filename": "FF-02-provenance.json",
+            "bytes": 124874,
+            "sha256": "a3d819983cda8a1b89d3f9f38dcaaf89949e2fc7e676545e0f13e50f11551c2b"
+          },
+          {
+            "filename": "FF-02.FCStd",
+            "bytes": 2950683,
+            "sha256": "90094bc074ac7e332bd1f082c2451eb485b759ccca25e14e353a4f6687de7935"
+          },
+          {
+            "filename": "FF-02.png",
+            "bytes": 51253,
+            "sha256": "7ecd99330d61a45b9787032c9856264544d70684d81937a907ccd2e4d1b82a82"
+          },
+          {
+            "filename": "FF-02.step",
+            "bytes": 14526675,
+            "sha256": "560defa263de4951c5c70cd6a4d47dd9acb864fb0b928cf6f699082d35ea35cb"
+          },
+          {
+            "filename": "FF-02.svg",
+            "bytes": 699295,
+            "sha256": "c2623b73cc0aa2d0e22135d481612e8b64b0e26d42ebab76aeed960ab9c4a76b"
+          }
+        ]
+      }
+    },
+    {
+      "id": "FF-03",
+      "purpose": "Two-person and four-person cabins",
+      "floor": "FF",
+      "revision": "R04",
+      "includedInRelease": "R04",
+      "sourceFile": "first-floor.FCStd",
+      "sourceSha256": "ad1397f6b855e309b0093e64baf582db559be5b4ebab1e22ef3f428a3b77d5e9",
+      "sourceBasis": "Coordinated P02 full-floor design and separately updated R03 room reference; inherited Z0 reference ancestry is recorded per object, not re-extracted from the curated full floor.",
+      "selectionSha256": "f95e63905d6e46d9092bd45d073b8601aa0f03510011554c630a0be37a260004",
+      "shapeCount": 221,
+      "solidCount": 231,
+      "geometryKind": "mixed 2D references and 3D fit-out",
+      "verification": {
+        "nativeSaveReopen": "PASS",
+        "exactWorldShapes": 221,
+        "stepReadback": "PASS",
+        "stepChecks": {
+          "valid": true,
+          "solids": true,
+          "bounds": true,
+          "volume": true,
+          "area": true,
+          "summed_edge_length": true
+        },
+        "stepMeasurements": {
+          "valid": true,
+          "solids": true,
+          "faces": true,
+          "edges": true,
+          "bounds_error_mm": 4.3382897274568677e-10,
+          "solid_volume_error_mm3": 0.027528762817382812,
+          "area_error_mm2": 0.00009816884994506836,
+          "edge_length_error_mm": 3.9301812648773193e-7
+        },
+        "freshReopenAuditSha256": "c17b2378d82bbf0e19252048d8d25745a91427b95247af27f26da9b4158a05b7"
+      },
+      "notes": [
+        "BlenderContext contains the exact latest native architecture context, including open/cropped faces; inherited Z0 CAD references are separately retained and shown grey in the preview. Model-derived context may include immediately adjoining doorway/floor pieces. No source offsets are silently reconciled.",
+        "Four-person west entrance has independent bi-parting sliding leaves, 500 mm travel each. Original 920.4 mm frame aperture retained; two-person and shared bathroom doors unchanged.",
+        "Parked leaves project 40 mm beyond the fixed glazing frame; overhead track projects 52.5 mm. No whole-corridor nonreduction or occupied-capacity claim. Narrow rear working space and installation details remain provisional."
+      ],
+      "files": {
+        "freecad": {
+          "url": "/building-models/r04/rooms/FF-03.FCStd",
+          "filename": "FF-03.FCStd",
+          "bytes": 2943768,
+          "sha256": "452fafd1f345ef268616a241933826073a62fd4a95b6f9098851cdf3523b5695"
+        },
+        "step": {
+          "url": "/building-models/r04/rooms/FF-03.step",
+          "filename": "FF-03.step",
+          "bytes": 15830737,
+          "sha256": "6a59d38a9a2b80c4241657dda8dd921a17a9a97e23a46b084d8567dcbd553d09"
+        },
+        "preview": {
+          "url": "/building-models/r04/rooms/FF-03.svg",
+          "filename": "FF-03.svg",
+          "bytes": 1293817,
+          "sha256": "f4127c204095832f2036505b2432b9ab05a87aaa78d150392c236df4278f25fc"
+        },
+        "previewPng": {
+          "url": "/building-models/r04/rooms/FF-03.png",
+          "filename": "FF-03.png",
+          "bytes": 53932,
+          "sha256": "c28342b59a6a0df4cc99094cce4f6d1aaf058208df8e8c80f5d79681b2e5ee0d"
+        }
+      },
+      "provenanceUrl": "/building-models/r04/rooms/FF-03-provenance.json"
+    },
+    {
+      "id": "FF-04",
+      "purpose": "Enlarged twin cabins / selected stair slider",
+      "floor": "FF",
+      "revision": "R03",
+      "includedInRelease": "R03",
+      "sourceFile": "first-floor.FCStd",
+      "sourceSha256": "337d7e2d4d8d60c83a4e867e43141bec6c3ed46314640b8df89493b8ed2e4a50",
+      "selectionSha256": "e94671f3923c29b42ccbb72ce97c4771fc408418119e7ed78b7a9873588828f4",
+      "files": {
+        "freecad": {
+          "url": "/building-models/r03/rooms/FF-04.FCStd",
+          "filename": "FF-04.FCStd",
+          "bytes": 19206156,
+          "sha256": "b66723cacfd0a2c87ad4b12aab32fe719577e14b05c3171574020dbfbbb64477"
+        },
+        "step": {
+          "url": "https://github.com/sandeep-devarapalli/armature-ai-labs/releases/download/building-models-r03/FF-04.step",
+          "filename": "FF-04.step",
+          "bytes": 93424637,
+          "sha256": "f15ad68a37e934300ed65bb3e34ab78d04b8ca35d78e6bfe1fbb776624597b97"
+        },
+        "preview": {
+          "url": "/building-models/r03/rooms/FF-04.svg",
+          "filename": "FF-04.svg",
+          "bytes": 3622824,
+          "sha256": "082569eb41b5a7ebc695d2db417a8576f9ffd4c6a499cd3eb2826e3303d51231"
+        },
+        "previewPng": {
+          "url": "/building-models/r03/rooms/FF-04.png",
+          "filename": "FF-04.png",
+          "bytes": 71272,
+          "sha256": "b3fd61b428edb57a314e52e8a98d84290e29aab786f8b0ea5e067485138e0a6e"
+        }
+      },
+      "shapeCount": 473,
+      "solidCount": 438,
+      "geometryKind": "mixed source context and 3D fit-out",
+      "verification": {
+        "nativeSaveReopen": "PASS",
+        "exactWorldShapes": 473,
+        "stepReadback": "PASS",
+        "stepChecks": {
+          "valid": true,
+          "solids": true,
+          "bounds": true,
+          "volume": true,
+          "area": true,
+          "summed_edge_length": true
+        }
+      },
+      "notes": [
+        "Selected P03 twin cabins, eight full-size tables and eight chair proxies. Retained source context includes neighbouring openings without creating closure walls.",
+        "Retained enlarged cabin geometry, curved stair enclosure, selected curved leaf paths and stair/gallery context. No geometry derived from older concepts."
+      ],
+      "provenanceUrl": "/building-models/r03/rooms/FF-04-provenance.json"
+    },
+    {
+      "id": "FF-05",
+      "purpose": "Bathroom reference",
+      "floor": "FF",
+      "revision": "R02",
+      "sourceFile": "First Floor - FF03 Cabins Approved Layout P01.FCStd",
+      "sourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+      "files": {
+        "freecad": {
+          "url": "/building-models/r03/rooms/FF-05.FCStd",
+          "filename": "FF-05.FCStd",
+          "bytes": 17606,
+          "sha256": "d1cd4929ed6db9b087502aa27f7b498657d149af9522296c9b55d73736f66737"
+        },
+        "step": {
+          "url": "/building-models/r03/rooms/FF-05.step",
+          "filename": "FF-05.step",
+          "bytes": 15134,
+          "sha256": "4aaf27bd505d512fd6e321768fd99155efd31efb8e8525e1428dcf2ebf76eebf"
+        },
+        "preview": {
+          "url": "/building-models/r03/rooms/FF-05.svg",
+          "filename": "FF-05.svg",
+          "bytes": 8054,
+          "sha256": "7fba620ff107afd6a0021ccc097ce0dd5993d4cef4b7633c202db39837ca5767"
+        },
+        "previewPng": {
+          "url": "/building-models/r03/rooms/FF-05.png",
+          "filename": "FF-05.png",
+          "bytes": 36969,
+          "sha256": "19b1943d9078a9ed2d4b87b74b1e28da1e6d93199bce59fa2fbb743fe74c0835"
+        }
+      },
+      "shapeCount": 13,
+      "solidCount": 0,
+      "geometryKind": "2D plan/reference geometry",
+      "verification": {
+        "nativeSaveReopen": "PASS",
+        "exactWorldShapes": 13,
+        "stepReadback": "PASS",
+        "stepChecks": {
+          "valid": true,
+          "solids": true,
+          "bounds": true,
+          "volume": true,
+          "area": true,
+          "summed_edge_length": true
+        }
+      },
+      "notes": [
+        "This room has source plan/reference geometry only: its STEP contains curves/wires, not a volumetric room model."
+      ],
+      "provenanceUrl": "/building-models/r03/rooms/FF-05-provenance.json",
+      "includedInRelease": "R03",
+      "retainedFrom": {
+        "revision": "R02",
+        "releaseSha256": "224342c1a9f38354895693821a91a08820d31d62016e6f3043ec85572ae03cf3",
+        "roomManifestSha256": "7d54d5337a8eefa2192e9310c4ade86ab59bba7c4824155143b33ffd529d7a09",
+        "files": [
+          {
+            "filename": "FF-05-README.md",
+            "bytes": 1787,
+            "sha256": "c480526be4b6aa086109ff6169954f66e1190e486e56e6c08c956eb369abcaa5"
+          },
+          {
+            "filename": "FF-05-provenance.json",
+            "bytes": 6825,
+            "sha256": "801bfa7e60a6c6401529af3c13250debc7f5ab54a197e146cd52879b1051d7d0"
+          },
+          {
+            "filename": "FF-05.FCStd",
+            "bytes": 17606,
+            "sha256": "d1cd4929ed6db9b087502aa27f7b498657d149af9522296c9b55d73736f66737"
+          },
+          {
+            "filename": "FF-05.png",
+            "bytes": 36969,
+            "sha256": "19b1943d9078a9ed2d4b87b74b1e28da1e6d93199bce59fa2fbb743fe74c0835"
+          },
+          {
+            "filename": "FF-05.step",
+            "bytes": 15134,
+            "sha256": "4aaf27bd505d512fd6e321768fd99155efd31efb8e8525e1428dcf2ebf76eebf"
+          },
+          {
+            "filename": "FF-05.svg",
+            "bytes": 8054,
+            "sha256": "7fba620ff107afd6a0021ccc097ce0dd5993d4cef4b7633c202db39837ca5767"
+          }
+        ]
+      }
+    },
+    {
+      "id": "FF-06",
+      "purpose": "Stacked twin cabins / dedicated balcony",
+      "floor": "FF",
+      "revision": "R03",
+      "includedInRelease": "R03",
+      "sourceFile": "first-floor.FCStd",
+      "sourceSha256": "337d7e2d4d8d60c83a4e867e43141bec6c3ed46314640b8df89493b8ed2e4a50",
+      "selectionSha256": "e94671f3923c29b42ccbb72ce97c4771fc408418119e7ed78b7a9873588828f4",
+      "files": {
+        "freecad": {
+          "url": "/building-models/r03/rooms/FF-06.FCStd",
+          "filename": "FF-06.FCStd",
+          "bytes": 6158586,
+          "sha256": "e6cf2f12a596d5b3a947514b1650a54f19e246f483554bfa7e8bdad0b6303ce1"
+        },
+        "step": {
+          "url": "https://github.com/sandeep-devarapalli/armature-ai-labs/releases/download/building-models-r03/FF-06.step",
+          "filename": "FF-06.step",
+          "bytes": 33159203,
+          "sha256": "0bc0129d60844c4e131538f1d0088fc92111379c67aee914773c4d45fe2ee5ef"
+        },
+        "preview": {
+          "url": "/building-models/r03/rooms/FF-06.svg",
+          "filename": "FF-06.svg",
+          "bytes": 1912045,
+          "sha256": "f9ba9e1df3157e346b41292b66b2eafb87fac825cd3fa4415d17dad72693d679"
+        },
+        "previewPng": {
+          "url": "/building-models/r03/rooms/FF-06.png",
+          "filename": "FF-06.png",
+          "bytes": 59504,
+          "sha256": "fa8f6dfec3e23c9480ef5dbe1ccf5fa6166c9f8e07a0dfdb4acad1dbc4835e7d"
+        }
+      },
+      "shapeCount": 386,
+      "solidCount": 378,
+      "geometryKind": "mixed source context and 3D fit-out",
+      "verification": {
+        "nativeSaveReopen": "PASS",
+        "exactWorldShapes": 386,
+        "stepReadback": "PASS",
+        "stepChecks": {
+          "valid": true,
+          "solids": true,
+          "bounds": true,
+          "volume": true,
+          "area": true,
+          "summed_edge_length": true
+        }
+      },
+      "notes": [
+        "Selected P03 twin cabins, eight full-size tables and eight chair proxies. Retained source context includes neighbouring openings without creating closure walls.",
+        "Retained cupboard, dresser/mirror and B02 balcony; lower cabin has dedicated balcony access. Occupied-chair and storage-use limitations remain."
+      ],
+      "provenanceUrl": "/building-models/r03/rooms/FF-06-provenance.json"
+    }
+  ]
+}

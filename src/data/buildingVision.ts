@@ -321,7 +321,7 @@ export const buildingVisionItems: BuildingVisionItem[] = [
     imageHeight: 1448,
     alt: "First-floor workspace with acoustic carpet, desks placed toward the window wall and a solid brown door replaced by a glass access door",
     caption: "Window-wall workspace concept",
-    modelNote: "Do not assign this earlier image a permanent room ID before registration. R03 retains FF03 P01's two- and four-person cabins and adds the selected FF04/FF06 twin cabins. FF06's former four-desk proposal is superseded; its cupboard, dresser and mirror remain. Use current native views and room CAD for positions, not this historical concept. Occupied access and services remain unresolved.",
+    modelNote: "Do not assign this earlier image a permanent room ID before registration. R04 updates the FF03 four-person entrance to sliding while retaining both cabins and the R03 FF04/FF06 twin cabins. FF06's former four-desk proposal is superseded; its cupboard, dresser and mirror remain. Use current native views and room CAD for positions, not this historical concept. Occupied access and services remain unresolved.",
     designIntent: "Create a bright, minimal work room while improving visibility and access through the new glass door.",
     keyElements: "Acoustic carpet, wall-oriented desks, ergonomic chairs, power access, warm task lights and a clear glass access door.",
     preserve: "Windows, room footprint, existing fixed storage, wall lines, ceiling and the original doorway opening."
@@ -369,7 +369,7 @@ export const buildingVisionItems: BuildingVisionItem[] = [
     imageHeight: 1448,
     alt: "Entry view of the first-floor workspace through a glass access door, with acoustic carpet and the original storage wall intact",
     caption: "Storage-wall entry concept",
-    modelNote: "Image-to-room registration is pending; do not use this view to assign a room ID or approve a new glass door. R03 retains FF03 P01's two- and four-person cabins and adds selected FF04/FF06 twin cabins. Use current native views and room CAD for doors, storage and access limitations; this concept does not establish a clear occupied route.",
+    modelNote: "Image-to-room registration is pending; do not use this view to assign a room ID or approve a new glass door. R04 changes only the FF03 four-person cabin entrance to sliding; its two-person cabin and the R03 FF04/FF06 twin cabins are retained. Use current native views and room CAD for doors, storage and access limitations; this concept does not establish a clear occupied route.",
     designIntent: "Make the room feel organised from the entrance while keeping the furniture outside every door swing and access route.",
     keyElements: "Glass access door, quiet carpet, retained storage, warm-white walls and a completely open route along the storage wall.",
     preserve: "Storage wall, fixed cupboards, original doorway size, adjacent doors, windows, washroom access and central circulation."
@@ -385,7 +385,7 @@ export const buildingVisionItems: BuildingVisionItem[] = [
     imageHeight: 1448,
     alt: "First-floor workspace showing retained storage, acoustic carpet, an open central floor and the balcony opening at the left",
     caption: "Workspace-to-balcony concept",
-    modelNote: "Image-to-room registration is pending. FF03's selected P01 cabins preserve the FF02 connection, storage and inward-opening FF05 bathroom door, with constrained occupied-chair and outward-door routes. R03 includes FF06's selected twin cabins and lower-cabin-only balcony access. B02 retains the junction wall and threshold after removing the isolated west strip/kerb/guard; do not infer shared balcony access from this earlier concept.",
+    modelNote: "Image-to-room registration is pending. FF03's R04 four-person entrance slides; the FF02 connection, storage, two-person cabin door and inward-opening FF05 bathroom door are preserved. Occupied-chair routes remain constrained. R03's FF06 twin cabins and lower-cabin-only balcony access remain unchanged. B02 retains the junction wall and threshold after removing the isolated west strip/kerb/guard; do not infer shared balcony access from this earlier concept.",
     designIntent: "Complete the room sequence by showing the retained storage wall and the unobstructed connection to the balcony before loose furniture is added.",
     keyElements: "Retained full-height storage, acoustic carpet, refreshed warm-white walls, open central floor area and a clearly visible balcony opening.",
     preserve: "All cabinets and cupboards, balcony opening, door position, windows, wall proportions, services and an unobstructed route outdoors."

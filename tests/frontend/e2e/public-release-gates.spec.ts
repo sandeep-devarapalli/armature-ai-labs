@@ -6,6 +6,8 @@ test("footer publishes direct contact links", async ({ page }) => {
   const discord = footer.getByRole("link", { name: "Discord", exact: true });
   const linkedIn = footer.getByRole("link", { name: "LinkedIn", exact: true });
 
+  await expect(footer).toContainText("1490, 11th Cross, 20th Main, 1st Sector, HSR Layout, Bengaluru – 560034, Karnataka.");
+
   await expect(footer.getByRole("link", { name: "hello@armatureailabs.com" })).toHaveAttribute("href", "mailto:hello@armatureailabs.com");
   await expect(footer.getByRole("link", { name: "+91 9748485583" })).toHaveAttribute("href", "tel:+919748485583");
   await expect(discord).toHaveAttribute("href", "https://discord.gg/qGNXGmF8z");
@@ -141,7 +143,7 @@ test("historical directory URLs load the React routes", async ({ page }) => {
 
   await page.goto("/building-vision/");
   await expect(
-    page.getByRole("heading", { name: "The building, without rebuilding it." })
+    page.getByRole("heading", { name: "Building Vision", exact: true })
   ).toBeVisible();
 });
 
