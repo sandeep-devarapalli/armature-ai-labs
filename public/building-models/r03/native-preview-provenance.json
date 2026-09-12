@@ -1,0 +1,76 @@
+{
+  "release": "R03",
+  "aiGenerated": false,
+  "images": [
+    {
+      "file": "ff04-cad.png",
+      "sha256": "77c06d22d59b3d567e027b6e603b332b1f399c65d63caed8f765dc76a95a2c2b",
+      "sourceNative": "first-floor.FCStd",
+      "sourceNativeSha256": "337d7e2d4d8d60c83a4e867e43141bec6c3ed46314640b8df89493b8ed2e4a50",
+      "renderer": "Native FreeCAD orthographic viewport; text placed outside unchanged viewport pixels",
+      "displayChanges": [
+        "Room selection visibility and fitted orthographic camera only; no geometry changed or saved.",
+        "Only the known below-first-floor ground-commons context fragment is hidden for this focused view; it remains in the CAD download."
+      ]
+    },
+    {
+      "file": "ff06-cad.png",
+      "sha256": "6e2bc854856be48b5e64cba5199659a5ee64757e7fdce4fd498fd9c063918f6d",
+      "sourceNative": "first-floor.FCStd",
+      "sourceNativeSha256": "337d7e2d4d8d60c83a4e867e43141bec6c3ed46314640b8df89493b8ed2e4a50",
+      "renderer": "Native FreeCAD orthographic viewport; text placed outside unchanged viewport pixels",
+      "displayChanges": [
+        "Room selection visibility and fitted orthographic camera only; no geometry changed or saved."
+      ]
+    },
+    {
+      "file": "ff04-cabins.png",
+      "sha256": "3c1bea42c9831f11ee6eedb62e3acedef09cf75d89f9177ed5e4d3f1d29af957",
+      "sourceImageSha256": "986875ce87db75eb01edec285339d876214882ca1d72e996dea40eccafa2b6b7",
+      "sourceNative": "verified-private-selected-P03-source",
+      "sourceNativeSha256": "4d4964c3c42c3501ada1ae3274f18a686a190cd8207e8ea9b6df7245654bc2b6",
+      "renderer": "Native Blender Cycles",
+      "displayChanges": [
+        "Transient camera, lighting and labels; source native is never saved.",
+        "Only the already identified cropped ground-commons floor context strip is omitted from this focused FF04 view."
+      ],
+      "pixelChunksUnchanged": true
+    },
+    {
+      "file": "ff06-cabins.png",
+      "sha256": "511f5fc0108554d629b36795c9a85fde3e5a57a4054ce01ac04859d3f58186a8",
+      "sourceImageSha256": "85d35d6afacff4a3d82e9c416e81bef6e5b2a678359dcec67256124ee60fbc80",
+      "sourceNative": "verified-private-selected-P03-source",
+      "sourceNativeSha256": "4d4964c3c42c3501ada1ae3274f18a686a190cd8207e8ea9b6df7245654bc2b6",
+      "renderer": "Native Blender Cycles",
+      "displayChanges": [
+        "Transient camera, lighting and labels; source native is never saved."
+      ],
+      "pixelChunksUnchanged": true
+    },
+    {
+      "file": "first-floor.png",
+      "sha256": "0463bc9b260c59b3d1ffcb21405f33df51855410bfba61ef6772c70781f58999",
+      "sourceImageSha256": "a2d50ceec7ac46ac69c97dd3943510811bd836e6c7c6f4cc6414826da8f6dce1",
+      "sourceNative": "selected-layout.blend",
+      "sourceNativeSha256": "2bf4638a5d4ec2eaca76316debf06f290d69afe36f667fc8329247460f130a70",
+      "renderer": "Native Blender Cycles",
+      "displayChanges": [
+        "Native saved camera; render sample count16. Source native never saved."
+      ],
+      "pixelChunksUnchanged": true
+    },
+    {
+      "file": "ground-floor.png",
+      "sha256": "80b710cde0de7dcab4543af27228887a54ee9f4da357bcb62a459605f53bb47b",
+      "sourceImageSha256": "6333c6c7fdbaf16a2e5de7ab0b087410017b9f6690a3226a60c852061c312e32",
+      "sourceNative": "selected-layout.blend",
+      "sourceNativeSha256": "2bf4638a5d4ec2eaca76316debf06f290d69afe36f667fc8329247460f130a70",
+      "renderer": "Native Blender Cycles",
+      "displayChanges": [
+        "Native saved camera; render sample count16. Source native never saved."
+      ],
+      "pixelChunksUnchanged": true
+    }
+  ]
+}

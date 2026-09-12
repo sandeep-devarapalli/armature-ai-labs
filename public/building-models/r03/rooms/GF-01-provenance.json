@@ -1,0 +1,1750 @@
+{
+  "id": "GF-01",
+  "purpose": "Four-person cabin A / retained cupboard",
+  "floor": "GF",
+  "revision": "R02",
+  "sourceFile": "Ground Floor - GF01 Cabin Approved Layout P01.FCStd",
+  "sourceSha256": "374df20b0b81f03790211ead98471353221c830b1a5cc98f4bdbcf052764c2fc",
+  "files": {
+    "freecad": {
+      "url": "/building-models/r03/rooms/GF-01.FCStd",
+      "filename": "GF-01.FCStd",
+      "bytes": 2373983,
+      "sha256": "7543833010231849af19a7fc7fb83a256a573c4c17389700d8c324992fc40fd1"
+    },
+    "step": {
+      "url": "/building-models/r03/rooms/GF-01.step",
+      "filename": "GF-01.step",
+      "bytes": 11186701,
+      "sha256": "98dc78538eb9ab71f473233734aa37bfd7f84926a53dc3663c22a278cf2d57a3"
+    },
+    "preview": {
+      "url": "/building-models/r03/rooms/GF-01.svg",
+      "filename": "GF-01.svg",
+      "bytes": 593431,
+      "sha256": "4da6a7746b10469862708f1d215b2bbe87f8045b2577eee39085dd04749eb822"
+    },
+    "previewPng": {
+      "url": "/building-models/r03/rooms/GF-01.png",
+      "filename": "GF-01.png",
+      "bytes": 53778,
+      "sha256": "c5b52cbd67a292e64744f082daa5935aefc85c3116b8bfc52e51d73ff176aebc"
+    }
+  },
+  "shapeCount": 184,
+  "solidCount": 189,
+  "geometryKind": "mixed 2D references and 3D fit-out",
+  "verification": {
+    "nativeSaveReopen": "PASS",
+    "exactWorldShapes": 184,
+    "stepReadback": "PASS",
+    "stepChecks": {
+      "valid": true,
+      "solids": true,
+      "bounds": true,
+      "volume": true,
+      "area": true,
+      "summed_edge_length": true
+    }
+  },
+  "notes": [
+    "BlenderContext contains the exact latest native architecture context, including open/cropped faces; inherited Z0 CAD references are separately retained and shown grey in the preview. Model-derived context may include immediately adjoining doorway/floor pieces. No source offsets are silently reconciled.",
+    "Includes selected four-person cabin A, four full-size tables/chairs and recessed outward door. Cupboard allowance is already factored; do not deduct it again. Occupied centre gap is about 3 ft 1 in, reducing to about 1 ft 1 in during simultaneous pullback; operator retreat and existing-door/hardware clearances remain unresolved."
+  ],
+  "objects": [
+    {
+      "sourceObjectId": "GF_01___GF_01_A___wall",
+      "label": "GF-01 / GF-01-A / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "c2ef74eb2cb04aed3708660244fd08c2f766f7fb9f55e99d2b43fb716775cec7"
+    },
+    {
+      "sourceObjectId": "GF_01___GF_01_A___wall___provisional_120_mm_offset",
+      "label": "GF-01 / GF-01-A / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "fdecae2a2109171ab94d89be6af3a0ca8f1df5ad6bfab36191f8a61025eeef6b"
+    },
+    {
+      "sourceObjectId": "GF_01___GF_01_B___wall",
+      "label": "GF-01 / GF-01-B / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "05e5469115ede26dbf0f99969cef8bf8c71d0deb8e617a53ec7afbe9ac614d92"
+    },
+    {
+      "sourceObjectId": "GF_01___GF_01_B___wall___provisional_120_mm_offset",
+      "label": "GF-01 / GF-01-B / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "ae6e9edd21be28693c58eaf9d917816213a40b1fc7e3723bde55c5a3ac41baa6"
+    },
+    {
+      "sourceObjectId": "GF_01___GF_01_C___wall",
+      "label": "GF-01 / GF-01-C / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "eff75ea390c06a48dff96452488b69b6bb3d015b1a4b78f74521563b606e3345"
+    },
+    {
+      "sourceObjectId": "GF_01___GF_01_C___wall___provisional_120_mm_offset",
+      "label": "GF-01 / GF-01-C / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "78a8c7f8c634d25ec910a42e8d85e27f0dc0ebd839450fb88c4b57812d6d41dc"
+    },
+    {
+      "sourceObjectId": "GF_01___GF_01_D___wall",
+      "label": "GF-01 / GF-01-D / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "1ae0aafada25a8c60ad0b0a85ec582091a747f0b13126a4f538eda17d8cf383b"
+    },
+    {
+      "sourceObjectId": "GF_01___GF_01_D___wall___provisional_120_mm_offset",
+      "label": "GF-01 / GF-01-D / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "52842eb6c42b28949bcb985fee5b63368b3d3653b02f6d9caa6cf7513b997564"
+    },
+    {
+      "sourceObjectId": "GF_W06___window",
+      "label": "GF-W06 / window",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "87d1ff323e0441c80ad4d7bdb02110111920cb16dc412280cb0cd63bfd8cb59d"
+    },
+    {
+      "sourceObjectId": "GF_W07___window",
+      "label": "GF-W07 / window",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "588dbf9734e3dc59af8637bf1cea63bc1a7cdbc43b5ba21073770e583b1e75d8"
+    },
+    {
+      "sourceObjectId": "GF_01_GAP1___door",
+      "label": "GF-01-GAP1 / door",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "0dd1daa9d9bf6f6423e36a21ebd9deae78fc83c4c3eb9046a1fac8983dfcfe1a"
+    },
+    {
+      "sourceObjectId": "GF_D07___door",
+      "label": "GF-D07 / door",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "ef7b3fd722d0f92b3c2be7e6dd7263dbdc27a5522666435fcb09bc0cd9d2e51e"
+    },
+    {
+      "sourceObjectId": "GF_D06___door",
+      "label": "GF-D06 / door",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "9ff2032258b5d538c25df43b979d036a31fbabf1f40fde9689b936f51ca310e8"
+    },
+    {
+      "sourceObjectId": "GF_O02___opening",
+      "label": "GF-O02 / opening",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "0f8ae00bf01ad7d9379794ed42945e61d173047168382b119a0e0c752b56c6d6"
+    },
+    {
+      "sourceObjectId": "GF01P01_C001",
+      "label": "GF01 A P01 | Enclosure 0-0 post 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a2e49434958fa4e86f8ff53c83c053c8f2c0c31a38d3b604b30e321283d6beeb"
+    },
+    {
+      "sourceObjectId": "GF01P01_C002",
+      "label": "GF01 A P01 | Enclosure 0-0 post 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "5d4fd394b56cd386bab986ecc055589762ce9377304db3f23c8f8df68efc76d6"
+    },
+    {
+      "sourceObjectId": "GF01P01_C003",
+      "label": "GF01 A P01 | Enclosure 0-0 post 2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "367e659ef9df426eee3779cc692fe444b2090f3a6a781039454ef91dc4da2161"
+    },
+    {
+      "sourceObjectId": "GF01P01_C004",
+      "label": "GF01 A P01 | Enclosure 0-0 post 3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6c5b4d93fc42932d31dd1dc839b0b09f1c91eb7b473dffcd4f142d98e322bda4"
+    },
+    {
+      "sourceObjectId": "GF01P01_C005",
+      "label": "GF01 A P01 | Enclosure 0-0 post 4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "9564a33248bfcfee0b0d00cb4f33e7bf4987050ac819debe246532166f750699"
+    },
+    {
+      "sourceObjectId": "GF01P01_C006",
+      "label": "GF01 A P01 | Enclosure 0-0 rail 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "34e6bd46598c095e54fdb93c56a799828f813b3c3851cfaceaac63e12a307a42"
+    },
+    {
+      "sourceObjectId": "GF01P01_C007",
+      "label": "GF01 A P01 | Enclosure 0-0 rail 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c4b2f62ed77009a21b0c3192c3392d02c8951764e8a21ca8e7e513dc7f31b68c"
+    },
+    {
+      "sourceObjectId": "GF01P01_C008",
+      "label": "GF01 A P01 | Enclosure 0-0 rail 2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b3d8d02736f18fde50e3760e72a244632295f5e3a9cfedaf1d49472af838bdd4"
+    },
+    {
+      "sourceObjectId": "GF01P01_C009",
+      "label": "GF01 A P01 | Enclosure 0-0 rail 3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b93710b3b6dfb6ff3166f56c527f6e974927a610b8bae5aba1544d469233a648"
+    },
+    {
+      "sourceObjectId": "GF01P01_C010",
+      "label": "GF01 A P01 | Enclosure 0-0 infill 0-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e67fc3c065b9a75216d5825dc083ccc393378177bc9da0ef71487607534b27df"
+    },
+    {
+      "sourceObjectId": "GF01P01_C011",
+      "label": "GF01 A P01 | Enclosure 0-0 infill 0-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "fe8403aff666faca8c072b28215830defacfc031f10b28ecbad177425ef93858"
+    },
+    {
+      "sourceObjectId": "GF01P01_C012",
+      "label": "GF01 A P01 | Enclosure 0-0 infill 0-2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "76a12d3d85266e2e9253bd5efda36be56633d2e057d9ea8115815e5010512f17"
+    },
+    {
+      "sourceObjectId": "GF01P01_C013",
+      "label": "GF01 A P01 | Enclosure 0-0 infill 1-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a5f84d2d2d3ec5d3ae2ea017d20dec3baeae7ce0b81f0a793c74c4881896880d"
+    },
+    {
+      "sourceObjectId": "GF01P01_C014",
+      "label": "GF01 A P01 | Enclosure 0-0 infill 1-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "91bc277b073a7d7b92320e015aed9a20d0e20250acfd1e77688a478061f345c4"
+    },
+    {
+      "sourceObjectId": "GF01P01_C015",
+      "label": "GF01 A P01 | Enclosure 0-0 infill 1-2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a4fcc1256e282e9514f07aa292b2a4c065240f6b8693376cc7c1e53b911a2e19"
+    },
+    {
+      "sourceObjectId": "GF01P01_C016",
+      "label": "GF01 A P01 | Enclosure 0-0 infill 2-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "2b4c02d5e3af91f9d994609d50b4fe330b41ad82966daa06ec78f6e5246a243f"
+    },
+    {
+      "sourceObjectId": "GF01P01_C017",
+      "label": "GF01 A P01 | Enclosure 0-0 infill 2-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "658cd41f39309f0379cd463a4ed912fb07777a8a943fe7390f3c9e558d57d16c"
+    },
+    {
+      "sourceObjectId": "GF01P01_C018",
+      "label": "GF01 A P01 | Enclosure 0-0 infill 2-2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e83d945d52d65d6e7cc8b7d1ee9daaeabb015a3e19f870605fb71e26d83f1c3f"
+    },
+    {
+      "sourceObjectId": "GF01P01_C019",
+      "label": "GF01 A P01 | Enclosure 0-0 infill 3-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "049d0ff021f8f26ec17e0c70a6f8306c562a943dd7ca2f0b59531ff3f291de60"
+    },
+    {
+      "sourceObjectId": "GF01P01_C020",
+      "label": "GF01 A P01 | Enclosure 0-0 infill 3-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "ae0ff033117f2cace145dce5a18aa9aede5886bb64ad483504df241be588ff47"
+    },
+    {
+      "sourceObjectId": "GF01P01_C021",
+      "label": "GF01 A P01 | Enclosure 0-0 infill 3-2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c837c3433fc6155e2157a3fcad13887abe07e8c104d13de2387aeaea95d8a3c4"
+    },
+    {
+      "sourceObjectId": "GF01P01_C022",
+      "label": "GF01 A P01 | Enclosure 0-1 post 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "613c4e582388ed5eb46a02fdd9bf14065134acd21b3446e486e2a95df8171b4d"
+    },
+    {
+      "sourceObjectId": "GF01P01_C023",
+      "label": "GF01 A P01 | Enclosure 0-1 post 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "4d0358b90027ebd717c64a4872d07ff930240fabe0264c1d0305e1c408714d48"
+    },
+    {
+      "sourceObjectId": "GF01P01_C024",
+      "label": "GF01 A P01 | Enclosure 0-1 post 2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e60dbcec21e3445b7a7b51554e033ad8fff260fa2b67dc1699ba827a3a6e8e62"
+    },
+    {
+      "sourceObjectId": "GF01P01_C025",
+      "label": "GF01 A P01 | Enclosure 0-1 rail 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "2ecc7f40408702f22ca42161cacac4c611181cf9f83ba3b107849bb20de5a63d"
+    },
+    {
+      "sourceObjectId": "GF01P01_C026",
+      "label": "GF01 A P01 | Enclosure 0-1 rail 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b86a000c2f72db3cc37859ad4b5bd8ef6475b99e2e95bf1c628b3c75e17286c7"
+    },
+    {
+      "sourceObjectId": "GF01P01_C027",
+      "label": "GF01 A P01 | Enclosure 0-1 rail 2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "0a3f52942cadfcd4fd6e2665380c7da7354335f4909d8bccf0224a1a75e9d45e"
+    },
+    {
+      "sourceObjectId": "GF01P01_C028",
+      "label": "GF01 A P01 | Enclosure 0-1 rail 3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "3ed44f8b817bff09f19f5f8fca64b82f81021bacf02ea8b9793de2f2b6e1785d"
+    },
+    {
+      "sourceObjectId": "GF01P01_C029",
+      "label": "GF01 A P01 | Enclosure 0-1 infill 0-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "04ecfe779d3250b8b02001ce6bcadf23b0d8c5bca9e17781d784b3ff01499227"
+    },
+    {
+      "sourceObjectId": "GF01P01_C030",
+      "label": "GF01 A P01 | Enclosure 0-1 infill 0-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "10723c14602c70ea3c188a3cde5f0b9606c546479cb86515b01b1b9c8be711ca"
+    },
+    {
+      "sourceObjectId": "GF01P01_C031",
+      "label": "GF01 A P01 | Enclosure 0-1 infill 0-2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c52b3d2485cf1b4dc9cbee87d090267b3265e4903ba247d60d01e01469e80dbf"
+    },
+    {
+      "sourceObjectId": "GF01P01_C032",
+      "label": "GF01 A P01 | Enclosure 0-1 infill 1-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "81258c29d7b0d0bdf326b14a95d2d676175df65c5e3b484b56216e3a9f0448ff"
+    },
+    {
+      "sourceObjectId": "GF01P01_C033",
+      "label": "GF01 A P01 | Enclosure 0-1 infill 1-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "f0c5897a2c389e9abdf2e5f02ffb5b41e7ae4f543350b64583bdae552a03b5d9"
+    },
+    {
+      "sourceObjectId": "GF01P01_C034",
+      "label": "GF01 A P01 | Enclosure 0-1 infill 1-2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "d696b180841c24f43c75f74272bfd31c948276602052ad037f76ad0ef4250a84"
+    },
+    {
+      "sourceObjectId": "GF01P01_C035",
+      "label": "GF01 A P01 | Enclosure 0-2 post 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "84a3dc52b0132d5cd0a2a073fa7fc34a0e24dcde7217453a01f4c2d5d41e0e98"
+    },
+    {
+      "sourceObjectId": "GF01P01_C036",
+      "label": "GF01 A P01 | Enclosure 0-2 post 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "0bee48bf7190dee056d5c369b53ea6d51966276c0f8b6a0b13a3f8555734574b"
+    },
+    {
+      "sourceObjectId": "GF01P01_C037",
+      "label": "GF01 A P01 | Enclosure 0-2 post 2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b26315218c050080d01e7a8bc81d64038e4c6ebffb4fe06db119b0e7bed332d4"
+    },
+    {
+      "sourceObjectId": "GF01P01_C038",
+      "label": "GF01 A P01 | Enclosure 0-2 rail 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "38a8f0db7d37914b40284d0bafbe81cad1287b3414b72d01e4903455996e9a30"
+    },
+    {
+      "sourceObjectId": "GF01P01_C039",
+      "label": "GF01 A P01 | Enclosure 0-2 rail 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "256f0ef9e2effffde68ba21e1adf42d73ae08a34fda953fbe19822a04936d71b"
+    },
+    {
+      "sourceObjectId": "GF01P01_C040",
+      "label": "GF01 A P01 | Enclosure 0-2 rail 2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "7748182d39f0254302d89af20d57eb3d2aff7268ea16535cf5e717f4fec760ad"
+    },
+    {
+      "sourceObjectId": "GF01P01_C041",
+      "label": "GF01 A P01 | Enclosure 0-2 rail 3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "84ba9a16ab7afd0d8ed21efa9e52818c82200386bb06487b0a3d8d7967e7e779"
+    },
+    {
+      "sourceObjectId": "GF01P01_C042",
+      "label": "GF01 A P01 | Enclosure 0-2 infill 0-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b037df34e83ea80bf42c9b6398784fd0ec9431a387b8e9c1c07a70b9b36449f7"
+    },
+    {
+      "sourceObjectId": "GF01P01_C043",
+      "label": "GF01 A P01 | Enclosure 0-2 infill 0-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "1f1d7d614013f4e74fefbb64a79527b86c2b3d78b1eda8b446b64177f1b740d6"
+    },
+    {
+      "sourceObjectId": "GF01P01_C044",
+      "label": "GF01 A P01 | Enclosure 0-2 infill 0-2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e3868499dd7c9791788bdcf19767cec5bbaf1f3f060a08ed6f3382b835142e33"
+    },
+    {
+      "sourceObjectId": "GF01P01_C045",
+      "label": "GF01 A P01 | Enclosure 0-2 infill 1-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "84e4b5612c52ba18fe3496794e0dac991b49caa0f64591e55f336259741f2076"
+    },
+    {
+      "sourceObjectId": "GF01P01_C046",
+      "label": "GF01 A P01 | Enclosure 0-2 infill 1-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "661739e49e45ffe0b5187752aaa3806f28b03aeeced0d280b761a085d71e7163"
+    },
+    {
+      "sourceObjectId": "GF01P01_C047",
+      "label": "GF01 A P01 | Enclosure 0-2 infill 1-2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b0d9e0d7e65956c7bc8341054fecab231155a37aa5e4697d810762a0a872e80d"
+    },
+    {
+      "sourceObjectId": "GF01P01_C048",
+      "label": "GF01 A P01 | Enclosure 0-3 post 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "3c0b74740cd59bd10fbf8432b22ce3ad2e9e8e4d667d88a983e6dae1f4293e1d"
+    },
+    {
+      "sourceObjectId": "GF01P01_C049",
+      "label": "GF01 A P01 | Enclosure 0-3 post 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "75b7e69ebd7ed831924056256c581eddeb47bf385e62c6785e65162ea52650d6"
+    },
+    {
+      "sourceObjectId": "GF01P01_C050",
+      "label": "GF01 A P01 | Enclosure 0-3 rail 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "7c5674fb1e51f705264c3700181ac5f0b6add32ad638f86908d5f930729fa8c4"
+    },
+    {
+      "sourceObjectId": "GF01P01_C051",
+      "label": "GF01 A P01 | Enclosure 0-3 rail 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "88b4209b3831c3af30578888b1c9f9d9eaa2bcccc0c85f0886abecb7a75fcd86"
+    },
+    {
+      "sourceObjectId": "GF01P01_C052",
+      "label": "GF01 A P01 | Enclosure 0-3 rail 2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "fe067d33b857bd55b3512ffd2caba7ca7716e6892c3d05f7d3021cf9c26acd74"
+    },
+    {
+      "sourceObjectId": "GF01P01_C053",
+      "label": "GF01 A P01 | Enclosure 0-3 rail 3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "723430652d041dd8af4cda67c399618196339d845247134b173aaa7cd002c1ea"
+    },
+    {
+      "sourceObjectId": "GF01P01_C054",
+      "label": "GF01 A P01 | Enclosure 0-3 infill 0-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "44b6ad40c44662593f4acc02dc966b12bd07245cf4fc2cae8ddeec08b2bae3af"
+    },
+    {
+      "sourceObjectId": "GF01P01_C055",
+      "label": "GF01 A P01 | Enclosure 0-3 infill 0-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "71295dcdeb4e1ed840b34d772ccbd0616d8d92cc506aa30425e2833e8449e989"
+    },
+    {
+      "sourceObjectId": "GF01P01_C056",
+      "label": "GF01 A P01 | Enclosure 0-3 infill 0-2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "f8a8429f08659b7d92f553907ee23de1a01773fa6e5de4a31ce29ed87acd1f5e"
+    },
+    {
+      "sourceObjectId": "GF01P01_C057",
+      "label": "GF01 A P01 | Enclosure 1-0 post 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "bb3c87b2ca6844c63f8431db7d84055a2ef588baa34490e16af68f3ef49f7bbf"
+    },
+    {
+      "sourceObjectId": "GF01P01_C058",
+      "label": "GF01 A P01 | Enclosure 1-0 post 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "de9ecfebff0a60d598f3aff4eba6509fea99d5c8ad52edd4dd979b28d92902b0"
+    },
+    {
+      "sourceObjectId": "GF01P01_C059",
+      "label": "GF01 A P01 | Enclosure 1-0 rail 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "39563ad74f99b5ff01fdd84cfb71315e76512ec10a32306d9bb94a8b9f30a0ec"
+    },
+    {
+      "sourceObjectId": "GF01P01_C060",
+      "label": "GF01 A P01 | Enclosure 1-0 rail 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "1dc9e8f9dcf137f7978c19df2012d2b548517ced14106428f2d40a243c1eb560"
+    },
+    {
+      "sourceObjectId": "GF01P01_C061",
+      "label": "GF01 A P01 | Enclosure 1-0 rail 2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "93ef7e0c77a4b2fb3d11a848cad0e1d883b9c15d8218becf66bdc849ace6a41c"
+    },
+    {
+      "sourceObjectId": "GF01P01_C062",
+      "label": "GF01 A P01 | Enclosure 1-0 rail 3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "d878ad41c3750e771e845521698a5ed9e43aa02ece8eb6c13f97f5512790dfe6"
+    },
+    {
+      "sourceObjectId": "GF01P01_C063",
+      "label": "GF01 A P01 | Enclosure 1-0 infill 0-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "81a981dcde54e4b0c122633a15ce092f2dfaf46af5cd9476ce36ed8f77a45196"
+    },
+    {
+      "sourceObjectId": "GF01P01_C064",
+      "label": "GF01 A P01 | Enclosure 1-0 infill 0-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "2670ec8246e069a49437739abf57bfa24865feb854cb870fa09eb5d3af7b50b8"
+    },
+    {
+      "sourceObjectId": "GF01P01_C065",
+      "label": "GF01 A P01 | Enclosure 1-0 infill 0-2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6212d9464209c5269d2eda0ad0b48a53b3dd61f8cf176d442b7377eb7de9a53e"
+    },
+    {
+      "sourceObjectId": "GF01P01_C066",
+      "label": "GF01 A P01 | Enclosure 1-1 post 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "ed1e51c685873ac3e265398d1145a4dce4ea8b8d28f4a95cb0b3205e882cf414"
+    },
+    {
+      "sourceObjectId": "GF01P01_C067",
+      "label": "GF01 A P01 | Enclosure 1-1 post 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "08ddfc9656b01fcacfc4ed46034146c2f262b17e672223cb153e4493bd1a8a78"
+    },
+    {
+      "sourceObjectId": "GF01P01_C068",
+      "label": "GF01 A P01 | Enclosure 1-1 post 2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b48ccfcd6bd0439031d2302ad88bf2b88be928c774c1704050612b3d5521e221"
+    },
+    {
+      "sourceObjectId": "GF01P01_C069",
+      "label": "GF01 A P01 | Enclosure 1-1 rail 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "cd24d01c3fff69b4bf41daa51cda789ef281b00902a90274c48952f17969739b"
+    },
+    {
+      "sourceObjectId": "GF01P01_C070",
+      "label": "GF01 A P01 | Enclosure 1-1 rail 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "beca2dbab7f0ab8072fa34551f42921f1cab87bb92188d555c9f5edd3c9c6ba0"
+    },
+    {
+      "sourceObjectId": "GF01P01_C071",
+      "label": "GF01 A P01 | Enclosure 1-1 rail 2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "55f7363aee9ad9d32cd0b44970a8839cdfd1acaee23040798ec9f66eaa75e9a9"
+    },
+    {
+      "sourceObjectId": "GF01P01_C072",
+      "label": "GF01 A P01 | Enclosure 1-1 rail 3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "aeb57b0318bd9bbd359f259103b239fd0088e06de5f21f58236d929b6acab6f6"
+    },
+    {
+      "sourceObjectId": "GF01P01_C073",
+      "label": "GF01 A P01 | Enclosure 1-1 infill 0-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "87075024938d53eb7d84fcf69d3a2d8f56e2caaa92f154306095c7a0332d5a9f"
+    },
+    {
+      "sourceObjectId": "GF01P01_C074",
+      "label": "GF01 A P01 | Enclosure 1-1 infill 0-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "9dc96ee76617f1c3131e6db7f20ea179d2c9deb88b3a12df12a54a0717293b09"
+    },
+    {
+      "sourceObjectId": "GF01P01_C075",
+      "label": "GF01 A P01 | Enclosure 1-1 infill 0-2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "d60bf2b8ca4713f8dd61873b02e5cbbc167d158c14aab2badf680ece3a8b1358"
+    },
+    {
+      "sourceObjectId": "GF01P01_C076",
+      "label": "GF01 A P01 | Enclosure 1-1 infill 1-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "271f930915d17a62c414c0d73ac5c3a0adf685be052d75602f8536bf1f97fb5b"
+    },
+    {
+      "sourceObjectId": "GF01P01_C077",
+      "label": "GF01 A P01 | Enclosure 1-1 infill 1-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "0e5204fa816145ac14e28d043515f96ebbbab5b02df4098feb4fdf2383cc192e"
+    },
+    {
+      "sourceObjectId": "GF01P01_C078",
+      "label": "GF01 A P01 | Enclosure 1-1 infill 1-2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e0a456cb4c527bd8ad85e59ba2c7b82b2bcdc75a98d2dd0d8f11fba2270f0f57"
+    },
+    {
+      "sourceObjectId": "GF01P01_C079",
+      "label": "GF01 A P01 | Enclosure 1-2 post 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "8f0ef56b03974cb8dd6649c8df54279aa2fd5b1d7c7bb91cfa46c781893aaa3c"
+    },
+    {
+      "sourceObjectId": "GF01P01_C080",
+      "label": "GF01 A P01 | Enclosure 1-2 post 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "bbd37ec1857b3a806dc909269edb6ac9a7d497e46961d0733d98101ac1af0f04"
+    },
+    {
+      "sourceObjectId": "GF01P01_C081",
+      "label": "GF01 A P01 | Enclosure 1-2 post 2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "2903ba94806aa15872b8d145e6cbd029326b43b93a4ad7d2a66617b5dcc51330"
+    },
+    {
+      "sourceObjectId": "GF01P01_C082",
+      "label": "GF01 A P01 | Enclosure 1-2 rail 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6b787e0bcc37cbf9c7adfc98a245672fc2637934325d9674febeaec812b8804e"
+    },
+    {
+      "sourceObjectId": "GF01P01_C083",
+      "label": "GF01 A P01 | Enclosure 1-2 rail 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e7fe4b76d1bec0a3cc18962fdcf86a97aa5f36daaef81676127424cc10572afb"
+    },
+    {
+      "sourceObjectId": "GF01P01_C084",
+      "label": "GF01 A P01 | Enclosure 1-2 rail 2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "68d1bb99b446c22173ca2276e059868b4902d9e06b802307f61608465be293db"
+    },
+    {
+      "sourceObjectId": "GF01P01_C085",
+      "label": "GF01 A P01 | Enclosure 1-2 rail 3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "ed371aeaf2eaa3a4e8a1bccd97d781a7d9e39cdd0b1b1206a300a738669cd23d"
+    },
+    {
+      "sourceObjectId": "GF01P01_C086",
+      "label": "GF01 A P01 | Enclosure 1-2 infill 0-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b8bdc6f8f01250af225ea6ff81e6095a3780cf799f1663502a990d3e1d06de03"
+    },
+    {
+      "sourceObjectId": "GF01P01_C087",
+      "label": "GF01 A P01 | Enclosure 1-2 infill 0-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "551cffa50eca81ae6ef454f7f59a11e251804b826ea14beeeb205f97c614b0b4"
+    },
+    {
+      "sourceObjectId": "GF01P01_C088",
+      "label": "GF01 A P01 | Enclosure 1-2 infill 0-2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "945758e14f5ef08bfeac1a2b62def8f37df631d308ab6eedaed21222923c465e"
+    },
+    {
+      "sourceObjectId": "GF01P01_C089",
+      "label": "GF01 A P01 | Enclosure 1-2 infill 1-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "1de2a7878c42c6b7f5a3726918acc60bc3c77f85c0892d95aa50a5a0daacb350"
+    },
+    {
+      "sourceObjectId": "GF01P01_C090",
+      "label": "GF01 A P01 | Enclosure 1-2 infill 1-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "3660fc11b9c455274844e17002d8532acf4068b2ef30984fa0e0464a32a7ea26"
+    },
+    {
+      "sourceObjectId": "GF01P01_C091",
+      "label": "GF01 A P01 | Enclosure 1-2 infill 1-2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "19f0c07b45e62386312c52c7a33f42379513724293aa1e327da23f7e555a552f"
+    },
+    {
+      "sourceObjectId": "GF01P01_C092",
+      "label": "GF01 A P01 | Enclosure 1-3 post 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "4454b06496c4c6d418233b7da5312fdba84bb059c8f1fadd359f325c082cd72f"
+    },
+    {
+      "sourceObjectId": "GF01P01_C093",
+      "label": "GF01 A P01 | Enclosure 1-3 post 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "aec586b1ae04f31e05e299f31d9df74ce9a0d87feddd868e1c67e1699b3672c1"
+    },
+    {
+      "sourceObjectId": "GF01P01_C094",
+      "label": "GF01 A P01 | Enclosure 1-3 post 2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "2e95be00c39cbe3f7259cd044d9006bbbaa34d04a88cd4a6c26518b25a5728f2"
+    },
+    {
+      "sourceObjectId": "GF01P01_C095",
+      "label": "GF01 A P01 | Enclosure 1-3 post 3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "8206c9fce0e8dd0929e6976572416271c79c080e87c517aba2b75f80822ed809"
+    },
+    {
+      "sourceObjectId": "GF01P01_C096",
+      "label": "GF01 A P01 | Enclosure 1-3 post 4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c39bcf9e9cd666e2e459a8fe686482632620f6145a38fb6c9000aa80e8db0573"
+    },
+    {
+      "sourceObjectId": "GF01P01_C097",
+      "label": "GF01 A P01 | Enclosure 1-3 rail 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "2b25989a176e0dd1d1c07de613b6efbd83cbc759eca7f19ae000acb4bfe09f1f"
+    },
+    {
+      "sourceObjectId": "GF01P01_C098",
+      "label": "GF01 A P01 | Enclosure 1-3 rail 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c5c918692f6db6deeaff759b258b80c7c041696af7a5d1168cb8d42fbb195d81"
+    },
+    {
+      "sourceObjectId": "GF01P01_C099",
+      "label": "GF01 A P01 | Enclosure 1-3 rail 2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "fb83ff605eaac33a3db8d137f6ca027f8ce9aa20bad71448a81ae1329aa0fa38"
+    },
+    {
+      "sourceObjectId": "GF01P01_C100",
+      "label": "GF01 A P01 | Enclosure 1-3 rail 3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "2e1c1b3943cc2274d8704cf59a195a85b77ad5cbe79d7ec0f72f68dfe97870f7"
+    },
+    {
+      "sourceObjectId": "GF01P01_C101",
+      "label": "GF01 A P01 | Enclosure 1-3 infill 0-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "4c4a383c2233037a90d77d87da05bf7ce92cdb5aaf5f679f4206d6b760c290a0"
+    },
+    {
+      "sourceObjectId": "GF01P01_C102",
+      "label": "GF01 A P01 | Enclosure 1-3 infill 0-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "5116e7448a2c101f96d5bae06f190fe84bd3be31cafdb440becdf0818f4163f7"
+    },
+    {
+      "sourceObjectId": "GF01P01_C103",
+      "label": "GF01 A P01 | Enclosure 1-3 infill 0-2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "dde05f1b0d0eb86289541974e5762dd8ce011b2f2e4bb539be48cae179323021"
+    },
+    {
+      "sourceObjectId": "GF01P01_C104",
+      "label": "GF01 A P01 | Enclosure 1-3 infill 1-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b9e8a9f2dc8dd44cbae0f8b096fe5dff2a49cc40e0d31f3736f526f941bca566"
+    },
+    {
+      "sourceObjectId": "GF01P01_C105",
+      "label": "GF01 A P01 | Enclosure 1-3 infill 1-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "abb75cee7fcb24c0adcf4bf3e66d62e870dff42a443d031e0071867043cf4e0c"
+    },
+    {
+      "sourceObjectId": "GF01P01_C106",
+      "label": "GF01 A P01 | Enclosure 1-3 infill 1-2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e4ff89efe67e08f07540ccc706e77fd210011bdb3d54c2a3b7d3489ab9bcdb03"
+    },
+    {
+      "sourceObjectId": "GF01P01_C107",
+      "label": "GF01 A P01 | Enclosure 1-3 infill 2-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "584d5a247cf20ad989ec6b014538861d31eb63562726173b9cadaa8bd7dd5d50"
+    },
+    {
+      "sourceObjectId": "GF01P01_C108",
+      "label": "GF01 A P01 | Enclosure 1-3 infill 2-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "f8e37b50d528d12a9a5369ba09a74e15686963826d13da281da060f603f0c3a7"
+    },
+    {
+      "sourceObjectId": "GF01P01_C109",
+      "label": "GF01 A P01 | Enclosure 1-3 infill 2-2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "d0146ff970e4818b3a72e055204a8800234ef930bcb98f98cad5f440e616c8cc"
+    },
+    {
+      "sourceObjectId": "GF01P01_C110",
+      "label": "GF01 A P01 | Enclosure 1-3 infill 3-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "f4cfef3996c4c1c11ede45875f0f504fe2ce35c94ba3d2c300dbb127845a8c89"
+    },
+    {
+      "sourceObjectId": "GF01P01_C111",
+      "label": "GF01 A P01 | Enclosure 1-3 infill 3-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "433fe05585ea59b8ba63beb271407a934e344bf92ae9916d549eec2faae0ecf1"
+    },
+    {
+      "sourceObjectId": "GF01P01_C112",
+      "label": "GF01 A P01 | Enclosure 1-3 infill 3-2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "062b75ef0a4719cc77fbe5e63a7683404bbf2f83cc91dccfc2eca25037d40f94"
+    },
+    {
+      "sourceObjectId": "GF01P01_C113",
+      "label": "GF01 A P01 | Door hinge stile",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "69b06a045863a180b188dcd562fe561b8bdf7c41f0b0ac5aace5e6e523c4da1d"
+    },
+    {
+      "sourceObjectId": "GF01P01_C114",
+      "label": "GF01 A P01 | Door latch stile",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a50e08786ac0ec8d1f3da80ecf63743425cfc556bce5fa881cc3ab132652798d"
+    },
+    {
+      "sourceObjectId": "GF01P01_C115",
+      "label": "GF01 A P01 | Door rail 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "645cb21fe7fc2a08415684df12519551e319f1aa87b6491e7c9436636e9f8d4a"
+    },
+    {
+      "sourceObjectId": "GF01P01_C116",
+      "label": "GF01 A P01 | Door rail 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "ef90d60d86acea4d4ee4f7693aab56cc0ce1ee9bbd738a7b94df799210b74c16"
+    },
+    {
+      "sourceObjectId": "GF01P01_C117",
+      "label": "GF01 A P01 | Door rail 2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a2c238c1e4dba2316dc688c1210b6fbf341a9ddf0b0cfba876c400ee163b8271"
+    },
+    {
+      "sourceObjectId": "GF01P01_C118",
+      "label": "GF01 A P01 | Door infill 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "2eea05e419b712bd6d75053e57cfbf7dcf445d10fb57c5943f74600ed2326b8f"
+    },
+    {
+      "sourceObjectId": "GF01P01_C119",
+      "label": "GF01 A P01 | Door infill 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "1f733582328321e7d82cc6a8b3864bd4d8be02a5ae8dd7492f121d8b96a03b87"
+    },
+    {
+      "sourceObjectId": "GF01P01_C120",
+      "label": "GF01 A P01 | Door handle clearance proxy",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6a3726d58d10327fdaa81530b97370c6edb340cc5509ae4a917de38d858064a5"
+    },
+    {
+      "sourceObjectId": "GF01P01_C121",
+      "label": "GF01 A P01 | Door head",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "0fff319d2694b2d01cf9ee8d6a0e97cc4742446b673670e3de2b23862e7e1aaf"
+    },
+    {
+      "sourceObjectId": "GF01P01_C122",
+      "label": "GF01 A P01 | Door transom",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "4135755c78b6a4f40d3b38d99edea5161e814c0b4d75e6e9014d7a84d0837487"
+    },
+    {
+      "sourceObjectId": "GF01P01_C123",
+      "label": "GF01 A P01 | Door top rail",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e30d379638a26e1d021bb1436380ee0898c7066d49e62d45724a5e3f17a7fd7d"
+    },
+    {
+      "sourceObjectId": "GF01P01_C124",
+      "label": "GF01 A P01 | GF01-T01 | T1_ApronX0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6b075e30849ef0a6fb21d8d04c551db407c03a73aaf50944c8a64b0f83b72e5e"
+    },
+    {
+      "sourceObjectId": "GF01P01_C125",
+      "label": "GF01 A P01 | GF01-T01 | T1_ApronX1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "dd8f4f90b6fe8929db6d247b40029f553b9d0d48c3b29c74a2a35240f2495b4f"
+    },
+    {
+      "sourceObjectId": "GF01P01_C126",
+      "label": "GF01 A P01 | GF01-T01 | T1_ApronY0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "5d86a7790572b93c1adf13964f3138f4ea70fd140446947ff2edd5d8490ba72b"
+    },
+    {
+      "sourceObjectId": "GF01P01_C127",
+      "label": "GF01 A P01 | GF01-T01 | T1_ApronY1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "2e6f7d513f9f5de789585a3aafbf4698eeb2ce357c880e7b0a21d3539a094c72"
+    },
+    {
+      "sourceObjectId": "GF01P01_C128",
+      "label": "GF01 A P01 | GF01-T01 | T1_Leg00",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "0979cf70d48ae056f311e5f50a067eba5e2cb3adc36c9854f31e495faaa44e1c"
+    },
+    {
+      "sourceObjectId": "GF01P01_C129",
+      "label": "GF01 A P01 | GF01-T01 | T1_Leg01",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e4401030526492872588a7deccce5979f73e911fc8b75e84808041c328ca8de4"
+    },
+    {
+      "sourceObjectId": "GF01P01_C130",
+      "label": "GF01 A P01 | GF01-T01 | T1_Leg10",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "1cc5d6eab52dd86ed0e83f51eec5bdcf45395e0605bdd50e102063f31b8b551a"
+    },
+    {
+      "sourceObjectId": "GF01P01_C131",
+      "label": "GF01 A P01 | GF01-T01 | T1_Leg11",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "0b346bd6fe625a7b3faa4b3c26500f3456d5153e37f6d5e1aaa939112ab3f821"
+    },
+    {
+      "sourceObjectId": "GF01P01_C132",
+      "label": "GF01 A P01 | GF01-T01 | T1_Top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "17d56d002521cd089a68cb712a91a759bc2ada8c18bb33d259cbbbddccaf3b0e"
+    },
+    {
+      "sourceObjectId": "GF01P01_C133",
+      "label": "GF01 A P01 | GF01-C01 | PROPOSED_T1L_chair_placeholder",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 6,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "8490221d171564a278b73c127a73883706eab767fbdca5b8ef8c6e61de2b4a74"
+    },
+    {
+      "sourceObjectId": "GF01P01_C134",
+      "label": "GF01 A P01 | GF01-T02 | T1_ApronX0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "093a036abdce35fbb2bfba8babbe0f0535d20d00fd71b5a9a5f12b27096fe6b6"
+    },
+    {
+      "sourceObjectId": "GF01P01_C135",
+      "label": "GF01 A P01 | GF01-T02 | T1_ApronX1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "acbb7695580c6bac0a6cda24da982573b61265c41e7fd42e429e7375768ddf93"
+    },
+    {
+      "sourceObjectId": "GF01P01_C136",
+      "label": "GF01 A P01 | GF01-T02 | T1_ApronY0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e36548566526475cb06e16a8e1d22b44ced2ed3475899e3e9e04cdb45ffdcd2e"
+    },
+    {
+      "sourceObjectId": "GF01P01_C137",
+      "label": "GF01 A P01 | GF01-T02 | T1_ApronY1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "7023ef35176e14d2a152e0d720dbcc933d170e3210bc1730c5f2c8d9322d0924"
+    },
+    {
+      "sourceObjectId": "GF01P01_C138",
+      "label": "GF01 A P01 | GF01-T02 | T1_Leg00",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "58a67f4007382af2545f6ce928e48471a39cdf05c4249b00fc8e0a0563b7edc1"
+    },
+    {
+      "sourceObjectId": "GF01P01_C139",
+      "label": "GF01 A P01 | GF01-T02 | T1_Leg01",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "7a0d1a3d125dd63e098b0db5de31f1d1ad27a6143f595140bb5a5357685887cf"
+    },
+    {
+      "sourceObjectId": "GF01P01_C140",
+      "label": "GF01 A P01 | GF01-T02 | T1_Leg10",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "f6afef8054251c3f734095c4633a215d76c3ee6dce9ecf074c601b18460dd959"
+    },
+    {
+      "sourceObjectId": "GF01P01_C141",
+      "label": "GF01 A P01 | GF01-T02 | T1_Leg11",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "629b7afa0a67326625f8a4018f1463ea7dab1fb98cb4a219386bfcfaf52c0554"
+    },
+    {
+      "sourceObjectId": "GF01P01_C142",
+      "label": "GF01 A P01 | GF01-T02 | T1_Top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "efbedbaae206fa9c750d904b36c5b59fca9781a56d84587e30c7100bdaeee198"
+    },
+    {
+      "sourceObjectId": "GF01P01_C143",
+      "label": "GF01 A P01 | GF01-C02 | PROPOSED_T1L_chair_placeholder",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 6,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "3dd4bd171e729a4511e1beb8d4076f670b251d9c90724272f8a2d998ff8ef412"
+    },
+    {
+      "sourceObjectId": "GF01P01_C144",
+      "label": "GF01 A P01 | GF01-T03 | T1_ApronX0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "45a03253cb7626e38171cad93520b11aec9b7b887dbfbb41c73666c89d18c5d2"
+    },
+    {
+      "sourceObjectId": "GF01P01_C145",
+      "label": "GF01 A P01 | GF01-T03 | T1_ApronX1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "63fbe80b17d1a1930b7f75593b3437adffe2f725040917441bbec4574ac535df"
+    },
+    {
+      "sourceObjectId": "GF01P01_C146",
+      "label": "GF01 A P01 | GF01-T03 | T1_ApronY0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e44df8dd2b70f488f15a4d3a9b351e1335c0670facab30697af7ec29251e9675"
+    },
+    {
+      "sourceObjectId": "GF01P01_C147",
+      "label": "GF01 A P01 | GF01-T03 | T1_ApronY1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "fa973eabfa41a32b853a09624cf8c12926b024c3c444aaf8651270692fc10c12"
+    },
+    {
+      "sourceObjectId": "GF01P01_C148",
+      "label": "GF01 A P01 | GF01-T03 | T1_Leg00",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "d0e82bf48d87b1779127b03a1df7b8c21cfe3fdf32e2d53ab9533bddd59c4a19"
+    },
+    {
+      "sourceObjectId": "GF01P01_C149",
+      "label": "GF01 A P01 | GF01-T03 | T1_Leg01",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "cf1b175a0c0b03a1c8b7a35231d5c9e1274d969c6882538222bef67675bb4667"
+    },
+    {
+      "sourceObjectId": "GF01P01_C150",
+      "label": "GF01 A P01 | GF01-T03 | T1_Leg10",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "37a964e9df3663376c66e60d5c4396c71396053d05cff429737c6442d9f2fa93"
+    },
+    {
+      "sourceObjectId": "GF01P01_C151",
+      "label": "GF01 A P01 | GF01-T03 | T1_Leg11",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "1210389e32d43b11c8811abf100ff46a74dc67384c383de980cea0d8f21b1362"
+    },
+    {
+      "sourceObjectId": "GF01P01_C152",
+      "label": "GF01 A P01 | GF01-T03 | T1_Top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "1b21c609c122b03ed56935d6dbceda87b4cd35a0a12423bdbd2ebca7ca43fd74"
+    },
+    {
+      "sourceObjectId": "GF01P01_C153",
+      "label": "GF01 A P01 | GF01-C03 | PROPOSED_T1L_chair_placeholder",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 6,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "db70c7b6d5819a3f81ece5165abfac367d3355c2a53256c7f9e2751c7131c7c5"
+    },
+    {
+      "sourceObjectId": "GF01P01_C154",
+      "label": "GF01 A P01 | GF01-T04 | T1_ApronX0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "1f04ecf5fa30e0f4bd3adee230be9709a19d8c0f390ee706670f4b5a2e43b687"
+    },
+    {
+      "sourceObjectId": "GF01P01_C155",
+      "label": "GF01 A P01 | GF01-T04 | T1_ApronX1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "3f64c2d88a5c020897aa7602ee863a50d9d288e9bb8addd3021166e5d9919aa3"
+    },
+    {
+      "sourceObjectId": "GF01P01_C156",
+      "label": "GF01 A P01 | GF01-T04 | T1_ApronY0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "62ae308505a3155584ae8e163975a2ff2dfef44b4f7f99a713d288f6e35ba9e1"
+    },
+    {
+      "sourceObjectId": "GF01P01_C157",
+      "label": "GF01 A P01 | GF01-T04 | T1_ApronY1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "fc061aa0915b47de6a16aebefa09b2eb90b7816729a9f5846948eb18f7d2a878"
+    },
+    {
+      "sourceObjectId": "GF01P01_C158",
+      "label": "GF01 A P01 | GF01-T04 | T1_Leg00",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "7d3769657a631a9316ec82246c4947e038574cb3390971908137c4801112df7d"
+    },
+    {
+      "sourceObjectId": "GF01P01_C159",
+      "label": "GF01 A P01 | GF01-T04 | T1_Leg01",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6a6d90e0e21454bec0d48a160144c2f054f42208c7eb96c0d29dd8b043fefd82"
+    },
+    {
+      "sourceObjectId": "GF01P01_C160",
+      "label": "GF01 A P01 | GF01-T04 | T1_Leg10",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "3f43719259de1b2349acf7ddc09264f8395d6041dfa711a0595814e8abea28ad"
+    },
+    {
+      "sourceObjectId": "GF01P01_C161",
+      "label": "GF01 A P01 | GF01-T04 | T1_Leg11",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "13ff4731f027569d6841c34f173eb966d3e73d372e21b084a048e0db3bb237a6"
+    },
+    {
+      "sourceObjectId": "GF01P01_C162",
+      "label": "GF01 A P01 | GF01-T04 | T1_Top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "2dec537eb250df00a273b872b1a7bf9e5a54fbee0ad99db04dbabe7f25112186"
+    },
+    {
+      "sourceObjectId": "GF01P01_C163",
+      "label": "GF01 A P01 | GF01-C04 | PROPOSED_T1L_chair_placeholder",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 6,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "555616d38feb9a4f51285fbe7c756b12aef16724eb1b430e4dd189589a7f31a7"
+    },
+    {
+      "sourceObjectId": "GF01P01_Context001",
+      "label": "GF-01 | floor",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact saved Blender architecture context; includes open/cropped reference faces without inventing caps or solid volume",
+      "worldShapeSignatureSha256": "0793cd3d6af3138470b4a19cd9cf6aa82932416045b55616055bceaa06a2d775"
+    },
+    {
+      "sourceObjectId": "GF01P01_Context002",
+      "label": "GF01 A P01 | Existing crop | Ground Floor - Planning Base 08 | joined wall display",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Exact saved Blender architecture context; includes open/cropped reference faces without inventing caps or solid volume",
+      "worldShapeSignatureSha256": "bbe52b794ee8da806ab089b636e46e7408505e6e8f207140a9266483466e8965"
+    },
+    {
+      "sourceObjectId": "GF01P01_Context003",
+      "label": "GF-W06 | window glass 000",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact saved Blender architecture context; includes open/cropped reference faces without inventing caps or solid volume",
+      "worldShapeSignatureSha256": "3b68eacb0ca223db90a1d999e597e0109ec3ec9d3609c33276faeb491a048ea5"
+    },
+    {
+      "sourceObjectId": "GF01P01_Context004",
+      "label": "GF-W07 | window glass 000",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact saved Blender architecture context; includes open/cropped reference faces without inventing caps or solid volume",
+      "worldShapeSignatureSha256": "387ae6c2b4ba4343b84294e25e10c6a57819c3d3f58dc285536cc20e7c883ca9"
+    },
+    {
+      "sourceObjectId": "GF01P01_Context005",
+      "label": "GF-01-GAP1 | door threshold 000",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact saved Blender architecture context; includes open/cropped reference faces without inventing caps or solid volume",
+      "worldShapeSignatureSha256": "cfcb1dd1824cad8d773a34f1c0f40c2d725b691ce6cb639c892555f88ed051fb"
+    },
+    {
+      "sourceObjectId": "GF01P01_Context006",
+      "label": "GF-D07 | door threshold 000",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact saved Blender architecture context; includes open/cropped reference faces without inventing caps or solid volume",
+      "worldShapeSignatureSha256": "a8f508121d70a07b581f345dbe63787a90e269869904ee5ff451a555690f1655"
+    },
+    {
+      "sourceObjectId": "GF01P01_Context007",
+      "label": "GF-D06 | door threshold 000",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Exact saved Blender architecture context; includes open/cropped reference faces without inventing caps or solid volume",
+      "worldShapeSignatureSha256": "3a94b50af66e294235e4636a2f94a8d89c2da0b897cae11eb0bef779b0550e3a"
+    }
+  ],
+  "includedInRelease": "R03",
+  "retainedFrom": {
+    "revision": "R02",
+    "releaseSha256": "224342c1a9f38354895693821a91a08820d31d62016e6f3043ec85572ae03cf3",
+    "roomManifestSha256": "7d54d5337a8eefa2192e9310c4ade86ab59bba7c4824155143b33ffd529d7a09",
+    "files": [
+      {
+        "filename": "GF-01-README.md",
+        "bytes": 2334,
+        "sha256": "8ff5a218d859543ce90ad91a08d9e5c077a3d0eab4a06d1ed688920bc4deea11"
+      },
+      {
+        "filename": "GF-01-provenance.json",
+        "bytes": 72500,
+        "sha256": "8ae9b3380fea04adf36ee8592b6afa57a6df2b926d68e87763841db960124126"
+      },
+      {
+        "filename": "GF-01.FCStd",
+        "bytes": 2373983,
+        "sha256": "7543833010231849af19a7fc7fb83a256a573c4c17389700d8c324992fc40fd1"
+      },
+      {
+        "filename": "GF-01.png",
+        "bytes": 53778,
+        "sha256": "c5b52cbd67a292e64744f082daa5935aefc85c3116b8bfc52e51d73ff176aebc"
+      },
+      {
+        "filename": "GF-01.step",
+        "bytes": 11186701,
+        "sha256": "98dc78538eb9ab71f473233734aa37bfd7f84926a53dc3663c22a278cf2d57a3"
+      },
+      {
+        "filename": "GF-01.svg",
+        "bytes": 593431,
+        "sha256": "4da6a7746b10469862708f1d215b2bbe87f8045b2577eee39085dd04749eb822"
+      }
+    ]
+  }
+}

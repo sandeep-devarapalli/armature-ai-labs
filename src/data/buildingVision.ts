@@ -56,7 +56,7 @@ export const buildingVisionItems: BuildingVisionItem[] = [
     modelImage: {
       src: "/building-vision/model-aligned-r01/gf10-layout.png",
       alt: "R01 Blender cutaway showing nine square table modules in three banks, perimeter workbar seating and the GF09 presentation area",
-      caption: "Current GF10/GF09 model cutaway; square tables replace the earlier round-table concept.",
+      caption: "R01 GF10/GF09 cutaway; this retained arrangement uses square tables instead of the earlier round-table concept.",
       width: 2100, height: 1550
     },
     sequence: "02",
@@ -78,7 +78,7 @@ export const buildingVisionItems: BuildingVisionItem[] = [
     modelImage: {
       src: "/building-vision/model-aligned-r01/gf10-workbar.png",
       alt: "R01 Blender workbar cutaway showing the straight run, limited curved section and selected counter and square-table seating",
-      caption: "Nine square modules joined in three banks; current workbar and chair positions are unchanged.",
+      caption: "R01 view of nine square modules joined in three banks; the workbar and chair arrangement is retained.",
       width: 1200, height: 1000
     },
     sequence: "03",
@@ -132,7 +132,7 @@ export const buildingVisionItems: BuildingVisionItem[] = [
     modelImage: {
       src: "/building-vision/model-aligned-r01/gf09-presentation.png",
       alt: "R01 Blender cutaway of four individual GF09 lounge chairs, coffee table, lectern and AV equipment in front of the selected curved stair partition",
-      caption: "Current GF09 model cutaway, including the coordinated 1 ft forward furniture shift.",
+      caption: "R01 GF09 cutaway, including the retained 1 ft forward furniture shift.",
       width: 1200, height: 1000
     },
     sequence: "06",
@@ -170,15 +170,15 @@ export const buildingVisionItems: BuildingVisionItem[] = [
     sequence: "08",
     floor: "Ground floor",
     title: "Ground floor open workspace with attached washroom",
-    proposedUse: "GF01 cabin for three or four people — size and arrangement not selected",
+    proposedUse: "GF01 four-person cabin A — selected P01 layout",
     image: `${imageRoot}/08 - Ground Floor Open Workspace with Attached Washroom.png`,
     imageWidth: 1086,
     imageHeight: 1448,
     alt: "Ground-floor workspace arranged around an eight-seat meeting table while its attached washroom and polished marble floor remain accessible",
     caption: "Open workspace concept",
-    modelNote: "GF01's three- or four-person cabin remains unselected and is not added to issued R01. The eight-seat table shown is an earlier concept, not the current brief. Register retained cupboards and preserve hall, GF03 and GF08 access before choosing a layout.",
-    designIntent: "Compare a three- or four-person cabin only after checking the retained storage and access routes; do not use the pictured eight-seat arrangement as the selected plan.",
-    keyElements: "Cabin size, furniture, enclosure and door remain pending. Retain and polish the existing marble and dark border rather than assuming a replacement finish.",
+    modelNote: "GF01 cabin A is included in R03: four 2 ft 6 in square tables, four chairs, opposed desk pairs, grid-framed glazing and a recessed outward door. The earlier eight-seat concept is superseded. GF03 remains shared; the GF01–GF08 connection is cabin-only, while GF08 retains its separate GF10 door. Occupied-chair, pull-back and door-operation restrictions are not resolved by selection.",
+    designIntent: "Use selected P01 with retained storage already accounted for; do not deduct the cupboard allowance a second time or restore the pictured eight-seat table.",
+    keyElements: "Four tables and chairs, the selected glazed enclosure and recessed door. Retain the existing marble and dark border; final frame material, hardware and installation details remain provisional.",
     preserve: "Existing marble and border pattern, attached washroom, all room doors, windows, cupboards and cabinets, walls, ceiling and service locations."
   },
   {
@@ -202,7 +202,7 @@ export const buildingVisionItems: BuildingVisionItem[] = [
     modelImage: {
       src: "/building-vision/model-aligned-r01/gf08-balcony.png",
       alt: "R01 Blender cutaway of the GF08 balcony with its dark grid enclosure, GF10 timber door, GF01-side steps and selected café seating",
-      caption: "Current GF08 cutaway; the modeled existing GF10 door and approximate bounded steps remain visible.",
+      caption: "R01 GF08 cutaway; the retained GF10 door and approximate bounded steps remain visible.",
       width: 1200, height: 1000
     },
     sequence: "10",
@@ -224,7 +224,7 @@ export const buildingVisionItems: BuildingVisionItem[] = [
     modelImage: {
       src: "/building-vision/model-aligned-r01/gf09-stair.png",
       alt: "R01 Blender view of the curved GF09 A01 dark grid stair partition with a left flat access door and rear wall returns",
-      caption: "Selected GF09 A01 curved partition, not the former straight-front enclosure.",
+      caption: "R01 view of the retained GF09 A01 curved partition, not the older straight-front concept.",
       width: 2100, height: 1550
     },
     sequence: "11",
@@ -261,21 +261,21 @@ export const buildingVisionItems: BuildingVisionItem[] = [
     modelImage: {
       src: "/building-vision/model-aligned-r01/ff04-stair.png",
       alt: "R01 Blender view of the curved FF04 P01 dark grid stair partition with a central flat access door and the stair void retained",
-      caption: "Selected FF04 P01 curved partition with its own central-door arrangement.",
+      caption: "Historical R01 FF04 partition: its central door is superseded by R03's left curved stair slider.",
       width: 2100, height: 1550
     },
     sequence: "13",
     floor: "First floor",
     title: "First floor glass stair partition",
-    proposedUse: "Access-controlled separation at the upper stair landing",
+    proposedUse: "FF04 twin cabins and selected left curved stair access — R03 proposal",
     image: `${imageRoot}/13 - First Floor Glass Stair Partition.png`,
     imageWidth: 1448,
     imageHeight: 1086,
     alt: "First-floor stair landing with a full-height U-shaped glass partition stopping at the stair turn and leaving the adjacent doorway clear",
     caption: "First-floor stair separation concept",
-    designIntent: "Close the stair opening at its true edges without extending the left wall or consuming the route to the adjacent room.",
-    modelNote: "FF04 P01 is the selected curved stair partition with a central flat nominal 3 ft access door. It is not a mirror of GF09 A01 and replaces the expandable earlier U-shaped concept. Keep the separate gallery railing and open void; final hardware, door operation and passage require site checks.",
-    keyElements: "Curved clear glazing and slim framing following selected P01, with a central flat door and the first floor's own wall attachments.",
+    designIntent: "Coordinate the enlarged twin cabins with the selected left stair opening, separate gallery and existing room access.",
+    modelNote: "R03 models the selected FF04 enlargement with two four-table islands and sliding cabin entrances. P03 replaces the right outward door with a left-parking slider. A custom two-leaf curved slider replaces the stair enclosure's former central door, which is now glazed. The R01 render and older U-shaped concept are historical. Occupied island access and hardware engineering still need review; eight modeled positions are not verified capacity or installation approval.",
+    keyElements: "Eight 2 ft 6 in square tables, eight chair proxies, dark grid glazing, sliding cabin entrances and separate-radius curved stair leaves; preserve the gallery and void.",
     preserve: "Original wall proportions, stair turn, white stairs, railings, landing void, windows, services and clear access to the door beside the stair."
   },
   {
@@ -283,15 +283,15 @@ export const buildingVisionItems: BuildingVisionItem[] = [
     sequence: "14",
     floor: "First floor",
     title: "First floor enclosed right balcony — door view",
-    proposedUse: "FF02 electronics and soldering workshop — new cover and fit-out pending",
+    proposedUse: "FF02 electronics workshop — P01 modeled fit-out and cover proposal",
     image: `${imageRoot}/14 - First Floor Enclosed Right Balcony - Door View.png`,
     imageWidth: 1086,
     imageHeight: 1448,
     alt: "Door view of the first-floor right balcony enclosed with glass walls and a glass roof while retaining its curved perimeter",
     caption: "First-floor balcony doorway view",
-    modelNote: "The FF02 workshop and new weatherproof cover are not implemented in issued R01. Its enclosure references do not establish a complete installed enclosure. Roof material, structure, extraction, access and services remain unresolved; the pictured glass roof and AC are not selected specifications.",
+    modelNote: "R03 retains FF02 workshop P01: two square tables, four chairs, a separate 4 ft × 3 ft bench, glazing, outward door and proposed cover. This is a saved model, not installed work. Roof material, structure, extraction, occupied access and services remain unresolved; the earlier pictured glass roof and AC are not specifications.",
     designIntent: "Develop the proposed workshop and cover around the retained balcony contour and adjoining doors, with ventilation and solder-fume extraction reviewed before equipment is chosen.",
-    keyElements: "A provisional custom 4 ft × 3 ft workbench, enclosure and new cover require a separate reviewed revision; no settled HVAC or roof specification.",
+    keyElements: "Two 2 ft 6 in square tables, four chairs, a custom 4 ft × 3 ft workbench and modeled enclosure/cover proposal; no settled HVAC or roof specification.",
     preserve: "Door, wall counters and returns, balcony curve, corners, floor levels, drainage and all existing structural edges."
   },
   {
@@ -299,15 +299,15 @@ export const buildingVisionItems: BuildingVisionItem[] = [
     sequence: "15",
     floor: "First floor",
     title: "First floor enclosed right balcony — curved perimeter view",
-    proposedUse: "FF02 workshop enclosure and new cover — not issued R01 geometry",
+    proposedUse: "FF02 workshop enclosure and new cover — retained R03 proposal",
     image: `${imageRoot}/15 - First Floor Enclosed Right Balcony - Curved Perimeter View.png`,
     imageWidth: 1086,
     imageHeight: 1448,
     alt: "Curved-perimeter view of the first-floor right balcony with segmented curved glass walls, glass roof and coordinated furniture",
     caption: "Curved glass perimeter concept",
-    modelNote: "This earlier lounge image does not show the current FF02 workshop brief. The proposed enclosure follows its own inset glass path, not the entire slab edge; keep the unenclosed balcony tip and access. Workshop furniture and new cover are not issued in R01.",
+    modelNote: "This earlier lounge image does not show FF02 workshop P01 retained in R03. Its revised 9 ft 9 in approximate enclosure run is parallel to the opposite side, with a separate inset glass path and unenclosed balcony tip. Use the current floor model and room CAD, not this picture, for furniture, door and cover positions.",
     designIntent: "Review the separate glass line and new cover without altering the existing straight, stepped and curved balcony perimeter.",
-    keyElements: "Workshop bench, glazing, weather protection and extraction are pending design; do not procure a glass roof or AC from this concept image.",
+    keyElements: "Selected workshop furniture and provisional glazing/cover geometry; extraction and installation design remain pending. Do not procure a glass roof or AC from this concept image.",
     preserve: "The complete balcony contour, both corners, wall turns, door clearances, drainage paths and the visual connection outdoors."
   },
   {
@@ -315,13 +315,13 @@ export const buildingVisionItems: BuildingVisionItem[] = [
     sequence: "16",
     floor: "First floor",
     title: "First floor workspace — window wall and glass door view",
-    proposedUse: "First-floor office development reference — image-to-room registration pending",
+    proposedUse: "Historical first-floor office reference — image-to-room registration pending",
     image: `${imageRoot}/16 - First Floor Workspace - Window Wall and Glass Door View.png`,
     imageWidth: 1086,
     imageHeight: 1448,
     alt: "First-floor workspace with acoustic carpet, desks placed toward the window wall and a solid brown door replaced by a glass access door",
     caption: "Window-wall workspace concept",
-    modelNote: "Do not assign this image a permanent room ID before registration. FF03's two-person and FF06's four-person wall-facing Option B offices are development proposals, not issued R01 furniture. Retained storage and shared access must be resolved before either is issued.",
+    modelNote: "Do not assign this earlier image a permanent room ID before registration. R03 retains FF03 P01's two- and four-person cabins and adds the selected FF04/FF06 twin cabins. FF06's former four-desk proposal is superseded; its cupboard, dresser and mirror remain. Use current native views and room CAD for positions, not this historical concept. Occupied access and services remain unresolved.",
     designIntent: "Create a bright, minimal work room while improving visibility and access through the new glass door.",
     keyElements: "Acoustic carpet, wall-oriented desks, ergonomic chairs, power access, warm task lights and a clear glass access door.",
     preserve: "Windows, room footprint, existing fixed storage, wall lines, ceiling and the original doorway opening."
@@ -331,15 +331,15 @@ export const buildingVisionItems: BuildingVisionItem[] = [
     sequence: "17",
     floor: "First floor",
     title: "First floor workspace — three-desk and dresser view",
-    proposedUse: "FF06 four-person Option B office — dresser and access review hold",
+    proposedUse: "FF06 selected twin cabins — dresser retained, lower cabin has balcony access",
     image: `${imageRoot}/17 - First Floor Workspace - Three-Desk and Dresser View.png`,
     imageWidth: 1086,
     imageHeight: 1448,
     alt: "First-floor room arranged with three work desks, ergonomic chairs, acoustic carpet and its existing dresser retained",
     caption: "Three-desk workspace concept",
-    modelNote: "FF06's current brief is four wall-facing desks, one T01 per person, not the three-desk image. Option B is not issued in R01: the existing dresser and mirror must stay, and their unregistered footprint holds the north desk pair. Confirm cupboard and room/balcony access before release.",
-    designIntent: "Fit the proposed four-person office around the dresser, mirror and cupboards that must remain, without assuming the held desk pair fits.",
-    keyElements: "Four proposed T01 desks and chairs remain development-only; retain the dresser and mirror, and resolve storage and access conflicts before choosing services.",
+    modelNote: "R03 models FF06 revised A: two cabins with eight square tables and eight chairs, an enlarged upper cabin and dedicated lower-cabin balcony access. P03 replaces the outward entrances with inside-parking sliding doors. The dresser and mirror must stay; their approximate dimensions, the cupboard and corrected B02 balcony are retained. This older three-desk picture and the former four-desk proposal are superseded. Upper-chair pull-back, occupied routes and hardware engineering still need review; modeled positions are not verified simultaneous capacity.",
+    designIntent: "Retain the accepted dresser/mirror approximation and cupboard around the selected cabins, keeping lower-cabin balcony access distinct from the shared west route.",
+    keyElements: "Eight full-size square tables, eight chair proxies, two glazed cabins and inside-parking sliders, retained storage and B02 balcony. Hardware, occupied routes and services still require review.",
     preserve: "Existing dresser, cupboards, windows, doors, washroom access, wall geometry and service locations."
   },
   {
@@ -353,7 +353,7 @@ export const buildingVisionItems: BuildingVisionItem[] = [
     imageHeight: 1448,
     alt: "First-floor office view with minimal work desks and task chairs arranged around the retained built-in cabinets",
     caption: "Cabinet-side workspace concept",
-    modelNote: "FF06 Option B is a four-person office proposal, not issued R01 furniture. The dresser, mirror and long cupboard stay; their accurate footprint and access review are outstanding. Do not remove storage or fill gaps based on this earlier image.",
+    modelNote: "R03 includes FF06's selected twin cabins with P03 sliding entrances and the approximate retained dresser/mirror. The long cupboard and shared west access remain; storage operation and occupied chair routes still need checks. The lower cabin has dedicated access to the corrected B02 balcony. Do not remove storage or change furniture from this earlier image.",
     designIntent: "Let the existing storage remain the fixed element and keep all new work furniture simple and movable.",
     keyElements: "Compact desks, ergonomic chairs, acoustic carpet, low-glare lighting, cable management and uncluttered styling.",
     preserve: "All owner-retained cabinets and cupboards, doors, windows, walls, ceiling, floor levels and service points."
@@ -369,7 +369,7 @@ export const buildingVisionItems: BuildingVisionItem[] = [
     imageHeight: 1448,
     alt: "Entry view of the first-floor workspace through a glass access door, with acoustic carpet and the original storage wall intact",
     caption: "Storage-wall entry concept",
-    modelNote: "Image-to-room registration is pending; do not use this view to assign a room ID or approve a new glass door. FF03's two-person and FF06's four-person Option B offices are not issued in R01, with retained-storage and shared-access decisions outstanding.",
+    modelNote: "Image-to-room registration is pending; do not use this view to assign a room ID or approve a new glass door. R03 retains FF03 P01's two- and four-person cabins and adds selected FF04/FF06 twin cabins. Use current native views and room CAD for doors, storage and access limitations; this concept does not establish a clear occupied route.",
     designIntent: "Make the room feel organised from the entrance while keeping the furniture outside every door swing and access route.",
     keyElements: "Glass access door, quiet carpet, retained storage, warm-white walls and a completely open route along the storage wall.",
     preserve: "Storage wall, fixed cupboards, original doorway size, adjacent doors, windows, washroom access and central circulation."
@@ -385,7 +385,7 @@ export const buildingVisionItems: BuildingVisionItem[] = [
     imageHeight: 1448,
     alt: "First-floor workspace showing retained storage, acoustic carpet, an open central floor and the balcony opening at the left",
     caption: "Workspace-to-balcony concept",
-    modelNote: "Image-to-room registration is pending. FF03's selected two-person Option B direction still needs cupboard, FF02 connection and FF05 access reconciliation before issue; FF06 separately remains on dresser/access hold. Neither office proposal is installed in R01.",
+    modelNote: "Image-to-room registration is pending. FF03's selected P01 cabins preserve the FF02 connection, storage and inward-opening FF05 bathroom door, with constrained occupied-chair and outward-door routes. R03 includes FF06's selected twin cabins and lower-cabin-only balcony access. B02 retains the junction wall and threshold after removing the isolated west strip/kerb/guard; do not infer shared balcony access from this earlier concept.",
     designIntent: "Complete the room sequence by showing the retained storage wall and the unobstructed connection to the balcony before loose furniture is added.",
     keyElements: "Retained full-height storage, acoustic carpet, refreshed warm-white walls, open central floor area and a clearly visible balcony opening.",
     preserve: "All cabinets and cupboards, balcony opening, door position, windows, wall proportions, services and an unobstructed route outdoors."

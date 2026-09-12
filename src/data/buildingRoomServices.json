@@ -1,16 +1,16 @@
 [
   {
-    "id": "GF-01", "floor": "ground", "name": "Private-cabin proposal", "purpose": "Existing cupboard room; proposed three- or four-person private cabin.",
-    "seating": "Three or four people proposed; capacity and arrangement unselected.", "status": "Proposed programme — selection pending", "modelNote": "R01 retains the existing room, not a finalized cabin. Keep cupboard and GF03/GF08/hall access.",
+    "id": "GF-01", "floor": "ground", "name": "Four-person cabin A", "purpose": "Selected opposed-desk cabin with retained storage and shared GF03 access. The GF01–GF08 connection is cabin-only; GF08 also retains its separate GF10 door.",
+    "seating": "Four 2 ft 6 in square tables and four chairs modeled; not certified capacity.", "status": "Selected P01 layout — access limits remain", "modelNote": "R03 retains cabin A glazing, recessed outward door and four desk positions from the checked R02 source. Cupboard allowance is already included; do not deduct it again.",
     "sockets": 8, "socketNote": "Conditional four-person scenario: 4 × 2 individual receptacles. Three-person alternative = 6. New target allowance, not surveyed or selected hardware.",
     "lights": 6, "lightWatts": 56, "lightingBasis": "Hypothetical 2 general × 18 W + 4 integrated task × 5 W; no photometric or product selection.",
     "equipmentWatts": 380, "equipmentBasis": "Hypothetical 4 × (65 W laptop + 30 W monitor). Excludes lighting/HVAC/heating; three-person alternative = 285 W.",
     "ac": "Proposed", "acNote": "Study comfort cooling/ventilation if cabin proceeds; no installed unit, quantity or capacity verified.",
-    "holds": ["Choose three or four people and enclosure path.", "Register retained cupboard; withdrawn 2 ft 2 in reading is not a footprint.", "Retain dependent-room/balcony access and decide shared versus private access."]
+    "holds": ["Approximately 3 ft 1 in between working-chair envelopes drops to about 1 ft 1 in during simultaneous pull-back; not a verified usable passage.", "Door-set moved approximately 1.68 in in the selected model; actual frames, handles and existing-door interaction remain unverified.", "Keep GF03 on the shared approach and the GF01–GF08 connection within the cabin, without changing the separate GF10–GF08 door. Operator retreat overlaps the shared route."]
   },
   {
     "id": "GF-02", "floor": "ground", "name": "Reception and merchandise", "purpose": "Visitor check-in, reception and compact merchandise display.",
-    "seating": "Compact standing staff setup; no verified seated-workstation count.", "status": "Selected layout", "modelNote": "R01 includes reception desk and two display racks. Main entrance remains side C; commons door is side B.",
+    "seating": "Compact standing staff setup; no verified seated-workstation count.", "status": "Selected layout", "modelNote": "R03 retains the reception desk and two display racks from R01. Main entrance remains side C; commons door is side B.",
     "sockets": 8, "socketNote": "Hypothetical 3 staff/device positions + 3 plug-in lamps + 2 spares; target positions, not installed/additional quantities.",
     "lights": 5, "lightWatts": 39, "lightingBasis": "Hypothetical 2 general × 12 W + 3 desk/display lamps × 5 W; not a count of Blender lights.",
     "equipmentWatts": 115, "equipmentBasis": "Hypothetical 65 W laptop + 30 W display + 20 W small check-in device. Excludes lighting/HVAC/heating.",
@@ -46,7 +46,7 @@
   },
   {
     "id": "GF-07", "floor": "ground", "name": "Enclosed upholstered booth", "purpose": "Compact enclosed booth with retained bench and rounded pedestal table.",
-    "seating": "One bench with two cushion sections; not certified two-person capacity.", "status": "Selected layout", "modelNote": "R01 includes the timber/dark-upholstery booth and framed glass enclosure; this is not a T01 table.",
+    "seating": "One bench with two cushion sections; not certified two-person capacity.", "status": "Selected layout", "modelNote": "R03 retains the timber/dark-upholstery booth and framed glass enclosure from R01; this is not a T01 table.",
     "sockets": 4, "socketNote": "Hypothetical 2 possible device connections + 2 spares; no capacity claim.",
     "lights": 2, "lightWatts": 16, "lightingBasis": "Hypothetical 2 shielded fittings × 8 W; light level not verified.",
     "equipmentWatts": 130, "equipmentBasis": "Hypothetical 2 × 65 W laptops; excludes lighting/HVAC/heating and does not establish simultaneous seating capacity.",
@@ -55,7 +55,7 @@
   },
   {
     "id": "GF-08", "floor": "ground", "name": "Balcony café / informal work", "purpose": "Enclosed balcony with café tables and wall bar.",
-    "seating": "Four chairs and two stools modeled; not an approved simultaneous headcount.", "status": "Selected layout", "modelNote": "R01 preserves two round tables, stepped-and-curved perimeter, existing grill, GF01 steps and GF10 door.",
+    "seating": "Four chairs and two stools modeled; not an approved simultaneous headcount.", "status": "Selected layout", "modelNote": "R03 retains R01's two round tables, stepped-and-curved perimeter, existing grill, GF01 steps and separate GF10 door.",
     "sockets": 8, "socketNote": "Hypothetical 6 possible laptop connections + 2 spares; weather exposure and reach require review.",
     "lights": 5, "lightWatts": 42, "lightingBasis": "Hypothetical 4 general × 8 W + 1 integrated bar task × 10 W.",
     "equipmentWatts": 390, "equipmentBasis": "Hypothetical 6 × 65 W laptops; excludes lighting/HVAC/heating and is not a capacity approval.",
@@ -64,7 +64,7 @@
   },
   {
     "id": "GF-09", "floor": "ground", "name": "Lounge and presentation hall", "purpose": "Presentations, informal lounge and protected through-stair access.",
-    "seating": "Four separate lounge chairs modeled.", "status": "Selected layout", "modelNote": "R01 retains the 1 ft forward furniture/AV shift and selected A stair enclosure with left flat door.",
+    "seating": "Four separate lounge chairs modeled.", "status": "Selected layout", "modelNote": "R03 retains R01's 1 ft forward furniture/AV shift and selected A stair enclosure with left flat door.",
     "sockets": 10, "socketNote": "Hypothetical laptop, projector, 2 powered speakers, AV controller, possible screen motor, 2 charging positions + 2 spares. Equipment and motor need unselected.",
     "lights": 8, "lightWatts": 96, "lightingBasis": "Hypothetical 6 adjustable heads × 10 W + 2 shielded general × 18 W; separate AV/glare controls to develop.",
     "equipmentWatts": 805, "equipmentBasis": "Hypothetical 65 W laptop + 350 W projector + 2 × 100 W powered-speaker input + 60 W AV control + 2 × 65 W charging. Screen motor unknown; excludes lighting/HVAC/heating.",
@@ -90,48 +90,48 @@
     "holds": ["Verify sanitary-use assumption.", "Decide office-only versus shared access through FF06.", "No wet-area electrical specification is supplied."]
   },
   {
-    "id": "FF-02", "floor": "first", "name": "Proposed electronics workshop", "purpose": "One seated electronics/soldering bench in a proposed glazed balcony enclosure with a new weatherproof cover.",
-    "seating": "One bench/operator planning candidate; no extra stations inferred.", "status": "Programme selected — enclosure and services pending", "modelNote": "R01 contains proposal paths/placeholders, not completed enclosure/roof. One 4 ft × 3 ft bench candidate fits with recorded limitations; custom bench is not T01.",
+    "id": "FF-02", "floor": "first", "name": "Electronics workshop proposal", "purpose": "Selected balcony workshop model with two square work tables, a separate electronics bench, glazing and a proposed new cover.",
+    "seating": "Two 2 ft 6 in square tables with four chairs plus a 4 ft × 3 ft bench; simultaneous operation is unverified.", "status": "Modeled P01 proposal — installation unresolved", "modelNote": "R03 retains workshop P01, its outward door and approximate cover. The revised enclosure run is parallel to the opposite side; the balcony tip and FF03/FF04 connections are retained. This is modeled fit-out, not installed work.",
     "sockets": 8, "socketNote": "Hypothetical laptop, soldering station, bench supply, test instrument, local extractor + 3 test/spare positions; ratings/isolation/circuits unselected.",
     "lights": 3, "lightWatts": 46, "lightingBasis": "Hypothetical 2 general × 18 W + 1 integrated bench task × 10 W; no solder-task illumination verification.",
     "equipmentWatts": 325, "equipmentBasis": "Hypothetical 65 W laptop + 150 W bench supply + 50 W test instrument + 60 W extractor. Soldering/rework heating and further tools unquantified; excludes lighting/HVAC/heating. Extractor watts do not establish capture performance.",
     "ac": "Undecided", "acNote": "Decide after weatherproof-cover/solar review; AC does not replace solder-fume source capture or ventilation.",
-    "holds": ["New cover material, height, structure/fixings, drainage and heat control unselected; no glass roof assumed.", "Keep FF03/FF04 and proposed outside-door approaches; outside door width/position/swing remain unresolved.", "Resolve source-capture extraction and safe operating arrangements before soldering.", "Heating/tool nameplates and electrical design remain unquantified."]
+    "holds": ["New cover material, height, structure/fixings, drainage and heat control unselected; no glass roof specification approved.", "Preserve FF03/FF04 approaches, unenclosed balcony tip and the modeled outward-door route; verify actual door hardware and occupied-chair use.", "Resolve source-capture extraction and safe operating arrangements before soldering.", "S01 covers the older bench basket, not the added four-chair programme; review all workstation, heating/tool and electrical allowances."]
   },
   {
-    "id": "FF-03", "floor": "first", "name": "Two-person private office", "purpose": "Selected wall-facing Option B: one 2 ft 6 in square T01 table per person.",
-    "seating": "Two-person programme selected; two desks/chairs in development.", "status": "Selected programme — private enclosure pending", "modelNote": "Not yet in issued R01. Preserve wardrobe/counter alcove, FF02 connection and FF05 access; six-desk prototype is development-only.",
+    "id": "FF-03", "floor": "first", "name": "Two- and four-person cabins", "purpose": "Selected P01 two-person cabin A and four-table row, with a shared cross-route and retained storage/bathroom access.",
+    "seating": "Six modeled tables/chairs across two cabins; not six verified comfortable workstations.", "status": "Selected P01 layout — circulation constrained", "modelNote": "R03 retains both cabins. Shared cross-route is nominally 2 ft; the four-person cabin has a west outward door, and the FF05 bathroom door opens inward. These separate FF03 doors are unchanged by the FF04/FF06 sliding-entrance revision.",
     "sockets": 6, "socketNote": "Hypothetical 2 desks × 2 receptacles + 2 common/spare positions; target quantity, not installed hardware.",
     "lights": 4, "lightWatts": 46, "lightingBasis": "Hypothetical 2 general × 18 W + 2 integrated task × 5 W.",
     "equipmentWatts": 190, "equipmentBasis": "Hypothetical 2 × (65 W laptop + 30 W monitor); excludes lighting/HVAC/heating.",
     "ac": "Proposed", "acNote": "Private-office cooling/ventilation study; no installed unit, quantity or capacity claim.",
-    "holds": ["Private enclosure/joinery and shared-access policy not finalized.", "Retain access to FF05 and FF02; a locked office is not independent public access.", "Verify actual furniture/plug/lighting/air fit before installation."]
+    "holds": ["Approximately 1 ft behind the occupied four-person row leaves no demonstrated pull-back route.", "West outward door obstructs the shared passage; modeled bypass at 90 degrees is only about 9.3 in. Retain this unresolved restriction.", "Preserve storage and FF02/FF05 access. S01 below is the superseded two-desk allowance, not a service design for six desks."]
   },
   {
     "id": "FF-04", "floor": "first", "name": "Stair landing and gallery", "purpose": "Circulation and gallery overlooking the commons, with selected curved stair separation.",
-    "seating": "No work seating proposed; gallery void is not floor.", "status": "Selected partition layout", "modelNote": "R01 retains central outward-door partition, separate gallery railing and open void.",
+    "seating": "Eight 2 ft 6 in square tables and eight chair proxies across two cabins; not verified simultaneous capacity.", "status": "Selected twin cabins — sliding entrances", "modelNote": "R03 includes the enlarged twin cabins. Both cabin entrances slide; the right entrance uses P03's left-parking leaf. The stair enclosure has a separate two-leaf curved slider, with its former central doorway glazed. The gallery railing and open void remain separate.",
     "sockets": 2, "socketNote": "Hypothetical maintenance pair off walking and door routes; location not chosen; temporary appliance load unquantified.",
     "lights": 4, "lightWatts": 40, "lightingBasis": "Hypothetical 4 general/landing fittings × 10 W; emergency lighting is separate and unquantified.",
     "equipmentWatts": 0, "equipmentBasis": "No permanent equipment basket. Maintenance tools/network/emergency systems unknown, not zero demand; lighting/HVAC/heating excluded.",
     "ac": "Not proposed", "acNote": "No dedicated comfort-AC unit in this scenario; shared-volume cooling, airflow and ventilation still need review.",
-    "holds": ["Retain central door sweep and adjoining door/gallery approach restrictions.", "Do not place services in the void or obstruct through-stair continuity.", "No certified emergency/egress-lighting or airflow claim."]
+    "holds": ["Occupied island seating and chair pull-back remain constrained; eight chair proxies are not a capacity approval.", "Sliding hardware, track support, glass and frame specifications need fabricator and site review. Modeled motion is not an operability or egress certificate.", "Do not place services in the void or obstruct through-stair continuity. S01's circulation-only allowance does not serve eight desks.", "No certified emergency/egress-lighting or airflow claim."]
   },
   {
     "id": "FF-05", "floor": "first", "name": "Retained bathroom", "purpose": "Existing source bathroom off FF03, retained schematically.",
-    "seating": "No work seating proposed.", "status": "Retained source bathroom", "modelNote": "Not a detailed fixture survey; access through proposed FF03 office needs policy review.",
+    "seating": "No work seating proposed.", "status": "Retained shared bathroom", "modelNote": "FF03 P01 retains the shared bathroom and inward-opening door. Shared use is confirmed; physical access, door operation and fixtures still require checks, not a detailed bathroom survey.",
     "sockets": 0, "socketNote": "No new general-purpose positions budgeted; existing wet-area fixed services reviewed separately.",
     "lights": 1, "lightWatts": 12, "lightingBasis": "One hypothetical suitable 12 W general fitting; actual product/location unresolved.",
     "equipmentWatts": 0, "equipmentBasis": "No general device basket; extraction and water heating unquantified, not absent. Lighting/HVAC/heating excluded.",
     "ac": "Not proposed", "acNote": "No dedicated comfort-AC unit in this scenario; ventilation design remains separate and unresolved.",
-    "holds": ["Retain FF03 access and decide private versus shared use.", "Do not infer fixture/wet-zone dimensions or electrical installation details.", "Existing ventilation and hot-water provision require survey."]
+    "holds": ["Retain confirmed shared access through the FF03 cross-route; verify physical access and door operation.", "Do not infer fixture/wet-zone dimensions or electrical installation details.", "Existing ventilation and hot-water provision require survey."]
   },
   {
-    "id": "FF-06", "floor": "first", "name": "Four-person private office", "purpose": "Selected wall-facing Option B: one 2 ft 6 in square T01 table per person, keeping existing storage.",
-    "seating": "Four-person programme selected; north desk pair not yet dresser-cleared.", "status": "Review hold — retained dresser", "modelNote": "Low dresser/tall mirror from IMG_2056 and long cupboard stay. Dresser absent from simplified model; pre-dresser six-desk prototype is development-only, not issued office CAD.",
-    "sockets": 10, "socketNote": "Hypothetical 4 desks × 2 receptacles + 2 common/spare positions; locations held until dresser reconciliation.",
+    "id": "FF-06", "floor": "first", "name": "Office and corrected balcony", "purpose": "Retained four-desk development model, approximate dresser/mirror and cupboard, with selected B02 balcony correction.",
+    "seating": "Eight 2 ft 6 in square tables and eight chair proxies across two cabins; not verified simultaneous capacity.", "status": "Selected twin cabins — dedicated lower balcony", "modelNote": "R03 includes the enlarged upper cabin and dedicated lower-cabin balcony access. P03 replaces the two outward entrances with inside-parking sliders: two independent leaves above, one leaf below. The existing-location dresser/mirror approximation, long cupboard, white junction wall, separate gallery guard and corrected B02 balcony are retained without invented steps.",
+    "sockets": 10, "socketNote": "Earlier S01 four-desk basket: 4 × 2 receptacles + 2 common/spare positions. Not recalculated for the later twin-cabin study.",
     "lights": 8, "lightWatts": 92, "lightingBasis": "Hypothetical 4 general × 18 W + 4 integrated task × 5 W; quantity not approved or photometrically verified.",
     "equipmentWatts": 380, "equipmentBasis": "Hypothetical 4 × (65 W laptop + 30 W monitor); excludes lighting/HVAC/heating.",
     "ac": "Proposed", "acNote": "Private-office thermal/ventilation study; no unit position, quantity or capacity selected.",
-    "holds": ["Register retained dresser width/depth/wall offset before north-wall desk positions are finalized.", "Keep long cupboard, FF01/hall and balcony accesses.", "Resolve private/shared access and enclosure details without closing unclassified gaps."]
+    "holds": ["Dresser, mirror and balcony geometry remain approximate; do not treat the accepted approximation as measured.", "Keep long cupboard, FF01/hall access, existing balcony threshold and retained junction wall.", "Upper-corner chair pull-back and occupied working routes remain constrained. Sliding entrances do not establish eight comfortable workstations.", "Hardware, track support and installation tolerances need fabricator and site review. S01's four-desk allowance is superseded, not an electrical design for eight desks."]
   }
 ]

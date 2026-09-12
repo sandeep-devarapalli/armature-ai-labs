@@ -1,0 +1,31 @@
+{
+  "files": [
+    {
+      "file": "first-floor.FCStd",
+      "url": "https://github.com/sandeep-devarapalli/armature-ai-labs/releases/download/building-models-r03/first-floor.FCStd",
+      "bytes": 50080959,
+      "sha256": "337d7e2d4d8d60c83a4e867e43141bec6c3ed46314640b8df89493b8ed2e4a50",
+      "status": "PASS",
+      "method": "download-sha256",
+      "checkedAt": "2026-09-12T01:58:18.566Z"
+    },
+    {
+      "file": "rooms/FF-04.step",
+      "url": "https://github.com/sandeep-devarapalli/armature-ai-labs/releases/download/building-models-r03/FF-04.step",
+      "bytes": 93424637,
+      "sha256": "f15ad68a37e934300ed65bb3e34ab78d04b8ca35d78e6bfe1fbb776624597b97",
+      "status": "PASS",
+      "method": "download-sha256",
+      "checkedAt": "2026-09-12T01:58:28.866Z"
+    },
+    {
+      "file": "rooms/FF-06.step",
+      "url": "https://github.com/sandeep-devarapalli/armature-ai-labs/releases/download/building-models-r03/FF-06.step",
+      "bytes": 33159203,
+      "sha256": "0bc0129d60844c4e131538f1d0088fc92111379c67aee914773c4d45fe2ee5ef",
+      "status": "PASS",
+      "method": "download-sha256",
+      "checkedAt": "2026-09-12T01:58:34.757Z"
+    }
+  ]
+}

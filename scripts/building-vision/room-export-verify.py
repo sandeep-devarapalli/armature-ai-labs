@@ -15,6 +15,9 @@ tree.body=[n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name in [
 exec(compile(tree,'build-functions','exec'))
 build=json.loads((S/'Audit/build.json').read_text());assert build['status']=='PASS'
 frozen=json.loads((S/'Audit/frozen.json').read_text());reports=[]
+selection=json.loads(Path(frozen['selection']['frozen']).read_text())
+assert selection['sourceSha256']==frozen['FF']['sha256'] and selection['revision']=='R03'
+assert [room['id'] for room in build['rooms']]==['FF-04','FF-06']
 for room in build['rooms']:
     rid=room['id'];short=rid.replace('-','');native=room['native'];expected=json.loads((S/'Audit'/(short+' expected.json')).read_text())
     assert sha(native)==room['native_sha256']
@@ -25,6 +28,9 @@ for room in build['rooms']:
         assert len(doc.Objects)==room['native_objects']
         assert doc.RoomReferenceInfo.RoomID==rid
         assert doc.RoomReferenceInfo.SourceSHA256==room['source_sha256']
+        assert doc.RoomReferenceInfo.SelectionSHA256==frozen['selection']['sha256']==room['selection_sha256']
+        allowed=next(r for r in selection['rooms'] if r['id']==rid)
+        assert set(actual)==set(allowed['fitoutObjectIds'])|set(allowed['contextObjectIds']),rid
     finally:App.closeDocument(doc.Name)
     assert sha(native)==room['native_sha256']
     with zipfile.ZipFile(native) as z:

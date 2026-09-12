@@ -5,6 +5,7 @@ import { ModelBoundary } from "../../src/components/ModelBoundary";
 import rooms from "../../src/data/buildingRoomServices.json";
 import { buildingVisionItems } from "../../src/data/buildingVision";
 import imageProvenance from "../../public/building-vision/model-aligned-r01/provenance.json";
+import release from "../../src/data/buildingModelRelease.json";
 
 vi.mock("../../src/components/BuildingModelViewer", () => ({ default: () => <div>Test 3D viewer</div> }));
 afterEach(cleanup);
@@ -36,15 +37,24 @@ describe("coordinated building planning", () => {
   it("loads 3D only on request and switches room CAD with the selected floor", async () => {
     render(<BuildingPlanning />);
     expect(screen.queryByText("Test 3D viewer")).not.toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Full ground floor · FreeCAD" })).toHaveAttribute("href", "/building-models/r01/ground-floor.FCStd");
+    expect(screen.getByRole("link", { name: "Full ground floor · FreeCAD" })).toHaveAttribute("href", release.downloads.groundCad.url);
+    expect(screen.getByRole("link", { name: "Both floors · Blender source" })).toHaveAttribute("href", release.downloads.blender.url);
     fireEvent.click(screen.getByRole("button", { name: "Open interactive 3D" }));
     expect(await screen.findByText("Test 3D viewer")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "First floor model" }));
     expect(screen.queryByText("Test 3D viewer")).not.toBeInTheDocument();
-    expect(screen.getByRole("combobox", { name: "Choose a room" })).toHaveValue("FF-02");
+    expect(screen.getByRole("combobox", { name: "Choose a room" })).toHaveValue("FF-04");
+    expect(screen.getByRole("link", { name: "Full first floor · FreeCAD" })).toHaveAttribute("href", release.downloads.firstCad.url);
+    expect(screen.getByRole("img", { name: "FF-04 selected twin-cabin Blender proposal R03" })).toHaveAttribute("src", `${release.root}/ff04-cabins.png`);
     fireEvent.change(screen.getByRole("combobox"), { target: { value: "FF-06" } });
-    expect(screen.getByRole("link", { name: "FF-06 · FreeCAD extract" })).toHaveAttribute("href", "/building-models/r01/rooms/FF-06.FCStd");
-    expect(screen.getByText(/Review hold — retained dresser/)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "FF-06 · FreeCAD extract" })).toHaveAttribute("href", `${release.root}/rooms/FF-06.FCStd`);
+    expect(screen.getByText(/Selected twin cabins — dedicated lower balcony/)).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: "FF-06 selected twin-cabin Blender proposal R03" })).toHaveAttribute("src", `${release.root}/ff06-cabins.png`);
+    expect(screen.getByRole("heading", { name: "Earlier S01 service estimate · not recalculated for R03" })).toBeInTheDocument();
+    fireEvent.change(screen.getByRole("combobox"), { target: { value: "FF-03" } });
+    expect(screen.getByRole("heading", { name: "Two- and four-person cabins" })).toBeInTheDocument();
+    expect(screen.getByText(/9.3 in/)).not.toBeVisible();
+    expect(screen.getByText(/superseded two-desk allowance/)).not.toBeVisible();
   });
 
   it("isolates a viewer failure from the page", () => {
