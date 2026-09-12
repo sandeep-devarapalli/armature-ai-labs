@@ -78,7 +78,7 @@ Deno.serve(async (request) => {
       "CALSCALE:GREGORIAN",
       "METHOD:PUBLISH",
       "BEGIN:VEVENT",
-      `UID:${booking.id}@armaturelab.org`,
+      `UID:${booking.id}@armatureailabs.com`,
       `DTSTAMP:${icsDate(booking.updated_at)}`,
       `DTSTART:${icsDate(booking.starts_at)}`,
       `DTEND:${icsDate(booking.ends_at)}`,
