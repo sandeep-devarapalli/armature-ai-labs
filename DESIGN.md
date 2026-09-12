@@ -4,11 +4,11 @@
 
 Armature AI Labs should feel like a real lab floor: precise, physical, useful, and quietly ambitious. The design should avoid generic AI startup polish, vague futurism, and decorative marketing gloss. It should make robotics, fabrication, compute, and safety feel inspectable.
 
-The first screen should make the lab identity obvious: the lowercase `armature ai labs` hero wordmark, the commutator mark, HSR Layout, Bengaluru, and the physical lab offer.
+The first screen should make the lab identity obvious: the `Armature AI Labs` hero wordmark (capital A and L, "AI" in caps), the commutator mark, HSR 1490 in HSR Layout, Bengaluru, and the physical lab offer.
 
 ## Brand Hierarchy
 
-- The visible wordmark uses lowercase `armature ai labs`.
+- The visible wordmark uses title case `Armature AI Labs` (renamed from the earlier lowercase styling in September 2026).
 - Formal lab identity: `Armature AI Labs - The Physical AI and Robotics Lab`.
 - Parent plan: `Institute for Physical AI`.
 - Do not collapse the parent institute and lab floor into one vague brand.
@@ -23,7 +23,7 @@ Use the current site as the source of truth.
 - Dark uses near-black workshop surfaces with warm text and keeps saffron, brick, and moss as operational accents.
 - Sepia uses a restrained drafting-paper palette with deep brown ink; it must not become a flat beige wash.
 - Dark/ink feature sections remain darker than the surrounding page in every mode.
-- The mark is the commutator (eight rounded segments, saffron live pair at 3 and 9, ink shaft); geometry is fixed and lives in `brand/armature-lab/`; never rotate it; saffron only on the live pair; all-ink on saffron backgrounds.
+- The mark is the commutator (eight rounded segments, saffron live pair at 3 and 9, ink shaft); geometry is fixed and lives in `brand/armature-ai-labs/`; never rotate it; saffron only on the live pair; all-ink on saffron backgrounds.
 - Prefer grids, measured lines, diagrams, tables, chips, boards, and floor-plan language.
 - Use real lab/equipment/photo assets when available. Until then, reserved photo slots must remain clearly marked as placeholders.
 - Avoid generic gradient hero art, blob backgrounds, glossy SaaS cards, stock-office imagery, or abstract AI smoke.

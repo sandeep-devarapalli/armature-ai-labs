@@ -623,10 +623,10 @@ test("home hero restores the mechanical kernel animation", async ({ page }) => {
     "brand-mark-commutate"
   );
   await expect(page.locator(".brand-mark--animated")).toHaveCount(1);
-  await expect(page.locator(".topbar .brand-lockup")).toHaveAttribute("aria-label", "armature ai labs");
-  await expect(page.locator(".topbar .brand-mark")).toHaveAttribute("aria-label", "armature ai labs mark");
-  await expect(page.locator(".topbar .brand-lockup > span")).toHaveText("armature ai labs");
-  await expect(page.locator(".hero-lockup h1")).toHaveText("armature ai labs");
+  await expect(page.locator(".topbar .brand-lockup")).toHaveAttribute("aria-label", "Armature AI Labs");
+  await expect(page.locator(".topbar .brand-mark")).toHaveAttribute("aria-label", "Armature AI Labs mark");
+  await expect(page.locator(".topbar .brand-lockup > span")).toHaveText("Armature AI Labs");
+  await expect(page.locator(".hero-lockup h1")).toHaveText("Armature AI Labs");
   expect(await page.evaluate(async () => {
     await document.fonts.load('500 21px "Armature Space Grotesk"');
     return document.fonts.check('500 21px "Armature Space Grotesk"');
@@ -1042,10 +1042,10 @@ test("PWA keeps transactional traffic out of Cache Storage", async ({ page, cont
   expect(cachedUrls.some((url) => /\/assets\/index-[^/]+\.js$/.test(url))).toBe(true);
 
   await page.goto("/");
-  await expect(page.getByRole("heading", { name: "armature ai labs", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Armature AI Labs", exact: true })).toBeVisible();
   await context.setOffline(true);
   await page.reload();
-  await expect(page.getByRole("heading", { name: "armature ai labs", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Armature AI Labs", exact: true })).toBeVisible();
 });
 
 test("mobile route families stay contained and avoid iOS form zoom", async ({ page }, testInfo) => {

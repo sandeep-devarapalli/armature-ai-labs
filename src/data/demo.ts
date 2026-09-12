@@ -8,7 +8,7 @@ export const resources: Resource[] = [
     name: "Robot arm cell",
     kind: "robotics",
     zone: "Zone 06",
-    description: "Guarded six-axis arm, controller, safety PLC, light curtains, and calibrated work surface.",
+    description: "Guarded robot arm, controller, safety interlocks, and calibrated work surface.",
     capacity: 2,
     maxGuests: 0,
     durationMinutes: 60,

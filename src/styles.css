@@ -1095,6 +1095,13 @@ h3 {
   color: var(--saffron);
 }
 
+.pillar-band {
+  padding: 34px 0 8px;
+}
+.pillar-band .feature-grid article > svg {
+  color: var(--saffron);
+}
+
 .quote-band {
   padding: 48px 0;
   background: var(--band);

@@ -111,20 +111,21 @@ export function HomePage() {
         <HeroKernelField />
         <div className="wrap home-hero-inner">
           <div className="eyebrow mono">
-            The Physical AI and Robotics Lab · HSR Layout, Bengaluru
+            HSR 1490 · HSR Layout, Bengaluru
           </div>
           <div className="hero-lockup">
             <BrandMark compact animated />
             <div>
-              <h1>armature ai labs</h1>
+              <h1>Armature AI Labs</h1>
               <span className="mono">The physical AI and robotics lab</span>
             </div>
           </div>
           <p className="hero-copy">
-            The armature is the core of every motor: the part that moves. Ours is
-            a 3,500 sq ft lab across two floors, built for the full path from idea
-            to working machine: arms, prototyping, machining, ESD-safe benches, and
-            GPU compute, all bookable by the hour.
+            Armature AI Labs is a maker space in HSR Layout built for people
+            making physical things with AI. Robotics and hardware teams take
+            desks and cabins here, and there&apos;s a shared lab with robot arms,
+            GPUs, and Jetson edge kits down the hall, so you can go from idea to
+            working prototype without buying a lab of your own.
           </p>
           <div className="button-row">
             {memberPlatformAvailable ? (
@@ -171,6 +172,47 @@ export function HomePage() {
           </div>
         </div>
       </header>
+
+      <section className="pillar-band" aria-label="Why Armature AI Labs">
+        <div className="wrap">
+          <div className="feature-grid">
+            <article>
+              <Wrench aria-hidden="true" />
+              <h3>Build where you sit</h3>
+              <p>
+                Book a desk, cabin, or room like any workspace, but here you can
+                prototype, test, validate, debug, and simulate in the same
+                building. The equipment you&apos;d use a few weekends a year
+                (robot arms, GPU compute, Jetson kits, electronics benches) is
+                shared, maintained, and bookable, not something you buy and
+                babysit.
+              </p>
+            </article>
+            <article>
+              <Users aria-hidden="true" />
+              <h3>The room is the network</h3>
+              <p>
+                The people at the next bench are hardware engineers, robotics
+                founders, and physical AI people. When you&apos;re stuck on a
+                driver, a sensor, or a control loop, unblocking is usually a
+                conversation, not a week of forum threads. HSR has a hundred
+                co-working spaces; this is the one where the person next to you
+                has also fought your problem.
+              </p>
+            </article>
+            <article>
+              <CheckCircle2 aria-hidden="true" />
+              <h3>Speed to something real</h3>
+              <p>
+                Everything is arranged so a team gets from idea to working
+                prototype to something they can demo, sell, and scale faster
+                than they would alone in an apartment or a software-only
+                co-working space.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
 
       <Section
         number="01"
@@ -348,8 +390,9 @@ export function HomePage() {
       <div className="quote-band">
         <div className="wrap">
           <p>
-            Most builders will never own a six-axis arm, a machine shop, and
-            dedicated GPU compute. <strong>Here you book them by the hour.</strong>
+            Most builders will never own a robot arm, a rack of GPUs, and a
+            bench full of Jetsons for something they&apos;d use a few weekends a
+            year. <strong>Here, it&apos;s all down the hall, and you book it when you need it.</strong>
           </p>
           <Link to="/join">
             Join the floor <ArrowRight aria-hidden="true" />
