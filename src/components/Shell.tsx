@@ -200,6 +200,7 @@ export function Shell({ children }: PropsWithChildren) {
           <div>
             <BrandMark />
             <p>The Physical AI and Robotics Lab · HSR Layout, Bengaluru</p>
+            <p>1490, 11th Cross, 20th Main, 1st Sector, HSR Layout, Bengaluru – 560034, Karnataka.</p>
           </div>
           <div className="footer-links">
             <a href="mailto:hello@armatureailabs.com">hello@armatureailabs.com</a>

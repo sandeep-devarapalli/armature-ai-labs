@@ -36,13 +36,21 @@ await verify(new URL(`${active.root}/release.json`, base), { bytes: local.length
 const assets = manifest.files.map((file) => ({
   url: new URL(`${active.root}/${file.path}`, base), ...file
 }));
+const retainedManifest = await readFile(resolve(`public${manifest.retainedRelease.url}`));
+if (hash(retainedManifest) !== manifest.retainedRelease.sha256) throw new Error("Retained release manifest drift");
+assets.push({ url: new URL(manifest.retainedRelease.url, base), bytes: retainedManifest.length, sha256: manifest.retainedRelease.sha256 });
+for (const asset of manifest.retainedAssets) {
+  if (asset.sourceRelease !== "R03" || !asset.url.startsWith("/building-models/r03/")) throw new Error("Unexpected retained asset URL");
+  assets.push({ url: new URL(asset.url, base), bytes: asset.bytes, sha256: asset.sha256 });
+}
 for (const entry of Object.values(active.downloads)) {
   if (!entry.url.startsWith("https://")) continue;
   const download = manifest.externalDownloads?.find((file) => file.url === entry.url);
   if (!download) throw new Error(`External download is absent from the release manifest: ${entry.url}`);
 }
 for (const download of manifest.externalDownloads ?? []) {
-  if (!download.url.startsWith("https://github.com/sandeep-devarapalli/armature-ai-labs/releases/download/building-models-r03/")) {
+  const revision = download.sourceRelease === "R03" ? "r03" : active.revision;
+  if (!download.url.startsWith(`https://github.com/sandeep-devarapalli/armature-ai-labs/releases/download/building-models-${revision}/`)) {
     throw new Error("Unexpected external download host or release");
   }
   assets.push({ url: new URL(download.url), bytes: download.bytes, sha256: download.sha256 });
