@@ -11,20 +11,24 @@ const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
 if (manifest.release !== active.label) throw new Error("Active model release and manifest differ");
 
 async function verify(url, expected) {
-  const response = await fetch(url, {
-    signal: AbortSignal.timeout(60_000),
-    headers: { "Cache-Control": "no-cache" }
-  });
-  if (response.status !== 200 || !response.body) throw new Error(`Unavailable: ${url}`);
-  const digest = createHash("sha256");
   let bytes = 0;
-  for await (const chunk of response.body) {
-    bytes += chunk.length;
-    if (bytes > expected.bytes) throw new Error(`Unexpected extra bytes: ${url}`);
-    digest.update(chunk);
-  }
-  if (bytes !== expected.bytes || digest.digest("hex") !== expected.sha256) {
-    throw new Error(`Published file differs from reviewed bytes: ${url}`);
+  try {
+    const response = await fetch(url, {
+      signal: AbortSignal.timeout(60_000),
+      headers: { "Cache-Control": "no-cache" }
+    });
+    if (response.status !== 200 || !response.body) throw new Error(`HTTP ${response.status}`);
+    const digest = createHash("sha256");
+    for await (const chunk of response.body) {
+      bytes += chunk.length;
+      if (bytes > expected.bytes) throw new Error("Unexpected extra bytes");
+      digest.update(chunk);
+    }
+    if (bytes !== expected.bytes || digest.digest("hex") !== expected.sha256) {
+      throw new Error("Published file differs from reviewed bytes");
+    }
+  } catch (error) {
+    throw new Error(`Download verification failed for ${url} (${bytes}/${expected.bytes} bytes): ${error.message}`, { cause: error });
   }
 }
 
