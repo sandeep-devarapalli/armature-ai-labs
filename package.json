@@ -30,7 +30,7 @@
     "@supabase/supabase-js": "^2.57.4",
     "@zxing/browser": "^0.1.5",
     "date-fns": "^4.1.0",
-    "lucide-react": "^0.468.0",
+    "lucide-react": "^1.43.0",
     "maplibre-gl": "6.4.1",
     "qrcode": "^1.5.4",
     "react": "^19.1.1",
