@@ -1,0 +1,3532 @@
+{
+  "id": "FF-06",
+  "purpose": "Stacked twin cabins / dedicated balcony",
+  "floor": "FF",
+  "revision": "R03",
+  "includedInRelease": "R03",
+  "sourceFile": "first-floor.FCStd",
+  "sourceSha256": "337d7e2d4d8d60c83a4e867e43141bec6c3ed46314640b8df89493b8ed2e4a50",
+  "selectionSha256": "e94671f3923c29b42ccbb72ce97c4771fc408418119e7ed78b7a9873588828f4",
+  "files": {
+    "freecad": {
+      "url": "/building-models/r03/rooms/FF-06.FCStd",
+      "filename": "FF-06.FCStd",
+      "bytes": 6158586,
+      "sha256": "e6cf2f12a596d5b3a947514b1650a54f19e246f483554bfa7e8bdad0b6303ce1"
+    },
+    "step": {
+      "url": "https://github.com/sandeep-devarapalli/armature-ai-labs/releases/download/building-models-r03/FF-06.step",
+      "filename": "FF-06.step",
+      "bytes": 33159203,
+      "sha256": "0bc0129d60844c4e131538f1d0088fc92111379c67aee914773c4d45fe2ee5ef"
+    },
+    "preview": {
+      "url": "/building-models/r03/rooms/FF-06.svg",
+      "filename": "FF-06.svg",
+      "bytes": 1912045,
+      "sha256": "f9ba9e1df3157e346b41292b66b2eafb87fac825cd3fa4415d17dad72693d679"
+    },
+    "previewPng": {
+      "url": "/building-models/r03/rooms/FF-06.png",
+      "filename": "FF-06.png",
+      "bytes": 59504,
+      "sha256": "fa8f6dfec3e23c9480ef5dbe1ccf5fa6166c9f8e07a0dfdb4acad1dbc4835e7d"
+    }
+  },
+  "shapeCount": 386,
+  "solidCount": 378,
+  "geometryKind": "mixed source context and 3D fit-out",
+  "verification": {
+    "nativeSaveReopen": "PASS",
+    "exactWorldShapes": 386,
+    "stepReadback": "PASS",
+    "stepChecks": {
+      "valid": true,
+      "solids": true,
+      "bounds": true,
+      "volume": true,
+      "area": true,
+      "summed_edge_length": true
+    }
+  },
+  "notes": [
+    "Selected P03 twin cabins, eight full-size tables and eight chair proxies. Retained source context includes neighbouring openings without creating closure walls.",
+    "Retained cupboard, dresser/mirror and B02 balcony; lower cabin has dedicated balcony access. Occupied-chair and storage-use limitations remain."
+  ],
+  "objects": [
+    {
+      "sourceObjectId": "P03_C0001",
+      "label": "FF04 FF06 P01 | FF06 enclosure 0 post 001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "5dddbab1b55e68644f4870683c1c935cc631aba2e522052db12f491597bb221a"
+    },
+    {
+      "sourceObjectId": "P03_C0002",
+      "label": "FF04 FF06 P01 | FF06 enclosure 0 post 002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "fe0f0853595f86a4fc9679ab15abe9893736be2d89a845bcccb6c95c22a7eb5e"
+    },
+    {
+      "sourceObjectId": "P03_C0003",
+      "label": "FF04 FF06 P01 | FF06 enclosure 0 post 003",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "71c031784a1ada9a76d95f58eb1183b068396ada1e410caa0d942c005caac227"
+    },
+    {
+      "sourceObjectId": "P03_C0004",
+      "label": "FF04 FF06 P01 | FF06 enclosure 0 post 004",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "fdfa35a708d148d052e93d31442ee34614c4a7b1c4c7ba080d897f5a8cfc57b6"
+    },
+    {
+      "sourceObjectId": "P03_C0005",
+      "label": "FF04 FF06 P01 | FF06 enclosure 0 post 005",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "d5b3ed50fadb23e99d1d2f74d4dcb640b0c1eee5d1c173524e403cc69262be53"
+    },
+    {
+      "sourceObjectId": "P03_C0006",
+      "label": "FF04 FF06 P01 | FF06 enclosure 0 post 006",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "9d731cfe59d81e52acd5cc0b20d61f018414ee83cc832184b9f933d6be4d91bf"
+    },
+    {
+      "sourceObjectId": "P03_C0007",
+      "label": "FF04 FF06 P01 | FF06 enclosure 0 post 007",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "4285be5d72191188a98a0f0dd7b55c27581e50fd93f62b107f39bf13cf62bd17"
+    },
+    {
+      "sourceObjectId": "P03_C0008",
+      "label": "FF04 FF06 P01 | FF06 enclosure 0 continuous rail 001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "6c2ab644637c74798a2d7d8dab2dd8093e35c088e1ca3107757ec3edf9c12e28"
+    },
+    {
+      "sourceObjectId": "P03_C0009",
+      "label": "FF04 FF06 P01 | FF06 enclosure 0 continuous rail 002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "05bfc0dfa15a00888efa5a7fa1a5bf50bee3a2b6174d265ad2bd4ef03d537ffe"
+    },
+    {
+      "sourceObjectId": "P03_C0010",
+      "label": "FF04 FF06 P01 | FF06 enclosure 0 continuous rail 003",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "d9e03e8e578d829f2f191889fb8be9bc128ec343e5ed87c476fd704cc462b7b8"
+    },
+    {
+      "sourceObjectId": "P03_C0011",
+      "label": "FF04 FF06 P01 | FF06 enclosure 0 continuous rail 004",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "07f8399883b28ba421dd693966d4f41baac02ed29516064671c2829c61087ac2"
+    },
+    {
+      "sourceObjectId": "P03_C0012",
+      "label": "FF04 FF06 P01 | FF06 enclosure 0 infill 0-001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "4288c9bdfe0fe1ad2ede3cd95e74fbd31e4bfd824bb753453aad97fa5ecba9c3"
+    },
+    {
+      "sourceObjectId": "P03_C0013",
+      "label": "FF04 FF06 P01 | FF06 enclosure 0 infill 0-002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "8c3ad78dca834a27657e0b4d79ad5068ebfcca2c803b1196722e938b2f1a90c7"
+    },
+    {
+      "sourceObjectId": "P03_C0014",
+      "label": "FF04 FF06 P01 | FF06 enclosure 0 infill 0-003",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "fa0b2b3f2ab093681bb74c67deb4cd708671fd7c0ef536528b48713793f1535f"
+    },
+    {
+      "sourceObjectId": "P03_C0015",
+      "label": "FF04 FF06 P01 | FF06 enclosure 0 infill 1-001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "272cb8d9eddd847f91bd9beb72c693757224ec36101cf71bb8ec94604dd5a644"
+    },
+    {
+      "sourceObjectId": "P03_C0016",
+      "label": "FF04 FF06 P01 | FF06 enclosure 0 infill 1-002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "cdbf2e6477f4c2e70a56e405bd9daf75df86d613642376c4cc286aa8b62df85b"
+    },
+    {
+      "sourceObjectId": "P03_C0017",
+      "label": "FF04 FF06 P01 | FF06 enclosure 0 infill 1-003",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "288729470f8b281a280f1da0b3b659e9ab8c87fc0ae401a2520c9250e0db6bc2"
+    },
+    {
+      "sourceObjectId": "P03_C0018",
+      "label": "FF04 FF06 P01 | FF06 enclosure 0 infill 2-001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "28e4db481eb8f1ca9c21becc75599288cba46e053d3f757359307abb5fd28bab"
+    },
+    {
+      "sourceObjectId": "P03_C0019",
+      "label": "FF04 FF06 P01 | FF06 enclosure 0 infill 2-002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "6d1d7ec9248b13e55c2ac96adb72d788c98b562970e0533f7148e5ea49f80a36"
+    },
+    {
+      "sourceObjectId": "P03_C0020",
+      "label": "FF04 FF06 P01 | FF06 enclosure 0 infill 2-003",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "5d9616b5e8d1373f8c32b133965ae4f51a8ca104132b1d886eec33eb82b67337"
+    },
+    {
+      "sourceObjectId": "P03_C0021",
+      "label": "FF04 FF06 P01 | FF06 enclosure 0 infill 3-001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "72408cd15c6287fe5f31e5054bf5274ba141bdb63ac9267bc3e55e6f1d16e627"
+    },
+    {
+      "sourceObjectId": "P03_C0022",
+      "label": "FF04 FF06 P01 | FF06 enclosure 0 infill 3-002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "c29a61f991efde7819816db58f03238c88991f60661ead6380b43535418ae8e4"
+    },
+    {
+      "sourceObjectId": "P03_C0023",
+      "label": "FF04 FF06 P01 | FF06 enclosure 0 infill 3-003",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "15756dd0953c516e3243cc7ab1ddf76a8cbc05a1b68629ef0e424a2b09d2e4e9"
+    },
+    {
+      "sourceObjectId": "P03_C0024",
+      "label": "FF04 FF06 P01 | FF06 enclosure 0 infill 4-001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "bf3a0a35ee082b850cbd58bf7e6da332e8354ac3c69203b7c2d033bebf2afb9f"
+    },
+    {
+      "sourceObjectId": "P03_C0025",
+      "label": "FF04 FF06 P01 | FF06 enclosure 0 infill 4-002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "b0228eb2006dfc2d0873de5b514560b4aebf36c0967a7c16fc2780ec4f556d17"
+    },
+    {
+      "sourceObjectId": "P03_C0026",
+      "label": "FF04 FF06 P01 | FF06 enclosure 0 infill 4-003",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "92f1abf9124ff9d4def684b86dd692e41f242efbc59086d1e7b0dd0cbe38a415"
+    },
+    {
+      "sourceObjectId": "P03_C0027",
+      "label": "FF04 FF06 P01 | FF06 enclosure 0 infill 5-001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "2b059933d515598c1a93344690ec24aa65441730194b1a190ffb6dd18560def6"
+    },
+    {
+      "sourceObjectId": "P03_C0028",
+      "label": "FF04 FF06 P01 | FF06 enclosure 0 infill 5-002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "4f33a998d6b851057d90cecdba731143f14d2e20899da0c1a7d632292a42be8a"
+    },
+    {
+      "sourceObjectId": "P03_C0029",
+      "label": "FF04 FF06 P01 | FF06 enclosure 0 infill 5-003",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "90cdda0203fae49872a2e43d730d098c668debb45270920b730814df1fc771de"
+    },
+    {
+      "sourceObjectId": "P03_C0030",
+      "label": "FF04 FF06 P01 | FF06 enclosure 1 post 001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "14a49c118d8c2aedf3bff84de386610839d59919e082c4f9a2b407c1ff5a9f37"
+    },
+    {
+      "sourceObjectId": "P03_C0031",
+      "label": "FF04 FF06 P01 | FF06 enclosure 1 post 002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "bf86474b3da4fdd540a90afd9f5c125c34693179d5253da06d39cdc5225b461d"
+    },
+    {
+      "sourceObjectId": "P03_C0032",
+      "label": "FF04 FF06 P01 | FF06 enclosure 1 continuous rail 001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "9464c3100cf9fd90b84f9a84374b3c8074f53cd664dadd3cd52b340d320817c4"
+    },
+    {
+      "sourceObjectId": "P03_C0033",
+      "label": "FF04 FF06 P01 | FF06 enclosure 1 continuous rail 002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "3a963b428881d7b7635902ba9675ea875de79d486cca4a80ff4b0148744cf3b4"
+    },
+    {
+      "sourceObjectId": "P03_C0034",
+      "label": "FF04 FF06 P01 | FF06 enclosure 1 continuous rail 003",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "6f3afe3b4fb48bac61b884685ed13d4ccd41ab939d8236b4a6b7e6f6875373a9"
+    },
+    {
+      "sourceObjectId": "P03_C0035",
+      "label": "FF04 FF06 P01 | FF06 enclosure 1 continuous rail 004",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "ffaea066353bf5e694d7fcfea977532517ef42f784cde98226722a4b5d43a46f"
+    },
+    {
+      "sourceObjectId": "P03_C0036",
+      "label": "FF04 FF06 P01 | FF06 enclosure 1 infill 0-001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "85856b87b4001db4c42d3fdd81f0f8c74a5c6227c9464702626ea8ba00162b7e"
+    },
+    {
+      "sourceObjectId": "P03_C0037",
+      "label": "FF04 FF06 P01 | FF06 enclosure 1 infill 0-002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "fdaacb90f7c8080a60cfff4c0f0da395e5c9d909e4be446ed6e406d2e54bc4da"
+    },
+    {
+      "sourceObjectId": "P03_C0038",
+      "label": "FF04 FF06 P01 | FF06 enclosure 1 infill 0-003",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "ec6b107beb73b2a8744ae8bd205c1ecc631a4b516b5667d99fbc9e9235622c80"
+    },
+    {
+      "sourceObjectId": "P03_C0039",
+      "label": "FF04 FF06 P01 | FF06 enclosure 2 post 001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "d934d90592827342324afd8748571c387963512c70b3f55911b319818281f318"
+    },
+    {
+      "sourceObjectId": "P03_C0040",
+      "label": "FF04 FF06 P01 | FF06 enclosure 2 post 002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "082b3d2e2f779d88663abdab73cdcab0229c441e54233388b099ddbf548c0202"
+    },
+    {
+      "sourceObjectId": "P03_C0041",
+      "label": "FF04 FF06 P01 | FF06 enclosure 2 continuous rail 001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "ec21bd17c78546f78efa0702c144d952bd65243f77ec1a3edd24fafa6cad7cf9"
+    },
+    {
+      "sourceObjectId": "P03_C0042",
+      "label": "FF04 FF06 P01 | FF06 enclosure 2 continuous rail 002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "4787113e2dc3b599294a188c72f0f8cf51dacd225217ad327e0ccf3d081b4c1a"
+    },
+    {
+      "sourceObjectId": "P03_C0043",
+      "label": "FF04 FF06 P01 | FF06 enclosure 2 continuous rail 003",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "c8f9d585038dd4467ed1fe039dcaa1913abfc53a5b945b2306439f36d6e78413"
+    },
+    {
+      "sourceObjectId": "P03_C0044",
+      "label": "FF04 FF06 P01 | FF06 enclosure 2 continuous rail 004",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "53336995208a19871477f5479ac17aa01621fee70f0a891d51ed81acf406a0a3"
+    },
+    {
+      "sourceObjectId": "P03_C0045",
+      "label": "FF04 FF06 P01 | FF06 enclosure 2 infill 0-001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "de4da54cc6b1307c5ad6354d83114d649ace635f19844a45ac791bbd7ec81a73"
+    },
+    {
+      "sourceObjectId": "P03_C0046",
+      "label": "FF04 FF06 P01 | FF06 enclosure 2 infill 0-002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "c707be467ce20885d3d8a94d73bf501a8d628dae5e8e15c6f384a37471a8b73b"
+    },
+    {
+      "sourceObjectId": "P03_C0047",
+      "label": "FF04 FF06 P01 | FF06 enclosure 2 infill 0-003",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "6d52bffa96ee81effa43c824d8143eb998ceb0eb49593531a0416cc5829b986b"
+    },
+    {
+      "sourceObjectId": "P03_C0048",
+      "label": "FF04 FF06 P01 | FF06 enclosure 3 post 001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "9a7da08895d8eb117717fe220f606add317d9b0ab425c0bd36b7c7c35927eba9"
+    },
+    {
+      "sourceObjectId": "P03_C0049",
+      "label": "FF04 FF06 P01 | FF06 enclosure 3 post 002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "0365939c0d217fd3b68dadd9ac1daaf97ddcaede8552a7a79ac4e2b20c4b5fd9"
+    },
+    {
+      "sourceObjectId": "P03_C0050",
+      "label": "FF04 FF06 P01 | FF06 enclosure 3 continuous rail 001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "e81961c4bfd3a4b7a8054ebc47d1e9db3e8d10079fb46500e114e0d21db816de"
+    },
+    {
+      "sourceObjectId": "P03_C0051",
+      "label": "FF04 FF06 P01 | FF06 enclosure 3 continuous rail 002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "982699a429e263f203cebc4db7acc353b1e239cd1990149560694ab5827dd5c1"
+    },
+    {
+      "sourceObjectId": "P03_C0052",
+      "label": "FF04 FF06 P01 | FF06 enclosure 3 continuous rail 003",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "1be3b4b202d0bdb9521fb260a1b0c97eff8d8c96ae396f825df1dcbbfe83fd27"
+    },
+    {
+      "sourceObjectId": "P03_C0053",
+      "label": "FF04 FF06 P01 | FF06 enclosure 3 continuous rail 004",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "573cdeea4567842fdab0cbdd9a1cf68e71a80a6c13da3b4da000a4b8d62955ac"
+    },
+    {
+      "sourceObjectId": "P03_C0054",
+      "label": "FF04 FF06 P01 | FF06 enclosure 3 infill 0-001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "e43938eeccf2c40652b47bc158871181db4a7e0c4951b15024d6ed5eea4f05dd"
+    },
+    {
+      "sourceObjectId": "P03_C0055",
+      "label": "FF04 FF06 P01 | FF06 enclosure 3 infill 0-002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "55aad93ece8448ebaeeaea5030473fe62f445e9c786efc8863c7b1449a1be5a9"
+    },
+    {
+      "sourceObjectId": "P03_C0056",
+      "label": "FF04 FF06 P01 | FF06 enclosure 3 infill 0-003",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "d88ad56bddf912eacf7a7a334449a09550e71f3601080fff5d1311e11026ea7a"
+    },
+    {
+      "sourceObjectId": "P03_C0057",
+      "label": "FF04 FF06 P01 | FF06 enclosure 4 post 001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "a56491859ad50721202806a4da5006156d0b82718fd1fbbdaf82f1a8b0733343"
+    },
+    {
+      "sourceObjectId": "P03_C0058",
+      "label": "FF04 FF06 P01 | FF06 enclosure 4 post 002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "aaac685eb4aafabb921b34d5c74f1dd615fb36c10e5e9a84818d22e38983b9a7"
+    },
+    {
+      "sourceObjectId": "P03_C0059",
+      "label": "FF04 FF06 P01 | FF06 enclosure 4 continuous rail 001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "bf200a6c286c0a92272de5799d900678350792ed0e546e97abe5631bf32c6f1f"
+    },
+    {
+      "sourceObjectId": "P03_C0060",
+      "label": "FF04 FF06 P01 | FF06 enclosure 4 continuous rail 002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "b04007f68876e3ee882448438631871ae7327565e19446271b7b6405f278fe8d"
+    },
+    {
+      "sourceObjectId": "P03_C0061",
+      "label": "FF04 FF06 P01 | FF06 enclosure 4 continuous rail 003",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "938bde9cdc53cd8c383b62bd0c392c64577dde2b6707d891b764e03e062c86d8"
+    },
+    {
+      "sourceObjectId": "P03_C0062",
+      "label": "FF04 FF06 P01 | FF06 enclosure 4 continuous rail 004",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "6b2e4b8c1fa2da75763b74ed7877a715f7e6bcd5a3edf86b0e9869327041958d"
+    },
+    {
+      "sourceObjectId": "P03_C0063",
+      "label": "FF04 FF06 P01 | FF06 enclosure 4 infill 0-001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "8426e84caaf067acbe874935e24e30b0d8fbdeeae9f2e3aaafdd86f4d50408a4"
+    },
+    {
+      "sourceObjectId": "P03_C0064",
+      "label": "FF04 FF06 P01 | FF06 enclosure 4 infill 0-002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "805e8df9f0a561fcff2f6d1589dffe3737e2e9a5b956dad7decd52ef605597a9"
+    },
+    {
+      "sourceObjectId": "P03_C0065",
+      "label": "FF04 FF06 P01 | FF06 enclosure 4 infill 0-003",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "194d5233ee0e8e83d79e974f1df9f58252926852270caeeee8bd3767f074713c"
+    },
+    {
+      "sourceObjectId": "P03_C0066",
+      "label": "FF04 FF06 P01 | FF06 enclosure 5 post 001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "7bdfeaa16193aee48b991b64051480d92d8315183f7c905fd57395e1409025ef"
+    },
+    {
+      "sourceObjectId": "P03_C0067",
+      "label": "FF04 FF06 P01 | FF06 enclosure 5 post 002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "0ceef4c77fac7e6b40090e603626992cfebb3b1a305cdee0757ba1b60e461bd3"
+    },
+    {
+      "sourceObjectId": "P03_C0068",
+      "label": "FF04 FF06 P01 | FF06 enclosure 5 post 003",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "a41d0a78109c4e33eb897eed41fca77941f94d107f2cbfe4d8d44e43fbc89d43"
+    },
+    {
+      "sourceObjectId": "P03_C0069",
+      "label": "FF04 FF06 P01 | FF06 enclosure 5 continuous rail 001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "d9791c13ed8223aa3f34b5a37f42431edf7288cdd002a55ea54c19163b23dee8"
+    },
+    {
+      "sourceObjectId": "P03_C0070",
+      "label": "FF04 FF06 P01 | FF06 enclosure 5 continuous rail 002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "2831024b091d4d14f2280f982a84a4a62902c0dfafae7a2e8b7a04f34c785ea3"
+    },
+    {
+      "sourceObjectId": "P03_C0071",
+      "label": "FF04 FF06 P01 | FF06 enclosure 5 continuous rail 003",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "1a048ca3f1353e655884ad90fb8727b51e451685120f97c98fb62ebc3c479596"
+    },
+    {
+      "sourceObjectId": "P03_C0072",
+      "label": "FF04 FF06 P01 | FF06 enclosure 5 continuous rail 004",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "37c4294336f3522367b6a4bb41a14d4bcdf63058f8a9e2a34f0958cddc4698c1"
+    },
+    {
+      "sourceObjectId": "P03_C0073",
+      "label": "FF04 FF06 P01 | FF06 enclosure 5 infill 0-001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "fd254867e94fe7db270c3e8807888ffc9a8c4b4b09a618a2860226db409ac2ec"
+    },
+    {
+      "sourceObjectId": "P03_C0074",
+      "label": "FF04 FF06 P01 | FF06 enclosure 5 infill 0-002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "e93cb612ba46462bf4c99d54b507ea176ba4c2205c2774402db73f19e4a26f70"
+    },
+    {
+      "sourceObjectId": "P03_C0075",
+      "label": "FF04 FF06 P01 | FF06 enclosure 5 infill 0-003",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "62c214cf956b4edf35f0be52a22c17d95f912bc97d188fa81ac324c412ab28b4"
+    },
+    {
+      "sourceObjectId": "P03_C0076",
+      "label": "FF04 FF06 P01 | FF06 enclosure 5 infill 1-001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "d0ce67c27ffb2d4e2fcad22e64462781d275b479700c64bcebce3d62499b129b"
+    },
+    {
+      "sourceObjectId": "P03_C0077",
+      "label": "FF04 FF06 P01 | FF06 enclosure 5 infill 1-002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "ddbffa9f13ba88d440d961904eeb35f4d5b0369aa8cc286e8e8a842ef9a34a12"
+    },
+    {
+      "sourceObjectId": "P03_C0078",
+      "label": "FF04 FF06 P01 | FF06 enclosure 5 infill 1-003",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "433a5d5db2c46777b347eef074cb4f28d49002d6fff0f737fc61db385b164554"
+    },
+    {
+      "sourceObjectId": "P03_C0079",
+      "label": "FF04 FF06 P01 | FF06-A1-DOOR head/transom 001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "a7ba0d097d05a4aabb94bdbe963fe36bfd1ef560f008aaf9110c98bfb012dd76"
+    },
+    {
+      "sourceObjectId": "P03_C0080",
+      "label": "FF04 FF06 P01 | FF06-A1-DOOR head/transom 002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "eaa667a36c01fa9d77c921893864806f3589ca02c674e189db1d6814d9098931"
+    },
+    {
+      "sourceObjectId": "P03_C0081",
+      "label": "FF04 FF06 P01 | FF06-A1-DOOR head/transom 003",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "331011804ed1d8bae9cf2ef3d33f761a1770c599ff88267007ed4ec8343bc2f9"
+    },
+    {
+      "sourceObjectId": "P03_C0082",
+      "label": "FF04 FF06 P01 | FF06-A2-DOOR head/transom 001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "660f862a0941cb1d125e03e1c71953c744d430585db80f680e9d9744673fde62"
+    },
+    {
+      "sourceObjectId": "P03_C0083",
+      "label": "FF04 FF06 P01 | FF06-A2-DOOR head/transom 002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "f98d9bb35c20d8abd0299406cf11f7301cbca7bd0c943a6abe2a50896d30c4c7"
+    },
+    {
+      "sourceObjectId": "P03_C0084",
+      "label": "FF04 FF06 P01 | FF06-A2-DOOR head/transom 003",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "095374c0d3c8239142b6f3617acbc99e999cd5443336e70b3d1176b8e93c4529"
+    },
+    {
+      "sourceObjectId": "P03_C0375",
+      "label": "FF04 FF06 P01 | FF06-T01 | T1_ApronX001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "988112f40ca1d96f8840b6fea0b7b8f23a28e92ce3e7c7a966cf578a1866dacf"
+    },
+    {
+      "sourceObjectId": "P03_C0376",
+      "label": "FF04 FF06 P01 | FF06-T01 | T1_ApronX002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "eae1552126f26bf1fb74e80ee2266b67c924db216ae8cc61fb7f926735545d33"
+    },
+    {
+      "sourceObjectId": "P03_C0377",
+      "label": "FF04 FF06 P01 | FF06-T01 | T1_ApronY001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "c5efced4f69fef2c4ec412149b27803df3146897978ac1cdcf7b2ca72e336118"
+    },
+    {
+      "sourceObjectId": "P03_C0378",
+      "label": "FF04 FF06 P01 | FF06-T01 | T1_ApronY002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "68b3128c1d0c67a695031a4b9105e2514f9700adff7cf7d1401f4c3823de95fe"
+    },
+    {
+      "sourceObjectId": "P03_C0379",
+      "label": "FF04 FF06 P01 | FF06-T01 | T1_Leg001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "f730c3975dc734de5b3c83ddeeddc375fe301c3409766cf33f94e4408e401108"
+    },
+    {
+      "sourceObjectId": "P03_C0380",
+      "label": "FF04 FF06 P01 | FF06-T01 | T1_Leg002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "f1264a25fd0c2febc18c631c9dfcdc5369cbf6ea15e055f1563988022ce09244"
+    },
+    {
+      "sourceObjectId": "P03_C0381",
+      "label": "FF04 FF06 P01 | FF06-T01 | T1_Leg003",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "1a892a13b3971d89a92c7005eadad9835ec21113342fe1d80319fb249a130eb6"
+    },
+    {
+      "sourceObjectId": "P03_C0382",
+      "label": "FF04 FF06 P01 | FF06-T01 | T1_Leg004",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "9a099da1e5ea3dab506791ec9a529434f00c47b1798829cd001af653cbc42bd2"
+    },
+    {
+      "sourceObjectId": "P03_C0383",
+      "label": "FF04 FF06 P01 | FF06-T01 | T1_Top001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "4900015b2ea5a3c0a665170402500618d4a9f4f9faebef3b3beb6126fc191c6a"
+    },
+    {
+      "sourceObjectId": "P03_C0384",
+      "label": "FF04 FF06 P01 | FF06-C01 | PROPOSED_T1L_chair_placeholder001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 6,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "92c133ac3b3cf8a07b77e37b06d0d77617eee7125efc4b0c7b6e842dbd18fa85"
+    },
+    {
+      "sourceObjectId": "P03_C0385",
+      "label": "FF04 FF06 P01 | FF06-T02 | T1_ApronX001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "eb8ed6d7b209e7feaf6fdb789e26b31d674be27fe66970b467f925aea62dbc8a"
+    },
+    {
+      "sourceObjectId": "P03_C0386",
+      "label": "FF04 FF06 P01 | FF06-T02 | T1_ApronX002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "27ac5d62d5d2facdf3aaf90e1664dd049576a3ffe50abf904e2d6f908fa7410c"
+    },
+    {
+      "sourceObjectId": "P03_C0387",
+      "label": "FF04 FF06 P01 | FF06-T02 | T1_ApronY001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "920b8d6681f642f136610977a68d18e9c26ca732f4686881da2c5cf82f1ecb5c"
+    },
+    {
+      "sourceObjectId": "P03_C0388",
+      "label": "FF04 FF06 P01 | FF06-T02 | T1_ApronY002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "5778938efa414ffc4d67ca0da081194962099c7e104edcfcb37cac2c5c6b9039"
+    },
+    {
+      "sourceObjectId": "P03_C0389",
+      "label": "FF04 FF06 P01 | FF06-T02 | T1_Leg001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "a1a5dc4576e8c4982a414f60f32d6e31934d4dee3bb04fcfdd325065b51eb4c2"
+    },
+    {
+      "sourceObjectId": "P03_C0390",
+      "label": "FF04 FF06 P01 | FF06-T02 | T1_Leg002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "3bec611e6679320d2d1b0cbf8391bde45130ead449fd6f3e6948d1a92e1ce710"
+    },
+    {
+      "sourceObjectId": "P03_C0391",
+      "label": "FF04 FF06 P01 | FF06-T02 | T1_Leg003",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "ceeecdc3576b6d313bb6775fb86158b858fcd45fc0806e54c1588dbabb1aca75"
+    },
+    {
+      "sourceObjectId": "P03_C0392",
+      "label": "FF04 FF06 P01 | FF06-T02 | T1_Leg004",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "8c957b19adc84faa21d00e9ef0caf5902c5a6f55b85263ef3fbe812e6ed14910"
+    },
+    {
+      "sourceObjectId": "P03_C0393",
+      "label": "FF04 FF06 P01 | FF06-T02 | T1_Top001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "b72565376498ee29c840b6988efceac8eae32c37018183103ff11acde4988ca6"
+    },
+    {
+      "sourceObjectId": "P03_C0394",
+      "label": "FF04 FF06 P01 | FF06-C02 | PROPOSED_T1L_chair_placeholder001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 6,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "bd4d3310b169e258cf5dd84c736a3f8a4fc2f4eb4d932500c4ad6734a99bec9e"
+    },
+    {
+      "sourceObjectId": "P03_C0395",
+      "label": "FF04 FF06 P01 | FF06-T03 | T1_ApronX001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "448da7bbe884fb47fc07fd6e7e3837a8956558f4d6dbb64c0ff39695cad58821"
+    },
+    {
+      "sourceObjectId": "P03_C0396",
+      "label": "FF04 FF06 P01 | FF06-T03 | T1_ApronX002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "9c7f3ac87d160573a937e8d7db8538a3d3a5e12dc650ac70ad79b10bc60b2ea3"
+    },
+    {
+      "sourceObjectId": "P03_C0397",
+      "label": "FF04 FF06 P01 | FF06-T03 | T1_ApronY001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "8b0e81433b4bb670f2acc0b6156ea5ec7a65fc70773bd6c5cc82a9303e57a0b4"
+    },
+    {
+      "sourceObjectId": "P03_C0398",
+      "label": "FF04 FF06 P01 | FF06-T03 | T1_ApronY002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "13aec6452a323df7e9fda12eb38acf094bcea4b5966a7aae19dc4d6a004c2e93"
+    },
+    {
+      "sourceObjectId": "P03_C0399",
+      "label": "FF04 FF06 P01 | FF06-T03 | T1_Leg001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "39a5fccd0213ed934852254f44ec518f5a1c1838ade593a56399b786ee5b48a9"
+    },
+    {
+      "sourceObjectId": "P03_C0400",
+      "label": "FF04 FF06 P01 | FF06-T03 | T1_Leg002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "317f0e3900012baf29957f6a24d6d6a1523b8321dc7e4888d49b638360717e9a"
+    },
+    {
+      "sourceObjectId": "P03_C0401",
+      "label": "FF04 FF06 P01 | FF06-T03 | T1_Leg003",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "cbcc9428dae025b0f5a01e7fbd28bfa3218886ddc7b3641893bd65fd7fb8617d"
+    },
+    {
+      "sourceObjectId": "P03_C0402",
+      "label": "FF04 FF06 P01 | FF06-T03 | T1_Leg004",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "025255de31921f4e909c505aae2357537837ac23f5a9360de5f84ea4f28eaf13"
+    },
+    {
+      "sourceObjectId": "P03_C0403",
+      "label": "FF04 FF06 P01 | FF06-T03 | T1_Top001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "c1d218bdb98995c221edc85e840604da5d85e36bb19026e4a6273bad5fdd2371"
+    },
+    {
+      "sourceObjectId": "P03_C0404",
+      "label": "FF04 FF06 P01 | FF06-C03 | PROPOSED_T1L_chair_placeholder001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 6,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "ababf0fde41543b8e91d68bf0c6c9cc4ad32e751b598de64f2efdb5ec2b16a03"
+    },
+    {
+      "sourceObjectId": "P03_C0405",
+      "label": "FF04 FF06 P01 | FF06-T04 | T1_ApronX001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "55bc508f3a92df6f379ea454d796014eb1bde408432ec2ea19de960bb2c2629e"
+    },
+    {
+      "sourceObjectId": "P03_C0406",
+      "label": "FF04 FF06 P01 | FF06-T04 | T1_ApronX002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "c07a8db1c51ba711d0c133678490aedf3d8ec4b3faa5a7f5c1abf2dd468701bb"
+    },
+    {
+      "sourceObjectId": "P03_C0407",
+      "label": "FF04 FF06 P01 | FF06-T04 | T1_ApronY001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "7bb84d2601cdb1c9e4165eb264aa97cceb81f6e3d4af6c8bf0dc28fc1098441e"
+    },
+    {
+      "sourceObjectId": "P03_C0408",
+      "label": "FF04 FF06 P01 | FF06-T04 | T1_ApronY002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "875ecbb253b0b8d0a98da7b67e145a4523c27218f4e83092516558567d02d0ce"
+    },
+    {
+      "sourceObjectId": "P03_C0409",
+      "label": "FF04 FF06 P01 | FF06-T04 | T1_Leg001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "62f430411bf23e33398c4cea69481015ae4c40d43c8b438fe2c14829e3447ef5"
+    },
+    {
+      "sourceObjectId": "P03_C0410",
+      "label": "FF04 FF06 P01 | FF06-T04 | T1_Leg002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "30c16af4a646ee44d16d0877d102f10cbf73e94b3c508faf9621e99754a5e491"
+    },
+    {
+      "sourceObjectId": "P03_C0411",
+      "label": "FF04 FF06 P01 | FF06-T04 | T1_Leg003",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "2b6ed108ca163b092f9b62d4bf04728d2cf8873c428bc89c9ed9715e1761d840"
+    },
+    {
+      "sourceObjectId": "P03_C0412",
+      "label": "FF04 FF06 P01 | FF06-T04 | T1_Leg004",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "b5cbafd337dfba7c9b177d5de80fec6aa78d37f8def6d86d98559d7a4cf9f582"
+    },
+    {
+      "sourceObjectId": "P03_C0413",
+      "label": "FF04 FF06 P01 | FF06-T04 | T1_Top001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "d23df015f42b105c43db6126b7505797d1f24f5fe7a485be6f47ca964d9e9572"
+    },
+    {
+      "sourceObjectId": "P03_C0414",
+      "label": "FF04 FF06 P01 | FF06-C04 | PROPOSED_T1L_chair_placeholder001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 6,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "92d55460dbfb1035cf07acb41deeaef86cf642fc6b032f36adcddb737c6de53c"
+    },
+    {
+      "sourceObjectId": "P03_C0415",
+      "label": "FF04 FF06 P01 | FF06-T05 | T1_ApronX001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "5f738f65e900baa5465d03939593a4dde7deb3b684fdd39e19d86b21a871a584"
+    },
+    {
+      "sourceObjectId": "P03_C0416",
+      "label": "FF04 FF06 P01 | FF06-T05 | T1_ApronX002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "3f3cefbd51263890e1a7bc60057b72d2bdac786edce863b1d122904cb738ac91"
+    },
+    {
+      "sourceObjectId": "P03_C0417",
+      "label": "FF04 FF06 P01 | FF06-T05 | T1_ApronY001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "b36e5a03a353513c8ac98954cc5965227ff4c5691c7b1963fb6e18ae834e2410"
+    },
+    {
+      "sourceObjectId": "P03_C0418",
+      "label": "FF04 FF06 P01 | FF06-T05 | T1_ApronY002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "70a8edfd17a87dc6d333c3c7030fc1b65d4978b94429cd51f8571dac8db20c0f"
+    },
+    {
+      "sourceObjectId": "P03_C0419",
+      "label": "FF04 FF06 P01 | FF06-T05 | T1_Leg001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "2d6230b59620fa31aafd71bf16ee7e50f623d0e6bb8957d263a9dfe54ce4b2a0"
+    },
+    {
+      "sourceObjectId": "P03_C0420",
+      "label": "FF04 FF06 P01 | FF06-T05 | T1_Leg002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "18b85b4f01c7347e424e4d44c24a8c8eca0acdf4108530bb747808ddc764a5ab"
+    },
+    {
+      "sourceObjectId": "P03_C0421",
+      "label": "FF04 FF06 P01 | FF06-T05 | T1_Leg003",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "98988efca1eb6bdaf5039f6cff1d4bcddea2b3bf34e0fc23997599630a5b9d22"
+    },
+    {
+      "sourceObjectId": "P03_C0422",
+      "label": "FF04 FF06 P01 | FF06-T05 | T1_Leg004",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "29cd3e904b3af286774e6620af1940335bb2ddcd2c2e86b78a169d3e9f42f72c"
+    },
+    {
+      "sourceObjectId": "P03_C0423",
+      "label": "FF04 FF06 P01 | FF06-T05 | T1_Top001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "54e098ac64162fd00be1b19d3acdf3d4132da60d5dab1245adbb305028be0dc9"
+    },
+    {
+      "sourceObjectId": "P03_C0424",
+      "label": "FF04 FF06 P01 | FF06-C05 | PROPOSED_T1L_chair_placeholder001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 6,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "2700d8eac9ef5fbccc93ae875beba140843873f7e8a0d6acbea6955e0052095b"
+    },
+    {
+      "sourceObjectId": "P03_C0425",
+      "label": "FF04 FF06 P01 | FF06-T06 | T1_ApronX001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "295a47998960a75aa0d8873895910585819f67c9f5eb4377b951a99d25497b36"
+    },
+    {
+      "sourceObjectId": "P03_C0426",
+      "label": "FF04 FF06 P01 | FF06-T06 | T1_ApronX002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "06bb56dea1e50b90b559698f88d8a9a4db99a02d3e44785b1c18c357c6e36b85"
+    },
+    {
+      "sourceObjectId": "P03_C0427",
+      "label": "FF04 FF06 P01 | FF06-T06 | T1_ApronY001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "477306e305da8fda203707eb8222daed55abddf2ac915fa2ba69f531ec78366a"
+    },
+    {
+      "sourceObjectId": "P03_C0428",
+      "label": "FF04 FF06 P01 | FF06-T06 | T1_ApronY002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "25b0812b893f5b7a9ff812d37e4ead5935528048abf6687a1d9ba2714a5a8910"
+    },
+    {
+      "sourceObjectId": "P03_C0429",
+      "label": "FF04 FF06 P01 | FF06-T06 | T1_Leg001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "dca9804660ed11ed6a2ef034013f5e8804fa980c4deed23d709968b84ffb9076"
+    },
+    {
+      "sourceObjectId": "P03_C0430",
+      "label": "FF04 FF06 P01 | FF06-T06 | T1_Leg002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "34963a7a51cca03acb295c773fe73564c83e96de547506626ab80a65ed2869d7"
+    },
+    {
+      "sourceObjectId": "P03_C0431",
+      "label": "FF04 FF06 P01 | FF06-T06 | T1_Leg003",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "6df509a8e190c466b0bf3b72c81d6a197197b9801b2e2e38b3cd747901063256"
+    },
+    {
+      "sourceObjectId": "P03_C0432",
+      "label": "FF04 FF06 P01 | FF06-T06 | T1_Leg004",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "caf0ffe18506469fcc3d6cee9151468ef43aae7d2cdb51456a600313c44e5c4e"
+    },
+    {
+      "sourceObjectId": "P03_C0433",
+      "label": "FF04 FF06 P01 | FF06-T06 | T1_Top001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "b629d22e4e1890f2b2f93e7f5dd688302031613c9a3765db347abc32d36abb27"
+    },
+    {
+      "sourceObjectId": "P03_C0434",
+      "label": "FF04 FF06 P01 | FF06-C06 | PROPOSED_T1L_chair_placeholder001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 6,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "ac64cbf4290a397b9c941591b851039801e40ec6af381813c21add7154320543"
+    },
+    {
+      "sourceObjectId": "P03_C0435",
+      "label": "FF04 FF06 P01 | FF06-T07 | T1_ApronX001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "6bdb98e51f06c779870bb4a076ad4842359733da8959c8eb4cabd67aca82f47f"
+    },
+    {
+      "sourceObjectId": "P03_C0436",
+      "label": "FF04 FF06 P01 | FF06-T07 | T1_ApronX002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "5495e769a8db240f0dc0853c46f617e2f4782e33ba01d3a7633a9976e244669e"
+    },
+    {
+      "sourceObjectId": "P03_C0437",
+      "label": "FF04 FF06 P01 | FF06-T07 | T1_ApronY001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "17f07cc6b24d6b4c55a227966beaf273808cfb67487cc22350ac6bd90025ea28"
+    },
+    {
+      "sourceObjectId": "P03_C0438",
+      "label": "FF04 FF06 P01 | FF06-T07 | T1_ApronY002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "1c1ec8355204ad1c5e5a2cf78d930771e9e0de9547d6857c044d1591e19e3717"
+    },
+    {
+      "sourceObjectId": "P03_C0439",
+      "label": "FF04 FF06 P01 | FF06-T07 | T1_Leg001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "c354a1d9c741db04fb554dd3daeb772e8e7c80fdb290589962647aadf48e5924"
+    },
+    {
+      "sourceObjectId": "P03_C0440",
+      "label": "FF04 FF06 P01 | FF06-T07 | T1_Leg002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "08cd56cd3a418bbb2806fa5532659de539532856ee6a6e3286a5cd01de43389f"
+    },
+    {
+      "sourceObjectId": "P03_C0441",
+      "label": "FF04 FF06 P01 | FF06-T07 | T1_Leg003",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "587f0ffb89463292fcada2d49c499df0649a978ab67bca754c685fac236310e8"
+    },
+    {
+      "sourceObjectId": "P03_C0442",
+      "label": "FF04 FF06 P01 | FF06-T07 | T1_Leg004",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "7034c1c327caf4f63053bedf5873bb7cd98c0ba55ceceb0af99caba075a4b3c6"
+    },
+    {
+      "sourceObjectId": "P03_C0443",
+      "label": "FF04 FF06 P01 | FF06-T07 | T1_Top001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "acf01ddb1829653ed5696d6af6463684d4130b81eef9e583d565331709614c53"
+    },
+    {
+      "sourceObjectId": "P03_C0444",
+      "label": "FF04 FF06 P01 | FF06-C07 | PROPOSED_T1L_chair_placeholder001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 6,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "2e18ce8faed1aec0fa9a784d8acbae58b32034d15bd0eae7cf635325426a3705"
+    },
+    {
+      "sourceObjectId": "P03_C0445",
+      "label": "FF04 FF06 P01 | FF06-T08 | T1_ApronX001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "4e8635c799a948e4ab5209d483a770604eff46aaa35c677f00dbd8d794fd6862"
+    },
+    {
+      "sourceObjectId": "P03_C0446",
+      "label": "FF04 FF06 P01 | FF06-T08 | T1_ApronX002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "66c35177a607dcf38dfe34c49d17ee1ea9f173fdb831f5ec9e864ef0ae8b66cd"
+    },
+    {
+      "sourceObjectId": "P03_C0447",
+      "label": "FF04 FF06 P01 | FF06-T08 | T1_ApronY001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "b93de9bfd2d24d72e49d7c7fcfb4905d22342c3f2efdc7d1f2252fda35c077e8"
+    },
+    {
+      "sourceObjectId": "P03_C0448",
+      "label": "FF04 FF06 P01 | FF06-T08 | T1_ApronY002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "5fa5647f2e737edcc4aaadc2a9fd8084951f1602db4af10e7c41d626d007c565"
+    },
+    {
+      "sourceObjectId": "P03_C0449",
+      "label": "FF04 FF06 P01 | FF06-T08 | T1_Leg001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "bbcd93f8f48fe034fbc9d39ead5b5039eac0d9e35d217d063a0ea0a9021f2b80"
+    },
+    {
+      "sourceObjectId": "P03_C0450",
+      "label": "FF04 FF06 P01 | FF06-T08 | T1_Leg002",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "44fed926cc0a0dc203e96988680ad28a25f9512862ed84cb0ef2b7edff349a76"
+    },
+    {
+      "sourceObjectId": "P03_C0451",
+      "label": "FF04 FF06 P01 | FF06-T08 | T1_Leg003",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "7c9dbeae54d84110b24e9530b239231c4ac8096d69e550e7129be3a0abd21002"
+    },
+    {
+      "sourceObjectId": "P03_C0452",
+      "label": "FF04 FF06 P01 | FF06-T08 | T1_Leg004",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "ea701fe012829dc7d8e4f070365ddd70e603691732f88622d1ad5586d8127423"
+    },
+    {
+      "sourceObjectId": "P03_C0453",
+      "label": "FF04 FF06 P01 | FF06-T08 | T1_Top001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "e87d5ffdff293322722d5113e214e3485f3c119049bbbdaebf146fc45778efa0"
+    },
+    {
+      "sourceObjectId": "P03_C0454",
+      "label": "FF04 FF06 P01 | FF06-C08 | PROPOSED_T1L_chair_placeholder001",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 6,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "bd75be32edc378f8631006ab473e973d9bab6c948c3893361bed9304d5ad1c3b"
+    },
+    {
+      "sourceObjectId": "P03_C0487",
+      "label": "FF04 FF06 P03 T02 | H1-L1 recessed pull below",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "50c184b6304b637955f669e97ae319411a54bd9d80123d39de1c7b8dbd4d6c92"
+    },
+    {
+      "sourceObjectId": "P03_C0488",
+      "label": "FF04 FF06 P03 T02 | H1-L1 recessed pull above",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "c8e24ba659356958eb6489a2d0d4ce10b92b11ae991743bc10538797fa34b31b"
+    },
+    {
+      "sourceObjectId": "P03_C0489",
+      "label": "FF04 FF06 P03 T02 | H1-L1 recessed pull end",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "1e60dfbaa3cde942021fb906c0b5f3f4ff3d9bfcb8bd849a3a7e625704e924bc"
+    },
+    {
+      "sourceObjectId": "P03_C0490",
+      "label": "FF04 FF06 P03 T02 | H1-L1 recessed pull grip",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "9b68623ee6e08243bde5fee799243557630bf9fdf8a799f79d242a309fda87ad"
+    },
+    {
+      "sourceObjectId": "P03_C0491",
+      "label": "FF04 FF06 P03 T02 | H1-L1 recessed pull web",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "e8f565572251fcae8927388cad2d4fde74c67eb28fb0d5f974dfd957c6918425"
+    },
+    {
+      "sourceObjectId": "P03_C0492",
+      "label": "FF04 FF06 P03 T02 | H1-L1 stile 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "77778bcfc96131b78030beb47e44bdfc580e7381a4a18951f1d26a2e71509dbd"
+    },
+    {
+      "sourceObjectId": "P03_C0493",
+      "label": "FF04 FF06 P03 T02 | H1-L1 rail 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "f965311489f4bae6dd28761b2fe39f0c24d26822820dd5c800a89005453ac973"
+    },
+    {
+      "sourceObjectId": "P03_C0494",
+      "label": "FF04 FF06 P03 T02 | H1-L1 rail 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "758df23bf9ca1f3380575dfc376ef344da4eb0e245ac2c33d187a47b89abe59c"
+    },
+    {
+      "sourceObjectId": "P03_C0495",
+      "label": "FF04 FF06 P03 T02 | H1-L1 rail 2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "968c904ffabcd349a33b9228e11537022ba235ceed1f0ce993bee6ed1938065e"
+    },
+    {
+      "sourceObjectId": "P03_C0496",
+      "label": "FF04 FF06 P03 T02 | H1-L1 clear 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "33f09e481d8a4660e3a8eb8220fbc5aae1df574f1f9739f2fa1833b3e91a4005"
+    },
+    {
+      "sourceObjectId": "P03_C0497",
+      "label": "FF04 FF06 P03 T02 | H1-L1 clear 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "7a652d655b4eddcb4b055a77548f19f73c56c33c3eecc71ab928b4f7acb3f246"
+    },
+    {
+      "sourceObjectId": "P03_C0498",
+      "label": "FF04 FF06 P03 T02 | H1-L1 track bearing flange -1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "079c83035e388217f37ac0b2563ee6061f1462ec1a122edbf90bc713334425e0"
+    },
+    {
+      "sourceObjectId": "P03_C0499",
+      "label": "FF04 FF06 P03 T02 | H1-L1 track side wall -1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "dd271c33aea9385de0ab5eab98a6b030dceadece18bd8ec83b7896018e12f09b"
+    },
+    {
+      "sourceObjectId": "P03_C0500",
+      "label": "FF04 FF06 P03 T02 | H1-L1 track bearing flange 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "f302c5f2d45f71cbcded5eb931a61092f62621e5baf596791b883e0e6fda49ac"
+    },
+    {
+      "sourceObjectId": "P03_C0501",
+      "label": "FF04 FF06 P03 T02 | H1-L1 track side wall 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "3b3538d56176ba2e4ca9c4fcfb0755fc03476c482a88a6cea044aa56954c28d3"
+    },
+    {
+      "sourceObjectId": "P03_C0502",
+      "label": "FF04 FF06 P03 T02 | H1-L1 track roof",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "0f567c65995619d418f53761c3dce8d32417b3012aa54651c12f84b7add278de"
+    },
+    {
+      "sourceObjectId": "P03_C0503",
+      "label": "FF04 FF06 P03 T02 | H1-L1 fixed travel stop 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "1591ae645d56d7a4d85bc951f793e6446e0a154384f167e48d05b0cf3cdc0115"
+    },
+    {
+      "sourceObjectId": "P03_C0504",
+      "label": "FF04 FF06 P03 T02 | H1-L1 fixed travel stop 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "661c1f8a6393a62dae9c4353273cf078938ec3e1585dbe6fb3cc82677189c8f7"
+    },
+    {
+      "sourceObjectId": "P03_C0505",
+      "label": "FF04 FF06 P03 T02 | H1-L1 header mounting plate",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "fed714f281dc95fd704842cd7ee775b3ae62931adf56cbd75156b393cedb7fc0"
+    },
+    {
+      "sourceObjectId": "P03_C0506",
+      "label": "FF04 FF06 P03 T02 | H1-L1 connected header bracket 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "5c685eb8f2a142fa9fb66f52729b1e356daf6b91e9e0558b78374c6b2b609334"
+    },
+    {
+      "sourceObjectId": "P03_C0507",
+      "label": "FF04 FF06 P03 T02 | H1-L1 connected header bracket 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "0bd8e58b4cecaa2d970550aeec19faec6cadbc249788715bdd40d93b6adf513e"
+    },
+    {
+      "sourceObjectId": "P03_C0508",
+      "label": "FF04 FF06 P03 T02 | H1-L1 connected header bracket 2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "432e6d332d089402096292f214376d653ddde730d8d0783bddcfcc2fe1ea085a"
+    },
+    {
+      "sourceObjectId": "P03_C0509",
+      "label": "FF04 FF06 P03 T02 | H1-L1 connected header bracket 3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "8d9c0a862aa1717efc66dc3251510991cc8e215382dbe9ae9fcccae24cb98da8"
+    },
+    {
+      "sourceObjectId": "P03_C0510",
+      "label": "FF04 FF06 P03 T02 | H1-L1 captured sliding shoe 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "d11bab9c99df9030d5754daf8cb9dd77dcee1b994d9c50af0e0944a2c264ae21"
+    },
+    {
+      "sourceObjectId": "P03_C0511",
+      "label": "FF04 FF06 P03 T02 | H1-L1 rigid hanger stem 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "8c88b4e0fecabc10ca5ab7477ae2ff17747f6ee443d420721414ec145c2b8549"
+    },
+    {
+      "sourceObjectId": "P03_C0512",
+      "label": "FF04 FF06 P03 T02 | H1-L1 captured sliding shoe 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "af7b4842a9dc4c5601a20191f0f81a33986cefa910695d0766a45963b63f8cff"
+    },
+    {
+      "sourceObjectId": "P03_C0513",
+      "label": "FF04 FF06 P03 T02 | H1-L1 rigid hanger stem 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "347bdbc08cbbd19c7a1342d0435e5402c57dd967224aa22bff57d7339d330eaa"
+    },
+    {
+      "sourceObjectId": "P03_C0514",
+      "label": "FF04 FF06 P03 T02 | H1-L2 recessed pull below",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "e3e2a1bc3c47ba659361795947b0f5f8cf666fb5ceab2b7fc0aec14077624704"
+    },
+    {
+      "sourceObjectId": "P03_C0515",
+      "label": "FF04 FF06 P03 T02 | H1-L2 recessed pull above",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "e56bb95cc1af69d84be6abe6e8f8328e5cd264503b6894d05d7c5b7417d1167f"
+    },
+    {
+      "sourceObjectId": "P03_C0516",
+      "label": "FF04 FF06 P03 T02 | H1-L2 recessed pull end",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "3fcb3d537033f4d13044f3a8d4f07343671553a215a5273b53458ed9cb62c2eb"
+    },
+    {
+      "sourceObjectId": "P03_C0517",
+      "label": "FF04 FF06 P03 T02 | H1-L2 recessed pull grip",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "3584a9bb046f0822eda8be62dce41e7c270807d0a3ff88b2731180b44e91a44e"
+    },
+    {
+      "sourceObjectId": "P03_C0518",
+      "label": "FF04 FF06 P03 T02 | H1-L2 recessed pull web",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "1b9018560462238aa4fb04c520c7fd95896ab1d4b49e48af4a284aaebd6555c4"
+    },
+    {
+      "sourceObjectId": "P03_C0519",
+      "label": "FF04 FF06 P03 T02 | H1-L2 stile 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "ad7f2d90d6a63209df13ebb509848a0fdf0e9d6d9b991caeeabf8be571a56fad"
+    },
+    {
+      "sourceObjectId": "P03_C0520",
+      "label": "FF04 FF06 P03 T02 | H1-L2 rail 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "e209ced25c23f562aafd0a252b17d5d1eb2e654c26da3bda4031f649d5a13bcc"
+    },
+    {
+      "sourceObjectId": "P03_C0521",
+      "label": "FF04 FF06 P03 T02 | H1-L2 rail 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "cfc65a0185ecd549555fba968aa1b3b5acc2a155b963fd775531b15c54e6f320"
+    },
+    {
+      "sourceObjectId": "P03_C0522",
+      "label": "FF04 FF06 P03 T02 | H1-L2 rail 2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "d42fa2ea3a00c79dbec7ea5fe791567f43949557b2346e78e86f98b699137453"
+    },
+    {
+      "sourceObjectId": "P03_C0523",
+      "label": "FF04 FF06 P03 T02 | H1-L2 clear 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "4615f712cf2b8f9fad2e5ad538ec8550897e8bb8a790afa31d59727cc2dfece0"
+    },
+    {
+      "sourceObjectId": "P03_C0524",
+      "label": "FF04 FF06 P03 T02 | H1-L2 clear 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "9af5881185c2351ae64404a0d0d336a9c79f11d56450132b6895bb0a5f1915f1"
+    },
+    {
+      "sourceObjectId": "P03_C0525",
+      "label": "FF04 FF06 P03 T02 | H1-L2 track bearing flange -1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "38b7fae1be1a7a7a08331d32dab128776114c78d6a25830671bcfb34171b4f45"
+    },
+    {
+      "sourceObjectId": "P03_C0526",
+      "label": "FF04 FF06 P03 T02 | H1-L2 track side wall -1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "3ba013214cdd7afa422df70dd05697d8b85639c3e7f5df82c165d7cad1b31db0"
+    },
+    {
+      "sourceObjectId": "P03_C0527",
+      "label": "FF04 FF06 P03 T02 | H1-L2 track bearing flange 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "30d5eaa9a60ea7c940e0e7d07d180dd80abbb6e77c761ffa25febf7d673af4d2"
+    },
+    {
+      "sourceObjectId": "P03_C0528",
+      "label": "FF04 FF06 P03 T02 | H1-L2 track side wall 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "82305f1158f6afda5af2c22d06008c2f64f2fcb5c33ba3b7b0c9dc698ccc9acb"
+    },
+    {
+      "sourceObjectId": "P03_C0529",
+      "label": "FF04 FF06 P03 T02 | H1-L2 track roof",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "fdc88b5a8aadd2da79250805f578fdec4d219d9fd8e1b21ffe564d89cf694287"
+    },
+    {
+      "sourceObjectId": "P03_C0530",
+      "label": "FF04 FF06 P03 T02 | H1-L2 fixed travel stop 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "37c917c4701567a1bc23d3e1cf1f0c670ca39fcdd49e6b026d977247a7286926"
+    },
+    {
+      "sourceObjectId": "P03_C0531",
+      "label": "FF04 FF06 P03 T02 | H1-L2 fixed travel stop 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "67246158bab9bc70cf5f0044d6e5dfac80f80089a50852a85690e60b5f102df1"
+    },
+    {
+      "sourceObjectId": "P03_C0532",
+      "label": "FF04 FF06 P03 T02 | H1-L2 header mounting plate",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "386efb6efafd6d0bffb54d6b237ceafc6b4550c13d9563ae89d4f333086c57d6"
+    },
+    {
+      "sourceObjectId": "P03_C0533",
+      "label": "FF04 FF06 P03 T02 | H1-L2 connected header bracket 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "379db097f405f7493064bcf1bcbc6d770cf012decebe5a4a1a8a7d4b98e74d7e"
+    },
+    {
+      "sourceObjectId": "P03_C0534",
+      "label": "FF04 FF06 P03 T02 | H1-L2 connected header bracket 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "3b84069a99aa24a43dcbd1dfc0312dcbc14438ef68c00ff63dee7d5b00f1b8de"
+    },
+    {
+      "sourceObjectId": "P03_C0535",
+      "label": "FF04 FF06 P03 T02 | H1-L2 connected header bracket 2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "c4c472ce2c327245ed6f66d41810b6ee2323d2a42dc57fa3e4c56bf7b42d4a4f"
+    },
+    {
+      "sourceObjectId": "P03_C0536",
+      "label": "FF04 FF06 P03 T02 | H1-L2 connected header bracket 3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "f9558fb4a6d162bc874bf838bcadc180ebac2a96569d458a555d22c4463bb9cb"
+    },
+    {
+      "sourceObjectId": "P03_C0537",
+      "label": "FF04 FF06 P03 T02 | H1-L2 captured sliding shoe 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "b23ee7243b01a3bb4045eb93205048f4598a38f4b198bff0b1e7a0f32d4a65c2"
+    },
+    {
+      "sourceObjectId": "P03_C0538",
+      "label": "FF04 FF06 P03 T02 | H1-L2 rigid hanger stem 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "6f2a9a4bf49ce8df048f8647933799751126dafcb3540a3626f1d91717bf7a5f"
+    },
+    {
+      "sourceObjectId": "P03_C0539",
+      "label": "FF04 FF06 P03 T02 | H1-L2 captured sliding shoe 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "79a86babf707f3254ad6fb31907e364f4b1b6a588ccfef8f40ff666e35b627b4"
+    },
+    {
+      "sourceObjectId": "P03_C0540",
+      "label": "FF04 FF06 P03 T02 | H1-L2 rigid hanger stem 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "c874b9e0c3716e85d39dc90388531e4999c8599d86f0499f1bf443bf26de7a32"
+    },
+    {
+      "sourceObjectId": "P03_C0541",
+      "label": "FF04 FF06 P03 T02 | H2 recessed pull below",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "f57a7b1862b393532bfbcfbd45b9d15de5342424d9d9f0286e45a094690fd8ae"
+    },
+    {
+      "sourceObjectId": "P03_C0542",
+      "label": "FF04 FF06 P03 T02 | H2 recessed pull above",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "3ed7fe417e3bb079748b77ecc6b58424545a5d89381d27de29e0c9b0d980aa14"
+    },
+    {
+      "sourceObjectId": "P03_C0543",
+      "label": "FF04 FF06 P03 T02 | H2 recessed pull end",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "e292aed4aad40890d9c88b3eee0071197d8078a5d06f5da78266e1a361fea337"
+    },
+    {
+      "sourceObjectId": "P03_C0544",
+      "label": "FF04 FF06 P03 T02 | H2 recessed pull grip",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "1cc32c6c734c56e289f7aa632a1f208befc077fad2b7323770197560a4d24419"
+    },
+    {
+      "sourceObjectId": "P03_C0545",
+      "label": "FF04 FF06 P03 T02 | H2 recessed pull web",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "8eabfb1a289d066dd5282ae352f03f0eb0af21c806119978de571ecb3ea23606"
+    },
+    {
+      "sourceObjectId": "P03_C0546",
+      "label": "FF04 FF06 P03 T02 | H2 stile 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "14c1bdc650262c5657600ddec46def6b8b01bb786122b86d182af4da8fa3754d"
+    },
+    {
+      "sourceObjectId": "P03_C0547",
+      "label": "FF04 FF06 P03 T02 | H2 rail 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "897a97f3d5758061ce349476f5dc9f655f1199b6cc8fc923bccd4f25d8cd9713"
+    },
+    {
+      "sourceObjectId": "P03_C0548",
+      "label": "FF04 FF06 P03 T02 | H2 rail 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "1c6775fbf32184ea37fa88316990f3dd3cdbb1b210dd7dad2459a4a14169a26a"
+    },
+    {
+      "sourceObjectId": "P03_C0549",
+      "label": "FF04 FF06 P03 T02 | H2 rail 2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "e5ebee3d64d4999d1d5fc5d4af6cb9a145bb27bd4497072c35284309c2b286cf"
+    },
+    {
+      "sourceObjectId": "P03_C0550",
+      "label": "FF04 FF06 P03 T02 | H2 clear 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "8527d0a822c64db134fc7b83640b47a59b46bc529dba3f4bb500dabfb0afdf6f"
+    },
+    {
+      "sourceObjectId": "P03_C0551",
+      "label": "FF04 FF06 P03 T02 | H2 clear 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "3f204dd61052fe5256f9c2a91f97eaab93ff90eeaba9594b6a3f7b943c61c232"
+    },
+    {
+      "sourceObjectId": "P03_C0552",
+      "label": "FF04 FF06 P03 T02 | H2 track bearing flange -1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "e52b0095b6afcc2495add7804ce08be9d546f489ebda1d477ba902afb5a3b316"
+    },
+    {
+      "sourceObjectId": "P03_C0553",
+      "label": "FF04 FF06 P03 T02 | H2 track side wall -1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "0b94c417d7626aaf2c87633f3f4f63fb0f0d27919c1aed3d6be4a0a5891c0088"
+    },
+    {
+      "sourceObjectId": "P03_C0554",
+      "label": "FF04 FF06 P03 T02 | H2 track bearing flange 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "3dba7023ce0bcd391ba48230e7bc0cbcaff09ebfe138020cda8898cc7660f40a"
+    },
+    {
+      "sourceObjectId": "P03_C0555",
+      "label": "FF04 FF06 P03 T02 | H2 track side wall 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "f3c8ab3ac60713754a1036f5947dd8e5dbe03b62df2ae6a7d7ca66bca65d43ab"
+    },
+    {
+      "sourceObjectId": "P03_C0556",
+      "label": "FF04 FF06 P03 T02 | H2 track roof",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "2e0d246698bef1814c6b2eac78aa2a2c4856d407f20f7cea4fd6fc7e06cc49ea"
+    },
+    {
+      "sourceObjectId": "P03_C0557",
+      "label": "FF04 FF06 P03 T02 | H2 fixed travel stop 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "8bac265d43dc3d1855bf272bd6e2b910c0a19d384b941e3bd202e4ffb4a19c5d"
+    },
+    {
+      "sourceObjectId": "P03_C0558",
+      "label": "FF04 FF06 P03 T02 | H2 fixed travel stop 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "561e046028247315f5ed3cd2bd71c5c5a4f16b3dd4277d66347cdb2587450726"
+    },
+    {
+      "sourceObjectId": "P03_C0559",
+      "label": "FF04 FF06 P03 T02 | H2 header mounting plate",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "e09460ac03e9bde9f51e74ea8c1417914ca6c1bba85d35962701bfbc00bbffca"
+    },
+    {
+      "sourceObjectId": "P03_C0560",
+      "label": "FF04 FF06 P03 T02 | H2 connected header bracket 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "89cfa248f2bddd05be577564b4b4c4f172b4cb5828a2e95b05cb58513b79bf89"
+    },
+    {
+      "sourceObjectId": "P03_C0561",
+      "label": "FF04 FF06 P03 T02 | H2 connected header bracket 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "46bc6a56415c063dac996806b3446ac0b49a122f6168e779493e54de345391c1"
+    },
+    {
+      "sourceObjectId": "P03_C0562",
+      "label": "FF04 FF06 P03 T02 | H2 connected header bracket 2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "917426580641fb9a9bde92ebabe91742c4506364c681403501ebbd35445c139e"
+    },
+    {
+      "sourceObjectId": "P03_C0563",
+      "label": "FF04 FF06 P03 T02 | H2 connected header bracket 3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "2ff260c59b275e5535286be1662a82220cc42f02bf59f7f446b65149d4508af2"
+    },
+    {
+      "sourceObjectId": "P03_C0564",
+      "label": "FF04 FF06 P03 T02 | H2 captured sliding shoe 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "5164bdafb95191d00660555f01374bd7689f48a213c2545bf16e412e64d7442a"
+    },
+    {
+      "sourceObjectId": "P03_C0565",
+      "label": "FF04 FF06 P03 T02 | H2 rigid hanger stem 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "a23b967549a57e1ff8129e5ceff787f679577df57a8ac0effeda39a749a9cd69"
+    },
+    {
+      "sourceObjectId": "P03_C0566",
+      "label": "FF04 FF06 P03 T02 | H2 captured sliding shoe 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "1e22083701b4f19b7df9e723af919b186016d6448f5bef377bbf002423f671ea"
+    },
+    {
+      "sourceObjectId": "P03_C0567",
+      "label": "FF04 FF06 P03 T02 | H2 rigid hanger stem 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "707107698d8f6ab3310eabc57e959a5b8342d08558c7cb1788e357045cc46bec"
+    },
+    {
+      "sourceObjectId": "P03_R0125",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-01 | floor001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "6a1024a6dac233d0a0fd95b5729ac5c2aac9e57083b79fc21453c030d4bd67f7"
+    },
+    {
+      "sourceObjectId": "P03_R0126",
+      "label": "FF04 FF06 P01 | FF-06 context | First Floor - Planning Base 08 | joined wall display001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "7ad3d13cd9762b96fe7eea9572b5f6207059e2412b0088c97cf278161d866356"
+    },
+    {
+      "sourceObjectId": "P03_R0127",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-W06 | window glass 001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "c35cd97936bdcdf6b2d8dac86a4d1addf5d997ba915336d8f7b660fde87e60da"
+    },
+    {
+      "sourceObjectId": "P03_R0128",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-W06 | window jamb001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "6b9b40e68ec54e67f35d966b01183a98474dc5c8ba83647340b29cd3a54b146c"
+    },
+    {
+      "sourceObjectId": "P03_R0129",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-W06 | window jamb.002",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "672bd3dfc4b55844473db46b97f05db9fed866eca153b2dbf81717c5f3e2fbfa"
+    },
+    {
+      "sourceObjectId": "P03_R0130",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-W06 | window frame001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "37f530984b0504b3bfa9ce3d89721c409bf4cb5b85ebc9d7a6640e23d96d2a53"
+    },
+    {
+      "sourceObjectId": "P03_R0131",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-W06 | window frame.003",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "195611bed84fad442e771eedf1c92c3583b55f89f50a083f422c3ec394f3e3bf"
+    },
+    {
+      "sourceObjectId": "P03_R0132",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-W06 | window frame.004",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "3dcb42ee12a85be09747560d2e49c7c6304650ee6d22b0b3945eb802872d84c3"
+    },
+    {
+      "sourceObjectId": "P03_R0133",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-W06 | window grille 001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "843dc5dfcb1d27ec4debe045455fe26c57478946a94a15d51455e2795a7a850b"
+    },
+    {
+      "sourceObjectId": "P03_R0134",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-W06 | window grille 002",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "de3277ef3c0cb10563dd912d7580ec8e673791ac051df1c33bc8b75b346b9ca3"
+    },
+    {
+      "sourceObjectId": "P03_R0135",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-04 | floor001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "c6ef6995ce2363bbff7f062efaa7756f86a2f2401464539e8ca93c2a31276286"
+    },
+    {
+      "sourceObjectId": "P03_R0136",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-04 | low kerb 001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "8186ace30a51a1fcb1c7fdcc4fab3734ad72222c02e39a298bcb4c333206b79c"
+    },
+    {
+      "sourceObjectId": "P03_R0137",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-04 | open railing rail 0.004",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "1c7b14157ca1ab72ecbeca4006d0b468913d5acb4bf0796275717567a429e0b1"
+    },
+    {
+      "sourceObjectId": "P03_R0138",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-04 | open railing rail 0.005",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "80482169bd1b5b71b09c5f26bf21ddf5c87fe716c59e1b107dc38a309a8bac9b"
+    },
+    {
+      "sourceObjectId": "P03_R0139",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-04 | open railing rail 0.006",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "02bff5b3817f16b8a1e79a91a0f0e1a6a6c84035f3dc8cacc79712d1bbc70020"
+    },
+    {
+      "sourceObjectId": "P03_R0140",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-04 | open railing rail 1.002",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "0183e3187af1907c8883d01179b2e205e8da5e55a7d256f972c439c82859633f"
+    },
+    {
+      "sourceObjectId": "P03_R0141",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-04 | open railing post 001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "8c31622947ff10719fcb5ca0e03298d24c65397d0a716608254ae04a379487a2"
+    },
+    {
+      "sourceObjectId": "P03_R0142",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-04 | open railing post 002",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "c759ed52dfe101665a8f0b3980b44e4866598766d03166b84c9d9aef460f2ca3"
+    },
+    {
+      "sourceObjectId": "P03_R0143",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-04 | low kerb 000.002",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "edf0b23efc0270687926cea87a62da5a599c634c5bdc50e64b0ba1100ae42548"
+    },
+    {
+      "sourceObjectId": "P03_R0144",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-04 | open railing rail 0.007",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "07a6fdef3a4259ae24581a83286fd8a305a6f009b61024d7a2977f48225459ca"
+    },
+    {
+      "sourceObjectId": "P03_R0145",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-04 | open railing rail 0.008",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "e3133144d400e1a7a33cec5a0a037e97409f62aafc283042224aab1871b08800"
+    },
+    {
+      "sourceObjectId": "P03_R0146",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-04 | open railing rail 0.009",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "ccf13988c7edc506a24e1679d144cc2d7426779381c40b8a2eab1a29d6384edb"
+    },
+    {
+      "sourceObjectId": "P03_R0147",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-04 | open railing rail 1.003",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "558c1a2e27dd1e827412d0bbf6fc15c99110e242dbb2232d3cb47f837b43cb6e"
+    },
+    {
+      "sourceObjectId": "P03_R0148",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-04 | open railing post 0.002",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "c759ed52dfe101665a8f0b3980b44e4866598766d03166b84c9d9aef460f2ca3"
+    },
+    {
+      "sourceObjectId": "P03_R0149",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-D03 | door jamb001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "9a06c981ee52669051574a937614491683ec672bb61cd4d4e31965806792b41b"
+    },
+    {
+      "sourceObjectId": "P03_R0150",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-D03 | door jamb.002",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "6d8519372cfc72d151af8806aaff50dfda61d79b86b54e5e1497a90c54948cab"
+    },
+    {
+      "sourceObjectId": "P03_R0151",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-D03 | door threshold 001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "40ba874c8534050f6eb01b29c2b7110f8560bc0f5e5087fd3f68be380732678e"
+    },
+    {
+      "sourceObjectId": "P03_R0152",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-06 | floor001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "84034179fbc42becadf5b0eacaa13f9e6e3981f0a322bf3c2e05f50ccb9d8090"
+    },
+    {
+      "sourceObjectId": "P03_R0153",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-W03 | window glass 001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "c701c1e6824c483847ba9643ded37ce952e3ceff0e220ae319c31fd727a3db49"
+    },
+    {
+      "sourceObjectId": "P03_R0154",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-W03 | window jamb001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "b51ed4bad57ddec55c9f46a9ec353da3ee85473d26b11cd43562a39c15dc1b52"
+    },
+    {
+      "sourceObjectId": "P03_R0155",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-W03 | window jamb.002",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "3ecf19dd90e4b2e41fb502b9efae840fa82a88a63401cf21344fe1c053a0e215"
+    },
+    {
+      "sourceObjectId": "P03_R0156",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-W03 | window frame001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "157976f2f44056a1c024a967808e16650929adb2b103d9dd19b2fae532a5c4aa"
+    },
+    {
+      "sourceObjectId": "P03_R0157",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-W03 | window frame.003",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "e7dff42561b0692801ae76170234bf6792908d35502bb5996841a10ed0c2eb2d"
+    },
+    {
+      "sourceObjectId": "P03_R0158",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-W03 | window frame.004",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "364d9849e5ec98b1975d63b0c35cff4f661859be086127c153bebbb789a8955e"
+    },
+    {
+      "sourceObjectId": "P03_R0159",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-W03 | window grille 001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "aec25459d14b1b5f58dd84b016dfb8d061289bb6c96e5c8a9f09c77beb98c51a"
+    },
+    {
+      "sourceObjectId": "P03_R0160",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-W03 | window grille 002",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "bd6af04515bbcb4adcca27830e07bd8e47ec0b206c3de6a764fddd8c44300a10"
+    },
+    {
+      "sourceObjectId": "P03_R0161",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-W04 | window glass 001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "b16fc27926d4475f1cf491ff8bd463173f4170880765c5dff1409108561d9b72"
+    },
+    {
+      "sourceObjectId": "P03_R0162",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-W04 | window jamb001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "d78d7f7eaca00770016e407d1c6c266e6ccaed53dcb55c0caf5dc87d6f4f1a04"
+    },
+    {
+      "sourceObjectId": "P03_R0163",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-W04 | window jamb.002",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "ae4d1720a61467102a1dd8752907f7f8150bfffd9a8d15a60a9765af08209a89"
+    },
+    {
+      "sourceObjectId": "P03_R0164",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-W04 | window frame001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "05e2414655a05210f4858e2e6b6e709dafb23fc944e79879a3f1ed9f3e4145b8"
+    },
+    {
+      "sourceObjectId": "P03_R0165",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-W04 | window frame.003",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "0559001aa4b0184b43222b9f7d263514fce4e022065ffe79a65f9702f584086a"
+    },
+    {
+      "sourceObjectId": "P03_R0166",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-W04 | window frame.004",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "1a6de12ead10073380c8af4a8f2dc16f60e127d47db9b2e4ed95754b3ea54b89"
+    },
+    {
+      "sourceObjectId": "P03_R0167",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-W04 | window grille 001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "8b415bd7a160c07694ebf0ec1f70f05934684085c182fdd3f158e3781bb56ba8"
+    },
+    {
+      "sourceObjectId": "P03_R0168",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-W05 | window glass 001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "69c73d4b17f4503509bd2d03b58e644811813ca2022f3fb8f9ff4acaf3b1c8fd"
+    },
+    {
+      "sourceObjectId": "P03_R0169",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-W05 | window jamb001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "564ea14380863d4831f8249f8a9397dcf691f82dc425deda36fcb0cc1720cc64"
+    },
+    {
+      "sourceObjectId": "P03_R0170",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-W05 | window jamb.002",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "d47150d901ee16c46309eeb3c8217ac50a0386e6f6d4784d20660fb07a624a2e"
+    },
+    {
+      "sourceObjectId": "P03_R0171",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-W05 | window frame001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "211b70d507475fa605864757ead33cd21743e16138dde977f02694f815e59584"
+    },
+    {
+      "sourceObjectId": "P03_R0172",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-W05 | window frame.003",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "15d498f23ec185802aa502f074b5b7f8b0d247462d836feaff2acde89c3a5426"
+    },
+    {
+      "sourceObjectId": "P03_R0173",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-W05 | window frame.004",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "66a369ef6c0c1e844806bad0e1ddc0f2090d74aafd37dc4ec10db23c78364b5d"
+    },
+    {
+      "sourceObjectId": "P03_R0174",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-W05 | window grille 001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "53a3d56cc9d01742fe31c8feec4f999dd970cda09b247dc520edc32efd92fa3b"
+    },
+    {
+      "sourceObjectId": "P03_R0175",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-O01 | window_door jamb001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "430f231b9e18844aa3899d10e1f81456faf1289c5eacdd16603274129a7cf614"
+    },
+    {
+      "sourceObjectId": "P03_R0176",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-O01 | window_door jamb.002",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "ba65504f900974730562e20299089b199ff8de09a6bf1bfe1ec1b377c31eec2e"
+    },
+    {
+      "sourceObjectId": "P03_R0177",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-O01 | window_door threshold 001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "edbaa9f7ce8555eadfce25d543d001d291624ebfcb3c94aee66c74c77968c4d2"
+    },
+    {
+      "sourceObjectId": "P03_R0178",
+      "label": "FF04 FF06 P01 | FF-06 context | FF-06 | FF06-CUPBOARD001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "ed115bedcf86105ace16cc9535a7e70897fae6971d2a968a45166411ec91c440"
+    },
+    {
+      "sourceObjectId": "P03_R0179",
+      "label": "FF04 FF06 P01 | FF-06 context | Duplex context | ground commons floor001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "1134778291bcb5406224bb5fc5b91449414da80d2f238e93ec0cfe36cafe3ca9"
+    },
+    {
+      "sourceObjectId": "P03_R0180",
+      "label": "FF04 FF06 P01 | FF-06 context | PB04 | Corrected First Floor | sink_F2_001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "62188ad4b6f127424f43f0a1ece25569668c24941820958af7a8b197ba826b4b"
+    },
+    {
+      "sourceObjectId": "P03_R0181",
+      "label": "FF04 FF06 P01 | FF-06 context | PB04 | Corrected First Floor | storage_cabinet_mid2_F2_001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "f4c98129ffdb38cd29d9924f9ae7a34a3093f696045b54f36f1c76a7be54e414"
+    },
+    {
+      "sourceObjectId": "P03_R0182",
+      "label": "FF04 FF06 P01 | FF-06 context | PB04 | Corrected First Floor | toilet_F2_001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 0,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "40f19cd5dd0f9c04b0af31227d310e36d698436608241144e80a23f5d67fec79"
+    },
+    {
+      "sourceObjectId": "P03_R0183",
+      "label": "FF04 FF06 P01 | FF-06 context | OFFICE B02 | Dresser base001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "70cbb34b367b71679269a1b201de15b5ed350272991604c4252a75f4bab04896"
+    },
+    {
+      "sourceObjectId": "P03_R0184",
+      "label": "FF04 FF06 P01 | FF-06 context | OFFICE B02 | Dresser top001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "5c194e8d7ba7bd91294c522bb9478d2aa8179b3cd50f1c93db7266deba6aaa70"
+    },
+    {
+      "sourceObjectId": "P03_R0185",
+      "label": "FF04 FF06 P01 | FF-06 context | OFFICE B02 | Drawer handle 1-001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "ea8e67a551f0b0d116e47ce10532cc9c6c49c7d7094fea14dc20c99c455179f8"
+    },
+    {
+      "sourceObjectId": "P03_R0186",
+      "label": "FF04 FF06 P01 | FF-06 context | OFFICE B02 | Drawer handle 1-002",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "165b51aafc5e77eee94ac3ede8697b9886f043e4a23dd0f8bdaa384b551ff41c"
+    },
+    {
+      "sourceObjectId": "P03_R0187",
+      "label": "FF04 FF06 P01 | FF-06 context | OFFICE B02 | Drawer handle 2-001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "74e44e6d408b08e4c829253b7a71a3ada320c04bb9a0e1dd998a52ef51737939"
+    },
+    {
+      "sourceObjectId": "P03_R0188",
+      "label": "FF04 FF06 P01 | FF-06 context | OFFICE B02 | Drawer handle 2-002",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "128c64935558d7fee24b8bbcc9047d628fa7b5031541979636d08508ca5609ce"
+    },
+    {
+      "sourceObjectId": "P03_R0189",
+      "label": "FF04 FF06 P01 | FF-06 context | OFFICE B02 | Tall mirror backing001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "b660fa4143fcffe4b35fc1590600e90746da96d20d4d3ce2a10ab19fc335893d"
+    },
+    {
+      "sourceObjectId": "P03_R0190",
+      "label": "FF04 FF06 P01 | FF-06 context | OFFICE B02 | Tall mirror surface001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "ec8dd736fccea33f6cf500dd18687d7ba1191d9702fd1775a42f246d330100ce"
+    },
+    {
+      "sourceObjectId": "P03_R0191",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Level balcony slab - estimated outline001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "c2b16ea7718882941a6064cfd5b27f5a8a4a93fe9f5ac76aed7d23685b33424a"
+    },
+    {
+      "sourceObjectId": "P03_R0192",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard post 001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "2678abf43af2a24306c399b06e992f25aa4121be9485555b394120788d257c6b"
+    },
+    {
+      "sourceObjectId": "P03_R0193",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard post 002",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "b9a2451327eaa626bc9afa17c91eb3d30a5b607c79dd4f306ec25e27b3675e1f"
+    },
+    {
+      "sourceObjectId": "P03_R0194",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard post 003",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "5db35d17b362102d13e00af31a090f4d85e9dca9b60f4d0e1d38f69e670b1bdf"
+    },
+    {
+      "sourceObjectId": "P03_R0195",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard post 004",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "f83ca3be4e8512b3acffdcdb656cadf7d3020c3f9f9fee6ce99915af724edd42"
+    },
+    {
+      "sourceObjectId": "P03_R0196",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard post 005",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "1281ee434dc8a1d7c25fee27d880c63377c878c69c1d5d5d2433a9adc653ecaa"
+    },
+    {
+      "sourceObjectId": "P03_R0197",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard post 006",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "200e4d11d05f62b6df214a34fad1816f9ecc063cc828c0d7aa2a4caf85417d4a"
+    },
+    {
+      "sourceObjectId": "P03_R0198",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard post 007",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "7de77f47b672f1506286f9156588e39a684e17c021073c31436fbc55a2e1fc18"
+    },
+    {
+      "sourceObjectId": "P03_R0199",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard post 008",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "f91bfe5f179f66d8a700b371728bd316925680b16c2241ad4d4ada8b59402555"
+    },
+    {
+      "sourceObjectId": "P03_R0200",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard post 009",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "46e0d0e2c061ca23280219270935a1353443711c5f50946bbbc6671ada9a9732"
+    },
+    {
+      "sourceObjectId": "P03_R0201",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard post 010",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "a0d410c5d664ab0d5ebdbe214fb6081bf97278870399bab1aaef6d40c2a4589c"
+    },
+    {
+      "sourceObjectId": "P03_R0202",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard post 011",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "2b3c3427af9d7aae966f3ed43adf419e0e0d41095359ea1cff0cc5b50758de9e"
+    },
+    {
+      "sourceObjectId": "P03_R0203",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard post 012",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "0af5a31adb7b1462f653cb958b384c96ae2582bf022626c1084c404153c1ca2a"
+    },
+    {
+      "sourceObjectId": "P03_R0204",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard post 013",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "a81b6646898a906588dde559ba3adf1da77e6ff85eee581e7407c439c0c7c6d3"
+    },
+    {
+      "sourceObjectId": "P03_R0205",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard post 014",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "e557ec9872a357d015f11374f06689e6d2c9f1803d444f650925627ab1ccb94b"
+    },
+    {
+      "sourceObjectId": "P03_R0206",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 068",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "6e058547390d5b51189c9af1b32df8ec46f7bb51eda761e880fb72390ba95f6c"
+    },
+    {
+      "sourceObjectId": "P03_R0207",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 069",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "3ac8dcfce832d699ab9e0934c4c286cc1f3fd57c38b77fb7dcae7f504908f0cd"
+    },
+    {
+      "sourceObjectId": "P03_R0208",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 070",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "bcce35a3a11226cc03694bdac5283bc68c1bdf7ac47fb6af538ec08eda65301b"
+    },
+    {
+      "sourceObjectId": "P03_R0209",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 071",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "3711fa4c59cb055ef40408ece14fe1914c173bfaca797b25ca00941de576d806"
+    },
+    {
+      "sourceObjectId": "P03_R0210",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 072",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "55a8747ed111a3bdb88d4f9bff463d8c9aa4cd81b3648bb0d0dd315dc91f36f1"
+    },
+    {
+      "sourceObjectId": "P03_R0211",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 073",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "81be8d0b3332f095c8e87da33adfbff123e183069d985d06642eb6735ae89e81"
+    },
+    {
+      "sourceObjectId": "P03_R0212",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 074",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "0fd98dce24eb2d31d72d15c4e788a977d5142d74cc280825fb9dc7ea58740d3f"
+    },
+    {
+      "sourceObjectId": "P03_R0213",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 075",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "d41570693e1ba656c832ccc01e19f862dbce777e1c3af87a62e02b336d9458d3"
+    },
+    {
+      "sourceObjectId": "P03_R0214",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 076",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "ca2c33f6206b2705e38ed4c4c7f3d28800e849c425c0eba81259d126a8503227"
+    },
+    {
+      "sourceObjectId": "P03_R0215",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 077",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "03a47c2e86e3ca0e2e68dcfa3ff84a395c76b649769011f39756fa3a93bd8794"
+    },
+    {
+      "sourceObjectId": "P03_R0216",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 078",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "57bef68cbc58811cbb65c7088f6c24f5119508b7eb5da78f16763d4f6f285c70"
+    },
+    {
+      "sourceObjectId": "P03_R0217",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 079",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "81393b34f0e4c21859d13d73be42b50f29cdf28ebdeceb9bd11f0810b934e7e4"
+    },
+    {
+      "sourceObjectId": "P03_R0218",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 080",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "4655e61fd6d090d7ca0d1bbcf21b15d561d76f35f8f7fc094effcb94253d9ecb"
+    },
+    {
+      "sourceObjectId": "P03_R0219",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 081",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "6dde8f42fd6a14b4a90447f561a25184ca386877487572c088f7dbf245be6b50"
+    },
+    {
+      "sourceObjectId": "P03_R0220",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 082",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "993e1e5f35c976e8d13783bd95859355295cb62e791178b7d36532753b243c60"
+    },
+    {
+      "sourceObjectId": "P03_R0221",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 083",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "ab14834489e07fcef866604381277b97eaaf64ec5f426d680a1938ffa5d6668e"
+    },
+    {
+      "sourceObjectId": "P03_R0222",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 084",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "b46c98af701ec2a7f3bf071805f1f59c02812d7c3b8426ad41a8316222fa89b6"
+    },
+    {
+      "sourceObjectId": "P03_R0223",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 085",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "8024cfd95e2ff1e8ae0cd3b509ffd91aa918e6c60a87a28146ea994ce038a8bc"
+    },
+    {
+      "sourceObjectId": "P03_R0224",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 086",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "25258d3e14750203e6843fc98b8161fd30de5fd91aac16cfad20e738591d0cec"
+    },
+    {
+      "sourceObjectId": "P03_R0225",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 087",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "db262a172d36dd241e791d5749d7613c49816ca63550c96693720ad8efa3127a"
+    },
+    {
+      "sourceObjectId": "P03_R0226",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 088",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "f052a0482bd244907597aa5d7a96ab94682c20a23d3fe275bc82e241af69836a"
+    },
+    {
+      "sourceObjectId": "P03_R0227",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 089",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "06dea411e4abc31e3209b8c3a9d8521e5c5541d736e4a7be7c2c01b786d2b87b"
+    },
+    {
+      "sourceObjectId": "P03_R0228",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 090",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "023157ffefb71e364e6b464793d3cda61a0476b3b30057d0e822c06e6f760a94"
+    },
+    {
+      "sourceObjectId": "P03_R0229",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 091",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "e92af1a22fc25bacdd8914707856ccf35f4d427271b348311cd058d4cb81e952"
+    },
+    {
+      "sourceObjectId": "P03_R0230",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 092",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "bdf906474648b43f967f94de302a693cf6f26ace4d4fd609725ec1f9eb92f330"
+    },
+    {
+      "sourceObjectId": "P03_R0231",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 093",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "1da387bf64cb4a21cb13001779542bc20aea2e8c6b477203327514849b03e71a"
+    },
+    {
+      "sourceObjectId": "P03_R0232",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 094",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "4e011cfaee1807e847197e7c00ab3a1728073e6d47e39a4c437011b9035a1f78"
+    },
+    {
+      "sourceObjectId": "P03_R0233",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 095",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "077d596e73e71dbc15791b15ae63d533ef52e095f286f9842a277750851844db"
+    },
+    {
+      "sourceObjectId": "P03_R0234",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 096",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "9e44d08b1b1709bbad1b709b6389a617d9de2af13b91224a14733582f1e69a44"
+    },
+    {
+      "sourceObjectId": "P03_R0235",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 097",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "994f9e0644ddde326ab5d35970a38d4b65094682778820031910a4c0b6315ad6"
+    },
+    {
+      "sourceObjectId": "P03_R0236",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 098",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "80d64a3725ffe9e3fb22f68ac5dda195342aae4ab3436e2ee78e2dd8f73c59b8"
+    },
+    {
+      "sourceObjectId": "P03_R0237",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 099",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "69fad88943bafc0e13f879c12898cfc51f8a625da3d87a7411bf11d8197d34cf"
+    },
+    {
+      "sourceObjectId": "P03_R0238",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 100",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "7a7fd59e5f58eeafc58db482c7aa36d5d33920d58545339d3b7c734d4e9e3cf2"
+    },
+    {
+      "sourceObjectId": "P03_R0239",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 101",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "94f436f1779aa8987ee90cf759c831e60014aee39e2f2f18a5d0a90a4eaa9602"
+    },
+    {
+      "sourceObjectId": "P03_R0240",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 102",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "66563831c68ddbaaaa4e8828ab1933c7b5a8add8e2364ef9e4efb8927aae185d"
+    },
+    {
+      "sourceObjectId": "P03_R0241",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 103",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "60837f7aacbed15931acea5fc16fcdfcc783346caf1b033a71f5149be1f0217e"
+    },
+    {
+      "sourceObjectId": "P03_R0242",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 104",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "82e661325feccbc3247ea23e5830b8fec590bec802716777f774fe894342cc5f"
+    },
+    {
+      "sourceObjectId": "P03_R0243",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 105",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "e8e6470bb6f8962d206ed66a9d4e8c40c7cbbead7e6fac32b8b25674b082156a"
+    },
+    {
+      "sourceObjectId": "P03_R0244",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 106",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "c166ce138d0fac49a5bcf5322aa74777d87c6f9a9e8e0d77452b1925f1ad8cbb"
+    },
+    {
+      "sourceObjectId": "P03_R0245",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 107",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "11d65193ed1ad38ef6a34cfe50605fa652888b4f96acd8df3ac49b00ae3a9f7e"
+    },
+    {
+      "sourceObjectId": "P03_R0246",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 108",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "8d62471c9c2dd37daf22e562d264cd178d8aa257dd878284f2618ed616b3cdcf"
+    },
+    {
+      "sourceObjectId": "P03_R0247",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 109",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "e15aa1c719670f2e26b89acf9de64efef74d597d16d06ec4bf6c85fee4951b2b"
+    },
+    {
+      "sourceObjectId": "P03_R0248",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 110",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "51139b7d7e21106fafb2ea50158b8720cc8a233e5c7a27cda9ae6c9b7e151285"
+    },
+    {
+      "sourceObjectId": "P03_R0249",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 111",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "47ea5c8bc6d065db6bb779a48e956528638fbaa9442813eb5ab2d771beb0f496"
+    },
+    {
+      "sourceObjectId": "P03_R0250",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 112",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "398b93e2bf452887c0faa58300b98c35f65fafac0d34d403ebd05d06779f7926"
+    },
+    {
+      "sourceObjectId": "P03_R0251",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 113",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "bd89fcfcd275b957a47fa6d4a35d9a398fd0a3d930a6ffdf696a2a052e3797db"
+    },
+    {
+      "sourceObjectId": "P03_R0252",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 114",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "a908a8999aec962aa4b6953f2a35d4b9bcaf47b2b2c6b04437f0d575e6f8f717"
+    },
+    {
+      "sourceObjectId": "P03_R0253",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 115",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "5662b9f34658eeccded555a7c017ff5c656e35d56b3291a0e80b7c4e236da791"
+    },
+    {
+      "sourceObjectId": "P03_R0254",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 116",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "f2e342ec85e8bd466a66feee396f50bd8557a93232549ca2e221c5a890e1ec9e"
+    },
+    {
+      "sourceObjectId": "P03_R0255",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 117",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "41afdd625f5bd3e7888f5fdf5e3517ab340155dae1e64712e245d4ca128f7691"
+    },
+    {
+      "sourceObjectId": "P03_R0256",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 118",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "a0d60ccf58534b01b3bab31de7e5d645222f954419a5dfe12f00e62ad123b04c"
+    },
+    {
+      "sourceObjectId": "P03_R0257",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 119",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "8ae3c8cffab407611ffa7cf253f90a0721f2096a92a2dd47e2f05b3713b28953"
+    },
+    {
+      "sourceObjectId": "P03_R0258",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 120",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "30c86f06e9659bdaa3ad418e77ccaf8a06186971c2dfa806745d4bd82c319496"
+    },
+    {
+      "sourceObjectId": "P03_R0259",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 121",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "6aada0ea7691310d94ab3b6e2d840bb0ac43e1ea196d74876b94e27b1fe735d6"
+    },
+    {
+      "sourceObjectId": "P03_R0260",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 122",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "be1ba67e202e904a04796187ac0bee7420fe8d478767d101dbec3621c5f3a3a9"
+    },
+    {
+      "sourceObjectId": "P03_R0261",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 123",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "52d8fd6bcb8615c4710a673531c9457207c06e509a099bacad90710cf771084d"
+    },
+    {
+      "sourceObjectId": "P03_R0262",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Guard infill 124",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "1615b1863742d6d8741144600628e2e208e84d154e5628083c49c1c0ed7c95e3"
+    },
+    {
+      "sourceObjectId": "P03_R0263",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Perimeter low kerb - 80mm assumed section 001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "116c8dd4d414ccd90898f7a13a669b8c3de6671e773e2d6ed4d656cd1432cda3"
+    },
+    {
+      "sourceObjectId": "P03_R0264",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Top handrail - 1.05m height assumed section 001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "580bf6fa9a0dc19eb2a5722bb6597c9aaa2f0d741602a074796b7400419524fd"
+    },
+    {
+      "sourceObjectId": "P03_R0265",
+      "label": "FF04 FF06 P01 | FF-06 context | FF06 BALCONY B02 | Bottom rail section 001",
+      "role": "BlenderContext",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Independent current P03 room allowlist / exact world-space source shape",
+      "worldShapeSignatureSha256": "72493b656fe87c84a9badaac0fdd7092652c39f91d7d9701305fd05c7b40f83c"
+    }
+  ]
+}

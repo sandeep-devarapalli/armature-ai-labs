@@ -1,4 +1,4 @@
-"""Export verified R01 floor geometry from a frozen Blender input; never save it."""
+"""Export selected floor geometry from a frozen, curated Blender copy; never save it."""
 import argparse
 import hashlib
 import json
@@ -15,14 +15,15 @@ from mathutils import Matrix
 parser = argparse.ArgumentParser()
 parser.add_argument('--source-original', required=True)
 parser.add_argument('--expected-sha', required=True)
-parser.add_argument('--release-root', required=True)
+parser.add_argument('--config', required=True)
 parser.add_argument('--output', required=True)
 parser.add_argument('--audit-dir', required=True)
 args = parser.parse_args(sys.argv[sys.argv.index('--') + 1:])
 source = Path(args.source_original)
-release = Path(args.release_root)
+config = json.loads(Path(args.config).read_text())
 output = Path(args.output)
 audit_dir = Path(args.audit_dir)
+assert not (output/'release.json').exists(), 'An issued release is immutable; use a new revision directory'
 output.mkdir(parents=True, exist_ok=True)
 audit_dir.mkdir(parents=True, exist_ok=True)
 LIMIT = 25 * 1024 * 1024
@@ -33,9 +34,18 @@ def sha(path):
 assert sha(source) == args.expected_sha
 assert sha(bpy.data.filepath) == args.expected_sha, 'Open only the frozen input copy'
 assert Path(bpy.data.filepath).resolve() != source.resolve()
-release_gate=json.loads((release/'Records/Final release gate.json').read_text())
-render_manifest=json.loads((release/'Records/Final render manifest.json').read_text())
-assert release_gate['status']=='PASS' and release_gate['native_sha256']==args.expected_sha
+assert config['release'] == 'R03'
+assert config['sourceNativeSha256'] == args.expected_sha
+assert len(config['floors']) == 2
+assert {f['id'] for f in config['floors']} == {'ground-floor', 'first-floor'}
+assert set(bpy.data.scenes.keys()) == {f['scene'] for f in config['floors']}, 'Public Blender must contain only the two selected floor scenes'
+assert sha(config['curationProvenance']) == config['curationProvenanceSha256']
+curation = json.loads(Path(config['curationProvenance']).read_text())
+blender_copy = next(f for f in curation['files'] if f['file'] == 'selected-layout.blend')
+assert blender_copy['publicSha256'] == args.expected_sha
+assert blender_copy['nativeSaveReopen'] == 'PASS'
+assert blender_copy['transformationKind'] == 'current-design-curation-and-metadata-sanitization'
+assert config['originalSourceNativeSha256'] == blender_copy['sourceSha256']
 material_cache = {}
 material_notes = []
 
@@ -105,10 +115,8 @@ def glb_json(path):
 
 floors = []
 expected = {}
-for floor_id, scene_name, preview_name in [
-    ('ground-floor', 'R01 | 01 Ground floor selected layout', '01 - Ground floor - selected layout.png'),
-    ('first-floor', 'R01 | 02 First floor selected layout', '02 - First floor - selected partition.png'),
-]:
+for floor_config in config['floors']:
+    floor_id, scene_name = floor_config['id'], floor_config['scene']
     original = bpy.data.scenes[scene_name]
     bpy.context.window.scene = original
     bpy.context.view_layer.update()
@@ -118,7 +126,7 @@ for floor_id, scene_name, preview_name in [
     scene = bpy.data.scenes.new('Browser export | ' + floor_id)
     scene.unit_settings.system = 'METRIC'
     scene.unit_settings.scale_length = 1
-    scene['release'] = 'Coordinated Selected Layout R01'
+    scene['release'] = 'Coordinated Selected Layout R03'
     scene['sourceSha256'] = args.expected_sha
     per_object = {}
     points = []
@@ -181,10 +189,11 @@ for floor_id, scene_name, preview_name in [
             'rotation_quaternion_blender':list(camera.matrix_world.to_quaternion()),
             'ortho_scale_m':camera.data.ortho_scale,'projection':camera.data.type}
     preview = output/(floor_id+'.png')
-    assert sha(release/'Previews'/preview_name)==render_manifest['renders'][preview_name]
-    shutil.copy2(release/'Previews'/preview_name,preview)
+    preview_source, preview_sha = Path(floor_config['preview']), floor_config['previewSha256']
+    assert sha(preview_source) == preview_sha
+    shutil.copy2(preview_source, preview)
     floors.append({'id':floor_id,'label':'Ground floor' if floor_id=='ground-floor' else 'First floor',
-                   'model':'/building-models/r01/'+path.name,'preview':'/building-models/r01/'+preview.name,
+                   'model':'/building-models/r03/'+path.name,'preview':'/building-models/r03/'+preview.name,
                    'bytes':path.stat().st_size,'sha256':sha(path),'physicalObjects':len(per_object),
                    'triangles':sum(r['triangles'] for r in per_object.values()),'materials':len(gltf.get('materials',[])),
                    'boundsGltfYUpMetres':gltf_bounds,'boundsBlenderZUpMetres':bounds,
@@ -193,34 +202,42 @@ for floor_id, scene_name, preview_name in [
     expected[floor_id] = {'objects':per_object,'excluded':excluded,'semantic_roots':sorted(semantic_roots),'bounds':bounds}
     print('EXPORTED',floor_id,len(per_object),path.stat().st_size,flush=True)
 
-copy_specs = [
-    (source,'selected-layout.blend','Native Blender — both floors and all retained R01 scenes','native-blender'),
-    (release/'CAD/Ground Floor - Coordinated Planning R01.FCStd','ground-floor.FCStd','Ground floor — native FreeCAD','native-cad-ground'),
-    (release/'CAD/First Floor - Coordinated Planning R01.FCStd','first-floor.FCStd','First floor — native FreeCAD','native-cad-first'),
-    (release/'CAD/Ground Floor - Stair Partition Geometry R01.step','ground-floor-stair-partition-r01.step','Ground-floor stair partition only — STEP','step-partition-ground'),
-    (release/'CAD/First Floor - Stair Partition Geometry R01.step','first-floor-stair-partition-r01.step','First-floor stair partition only — STEP','step-partition-first'),
-]
 downloads=[]
-for src,name,label,identifier in copy_specs:
-    before=sha(src);target=output/name;shutil.copy2(src,target)
+assert {d['file'] for d in config['downloads']} == {'selected-layout.blend', 'ground-floor.FCStd', 'first-floor.FCStd'}
+for item in config['downloads']:
+    src, name = Path(item['path']), item['file']
+    before=sha(src)
+    assert before == item['publicSha256']
+    target = output/name if item['url'].startswith('/building-models/r03/') else audit_dir/'external-downloads'/name
+    target.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(src,target)
     assert sha(src)==before==sha(target)
-    assert target.stat().st_size<LIMIT
-    downloads.append({'id':identifier,'label':label,'url':'/building-models/r01/'+name,
-                      'bytes':target.stat().st_size,'sha256':before,'exactNativeCopy':True,
-                      'sourceFilename':src.name,'units':'metres' if name.endswith('.blend') else 'millimetres'})
+    if target.parent == output:
+        assert target.stat().st_size<LIMIT
+    else:
+        assert item['url'].startswith('https://github.com/sandeep-devarapalli/armature-ai-labs/releases/download/building-models-r03/')
+    downloads.append({'id':item['id'],'label':item['label'],'url':item['url'],
+                      'bytes':target.stat().st_size,'sha256':before,'sourceSha256':item['sourceSha256'],
+                      'exactNativeCopy':True,'copyBasis':'curated-current-design-source',
+                      'transformationKind':'current-design-curation-and-metadata-sanitization',
+                      'units':'metres' if name.endswith('.blend') else 'millimetres'})
 
 assert sha(source)==args.expected_sha
-manifest={'schema':'armature.building-web-assets.v1','release':'Coordinated Selected Layout R01','date':'2026-09-10',
+manifest={'schema':'armature.building-web-assets.v1','release':'Coordinated Selected Layout R03','date':config['date'],
           'status':'EXPORTED / AWAITING INDEPENDENT GLB REIMPORT CHECK',
-          'sourceNativeSha256':args.expected_sha,'sourcePreserved':True,'developmentB01Included':False,
+          'sourceNativeSha256':args.expected_sha,'originalSourceNativeSha256':config['originalSourceNativeSha256'],
+          'sourcePreserved':True,'currentDesignOnly':True,'selectedTwinCabinsIncluded':True,'slidingEntrancesRevision':'P03',
           'floors':floors,'downloads':downloads,'browserUnits':'metres','browserAxes':'glTF Y-up; (X,Y,Z) = Blender (X,Z,-Y)',
           'caveats':['Selected planning geometry, not measured as-built or installation/occupancy certification.',
                      'GLBs are mesh viewing derivatives; editable CAD and source Blender remain separate downloads.',
                      'Source procedural wood/marble and complex transparency are simplified to portable source-derived PBR values; native renders retain original appearance.',
                      'Lighting rigs, cameras, room-label text, empty parents and hidden planning overlays are excluded from GLBs; source names and room hints remain in node extras.',
-                     'STEP downloads contain only selected stair-partition solids, not full-floor architecture.',
-                     'First-floor native CAD mixes inherited Z=0 plan linework with partition solids at the world-floor datum; its units are millimetres.',
-                     'R01 contains no developmental private-cabin B01 desks, new workshop roof or GF01 cabin.'],
+                     'Room STEP downloads are exact source reference extracts; full-floor native CAD remains authoritative.',
+                     'Native CAD preserves selected current shapes and world coordinates, not every historical parametric dependency; units are millimetres.',
+                     'Current floor exports include GF01 cabin A, FF02 workshop, FF03 cabins and FF04/FF06 twin cabins with P03 sliding entrances, retaining FF06 balcony B02.',
+                     'FF04 and FF06 each contain eight full-size tables and eight chair proxies, not certified simultaneous capacity. Occupied-chair and installation limitations remain.',
+                     'Public native copies contain only selected current design; private source releases and failed earlier trials are preserved separately.',
+                     'Previews are direct native renders of the selected scenes; no generated image is used as geometry evidence.'],
           'materialRepresentations':material_notes}
 (output/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
 (audit_dir/'Expected GLB geometry.json').write_text(json.dumps(expected,indent=2)+'\n')

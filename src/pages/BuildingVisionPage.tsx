@@ -76,6 +76,7 @@ export function BuildingVisionPage() {
         description="Explore the selected ground- and first-floor layouts for Armature AI Labs. The latest approved Blender model governs the design, coordinated CAD follows it, and current model renders are distinguished from the 21 earlier appearance references."
       >
         <p className="building-vision-quick-links"><a href="#planning-model">Explore 3D + room CAD</a> · <a href="#comparisons">Browse concept photos</a></p>
+        <p>HSR 1490 · 1490, 11th Cross, 20th Main, 1st Sector, HSR Layout, Bengaluru – 560034</p>
         <div className="building-vision-summary" aria-label="Concept summary">
           <div><strong>{buildingVisionItems.length}</strong><span className="mono">Building views</span></div>
           <div><strong>2</strong><span className="mono">Floors + frontage</span></div>
@@ -86,7 +87,7 @@ export function BuildingVisionPage() {
       <div className="building-vision-guardrail">
         <div className="wrap">
           <span className="mono">Design authority</span>
-          <p>Latest approved Blender → coordinated CAD → aligned concept photos. Current model images below are direct R01 Blender renders; earlier photo concepts are labelled separately. Neither selection nor a successful export establishes construction readiness, safe occupancy or measured service capacity. AC and installation details remain proposals requiring site and professional checks.</p>
+          <p>Latest approved Blender → coordinated CAD → aligned concept photos. R03 includes the selected FF04/FF06 cabins with sliding entrances. The six R01 detail renders below remain labelled historical references; the first-floor stair door has since changed. Neither selection nor a successful export establishes construction readiness, safe occupancy or measured service capacity. AC and installation details require site and professional checks.</p>
         </div>
       </div>
 
@@ -104,7 +105,7 @@ export function BuildingVisionPage() {
           <article>
             <span className="mono">Access + glazing</span>
             <h3>Separate without closing in</h3>
-            <p>The selected curved stair partitions use a left flat door at GF09 A01 and a central flat door at FF04 P01. Retain their distinct floor layouts and recorded door-approach restrictions; verify operation and egress on site.</p>
+            <p>GF09 retains its left flat stair-access door. FF04 now uses a two-leaf curved stair slider, with the former central doorway glazed. FF04 and FF06 cabin entrances slide; preserve the separate gallery railing, stair void and recorded approach restrictions.</p>
           </article>
           <article>
             <span className="mono">Work-ready interiors</span>
@@ -124,7 +125,7 @@ export function BuildingVisionPage() {
       <Section
         number="03"
         title="The complete 21-view Building Vision."
-        lede="Six current-layout views now use direct R01 Blender renders. Expand the earlier concepts to compare; conflicting or unfinished concepts stay folded away. All 21 original references are preserved. Use Blender first, CAD second."
+        lede="Six direct R01 Blender renders are retained for comparison; the FF04 stair detail is historical and superseded by R03. Expand the earlier concepts to compare. All 21 original references are preserved. Use the current models above for layout decisions."
         id="comparisons"
       >
         <div className="building-vision-filters" role="toolbar" aria-label="Filter building views">

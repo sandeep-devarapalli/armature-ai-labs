@@ -6,7 +6,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 S=Path(__file__).parent
 build=json.loads((S/'Audit/build.json').read_text())
-COLORS={'Architecture':'#1F2D38','Openings':'#216B92','FixedReferences':'#5B7046','StairReferences':'#7C8790','FurnitureAndFitout':'#956A39'}
+COLORS={'Architecture':'#1F2D38','Openings':'#216B92','FixedReferences':'#5B7046','StairReferences':'#7C8790','BlenderContext':'#195257','FurnitureAndFitout':'#956A39'}
 FONT='/System/Library/Fonts/Supplemental/Arial.ttf'
 BOLD='/System/Library/Fonts/Supplemental/Arial Bold.ttf'
 def feet(m):
@@ -15,6 +15,7 @@ def feet(m):
 for room in build['rooms']:
     rid=room['id'];short=rid.replace('-','');folder=S/'rooms'/short.lower()
     records=json.loads((S/'Audit'/(short+' plan.json')).read_text())
+    has_context=any(r['role']=='BlenderContext' for r in records)
     allpoints=[p for r in records for line in r['lines_mm'] for p in line]
     x0=min(p[0] for p in allpoints);x1=max(p[0] for p in allpoints)
     y0=min(p[1] for p in allpoints);y1=max(p[1] for p in allpoints)
@@ -22,7 +23,7 @@ for room in build['rooms']:
     scale=min((right-left)/(x1-x0+500),(bottom-top)/(y1-y0+500))
     cx=(x0+x1)/2;cy=(y0+y1)/2
     def xy(p):return ((left+right)/2+(p[0]-cx)*scale,(top+bottom)/2-(p[1]-cy)*scale)
-    svg=[f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}" role="img" aria-label="{rid} R01 room reference plan">',
+    svg=[f'<svg xmlns="http://www.w3.org/2000/svg" width="{w}" height="{h}" viewBox="0 0 {w} {h}" role="img" aria-label="{rid} R03 room reference plan">',
          '<rect width="100%" height="100%" fill="#FFFEFA"/>']
     im=Image.new('RGB',(w,h),'#FFFEFA');d=ImageDraw.Draw(im)
     def text(x,y,t,size=16,color='#1F2D38',bold=False):
@@ -35,8 +36,9 @@ for room in build['rooms']:
         svg.append('<polyline points="'+' '.join(f'{x:.2f},{y:.2f}' for x,y in points)+f'" fill="none" stroke="{color}" stroke-width="{width}" stroke-linejoin="round"/>')
         d.line(points,fill=color,width=max(1,round(width)),joint='curve')
     text(48,47,rid+' / '+room['purpose'],27,bold=True)
-    text(48,75,'COORDINATED R01 · source-derived room reference · no new design',15,color='#3A4655')
-    text(48,101,'Ink: existing reference geometry   Blue: openings   Brown: selected fit-out   Grid: 1 ft',14,color='#6B7585')
+    text(48,75,'R03 · selected P03 source-derived room reference · unsectioned plan',15,color='#3A4655')
+    legend='Teal: saved Blender context   Grey: inherited Z0 references   Brown: fit-out   Grid: 1 ft' if has_context else 'Ink: existing reference geometry   Blue: openings   Brown: fit-out   Grid: 1 ft'
+    text(48,101,legend,14,color='#6B7585')
     line([(48,120),(1052,120)],'#C5C9CB')
     ft=304.8
     for x in range(math.floor(x0/ft),math.ceil(x1/ft)+1):
@@ -44,14 +46,15 @@ for room in build['rooms']:
     for y in range(math.floor(y0/ft),math.ceil(y1/ft)+1):
         a,b=xy((x0,y*ft)),xy((x1,y*ft));line([a,b],'#E8EBE8',.7)
     seen=set()
-    order={'StairReferences':0,'FixedReferences':1,'FurnitureAndFitout':2,'Architecture':3,'Openings':4}
+    order={'StairReferences':0,'FixedReferences':1,'FurnitureAndFitout':2,'Architecture':3,'Openings':4,'BlenderContext':-1}
     for rec in sorted(records,key=lambda r:order.get(r['role'],0)):
         for points in rec['lines_mm']:
             key=tuple((round(p[0],3),round(p[1],3)) for p in points)
             canonical=min(key,key[::-1])
             if canonical in seen:continue
             seen.add(canonical)
-            line([xy(p) for p in points],COLORS[rec['role']],1.45 if rec['role'] in ['Architecture','Openings'] else .9)
+            color='#A3AAA9' if has_context and rec['role'] in ['Architecture','Openings','FixedReferences'] else COLORS[rec['role']]
+            line([xy(p) for p in points],color,1.45 if rec['role'] in ['Architecture','Openings','BlenderContext'] else .9)
     scale_width=3*ft*scale
     line([(65,795),(65+scale_width,795)],'#1F2D38',2)
     line([(65,790),(65,800)],'#1F2D38',1)
@@ -67,21 +70,24 @@ for room in build['rooms']:
     if rid=='GF-08':doors.append('GF-10 3 ft nominal / P02 approximate jamb')
     if rid=='GF-10':doors.append('GF-08 3 ft nominal / P02 approximate jamb')
     if doors:
-        chunks=[];current='Model opening spans (not net clear): '
+        chunks=[];current='PB09 spans (not revised cabin doors or net clear): '
         for phrase in doors:
             if len(current)+len(phrase)>110:chunks.append(current);current=''
             current+=phrase+'; '
         if current:chunks.append(current.rstrip('; '))
         assert len(chunks)<=2,(rid,chunks)
         for i,t in enumerate(chunks):text(48,851+i*20,t,13,color='#216B92')
-    note='Exact extracted shapes. Walls/openings are 2D references at Z0; proposal solids retain their original world heights.'
+    if rid=='FF-03':text(48,887,'Adjacent FF-05 bathroom floor is context only, not added FF-03 workspace.',12,color='#195257')
+    note='Exact saved Blender context retains world heights; grey inherited Z0 references may have source offsets.' if has_context else 'Exact extracted shapes. Walls/openings are 2D references at Z0; proposal solids retain their original world heights.'
     text(48,905,note,13,color='#6B7585')
-    if rid in ['FF-03','FF-06']:note='R01 has no new private-office desks. Later development-only furniture is deliberately excluded.'
-    elif rid=='FF-02':note='R01 balcony only; preliminary glass paths hidden in native. New workshop bench and weatherproof cover are not included.'
+    if rid=='FF-03':note='Selected two-person and four-person cabins. Narrow rear/door-route working space remains; not capacity certification.'
+    elif rid in ['FF-04','FF-06']:note='Selected twin cabins / eight table and chair positions; modeled doors do not certify occupied access or installation.'
+    elif rid=='FF-02':note='Includes selected workshop with proposed cover. Roof, extraction, electrical design and door clearances need verification.'
     elif rid=='GF-10':note='Nine tables / 38 chair positions are a selected density layout, not verified simultaneous usable capacity.'
     else:note='Planning reference only. Measured, fitted and unmeasured conditions remain distinct; installation/access checks outstanding.'
     text(48,929,note,13,color='#9A5639')
+    text(48,949,'Wireframe projection: diagonal mesh edges are not walls, structural bracing or access routes.',12,color='#6B7585')
     svg.append('</svg>')
     (folder/(rid+'.svg')).write_text('\n'.join(svg)+'\n')
     im.save(folder/(rid+'.png'))
-print('15 exact-native top-view SVG/PNG previews written.')
+print('Two current R03 exact-native top-view SVG/PNG previews written.')

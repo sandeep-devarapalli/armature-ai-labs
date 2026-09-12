@@ -1,0 +1,15 @@
+{
+  "release": "R03",
+  "proposal": "P03 sliding entrances",
+  "sourceGeometrySha256": "215c9cfcda4a8e2456679cb42b7ba7fdd3df9bfc54855955ce9e829b44286f6c",
+  "motionStatus": "PASS / COMPLETE CONSERVATIVE MOTION BOUNDS",
+  "collisionPairs": 0,
+  "unresolvedPairs": 0,
+  "localOpeningsAndCorridorStatus": "PASS / LOCAL OPENINGS AND H1 CORRIDOR NONREDUCTION",
+  "corridorWidthMm": 971.2605476379395,
+  "scope": "Modeled door components over their complete conservative stop-limited travel, intended bearing contacts, local openings and H1 corridor non-reduction. Not an occupied-person, as-built, accessibility, egress, load, wear, hardware-product or installation certification.",
+  "privateEvidenceSha256": {
+    "motion": "e82023480594ade4ae8bae5afab269f27c324c8bee0f455ad3ca6e61b463ff4f",
+    "access": "04a9c31c7b120920dcd514931259d97e65899fb033265f8a25bc7a7388204dd8"
+  }
+}

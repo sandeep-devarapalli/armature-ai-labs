@@ -1,0 +1,210 @@
+{
+  "id": "FF-01",
+  "purpose": "Rear small room reference",
+  "floor": "FF",
+  "revision": "R02",
+  "sourceFile": "First Floor - FF03 Cabins Approved Layout P01.FCStd",
+  "sourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+  "files": {
+    "freecad": {
+      "url": "/building-models/r03/rooms/FF-01.FCStd",
+      "filename": "FF-01.FCStd",
+      "bytes": 17736,
+      "sha256": "d6c02b00caa316c1d259d6ec14c8be06e044c85bd11900a9e97a7a43f0e672cf"
+    },
+    "step": {
+      "url": "/building-models/r03/rooms/FF-01.step",
+      "filename": "FF-01.step",
+      "bytes": 14205,
+      "sha256": "5c11b00eee2a1d709f23f3376c34d9bf62ca7484cf2d1249a760cf9293f21ed8"
+    },
+    "preview": {
+      "url": "/building-models/r03/rooms/FF-01.svg",
+      "filename": "FF-01.svg",
+      "bytes": 8428,
+      "sha256": "9b24757bb3d1c6af8ecc3971155ac152dfda4e75ec4bee0c8e63083edb498a6c"
+    },
+    "previewPng": {
+      "url": "/building-models/r03/rooms/FF-01.png",
+      "filename": "FF-01.png",
+      "bytes": 37376,
+      "sha256": "44f4cf7935a70f6e8818d603f579b440f905a902de4243420d3b27e6eb223fff"
+    }
+  },
+  "shapeCount": 13,
+  "solidCount": 0,
+  "geometryKind": "2D plan/reference geometry",
+  "verification": {
+    "nativeSaveReopen": "PASS",
+    "exactWorldShapes": 13,
+    "stepReadback": "PASS",
+    "stepChecks": {
+      "valid": true,
+      "solids": true,
+      "bounds": true,
+      "volume": true,
+      "area": true,
+      "summed_edge_length": true
+    }
+  },
+  "notes": [
+    "This room has source plan/reference geometry only: its STEP contains curves/wires, not a volumetric room model."
+  ],
+  "objects": [
+    {
+      "sourceObjectId": "FF_01___FF_01_A___wall",
+      "label": "FF-01 / FF-01-A / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "5c35314cfee6516737265e8d4366f9b8a6ed8637018c57b0eaf822fa2769155b"
+    },
+    {
+      "sourceObjectId": "FF_01___FF_01_A___wall___provisional_120_mm_offset",
+      "label": "FF-01 / FF-01-A / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "e8ae188bd6a28cd18629dc548c8469cf8b2c0e161c79deaec316149b9cb9299f"
+    },
+    {
+      "sourceObjectId": "FF_01___FF_01_B___wall",
+      "label": "FF-01 / FF-01-B / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "00e39b44d3326e43317d25122601bd72c7b844c5da11998cb90b000a3f55f8ce"
+    },
+    {
+      "sourceObjectId": "FF_01___FF_01_B___wall___provisional_120_mm_offset",
+      "label": "FF-01 / FF-01-B / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "13ba35211f9d4265760420e51f18eb96eeebe25841ad62669145f240c4658803"
+    },
+    {
+      "sourceObjectId": "FF_01___FF_01_C___wall",
+      "label": "FF-01 / FF-01-C / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "8d4b920cf89fd744d39341f987c9a96f13cb3b3bd9eb1b932828fd8bccfb409d"
+    },
+    {
+      "sourceObjectId": "FF_01___FF_01_C___wall___provisional_120_mm_offset",
+      "label": "FF-01 / FF-01-C / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "0de71e4e2ede96ebe66ea8b3b809cb9dea8d6d753330cd39d883791a5c604fb7"
+    },
+    {
+      "sourceObjectId": "FF_01___FF_01_D___wall",
+      "label": "FF-01 / FF-01-D / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "ea1c423e2e652a309fa1ba46b0548677368eb965d41912c72990e590581f2547"
+    },
+    {
+      "sourceObjectId": "FF_01___FF_01_D___wall___provisional_120_mm_offset",
+      "label": "FF-01 / FF-01-D / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "1af4eeb8b505af9efbadeaa4271dced24510e69b285afb89c8c7a6d750d4f977"
+    },
+    {
+      "sourceObjectId": "FF_W06___window",
+      "label": "FF-W06 / window",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "9ad4fbaff3d1c388f56bb7cd8aaca435b0d2b667cbcdffe0f6c608c5ab990eee"
+    },
+    {
+      "sourceObjectId": "FF_01_GAP1___opening",
+      "label": "FF-01-GAP1 / opening",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "b39dfefd10ea3f4d14f360f5afd128e04aab36f456e0df571c12490975d7f31d"
+    },
+    {
+      "sourceObjectId": "FF_01___retained_Corrected_First_Floor___sink_F2_2",
+      "label": "FF-01 / retained Corrected First Floor | sink_F2_2",
+      "role": "FixedReferences",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "29b9ce7c950c625037487649cde1e5071182031a8c12485e55e44bd347cb7423"
+    },
+    {
+      "sourceObjectId": "FF_01___retained_Corrected_First_Floor___storage_cabinet_mid2_F2_3",
+      "label": "FF-01 / retained Corrected First Floor | storage_cabinet_mid2_F2_3",
+      "role": "FixedReferences",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "90a225db530ed10ac7b454547635a8d3cc305073d03fba6b464c03f80ae6e043"
+    },
+    {
+      "sourceObjectId": "FF_01___retained_Corrected_First_Floor___toilet_F2_2",
+      "label": "FF-01 / retained Corrected First Floor | toilet_F2_2",
+      "role": "FixedReferences",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "f77501d1e11dfa5ac06b3b5e03592772caffd216d4c36695e8ca77cf9abf4370"
+    }
+  ],
+  "includedInRelease": "R03",
+  "retainedFrom": {
+    "revision": "R02",
+    "releaseSha256": "224342c1a9f38354895693821a91a08820d31d62016e6f3043ec85572ae03cf3",
+    "roomManifestSha256": "7d54d5337a8eefa2192e9310c4ade86ab59bba7c4824155143b33ffd529d7a09",
+    "files": [
+      {
+        "filename": "FF-01-README.md",
+        "bytes": 1794,
+        "sha256": "16aa3ffd1a5a65c55fdfc87dc58378ead51cec0f3b7c0cff6dc166342b5b67c5"
+      },
+      {
+        "filename": "FF-01-provenance.json",
+        "bytes": 6811,
+        "sha256": "dfcb28824f99769a796af5043a104a0a0b08e362854364c36d26e3edee99498b"
+      },
+      {
+        "filename": "FF-01.FCStd",
+        "bytes": 17736,
+        "sha256": "d6c02b00caa316c1d259d6ec14c8be06e044c85bd11900a9e97a7a43f0e672cf"
+      },
+      {
+        "filename": "FF-01.png",
+        "bytes": 37376,
+        "sha256": "44f4cf7935a70f6e8818d603f579b440f905a902de4243420d3b27e6eb223fff"
+      },
+      {
+        "filename": "FF-01.step",
+        "bytes": 14205,
+        "sha256": "5c11b00eee2a1d709f23f3376c34d9bf62ca7484cf2d1249a760cf9293f21ed8"
+      },
+      {
+        "filename": "FF-01.svg",
+        "bytes": 8428,
+        "sha256": "9b24757bb3d1c6af8ecc3971155ac152dfda4e75ec4bee0c8e63083edb498a6c"
+      }
+    ]
+  }
+}

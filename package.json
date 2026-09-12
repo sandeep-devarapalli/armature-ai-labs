@@ -14,7 +14,7 @@
     "materialize:route-shells": "node scripts/materialize-route-shells.mjs",
     "check:release-artifacts": "node scripts/check-building-models.mjs && node scripts/check-release-artifacts.mjs",
     "check:pages-runtime": "node scripts/check-pages-runtime.mjs",
-    "check:live-release": "node scripts/check-live-release.mjs",
+    "check:live-release": "node scripts/check-live-release.mjs && node scripts/check-live-building-models.mjs",
     "audit:production": "node scripts/check-production-audit.mjs",
     "audit:all": "npm audit --audit-level=high",
     "preview": "vite preview",

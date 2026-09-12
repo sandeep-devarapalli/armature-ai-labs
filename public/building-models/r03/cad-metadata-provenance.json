@@ -1,0 +1,56 @@
+{
+  "files": [
+    {
+      "file": "ground-floor.FCStd",
+      "sourceSha256": "374df20b0b81f03790211ead98471353221c830b1a5cc98f4bdbcf052764c2fc",
+      "publicSha256": "3282f8e42579b73b24f097e8b65bad672d5bc2b4dc8d46c486eb163780cff0df",
+      "publicBytes": 6212792,
+      "nativeSaveReopen": "PASS",
+      "transformationKind": "current-design-curation-and-metadata-sanitization",
+      "curation": {
+        "retainedGeometryUnchanged": true,
+        "materialsUnchanged": true,
+        "selectedMembershipVerified": true,
+        "reviewViewsVerified": true,
+        "selectedAllowlistSha256": "147c4bd85e1b8037dd1023a82979c3c7dec8e3e10af53f378f7c709a4de1fe19",
+        "privateAuditSha256": "408a9f10265e9860e40255095afd58b106560e7063d8d66f24a20179c916014f",
+        "removedObjects": 701,
+        "displayChanges": [
+          "Selected shape display providers and material payloads retained exactly; orthographic review camera fitted to the visible current design.",
+          "First-floor cropped room-reference shapes remain hidden in the full-floor review."
+        ],
+        "dependencyDisclosure": [
+          "Public copies contain editable current-design Part B-reps, not historical sketches, spreadsheets, constraints or full parametric feature dependencies.",
+          "Ground-floor selection follows the retained current source visibility including parent groups. First floor uses the exact P03 full-floor and room-reference allowlist. Earlier native source files are preserved privately."
+        ],
+        "removedScenes": 0
+      }
+    },
+    {
+      "file": "first-floor.FCStd",
+      "sourceSha256": "dda19105f9c8ac092916f518b0239ad7ae420409acf9c87fe571dad727db3c29",
+      "publicSha256": "337d7e2d4d8d60c83a4e867e43141bec6c3ed46314640b8df89493b8ed2e4a50",
+      "publicBytes": 50080959,
+      "nativeSaveReopen": "PASS",
+      "transformationKind": "current-design-curation-and-metadata-sanitization",
+      "curation": {
+        "retainedGeometryUnchanged": true,
+        "materialsUnchanged": true,
+        "selectedMembershipVerified": true,
+        "reviewViewsVerified": true,
+        "selectedAllowlistSha256": "f5e70afa12b6343e3ae18acec95bab40d44f586fad17205a04c542ff51f56d4e",
+        "privateAuditSha256": "408a9f10265e9860e40255095afd58b106560e7063d8d66f24a20179c916014f",
+        "removedObjects": 3028,
+        "displayChanges": [
+          "Selected shape display providers and material payloads retained exactly; orthographic review camera fitted to the visible current design.",
+          "First-floor cropped room-reference shapes remain hidden in the full-floor review."
+        ],
+        "dependencyDisclosure": [
+          "Public copies contain editable current-design Part B-reps, not historical sketches, spreadsheets, constraints or full parametric feature dependencies.",
+          "Ground-floor selection follows the retained current source visibility including parent groups. First floor uses the exact P03 full-floor and room-reference allowlist. Earlier native source files are preserved privately."
+        ],
+        "removedScenes": 0
+      }
+    }
+  ]
+}

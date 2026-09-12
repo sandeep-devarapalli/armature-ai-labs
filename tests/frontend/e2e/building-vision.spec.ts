@@ -1,4 +1,59 @@
 import { expect, test } from "@playwright/test";
+import release from "../../../src/data/buildingModelRelease.json" with { type: "json" };
+
+test("R03 selected cabins show real native previews and load only the requested floor", async ({ page }, testInfo) => {
+  test.setTimeout(120_000);
+  const models: string[] = [];
+  const errors: string[] = [];
+  page.on("request", (request) => { if (request.url().endsWith(".glb")) models.push(new URL(request.url()).pathname); });
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.goto("/building-vision/");
+  await expect(page.getByRole("button", { name: "Open interactive 3D" })).toBeVisible();
+  await page.getByRole("button", { name: "First floor model", exact: true }).click();
+  await expect(page.getByLabel("Choose a room")).toHaveValue("FF-04");
+  expect(models).toEqual([]);
+  await expect(page.getByRole("link", { name: "Full first floor · FreeCAD", exact: true })).toHaveAttribute("href", release.downloads.firstCad.url);
+  for (const id of ["FF-04", "FF-06"]) {
+    await page.getByLabel("Choose a room").selectOption(id);
+    const wireframe = page.locator("details").filter({ has: page.getByText("Unsectioned CAD wireframe · SVG reference", { exact: true }) });
+    if ((await wireframe.getAttribute("open")) === null) await wireframe.locator("summary").click();
+    for (const label of [`Open ${id} Blender render`, `Open ${id} native CAD render`, `Open ${id} plan preview`]) {
+      const preview = page.getByRole("link", { name: label, exact: true }).locator("img");
+      await preview.scrollIntoViewIfNeeded();
+      await expect.poll(() => preview.evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+    }
+  }
+  expect(models).toEqual([]);
+  await page.getByRole("button", { name: "Open interactive 3D" }).click();
+  await expect(page.getByRole("status").filter({ hasText: "3D model ready" })).toBeVisible({ timeout: 60_000 });
+  await expect(page.locator("model-viewer")).toHaveCount(1);
+  expect([...new Set(models)]).toEqual([`${release.root}/first-floor.glb`]);
+  await page.locator(".building-model-stage").screenshot({ path: testInfo.outputPath("first-floor-viewer.png") });
+  await page.getByRole("button", { name: "Top view", exact: true }).click();
+  await page.getByRole("button", { name: "Reset view", exact: true }).click();
+  await page.getByRole("button", { name: "Ground floor model", exact: true }).click();
+  await expect(page.locator("model-viewer")).toHaveCount(0);
+  await page.getByRole("button", { name: "Open interactive 3D" }).click();
+  await expect(page.getByRole("status").filter({ hasText: "3D model ready" })).toBeVisible({ timeout: 60_000 });
+  await expect(page.locator("model-viewer")).toHaveCount(1);
+  expect([...new Set(models)]).toEqual([`${release.root}/first-floor.glb`, `${release.root}/ground-floor.glb`]);
+  await page.locator(".building-model-stage").screenshot({ path: testInfo.outputPath("ground-floor-viewer.png") });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
+  expect(errors).toEqual([]);
+});
+
+test("a failed model request retains previews and native downloads", async ({ page }) => {
+  await page.route("**/*.glb", (route) => route.abort("failed"));
+  await page.goto("/building-vision/");
+  await page.getByRole("button", { name: "Open interactive 3D" }).click();
+  await expect(page.getByRole("status").filter({ hasText: "3D could not load" })).toBeVisible();
+  await page.getByText("Static Blender preview", { exact: true }).click();
+  await expect(page.getByAltText("Ground floor static Blender preview")).toBeVisible();
+  await expect(page.getByRole("link", { name: "Full ground floor · FreeCAD", exact: true })).toHaveAttribute("href", release.downloads.groundCad.url);
+  await page.getByRole("button", { name: "Close 3D · return to preview" }).click();
+  await expect(page.locator("model-viewer")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Open interactive 3D" })).toBeVisible();
+});
 
 test("building vision presents the canonical 21-image set without overflow", async ({ page, context }) => {
   await context.grantPermissions(["clipboard-read", "clipboard-write"], {
@@ -81,7 +136,7 @@ test("building vision presents the canonical 21-image set without overflow", asy
   await expect(page.locator("#ground-floor-coworking-commons-wide-view")).toContainText("nine 2 ft 6 in square T01 modules, 17 counter chairs and 21 table chairs");
   await expect(page.locator("#ground-floor-coworking-curved-workbar-overview")).toContainText("selected counter is 17 in deep");
   await expect(page.locator("#ground-floor-presentation-area-audience-view")).toContainText("four individual lounge chairs, not a couch");
-  await expect(page.locator("#ground-floor-open-workspace-attached-washroom")).toContainText("three- or four-person cabin remains unselected and is not added to issued R01");
+  await expect(page.locator("#ground-floor-open-workspace-attached-washroom")).toContainText("GF01 cabin A is included in R03");
   await expect(page.locator("#ground-floor-glass-stair-partition")).toContainText("left flat nominal 3 ft access door");
   await expect(page.getByText("GF08 enclosed balcony café and work seating — AC undecided")).toBeVisible();
   await expect(page.getByText("Existing marble and border pattern, plumbing wall, counters, cupboards, windows, doors, ceiling and service points.")).toBeVisible();
@@ -90,9 +145,9 @@ test("building vision presents the canonical 21-image set without overflow", asy
   await page.getByRole("button", { name: "First floor", exact: true }).click();
   await expect(page.getByText("Showing 8 of 21 views")).toBeVisible();
   await expect(page.getByRole("heading", { name: "First floor glass stair partition" })).toBeVisible();
-  await expect(page.locator("#first-floor-glass-stair-partition")).toContainText("central flat nominal 3 ft access door");
-  await expect(page.locator("#first-floor-enclosed-right-balcony-door-view")).toContainText("workshop and new weatherproof cover are not implemented in issued R01");
-  await expect(page.locator("#first-floor-workspace-three-desks-dresser")).toContainText("Option B is not issued in R01");
+  await expect(page.locator("#first-floor-glass-stair-partition")).toContainText("P03 replaces the right outward door with a left-parking slider");
+  await expect(page.locator("#first-floor-enclosed-right-balcony-door-view")).toContainText("R03 retains FF02 workshop P01");
+  await expect(page.locator("#first-floor-workspace-three-desks-dresser")).toContainText("P03 replaces the outward entrances with inside-parking sliding doors");
   await expect(page.locator("#first-floor-workspace-three-desks-dresser")).toContainText("dresser and mirror must stay");
   await expect(page.locator("#first-floor-workspace-storage-wall-entry")).toContainText("Image-to-room registration is pending");
   await expect(page.getByRole("heading", { name: "First floor workspace — storage wall and balcony view" })).toBeVisible();

@@ -1,0 +1,64 @@
+{
+  "files": [
+    {
+      "file": "selected-layout.blend",
+      "sourceSha256": "4d4964c3c42c3501ada1ae3274f18a686a190cd8207e8ea9b6df7245654bc2b6",
+      "publicSha256": "2bf4638a5d4ec2eaca76316debf06f290d69afe36f667fc8329247460f130a70",
+      "publicBytes": 2798429,
+      "nativeSaveReopen": "PASS",
+      "transformationKind": "current-design-curation-and-metadata-sanitization",
+      "curation": {
+        "retainedGeometryUnchanged": true,
+        "materialsUnchanged": true,
+        "selectedMembershipVerified": true,
+        "reviewViewsVerified": true,
+        "selectedAllowlistSha256": "8eb698b34bd24f579865186ccf7829f23224d2fc90061518ec458f4b5e379d69",
+        "privateAuditSha256": "ad1c58c21059b4e5da9fc26dde50af1c24dc6800844714ac90ec6be8c56d558a",
+        "removedObjects": 2030,
+        "removedScenes": 48,
+        "displayChanges": [
+          {
+            "scene": "First floor - P03 selected current",
+            "change": "Added explicit full-floor orthographic review camera matching selected native preview framing; geometry/materials unchanged"
+          }
+        ],
+        "dependencyDisclosure": [
+          "Only required parents/object dependencies, lights and review cameras are retained alongside the selected physical geometry.",
+          "Private historical scenes, unused objects, embedded scripts and source-path metadata are omitted; original native files remain unchanged."
+        ]
+      },
+      "serializedPrivatePathScan": "PASS",
+      "evaluatedUvChecks": [
+        {
+          "scene": "Ground floor - selected current",
+          "maximum_evaluated_uv_distance": 8.429369702178807e-08,
+          "authored_uv_and_modifier_data_exact": true,
+          "numerical_limit": 1e-06
+        },
+        {
+          "scene": "First floor - P03 selected current",
+          "maximum_evaluated_uv_distance": 0.0,
+          "authored_uv_and_modifier_data_exact": true,
+          "numerical_limit": 1e-06
+        }
+      ],
+      "evaluatedUvNote": "Authored mesh UVs and modifier settings preserved exactly. Re-evaluated modifier UVs exhibit sub-micro-unit floating-point variation; geometry/topology/material fingerprints remain exact."
+    },
+    {
+      "file": "first-floor.png",
+      "sourceSha256": "a2d50ceec7ac46ac69c97dd3943510811bd836e6c7c6f4cc6414826da8f6dce1",
+      "publicSha256": "0463bc9b260c59b3d1ffcb21405f33df51855410bfba61ef6772c70781f58999",
+      "metadataOnly": true,
+      "pixelChunksUnchanged": true,
+      "retainedColorProfile": true
+    },
+    {
+      "file": "ground-floor.png",
+      "sourceSha256": "6333c6c7fdbaf16a2e5de7ab0b087410017b9f6690a3226a60c852061c312e32",
+      "publicSha256": "80b710cde0de7dcab4543af27228887a54ee9f4da357bcb62a459605f53bb47b",
+      "metadataOnly": true,
+      "pixelChunksUnchanged": true,
+      "retainedColorProfile": true
+    }
+  ]
+}

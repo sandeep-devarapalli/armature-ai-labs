@@ -15,24 +15,19 @@ import Part
 S=Path(__file__).parent
 FROZEN=json.loads((S/'Audit/frozen.json').read_text())
 G=json.loads(Path(FROZEN['geometry']['frozen']).read_text())
-STATUS='R01 source-derived room reference / user-selected planning layout / site and installation checks outstanding'
-ROLES=['Architecture','Openings','FixedReferences','StairReferences','FurnitureAndFitout','OptionalReferences']
-ROOTS={
-    'GF-02':['GF02_Furniture_P01','GF02_Lighting_P01'],
-    'GF-07':['PROPOSED_GF07_BOOTH_P01'],
-    'GF-08':['PROPOSED_GF08_ENCLOSURE_P01','PROPOSED_GF08_OPTION_B_P02'],
-    'GF-09':['GF09_Furniture','GF09_AV_P02','GF09_SELECTED_PARTITION_A01'],
-    'GF-10':['Proposal_Furniture','Proposal_Power','Proposal_Lighting'],
-    'FF-04':['FF04_PARTITION_P01'],
-}
+SELECTION=json.loads(Path(FROZEN['selection']['frozen']).read_text())
+assert SELECTION['revision']=='R03' and SELECTION['sourceSha256']==FROZEN['FF']['sha256']
+assert sorted(r['id'] for r in SELECTION['rooms'])==['FF-04','FF-06']
+STATUS='R03 selected FF04/FF06 P03 planning proposals / exact saved source references / occupied-space and installation checks outstanding'
+ROLES=['Architecture','Openings','FixedReferences','StairReferences','BlenderContext','FurnitureAndFitout','OptionalReferences']
 PURPOSES={
-    'GF-01':'Cupboard room / private-cabin planning', 'GF-02':'Reception and display',
+    'GF-01':'Four-person cabin A / retained cupboard', 'GF-02':'Reception and display',
     'GF-03':'Rear small room', 'GF-04':'Kitchen', 'GF-06':'Bathroom reference',
     'GF-07':'Glass booth', 'GF-08':'Enclosed balcony seating',
     'GF-09':'Presentation lounge and stair access', 'GF-10':'Coworking commons',
-    'FF-01':'Rear small room reference', 'FF-02':'Exterior balcony / workshop brief',
-    'FF-03':'Two-person private-office programme', 'FF-04':'Stair hall and gallery',
-    'FF-05':'Bathroom reference', 'FF-06':'Four-person private-office programme',
+    'FF-01':'Rear small room reference', 'FF-02':'Workshop and proposed weatherproof cover',
+    'FF-03':'Two-person and four-person cabins', 'FF-04':'Enlarged twin cabins / selected stair slider',
+    'FF-05':'Bathroom reference', 'FF-06':'Stacked twin cabins / dedicated balcony',
 }
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 def world(o):
@@ -49,16 +44,8 @@ def signature(sh):
         edges.append([k,round(e.Length,6),sorted([vec(v.Point) for v in e.Vertexes])])
     return {'bounds_mm':vec([b.XMin,b.YMin,b.ZMin,b.XMax,b.YMax,b.ZMax]),
             'solids':len(sh.Solids),'faces':len(sh.Faces),'edges':len(sh.Edges),
-            'volume_mm3':round(sh.Volume,4) if sh.Solids else 0,
+            'volume_mm3':round(sum(s.Volume for s in sh.Solids),4),
             'area_mm2':round(sh.Area,5),'edge_geometry':sorted(edges)}
-def children(doc,root):
-    found=set();q=[doc.getObject(root)]
-    while q:
-        o=q.pop()
-        if not o or o.Name in found:continue
-        found.add(o.Name)
-        if hasattr(o,'Group'):q.extend(o.Group)
-    return found
 def string(o,k):return str(getattr(o,k,''))
 def prop(o,name,value):
     o.addProperty('App::PropertyString',name,'Room reference')
@@ -71,9 +58,9 @@ def xmlprop(vp,name,typ,tag,attrs):
     if old is not None:p.remove(old)
     n=ET.SubElement(p,'Property',name=name,type=typ,status='1');ET.SubElement(n,tag,**{k:str(v) for k,v in attrs.items()})
     p.set('Count',str(len(p)))
-def gui_pack(path,objects,room,source_xml,source_blobs):
+def gui_pack(path,objects,bounds,source_xml,source_blobs):
     colors={'Architecture':(.12,.18,.22),'Openings':(.13,.39,.58),'FixedReferences':(.37,.46,.31),
-            'StairReferences':(.48,.53,.58),'FurnitureAndFitout':(.60,.42,.22),'OptionalReferences':(.60,.64,.68)}
+            'StairReferences':(.48,.53,.58),'BlenderContext':(.10,.32,.34),'FurnitureAndFitout':(.60,.42,.22),'OptionalReferences':(.60,.64,.68)}
     tree=ET.Element('Document',SchemaVersion='1',HasExpansion='1');ET.SubElement(tree,'Expand')
     vps=ET.SubElement(tree,'ViewProviderData',Count='0');newblobs={}
     old={n.get('name'):n for n in source_xml.find('ViewProviderData')}
@@ -105,8 +92,7 @@ def gui_pack(path,objects,room,source_xml,source_blobs):
                 count='1'
             xmlprop(vp,'ShapeAppearance','App::PropertyMaterialList','MaterialList',{'file':blobname,'count':count})
     vps.set('Count',str(len(vps)))
-    poly=room['polygon_m'];xmin=min(p[0] for p in poly)*1000;xmax=max(p[0] for p in poly)*1000
-    ymin=min(p[1] for p in poly)*1000;ymax=max(p[1] for p in poly)*1000
+    xmin,ymin,_,xmax,ymax,_=bounds
     ET.SubElement(tree,'Camera',settings=f'OrthographicCamera {{\n viewportMapping ADJUST_CAMERA\n position {(xmin+xmax)/2} {(ymin+ymax)/2} 50000\n orientation 0 0 1 0\n nearDistance 1\n farDistance 100000\n aspectRatio 1\n focalDistance 50000\n height {max(xmax-xmin,ymax-ymin)*1.28}\n}}\n')
     with zipfile.ZipFile(path) as z:data={n:z.read(n) for n in z.namelist() if n!='GuiDocument.xml'}
     data.update(newblobs);data['GuiDocument.xml']=ET.tostring(tree,encoding='utf-8',xml_declaration=True)
@@ -117,7 +103,9 @@ def gui_pack(path,objects,room,source_xml,source_blobs):
 
 results=[]
 for floor in G['floors']:
-    fid=floor['id'];source=FROZEN[fid]
+    fid=floor['id']
+    if fid!='FF':continue
+    source=FROZEN[fid]
     assert sha(source['frozen'])==sha(source['source'])==source['sha256']
     doc=App.openDocument(source['frozen'])
     with zipfile.ZipFile(source['frozen']) as z:
@@ -125,58 +113,33 @@ for floor in G['floors']:
     try:
         for room in floor['rooms']:
             rid=room['id']
-            if rid=='GF-05':continue
+            if rid not in ['FF-04','FF-06']:continue
             short=rid.replace('-','');folder=S/'rooms'/short.lower();folder.mkdir(exist_ok=True)
-            target=folder/(short+'-R01-room-reference.FCStd')
+            target=folder/(short+'-R03-room-reference.FCStd')
             assert not target.exists(),target
-            opening_ids={o['id'] for o in room['openings']}
-            feature_ids={p['id'] for p in room.get('proposals',[])}
-            descendants=set().union(*(children(doc,n) for n in ROOTS.get(rid,[])))
+            allowlist=next(r for r in SELECTION['rooms'] if r['id']==rid)
+            descendants=set(allowlist['fitoutObjectIds']);context_names=set(allowlist['contextObjectIds'])
+            assert descendants and context_names and not descendants&context_names,rid
+            assert len(descendants)==len(allowlist['fitoutObjectIds']) and len(context_names)==len(allowlist['contextObjectIds']),rid
             selected={};omitted=[]
-            for o in doc.Objects:
-                if not shape_ok(o):continue
-                sid=string(o,'SourceID');parents={p.Name for p in o.InList}
-                role=None;reason=None
-                if sid.startswith(rid+' /') or sid.startswith(rid+' fixed '):
-                    role='FixedReferences' if 'FIXED' in parents else ('OptionalReferences' if 'REFERENCE_SOURCE' in parents else ('StairReferences' if 'REFERENCE' in parents else 'Architecture'))
-                    reason='Room-qualified SourceID'
-                if sid.split(' /')[0] in opening_ids:
-                    role='Openings';reason='Opening ID listed in authoritative room record (shared openings duplicated by room)'
-                if sid.split(' /')[0] in feature_ids:
-                    role='OptionalReferences';reason='Room preliminary proposal path, retained hidden'
-                if o.Name=='Centred_wall_band___GF_10_A' and rid in ['GF-07','GF-10']:
-                    role='Architecture';reason='Exact shared GF07/GF10 native wall band, includes source 6 in end remainder'
-                if rid in ['GF-09','FF-04'] and o.Name in [fid+'_StairsBelowCut',fid+'_StairsAboveCut',fid+'_StairDirections','STAIR_VOID']:
-                    role='StairReferences';reason='Existing floor stair/void references belonging to stair hall'
-                if rid in ['GF-09','GF-10'] and o.Name.startswith('GF09_GF10_STEP_'):
-                    role='StairReferences';reason='Shared GF09/GF10 step reference'
-                if o.Name in descendants:
-                    if any('Construction' in p for p in parents):
-                        omitted.append({'id':o.Name,'reason':'Hidden construction operand omitted; finished exact shape retained'})
-                    elif o.Shape.Solids or ('Proposal_Power' in parents and o.Shape.Faces):
-                        role='FurnitureAndFitout';reason='Physical leaf under room-specific fit-out root'
-                    elif 'Proposal_Lighting' in parents:
-                        role='OptionalReferences';reason='Room-specific schematic lighting route'
-                    elif o.Name.endswith('Swing_Approximate') or o.Name.endswith('Jamb_Connectors') or 'REF_Proposed_inward_swing' in o.Name or 'REF_Door_open_90deg' in o.Name:
-                        role='OptionalReferences';reason='Room-specific approximate door operation reference'
-                    else:omitted.append({'id':o.Name,'reason':'Construction/profile/plan duplicate omitted; physical output retained'})
-                if rid=='GF-09' and (o.Name=='GF09_Track_LIGHTING_CONCEPT' or o.Name.startswith('GF09_Concept_spot_')):
-                    role='FurnitureAndFitout';reason='Current associated lighting concept; not equipment specification'
-                if rid=='GF-10' and o.Name.startswith('GF08_P02_') and 'step_tier_' not in o.Name and ('GF08_P02_Physical' in parents or 'GF08_P02_Opening_Drafting' in parents):
-                    role='Openings';reason='Shared GF10/GF08 door geometry, no unrelated balcony furniture'
-                if role:
-                    selected[o.Name]=(o,role,reason)
-            assert selected,rid
-            nd=App.newDocument(short+'_R01_Reference');nd.Label=rid+' / R01 room reference'
+            for name in sorted(descendants|context_names):
+                o=doc.getObject(name)
+                assert o and shape_ok(o) and string(o,'RoomID')==rid,(rid,name,'Pinned current source member missing or mislabeled')
+                role='BlenderContext' if name in context_names else 'FurnitureAndFitout'
+                reason='Independent current P03 room allowlist / exact world-space source shape'
+                selected[name]=(o,role,reason)
+            assert set(selected)==descendants|context_names,rid
+            nd=App.newDocument(short+'_R03_Reference');nd.Label=rid+' / R03 selected cabin reference'
             groups={role:nd.addObject('App::DocumentObjectGroup',role) for role in ROLES}
             expected={};records=[];plan=[]
             try:
                 info=nd.addObject('App::FeaturePython','RoomReferenceInfo')
                 prop(info,'Authority',STATUS);prop(info,'RoomID',rid);prop(info,'RoomPurpose',PURPOSES[rid]);prop(info,'SourceSHA256',source['sha256'])
                 prop(info,'GeometrySHA256',FROZEN['geometry']['sha256']);prop(info,'RoomDefinitionJSON',room)
+                prop(info,'SelectionSHA256',FROZEN['selection']['sha256'])
                 prop(info,'SourceFileName',Path(source['source']).name)
-                prop(info,'Scope','Exact extracted native world B-reps. Editable Part features, not complete parametric construction history. No new design; original walls/openings are 2D linework at Z0 while proposal solids retain world Z. Full-floor R01 remains authoritative.')
-                prop(info,'Limits','Planning reference only. No fit, fire, accessibility, structural, electrical or simultaneous seating-capacity certification. 60 mm wall-reference convention differences remain. Development-only FF03/FF06 desks and FF02 workshop/roof are not included.')
+                prop(info,'Scope','Exact new selected cabin B-reps and room-qualified cropped Blender context at source world height. Editable Part features, not complete parametric history. Archived old fit-out, old Z0 drafting duplicates and the separate full-floor render-context duplicates are excluded. Open/cropped reference faces are not capped or counted as solid volume. R03 full-floor CAD remains authoritative.')
+                prop(info,'Limits','Planning reference only. Eight modeled desks in each room do not establish simultaneous usable capacity. Modeled door checks are not product, installation, egress or accessibility certification. Occupied/pull-out routes remain constrained. RoomDefinitionJSON retains the PB09 baseline only; it is not a new survey of the enlarged cabin layout.')
                 for name,(old,role,reason) in selected.items():
                     sh=world(old);assert sh.isValid(),(rid,name)
                     new=nd.addObject('Part::Feature',name);assert new.Name==name
@@ -206,6 +169,7 @@ for floor in G['floors']:
                 (S/'Audit'/(short+' plan.json')).write_text(json.dumps(plan,separators=(',',':')))
                 record={'id':rid,'slug':short.lower(),'purpose':PURPOSES[rid],'source_floor':fid,
                         'source_filename':Path(source['source']).name,'source_sha256':source['sha256'],
+                        'selection_sha256':FROZEN['selection']['sha256'],
                         'room_definition':room,'selection':records,'omitted_construction':omitted,
                         'native':str(target),'step':str(step),'native_objects':len(nd.Objects),
                         'leaf_shapes':len(records),'solid_components':sum(r['solids']>0 for r in records),
@@ -214,7 +178,8 @@ for floor in G['floors']:
                         'step_expected':signature(Part.makeCompound([world(o) for o in exported]))}
                 gui_records=[{'name':o.Name,'role':o.Name if o.Name in ROLES else 'Architecture','shape':False} for o in [*groups.values(),info]]+records
             finally:App.closeDocument(nd.Name)
-            gui_pack(target,gui_records,room,source_xml,source_blobs)
+            bounds=[min(sig['bounds_mm'][i] for sig in expected.values()) for i in range(3)]+[max(sig['bounds_mm'][i] for sig in expected.values()) for i in range(3,6)]
+            gui_pack(target,gui_records,bounds,source_xml,source_blobs)
             record.update(native_sha256=sha(target),step_sha256=sha(step))
             results.append(record)
             (S/'Audit/build.json').write_text(json.dumps({'status':'BUILDING','rooms':results},indent=2))
@@ -223,4 +188,5 @@ for floor in G['floors']:
     assert sha(source['source'])==sha(source['frozen'])==source['sha256']
 for source in FROZEN.values():assert sha(source['source'])==sha(source['frozen'])==source['sha256']
 (S/'Audit/build.json').write_text(json.dumps({'status':'PASS','rooms':results},indent=2))
-print('All 15 room extracts built; originals unchanged.',flush=True)
+assert [r['id'] for r in results]==['FF-04','FF-06']
+print('Two changed R03 room extracts built; original sources unchanged. Thirteen unchanged R02 extracts remain separate.',flush=True)

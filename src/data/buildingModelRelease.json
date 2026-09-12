@@ -1,0 +1,11 @@
+{
+  "revision": "r03",
+  "label": "R03",
+  "date": "2026-09-12",
+  "root": "/building-models/r03",
+  "downloads": {
+    "groundCad": { "url": "/building-models/r03/ground-floor.FCStd" },
+    "firstCad": { "url": "https://github.com/sandeep-devarapalli/armature-ai-labs/releases/download/building-models-r03/first-floor.FCStd" },
+    "blender": { "url": "/building-models/r03/selected-layout.blend" }
+  }
+}

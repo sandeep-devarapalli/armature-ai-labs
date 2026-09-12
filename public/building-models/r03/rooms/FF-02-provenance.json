@@ -1,0 +1,3018 @@
+{
+  "id": "FF-02",
+  "purpose": "Workshop and proposed weatherproof cover",
+  "floor": "FF",
+  "revision": "R02",
+  "sourceFile": "First Floor - FF03 Cabins Approved Layout P01.FCStd",
+  "sourceSha256": "d379157326c11798497b9dfd7cdc27ba2d1e79400332d27427d82c8bb0d28891",
+  "files": {
+    "freecad": {
+      "url": "/building-models/r03/rooms/FF-02.FCStd",
+      "filename": "FF-02.FCStd",
+      "bytes": 2950683,
+      "sha256": "90094bc074ac7e332bd1f082c2451eb485b759ccca25e14e353a4f6687de7935"
+    },
+    "step": {
+      "url": "/building-models/r03/rooms/FF-02.step",
+      "filename": "FF-02.step",
+      "bytes": 14526675,
+      "sha256": "560defa263de4951c5c70cd6a4d47dd9acb864fb0b928cf6f699082d35ea35cb"
+    },
+    "preview": {
+      "url": "/building-models/r03/rooms/FF-02.svg",
+      "filename": "FF-02.svg",
+      "bytes": 699295,
+      "sha256": "c2623b73cc0aa2d0e22135d481612e8b64b0e26d42ebab76aeed960ab9c4a76b"
+    },
+    "previewPng": {
+      "url": "/building-models/r03/rooms/FF-02.png",
+      "filename": "FF-02.png",
+      "bytes": 51253,
+      "sha256": "7ecd99330d61a45b9787032c9856264544d70684d81937a907ccd2e4d1b82a82"
+    }
+  },
+  "shapeCount": 325,
+  "solidCount": 336,
+  "geometryKind": "mixed 2D references and 3D fit-out",
+  "verification": {
+    "nativeSaveReopen": "PASS",
+    "exactWorldShapes": 325,
+    "stepReadback": "PASS",
+    "stepChecks": {
+      "valid": true,
+      "solids": true,
+      "bounds": true,
+      "volume": true,
+      "area": true,
+      "summed_edge_length": true
+    }
+  },
+  "notes": [
+    "Includes selected FF02 workshop P01: two tables, four chairs, workshop bench, outward door and provisional new cover. Retains the source balcony and adjoining approaches; roof/weatherproofing, ventilation/extraction, electrical design and occupied clearances are not approved."
+  ],
+  "objects": [
+    {
+      "sourceObjectId": "FF_02___FF_02_A___wall",
+      "label": "FF-02 / FF-02-A / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "10e5597de21012214732c7eb083f33038ea0b5e1dd35d24f0843aa58e2a4e2ef"
+    },
+    {
+      "sourceObjectId": "FF_02___FF_02_A___wall___provisional_120_mm_offset",
+      "label": "FF-02 / FF-02-A / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "23a0f9cac533e29d824bf1f32e7842a369d70da9617df58149f1bd8806f94a72"
+    },
+    {
+      "sourceObjectId": "FF_02___FF_02_B___wall",
+      "label": "FF-02 / FF-02-B / wall",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "5d30581dc6a160453f1aab4b045801805d2ee38006d4db880083dacdd542406a"
+    },
+    {
+      "sourceObjectId": "FF_02___FF_02_B___wall___provisional_120_mm_offset",
+      "label": "FF-02 / FF-02-B / wall / provisional 120 mm offset",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "a688ae634b0eabde2ceff4346f51f4ef0487c0cca7d9751632260ad7c1b9c294"
+    },
+    {
+      "sourceObjectId": "FF_02___FF_02_C___railing",
+      "label": "FF-02 / FF-02-C / railing",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "af92095092dc016e86327f7fffa31c6980fee1796ebc26deebeb8f1652f8ae94"
+    },
+    {
+      "sourceObjectId": "FF_02___FF_02_D_curve___railing",
+      "label": "FF-02 / FF-02-D.curve / railing",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "39d60345394a0a956220c56901a00ac077bcfd820123db6a4ba6f21e69dedd1c"
+    },
+    {
+      "sourceObjectId": "FF_02___FF_02_E___railing",
+      "label": "FF-02 / FF-02-E / railing",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "dcb045d67ccfd7423c2718e09bd6869b047620b8320f1375ea0cf1b47ffc1584"
+    },
+    {
+      "sourceObjectId": "FF_02___FF_02_F___railing",
+      "label": "FF-02 / FF-02-F / railing",
+      "role": "Architecture",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room-qualified SourceID",
+      "worldShapeSignatureSha256": "a7de363db4cf7d5fa988ed5402542a99d483849aa6503125c39aac94bd57ff45"
+    },
+    {
+      "sourceObjectId": "FF_D04___door",
+      "label": "FF-D04 / door",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "3b41ba88ffee1e38e3369c94c7f768083afcef523f5dd8a5f613d23903b6ce08"
+    },
+    {
+      "sourceObjectId": "FF_O02___opening",
+      "label": "FF-O02 / opening",
+      "role": "Openings",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Opening ID listed in authoritative room record (shared openings duplicated by room)",
+      "worldShapeSignatureSha256": "9f2d0c7ea08d57d1b431c345a7045fc90a7876b5184912e604bad8c940bc0e56"
+    },
+    {
+      "sourceObjectId": "FF02_GLASS___path_1",
+      "label": "FF02-GLASS / path 1",
+      "role": "OptionalReferences",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room preliminary proposal path, retained hidden",
+      "worldShapeSignatureSha256": "0215c96cdd185b5ecee8cca4b2647c54ea4e58591747a9be9f1e59c0c4ac41db"
+    },
+    {
+      "sourceObjectId": "FF02_GLASS___path_2",
+      "label": "FF02-GLASS / path 2",
+      "role": "OptionalReferences",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room preliminary proposal path, retained hidden",
+      "worldShapeSignatureSha256": "6fd939ddc00fa40a948973ed7582159b4d9fb7f8da260a5f964e6099969249ff"
+    },
+    {
+      "sourceObjectId": "FF02_GLASS___path_3",
+      "label": "FF02-GLASS / path 3",
+      "role": "OptionalReferences",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room preliminary proposal path, retained hidden",
+      "worldShapeSignatureSha256": "dcb045d67ccfd7423c2718e09bd6869b047620b8320f1375ea0cf1b47ffc1584"
+    },
+    {
+      "sourceObjectId": "FF02_GLASS___path_4",
+      "label": "FF02-GLASS / path 4",
+      "role": "OptionalReferences",
+      "sourceType": "Sketcher::SketchObject",
+      "solidCount": 0,
+      "selectionBasis": "Room preliminary proposal path, retained hidden",
+      "worldShapeSignatureSha256": "a7de363db4cf7d5fa988ed5402542a99d483849aa6503125c39aac94bd57ff45"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C001",
+      "label": "FF02 P01 | Contour mullion 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "d71c5dc5349c1f74f1d75969cb586fda0f32ff76f2d68948ff29eb920d68ef96"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C002",
+      "label": "FF02 P01 | Contour mullion 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b30ea17b075f86f48f9987f6c98a771310a87fde4f6fafd60accddd98f0725be"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C003",
+      "label": "FF02 P01 | Contour mullion 2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b0c78cc197e9995cb84d88bab20ff44b0f726d2481a9619efe031f930ae84b2d"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C004",
+      "label": "FF02 P01 | Contour mullion 3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "56d9d62b1fdc27ea0f98af90a9725cb472e6b8c85b5c4686d4c5cf2d7fe8f54b"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C005",
+      "label": "FF02 P01 | Contour mullion 4",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "da8fe7e1856036f4bb97759ba4deaa79ef61b4201b8073581a92e8bd4cc2b92f"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C006",
+      "label": "FF02 P01 | Contour mullion 5",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "afc4630ddafc32dcceb7324b5adacdf17da2e13228e4ec7c8b917e5c3352b35d"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C007",
+      "label": "FF02 P01 | Contour mullion 6",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "7a3c99f89ac8150ac9dc71e5a86761c69a45e21f2fc53d35b197098b558a4138"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C008",
+      "label": "FF02 P01 | Contour mullion 7",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "878db5c254f58a4e72317bb6e2657d0321f99e4f46e5c9f0c3d705e3ba2a0491"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C009",
+      "label": "FF02 P01 | Contour mullion 8",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "267db9aab78d5f3c0a03343aecc289c40eeebc412ab420ec7a38dc47a22f1262"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C010",
+      "label": "FF02 P01 | Contour glass 0-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c4ec811f6f4ee6fc9eff446e7599cc426183b21071deb2c7d9259b5e55edc607"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C011",
+      "label": "FF02 P01 | Contour glass 0-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "28f20cbc570acc212eb891d88bc241bc21725441c1ec00c93e18a8abc4d0df5d"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C012",
+      "label": "FF02 P01 | Contour glass 0-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "0dd55a618364787cb1997e964f77e50dce6d3b47b9cef4f5eae186ba09ab553f"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C013",
+      "label": "FF02 P01 | Contour rail 0-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "7afbc18ba23948b03de5d3bdf74c684ba1ce4d456ac3c0f98401ab7ae51a6706"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C014",
+      "label": "FF02 P01 | Contour rail 0-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "bc18f228a796189c07bacff5f1533da2495bf8680139926e31857ecca9c6e179"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C015",
+      "label": "FF02 P01 | Contour rail 0-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "da378ffebce529f5fbce53dc7290d43df4c85a00744bddc56a7ab6e2a9d3f4a1"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C016",
+      "label": "FF02 P01 | Contour rail 0-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "8b9946ab8543ae1ca44b084d321f591a4f7542139e72ad8b2e4f4eda8f915384"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C017",
+      "label": "FF02 P01 | Contour glass 1-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "00ac657297340c85c18eb02aa4273b47238383dbc35cd323f5284a453fc706ce"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C018",
+      "label": "FF02 P01 | Contour glass 1-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6d17bad16ed9ec1123e921c18bb84ea5c30fb49ca34293d75ce483e6e2f6f977"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C019",
+      "label": "FF02 P01 | Contour glass 1-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "58575177586f089d5d2fcdc2632d9491b7c88e5f14c18345db408977ca6f232f"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C020",
+      "label": "FF02 P01 | Contour rail 1-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "28c6576b6fe0c68d19afe8d01c701e0b6e9005ccab4d70e557e664f8057d3957"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C021",
+      "label": "FF02 P01 | Contour rail 1-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "baa74a23e9a9410821d541590c865dadc2387196410c5dfb178661470dd3932b"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C022",
+      "label": "FF02 P01 | Contour rail 1-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "34f05305f01d333c1dfce254c0a07549d84d52fbf2ded16b37bb8680a70b25a1"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C023",
+      "label": "FF02 P01 | Contour rail 1-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "47bdd1aa66658fb004853ddef7109561e4b416dc279b30888547d3aa9f33dcd9"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C024",
+      "label": "FF02 P01 | Contour glass 2-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "1b36e8b4dcb3a5e7d28fa3cf7e96cc84fd3fa64e6955df8e745df373f4d75e92"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C025",
+      "label": "FF02 P01 | Contour glass 2-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b901d0c171e09eb67d2246704849877c5f8f2f72506b48eac4460d2fe0ea772d"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C026",
+      "label": "FF02 P01 | Contour glass 2-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "67c32e170960319ef07ac85b1704c7dab85936c920a88b339eaed257b6315287"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C027",
+      "label": "FF02 P01 | Contour rail 2-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "ae0f8671758a914655637d0c08457276dfb9f8d9694f3bffda7f94ab0ba44b76"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C028",
+      "label": "FF02 P01 | Contour rail 2-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "203412580c14fc27b289e4df45af8012d174bc3021f93d470ec2093b894e26fe"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C029",
+      "label": "FF02 P01 | Contour rail 2-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "461d8b0d1033784b1ad69c962e99a4416b8f21188c848560ac6bef1305f168e6"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C030",
+      "label": "FF02 P01 | Contour rail 2-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b560f5cfb4ff0a32f80853dbc3cc1911fcb26a3c6ba75d57bdfd29fa018aba0e"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C031",
+      "label": "FF02 P01 | Contour glass 3-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "7d68bc37a926db54fe8c9bd244501fd45d28d584b8fff8d66304e62af0d39a62"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C032",
+      "label": "FF02 P01 | Contour glass 3-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6006080188ecb0d87ebbb84fe8a39dcad6c98fb6d8bf6dd147d33e217b1c9680"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C033",
+      "label": "FF02 P01 | Contour glass 3-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b2085ecfb01c4450737622833bf9c96101d1917857947804a41f677c84594d34"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C034",
+      "label": "FF02 P01 | Contour rail 3-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "973f2ef1c703d8d8d686c9f2918809f955e31880e56441e7dfac277357df6a6d"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C035",
+      "label": "FF02 P01 | Contour rail 3-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "adeddaeea660d12dc225da5c97684cb64a91348b2d94ddef997c1bc1e774eb7c"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C036",
+      "label": "FF02 P01 | Contour rail 3-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "09fc66ee7f59a6879fc5f0953d97375aab372147859d10b3fcccf049e407e476"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C037",
+      "label": "FF02 P01 | Contour rail 3-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "52408691763ab6f3fa1e72b56a73962ece532ff07c414d8de8697dc3f1739d6c"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C038",
+      "label": "FF02 P01 | Contour glass 4-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "0168337fec14d70b4ded593d7f650660eb9b6adf7890aaae42109f312bbd0ec5"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C039",
+      "label": "FF02 P01 | Contour glass 4-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "d502cc4771107016d7c0403a0f77aee16721a4e70805c9ca7efc2c6b2fef06ce"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C040",
+      "label": "FF02 P01 | Contour glass 4-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "076bfaf1d22704f0824375690c37aa8506beeda676a9c85f1510edf9f009a652"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C041",
+      "label": "FF02 P01 | Contour rail 4-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e47acdcea35b19fc929d6b216a5400dbb140d6befc5e64bed5a7d69878e96e62"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C042",
+      "label": "FF02 P01 | Contour rail 4-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "67061eb6b51284b3196769550e349a88e66834d002c3e2fe3883db4329e352d9"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C043",
+      "label": "FF02 P01 | Contour rail 4-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "8b01b735130e4198c7fd98a1840744a1dd6a579f3ddb6daf0fa42130be26a2ab"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C044",
+      "label": "FF02 P01 | Contour rail 4-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "1bb85d20e9e5f3ae29028c28432b209fb7b74d168602b8b18ab5235c43489203"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C045",
+      "label": "FF02 P01 | Contour glass 5-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "5924e455874fbcc9f437e10b73c698183226d4e8766c519bae8e523de9dfc43f"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C046",
+      "label": "FF02 P01 | Contour glass 5-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "1af9c94a6e00bfe3974a861c0d4bdc9e220b7615bf7a92ab27d9b94fb45b4c35"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C047",
+      "label": "FF02 P01 | Contour glass 5-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "7180fa099aa8eedc3ff93bec47cd8c4350580814eb2de3fac3f46db73f20b4fd"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C048",
+      "label": "FF02 P01 | Contour rail 5-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "5a7029692f5a7ecb210bd18959a028a11d4e20533d705196c84940ca2062d0e9"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C049",
+      "label": "FF02 P01 | Contour rail 5-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e9dcf53e5800620ce563e5664e73a764cd164752ca83ab1b8b614268bb0a173f"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C050",
+      "label": "FF02 P01 | Contour rail 5-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "71f889142e9d85d0f8ca24f7cfc10e90971d90dfda8bd006ff3348ddae244002"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C051",
+      "label": "FF02 P01 | Contour rail 5-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "f79fc050636c6cc58d9af997769619534e65fd4e5cc2c1be451e47630789de41"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C052",
+      "label": "FF02 P01 | Contour glass 6-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "75ec41f2de95b5daa0eb94f4996fc5eebf75e594fd4d89c606ccb5f63a8bdb68"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C053",
+      "label": "FF02 P01 | Contour glass 6-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "2f87e14e59789bd8e7150e5deac358ccfc2356c7c7542107d1283fc847085994"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C054",
+      "label": "FF02 P01 | Contour glass 6-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "928d6951c441a93a249e383d8aa11a3b9dcd343aaa354afaf0d60c065c43c189"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C055",
+      "label": "FF02 P01 | Contour rail 6-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "d080871c1ffd8274f0ca3276c954cbad2e26757e0d2981bb618b0f8fd5619b51"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C056",
+      "label": "FF02 P01 | Contour rail 6-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "2717c3b9303860e83d8d1879e11775a22ea88e20cb457ff19538766afe0fe77a"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C057",
+      "label": "FF02 P01 | Contour rail 6-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "aa4dff89390ba6a1939669388417cda591d673d5d2803c91cb9910ffe4256349"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C058",
+      "label": "FF02 P01 | Contour rail 6-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "08876271cda7a19b293bfba6f99f4941e9fa9be1a629f688afae1e0893534d29"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C059",
+      "label": "FF02 P01 | Contour glass 7-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "9d67d1120e33d94002dfb3c7884f37b1f61bf905d83bcd60c11682840d064028"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C060",
+      "label": "FF02 P01 | Contour glass 7-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "05141dc03bad99c10741359f23c49d44c2b48878a59921766232ab1e05ed9744"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C061",
+      "label": "FF02 P01 | Contour glass 7-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "5cf529d6e9cfa775a54029962724d1cacbd2e1c6544d3eb59d44d914d9bc4400"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C062",
+      "label": "FF02 P01 | Contour rail 7-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a256c976e022a7a65c9d18974071bd8d480bc30195513e3b263fbf95eb0e7c9e"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C063",
+      "label": "FF02 P01 | Contour rail 7-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "ce38cc203d69a550d8f42ac3d98da6aa99963b6f68c932d7ab763120eab6d33e"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C064",
+      "label": "FF02 P01 | Contour rail 7-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "7935d8f19f2e9f3dd94ab0f79d7583ef7b0e46786a5a7ff67b46d9c199b58102"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C065",
+      "label": "FF02 P01 | Contour rail 7-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "395ff1029aba1b72f3c1908cd41047a9e7b96ce1cb486972153cd8622649db67"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C066",
+      "label": "FF02 P01 | Contour glass 8-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "582e2fff8465072fa5ca26ef7d26cd806cbec70d83fae816c433e9b0a14a6dce"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C067",
+      "label": "FF02 P01 | Contour glass 8-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "321ce17c2e4d3e1f2f8643042553e1055c7bec3e1489e705280047e2998ea6f3"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C068",
+      "label": "FF02 P01 | Contour glass 8-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c279cdb90b0ff9c70ac6d38f7958f37d5174a81b0d63177b2d30f65c5826b74f"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C069",
+      "label": "FF02 P01 | Contour rail 8-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "9e5210a8cbabcac7ea5570ce89a1c8352188cee0e7f6a01cb314531778f5e6ac"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C070",
+      "label": "FF02 P01 | Contour rail 8-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "dde5a76f78d6ec82f317f8a469d07fc2f0c8a2578b2d68d03d615480be948523"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C071",
+      "label": "FF02 P01 | Contour rail 8-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "1f694df6b34ff8cb4c3da0472bc95e365dcd88e54c92585d3dab40e2e89562de"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C072",
+      "label": "FF02 P01 | Contour rail 8-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "f1ea2e5c83fa43bdfc45c3b61a104a996908bd8b6486d9a70b6538e959224b56"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C073",
+      "label": "FF02 P01 | Contour glass 9-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "4fb759326ce46edfcb2624720bfaa48627b7a5016788a78c47051062b23fc38c"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C074",
+      "label": "FF02 P01 | Contour glass 9-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6d7492092ce2182267ac8650ab91fecd3c4ffe68a83b4b6aeca180090cb4228d"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C075",
+      "label": "FF02 P01 | Contour glass 9-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b57066f01e3b3adc9b657ce602f8819aac720139c36e591cff0bfbac1bc49767"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C076",
+      "label": "FF02 P01 | Contour rail 9-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6341ec5cfd9d374d5cf7b3edc1f6d76d695ce46a7000943709d6642bedc9c8a7"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C077",
+      "label": "FF02 P01 | Contour rail 9-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b6eeda3a6c678e97047feac79e5d882f16080b7289332bb1be278bc7ce41164b"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C078",
+      "label": "FF02 P01 | Contour rail 9-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e714a942e2f39c61267d948688c5abd29d3831fea6e789044d6bbb5908e11af1"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C079",
+      "label": "FF02 P01 | Contour rail 9-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "3d39831f9788ed6ba218fad419c22a2fec06aea4b7cda52dd52e2f281d58e01c"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C080",
+      "label": "FF02 P01 | Contour glass 10-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "1e1731c2fdbfd707488c4750dec9355f1ff8598d928bd17329822aa46b77ef2d"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C081",
+      "label": "FF02 P01 | Contour glass 10-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "0b7717bba86ffa382abe2e052c8844c87ec23982a793076968854900e73beb0e"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C082",
+      "label": "FF02 P01 | Contour glass 10-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "eaddd1395718a24416f687b5fc7a48ae4757c71c1e4d5a1463c8c4eb8a0414d8"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C083",
+      "label": "FF02 P01 | Contour rail 10-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "0dd1511f4b02494b0b8cfd88c9b6ec3f5e3c648b74339e4bf196ff349c930217"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C084",
+      "label": "FF02 P01 | Contour rail 10-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e37fbd50fceab36ae333d420246dcd9169adb9cfe7fdac8f9865dcf47e54876c"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C085",
+      "label": "FF02 P01 | Contour rail 10-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c1fc1d59f1a80f4eefa955c95a7df2ab2fa4198755992b4092daaa97bccecda6"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C086",
+      "label": "FF02 P01 | Contour rail 10-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "ef530270395ad16183c544c26c60d44212aca8fe6760f5baf97244a5371e65c1"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C087",
+      "label": "FF02 P01 | Contour glass 11-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c1f1044a229e5c49467f0eb765e57e7c1e6993f1d0f2f57ef63bd956b314ab4c"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C088",
+      "label": "FF02 P01 | Contour glass 11-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "3742dcf3b75b7f36e76bfde2e0dcd40da684449cecb488926e8d04bb197a712d"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C089",
+      "label": "FF02 P01 | Contour glass 11-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "5de7c076a7e340793187c7d5ff75b626fdcabb0ef8f8ed7d952d4d7dff2d234a"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C090",
+      "label": "FF02 P01 | Contour rail 11-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "15fbc595176fce87fa0a76c5d8dc52149a89cca0bce9064ac13d356701a16a5e"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C091",
+      "label": "FF02 P01 | Contour rail 11-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "12f673547266b23f6bc1f7f0a8502574b0255d217bfdf1f4d0b0bba37e904a24"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C092",
+      "label": "FF02 P01 | Contour rail 11-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "771b5dacfd43e9722f207ba0c62dd4fdec8131b656cd5f5cc38660435604ac80"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C093",
+      "label": "FF02 P01 | Contour rail 11-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "1eef9712f8de74158c7a27c10c30f4e580d878e0af0391ee98d7a948917ae713"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C094",
+      "label": "FF02 P01 | Contour glass 12-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e176908679ac7ae91bbcfb19d3912869c393ef10ea2eb6e2239e211bc6de9bea"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C095",
+      "label": "FF02 P01 | Contour glass 12-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "49b16ed9758b9b3c1f8a2b6bfb7dcb8c302cf61ec5bc9301d74058849b66247d"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C096",
+      "label": "FF02 P01 | Contour glass 12-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "49fd3e9ebc408258f0ecf3a2128dd42ce3d9976967f8eccd7159ea0944a04c67"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C097",
+      "label": "FF02 P01 | Contour rail 12-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a6b873cc8ab07777cf2f1b1e6a723d6643e1ddb3d70af2bcf9cd69c7fbf543aa"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C098",
+      "label": "FF02 P01 | Contour rail 12-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "3a848d823c58d192adc878d7afde2b5ef85e9d1115dee7a765fdffb8feef0731"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C099",
+      "label": "FF02 P01 | Contour rail 12-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "7972481fc5f52a0b1d1ff43dc06eca67266177c50ee306b1bf6639def82b9618"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C100",
+      "label": "FF02 P01 | Contour rail 12-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "dee753a189bfbdb79c4f39c0bdaf36f36db0387648b7619fb70ce8c4c4341fd3"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C101",
+      "label": "FF02 P01 | Contour glass 13-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "52c8b2c636447bb148352e2f6981ea98e9bd2db151665e6fb7ec599c914e1cd8"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C102",
+      "label": "FF02 P01 | Contour glass 13-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6ecf329a2d9c3288b139d990b83786b2aeda3d77969dda85206f549708044435"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C103",
+      "label": "FF02 P01 | Contour glass 13-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "72719ff44d11d132b4da6256c876b8701f37a79cbda974312cd0e19a5d6d7acc"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C104",
+      "label": "FF02 P01 | Contour rail 13-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "4e69ce881f95620ee5a1e720f335a97c5f8f244ea2694912de0d5965958e8015"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C105",
+      "label": "FF02 P01 | Contour rail 13-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "3d6061f7b6a60d149d92ad1b523c7932ae3ef4e300a57295b355f55bb2b85772"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C106",
+      "label": "FF02 P01 | Contour rail 13-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "f004d8faa7a3b42c0e93dd3e0857db707f53380eb0aa18a0613a8f16fc50a7c7"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C107",
+      "label": "FF02 P01 | Contour rail 13-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "f0207036d1b2b7e2b4ee20d9a0e1bf3d6dd9f3b6f79fc234e8342f247b389553"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C108",
+      "label": "FF02 P01 | Contour glass 14-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "3bc2f40612193aea56fe7c8b0f1a77d53fba0e0b14a4e3a93abf0f0336d58007"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C109",
+      "label": "FF02 P01 | Contour glass 14-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "db456fe532252bf3bfa2625853147aa9199961ae640e28cf97c31d03ed440048"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C110",
+      "label": "FF02 P01 | Contour glass 14-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "d974fa80e2b598211e8b6a11cf5a8246b1589cb76672edee61b8efba08d591d2"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C111",
+      "label": "FF02 P01 | Contour rail 14-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b10c3bd522eb18f90590bf3889f3b084560ad9e008c4adc8d9a5c401f1b45eb3"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C112",
+      "label": "FF02 P01 | Contour rail 14-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "3fc2250ea537d13432746b86f6362e7190733b76c2b413d695aa9dcfeda381ae"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C113",
+      "label": "FF02 P01 | Contour rail 14-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "51550a494f52595644df1f2cf7ee37b35bb6df55d305187b193dc865404ad7c3"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C114",
+      "label": "FF02 P01 | Contour rail 14-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "1985e1d4d063b293df807a3fd65f724541dd9414dd19c5ffd7a6465d9ff7cc49"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C115",
+      "label": "FF02 P01 | Contour glass 15-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "db07debb7634e8b1df12223016fbbf9b9f3bd504f691b55f469b69c6992c7b7c"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C116",
+      "label": "FF02 P01 | Contour glass 15-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "9c305aaca698adf7610ab49879f6f5ede6f1b56467f3eb73fd26a39a1e27cb58"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C117",
+      "label": "FF02 P01 | Contour glass 15-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "fb85cc8fad03f2814bc7f053f0063f24425a17f5f93c22d76f96bd51cc6f72b8"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C118",
+      "label": "FF02 P01 | Contour rail 15-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "58ef5ee23d67030ef41871085c76090104ae28655ada72f14f5603b62906a91e"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C119",
+      "label": "FF02 P01 | Contour rail 15-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "d5b4860c984cec0cd745eab223913b3c3e0e44745410bc7f0ebf35976ddaafcf"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C120",
+      "label": "FF02 P01 | Contour rail 15-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "f8c302dca8462f5db24700eb3c388654304b1aea809db77d07c56377ddef41e5"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C121",
+      "label": "FF02 P01 | Contour rail 15-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b51f9dcaa01b31ad32c22d4446acffa5d0c7e016066ff4f5eff078fedcf98b3e"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C122",
+      "label": "FF02 P01 | Contour glass 16-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "239f7302b86e0ffa20ea8d64f45065713bdcdb7a07b4e79462a98d554a3b5346"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C123",
+      "label": "FF02 P01 | Contour glass 16-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "02fb1e4bc335456a2542fffda580f733af0263360c6db85f0ea6ee4078cf6145"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C124",
+      "label": "FF02 P01 | Contour glass 16-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "7dea56109de73d4fb3e17890f83182feb55262b86d37b87a80d3637faccbc25f"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C125",
+      "label": "FF02 P01 | Contour rail 16-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "1e8b7090d8a9a1d0779bbff1833d327547a075c479a8af66acc8fa9ccc4ecea8"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C126",
+      "label": "FF02 P01 | Contour rail 16-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "bf4d4ebf7908caa50610b3ec98ae6d1a41dad07f651029ffa537ca71bf3225f6"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C127",
+      "label": "FF02 P01 | Contour rail 16-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "3d99f3e787888330febcbc16cbe9ab6938b7762ac20ad5b7226969bdc0d88017"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C128",
+      "label": "FF02 P01 | Contour rail 16-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c9d4dfe00a1b872237d65a471c5b2bdb429a0d2055c1d15972d16f4675324a33"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C129",
+      "label": "FF02 P01 | Contour glass 17-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "94e9c3fc3adc19269562c075ad609f144d2be211f3c510d4ba4740924c31a1e0"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C130",
+      "label": "FF02 P01 | Contour glass 17-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "629fa015c8cac34804da149dfb3f87c42e974b1ddab29a374c9a2df1a35ed866"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C131",
+      "label": "FF02 P01 | Contour glass 17-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "f12d6ef05bfbb71592032d82d392ae75c7fdf1886129f2ed64107d8afa9ab233"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C132",
+      "label": "FF02 P01 | Contour rail 17-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "7bd42649aeedb4cdab6beae767ef646c7a7942a242d2d83c710209675b027086"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C133",
+      "label": "FF02 P01 | Contour rail 17-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e9970f1a0f7812b67aa4f189cd3cf1ac849e4590cd09946c599d9eb64e60ab36"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C134",
+      "label": "FF02 P01 | Contour rail 17-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "d8735f85ee177fe27b5d8576dc04dbad98907f6d2382e055b0b06233e8c4fcfd"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C135",
+      "label": "FF02 P01 | Contour rail 17-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "bb418877bcdb083974c036a618201466ff755e6e2fd18b8af6026623176cfb48"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C136",
+      "label": "FF02 P01 | Contour glass 18-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a2fd675f9c57b87a9292c307e052891c677c98baacd1b3e8e58c21a8edc0b86b"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C137",
+      "label": "FF02 P01 | Contour glass 18-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "d9432d3da2f10c53c6426bdcc0d722a21072b2b5090a7cae2b7665584c38aa9e"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C138",
+      "label": "FF02 P01 | Contour glass 18-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a0e41ca9e9797785dc9ec0f64cd6e9055c3e8eeec8ea25f2e91e0477df5a720e"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C139",
+      "label": "FF02 P01 | Contour rail 18-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b22b636e72b74bbf6e4e49067462c4cdaaa7d6ba31982df481d19ad961828a2b"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C140",
+      "label": "FF02 P01 | Contour rail 18-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "9c03b275911f81552d838c9ee18aa54a0550a991771c857c373e7f71765229d7"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C141",
+      "label": "FF02 P01 | Contour rail 18-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "26b0286a065c8514b219d56096c45d2a3f537c8c70ee3a3d7b387e7cc6107878"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C142",
+      "label": "FF02 P01 | Contour rail 18-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "0b700783067b8a8ba33cd7cb4a48ac121609a9e7b3a306e923813a3fab785bf3"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C143",
+      "label": "FF02 P01 | Contour glass 19-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "2a9bc130b6099ca8c22d6218b518b191066088b3716e7e76092b36c1d152863f"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C144",
+      "label": "FF02 P01 | Contour glass 19-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "4e4c2b1ad06d2eb5b370b6c9fccb7c56a780409033d48234441360c579c1c491"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C145",
+      "label": "FF02 P01 | Contour glass 19-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "96e6749bf76373ec65844fd066c17e697dbd4a5137eccf8ba9226fe8a74fa545"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C146",
+      "label": "FF02 P01 | Contour rail 19-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a312e8ff36fb8ac889db400b235cd6608553173a24b613e91119dae8cca52179"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C147",
+      "label": "FF02 P01 | Contour rail 19-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "d2eb75f4dbf700338396b9af141db0bdc4dfedabba75a40840e331dca1e87955"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C148",
+      "label": "FF02 P01 | Contour rail 19-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6f7be319a175260a2654c786a0c408b01290f6a5101387d5b6b0adec01a9d55c"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C149",
+      "label": "FF02 P01 | Contour rail 19-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "791a6ff3d394db18b0316212491ceaaa269356a1cc444a0a49a329347b60815e"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C150",
+      "label": "FF02 P01 | Contour glass 20-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "909eccf9f2411783540a8d2720cf9827312d5aebce1b6d380a68d74f94445d89"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C151",
+      "label": "FF02 P01 | Contour glass 20-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "ad8c8ccedfef3252965759a39727d65442491e674474caa06006a2d81b13a853"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C152",
+      "label": "FF02 P01 | Contour glass 20-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "80a40173ab238f2c58acba1382f9371230bfc45e45300204911dcd2fc1342ffb"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C153",
+      "label": "FF02 P01 | Contour rail 20-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a57c1e47265dd2071c5eca068138963a6c06263dba442b63d5b8cf809c42ab47"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C154",
+      "label": "FF02 P01 | Contour rail 20-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c30a2664e7881066f5e2d1a0cfd714a84ff971de3e54994f46c821367b3394eb"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C155",
+      "label": "FF02 P01 | Contour rail 20-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "9f342bab106c5435481c464fec121e700c1554ffb92c820c65e6bd1828bc4cc5"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C156",
+      "label": "FF02 P01 | Contour rail 20-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "f8975735447cf1627657b76393b56284aa54ee8a95bd502dd0a0dea95ad43c68"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C157",
+      "label": "FF02 P01 | Contour glass 21-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e6bb37b7e3cb1eb8f15394849015a813695c2babc041cf612632cf5f09376b04"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C158",
+      "label": "FF02 P01 | Contour glass 21-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "89dc9ca3b3721430e012b5de2a287a74e39faf67163674fdada702fb3cc4ee75"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C159",
+      "label": "FF02 P01 | Contour glass 21-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "4ed530b8506427cef1df8af127733b2a94842484b25758c249bbb4b1fd94d8be"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C160",
+      "label": "FF02 P01 | Contour rail 21-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "7bc354ec4bbe531dc3973c30e2837313d272f413a2ff70374f8598e664fb322a"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C161",
+      "label": "FF02 P01 | Contour rail 21-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c80e76c48fbbca325e7aa9b6ff25a17a4fd729a2109ddca3cbf19c3f2e2ec1a4"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C162",
+      "label": "FF02 P01 | Contour rail 21-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "0e7d361949d060770ff81ee76a81228886ba5921766fa34e5a10d6aa5f8c12bd"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C163",
+      "label": "FF02 P01 | Contour rail 21-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6acbfce6467309bd8f9b3fe75569ad69faf6a017df5fc1e5c8545ffb2f1c85b7"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C164",
+      "label": "FF02 P01 | Contour glass 22-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "66bc9f0bd60aa336f05aa0689bda3e8600c830549c753df789af76a656ef2049"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C165",
+      "label": "FF02 P01 | Contour glass 22-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "f73a0ab0f3ee91eada67cea60c227cbad285e285d7db564736902c1545c50da1"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C166",
+      "label": "FF02 P01 | Contour glass 22-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c504c555f6a615e19718365777ed267eafb1abef8bfa543f3c9d8cbbe61ac9d8"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C167",
+      "label": "FF02 P01 | Contour rail 22-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "20d5172cff5e1bd5ef583d9ac3c9dab80ebea13187a95bec065f5b505bfb9373"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C168",
+      "label": "FF02 P01 | Contour rail 22-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "3b9c432cd7ef5f9b25b19334c58aa3bdf215b2a6b108550351e921d4ba1b6598"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C169",
+      "label": "FF02 P01 | Contour rail 22-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "cd39ea179acbd56333f96822100901d3256c7843129c8410113f3c99db407de5"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C170",
+      "label": "FF02 P01 | Contour rail 22-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "1fda9b6bf3f23ec563ac58baab65233f40f6486a90f31f740af0830b5ec2be3a"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C171",
+      "label": "FF02 P01 | Contour glass 23-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "828db70fd7e6f31df0d414db67eaefe79446314f2aa93d6db842bc76fc9b6822"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C172",
+      "label": "FF02 P01 | Contour glass 23-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "599c3a1801bf1bc37cf29d7f56d7716165f8604876b0953e05bf627fd7d5138b"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C173",
+      "label": "FF02 P01 | Contour glass 23-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "70d8f1769af427c51f5484d800b8696ccbb2f616c025f2e51b3cb16d3b8b0769"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C174",
+      "label": "FF02 P01 | Contour rail 23-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6c1af1eb837130734394d1e94852c621f0af84bfcf9905e98fd40bc9ab595cfe"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C175",
+      "label": "FF02 P01 | Contour rail 23-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c2eefdd16bf54e05c8f6cfe4029025198a38a47164a096c2a0394f36389ae76e"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C176",
+      "label": "FF02 P01 | Contour rail 23-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "96c2480e73fbd6ce474d6d1f072dfd3625c786926ec378f6903adfac78215d9a"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C177",
+      "label": "FF02 P01 | Contour rail 23-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "10433b29bc8d9f0c872657e903ef80cbf30a11fe8c825548808464d370b25283"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C178",
+      "label": "FF02 P01 | Contour glass 24-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "fcc21bb6e9c1f9430bcdcb9a07fe9ba59c53c9e40673e28a6e076d458d6afa88"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C179",
+      "label": "FF02 P01 | Contour glass 24-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "3a99d28f5cdac1489d554da97639eceb7962b795ef41aabec4bc2c53c6a3db83"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C180",
+      "label": "FF02 P01 | Contour glass 24-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "3bbbfe3096362f60b5538f2d8e99c17abd776da10e46a000343fc1b6a109e5f0"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C181",
+      "label": "FF02 P01 | Contour rail 24-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b02594e8e5c3ea6ecea9d54c63a4f0b1e2066504dfc10f82da2762ea80227f2d"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C182",
+      "label": "FF02 P01 | Contour rail 24-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "74a0e8ea91b0b02e9b19b9ed58ba5a6bd5c3e48e5b1e70e2e726785333be79d0"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C183",
+      "label": "FF02 P01 | Contour rail 24-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "ef29e16f5f1ac0d92f6c7263733f01c643e703708f7dca8c4f2fb852c7d4fd58"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C184",
+      "label": "FF02 P01 | Contour rail 24-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "9ae7b6c2b17a23e370bb203913ab51aa5197d09d5c7b25cc3f6f18a5aeb2ccfb"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C185",
+      "label": "FF02 P01 | Contour glass 25-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "1fb08365f3c47ed74df02746397ba9b5efc4b7402e8519a9744eb30fa7a63695"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C186",
+      "label": "FF02 P01 | Contour glass 25-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "5e382a578a45795ca092c45431c45cd479b8357dbb6855353c81db1e6782fcaa"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C187",
+      "label": "FF02 P01 | Contour glass 25-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "aa0dfb868214d00f269ef3e8ff7847a9a7e6533e0ab8ab2ae4eafed928533268"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C188",
+      "label": "FF02 P01 | Contour rail 25-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b9f3bf14391ccd53eaec536928e64eadd68258a6e9798c4436d5b8fd6d619582"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C189",
+      "label": "FF02 P01 | Contour rail 25-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b460b022f2cc2399198d841d0ab27fc9b81e7939b5789e739b5d27dc2fa68e30"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C190",
+      "label": "FF02 P01 | Contour rail 25-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c5706b172964c64aa067b13f54e6097965076218c31b039d2f0aaf9ca32e66f5"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C191",
+      "label": "FF02 P01 | Contour rail 25-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c82635fb6f691eef9a7db6d9f9164dffa5e51fad33dabfdaca1573dc669161f7"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C192",
+      "label": "FF02 P01 | Contour glass 26-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "7abc15e2f236a156936c41a203249030671e8bb9ae6cef86c7c32f13bc03b027"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C193",
+      "label": "FF02 P01 | Contour glass 26-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b646efcb18b373cf1074edc4eade9b765c4462e1a2fa7386ab9df6346daaa163"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C194",
+      "label": "FF02 P01 | Contour glass 26-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "318fc139bef8be372832d39f6d60578f85206fc2c5e7e1f7e959a25d8e8c51a6"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C195",
+      "label": "FF02 P01 | Contour rail 26-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "2130d216d5b22fdc697c19195f40a8645a6d0e65b3480ae16afd854dda5dacc2"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C196",
+      "label": "FF02 P01 | Contour rail 26-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "9a8812585a78a91dcfb3ae38546a98b1045872119c25cdf35bb3b11d1cd04e7b"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C197",
+      "label": "FF02 P01 | Contour rail 26-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "f4fd3ef6a45f25b2da8d03776cc905184d9e2be7b1feea41b612d8814cc32dea"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C198",
+      "label": "FF02 P01 | Contour rail 26-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "cc885c8e9bfd2e317afd6143a16d3ef591c4217ecb64785820414308b504a956"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C199",
+      "label": "FF02 P01 | Contour glass 27-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "dbbb3a9c8dcf6a423cfa5f75a20c8746c1ba48a35cc62645f2ef9566282c469f"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C200",
+      "label": "FF02 P01 | Contour glass 27-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c85be2175f65e60004494c380da1c02687c41b4b180d2560727638825f2c2f91"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C201",
+      "label": "FF02 P01 | Contour glass 27-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "ce250d654410f9b994a0dc3db5c953138dd407b41474a179456739c407e8c25c"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C202",
+      "label": "FF02 P01 | Contour rail 27-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "51024c8c361d7c4cec2ea52dd62c247cae20f7fdc623a74c92aa3e0cf28739c5"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C203",
+      "label": "FF02 P01 | Contour rail 27-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "f1205aa831cd69a3d4aeeaa62eb702bec247741c07b0784b9005c7c3e1128db4"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C204",
+      "label": "FF02 P01 | Contour rail 27-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "5509ee4409550aad7593c28319c6c604110dcb897572d50c6d410cc852bce56b"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C205",
+      "label": "FF02 P01 | Contour rail 27-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a019b0fc9a6b961fa97341c797680df721ad7877cdf81118291a3015a668a37f"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C206",
+      "label": "FF02 P01 | Contour glass 28-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "bdcc0fbecd49d9d417fbb6f40f24e4f87c9d090c2d6ed3d0f520adc4e7ac1fbb"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C207",
+      "label": "FF02 P01 | Contour glass 28-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "4ec193a02bc1a045a68781bc9d754b08a7389d69b0f9aab78b2bac1f0720d5ad"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C208",
+      "label": "FF02 P01 | Contour glass 28-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "667cf76ad143f87ab7c429f6b9e143c8dd01357e5cf73de164d401b129572d25"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C209",
+      "label": "FF02 P01 | Contour rail 28-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "ae8c4a788a80d1f04d867948e0075ed151e9baa73727fb514448436f78aff99d"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C210",
+      "label": "FF02 P01 | Contour rail 28-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c13fa99b5530870b75f604c2bb4f4759f3b4adddd4909fd10d61bd1f04276778"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C211",
+      "label": "FF02 P01 | Contour rail 28-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "9dcfc7c22b50f31b4a88ab7e961ada33c489d3aa1341e239c681ec87d9ed6389"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C212",
+      "label": "FF02 P01 | Contour rail 28-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "dc321faeedd962974617d0952e980686c48ce8584f34914285fc1efb0373abf2"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C213",
+      "label": "FF02 P01 | Contour glass 29-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "906ec8eaba945e86e374c3e590e5cdab25d9e8a52f2011ea642543e2ee681c28"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C214",
+      "label": "FF02 P01 | Contour glass 29-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "4208f24525785a823a5e45860c28720ec1701ea24cbefa21cb5f05733b2deb32"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C215",
+      "label": "FF02 P01 | Contour glass 29-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "4502d6749b0ad60d2875907d5027798144a2657beea59816cbc1bf7dd773ef95"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C216",
+      "label": "FF02 P01 | Contour rail 29-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c5a56349584c013957948c18f7e1646d47f0f9fc7480228bdf5e36fbfc8efa6f"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C217",
+      "label": "FF02 P01 | Contour rail 29-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e567415fba1364499e4404fae7a87613bc2b3e911036c782d8e274e7e9a13d35"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C218",
+      "label": "FF02 P01 | Contour rail 29-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "8c86890296c5c39d80519490f708ee8c73006227b50aab0dbbf7227a682c23db"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C219",
+      "label": "FF02 P01 | Contour rail 29-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "3b1dd5c2979859e3d0aeae13ac602981fa69602d9dec6ea8bb37b2e37c340d50"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C220",
+      "label": "FF02 P01 | Contour glass 30-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a0f3396301f961d6a145b6eda50860af8aec59b850b64117ba37f09db06dde30"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C221",
+      "label": "FF02 P01 | Contour glass 30-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "16314d28fefe3bca50e846726ef4549e4426caa95a66ee522c4d298668c1b017"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C222",
+      "label": "FF02 P01 | Contour glass 30-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "0f07dd89a978bd41b5411544f8a2362a6280143c24f64543f7368fae89f7e6d4"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C223",
+      "label": "FF02 P01 | Contour rail 30-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "3bfa979b1c1158e85ff7e7fccaae53088d849fadc09ab75bdb21e232a1b5bc17"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C224",
+      "label": "FF02 P01 | Contour rail 30-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e5247617a3a1131a53afd277f4252e88ac9cb2d798268094c43fff3d69e22580"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C225",
+      "label": "FF02 P01 | Contour rail 30-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "544a1ffb3d6c3b448b08703d691feb787c418ce87e9fa2d33748dad4fa838dc8"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C226",
+      "label": "FF02 P01 | Contour rail 30-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "11a9439b83c9e9870df9ff0f60c050ce06b78324b0eb9f2c39058750c02fdcd6"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C227",
+      "label": "FF02 P01 | Contour glass 31-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "3ad6dd83244f885a7acd933171fbe4faf11de9449be585d07039b490a94f3436"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C228",
+      "label": "FF02 P01 | Contour glass 31-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "82026b2495d3b65163cd123689cfce58dd43edf292385370c4fa6fe6978edd11"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C229",
+      "label": "FF02 P01 | Contour glass 31-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e01203f8f4290be25f3e4f3772208ce8a9bcc450418f14e4bf7705e2b52bee9f"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C230",
+      "label": "FF02 P01 | Contour rail 31-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "daaef461f4e91f7ff415d138792b9033a09d778bd7f8c9451c53ffa41e7aba5b"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C231",
+      "label": "FF02 P01 | Contour rail 31-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "b13269b8768cfb80763323ef0c8f416f837da7b2d546d278bf27d5f8f21abc84"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C232",
+      "label": "FF02 P01 | Contour rail 31-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "2a6ea72b7d5cb8c8244dfe329266818aa3d9ee2b727ccb52f8cac59cec349527"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C233",
+      "label": "FF02 P01 | Contour rail 31-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "011de9a42b70ef6160157fec0c01a90df1bc29e641bb9b0ee680954467fe6708"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C234",
+      "label": "FF02 P01 | Contour glass 32-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "725d0659ea5a4090527aafa28387f56b2a1c05fd1f2b4ef0aa32725e6194da0d"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C235",
+      "label": "FF02 P01 | Contour glass 32-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "3c0c2652b5c11bd1b07ff02e1c53447ae7b76c5325eba542fa8b202bc82a5acf"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C236",
+      "label": "FF02 P01 | Contour glass 32-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6d8f8518a1ea7557ec0b2e72d8bab677f62526eda47ac673f735e55f6f126f4b"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C237",
+      "label": "FF02 P01 | Contour rail 32-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "7e8274930c5f382ad6a3e3380b9419cb687c5f0bfa1b1de1f063a56f67d6e56c"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C238",
+      "label": "FF02 P01 | Contour rail 32-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "caf0547f5cca7d92df5bcae23ce9e3a95186d29eadb9f18e87ddc030b2389ff8"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C239",
+      "label": "FF02 P01 | Contour rail 32-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "9a26cf97f8aa813578cfaaa305db8d29a810b7991091d02d72175dc54a9f481b"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C240",
+      "label": "FF02 P01 | Contour rail 32-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a4f0e2ebe778abc6ce9f5e184c756ce357b2963051ed89721d80339c4aaf7fee"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C241",
+      "label": "FF02 P01 | Contour glass 33-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "2e21176a8eaa0df0ff998464530bec9be9240fa03df886ebc730e5f0f5383012"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C242",
+      "label": "FF02 P01 | Contour glass 33-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "3a9488a2964ad6f81f1562c2453d067b23d8380eef5e6348de87e15de319860d"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C243",
+      "label": "FF02 P01 | Contour glass 33-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6a6b7519ba2e3e9267b6ae15f7bb65f9e022abf7cadedf07d6563c654da6f328"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C244",
+      "label": "FF02 P01 | Contour rail 33-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "2040702f0ead545268e740fedfd9605dcedf46d314865d0ae094fc81c6753ad2"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C245",
+      "label": "FF02 P01 | Contour rail 33-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "fcf6c9d06af2cbba6bd5aeadbd59ca3779c279929322b666aa5828f9e75ef8e7"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C246",
+      "label": "FF02 P01 | Contour rail 33-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "7f18eeadf969d496b396ff1f7468c525e7685412eba6b2aa6c6ea250581c6057"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C247",
+      "label": "FF02 P01 | Contour rail 33-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "0f4ef3799b1e73ac07732943631ba5e42b15e3e4970781307a9b6ac7aed7b0d6"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C248",
+      "label": "FF02 P01 | Crossline fixed 1 mullion 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "d71c5dc5349c1f74f1d75969cb586fda0f32ff76f2d68948ff29eb920d68ef96"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C249",
+      "label": "FF02 P01 | Crossline fixed 1 mullion 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "9eced7ddee27cb5e3c02c13edf05cd9d598163f086089fc9785a0a012a0b38e7"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C250",
+      "label": "FF02 P01 | Crossline fixed 1 mullion 2",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "9473dca5b6c4b8f1979f02c2919efc7a155f5eddbff4c6741860fcc2c59b9e68"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C251",
+      "label": "FF02 P01 | Crossline fixed 1 mullion 3",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "284fbd11abfd98a78348b6a079e39a6f52492a5775c11aac13d6de6df2f2481d"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C252",
+      "label": "FF02 P01 | Crossline fixed 1 glass 0-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6fafaa87ee4ecff82d47db64fbe47d32bcf9c2d7c04731765b593882f718c6ee"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C253",
+      "label": "FF02 P01 | Crossline fixed 1 glass 0-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "25f69bbf77ae831fe2fcd3b6347ae843df336452d3d4281a8f09e9c27c5a29d0"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C254",
+      "label": "FF02 P01 | Crossline fixed 1 glass 0-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c29c326d4f644aa81a6b0b602e69e91a2ecdb51c6d041ed226fda3a73c311717"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C255",
+      "label": "FF02 P01 | Crossline fixed 1 rail 0-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "28dfc4b68f87298ccc5e07fbadda4614dd89c3c98500fd43c7f93dc68b445dbc"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C256",
+      "label": "FF02 P01 | Crossline fixed 1 rail 0-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "ca0f7c4a45f3ead18a52efa309ed8929a8ce8bc62c54b89d83af0ea6659f34a9"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C257",
+      "label": "FF02 P01 | Crossline fixed 1 rail 0-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "6a192f3b0b067147954a7ef7f63e396f59dcf8c26a5bc7efcf3fc51b9d210945"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C258",
+      "label": "FF02 P01 | Crossline fixed 1 rail 0-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "26d9a5a2b6d01a8a39add534102008030c8ab7557970c97e1564cb1829538de1"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C259",
+      "label": "FF02 P01 | Crossline fixed 2 mullion 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "34ac9666eee9a8f42c8aae89bfa1c9eae7538e63dc75cb57b2bbf7fdf15dbf68"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C260",
+      "label": "FF02 P01 | Crossline fixed 2 mullion 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c1690670938ae0071d2b3cbe8836d81076b1605737e067a2aa8d4b205eb118fa"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C261",
+      "label": "FF02 P01 | Crossline fixed 2 glass 0-0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "565f600b548fea46dba11ea9734a8974b41f4a0fc5c97b7d6639048b01371da2"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C262",
+      "label": "FF02 P01 | Crossline fixed 2 glass 0-1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "ff2929c00c5d61096af7a0369ca15aad3eab1e3d948b9da3e3c45180c1cd9ef6"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C263",
+      "label": "FF02 P01 | Crossline fixed 2 glass 0-upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "7be0425706374c35d13cd670cb3e964fe1c225673f16a691c8b39e3d69c93819"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C264",
+      "label": "FF02 P01 | Crossline fixed 2 rail 0-0.08",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "307da14593c973bf67cd2915639dc0b16162f45ce6e789c47ab2a361f4092ffe"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C265",
+      "label": "FF02 P01 | Crossline fixed 2 rail 0-0.90",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "4438d16b99c878eb237fa0afede3679be74afbe462ca0cd4c3aa341083b073c5"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C266",
+      "label": "FF02 P01 | Crossline fixed 2 rail 0-1.75",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "0d4b4dae84081144a5bdc8393ded30b02610b9ec33ed7881f85d0fbde64582f2"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C267",
+      "label": "FF02 P01 | Crossline fixed 2 rail 0-top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e30a9e7a8fad8b0c44cbe1fc1f4095accea08b0c8a5b36a78de70749a8c62edf"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C268",
+      "label": "FF02 P01 | Latch jamb",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "284fbd11abfd98a78348b6a079e39a6f52492a5775c11aac13d6de6df2f2481d"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C269",
+      "label": "FF02 P01 | Hinge jamb",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "34ac9666eee9a8f42c8aae89bfa1c9eae7538e63dc75cb57b2bbf7fdf15dbf68"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C270",
+      "label": "FF02 P01 | Door head",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "bc19fb176044f7eebe42f357ad68118260aa1479b5ee3e003d3ca1669919e6ed"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C271",
+      "label": "FF02 P01 | Door transom glass",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "1449ca6e33578504048cd6e10936755ecf7b97e4fb6d87ce54c95fdbd38d9368"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C272",
+      "label": "FF02 P01 | Door transom top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "c9a15665626318bc7d9208f4e9614990f08e751043891a97fb588f5f00d592b8"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C273",
+      "label": "FF02 P01 | Door hinge stile",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a3e0f06c4696220c5786b38dc9f52dbb1b014d46c2dbf96b5e976996a6a0900b"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C274",
+      "label": "FF02 P01 | Door latch stile",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "295ae11e7ab963c99b3c8b5a64d1e6fee92c9be0cd199af32666754aea2e2e51"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C275",
+      "label": "FF02 P01 | Door bottom rail",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "cab727587ee3fafb4ba2a97b6122369d47a8ade834bcb28856bcb2f3180c5bcf"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C276",
+      "label": "FF02 P01 | Door mid rail",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "293543060f9d850b412377742345482c499e0d3b15053db5d2fe72f4861de704"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C277",
+      "label": "FF02 P01 | Door top rail",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "dc64b0102d56bfa09008b52eb92bfb5f555be5104fc39f7183edf7f6108f7e6d"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C278",
+      "label": "FF02 P01 | Door glass lower",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "a4b4a4fd048e0e9365b3b1f780df1e6812167f3d91b8382d01d88d74cabc331e"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C279",
+      "label": "FF02 P01 | Door glass upper",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "d7ea2f724fc7e4111ed4efc176beaa8676a5e8fb2f04b2f8a8210eee814367b2"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C280",
+      "label": "FF02 P01 | Door handle",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "fac08cfa79c35509f40c91a08fd97b1b596a9055f3ee2985523e0c830a8e948f"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C281",
+      "label": "FF02 P01 | T1 | T1_ApronX0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "550f799c41d28f1b7a3847c50bcfa9d7b6af77781d2d58f7dba5a72b1e5ae16a"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C282",
+      "label": "FF02 P01 | T1 | T1_ApronX1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "10b4d57f735bdc2466957283aae6384f7725e1b15aa90ce015153695689033f5"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C283",
+      "label": "FF02 P01 | T1 | T1_ApronY0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "663afc9052b473f4efba9d9bfdcfdfe8454bd0ab7cc151affeed074b0a3a458b"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C284",
+      "label": "FF02 P01 | T1 | T1_ApronY1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "84f95e88e97fa1946907678f98752f12e41072b7c32582a9d1f9d7535f013a2c"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C285",
+      "label": "FF02 P01 | T1 | T1_Leg00",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "acb6a870c56fc881e55800a68f08201681c7d795967ffe8f0073e931fe51b5ae"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C286",
+      "label": "FF02 P01 | T1 | T1_Leg01",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "e193d0f31e42c255e34828f3108f1cc32f187e5cc5312cd2b8e301ebed2c0dcb"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C287",
+      "label": "FF02 P01 | T1 | T1_Leg10",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "305b46146f242e40aaf3730f33a0d0c392791cc0148435b2ff04f071033bdc1c"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C288",
+      "label": "FF02 P01 | T1 | T1_Leg11",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "cd079c88f6b8837ece620c151d9eeafb0d67733677245d590d1f4ab68c76b446"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C289",
+      "label": "FF02 P01 | T1 | T1_Top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "9c6311d0fbb7d5db9a24b09a3bdae7241dab04e9b95c300929ef33abced44398"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C290",
+      "label": "FF02 P01 | T2 | T1_ApronX0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "838d1d87afd8c93bcfabbb09f5a7a19ec1e0d86ffde7a28abacaa5eefa06612a"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C291",
+      "label": "FF02 P01 | T2 | T1_ApronX1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "2ce5224155bc983ce2d8ea00b3e0bc262522658ac5f515217e828332a6881101"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C292",
+      "label": "FF02 P01 | T2 | T1_ApronY0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "567b1884efe6d9a10f7af24b4c45d0df07a4f499786b287339e9dadd4a8fccc5"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C293",
+      "label": "FF02 P01 | T2 | T1_ApronY1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "08422fea565beb65cd6aa107ad67984052b781243655757c4929f8b971c7455e"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C294",
+      "label": "FF02 P01 | T2 | T1_Leg00",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "7505a3ebbd84a3ead877a992e8cca10f691357019a1edaca7aa2b5e3fe7e53f8"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C295",
+      "label": "FF02 P01 | T2 | T1_Leg01",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "bc8336b216854b9a664fadab2add64bb3e0d78c4c766e6a196e140d6385556c1"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C296",
+      "label": "FF02 P01 | T2 | T1_Leg10",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "7f4e87f9bfbae93c3b0c0e66c80b290a8a4e65698430c3b7ec8e731540f8d026"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C297",
+      "label": "FF02 P01 | T2 | T1_Leg11",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "5b1b87ded01f469a4346185a825195d1d5e31300b1c26b0684bef950a53c0e44"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C298",
+      "label": "FF02 P01 | T2 | T1_Top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "152565dee09bc0eb9272e6d5bf009500d31e764d281433d25e6055217d0befae"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C299",
+      "label": "FF02 P01 | T1-W | PROPOSED_T1L_chair_placeholder",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 6,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "1ed4dad9194bb18f7635e896b6ca739762108a94a2b770efd0629eba3b6dc799"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C300",
+      "label": "FF02 P01 | T1-E | PROPOSED_T1L_chair_placeholder",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 6,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "7a05359e47296fa0709cdd15179365e62e8006112333a044b97d2a6e126a5397"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C301",
+      "label": "FF02 P01 | T2-N | PROPOSED_T1L_chair_placeholder",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 6,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "275d209620961418b1d745c15c771df2a137c7b8556021c6d9160b2531c69430"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C302",
+      "label": "FF02 P01 | T2-S | PROPOSED_T1L_chair_placeholder",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 6,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "06d0fb6e3084b0a7daf2face6988357c54e1edfeac50c03419abe5fe68bc7cb7"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C303",
+      "label": "FF02 P01 | WORK-C | PROPOSED_T1L_chair_placeholder",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 6,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "eb76a184a02b2b16f6eeda1a60b81362f3d28321cafe36a5a8e81524bb035ccd"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C304",
+      "label": "FF02 P01 | Workshop 4 ft x 3 ft top",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "ac7160af61abfbcb6d082ce61e15e0ad458cfc5b23ceb7194ad07e75305a928b"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C305",
+      "label": "FF02 P01 | Workshop leg 00",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "7736f8020153b1088e9f6eeb332e332f40df38958007eda12d723a88b393b913"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C306",
+      "label": "FF02 P01 | Workshop leg 01",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "56b627a22557dea2e3a9f951c5e650a2129ea7cf8b50d2051770ef56a1ff4d24"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C307",
+      "label": "FF02 P01 | Workshop leg 10",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "1a870a030ccbd6ceb155e57fc0bac82056d5a9a66abf5e3b1dca56dd71a7edaa"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C308",
+      "label": "FF02 P01 | Workshop leg 11",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "3c3fe4d6e8de11ce48a6be1e4bca2bb157954a606636ff63d449aff7d3c8c3f4"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C309",
+      "label": "FF02 P01 | Workshop apron 0",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "90c8870b17ebd9f77b369f0ef4807a4ee006dbef8a3d2aef0021ea3da944f183"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C310",
+      "label": "FF02 P01 | Workshop apron 1",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "2cc9ccee3c13d6f7b46c2d8c4149f04bf2244e5e6511f6f64e92458891298ab2"
+    },
+    {
+      "sourceObjectId": "WorkshopP01_C311",
+      "label": "FF02 P01 | New cover envelope - provisional",
+      "role": "FurnitureAndFitout",
+      "sourceType": "Part::Feature",
+      "solidCount": 1,
+      "selectionBasis": "Physical leaf under room-specific fit-out root",
+      "worldShapeSignatureSha256": "965dafe7fed89da1b1b125c2c23336e191aa4a81af2df7d1bf568ef3eb3a4bcb"
+    }
+  ],
+  "includedInRelease": "R03",
+  "retainedFrom": {
+    "revision": "R02",
+    "releaseSha256": "224342c1a9f38354895693821a91a08820d31d62016e6f3043ec85572ae03cf3",
+    "roomManifestSha256": "7d54d5337a8eefa2192e9310c4ade86ab59bba7c4824155143b33ffd529d7a09",
+    "files": [
+      {
+        "filename": "FF-02-README.md",
+        "bytes": 1975,
+        "sha256": "fe12f87de110e40b65775bf40d6ebd45d94e50eafd8d80c0e2d62c0ee1b5b84c"
+      },
+      {
+        "filename": "FF-02-provenance.json",
+        "bytes": 124874,
+        "sha256": "a3d819983cda8a1b89d3f9f38dcaaf89949e2fc7e676545e0f13e50f11551c2b"
+      },
+      {
+        "filename": "FF-02.FCStd",
+        "bytes": 2950683,
+        "sha256": "90094bc074ac7e332bd1f082c2451eb485b759ccca25e14e353a4f6687de7935"
+      },
+      {
+        "filename": "FF-02.png",
+        "bytes": 51253,
+        "sha256": "7ecd99330d61a45b9787032c9856264544d70684d81937a907ccd2e4d1b82a82"
+      },
+      {
+        "filename": "FF-02.step",
+        "bytes": 14526675,
+        "sha256": "560defa263de4951c5c70cd6a4d47dd9acb864fb0b928cf6f699082d35ea35cb"
+      },
+      {
+        "filename": "FF-02.svg",
+        "bytes": 699295,
+        "sha256": "c2623b73cc0aa2d0e22135d481612e8b64b0e26d42ebab76aeed960ab9c4a76b"
+      }
+    ]
+  }
+}
