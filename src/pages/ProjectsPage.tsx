@@ -1,25 +1,38 @@
-import { useMemo, useState } from "react";
+import { useRef, useState } from "react";
 import {
   ArrowUpRight,
   Cpu,
-  Filter,
+  ChevronDown,
   HardDrive,
   Rocket,
   Search,
   Share2,
-  Wrench
+  SlidersHorizontal,
+  Wrench,
+  X
 } from "lucide-react";
-import { Link } from "react-router-dom";
-import { EmptyState, Field, PageHeader, Section, Status } from "../components/Primitives";
+import { Link, useSearchParams } from "react-router-dom";
+import { EmptyState, Field, Section, Status } from "../components/Primitives";
 import { getProjectComponentCounts } from "../data/components";
 import { projects } from "../data/projects";
 import type { Project } from "../types/domain";
 
-const priorities = ["All", "P0", "P1", "P2"] as const;
-const statuses = ["All statuses", ...new Set(projects.map((project) => project.status))];
-const categories = ["All categories", ...new Set(projects.map((project) => project.category))];
+const priorities = ["P0", "P1", "P2"];
+const statuses = [...new Set(projects.map((project) => project.status))];
+const categories = [...new Set(projects.map((project) => project.category))].sort();
 const featuredProjects = projects.filter((project) => project.priority === "P0");
-const projectLayers = ["All layers", "Lab infrastructure", "AI & software", "Robotics & autonomy", "Sensing & interfaces"] as const;
+const projectLayers = [
+  { value: "", label: "All projects" },
+  { value: "robotics", label: "Robotics" },
+  { value: "sensing", label: "Sensing & interfaces" },
+  { value: "ai", label: "AI & software" },
+  { value: "infrastructure", label: "Infrastructure" }
+] as const;
+const sortOptions = [
+  { value: "", label: "Roadmap order" },
+  { value: "priority", label: "Priority: P0 first" },
+  { value: "name", label: "Name: A to Z" }
+];
 const projectMediaCredits: Record<string, readonly [string, string]> = {
   "autonomous-computer": ["Autonomous AI · autonomous-computer", "https://github.com/autonomous-ai/autonomous-computer"],
   "local-8b-model": ["Unsloth Studio", "https://github.com/unslothai/unsloth"],
@@ -38,6 +51,8 @@ const projectMediaCredits: Record<string, readonly [string, string]> = {
   "diy-weather-station": ["Nikodem Bartnik · DIY Weather Station", "https://github.com/NikodemBartnik/DIY-Weather-Station/blob/main/server/app/static/images/diy_weather_station.jpg"],
   q8bot: ["Q8bot · Yufeng (Eric) Wu", "https://github.com/EricYufengWu/q8bot"],
   "solo12-odri": ["Open Dynamic Robot Initiative · Solo 12", "https://github.com/open-dynamic-robot-initiative/open_robot_actuator_hardware"],
+  "orion-quadruped": ["Ashish A. · Orion Quadruped", "https://github.com/AshishA26/Orion-Quadruped/blob/5d265a949ce82a890a101f3e6c9379515f0cefae/photos/Orion_Thumbnail.png"],
+  "bridge-humanoid": ["BRIDGE project team · teleoperation demo", "https://drive.google.com/file/d/1r2t6l6J9tWuIiAmhrMzVjE-pLqLZ6EUT/view"],
   yor: ["YOR project team · yourownrobot.ai", "https://www.yourownrobot.ai/"],
   "rebot-devarm": ["Seeed Studio · reBot DevArm", "https://github.com/Seeed-Projects/reBot-DevArm"],
   openarm: ["OpenArm · Enactic", "https://github.com/enactic/openarm"],
@@ -71,27 +86,25 @@ const localFirstLoop = [
   { title: "Share", copy: "Open repos", icon: Share2 }
 ] as const;
 
-type ProjectLayer = (typeof projectLayers)[number];
-
-function getProjectLayer(project: Project): Exclude<ProjectLayer, "All layers"> {
+function getProjectLayer(project: Project) {
   if (project.infrastructure) {
-    return "Lab infrastructure";
+    return "infrastructure";
   }
   if (["Embedded AI", "Machine Learning"].includes(project.category)) {
-    return "AI & software";
+    return "ai";
   }
   if (["Tactile Sensing", "Tactile Interfaces", "Vision AI", "Wearables", "Environmental Sensing"].includes(project.category)) {
-    return "Sensing & interfaces";
+    return "sensing";
   }
-  return "Robotics & autonomy";
+  return "robotics";
 }
 
-function ProjectCard({ project, anchor = true }: { project: Project; anchor?: boolean }) {
+function ProjectCard({ project }: { project: Project }) {
   const componentCounts = getProjectComponentCounts(project.slug);
   const mediaCredit = projectMediaCredits[project.slug];
 
   return (
-    <article className="project-card" id={anchor ? project.slug : undefined}>
+    <article className="project-card" id={project.slug}>
       {project.image && (
         <figure className="project-visual">
           <img src={project.image} alt={`${project.title} project`} loading="lazy" />
@@ -120,122 +133,190 @@ function ProjectCard({ project, anchor = true }: { project: Project; anchor?: bo
           <span>{componentCounts.alternative} alternative</span>
         </div>
         <div className="tag-row">{project.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
-        {project.detailPath && (
-          <Link to={project.detailPath}>
-            Research brief <ArrowUpRight aria-hidden="true" />
+        <div className="project-card-links">
+          {project.detailPath && (
+            <Link to={project.detailPath}>
+              Research brief <ArrowUpRight aria-hidden="true" />
+            </Link>
+          )}
+          <Link to={`/components?project=${project.slug}`}>
+            Build components <ArrowUpRight aria-hidden="true" />
           </Link>
-        )}
-        <Link to={`/components?project=${project.slug}`}>
-          Build components <ArrowUpRight aria-hidden="true" />
-        </Link>
-        <a href={project.sourceUrl} target="_blank" rel="noreferrer">
-          Project source <ArrowUpRight aria-hidden="true" />
-        </a>
+          <a href={project.sourceUrl} target="_blank" rel="noreferrer">
+            Project source <ArrowUpRight aria-hidden="true" />
+          </a>
+        </div>
       </div>
     </article>
   );
 }
 
 export function ProjectsPage() {
-  const [priority, setPriority] = useState<(typeof priorities)[number]>("All");
-  const [status, setStatus] = useState("All statuses");
-  const [layer, setLayer] = useState<ProjectLayer>("All layers");
-  const [category, setCategory] = useState("All categories");
-  const [query, setQuery] = useState("");
-  const filtered = useMemo(() => {
-    const needle = query.toLowerCase().trim();
-    return projects.filter((project) => {
-      const matchesPriority = priority === "All" || project.priority === priority;
-      const matchesStatus = status === "All statuses" || project.status === status;
-      const matchesLayer = layer === "All layers" || getProjectLayer(project) === layer;
-      const matchesCategory = category === "All categories" || project.category === category;
-      const haystack = `${project.title} ${project.category} ${project.description} ${project.tags.join(" ")}`.toLowerCase();
-      return matchesPriority && matchesStatus && matchesLayer && matchesCategory && (!needle || haystack.includes(needle));
-    });
-  }, [category, layer, priority, query, status]);
+  const [params, setParams] = useSearchParams();
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const searchInput = useRef<HTMLInputElement>(null);
+  const validValue = (key: string, options: readonly string[]) => {
+    const value = params.get(key) ?? "";
+    return options.includes(value) ? value : "";
+  };
+  const priority = validValue("priority", priorities);
+  const status = validValue("status", statuses);
+  const layer = validValue("layer", projectLayers.map((item) => item.value));
+  const category = validValue("category", categories);
+  const sort = validValue("sort", sortOptions.map((item) => item.value));
+  const query = params.get("q") ?? "";
+  const words = query.toLowerCase().trim().split(/\s+/).filter(Boolean);
+  const matchesSearch = (project: Project) => {
+    const text = `${project.title} ${project.category} ${project.description} ${project.tags.join(" ")}`.toLowerCase();
+    return words.every((word) => text.includes(word));
+  };
+  const filtered = projects.filter((project) =>
+    (!priority || project.priority === priority)
+    && (!status || project.status === status)
+    && (!layer || getProjectLayer(project) === layer)
+    && (!category || project.category === category)
+    && matchesSearch(project)
+  );
+  if (sort === "name") filtered.sort((a, b) => a.title.localeCompare(b.title));
+  if (sort === "priority") filtered.sort((a, b) => a.priority.localeCompare(b.priority));
+
+  const activeFilters = [
+    { key: "q", value: query.trim(), label: `Search: ${query.trim()}` },
+    { key: "layer", value: layer, label: projectLayers.find((item) => item.value === layer)?.label },
+    { key: "category", value: category, label: category },
+    { key: "status", value: status, label: status },
+    { key: "priority", value: priority, label: priority }
+  ].filter((item) => item.value);
+  const refinementCount = [category, status, priority].filter(Boolean).length;
+  const visibleCategories = categories.filter((item) => !layer || projects.some((project) =>
+    project.category === item && getProjectLayer(project) === layer
+  ));
+
+  function updateFilters(values: Record<string, string>, replace = false) {
+    setParams((current) => {
+      const next = new URLSearchParams(current);
+      for (const [key, value] of Object.entries(values)) {
+        if (value) next.set(key, value);
+        else next.delete(key);
+      }
+      return next;
+    }, { replace, preventScrollReset: true });
+  }
+
+  function clearFilters() {
+    updateFilters({ q: "", layer: "", category: "", status: "", priority: "", sort: "" });
+  }
 
   return (
     <>
-      <PageHeader
-        meta="Open projects · living build roadmap"
-        title="Build what the lab needs next."
-        description="A working roadmap of open hardware, robot learning, tactile sensing, mobile autonomy, and the infrastructure that keeps every experiment reproducible."
-      >
-        <div className="process-line">
-          {localFirstLoop.map(({ title, copy, icon: Icon }, index) => (
-            <div className="process-step" key={title}>
-              <span className="mono">0{index + 1}</span>
-              <Icon aria-hidden="true" />
-              <h3>{title}</h3>
-              <p>{copy}</p>
-            </div>
-          ))}
+      <header className="projects-header">
+        <div className="wrap">
+          <div className="projects-heading">
+            <h1>Projects</h1>
+            <span className="mono">{projects.length} build & research tracks</span>
+          </div>
+          <p>Robots, sensing, local AI, and the tools to build them. Find your next lab project.</p>
         </div>
-      </PageHeader>
+      </header>
+
+      <section className="project-browser" id="project-grid" aria-label="Project catalog">
+        <div className="wrap">
+          <div className="project-search-row">
+            <label className="search-box">
+              <Search aria-hidden="true" />
+              <span className="sr-only">Search projects</span>
+              <input ref={searchInput} type="search" value={query} onChange={(event) => updateFilters({ q: event.target.value }, true)} placeholder="Search projects, hardware, or skills" />
+            </label>
+            <button className="button button-quiet project-filter-toggle" type="button" aria-expanded={filtersOpen} aria-controls="project-refinements" onClick={() => setFiltersOpen(!filtersOpen)}>
+              <SlidersHorizontal aria-hidden="true" /> Filters{refinementCount > 0 && ` (${refinementCount})`}
+              <ChevronDown aria-hidden="true" />
+            </button>
+          </div>
+          <div className="project-topics" role="group" aria-label="Filter by topic">
+            {projectLayers.map((item) => {
+              const count = projects.filter((project) =>
+                (!item.value || getProjectLayer(project) === item.value)
+                && (!priority || project.priority === priority)
+                && (!status || project.status === status)
+                && matchesSearch(project)
+              ).length;
+              return (
+                <button key={item.value} type="button" aria-pressed={layer === item.value} onClick={() => updateFilters({ layer: item.value, category: "" })}>
+                  {item.label}<span>{count}</span>
+                </button>
+              );
+            })}
+          </div>
+          <div id="project-refinements" className={`project-refinements${filtersOpen ? " is-open" : ""}`}>
+            <Field label="Category">
+              <select value={category} onChange={(event) => updateFilters({ category: event.target.value })}>
+                <option value="">All categories</option>
+                {[...new Set([...visibleCategories, ...(category ? [category] : [])])].map((item) => <option key={item}>{item}</option>)}
+              </select>
+            </Field>
+            <Field label="Build status">
+              <select value={status} onChange={(event) => updateFilters({ status: event.target.value })}>
+                <option value="">All statuses</option>
+                {statuses.map((item) => <option key={item}>{item}</option>)}
+              </select>
+            </Field>
+            <Field label="Priority">
+              <select value={priority} onChange={(event) => updateFilters({ priority: event.target.value })}>
+                <option value="">All priorities</option>
+                {priorities.map((item) => <option key={item}>{item}</option>)}
+              </select>
+            </Field>
+          </div>
+          <div className="project-results-bar">
+            <p role="status" aria-live="polite" aria-atomic="true"><strong>{filtered.length}</strong> of {projects.length} projects</p>
+            <label className="project-sort">
+              <span>Sort by</span>
+              <select value={sort} onChange={(event) => updateFilters({ sort: event.target.value })}>
+                {sortOptions.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}
+              </select>
+            </label>
+          </div>
+          {activeFilters.length > 0 && (
+            <div className="project-active-filters" aria-label="Active filters">
+              {activeFilters.map((item) => (
+                <button key={item.key} type="button" title={`Remove ${item.label}`} aria-label={`Remove ${item.label}`} onClick={() => updateFilters({ [item.key]: "" })}>
+                  <span>{item.label}</span><X aria-hidden="true" />
+                </button>
+              ))}
+              <button className="project-clear" type="button" onClick={clearFilters}>Clear all</button>
+            </div>
+          )}
+          {filtered.length > 0 ? (
+            <div className="project-grid">
+              {filtered.map((project) => <ProjectCard key={project.slug} project={project} />)}
+            </div>
+          ) : (
+            <div className="project-no-results">
+              <EmptyState title="No projects match these filters.">Try a broader topic or a different search.</EmptyState>
+              <button className="button button-primary" type="button" onClick={clearFilters}><X aria-hidden="true" /> Clear filters</button>
+            </div>
+          )}
+        </div>
+      </section>
 
       <Section
         id="p0-builds"
         number="01"
         title="P0 builds"
-        lede="Start here. Storage, compute, and the first embodied-AI arm loop give the lab its local backbone."
+        lede="Storage, compute, and the first embodied-AI arm loop give the lab its local backbone."
       >
-        <div className="project-grid">
-          {featuredProjects.map((project) => <ProjectCard anchor={false} key={project.slug} project={project} />)}
+        <div className="project-priority-list">
+          {featuredProjects.map((project) => (
+            <Link key={project.slug} to={`/projects?q=${encodeURIComponent(project.title)}`} onClick={() => searchInput.current?.focus()}>
+              <img src={project.image} alt="" loading="lazy" />
+              <span>{project.title}<small>{project.category}</small></span>
+              <ArrowUpRight aria-hidden="true" />
+            </Link>
+          ))}
         </div>
       </Section>
 
-      <Section
-        id="project-grid"
-        number="02"
-        title="Project grid"
-        lede={`${filtered.length} of ${projects.length} project tracks shown. Filter by build status, lab layer, category, or priority.`}
-      >
-        <div className="filter-bar">
-          <label className="search-box">
-            <Search aria-hidden="true" />
-            <span className="sr-only">Search projects</span>
-            <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search projects" />
-          </label>
-          <div className="segmented" role="group" aria-label="Filter by priority">
-            <Filter aria-hidden="true" />
-            {priorities.map((item) => (
-              <button key={item} className={priority === item ? "active" : ""} onClick={() => setPriority(item)} type="button">
-                {item}
-              </button>
-            ))}
-          </div>
-        </div>
-        <div className="filter-bar">
-          <div className="form-grid" style={{ width: "100%" }}>
-            <Field label="Status">
-              <select value={status} onChange={(event) => setStatus(event.target.value)}>
-                {statuses.map((item) => <option key={item}>{item}</option>)}
-              </select>
-            </Field>
-            <Field label="Lab layer">
-              <select value={layer} onChange={(event) => setLayer(event.target.value as ProjectLayer)}>
-                {projectLayers.map((item) => <option key={item}>{item}</option>)}
-              </select>
-            </Field>
-            <Field label="Category">
-              <select value={category} onChange={(event) => setCategory(event.target.value)}>
-                {categories.map((item) => <option key={item}>{item}</option>)}
-              </select>
-            </Field>
-          </div>
-        </div>
-        {filtered.length > 0 ? (
-          <div className="project-grid">
-            {filtered.map((project) => <ProjectCard key={project.slug} project={project} />)}
-          </div>
-        ) : (
-          <EmptyState title="No projects match these filters.">
-            Try another status, lab layer, category, priority, or search term.
-          </EmptyState>
-        )}
-      </Section>
-
-      <Section number="03" title="Infrastructure comes first" dark>
+      <Section number="02" title="Infrastructure comes first" dark>
         <div className="infra-line">
           {[
             ["01", "Storage", "TrueNAS or OpenZFS for durable data."],
@@ -245,6 +326,19 @@ export function ProjectsPage() {
             ["05", "Operations", "NetBox, BMC, and networking as nodes multiply."]
           ].map(([number, title, copy]) => (
             <div key={number}><span className="mono">{number}</span><h3>{title}</h3><p>{copy}</p></div>
+          ))}
+        </div>
+      </Section>
+
+      <Section number="03" title="The local-first lab loop">
+        <div className="process-line">
+          {localFirstLoop.map(({ title, copy, icon: Icon }, index) => (
+            <div className="process-step" key={title}>
+              <span className="mono">0{index + 1}</span>
+              <Icon aria-hidden="true" />
+              <h3>{title}</h3>
+              <p>{copy}</p>
+            </div>
           ))}
         </div>
       </Section>

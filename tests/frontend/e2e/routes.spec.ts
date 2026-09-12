@@ -59,7 +59,7 @@ test("the demo kiosk route also recovers from a retired chunk", async ({ browser
 
 test("public projects and three themes remain usable", async ({ page }) => {
   await page.goto("/projects");
-  await expect(page.getByRole("heading", { name: "Build what the lab needs next." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Projects", exact: true })).toBeVisible();
   await expect(page.getByText("LeRobot + SO-ARM101").first()).toBeVisible();
   await page.getByRole("button", { name: "dark theme" }).click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
@@ -69,6 +69,68 @@ test("public projects and three themes remain usable", async ({ page }) => {
   await expect(page.locator("html")).toHaveAttribute("data-theme", "sepia");
   await page.getByRole("button", { name: "light theme" }).click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+});
+
+test("project discovery combines filters and preserves BRIDGE through reload and build-list navigation", async ({ page }) => {
+  await page.goto("/projects");
+  await page.getByRole("group", { name: "Filter by topic" }).getByRole("button", { name: /^Robotics/ }).click();
+  const filtersToggle = page.getByRole("button", { name: /^Filters/ });
+  if (await filtersToggle.isVisible()) await filtersToggle.click();
+  await page.getByRole("combobox", { name: "Category", exact: true }).selectOption("Humanoid Robots");
+  await page.getByLabel("Build status").selectOption("Research Track");
+  await page.getByRole("searchbox", { name: "Search projects" }).fill("BRIDGE");
+  await page.getByLabel("Sort by").selectOption("name");
+  await expect(page.locator("#project-grid .project-card")).toHaveCount(1);
+  await expect(page.locator(".project-results-bar")).toContainText("1 of");
+  await expect(page).toHaveURL(/category=Humanoid\+Robots/);
+  await page.reload();
+  await expect(page.getByRole("searchbox", { name: "Search projects" })).toHaveValue("BRIDGE");
+  await expect(page.getByLabel("Sort by")).toHaveValue("name");
+  const bridge = page.locator("#bridge-humanoid");
+  await expect(bridge.getByRole("heading", { name: "BRIDGE Humanoid" })).toBeVisible();
+  await expect(bridge).toContainText("release pending");
+  await expect(bridge.getByRole("link", { name: "Project source" })).toHaveAttribute("href", "https://sites.google.com/view/bridgerobot");
+  const cover = bridge.getByRole("img");
+  await cover.scrollIntoViewIfNeeded();
+  await expect.poll(() => cover.evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  await bridge.getByRole("link", { name: "Build components" }).click();
+  await expect(page).toHaveURL(/\/components\?project=bridge-humanoid$/);
+  await expect(page.getByRole("heading", { name: "Build list for BRIDGE Humanoid." })).toBeVisible();
+  await page.goBack();
+  await expect(page.locator("#project-grid .project-card")).toHaveCount(1);
+  await page.getByRole("button", { name: "Clear all", exact: true }).click();
+  await expect(page).toHaveURL(/\/projects$/);
+  await expectNoHorizontalOverflow(page);
+});
+
+test("project discovery recovers from conflicting and invalid filters and sorts results", async ({ page }) => {
+  await page.goto("/projects?layer=unknown&category=missing&sort=invalid");
+  const cards = page.locator("#project-grid .project-card");
+  await expect(cards.first()).toBeVisible();
+  const total = await cards.count();
+  await page.getByRole("searchbox", { name: "Search projects" }).fill("STM32 ROS");
+  await expect(page.locator("#orion-quadruped")).toBeVisible();
+  const filtersToggle = page.getByRole("button", { name: /^Filters/ });
+  if (await filtersToggle.isVisible()) await filtersToggle.click();
+  await page.getByRole("combobox", { name: "Priority", exact: true }).selectOption("P0");
+  await expect(cards).toHaveCount(0);
+  await expect(page.getByText("No projects match these filters.")).toBeVisible();
+  await page.getByRole("button", { name: "Remove P0", exact: true }).click();
+  await expect(page.locator("#orion-quadruped")).toBeVisible();
+  await page.getByRole("searchbox", { name: "Search projects" }).fill("no-such-armature-project");
+  await page.getByRole("button", { name: "Clear filters", exact: true }).click();
+  await expect(cards).toHaveCount(total);
+  await page.getByLabel("Sort by").selectOption("name");
+  const names = await cards.locator("h3").allTextContents();
+  expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b)));
+  await page.goBack();
+  await expect(page.getByLabel("Sort by")).toHaveValue("");
+  await page.locator("#p0-builds").getByRole("link", { name: /Local Dataset NAS/ }).focus();
+  await page.keyboard.press("Enter");
+  await expect(page.getByRole("searchbox", { name: "Search projects" })).toBeFocused();
+  await expect(page.getByRole("searchbox", { name: "Search projects" })).toHaveValue("Local Dataset NAS");
+  await expect(page.locator("#local-dataset-nas").getByRole("heading")).toHaveText("Local Dataset NAS");
+  await expectNoHorizontalOverflow(page);
 });
 
 test("ecosystem map filters and preserves a selected organization", async ({ page }) => {
@@ -418,6 +480,34 @@ test("Solo 12 represents ODRI with its official robot and concrete hardware hier
   await expect(page.getByRole("heading", { name: "Solo 12 autonomy power upgrade" })).toBeVisible();
 });
 
+test("Orion Quadruped uses official media and its documented ROS 2 hardware stack", async ({ page }) => {
+  await page.goto("/projects");
+  const card = page.locator("#orion-quadruped");
+
+  await expect(card.getByRole("heading", { name: "Orion Quadruped" })).toBeVisible();
+  await expect(card.locator("img")).toHaveAttribute("src", "/project-images/orion-quadruped-official.png");
+  await expect(card.getByRole("link", { name: "Image: Ashish A. · Orion Quadruped" })).toHaveAttribute(
+    "href",
+    "https://github.com/AshishA26/Orion-Quadruped/blob/5d265a949ce82a890a101f3e6c9379515f0cefae/photos/Orion_Thumbnail.png"
+  );
+  await expect(card.getByRole("link", { name: "Project source" })).toHaveAttribute(
+    "href",
+    "https://github.com/AshishA26/Orion-Quadruped"
+  );
+  await expect(card.getByText("license not stated", { exact: true })).toBeVisible();
+  await expect(card.getByText("9 required")).toBeVisible();
+  await expect(card.getByText("2 optional")).toBeVisible();
+
+  await card.getByRole("link", { name: "Build components" }).click();
+  await expect(page.getByRole("heading", { name: "Build list for Orion Quadruped." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Orion 12-DoF actuation and mechanical set" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Orion control and power PCB set" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Orion dual IMX219 stereo camera set" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "NVIDIA Jetson Orin Nano" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Orion RPLIDAR A1M8" })).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+});
+
 test("YOR uses actual project media and its published core build list", async ({ page }) => {
   await page.goto("/projects");
   const card = page.locator("#yor");
@@ -655,7 +745,7 @@ test("public routes preserve the useful legacy lab sections", async ({ page }) =
   await expect(page.getByText("Store", { exact: true }).first()).toBeVisible();
   await expect(page.locator(".project-credit").first()).toBeVisible();
   await expect(page.locator(".project-card img")).not.toHaveCount(0);
-  const featuredCovers = await page.locator("#p0-builds .project-card img").evaluateAll(
+  const featuredCovers = await page.locator("#p0-builds img").evaluateAll(
     (images) => images.map((image) => (image as HTMLImageElement).src)
   );
   expect(new Set(featuredCovers).size).toBe(featuredCovers.length);
