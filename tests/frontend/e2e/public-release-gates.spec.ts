@@ -121,7 +121,7 @@ test("equipment page stays hidden", async ({ page }, testInfo) => {
 test("public catalogs remain available", async ({ page }) => {
   await page.goto("/projects");
   await expect(
-    page.getByRole("heading", { name: "Build what the lab needs next." })
+    page.getByRole("heading", { name: "Projects", exact: true })
   ).toBeVisible();
 
   await page.goto("/components");
@@ -138,7 +138,7 @@ test("public catalogs remain available", async ({ page }) => {
 test("historical directory URLs load the React routes", async ({ page }) => {
   await page.goto("/projects/");
   await expect(
-    page.getByRole("heading", { name: "Build what the lab needs next." })
+    page.getByRole("heading", { name: "Projects", exact: true })
   ).toBeVisible();
 
   await page.goto("/building-vision/");

@@ -215,6 +215,28 @@ export const projects: Project[] = [
     tags: ["torque control", "brushless actuators", "Solo 12", "BSD-3-Clause"]
   },
   {
+    slug: "orion-quadruped",
+    title: "Orion Quadruped",
+    category: "Quadruped Robots",
+    priority: "P1",
+    status: "Research Track",
+    description: "A custom 12-DoF ROS 2 quadruped coupling Jetson Orin Nano perception and Nav2 autonomy with STM32F401 FreeRTOS gait control, SolidWorks mechanics, and KiCad control and power boards.",
+    image: "/project-images/orion-quadruped-official.png",
+    sourceUrl: "https://github.com/AshishA26/Orion-Quadruped",
+    tags: ["ROS 2", "Jetson Orin Nano", "FreeRTOS", "stereo depth", "LiDAR SLAM", "Isaac Lab", "license not stated"]
+  },
+  {
+    slug: "bridge-humanoid",
+    title: "BRIDGE Humanoid",
+    category: "Humanoid Robots",
+    priority: "P1",
+    status: "Research Track",
+    description: "An 80 cm, 12.5 kg humanoid with 21 active DoF exploring morphology-control co-design and whole-body motion. Submitted to CoRL 2026; complete BOM, electrical, and training resources are promised on acceptance.",
+    image: "/project-images/bridge-humanoid-official.jpg",
+    sourceUrl: "https://sites.google.com/view/bridgerobot",
+    tags: ["humanoid", "morphology-control co-design", "21 active DoF", "release pending"]
+  },
+  {
     slug: "yor",
     title: "YOR",
     category: "Mobile Robots",

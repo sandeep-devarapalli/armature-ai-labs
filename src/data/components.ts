@@ -1083,6 +1083,150 @@ export const components: CatalogComponent[] = [
     ]
   },
   {
+    slug: "orion-actuation-mechanics",
+    name: "Orion 12-DoF actuation and mechanical set",
+    category: "Robot systems",
+    description: "The twelve servo joints, printed chassis and leg parts, bearings, four-bar linkages, magnetic shelves, mounts, hardware, and molded silicone feet documented for one Orion quadruped.",
+    inventoryClass: "serialized_asset",
+    availability: "unavailable",
+    validationState: "source_required",
+    quantityTarget: 1,
+    quantityUnit: "robot set",
+    tags: ["Orion", "12-DoF", "servo actuation", "SolidWorks", "3D printing"],
+    validationNotes: [
+      "Reconcile the current SolidWorks, STL, and 3MF files with an assembly BOM before fabrication; the repository does not provide one consolidated mechanical purchase list.",
+      "Identify and validate the exact servo model, horn geometry, bearing fits, fasteners, print material, silicone, torque margin, travel limits, and safe gait envelope before full-body operation."
+    ]
+  },
+  {
+    slug: "orion-control-power-pcb-set",
+    name: "Orion control and power PCB set",
+    category: "Controllers",
+    description: "The custom KiCad control and power boards combining STM32F401 real-time control, BNO055 orientation, PCA9685 servo PWM, INA3221 rail monitoring, I2C conditioning, and high-current power distribution.",
+    inventoryClass: "serialized_asset",
+    availability: "unavailable",
+    validationState: "source_required",
+    quantityTarget: 2,
+    quantityUnit: "assembled board pairs",
+    tags: ["Orion", "STM32F401", "BNO055", "PCA9685", "INA3221", "KiCad"],
+    validationNotes: [
+      "Build only from the current upstream KiCad production files after checking schematic, PCB, BOM, placement, connector, firmware, and fabrication revisions together.",
+      "Commission logic and sensor rails first, then validate fused servo-current paths, thermal behavior, battery monitoring, emergency isolation, and DMA UART communication under bounded loads."
+    ]
+  },
+  {
+    slug: "orion-stereo-imx219-camera-set",
+    name: "Orion dual IMX219 stereo camera set",
+    category: "Vision",
+    description: "Two CSI IMX219 cameras, rigid mounts, ribbon cables, and calibration artifacts for Orion's GStreamer capture, SGBM stereo depth, and TensorRT MiDaS perception paths.",
+    inventoryClass: "serialized_asset",
+    availability: "unavailable",
+    validationState: "source_required",
+    quantityTarget: 1,
+    quantityUnit: "stereo camera set",
+    tags: ["Orion", "IMX219", "stereo depth", "GStreamer", "SGBM", "MiDaS"],
+    validationNotes: [
+      "Verify the exact IMX219 module, field of view, Jetson CSI connector and cable, synchronized capture behavior, and rigid baseline before purchase.",
+      "Calibrate the installed pair and retain intrinsics, extrinsics, rectification maps, depth-error measurements, lighting conditions, and failure cases."
+    ]
+  },
+  {
+    slug: "orion-rplidar-a1m8",
+    name: "Orion RPLIDAR A1M8",
+    category: "Navigation",
+    description: "The exact 2D scanning LiDAR documented for Orion's rf2o laser odometry, slam_toolbox mapping, Nav2 costmaps, and pure-pursuit navigation.",
+    inventoryClass: "serialized_asset",
+    availability: "unavailable",
+    validationState: "source_required",
+    quantityTarget: 1,
+    quantityUnit: "scanner",
+    tags: ["Orion", "RPLIDAR A1M8", "SLAM", "Nav2", "rf2o"],
+    validationNotes: [
+      "Source the A1M8 variant used by Orion; do not silently substitute the catalog's C1 alternative without validating mounts, power, serial interface, driver, range, and scan behavior.",
+      "Measure map repeatability, odometry drift, occlusion recovery, minimum-range behavior, and emergency-stop response before autonomous operation."
+    ]
+  },
+  {
+    slug: "orion-oled-eyes",
+    name: "Orion OLED eyes display set",
+    category: "Vision",
+    description: "The front display used by Orion's ROS 2 Python and OpenCV node for responsive eye animations and visible robot-state cues.",
+    inventoryClass: "reusable_tray",
+    availability: "unavailable",
+    validationState: "source_required",
+    quantityTarget: 1,
+    quantityUnit: "display set",
+    tags: ["Orion", "OLED", "human-robot interaction", "OpenCV", "ROS 2"],
+    validationNotes: [
+      "The repository demonstrates the display behavior but does not identify a complete purchasing specification; confirm panel model, resolution, interface, driver, power, mounting, and viewing angle before PO.",
+      "Treat the eyes as a state cue, not as the sole indication of safe operating state or motion readiness."
+    ]
+  },
+  {
+    slug: "bridge-mechanical-set",
+    name: "BRIDGE mechanical and assembly set",
+    category: "Fabrication",
+    description: "A pending sourcing group for BRIDGE's body, limbs, joints, and assembly hardware, to reconcile against the linked STEP model and forthcoming complete BOM.",
+    inventoryClass: "serialized_asset",
+    availability: "unavailable",
+    validationState: "source_required",
+    quantityTarget: 1,
+    quantityUnit: "planning set",
+    tags: ["BRIDGE", "humanoid", "CAD", "release pending"],
+    validationNotes: [
+      "Source checked 5 September 2026: https://sites.google.com/view/bridgerobot links BRIDGE_CAD.stp but promises the complete BOM and assembly tutorial on paper acceptance; this is not a purchase-ready kit.",
+      "Verify CAD revision, materials, fabrication processes, tolerances, fasteners, assembly sequence, and hardware reuse rights before fabrication. No INR quote is verified [authors report approximately USD 1.5K for the platform]; landed and lab commissioning costs remain unverified."
+    ]
+  },
+  {
+    slug: "bridge-actuation-set",
+    name: "BRIDGE joint-actuation set",
+    category: "Motion",
+    description: "A pending actuation sourcing group for BRIDGE's reported 21 active DoF; exact actuator models and purchasing quantities await the complete BOM.",
+    inventoryClass: "serialized_asset",
+    availability: "unavailable",
+    validationState: "source_required",
+    quantityTarget: 1,
+    quantityUnit: "planning set",
+    tags: ["BRIDGE", "21 active DoF", "actuation", "source required"],
+    validationNotes: [
+      "The official source https://sites.google.com/view/bridgerobot reports 21 active DoF, not a verified order for 21 identical motors. Confirm actuator types, counts, transmissions, feedback, interfaces, and electrical ratings from the released BOM.",
+      "Validate joint limits, torque margins, thermal behavior, and shutdown response under bounded bench loads before supported full-body commissioning; published demonstrations are not a local safety qualification."
+    ]
+  },
+  {
+    slug: "bridge-control-electronics",
+    name: "BRIDGE control and sensing electronics",
+    category: "Controllers",
+    description: "A pending controller, sensing, and communications sourcing group, dependent on BRIDGE's electrical specifications and training/deployment release.",
+    inventoryClass: "serialized_asset",
+    availability: "unavailable",
+    validationState: "source_required",
+    quantityTarget: 1,
+    quantityUnit: "planning set",
+    tags: ["BRIDGE", "whole-body control", "electronics", "release pending"],
+    validationNotes: [
+      "At https://sites.google.com/view/bridgerobot the code and tutorial links are coming-soon placeholders; no project repository was verified on 5 September 2026. Confirm controller, sensor, compute, bus, connector, firmware, and software-license details before PO.",
+      "Reconcile the released training and deployment stack with the hardware revision. Do not assume a Jetson, Raspberry Pi, IMU model, camera, LiDAR, GPU requirement, or software framework from the demonstrations."
+    ]
+  },
+  {
+    slug: "bridge-power-safety-set",
+    name: "BRIDGE power and commissioning safety set",
+    category: "Power and safety",
+    description: "A pending power and wiring group with Armature commissioning safeguards to define from BRIDGE's electrical release and a local risk assessment.",
+    inventoryClass: "serialized_asset",
+    availability: "unavailable",
+    validationState: "source_required",
+    quantityTarget: 1,
+    quantityUnit: "planning set",
+    tags: ["BRIDGE", "power", "wiring", "commissioning safety"],
+    validationNotes: [
+      "Electrical specifications are pending at https://sites.google.com/view/bridgerobot. Verify supply architecture, voltage, current, protection, connectors, and any battery or charger requirements before sourcing; no pack chemistry or capacity is assumed.",
+      "Armature requirements, not claimed upstream hardware: define emergency isolation, current-limited commissioning, fall restraint, guarding, and an exclusion area before powered motion. Dynamic demonstrations do not authorize unsupervised or human-contact operation."
+    ]
+  },
+  {
     slug: "yor-agilex-piper-arm",
     name: "AgileX Piper 6-DoF arm",
     category: "Robot systems",
@@ -2698,6 +2842,21 @@ export const projectComponentLinks: ProjectComponentLink[] = [
   ["solo12-odri", "electronics-bench", "required"],
   ["solo12-odri", "hazard-zone-safety", "required"],
   ["solo12-odri", "solo12-autonomy-upgrade", "optional"],
+  ["orion-quadruped", "orion-actuation-mechanics", "required"],
+  ["orion-quadruped", "orion-control-power-pcb-set", "required"],
+  ["orion-quadruped", "orion-stereo-imx219-camera-set", "required"],
+  ["orion-quadruped", "jetson-orin-nano", "required"],
+  ["orion-quadruped", "orion-rplidar-a1m8", "required"],
+  ["orion-quadruped", "battery-bms-safety", "required"],
+  ["orion-quadruped", "3d-printing-stock", "required"],
+  ["orion-quadruped", "electronics-bench", "required"],
+  ["orion-quadruped", "hazard-zone-safety", "required"],
+  ["orion-quadruped", "orion-oled-eyes", "optional"],
+  ["orion-quadruped", "gpu-workstation", "optional"],
+  ["bridge-humanoid", "bridge-mechanical-set", "required"],
+  ["bridge-humanoid", "bridge-actuation-set", "required"],
+  ["bridge-humanoid", "bridge-control-electronics", "required"],
+  ["bridge-humanoid", "bridge-power-safety-set", "required"],
   ["yor", "yor-agilex-piper-arm", "required"],
   ["yor", "yor-dynamixel-xl430-w250-t", "required"],
   ["yor", "yor-dynamixel-u2d2", "required"],
