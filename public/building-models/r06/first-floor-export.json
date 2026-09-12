@@ -1,0 +1,101 @@
+{
+  "id": "first-floor",
+  "label": "First floor",
+  "model": "/building-models/r06/first-floor.glb",
+  "preview": "/building-models/r06/first-floor.png",
+  "bytes": 6857020,
+  "sha256": "c305077db2994542bc8835ce4ad8f54e17c0e945d36fd4560f4e7bb3e8126183",
+  "physicalObjects": 1466,
+  "triangles": 132032,
+  "materials": 35,
+  "boundsGltfYUpMetres": [
+    [
+      -8.584599494934082,
+      9.905726432800293
+    ],
+    [
+      -0.11900000274181366,
+      7.688281059265137
+    ],
+    [
+      -6.9683966636657715,
+      6.15752649307251
+    ]
+  ],
+  "boundsBlenderZUpMetres": [
+    [
+      -8.584599494934082,
+      9.905726432800293
+    ],
+    [
+      -6.15752649307251,
+      6.9683966636657715
+    ],
+    [
+      -0.11900000274181366,
+      7.688281059265137
+    ]
+  ],
+  "sourceScene": "First floor - R06 FF02 glass enclosure",
+  "sourceCamera": {
+    "position_blender_z_up_m": [
+      -14,
+      -13,
+      15
+    ],
+    "rotation_quaternion_blender": [
+      0.8553195595741272,
+      0.41206836700439453,
+      -0.13630688190460205,
+      -0.2829285264015198
+    ],
+    "ortho_scale_m": 9,
+    "projection": "ORTHO"
+  },
+  "retainedRoomNames": true,
+  "excludedCamerasLightsLabelsAndEmptyRoots": 65,
+  "previewSha256": "679ff9698a2b5e6c53c434185bc40b6efb792e85edaf8c364782492a45bee1ea",
+  "sourceNativeSha256": "704fdc25180377362b1b81446287de2d3fcb91ef5993c785a70a7534b08f9d62",
+  "materialRepresentations": [
+    {
+      "source": "Photo 01 - balcony existing grey stone",
+      "browser": "Photo 01 - balcony existing grey stone | browser",
+      "procedural_nodes": [
+        "TEX_NOISE"
+      ],
+      "source_surface": "BSDF_PRINCIPLED",
+      "representation": "Procedural patterns replaced by stored source PBR scalar/base-color values; glass/transparent shader represented by source-weight alpha/transmission where needed."
+    },
+    {
+      "source": "Photo 01 - existing brown wood-look finish",
+      "browser": "Photo 01 - existing brown wood-look finish | browser",
+      "procedural_nodes": [
+        "TEX_BRICK"
+      ],
+      "source_surface": "BSDF_PRINCIPLED",
+      "representation": "Procedural patterns replaced by stored source PBR scalar/base-color values; glass/transparent shader represented by source-weight alpha/transmission where needed."
+    },
+    {
+      "source": "R01 | warm oak",
+      "browser": "R01 | warm oak | browser",
+      "procedural_nodes": [
+        "TEX_NOISE",
+        "TEX_COORD"
+      ],
+      "source_surface": "BSDF_PRINCIPLED",
+      "representation": "Procedural patterns replaced by stored source PBR scalar/base-color values; glass/transparent shader represented by source-weight alpha/transmission where needed."
+    }
+  ],
+  "reimport": {
+    "objectCount": 1466,
+    "maxVertexDistanceMetres": 5.331201577973843e-7,
+    "toleranceMetres": 0.00002,
+    "importerTriangleDifferences": [
+      {
+        "name": "First Floor - Planning Base 08 | joined wall display",
+        "source": 4064,
+        "import": 4063
+      }
+    ]
+  }
+}

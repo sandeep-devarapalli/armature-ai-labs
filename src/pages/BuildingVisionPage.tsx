@@ -15,8 +15,8 @@ const views = [
   })),
   {
     id: "ff-02-enclosure", floor: "First floor", title: "FF-02 · Enclosure proposal",
-    src: release.enclosure.blender, alt: "FF-02 proposed steel-frame enclosure with skylight strip, native Blender render",
-    caption: "Proposed steel-frame insulated-panel enclosure of the workshop terrace, with the curved balcony kept open. Concept for review.",
+    src: release.enclosure.blender, alt: "FF-02 proposed aluminium-framed glass enclosure and glass roof, native Blender render",
+    caption: "Glass-enclosure and glass-roof proposal with cabin-style aluminium framing. Existing masonry and the open curved balcony are retained.",
     width: 1450, height: 1200
   },
   ...(["FF-03", "FF-04", "FF-06"] as const).map((id) => ({

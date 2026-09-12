@@ -1,0 +1,35 @@
+{
+  "files": [
+    {
+      "file": "selected-layout.blend",
+      "sourceSha256": "704fdc25180377362b1b81446287de2d3fcb91ef5993c785a70a7534b08f9d62",
+      "publicSha256": "704fdc25180377362b1b81446287de2d3fcb91ef5993c785a70a7534b08f9d62",
+      "publicBytes": 2793877,
+      "previousReleaseSourceSha256": "5cd3c6657441982c8a0fa4d92711d140d14d52ebd0c4776370053c2f88d61a42",
+      "nativeSaveReopen": "PASS",
+      "serializedPrivatePathScan": "PASS",
+      "transformationKind": "verified-current-design-copy",
+      "curation": {
+        "retainedGeometryUnchanged": true,
+        "materialsUnchanged": true,
+        "selectedMembershipVerified": true,
+        "reviewViewsVerified": true,
+        "selectedAllowlistSha256": "0fc2e393a71f7b8d85c6c32b63f0b1844fb61fe0fc4e1d8995682935a18a6b41",
+        "privateAuditSha256": "832afc63984b0b166b4f37a34205b7caf04d707fe3a2c804fac9a9274a77dbbb",
+        "displayChanges": [],
+        "dependencyDisclosure": [
+          "Byte-identical current-design native copy; earlier R05 source remains separate.",
+          "Selected floor membership and all saved object fingerprints checked after reopen; four direct native review renders reviewed separately."
+        ]
+      },
+      "geometryRevision": {
+        "retainedObjectCount": 3297,
+        "replacedObjectCount": 53,
+        "addedObjectCount": 184,
+        "movedObjectCount": 0,
+        "retainedGeometryMaterialsUVAndPlacementsUnchanged": true,
+        "scope": "Existing object fingerprints retained; only C03 enclosure skin/framing/door/roof replaced by C04. Three added review cameras are not counted as physical pieces."
+      }
+    }
+  ]
+}

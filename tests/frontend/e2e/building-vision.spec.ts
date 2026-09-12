@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 import release from "../../../src/data/buildingModelRelease.json" with { type: "json" };
 import electrical from "../../../src/data/buildingElectricalS02.json" with { type: "json" };
 
-test("R05 shows the FF02 enclosure proposal while retaining R03/R04 previews and lazy floor models", async ({ page }, testInfo) => {
+test("R06 shows the FF02 glass enclosure with coordinated CAD while retaining earlier previews and lazy floor models", async ({ page }, testInfo) => {
   test.setTimeout(120_000);
   const models: string[] = [];
   const errors: string[] = [];
@@ -25,26 +25,47 @@ test("R05 shows the FF02 enclosure proposal while retaining R03/R04 previews and
     }
   }
   await page.getByLabel("Choose a room").selectOption("FF-02");
-  await expect(page.getByRole("heading", { name: "Enclosure proposal C03 · Blender" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Enclosure proposal C04 · Blender" })).toBeVisible();
+  await expect(page.getByText(/Existing back and right masonry walls/)).toBeVisible();
+  await expect(page.getByText(/three fixed windows/)).toHaveCount(0);
+  const enclosurePreview = page.getByRole("link", { name: "Open FF-02 enclosure Blender render", exact: true }).locator("img");
+  await enclosurePreview.scrollIntoViewIfNeeded();
+  await expect.poll(() => enclosurePreview.evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  for (const theme of ["light", "dark", "sepia"]) {
+    await page.getByRole("button", { name: `${theme} theme`, exact: true }).click();
+    await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
+    await page.getByRole("heading", { name: "Enclosure proposal C04 · Blender" }).scrollIntoViewIfNeeded();
+    await page.screenshot({ path: testInfo.outputPath(`ff02-${theme}.png`) });
+    expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
+  }
+  await page.getByRole("button", { name: "light theme", exact: true }).click();
+  await page.getByText("Glass roof and inside layout", { exact: true }).click();
   const enclosureViews = page.locator("details").filter({ has: page.getByText("Enclosure CAD views: exterior, cutaway and plan", { exact: true }) });
   if ((await enclosureViews.getAttribute("open")) === null) await enclosureViews.locator("summary").click();
-  for (const label of ["Open FF-02 enclosure Blender render", "Open FF-02 enclosure CAD exterior", "Open FF-02 enclosure CAD cutaway", "Open FF-02 enclosure CAD plan"]) {
+  for (const label of ["Open FF-02 enclosure Blender render", "Open FF-02 glass roof render", "Open FF-02 inside layout render", "Open FF-02 enclosure CAD exterior", "Open FF-02 enclosure CAD cutaway", "Open FF-02 enclosure CAD plan"]) {
     const preview = page.getByRole("link", { name: label, exact: true }).locator("img");
     await preview.scrollIntoViewIfNeeded();
     await expect.poll(() => preview.evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+    await expect(preview).toHaveJSProperty("naturalWidth", Number(await preview.getAttribute("width")));
+    await expect(preview).toHaveJSProperty("naturalHeight", Number(await preview.getAttribute("height")));
   }
   await expect(page.getByRole("link", { name: "FF-02 · enclosure FreeCAD", exact: true })).toHaveAttribute("href", release.enclosure.freecad);
   await expect(page.getByRole("link", { name: "FF-02 · enclosure STEP", exact: true })).toHaveAttribute("href", release.enclosure.step);
-  for (const url of [release.enclosure.freecad, release.enclosure.step, `${release.root}/release.json`]) {
+  for (const [url, signature] of [[release.enclosure.freecad, "PK"], [release.enclosure.step, "ISO-10303"]]) {
     const response = await page.request.get(url);
     expect(response.ok()).toBe(true);
+    expect((await response.body()).toString("ascii", 0, signature.length)).toBe(signature);
   }
+  const manifestResponse = await page.request.get(`${release.root}/release.json`);
+  expect(manifestResponse.ok()).toBe(true);
+  expect(manifestResponse.headers()["content-type"]).toContain("application/json");
+  expect((await manifestResponse.json()).release).toBe(release.label);
   expect(models).toEqual([]);
   await page.getByRole("button", { name: "Open interactive 3D" }).click();
   await expect(page.getByRole("status").filter({ hasText: "3D model ready" })).toBeVisible({ timeout: 60_000 });
   await expect(page.locator("model-viewer")).toHaveCount(1);
   expect([...new Set(models)]).toEqual([release.floors.first.model]);
-  expect(release.floors.first.model).toBe("/building-models/r05/first-floor.glb");
+  expect(release.floors.first.model).toBe("/building-models/r06/first-floor.glb");
   await page.locator(".building-model-stage").screenshot({ path: testInfo.outputPath("first-floor-viewer.png") });
   await page.getByRole("button", { name: "Top view", exact: true }).click();
   await page.getByRole("button", { name: "Reset view", exact: true }).click();

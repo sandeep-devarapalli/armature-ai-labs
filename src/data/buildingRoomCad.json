@@ -171,18 +171,18 @@
   },
   {
     "id": "FF-02",
-    "geometryKind": "mixed 2D references and 3D fit-out",
-    "solidCount": 336,
-    "provenance": "/building-models/r03/rooms/FF-02-provenance.json",
+    "geometryKind": "Editable native BReps; inherited open wall context remains uncapped surfaces",
+    "solidCount": 349,
+    "provenance": "/building-models/r06/rooms/FF-02-provenance.json",
     "downloads": {
       "freecad": {
-        "url": "/building-models/r03/rooms/FF-02.FCStd"
+        "url": "/building-models/r06/rooms/FF-02.FCStd"
       },
       "step": {
-        "url": "/building-models/r03/rooms/FF-02.step"
+        "url": "/building-models/r06/rooms/FF-02.step"
       },
       "svg": {
-        "url": "/building-models/r03/rooms/FF-02.svg"
+        "url": "/building-models/r06/rooms/FF-02.svg"
       }
     }
   },

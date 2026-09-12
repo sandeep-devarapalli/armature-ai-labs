@@ -1,30 +1,31 @@
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { resolve, relative } from "node:path";
-import { check, earlierRoot, expectedExternalDownloads, expectedRetainedAssets, hash, json, previousAsset, previousRelease, previousReleaseSha256, previousRoot, publicPath, verifyBytes } from "./building-vision/release-assets.mjs";
+import { check, expectedExternalDownloads, expectedRetainedAssets, hash, json, previousAsset, previousRelease, previousReleaseSha256, previousRoot, publicPath, retainedRoomsUrl, verifyBytes } from "./building-vision/release-assets.mjs";
 
-// R05 (FF02 C03 enclosure) release gate. R04 and R03 are immutable and fully retained; only the assets in
-// public/building-models/r05 are new, and every one of them must match reviewed provenance and accepted pins.
+// R06 glass enclosure gate. Previous assets are immutable; each new native, render and
+// FF02 extract must match reviewed provenance and independently accepted pins.
 const validHash = (value) => typeof value === "string" && /^[a-f0-9]{64}$/.test(value);
 const configPath = "src/data/buildingModelRelease.json";
 const config = json(configPath);
-check(config.revision === "r05" && config.label === "R05" && config.root === "/building-models/r05", "Active building release configuration mismatch");
+check(config.revision === "r06" && config.label === "R06" && config.root === "/building-models/r06", "Active building release configuration mismatch");
 const root = resolve("public" + config.root);
 function local(file) {
   const path = resolve(root, file);
-  check(path.startsWith(root + "/"), "Manifest path escapes R05");
+  check(path.startsWith(root + "/"), "Manifest path escapes R06");
   return path;
 }
 const manifest = json(local("release.json"));
-const pins = json("scripts/building-vision/r05-accepted-pins.json");
+const pins = json("scripts/building-vision/r06-accepted-pins.json");
 const previous = previousRelease();
-check(manifest.release === "R05" && manifest.releaseConfigSha256 === hash(readFileSync(configPath)), "Frontend release configuration drift");
+const exportAudit = json(local("manifest.json"));
+check(manifest.release === "R06" && manifest.releaseConfigSha256 === hash(readFileSync(configPath)), "Frontend release configuration drift");
 check(manifest.retainedRelease.url === previousRoot + "/release.json" && manifest.retainedRelease.sha256 === previousReleaseSha256, "Retained release attribution drift");
 check(manifest.serviceRevision === "S02", "Service revision must point at the published S02 plan");
 check(JSON.stringify(manifest.retainedAssets) === JSON.stringify(expectedRetainedAssets(previous)), "Missing, extra or modified retained asset");
-check(JSON.stringify(manifest.externalDownloads) === JSON.stringify(expectedExternalDownloads(previous)), "Retained external download drift");
+check(JSON.stringify(manifest.externalDownloads) === JSON.stringify(expectedExternalDownloads(previous, exportAudit.downloads)), "External download drift");
 for (const asset of manifest.retainedAssets) verifyBytes(publicPath(asset.url), asset);
 for (const [file, expected] of Object.entries(pins.evidence)) check(validHash(expected) && hash(readFileSync(local(file))) === expected, "Accepted evidence drift: " + file);
-for (const file of ["blender-metadata-provenance.json", "cad-metadata-provenance.json", "native-preview-provenance.json", "design-verification.json", "manifest.json"]) check(validHash(pins.evidence[file]), "Missing independently accepted evidence pin: " + file);
+for (const file of ["blender-metadata-provenance.json", "cad-metadata-provenance.json", "native-preview-provenance.json", "design-verification.json", "manifest.json", "rooms/manifest.json"]) check(validHash(pins.evidence[file]), "Missing independently accepted evidence pin: " + file);
 const allAssets = [...manifest.files.map((asset) => ({ ...asset, url: config.root + "/" + asset.path })), ...manifest.retainedAssets, ...manifest.externalDownloads];
 check(new Set(allAssets.map((asset) => asset.url)).size === allAssets.length, "Duplicate release asset URL");
 function registered(url) {
@@ -33,10 +34,9 @@ function registered(url) {
   return asset;
 }
 
-// Native copies: the R05 Blender public copy and the room-level enclosure CAD are new; both full-floor CAD downloads are retained.
+// New native Blender, FF02 and coordinated first-floor CAD; ground CAD is retained.
 const blenderCopies = json(local("blender-metadata-provenance.json")).files;
 const cadCopies = json(local("cad-metadata-provenance.json")).files;
-const exportAudit = json(local("manifest.json"));
 const blender = blenderCopies.filter((copy) => copy.file === "selected-layout.blend");
 check(blender.length === 1, "Missing/duplicate Blender curation record");
 {
@@ -66,23 +66,28 @@ check(blender.length === 1, "Missing/duplicate Blender curation record");
     const download = exportAudit.downloads.find((entry) => entry.file === file);
     check(download?.url === config.enclosure[key] && download.sha256 === asset.sha256 && download.bytes === asset.bytes, "Enclosure export record drift: " + file);
   }
-  check(config.enclosure.roomId === "FF-02" && config.enclosure.revision === "C03", "Enclosure scope drift");
+  check(config.enclosure.roomId === "FF-02" && config.enclosure.revision === "C04", "Enclosure scope drift");
 }
 {
   const old = json(publicPath(previousRoot + "/manifest.json"));
-  for (const [file, key] of [["ground-floor.FCStd", "groundCad"], ["first-floor.FCStd", "firstCad"]]) {
+  for (const [file, key] of [["ground-floor.FCStd", "groundCad"]]) {
     const url = config.downloads[key].url, retained = previousAsset(url, previous), download = exportAudit.downloads.find((entry) => entry.file === file);
     const before = old.downloads.find((entry) => entry.file === file);
     check(download?.url === url && before?.url === url && download.sha256 === retained.sha256 && download.bytes === retained.bytes && download.sourceSha256 === before.sourceSha256, "Retained full-floor CAD drift: " + file);
-    if (key === "firstCad") check(url.startsWith("https://github.com/sandeep-devarapalli/armature-ai-labs/releases/download/building-models-r04/") && download.retainedFrom?.release === "R04" && download.retainedFrom.releaseSha256 === previousReleaseSha256, "First-floor CAD must remain the verified R04 release download");
-    else check(url === earlierRoot + "/ground-floor.FCStd" && download.retainedFrom?.release === "R03", "Ground CAD must retain its R03 URL");
+    check(url === "/building-models/r03/ground-floor.FCStd" && download.retainedFrom?.release === "R03", "Ground CAD must retain its R03 URL");
   }
+  const copy = cadCopies.find((entry) => entry.file === "first-floor.FCStd"), pin = pins.native["first-floor.FCStd"];
+  check(copy && validHash(pin?.publicSha256) && copy.sourceSha256 === pin.sourceSha256 && copy.publicSha256 === pin.publicSha256 && copy.sourceSha256 === copy.publicSha256 &&
+    copy.sourceBlenderSha256 === pins.native["selected-layout.blend"].publicSha256 && copy.nativeSaveReopen === "PASS" && copy.serializedPrivatePathScan === "PASS" && copy.invalidShapes === 0 && copy.solids > 0, "Coordinated full-floor CAD curation not accepted");
+  const download = exportAudit.downloads.find((entry) => entry.file === "first-floor.FCStd"), asset = registered(config.downloads.firstCad.url);
+  check(download?.url === config.downloads.firstCad.url && download.sourceSha256 === pin.sourceSha256 && download.sha256 === copy.publicSha256 && download.bytes === copy.publicBytes &&
+    asset.sha256 === copy.publicSha256 && asset.bytes === copy.publicBytes && asset.sourceRelease === "R06" && !download.retainedFrom, "Coordinated full-floor CAD download drift");
 }
 
-// Browser export audit: ground floor retained from R03 exactly as R04 published it; first floor newly exported from the R05 scene.
-check(exportAudit.release === "Coordinated Selected Layout R05" && exportAudit.status === "PASS_GEOMETRY_REIMPORT_AND_EXACT_COPY_CHECKS" &&
+// Browser export audit: unchanged ground floor, first floor exported from the saved C04 design.
+check(exportAudit.release === "Coordinated Selected Layout R06" && exportAudit.status === "PASS_GEOMETRY_REIMPORT_AND_EXACT_COPY_CHECKS" &&
   exportAudit.sourceNativeSha256 === pins.native["selected-layout.blend"].publicSha256 && exportAudit.previousSourceNativeSha256 === pins.previousSourceNativeSha256 &&
-  exportAudit.sourcePreserved === true && exportAudit.currentDesignOnly === true && exportAudit.ff03EntranceRevision === "P02" && exportAudit.ff02EnclosureRevision === "C03", "Wrong current Blender source");
+  exportAudit.sourcePreserved === true && exportAudit.currentDesignOnly === true && exportAudit.ff03EntranceRevision === "P02" && exportAudit.ff02EnclosureRevision === "C04", "Wrong current Blender source");
 check(exportAudit.verification.freshReimport === true && exportAudit.verification.physicalObjectAndRawGlbTriangleCountsMatch === true && exportAudit.verification.nativeDownloadHashesMatch === true, "GLB source/reimport gate missing");
 check(exportAudit.floors.length === 2 && exportAudit.downloads.length === 5, "Expected two floors and five download records");
 for (const id of ["ground", "first"]) {
@@ -91,31 +96,39 @@ for (const id of ["ground", "first"]) {
   if (id === "ground") {
     const old = json(publicPath(previousRoot + "/manifest.json")).floors.find((entry) => entry.id === "ground-floor");
     check(JSON.stringify(floor) === JSON.stringify(old) && floor.retainedFrom?.release === "R03" && ui.revision === "R03", "Retained ground floor attribution changed");
-  } else check(floor.sourceScene === pins.firstFloorScene && ui.revision === "R05" && ui.model.startsWith(config.root + "/") && floor.physicalObjects > 1000, "New first-floor source scene mismatch");
+  } else check(floor.sourceScene === pins.firstFloorScene && ui.revision === "R06" && ui.model.startsWith(config.root + "/") && floor.physicalObjects > 1000, "New first-floor source scene mismatch");
 }
 const previews = json(local("native-preview-provenance.json"));
 const design = json(local("design-verification.json"));
 check(design.status === "PASS / CONCEPT GEOMETRY ONLY" && design.nativeSaveReopen === "PASS" && design.glbFreshReimport === "PASS" && design.serializedPrivatePathScan === "PASS" && design.sourcesUnchanged === true &&
-  design.sourceNativeSha256 === pins.native["selected-layout.blend"].publicSha256 && design.enclosureCadSha256 === pins.native["ff02-enclosure.FCStd"].publicSha256 &&
+  design.sourceNativeSha256 === pins.native["selected-layout.blend"].publicSha256 && design.enclosureCadSha256 === pins.native["ff02-enclosure.FCStd"].publicSha256 && design.firstFloorCadSha256 === pins.native["first-floor.FCStd"].publicSha256 &&
   design.blenderPreservation.groundFloorUnchanged === true && design.cadFreshReopen.status === "PASS" && design.cadFreshReopen.invalidShapes === 0 && Array.isArray(design.notCovered) && design.notCovered.length >= 5, "FF02 enclosure acceptance missing");
-check(previews.aiGenerated === false && previews.images.length === 5, "Expected five source-backed R05 native previews");
+check(previews.aiGenerated === false && previews.images.length === 7, "Expected seven source-backed R06 native previews");
 for (const preview of previews.images) {
   check(registered(config.root + "/" + preview.file).sha256 === preview.sha256 && validHash(preview.sourceNativeSha256) && preview.metadataOnly === true && preview.pixelChunksUnchanged === true, "Native preview attribution drift: " + preview.file);
   check(preview.sourceNativeSha256 === (preview.sourceNative === "selected-layout.blend" ? pins.native["selected-layout.blend"].publicSha256 : pins.native["ff02-enclosure.FCStd"].publicSha256), "Preview source mismatch: " + preview.file);
 }
-for (const key of ["blender", "cad", "cutaway", "plan"]) registered(config.enclosure[key]);
+for (const key of ["blender", "roof", "layout", "cad", "cutaway", "plan"]) registered(config.enclosure[key]);
 for (const [id, preview] of Object.entries(config.roomPreviews)) {
   for (const [key, url] of Object.entries(preview)) if (key !== "revision") check(registered(url).sourceRelease === preview.revision, "Room preview attribution drift: " + id);
 }
 
-// Rooms: the fifteen R04 extracts are retained unchanged; the frontend catalog must still match them.
-const roomAudit = json(publicPath(previousRoot + "/rooms/manifest.json"));
-check(hash(readFileSync(publicPath(previousRoot + "/rooms/manifest.json"))) === pins.retainedRoomsSha256 && roomAudit.revision === "R04" && roomAudit.rooms.length === 15, "Retained room manifest drift");
+// Only FF02 is re-extracted; fourteen existing room entries retain their original provenance.
+const priorRooms = json(publicPath(retainedRoomsUrl));
+const roomAudit = json(local("rooms/manifest.json"));
+check(pins.retainedRooms === retainedRoomsUrl && hash(readFileSync(publicPath(retainedRoomsUrl))) === pins.retainedRoomsSha256 &&
+  roomAudit.revision === "R06" && roomAudit.rooms.length === 15 && roomAudit.protectedSourcesUnchanged === true && JSON.stringify(roomAudit.changedRoomIds) === '["FF-02"]', "Room revision scope drift");
 const rooms = json("src/data/buildingRoomServices.json");
 const roomCatalog = json("src/data/buildingRoomCad.json");
 const ids = ["GF-01", "GF-02", "GF-03", "GF-04", "GF-06", "GF-07", "GF-08", "GF-09", "GF-10", "FF-01", "FF-02", "FF-03", "FF-04", "FF-05", "FF-06"];
 for (const list of [rooms, roomCatalog, roomAudit.rooms]) check(JSON.stringify(list.map((room) => room.id).sort()) === JSON.stringify([...ids].sort()), "Room IDs incomplete");
 for (const room of roomAudit.rooms) {
+  if (room.id !== "FF-02") check(JSON.stringify(room) === JSON.stringify(priorRooms.rooms.find((entry) => entry.id === room.id)), "Retained room changed: " + room.id);
+  else {
+    check(room.revision === "R06" && room.sourceSha256 === pins.native["first-floor.FCStd"].publicSha256 && room.verification.nativeSaveReopen === "PASS" &&
+      room.verification.stepReadback === "PASS" && Object.values(room.verification.stepChecks).length >= 6 && Object.values(room.verification.stepChecks).every((value) => value === true), "FF02 extract lacks coordinated native and STEP proof");
+    check(room.provenanceUrl === config.root + "/rooms/FF-02-provenance.json" && Object.values(room.files).every((asset) => asset.url.startsWith(config.root + "/rooms/FF-02")), "FF02 still links a superseded extract");
+  }
   const catalog = roomCatalog.find((entry) => entry.id === room.id);
   check(catalog.geometryKind === room.geometryKind && catalog.solidCount === room.solidCount && catalog.provenance === room.provenanceUrl &&
     catalog.downloads.freecad.url === room.files.freecad.url && catalog.downloads.step.url === room.files.step.url && catalog.downloads.svg.url === room.files.preview.url, "Room frontend catalog drift");
@@ -132,7 +145,7 @@ for (const room of rooms) {
 }
 check(rooms.find((room) => room.id === "GF-10").sockets === 52 && rooms.reduce((sum, room) => sum + room.lightWatts, 0) === 807, "Legacy service allowance changed");
 
-// Every R05 file: bytes and hash, hosting limit, format headers, no private paths, no PNG text metadata, nothing unregistered.
+// Every new file: exact bytes, hosting limit, format and public metadata checks.
 for (const asset of manifest.files) {
   const data = verifyBytes(local(asset.path), asset);
   check(data.length < 25 * 1024 * 1024, "Pages single-file limit exceeded");
@@ -153,7 +166,7 @@ function auditFiles(path) {
   for (const name of readdirSync(path)) {
     const next = resolve(path, name);
     if (statSync(next).isDirectory()) auditFiles(next);
-    else check(relative(root, next) === "release.json" || manifest.files.some((file) => file.path === relative(root, next)), "Unregistered R05 file: " + name);
+    else check(relative(root, next) === "release.json" || manifest.files.some((file) => file.path === relative(root, next)), "Unregistered R06 file: " + name);
   }
 }
 auditFiles(root);
@@ -179,4 +192,4 @@ for (const entry of imageAudit.images) {
   check(hash(Buffer.concat(pixelChunks)) === entry.pixelChunksSha256, `Pixel data drift: ${entry.file}`);
 }
 console.log(`Model-led image alignment verified: ${imageAudit.images.length} native R01 views.`);
-console.log(`R05 verified: FF02 enclosure proposal, ${manifest.files.length} new assets; ${manifest.retainedAssets.length} R04/R03 assets and ${manifest.externalDownloads.length} external downloads retained by exact bytes.`);
+console.log(`R06 verified: FF02 glass enclosure and coordinated CAD, ${manifest.files.length} new assets; ${manifest.retainedAssets.length} earlier assets and ${manifest.externalDownloads.length} external downloads verified by exact bytes.`);

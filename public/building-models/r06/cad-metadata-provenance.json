@@ -1,0 +1,127 @@
+{
+  "files": [
+    {
+      "file": "first-floor.FCStd",
+      "sourceSha256": "ceec2bffac84d367a0c20db508da3273573efd6b3cca632b18b2f248ced6eb08",
+      "publicSha256": "ceec2bffac84d367a0c20db508da3273573efd6b3cca632b18b2f248ced6eb08",
+      "publicBytes": 49128914,
+      "sourceBlenderSha256": "704fdc25180377362b1b81446287de2d3fcb91ef5993c785a70a7534b08f9d62",
+      "sourceGeometrySha256": "4282e81dbe8c2ead38ab27cdca275d883323d8c785732f84fef306b5a9d30860",
+      "nativeSaveReopen": "PASS",
+      "serializedPrivatePathScan": "PASS",
+      "transformationKind": "verified-current-design-copy",
+      "objects": 1731,
+      "solids": 1579,
+      "invalidShapes": 0,
+      "retainedObjects": 1498,
+      "newExactShapes": 233,
+      "openReferenceShapes": 277,
+      "retainedGeometryPropertiesMaterialsUnchanged": true,
+      "privateAuditSha256": "ac69ec21d0c010f2c54fbbb85742c1678c76b709db5eba6e893df9ef6c03735b",
+      "scope": "Cumulative first floor: C04 replaces only FF02 fit-out; all other baseline objects preserved.",
+      "curation": {
+        "retainedGeometryUnchanged": true,
+        "materialsUnchanged": true,
+        "selectedMembershipVerified": true,
+        "reviewViewsVerified": true,
+        "selectedAllowlistSha256": "71f8a7387e2a6782fcefa1782b2bcf163920b06309241608a54e7341e21056fd",
+        "privateAuditSha256": "ac69ec21d0c010f2c54fbbb85742c1678c76b709db5eba6e893df9ef6c03735b",
+        "removedObjects": 0,
+        "removedScenes": 0,
+        "displayChanges": [],
+        "dependencyDisclosure": [
+          "This copy contract requires byte-identical copying of the freshly reopened current C04 design.",
+          "The design revision replaces 310 obsolete FF02 P01 leaves with 233 current FF02 fitout components; 1498 non-replaced full-floor shapes are preserved.",
+          "Room native contains exact retained FF02 floor/guard and a local crop of existing shared-wall surfaces. No source architecture is redesigned.",
+          "Editable BReps are retained, not the historical parametric feature graph. Proposed materials and hardware are not fabrication specifications."
+        ]
+      }
+    },
+    {
+      "file": "ff02-enclosure.FCStd",
+      "sourceSha256": "06af7359df1fe8b7e2a60db2974541343ed1dd952ec2e4c7c060ec0b14f194d1",
+      "publicSha256": "06af7359df1fe8b7e2a60db2974541343ed1dd952ec2e4c7c060ec0b14f194d1",
+      "publicBytes": 4668634,
+      "sourceBlenderSha256": "704fdc25180377362b1b81446287de2d3fcb91ef5993c785a70a7534b08f9d62",
+      "sourceGeometrySha256": "4282e81dbe8c2ead38ab27cdca275d883323d8c785732f84fef306b5a9d30860",
+      "nativeSaveReopen": "PASS",
+      "serializedPrivatePathScan": "PASS",
+      "transformationKind": "verified-current-design-copy",
+      "objects": 369,
+      "solids": 349,
+      "invalidShapes": 0,
+      "retainedObjects": 135,
+      "newExactShapes": 233,
+      "openReferenceShapes": 35,
+      "retainedGeometryPropertiesMaterialsUnchanged": true,
+      "privateAuditSha256": "ac69ec21d0c010f2c54fbbb85742c1678c76b709db5eba6e893df9ef6c03735b",
+      "scope": "Coordinated FF02 room extract: retained source context and all C04 components. Existing joined-wall surfaces are cropped to the room for context without closing open surfaces. Same native document used by room and enclosure download links.",
+      "curation": {
+        "retainedGeometryUnchanged": true,
+        "materialsUnchanged": true,
+        "selectedMembershipVerified": true,
+        "reviewViewsVerified": true,
+        "selectedAllowlistSha256": "c7ac0c32279f2f7b0cac2e91b0d7a18069492a1f4d7d348d97f968252f28b037",
+        "privateAuditSha256": "ac69ec21d0c010f2c54fbbb85742c1678c76b709db5eba6e893df9ef6c03735b",
+        "removedObjects": 0,
+        "removedScenes": 0,
+        "displayChanges": [],
+        "dependencyDisclosure": [
+          "This copy contract requires byte-identical copying of the freshly reopened current C04 design.",
+          "The design revision replaces 310 obsolete FF02 P01 leaves with 233 current FF02 fitout components; 1498 non-replaced full-floor shapes are preserved.",
+          "Room native contains exact retained FF02 floor/guard and a local crop of existing shared-wall surfaces. No source architecture is redesigned.",
+          "Editable BReps are retained, not the historical parametric feature graph. Proposed materials and hardware are not fabrication specifications."
+        ]
+      }
+    },
+    {
+      "file": "ff02-enclosure.step",
+      "sourceSha256": "5682968a073c71cf253fbafab1a35f50461b3555320320c05160be1c9823b56d",
+      "publicSha256": "5682968a073c71cf253fbafab1a35f50461b3555320320c05160be1c9823b56d",
+      "publicBytes": 25073167,
+      "transformationKind": "native-step-export",
+      "serializedPrivatePathScan": "PASS",
+      "header": "ISO-10303",
+      "sourceNativeSha256": "06af7359df1fe8b7e2a60db2974541343ed1dd952ec2e4c7c060ec0b14f194d1",
+      "stepReadback": "PASS",
+      "stepChecks": {
+        "valid": true,
+        "solids": 349,
+        "expectedSolids": 349,
+        "faces": 17706,
+        "expectedFaces": 17706,
+        "bounds_error_mm": 5.699121174984612e-10,
+        "solid_volume_error_mm3": 0.02069377899169922,
+        "area_error_mm2": 0.0000012218952178955078,
+        "edge_length_error_mm": 6.351619958877563e-7
+      }
+    },
+    {
+      "file": "ff02-enclosure-cad.png",
+      "sourceSha256": "6745f761989524d048ba6a7d3a63c9d5c7a33b92b6c0535bc683f6fa7fccfde5",
+      "publicSha256": "6745f761989524d048ba6a7d3a63c9d5c7a33b92b6c0535bc683f6fa7fccfde5",
+      "metadataOnly": true,
+      "pixelChunksUnchanged": true,
+      "retainedColorProfile": true,
+      "removedTextChunks": 0
+    },
+    {
+      "file": "ff02-enclosure-cad-cutaway.png",
+      "sourceSha256": "eb37662cd244b82c8418d8d277f5b43322437231183f2015fefc67279a4dee6d",
+      "publicSha256": "eb37662cd244b82c8418d8d277f5b43322437231183f2015fefc67279a4dee6d",
+      "metadataOnly": true,
+      "pixelChunksUnchanged": true,
+      "retainedColorProfile": true,
+      "removedTextChunks": 0
+    },
+    {
+      "file": "ff02-enclosure-plan.png",
+      "sourceSha256": "d64d571171cd2b875117f77e5d12bc985f0e6f4074b84448e1d8b3bf5cfefb91",
+      "publicSha256": "d64d571171cd2b875117f77e5d12bc985f0e6f4074b84448e1d8b3bf5cfefb91",
+      "metadataOnly": true,
+      "pixelChunksUnchanged": true,
+      "retainedColorProfile": true,
+      "removedTextChunks": 0
+    }
+  ]
+}

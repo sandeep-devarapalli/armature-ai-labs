@@ -1,0 +1,55 @@
+{
+  "status": "PASS / CONCEPT GEOMETRY ONLY",
+  "sourceNativeSha256": "704fdc25180377362b1b81446287de2d3fcb91ef5993c785a70a7534b08f9d62",
+  "sourceGeometrySha256": "4282e81dbe8c2ead38ab27cdca275d883323d8c785732f84fef306b5a9d30860",
+  "firstFloorCadSha256": "ceec2bffac84d367a0c20db508da3273573efd6b3cca632b18b2f248ced6eb08",
+  "enclosureCadSha256": "06af7359df1fe8b7e2a60db2974541343ed1dd952ec2e4c7c060ec0b14f194d1",
+  "nativeSaveReopen": "PASS",
+  "glbFreshReimport": "PASS",
+  "serializedPrivatePathScan": "PASS",
+  "sourcesUnchanged": true,
+  "blenderPreservation": {
+    "groundFloorUnchanged": true,
+    "retainedObjects": 3297,
+    "replacedObjects": 53,
+    "addedPhysicalObjects": 184,
+    "movedObjects": 0
+  },
+  "cadFreshReopen": {
+    "status": "PASS",
+    "invalidShapes": 0,
+    "fullFloorShapes": 1731,
+    "fullFloorSolids": 1579,
+    "roomShapes": 369,
+    "roomSolids": 349,
+    "evidenceSha256": "ac69ec21d0c010f2c54fbbb85742c1678c76b709db5eba6e893df9ef6c03735b"
+  },
+  "doorTravel": {
+    "status": "PASS / COMPLETE FREE-TRAVEL SEPARATION / NO CONTACT EXEMPTIONS",
+    "movingComponents": 8,
+    "fixedComponents": 1723,
+    "completePairCoverage": true,
+    "contacts": 0,
+    "collisions": 0,
+    "unresolved": 0,
+    "contactExemptions": 0,
+    "method": "Exact saved CAD component shapes; full 0-to-90-degree rotational interval separation with bounded displacement, plus endpoint intersection checks. Not finite pose sampling.",
+    "hardwareScope": "The supplied moving set models door frames, glass and pull only; no hinge bearing or anchoring geometry is certified.",
+    "evidenceSha256": "b713328b0b4cd283edfcda4704ba86a4ed094592c1a1d81473f9df94d444c631"
+  },
+  "extractionEquipment": "Frame and rail recesses avoid retained extraction equipment in the modeled geometry; this is not installation clearance verification.",
+  "nativeVisualReview": "PASS",
+  "browserVisualReview": "PASS / Chromium desktop and 390px mobile: native previews, themes, room downloads, lazy 3D, floor switching and failure fallback",
+  "browserEvidenceSha256": "4b273f3a00dbb92185d54c8be25728475cf6d500c344016d179f15d8636ad03c",
+  "serviceStatus": "S02 remains unchanged and has not been recalculated for this glass enclosure. S03 is not published.",
+  "notCovered": [
+    "As-built dimensional survey",
+    "Structural, wind or roof-load design",
+    "Glass specification, breakage safety or anchoring",
+    "Hinge bearings and hardware installation",
+    "Roof waterproofing and drainage",
+    "Thermal performance and solar-control product selection",
+    "Ventilation, extraction and electrical sizing",
+    "Fire, egress or local regulatory approval"
+  ]
+}

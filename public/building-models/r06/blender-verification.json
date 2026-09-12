@@ -1,0 +1,36 @@
+{
+  "status": "PASS",
+  "nativeFreshReopen": "PASS",
+  "nativeSha256": "704fdc25180377362b1b81446287de2d3fcb91ef5993c785a70a7534b08f9d62",
+  "sourcePublicSha256": "5cd3c6657441982c8a0fa4d92711d140d14d52ebd0c4776370053c2f88d61a42",
+  "retainedObjectsUnchanged": 3297,
+  "groundFloorUnchanged": true,
+  "removedVerified": 53,
+  "addedVerified": 184,
+  "geometrySha256": "4282e81dbe8c2ead38ab27cdca275d883323d8c785732f84fef306b5a9d30860",
+  "componentCount": 233,
+  "finalFingerprintDigest": "716428c8a6a3fe281bdb1fe20779f5c0bc97a04c5094a8beb6b65a8aff47d638",
+  "sourceUnchanged": true,
+  "revision": "R06",
+  "serializedPrivatePathScan": "PASS",
+  "glbSha256": "c305077db2994542bc8835ce4ad8f54e17c0e945d36fd4560f4e7bb3e8126183",
+  "glbBytes": 6857020,
+  "retainedGeometryMaterialsUVAndPlacementsUnchanged": true,
+  "glbFreshReimport": "PASS",
+  "glbWorldVertexMatch": "PASS",
+  "glbVertexTolerance_m": 0.00002,
+  "glbMaxVertexDistance_m": 5.331201577973843e-7,
+  "glbObjectCount": 1466,
+  "reimportMissing": [],
+  "reimportExtra": [],
+  "importerTriangleDifferences": [
+    {
+      "name": "First Floor - Planning Base 08 | joined wall display",
+      "source": 4064,
+      "import": 4063
+    }
+  ],
+  "allObjectFingerprintDigest": "716428c8a6a3fe281bdb1fe20779f5c0bc97a04c5094a8beb6b65a8aff47d638",
+  "verificationScope": "Fresh Blender reopen, preserved object fingerprints, complete visible GLB object set, bidirectional world-space vertex match, triangle-count tolerance and serialized path scan. Not engineering or thermal approval.",
+  "privateEvidenceSha256": "832afc63984b0b166b4f37a34205b7caf04d707fe3a2c804fac9a9274a77dbbb"
+}

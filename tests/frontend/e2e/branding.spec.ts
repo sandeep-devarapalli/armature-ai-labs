@@ -1,8 +1,8 @@
 import { expect, test } from "@playwright/test";
 
-test("brand resources are discoverable, usable and downloadable", async ({ page, request }) => {
+test("brand resources are discoverable, usable and downloadable", async ({ page, request, baseURL }) => {
   await page.context().grantPermissions(["clipboard-read", "clipboard-write"], {
-    origin: "http://127.0.0.1:4173"
+    origin: baseURL
   });
   await page.goto("/");
   await page.locator("footer").getByRole("link", { name: "Brand assets" }).click();

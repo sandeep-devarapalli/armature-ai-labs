@@ -1,0 +1,911 @@
+{
+  "release": "R06",
+  "date": "2026-09-12",
+  "serviceRevision": "S02",
+  "floors": [
+    "ground",
+    "first"
+  ],
+  "serviceStatus": "S02 remains the published electrical and setup plan and is not recalculated for the glass enclosure; S01 counts are historical and S03 is not published.",
+  "scope": "FF02 C04 aluminium-framed glass enclosure and glass-roof proposal with provisional solar-control film. Existing masonry, doorways, balcony, furniture and all other rooms are retained. First-floor native CAD and the FF02 extract are coordinated with the saved Blender design. Not a structural, thermal, fabrication or as-built design.",
+  "releaseConfigSha256": "e47c58415a5bdda2fe00880699dfb8641389dc3043fdf85a8d0c6204bc4a4992",
+  "servicesSha256": "0a9385c9580afb5fc816f8e85e4e7b2f4ace465e53e905a4cf54f6ac8412a4df",
+  "roomCatalogSha256": "2e9289f2dfc88e9f3105c064c37d0f35b93b2190f2878c90b37fde98a1e0294e",
+  "retainedRelease": {
+    "url": "/building-models/r05/release.json",
+    "sha256": "b67ba614619c1761b39b538ea475395355d056b93fd13e97345f91c462c4c00e"
+  },
+  "updatePolicy": "Regenerate only verified affected assets; preserve prior public releases and retained asset provenance. Local saves are not deployments.",
+  "files": [
+    {
+      "path": "blender-metadata-provenance.json",
+      "bytes": 1649,
+      "sha256": "f3eb778f12b2ff623f20a529a5d5d5c762cd84c57e3d01e788793b0e3fd8b0a9"
+    },
+    {
+      "path": "blender-verification.json",
+      "bytes": 1634,
+      "sha256": "e81e3b7544254be23b5f6f87a606d529250b1d11db5ab7c4eb4c1fcf64b5797d"
+    },
+    {
+      "path": "cad-metadata-provenance.json",
+      "bytes": 6389,
+      "sha256": "930cad833f8a70a4934a546d6417bd4decbd8d9d3a331535f15221f75df7a9d6"
+    },
+    {
+      "path": "cad-verification.json",
+      "bytes": 9471,
+      "sha256": "2360b583835b3e489cf25bbacc4bae6543209ac27ba8c92c62d7bbf86498811e"
+    },
+    {
+      "path": "design-verification.json",
+      "bytes": 2669,
+      "sha256": "2fd04bc6ea2cbacc743e5b766a3d3955298ac990e9588eca51cd28859ed7d712"
+    },
+    {
+      "path": "ff02-enclosure-cad-cutaway.png",
+      "bytes": 81600,
+      "sha256": "eb37662cd244b82c8418d8d277f5b43322437231183f2015fefc67279a4dee6d"
+    },
+    {
+      "path": "ff02-enclosure-cad.png",
+      "bytes": 100879,
+      "sha256": "6745f761989524d048ba6a7d3a63c9d5c7a33b92b6c0535bc683f6fa7fccfde5"
+    },
+    {
+      "path": "ff02-enclosure-plan.png",
+      "bytes": 39421,
+      "sha256": "d64d571171cd2b875117f77e5d12bc985f0e6f4074b84448e1d8b3bf5cfefb91"
+    },
+    {
+      "path": "ff02-enclosure.FCStd",
+      "bytes": 4668634,
+      "sha256": "06af7359df1fe8b7e2a60db2974541343ed1dd952ec2e4c7c060ec0b14f194d1"
+    },
+    {
+      "path": "ff02-enclosure.png",
+      "bytes": 2012656,
+      "sha256": "326d9292505254c0774f3f3a292794c6546afdf1bcd65afc1f1dabc9fcce3897"
+    },
+    {
+      "path": "ff02-enclosure.step",
+      "bytes": 25073167,
+      "sha256": "5682968a073c71cf253fbafab1a35f50461b3555320320c05160be1c9823b56d"
+    },
+    {
+      "path": "ff02-layout.png",
+      "bytes": 1438816,
+      "sha256": "bbd127f62c844af6902f4a08927e6e9d7782dbe132fce7370c31aa6f5cf1e1b0"
+    },
+    {
+      "path": "ff02-roof.png",
+      "bytes": 1949842,
+      "sha256": "a4777d4bcbd8f8ed8aab55e8f3b6bed68fea1c2c2e80af1096a0e421fa8b4a5a"
+    },
+    {
+      "path": "first-floor-export.json",
+      "bytes": 2998,
+      "sha256": "f8d87623c02ad0d183ea9fe0acf3fc780e4c40e4073824dd067616e4e3793243"
+    },
+    {
+      "path": "first-floor.glb",
+      "bytes": 6857020,
+      "sha256": "c305077db2994542bc8835ce4ad8f54e17c0e945d36fd4560f4e7bb3e8126183"
+    },
+    {
+      "path": "first-floor.png",
+      "bytes": 1553983,
+      "sha256": "679ff9698a2b5e6c53c434185bc40b6efb792e85edaf8c364782492a45bee1ea"
+    },
+    {
+      "path": "manifest.json",
+      "bytes": 12317,
+      "sha256": "e326a89e06f93103b6313fc2aa9a3e03299e680f89762774b35805c1ee16c047"
+    },
+    {
+      "path": "native-preview-provenance.json",
+      "bytes": 11239,
+      "sha256": "334ef74ba6b42ba938bb43edb5759cae5c62797abe8047452e88f997901913f0"
+    },
+    {
+      "path": "rooms/FF-02-provenance.json",
+      "bytes": 236844,
+      "sha256": "6b84269586c74b415840d9a7f08974192d88db530788da122d8fdcd63ca9feda"
+    },
+    {
+      "path": "rooms/FF-02.FCStd",
+      "bytes": 4668634,
+      "sha256": "06af7359df1fe8b7e2a60db2974541343ed1dd952ec2e4c7c060ec0b14f194d1"
+    },
+    {
+      "path": "rooms/FF-02.step",
+      "bytes": 25073167,
+      "sha256": "5682968a073c71cf253fbafab1a35f50461b3555320320c05160be1c9823b56d"
+    },
+    {
+      "path": "rooms/FF-02.svg",
+      "bytes": 1281278,
+      "sha256": "bfa054993f23b3ccbed8dcf6ae2d8b73ca916e851b82a30d6e442c5e8f9c3b64"
+    },
+    {
+      "path": "rooms/manifest.json",
+      "bytes": 47655,
+      "sha256": "edf91ab5127e63890042709ac8363ae797e49763c7337611cc7d2af947f54eab"
+    },
+    {
+      "path": "selected-layout.blend",
+      "bytes": 2793877,
+      "sha256": "704fdc25180377362b1b81446287de2d3fcb91ef5993c785a70a7534b08f9d62"
+    }
+  ],
+  "retainedAssets": [
+    {
+      "url": "/building-models/r03/ff04-cabins.png",
+      "bytes": 1992444,
+      "sha256": "3c1bea42c9831f11ee6eedb62e3acedef09cf75d89f9177ed5e4d3f1d29af957",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/ff04-cad.png",
+      "bytes": 131493,
+      "sha256": "77c06d22d59b3d567e027b6e603b332b1f399c65d63caed8f765dc76a95a2c2b",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/ff06-cabins.png",
+      "bytes": 1778053,
+      "sha256": "511f5fc0108554d629b36795c9a85fde3e5a57a4054ce01ac04859d3f58186a8",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/ff06-cad.png",
+      "bytes": 76194,
+      "sha256": "6e2bc854856be48b5e64cba5199659a5ee64757e7fdce4fd498fd9c063918f6d",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/ground-floor.FCStd",
+      "bytes": 6212792,
+      "sha256": "3282f8e42579b73b24f097e8b65bad672d5bc2b4dc8d46c486eb163780cff0df",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/ground-floor.glb",
+      "bytes": 15351516,
+      "sha256": "79ccf1a77c67a38a4a9e189734bc0393b0961a92d090b0875bb7714945b2f7fa",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/ground-floor.png",
+      "bytes": 1232914,
+      "sha256": "80b710cde0de7dcab4543af27228887a54ee9f4da357bcb62a459605f53bb47b",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/FF-01-provenance.json",
+      "bytes": 8064,
+      "sha256": "2d6b29fc7bae6d4a8cb1407355bc20c026483bdf7f2a75808e257ededde4183f",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/FF-01-README.md",
+      "bytes": 1794,
+      "sha256": "16aa3ffd1a5a65c55fdfc87dc58378ead51cec0f3b7c0cff6dc166342b5b67c5",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/FF-01.FCStd",
+      "bytes": 17736,
+      "sha256": "d6c02b00caa316c1d259d6ec14c8be06e044c85bd11900a9e97a7a43f0e672cf",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/FF-01.png",
+      "bytes": 37376,
+      "sha256": "44f4cf7935a70f6e8818d603f579b440f905a902de4243420d3b27e6eb223fff",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/FF-01.step",
+      "bytes": 14205,
+      "sha256": "5c11b00eee2a1d709f23f3376c34d9bf62ca7484cf2d1249a760cf9293f21ed8",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/FF-01.svg",
+      "bytes": 8428,
+      "sha256": "9b24757bb3d1c6af8ecc3971155ac152dfda4e75ec4bee0c8e63083edb498a6c",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/FF-02-provenance.json",
+      "bytes": 126136,
+      "sha256": "1d8e27205d216d58f995ad174f898afc863b292709c0e8ae98de0b431e67945a",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/FF-02-README.md",
+      "bytes": 1975,
+      "sha256": "fe12f87de110e40b65775bf40d6ebd45d94e50eafd8d80c0e2d62c0ee1b5b84c",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/FF-02.FCStd",
+      "bytes": 2950683,
+      "sha256": "90094bc074ac7e332bd1f082c2451eb485b759ccca25e14e353a4f6687de7935",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/FF-02.png",
+      "bytes": 51253,
+      "sha256": "7ecd99330d61a45b9787032c9856264544d70684d81937a907ccd2e4d1b82a82",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/FF-02.step",
+      "bytes": 14526675,
+      "sha256": "560defa263de4951c5c70cd6a4d47dd9acb864fb0b928cf6f699082d35ea35cb",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/FF-02.svg",
+      "bytes": 699295,
+      "sha256": "c2623b73cc0aa2d0e22135d481612e8b64b0e26d42ebab76aeed960ab9c4a76b",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/FF-04-provenance.json",
+      "bytes": 199386,
+      "sha256": "5c9b1db89dc1ca36e67ed406ecd360549e483fcfd75758ad5090025685bd1602",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/FF-04-README.md",
+      "bytes": 1427,
+      "sha256": "50d754e3e9c14344cb60b1e5fb33365d8cbb7810c4de21e130870dc5bc96f328",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/FF-04.FCStd",
+      "bytes": 19206156,
+      "sha256": "b66723cacfd0a2c87ad4b12aab32fe719577e14b05c3171574020dbfbbb64477",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/FF-04.png",
+      "bytes": 71272,
+      "sha256": "b3fd61b428edb57a314e52e8a98d84290e29aab786f8b0ea5e067485138e0a6e",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/FF-04.svg",
+      "bytes": 3622824,
+      "sha256": "082569eb41b5a7ebc695d2db417a8576f9ffd4c6a499cd3eb2826e3303d51231",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/FF-05-provenance.json",
+      "bytes": 8078,
+      "sha256": "87cc13063761307cb80ac5a5f1af1e573cae282aaacf6ab002a389a19e82bce5",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/FF-05-README.md",
+      "bytes": 1787,
+      "sha256": "c480526be4b6aa086109ff6169954f66e1190e486e56e6c08c956eb369abcaa5",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/FF-05.FCStd",
+      "bytes": 17606,
+      "sha256": "d1cd4929ed6db9b087502aa27f7b498657d149af9522296c9b55d73736f66737",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/FF-05.png",
+      "bytes": 36969,
+      "sha256": "19b1943d9078a9ed2d4b87b74b1e28da1e6d93199bce59fa2fbb743fe74c0835",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/FF-05.step",
+      "bytes": 15134,
+      "sha256": "4aaf27bd505d512fd6e321768fd99155efd31efb8e8525e1428dcf2ebf76eebf",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/FF-05.svg",
+      "bytes": 8054,
+      "sha256": "7fba620ff107afd6a0021ccc097ce0dd5993d4cef4b7633c202db39837ca5767",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/FF-06-provenance.json",
+      "bytes": 162265,
+      "sha256": "5372ea6c7511e09d42afb92878b2b42e63ab59268d48f2c46199b1e6315cea62",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/FF-06-README.md",
+      "bytes": 1413,
+      "sha256": "b8c40bd3e9ac0fc43bcbc84e6d687989b2ea0a56c76112fb80dd2a5940304d6a",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/FF-06.FCStd",
+      "bytes": 6158586,
+      "sha256": "e6cf2f12a596d5b3a947514b1650a54f19e246f483554bfa7e8bdad0b6303ce1",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/FF-06.png",
+      "bytes": 59504,
+      "sha256": "fa8f6dfec3e23c9480ef5dbe1ccf5fa6166c9f8e07a0dfdb4acad1dbc4835e7d",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/FF-06.svg",
+      "bytes": 1912045,
+      "sha256": "f9ba9e1df3157e346b41292b66b2eafb87fac825cd3fa4415d17dad72693d679",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-01-provenance.json",
+      "bytes": 73761,
+      "sha256": "4a2c3c1368553f3792649da89e2df3c16bdecb0701aaf2e9d59bc583368fc047",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-01-README.md",
+      "bytes": 2334,
+      "sha256": "8ff5a218d859543ce90ad91a08d9e5c077a3d0eab4a06d1ed688920bc4deea11",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-01.FCStd",
+      "bytes": 2373983,
+      "sha256": "7543833010231849af19a7fc7fb83a256a573c4c17389700d8c324992fc40fd1",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-01.png",
+      "bytes": 53778,
+      "sha256": "c5b52cbd67a292e64744f082daa5935aefc85c3116b8bfc52e51d73ff176aebc",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-01.step",
+      "bytes": 11186701,
+      "sha256": "98dc78538eb9ab71f473233734aa37bfd7f84926a53dc3663c22a278cf2d57a3",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-01.svg",
+      "bytes": 593431,
+      "sha256": "4da6a7746b10469862708f1d215b2bbe87f8045b2577eee39085dd04749eb822",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-02-provenance.json",
+      "bytes": 36678,
+      "sha256": "4aef6e6b59c5b4be10ec558e2b0351f71284464fea153678169ce44fdc401db9",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-02-README.md",
+      "bytes": 1676,
+      "sha256": "129429e72d2b932ccf39f464912aa91adbba6ab2a918ff6c8ab348e6b538b858",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-02.FCStd",
+      "bytes": 129067,
+      "sha256": "60d180e3829a1c73b7dfdd7c07a58f0d6740658ca72f72b86fcf3b262d55cf39",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-02.png",
+      "bytes": 44357,
+      "sha256": "3efc14b24a9b34775ec2e3de527fa8c342f47c6dc3912c7e629241240c6a9e77",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-02.step",
+      "bytes": 359414,
+      "sha256": "5da7309ab5fbb0ff676b8e4f301777ca4653cf57c93874d7621f586c95853df6",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-02.svg",
+      "bytes": 36793,
+      "sha256": "6d2cfd5bfe61f902e14f1736523ef174bfd21672bcfc0e2a65822c631acc1ef6",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-03-provenance.json",
+      "bytes": 7213,
+      "sha256": "7032e12a27b417af520c82108b9554bc858e7408510aec6e42afae5bc8429c61",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-03-README.md",
+      "bytes": 1784,
+      "sha256": "81eb2c307893ef4187aba71293b99dca359d822a6a6f2f3ea2be0cb202dd1c21",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-03.FCStd",
+      "bytes": 16167,
+      "sha256": "255419dfcd31eeb715e97625e5cb67b3ea050322bb9086d95237d5dbd571c19b",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-03.png",
+      "bytes": 37339,
+      "sha256": "3de5973bb489bbb8c1adac6ceee6c1c51c2497e566a2250e1fc0cd3ded383219",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-03.step",
+      "bytes": 12207,
+      "sha256": "36cb9aa2876883181d161fec1b24f5293d28e68a036c774b27b93ba4f5ecde7c",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-03.svg",
+      "bytes": 7569,
+      "sha256": "76b9a83855de45997d2060590352ffc78563796c21a44f053ea62821a02cba58",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-04-provenance.json",
+      "bytes": 9345,
+      "sha256": "9042d522f2ef10ad53b4bd765ebc1aed426895b40880b9bf5bf07c02b2e283bb",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-04-README.md",
+      "bytes": 1776,
+      "sha256": "cd37276c64049419df3b578d31cf3cac5d6467e3ab6b8e830da8c9df9a0fa101",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-04.FCStd",
+      "bytes": 21235,
+      "sha256": "ca47f973a197bc092b2f36e552a6e5c0200742bef870f2d123ddf4a3606b9363",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-04.png",
+      "bytes": 36674,
+      "sha256": "cd75467b084c0000f5d09f7f37d8323e5cde413a9db05c1f8af85afbcdc2d225",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-04.step",
+      "bytes": 19377,
+      "sha256": "a9bcf173b7dd8da24f37c7a7e909a0890e3e9f79a4866a91056cbf1e80f43100",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-04.svg",
+      "bytes": 11078,
+      "sha256": "e524fd1d3191e031e36852569d741d9754c54cee663c0d88a143b30793eaf14f",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-06-provenance.json",
+      "bytes": 6776,
+      "sha256": "49858bf93851f963ce9bcb88d8c059fe23915dfd0c308d70ef75fe1107484f81",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-06-README.md",
+      "bytes": 1787,
+      "sha256": "7dcde58b5c8d1f1110d269c72cc0112a4af9cd5acedfd3251bfa947156c85455",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-06.FCStd",
+      "bytes": 15209,
+      "sha256": "6e20b3ebc23c4f519c10c42f8d7e16d4b36e659a0b457f8a247ca7d465b3df25",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-06.png",
+      "bytes": 37546,
+      "sha256": "192ec0cbca0c8c085462f924fa1f58beddb8763e32d16deaebc7a74e5b201560",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-06.step",
+      "bytes": 12177,
+      "sha256": "83cfd79638c5116c88459b28f76bb9be90ed8873c1fe44079c93cf7ef69abc81",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-06.svg",
+      "bytes": 6725,
+      "sha256": "5bf87c7897aa2df6e81770750e45ed5840d81ab6bf97c8176c6244fbf1dc96e2",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-07-provenance.json",
+      "bytes": 24864,
+      "sha256": "c8d4661cf92f43857e812d2adc50710ec411962a0cd4b31cf07186560c28f6bb",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-07-README.md",
+      "bytes": 1818,
+      "sha256": "8ae836a57576cf33c11d9f2918c003858432fc42d33faa04c7c6126e033457ae",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-07.FCStd",
+      "bytes": 107338,
+      "sha256": "85ac51dd5bd53c51fe2e79650aceff08fdd2a33aa687593fe7761462058c0043",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-07.png",
+      "bytes": 38419,
+      "sha256": "aeed4297ee0c619e8f8376a02249885282f2c64c0148fb7568bc40bb66a036e8",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-07.step",
+      "bytes": 407418,
+      "sha256": "d7b503d6913770fbc9f3af2a6b76a3f67637c0f0cbd6a4d484f0e984be3a6530",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-07.svg",
+      "bytes": 37844,
+      "sha256": "5174eddee00795864c74b63d38809a0343c6eb781fd722b4bbab3172f7bb300f",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-08-provenance.json",
+      "bytes": 128892,
+      "sha256": "3a1f38e267821264ce880cc932e4233a78bcc4601b09fdb2b9a0803ad48711fe",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-08-README.md",
+      "bytes": 1847,
+      "sha256": "89aed4c0f9be399c4928ca2f31f8fa5ec99101542f186baa219d375108a9e22f",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-08.FCStd",
+      "bytes": 658987,
+      "sha256": "23881de3665b8e29346b874e95a81cfd938391e87959ff61fab500b142003806",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-08.png",
+      "bytes": 54951,
+      "sha256": "6f9b1c98e902dda49d1c5cc3bf9d163e8b210fa15e335413b418729a2fd38722",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-08.step",
+      "bytes": 2239052,
+      "sha256": "3e40a7d2ea77e1b9c26316e36a38324e49c60822c9021bb6d5ab33e055bf6e9f",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-08.svg",
+      "bytes": 180714,
+      "sha256": "bce907d59b1eeb876a04ef1591573c74d0f7d1ea2047fb9f9914deb0ca7ce33e",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-09-provenance.json",
+      "bytes": 256110,
+      "sha256": "1f50762c20cc43fa455c9be6140e23344ed8a4b79f31cb483a378d5621047bbb",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-09-README.md",
+      "bytes": 1854,
+      "sha256": "4ed003da70db1e963ebe34512553fcb159389700a3bc580a4ee31e7ea7dd089c",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-09.FCStd",
+      "bytes": 2529106,
+      "sha256": "28d332020d6ab23d52be00ec6087997181f0495c8cdf383a8983f638891344d6",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-09.png",
+      "bytes": 50467,
+      "sha256": "4cba223fc69113e4ab70b1f0f9a6c683e1538732b20eaca518d79a09e83ce04c",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-09.step",
+      "bytes": 10488273,
+      "sha256": "2f540c2f253b4223cd0999b176310705fe15296677a6c988f4cc1c075c6d8a90",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-09.svg",
+      "bytes": 681811,
+      "sha256": "dbb5703d807d8ee8dfe3d7acacc3b8744ca0ca08b486a9844e2828ca7691722d",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-10-provenance.json",
+      "bytes": 76366,
+      "sha256": "83005db858b80f271d766d458dbe558799514a0f643d5f75ff5a44da869057fa",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-10-README.md",
+      "bytes": 1883,
+      "sha256": "8544b10b2dd41d54369e883901a4d1d23624b05bb9793909b55c34c7a5fc56ed",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-10.FCStd",
+      "bytes": 415226,
+      "sha256": "4144b577743a9488f3c0e698a8e558427189a62837592319988d35d98c0352c1",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-10.png",
+      "bytes": 52720,
+      "sha256": "7542325846fe580dfe6577c8133ec8173bf8af20cb23b49d9dcac2eba42a1a15",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-10.step",
+      "bytes": 2016601,
+      "sha256": "c8fcd49ce71af026d8f173b77a884f2e9419fdb981426d1e0e73d29e75499f85",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r03/rooms/GF-10.svg",
+      "bytes": 153370,
+      "sha256": "a3d001999d428ebcb60d3eff8e4f0f52f638c4f56084dd34746cc1c2d1706a00",
+      "sourceRelease": "R03"
+    },
+    {
+      "url": "/building-models/r04/blender-metadata-provenance.json",
+      "bytes": 3094,
+      "sha256": "a36603ed04c5f8808ced112bf25802e9487d82345b795eb2f054deac6c2913dc",
+      "sourceRelease": "R04"
+    },
+    {
+      "url": "/building-models/r04/cad-metadata-provenance.json",
+      "bytes": 2689,
+      "sha256": "b67ed1ee9f6f6d70edc6433d27ef5600270003c885965fbec436be07c859ec9a",
+      "sourceRelease": "R04"
+    },
+    {
+      "url": "/building-models/r04/design-verification.json",
+      "bytes": 54558,
+      "sha256": "2b2c57a4672e865698ff9d93b52c6036f9f96fbd1d1cd43096e7853ceacb496d",
+      "sourceRelease": "R04"
+    },
+    {
+      "url": "/building-models/r04/external-download-verification.json",
+      "bytes": 430,
+      "sha256": "397bab9b06d8661ec7e3c5a14a86c6265c871da8a76c9c33403d8570e6081cb5",
+      "sourceRelease": "R04"
+    },
+    {
+      "url": "/building-models/r04/ff03-cabins.png",
+      "bytes": 1689024,
+      "sha256": "1c780e626cecb4c59cb8d36824be824a68cb402e13f9704e51b5a40434e31c13",
+      "sourceRelease": "R04"
+    },
+    {
+      "url": "/building-models/r04/ff03-cad.png",
+      "bytes": 81757,
+      "sha256": "7117f3bc430d76542b7196e1349e64e98a781d6680c4f4b6412fa88d21152e01",
+      "sourceRelease": "R04"
+    },
+    {
+      "url": "/building-models/r04/ff03-closed.png",
+      "bytes": 1687305,
+      "sha256": "9b3c7d8d791084d15d9ddf52809ab3514fc4451e287ed15de5dc727fc187d42d",
+      "sourceRelease": "R04"
+    },
+    {
+      "url": "/building-models/r04/ff03-plan.png",
+      "bytes": 1663746,
+      "sha256": "b8ed64dbcfbcb969623e97828726ec0eefb243de1c1c11413e00b3a451fdd85c",
+      "sourceRelease": "R04"
+    },
+    {
+      "url": "/building-models/r04/first-floor.glb",
+      "bytes": 7191908,
+      "sha256": "78c497d2fe0a54b80aa977d872cfce8da36400345fc5f0065184fd6d3b32160c",
+      "sourceRelease": "R04"
+    },
+    {
+      "url": "/building-models/r04/first-floor.png",
+      "bytes": 1552198,
+      "sha256": "ecf6c25d38124ac390c57f75993040b736df253c19a1930e647dd254de3bdc81",
+      "sourceRelease": "R04"
+    },
+    {
+      "url": "/building-models/r04/manifest.json",
+      "bytes": 12843,
+      "sha256": "b0149231e41f5e1a8faca09d4c5b7d85d80fce3a8fb3c18080ae6a1414bbb171",
+      "sourceRelease": "R04"
+    },
+    {
+      "url": "/building-models/r04/native-preview-provenance.json",
+      "bytes": 4139,
+      "sha256": "0478261b61b19e6ccc71143344152537257615eb769f84a06cfb921df9cf9198",
+      "sourceRelease": "R04"
+    },
+    {
+      "url": "/building-models/r04/rooms/FF-03-provenance.json",
+      "bytes": 140866,
+      "sha256": "f7a5852b0fb909883fa10a6e26bd2ca2d6ebc056b0a31492e1fd1a878741c613",
+      "sourceRelease": "R04"
+    },
+    {
+      "url": "/building-models/r04/rooms/FF-03-README.md",
+      "bytes": 492,
+      "sha256": "3478917e2e50865eda70106d43f834a87cd2d84577c6570e562bdea3b54859cb",
+      "sourceRelease": "R04"
+    },
+    {
+      "url": "/building-models/r04/rooms/FF-03.FCStd",
+      "bytes": 2943768,
+      "sha256": "452fafd1f345ef268616a241933826073a62fd4a95b6f9098851cdf3523b5695",
+      "sourceRelease": "R04"
+    },
+    {
+      "url": "/building-models/r04/rooms/FF-03.png",
+      "bytes": 53932,
+      "sha256": "c28342b59a6a0df4cc99094cce4f6d1aaf058208df8e8c80f5d79681b2e5ee0d",
+      "sourceRelease": "R04"
+    },
+    {
+      "url": "/building-models/r04/rooms/FF-03.step",
+      "bytes": 15830737,
+      "sha256": "6a59d38a9a2b80c4241657dda8dd921a17a9a97e23a46b084d8567dcbd553d09",
+      "sourceRelease": "R04"
+    },
+    {
+      "url": "/building-models/r04/rooms/FF-03.svg",
+      "bytes": 1293817,
+      "sha256": "f4127c204095832f2036505b2432b9ab05a87aaa78d150392c236df4278f25fc",
+      "sourceRelease": "R04"
+    },
+    {
+      "url": "/building-models/r04/rooms/manifest.json",
+      "bytes": 48973,
+      "sha256": "ce1105a794a5e47aa5db924b0744262f4898e9208c96bd9af2849cc1da8b663a",
+      "sourceRelease": "R04"
+    },
+    {
+      "url": "/building-models/r04/selected-layout.blend",
+      "bytes": 2804748,
+      "sha256": "9962e93c7cb587f6355a74d6e62bafd046ec5b26b44a4290b2511e6f75a5d4f8",
+      "sourceRelease": "R04"
+    },
+    {
+      "url": "/building-models/r05/blender-metadata-provenance.json",
+      "bytes": 3135,
+      "sha256": "f52ab94b346e76a22852cfba053e129cd08c559c54ca35d8d323d1e029e8c64f",
+      "sourceRelease": "R05"
+    },
+    {
+      "url": "/building-models/r05/cad-metadata-provenance.json",
+      "bytes": 2585,
+      "sha256": "9092db7c2a1f0f422ee9d3a4cec3b3e81524da700aff3d20421e97c845763308",
+      "sourceRelease": "R05"
+    },
+    {
+      "url": "/building-models/r05/design-verification.json",
+      "bytes": 2394,
+      "sha256": "828574c73c0c10e3df28a9dee41446193dadd53b084e3de572b2a063ed668afb",
+      "sourceRelease": "R05"
+    },
+    {
+      "url": "/building-models/r05/ff02-enclosure-cad-cutaway.png",
+      "bytes": 58910,
+      "sha256": "55d844144a4e2b0e8a615205aad98a95e418f655338f8a9c8b7360b1d59e42aa",
+      "sourceRelease": "R05"
+    },
+    {
+      "url": "/building-models/r05/ff02-enclosure-cad.png",
+      "bytes": 37105,
+      "sha256": "93b548e844bdb74845960e2a21228b4bf80d343bdfefdf4b049459e6329b4084",
+      "sourceRelease": "R05"
+    },
+    {
+      "url": "/building-models/r05/ff02-enclosure-plan.png",
+      "bytes": 16880,
+      "sha256": "b7e1b90c8d46ed3c7b4e77a1553156bf8868177a502e9f83d2c837522917586d",
+      "sourceRelease": "R05"
+    },
+    {
+      "url": "/building-models/r05/ff02-enclosure.FCStd",
+      "bytes": 264283,
+      "sha256": "28fab8d70bffa3c43202d02c49f533cb4bf8f7740ae13cc3ec13463c364ee1ce",
+      "sourceRelease": "R05"
+    },
+    {
+      "url": "/building-models/r05/ff02-enclosure.png",
+      "bytes": 1944077,
+      "sha256": "7038b0d466798a0389cb6a32302e64f9fbd378459a7677e43256eca9dcfcaaad",
+      "sourceRelease": "R05"
+    },
+    {
+      "url": "/building-models/r05/ff02-enclosure.step",
+      "bytes": 1205429,
+      "sha256": "c0a8068e058c3d979091addfb761b154192a29bf1026c6637c3fbc892a9b9071",
+      "sourceRelease": "R05"
+    },
+    {
+      "url": "/building-models/r05/first-floor.glb",
+      "bytes": 6689880,
+      "sha256": "08d33f8a54f1020815b5a41ee774f92366dcd444635fd4d5b01d3fe79f8cc422",
+      "sourceRelease": "R05"
+    },
+    {
+      "url": "/building-models/r05/first-floor.png",
+      "bytes": 1533037,
+      "sha256": "4d19fb10c47f6310b3a7a99bf73c6ac404dd00770d1a5134069cd9611cc0aa03",
+      "sourceRelease": "R05"
+    },
+    {
+      "url": "/building-models/r05/manifest.json",
+      "bytes": 11620,
+      "sha256": "af2fee03fe19093d20c3cc601fc682e6c489aa1385e927cbc3508d1a8a677736",
+      "sourceRelease": "R05"
+    },
+    {
+      "url": "/building-models/r05/native-preview-provenance.json",
+      "bytes": 3510,
+      "sha256": "2fc0e0cd0ab28b196215e23ee16e6e28b1418ebbe9ad8b4c2e7e84b7fc907feb",
+      "sourceRelease": "R05"
+    },
+    {
+      "url": "/building-models/r05/selected-layout.blend",
+      "bytes": 2742737,
+      "sha256": "5cd3c6657441982c8a0fa4d92711d140d14d52ebd0c4776370053c2f88d61a42",
+      "sourceRelease": "R05"
+    }
+  ],
+  "externalDownloads": [
+    {
+      "file": "first-floor.FCStd",
+      "url": "https://github.com/sandeep-devarapalli/armature-ai-labs/releases/download/building-models-r04/first-floor.FCStd",
+      "bytes": 50172007,
+      "sha256": "ad1397f6b855e309b0093e64baf582db559be5b4ebab1e22ef3f428a3b77d5e9",
+      "sourceRelease": "R04"
+    },
+    {
+      "file": "rooms/FF-04.step",
+      "url": "https://github.com/sandeep-devarapalli/armature-ai-labs/releases/download/building-models-r03/FF-04.step",
+      "bytes": 93424637,
+      "sha256": "f15ad68a37e934300ed65bb3e34ab78d04b8ca35d78e6bfe1fbb776624597b97",
+      "sourceRelease": "R03"
+    },
+    {
+      "file": "rooms/FF-06.step",
+      "url": "https://github.com/sandeep-devarapalli/armature-ai-labs/releases/download/building-models-r03/FF-06.step",
+      "bytes": 33159203,
+      "sha256": "0bc0129d60844c4e131538f1d0088fc92111379c67aee914773c4d45fe2ee5ef",
+      "sourceRelease": "R03"
+    },
+    {
+      "file": "first-floor.FCStd",
+      "url": "https://github.com/sandeep-devarapalli/armature-ai-labs/releases/download/building-models-r06/first-floor.FCStd",
+      "bytes": 49128914,
+      "sha256": "ceec2bffac84d367a0c20db508da3273573efd6b3cca632b18b2f248ced6eb08",
+      "sourceRelease": "R06"
+    }
+  ]
+}

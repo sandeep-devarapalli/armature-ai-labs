@@ -25,7 +25,7 @@ export function BuildingPlanning() {
   const enclosure = release.enclosure.roomId === room.id ? release.enclosure : null;
 
   return <Section number="01" id="planning-model" title="Models and room plans."
-    lede="Updated 12 September 2026 · FF02 workshop terrace shown with the proposed steel-frame enclosure and lab layout.">
+    lede="Updated 12 September 2026 · FF02 now has a framed-glass enclosure and glass-roof proposal.">
     <p className="building-model-help">Planning layouts. Site dimensions, occupied access and installation details still need verification.</p>
     <div className="building-floor-tabs" role="group" aria-label="Choose model floor">
       {floors.map((item) => <button key={item.id} type="button" aria-pressed={floor === item.id}
@@ -81,15 +81,21 @@ export function BuildingPlanning() {
         {enclosure ? <>
           <h4>Enclosure proposal {enclosure.revision} · Blender</h4>
           <a className="building-room-preview" href={enclosure.blender} target="_blank" rel="noreferrer" aria-label={`Open ${room.id} enclosure Blender render`}>
-            <img src={enclosure.blender} alt={`${room.id} proposed steel-frame insulated-panel enclosure, native Blender render ${enclosure.revision}`} width="1450" height="1200" loading="lazy" />
+            <img src={enclosure.blender} alt={`${room.id} proposed aluminium-framed glass enclosure and glass roof, native Blender render ${enclosure.revision}`} width="1450" height="1200" loading="lazy" />
           </a>
-          <p className="building-model-help">Steel box-section frame, 50 mm PUF wall panels, 80 mm PUF roof falling to the west guard, a polycarbonate skylight strip along the north wall, three fixed windows and an insulated door to the retained curved balcony. Inside: the lab layout the S03 services plan will serve. A concept for review, not a structural, thermal or fabrication design.</p>
+          <p className="building-model-help">Cabin-style aluminium framing with clear glass walls and a glass roof with provisional solar-control film. Existing back and right masonry walls, doorways, lab furniture and the open curved balcony are retained. A concept for review, not a structural, thermal or fabrication design.</p>
+          <details>
+            <summary>Glass roof and inside layout</summary>
+            <a className="building-room-preview" href={enclosure.roof} target="_blank" rel="noreferrer" aria-label="Open FF-02 glass roof render"><img src={enclosure.roof} alt="FF-02 glass roof with aluminium framing and provisional solar-control film, native Blender close-up" width="1450" height="1200" loading="lazy" /></a>
+            <a className="building-room-preview" href={enclosure.layout} target="_blank" rel="noreferrer" aria-label="Open FF-02 inside layout render"><img src={enclosure.layout} alt="FF-02 retained lab layout with the roof hidden for inspection, native Blender render" width="1450" height="1200" loading="lazy" /></a>
+            <p className="building-model-help">The roof is hidden only in the inside-layout view. Film tint is illustrative; heat rejection and glass compatibility are not verified.</p>
+          </details>
           <details>
             <summary>Enclosure CAD views: exterior, cutaway and plan</summary>
-            <a className="building-room-preview" href={enclosure.cad} target="_blank" rel="noreferrer" aria-label={`Open ${room.id} enclosure CAD exterior`}><img src={enclosure.cad} alt={`${room.id} enclosure native FreeCAD exterior from the south-west`} width="1600" height="1100" loading="lazy" /></a>
-            <a className="building-room-preview" href={enclosure.cutaway} target="_blank" rel="noreferrer" aria-label={`Open ${room.id} enclosure CAD cutaway`}><img src={enclosure.cutaway} alt={`${room.id} enclosure native FreeCAD cutaway showing frame, purlins and lab layout`} width="1600" height="1100" loading="lazy" /></a>
-            <a className="building-room-preview" href={enclosure.plan} target="_blank" rel="noreferrer" aria-label={`Open ${room.id} enclosure CAD plan`}><img src={enclosure.plan} alt={`${room.id} enclosure native FreeCAD plan without the roof`} width="1400" height="1400" loading="lazy" /></a>
-            <p className="building-model-help">Native FreeCAD views of the room-level enclosure document. The full first-floor CAD download predates the enclosure and is retained unchanged.</p>
+            <a className="building-room-preview" href={enclosure.cad} target="_blank" rel="noreferrer" aria-label={`Open ${room.id} enclosure CAD exterior`}><img src={enclosure.cad} alt={`${room.id} enclosure native FreeCAD exterior from the south-west`} width="1600" height="1330" loading="lazy" /></a>
+            <a className="building-room-preview" href={enclosure.cutaway} target="_blank" rel="noreferrer" aria-label={`Open ${room.id} enclosure CAD cutaway`}><img src={enclosure.cutaway} alt={`${room.id} enclosure native FreeCAD cutaway showing glass, aluminium framing and retained lab layout`} width="1600" height="1330" loading="lazy" /></a>
+            <a className="building-room-preview" href={enclosure.plan} target="_blank" rel="noreferrer" aria-label={`Open ${room.id} enclosure CAD plan`}><img src={enclosure.plan} alt={`${room.id} enclosure native FreeCAD plan without the roof`} width="1600" height="1330" loading="lazy" /></a>
+            <p className="building-model-help">Native FreeCAD views coordinated with the saved Blender design. The full first-floor CAD and FF02 room extract include this revision.</p>
           </details>
           <div className="building-plan-downloads" aria-label="Enclosure downloads">
             <a href={enclosure.freecad} download>{room.id} · enclosure FreeCAD</a>
@@ -121,11 +127,11 @@ export function BuildingPlanning() {
       </article>
     </div>
     <details className="building-release-details"><summary>Revision, sources and future updates</summary>
-      <p>Model publication: R05, 12 September 2026. Only FF02 changes: the earlier glazed-frame study is replaced by the proposed steel-frame insulated-panel enclosure and lab layout, published for review. The first-floor model retains the FF03 sliding entrance (R04), FF04/FF06 P03 entrances and FF06 balcony B02; the full first-floor CAD download is the retained R04 file. Ground-floor assets and all 15 room extracts remain the published R03/R04 files. Service quantities: the S02 electrical and setup plan of 12 September (section 03 below) supersedes the S01 discussion scenario of 10 September, which is retained as history; neither is a certified design. Original CAD and Blender sources are preserved privately. Public current-design copies omit earlier trials and private computer-path metadata, with separate source and download hashes.</p>
+      <p>Model publication: R06, 12 September 2026. FF02 C04 replaces the C03 insulated panels and opaque roof with aluminium-framed glazing and a glass roof. The first-floor Blender, CAD and FF02 extract are coordinated; other rooms and the ground floor are unchanged. S02 remains the published service plan and has not been recalculated for the glass enclosure. Original models and historical releases are preserved, with separate source and download hashes.</p>
       <p>Changes require a coordinated export, room-plan regeneration, service-note review and tested website release. Saving a local Blender or CAD file does not automatically publish it. Pending or unreviewed models are never substituted silently.</p>
       <a href={`${root}/release.json`} download>Download file checksums and release manifest</a>
       <p><a href={`${root}/design-verification.json`} download>FF02 enclosure verification record</a> · covers Blender preservation, native reopen and browser reimport of the concept geometry, not structure, weatherproofing or installation approval. <a href="/building-models/r04/design-verification.json" download>R04 sliding-door verification</a> retains its original scope.</p>
-      <p><a href="/building-models/r04/release.json" download>Previous published R04 manifest</a> · <a href="/building-models/r03/release.json" download>R03 manifest</a> · <a href="/building-models/r01/release.json" download>R01 manifest · 10 September</a>. All remain unchanged; R02 was an unpublished checkpoint.</p>
+      <p><a href="/building-models/r05/release.json" download>Previous published R05 manifest</a> · <a href="/building-models/r04/release.json" download>R04 manifest</a> · <a href="/building-models/r03/release.json" download>R03 manifest</a> · <a href="/building-models/r01/release.json" download>R01 manifest · 10 September</a>. All remain unchanged; R02 was an unpublished checkpoint.</p>
     </details>
   </Section>;
 }
