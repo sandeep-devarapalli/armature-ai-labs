@@ -1,5 +1,15 @@
 # Building Vision model publication
 
+## RV01 — Complete room previews
+
+The user approved publication after reviewing the local page and confirming GF-03 is a bathroom. This presentation-only revision adds eleven camera-only Blender views from the saved R06 cumulative source, completing individual views for all fifteen included ground- and first-floor rooms. The gallery contains fifteen room views and two floor overviews; GF-05 remains excluded. No geometry, furniture, materials, native model, CAD extract or service quantity changes.
+
+New PNGs and source/camera provenance are in `public/building-vision/room-views-r01/`. All 3,484 authored objects passed before/after fingerprints; original native bytes remain unchanged. PNG text metadata is removed while all other chunks stay byte-identical. Shared walls and neighbouring rooms remain in view rather than being hidden by guessed room tags. Support-room fixtures remain schematic, not detailed fit-out drawings.
+
+`buildingRoomViews.json` supplies the new views; `buildingRooms.ts` applies current user-confirmed descriptions without rewriting immutable released service catalogs. GF-03 is labelled Bathroom; its use is confirmed, not its dimensions or fixture positions. The four earlier individual room previews and every R06/R05/R04/R03 native asset retain their bytes and URLs.
+
+`check-building-room-views.mjs` verifies room coverage, source identity, hashes, dimensions and metadata in public/build outputs. Its `--live` option compares all eleven deployed PNGs and provenance by actual bytes, and runs in the normal production release check. Existing model and S02 checks stay enabled. Publish only through the reviewed-main squash-merge workflow; local review does not establish live availability.
+
 ## R06 — FF02 aluminium-framed glass enclosure (12 September 2026)
 
 The new user direction supersedes C03's three-window insulated-panel treatment and opaque roof: replace the proposed enclosure skin with cabin-style aluminium-framed clear glazing and a glass roof, with solar-control film provisionally represented. Preserve the enclosure footprint, existing north/east masonry and FF03/FF04 openings, curved outside balcony, all lab furniture/equipment and every other room. This is not permission to demolish existing walls. Glass build-up, overhead retention, frame supports/fixings, drainage, film compatibility, heat gain and door hardware remain specialist design decisions; the model is not a fabrication or installation specification.

@@ -1,8 +1,9 @@
 import { lazy, Suspense, useState } from "react";
 import { Section } from "./Primitives";
 import { ModelBoundary } from "./ModelBoundary";
-import rooms from "../data/buildingRoomServices.json";
+import rooms from "../data/buildingRooms";
 import roomCad from "../data/buildingRoomCad.json";
+import roomViews from "../data/buildingRoomViews.json";
 import release from "../data/buildingModelRelease.json";
 import "./BuildingPlanning.css";
 
@@ -23,9 +24,11 @@ export function BuildingPlanning() {
   const cadDownload = release.downloads[floor === "ground" ? "groundCad" : "firstCad"].url;
   const roomRender = (release.roomPreviews as Record<string, RoomPreview>)[room.id];
   const enclosure = release.enclosure.roomId === room.id ? release.enclosure : null;
+  const roomView = roomViews.find((item) => item.id === room.id);
+  const blenderImage = roomView?.image ?? roomRender?.blender ?? enclosure?.blender;
 
   return <Section number="01" id="planning-model" title="Models and room plans."
-    lede="Updated 12 September 2026 · FF02 now has a framed-glass enclosure and glass-roof proposal.">
+    lede="Explore each ground- and first-floor room through Blender views, CAD references and downloads.">
     <p className="building-model-help">Planning layouts. Site dimensions, occupied access and installation details still need verification.</p>
     <div className="building-floor-tabs" role="group" aria-label="Choose model floor">
       {floors.map((item) => <button key={item.id} type="button" aria-pressed={floor === item.id}
@@ -65,6 +68,13 @@ export function BuildingPlanning() {
         <div className="building-room-title"><span className="mono">{room.id} · {room.status}</span><h3>{room.name}</h3><p>{room.purpose}</p></div>
         <p><strong>Furniture / use:</strong> {room.seating}</p>
         <p className="building-room-model-note"><strong>Model status:</strong> {room.modelNote}</p>
+        {roomView ? <>
+          <h4>Room view · Blender</h4>
+          <a className="building-room-preview" href={roomView.image} target="_blank" rel="noreferrer" aria-label={`Open ${room.id} Blender render`}>
+            <img src={roomView.image} alt={`${room.id} · ${room.name} · native Blender room view`} width={roomView.width} height={roomView.height} loading="lazy" decoding="async" />
+          </a>
+          <p className="building-model-help">{roomView.caption}</p>
+        </> : null}
         {roomRender ? <>
           <h4>Sliding-entrance cabin proposal · Blender</h4>
           <a className="building-room-preview" href={roomRender.blender} target="_blank" rel="noreferrer" aria-label={`Open ${room.id} Blender render`}>
@@ -115,6 +125,7 @@ export function BuildingPlanning() {
           </a>
         </details>
         <div className="building-plan-downloads">
+          {blenderImage ? <a href={blenderImage} download>{room.id} · Blender PNG</a> : null}
           <a href={cad.downloads.freecad.url} download>{room.id} · FreeCAD extract</a>
           <a href={cad.downloads.step.url} download>{room.id} · STEP extract</a>
           <a href={cad.downloads.svg.url} download>{room.id} · plan SVG</a>

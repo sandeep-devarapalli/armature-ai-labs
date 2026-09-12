@@ -3,6 +3,8 @@ import { PageHeader, Section } from "../components/Primitives";
 import { BuildingPlanning } from "../components/BuildingPlanning";
 import { ElectricalPlan } from "../components/ElectricalPlan";
 import release from "../data/buildingModelRelease.json";
+import rooms from "../data/buildingRooms";
+import roomViews from "../data/buildingRoomViews.json";
 import "./BuildingVisionPage.css";
 
 const filters = ["All", "Ground floor", "First floor"] as const;
@@ -24,7 +26,15 @@ const views = [
     src: release.roomPreviews[id].blender, alt: `${id} selected cabin layout${id === "FF-03" ? " with sliding doors open" : ""}`,
     caption: id === "FF-03" ? "Four-seat cabin with the new two-panel sliding entrance." : "Selected cabin layout with sliding entrances.",
     width: 1450, height: 1450
-  }))
+  })),
+  ...roomViews.map((view) => {
+    const room = rooms.find((item) => item.id === view.id)!;
+    return {
+      id: `${view.id.toLowerCase()}-room`, floor: room.floor === "ground" ? "Ground floor" : "First floor",
+      title: `${room.id} · ${room.name}`, src: view.image, alt: `${room.id} · ${room.name} · native Blender room view`,
+      caption: view.caption, width: view.width, height: view.height
+    };
+  })
 ];
 
 export function BuildingVisionPage() {

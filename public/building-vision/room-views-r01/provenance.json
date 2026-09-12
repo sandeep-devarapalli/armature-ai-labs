@@ -1,0 +1,517 @@
+{
+  "status": "PASS",
+  "revision": "RV01",
+  "sourceNativeSha256": "704fdc25180377362b1b81446287de2d3fcb91ef5993c785a70a7534b08f9d62",
+  "sourceModelRelease": "R06",
+  "sourceFile": "selected-layout.blend",
+  "sourceSaved": false,
+  "originalAndFrozenBytesUnchanged": true,
+  "geometryMaterialsUVPlacementsAndMembershipUnchanged": true,
+  "objectsCompared": 3484,
+  "beforeObjectDigest": "a1893d2776d36d8c92bf13cff256ee2c8bce4a8ae166e5e6331347a7b4bd249e",
+  "afterObjectDigest": "a1893d2776d36d8c92bf13cff256ee2c8bce4a8ae166e5e6331347a7b4bd249e",
+  "aiGenerated": false,
+  "scriptSha256": "31d834c8a1813738a305744a1fdbf3561761fe4e3aec421f0fd8831bd80da8ce",
+  "images": [
+    {
+      "id": "GF-01",
+      "file": "GF-01.png",
+      "sourceScene": "Ground floor - selected current",
+      "floorObject": "GF-01 | floor",
+      "floorBoundsMetres": [
+        [
+          3.6417980194091797,
+          9.147604942321777
+        ],
+        [
+          -0.31003284454345703,
+          3.6792821884155273
+        ],
+        [
+          0.15790799260139465,
+          0.27790799736976624
+        ]
+      ],
+      "cameraLocation": [
+        10.003060340881348,
+        -5.081048011779785,
+        24.120141983032227
+      ],
+      "cameraRotationEuler": [
+        0.3277386426925659,
+        4.750445370405032e-8,
+        0.4899573028087616
+      ],
+      "cameraOrthoScale": 8.485206604003906,
+      "width": 1280,
+      "height": 1100,
+      "sha256": "df697612821cf9068ebdb58d1e2bff7357d5954fba2cb8d93eac35f2427e463a",
+      "bytes": 1547109,
+      "engine": "CYCLES",
+      "device": "METAL",
+      "samples": 64,
+      "seconds": 10.69,
+      "objectsHiddenForRender": [],
+      "cameraOnly": true,
+      "neighbouringContextRetained": true,
+      "sourceImageSha256": "493f1bcd4c0ccb76262ccc4f399d5631db058b60f2846dabc6f22327f33a9e8d",
+      "retainedChunksSha256": "53a9a8d739fde4022ed8db349059b2066e30bcca8d7c22c97e569351b8fbeffb",
+      "metadataSanitization": "PNG text chunks removed; all other chunks retained byte-for-byte"
+    },
+    {
+      "id": "GF-02",
+      "file": "GF-02.png",
+      "sourceScene": "Ground floor - selected current",
+      "floorObject": "GF-02 | floor",
+      "floorBoundsMetres": [
+        [
+          -6.670601844787598,
+          -3.7242019176483154
+        ],
+        [
+          -2.3912699222564697,
+          0.4535300135612488
+        ],
+        [
+          -0.11900000274181366,
+          0.0010000000474974513
+        ]
+      ],
+      "cameraLocation": [
+        -1.5890425443649292,
+        -7.734541893005371,
+        23.843233108520508
+      ],
+      "cameraRotationEuler": [
+        0.3277386426925659,
+        4.750445370405032e-8,
+        0.4899573028087616
+      ],
+      "cameraOrthoScale": 5.801773548126221,
+      "width": 1280,
+      "height": 1100,
+      "sha256": "693f736cd09adad06ce970f1ad758e130d4558de6ff9171937907ec5aa0940a0",
+      "bytes": 1334720,
+      "engine": "CYCLES",
+      "device": "METAL",
+      "samples": 64,
+      "seconds": 4.91,
+      "objectsHiddenForRender": [],
+      "cameraOnly": true,
+      "neighbouringContextRetained": true,
+      "sourceImageSha256": "6c1654a9d829f1706bc9d20ac2fe43af930170924896e8e090d7ede9814cf37c",
+      "retainedChunksSha256": "5d9dd221f738e6ca769494775314ec70d0c5797708fe5386215a9e4f40ffe51b",
+      "metadataSanitization": "PNG text chunks removed; all other chunks retained byte-for-byte"
+    },
+    {
+      "id": "GF-03",
+      "file": "GF-03.png",
+      "sourceScene": "Ground floor - selected current",
+      "floorObject": "GF-03 | floor",
+      "floorBoundsMetres": [
+        [
+          5.693246841430664,
+          9.15659236907959
+        ],
+        [
+          3.6523191928863525,
+          5.498074054718018
+        ],
+        [
+          0.15790799260139465,
+          0.27790799736976624
+        ]
+      ],
+      "cameraLocation": [
+        9.53287410736084,
+        8.322673797607422,
+        24.98964500427246
+      ],
+      "cameraRotationEuler": [
+        0.18155406415462494,
+        4.2267448208122005e-8,
+        2.6292030811309814
+      ],
+      "cameraOrthoScale": 4.768479347229004,
+      "width": 1280,
+      "height": 1100,
+      "sha256": "b34590fcf4e297e833ae08770e3e938e731676dd6976ebb4bcf7c9821791423f",
+      "bytes": 1240060,
+      "engine": "CYCLES",
+      "device": "METAL",
+      "samples": 64,
+      "seconds": 6.5,
+      "objectsHiddenForRender": [],
+      "cameraOnly": true,
+      "neighbouringContextRetained": true,
+      "sourceImageSha256": "c5d98aa9eff7fbebf37066f8348a47b0d0bccf90f4abcb2cbc1fdbea7cebbc25",
+      "retainedChunksSha256": "127158752b118303da024a1590d70ece6564db6ca31fa34959905c8922f36b10",
+      "metadataSanitization": "PNG text chunks removed; all other chunks retained byte-for-byte"
+    },
+    {
+      "id": "GF-04",
+      "file": "GF-04.png",
+      "sourceScene": "Ground floor - selected current",
+      "floorObject": "GF-04 | floor",
+      "floorBoundsMetres": [
+        [
+          -6.619801998138428,
+          -1.7430020570755005
+        ],
+        [
+          2.8086729049682617,
+          6.415472984313965
+        ],
+        [
+          0.15790799260139465,
+          0.27790799736976624
+        ]
+      ],
+      "cameraLocation": [
+        -0.5730473399162292,
+        11.3777437210083,
+        24.120141983032227
+      ],
+      "cameraRotationEuler": [
+        0.3277384638786316,
+        8.085881830766084e-8,
+        2.6516354084014893
+      ],
+      "cameraOrthoScale": 7.717467784881592,
+      "width": 1280,
+      "height": 1100,
+      "sha256": "01e0440f7a66d38782d8b66ceded59d232fdc33149c9c695aac8fab27ebf52ba",
+      "bytes": 1318347,
+      "engine": "CYCLES",
+      "device": "METAL",
+      "samples": 64,
+      "seconds": 6.31,
+      "objectsHiddenForRender": [],
+      "cameraOnly": true,
+      "neighbouringContextRetained": true,
+      "sourceImageSha256": "6c1c99dd56139b5dc3e1f11052f70058fcee818dba945e16d09e43020eed2c07",
+      "retainedChunksSha256": "6090a30b0b363f09e57a9e461eeb0f5007a30b96c026a3974aeca30e1814ee67",
+      "metadataSanitization": "PNG text chunks removed; all other chunks retained byte-for-byte"
+    },
+    {
+      "id": "GF-06",
+      "file": "GF-06.png",
+      "sourceScene": "Ground floor - selected current",
+      "floorObject": "GF-06 | floor",
+      "floorBoundsMetres": [
+        [
+          3.661271095275879,
+          5.7007365226745605
+        ],
+        [
+          3.6692960262298584,
+          5.203263759613037
+        ],
+        [
+          0.15790799260139465,
+          0.27790799736976624
+        ]
+      ],
+      "cameraLocation": [
+        6.78895902633667,
+        8.183756828308105,
+        24.98964500427246
+      ],
+      "cameraRotationEuler": [
+        0.18155406415462494,
+        4.2267448208122005e-8,
+        2.6292030811309814
+      ],
+      "cameraOrthoScale": 3.547513723373413,
+      "width": 1280,
+      "height": 1100,
+      "sha256": "e66581ac8de50703046c5119ab47a2407d21e5f15471fed3927580656fcb49e1",
+      "bytes": 1296288,
+      "engine": "CYCLES",
+      "device": "METAL",
+      "samples": 64,
+      "seconds": 6.95,
+      "objectsHiddenForRender": [],
+      "cameraOnly": true,
+      "neighbouringContextRetained": true,
+      "sourceImageSha256": "ca6deca5372769ca6e60d1e07148eaf077dcf0be726801cec11b9947286581cb",
+      "retainedChunksSha256": "7a75de9e4713a9e7c674205a9a94b372434e8059e85fbcfb54346ce167146c7d",
+      "metadataSanitization": "PNG text chunks removed; all other chunks retained byte-for-byte"
+    },
+    {
+      "id": "GF-07",
+      "file": "GF-07.png",
+      "sourceScene": "Ground floor - selected current",
+      "floorObject": "GF-07 | floor",
+      "floorBoundsMetres": [
+        [
+          -3.5718019008636475,
+          -1.7430020570755005
+        ],
+        [
+          0.4535300135612488,
+          2.8086729049682617
+        ],
+        [
+          0.15790799260139465,
+          0.27790799736976624
+        ]
+      ],
+      "cameraLocation": [
+        0.9509576559066772,
+        -5.134571075439453,
+        24.120141983032227
+      ],
+      "cameraRotationEuler": [
+        0.3277386426925659,
+        4.750445370405032e-8,
+        0.4899573028087616
+      ],
+      "cameraOrthoScale": 4.640827655792236,
+      "width": 1280,
+      "height": 1100,
+      "sha256": "32980065d9e083e4badb3fb02f12efc877dc455e874575542f96de24a70363ca",
+      "bytes": 1425404,
+      "engine": "CYCLES",
+      "device": "METAL",
+      "samples": 64,
+      "seconds": 7.15,
+      "objectsHiddenForRender": [],
+      "cameraOnly": true,
+      "neighbouringContextRetained": true,
+      "sourceImageSha256": "3a03c307a47f85c25c01d11e7be210f00f8b27be49ee9b5542d80d22cb56d448",
+      "retainedChunksSha256": "e9ceed236eaa1d06d93abe65427974305d20d8b5eae8dafd92a3c184f4701132",
+      "metadataSanitization": "PNG text chunks removed; all other chunks retained byte-for-byte"
+    },
+    {
+      "id": "GF-08",
+      "file": "GF-08.png",
+      "sourceScene": "Ground floor - selected current",
+      "floorObject": "GF-08 | floor",
+      "floorBoundsMetres": [
+        [
+          3.985410213470459,
+          9.48372745513916
+        ],
+        [
+          -4.794044494628906,
+          -0.2848176062107086
+        ],
+        [
+          -0.11900000274181366,
+          0.0010000000474974513
+        ]
+      ],
+      "cameraLocation": [
+        10.342927932739258,
+        -9.305103302001953,
+        23.843233108520508
+      ],
+      "cameraRotationEuler": [
+        0.3277386426925659,
+        4.750445370405032e-8,
+        0.4899573028087616
+      ],
+      "cameraOrthoScale": 9.036874771118164,
+      "width": 1280,
+      "height": 1100,
+      "sha256": "08cc9a5c82b44f4913838b3c78f4e1b4363a5b11743a4f142121b8e1a3b3d8a4",
+      "bytes": 1520293,
+      "engine": "CYCLES",
+      "device": "METAL",
+      "samples": 64,
+      "seconds": 7.07,
+      "objectsHiddenForRender": [],
+      "cameraOnly": true,
+      "neighbouringContextRetained": true,
+      "sourceImageSha256": "cdacf41e00cd89869c8c1aede176ab8f85cfc1353bac55c9fedffe431afe41f4",
+      "retainedChunksSha256": "62ced54d1b57ad2b48b57d91af8c80cda62e36f7240d50eb39658bff0ae540e1",
+      "metadataSanitization": "PNG text chunks removed; all other chunks retained byte-for-byte"
+    },
+    {
+      "id": "GF-09",
+      "file": "GF-09.png",
+      "sourceScene": "Ground floor - selected current",
+      "floorObject": "GF-09 | floor",
+      "floorBoundsMetres": [
+        [
+          -1.7430020570755005,
+          3.66713809967041
+        ],
+        [
+          -0.28306999802589417,
+          4.898530006408691
+        ],
+        [
+          0.15790799260139465,
+          0.27790799736976624
+        ]
+      ],
+      "cameraLocation": [
+        4.570427894592285,
+        -4.457942485809326,
+        24.120141983032227
+      ],
+      "cameraRotationEuler": [
+        0.3277386426925659,
+        4.750445370405032e-8,
+        0.4899573028087616
+      ],
+      "cameraOrthoScale": 9.705554962158203,
+      "width": 1280,
+      "height": 1100,
+      "sha256": "35a31907c266379d90dfbb9a214685f1b6b6ecf0c18f33bb8b82aceec7b3fbaa",
+      "bytes": 1632984,
+      "engine": "CYCLES",
+      "device": "METAL",
+      "samples": 64,
+      "seconds": 7.44,
+      "objectsHiddenForRender": [],
+      "cameraOnly": true,
+      "neighbouringContextRetained": true,
+      "sourceImageSha256": "99c6122dbdab28a4ddf697f994ec66e3c8fc7a8946aafa775ee363d887662f88",
+      "retainedChunksSha256": "cc332d2916301990aca19c0b5414d35137b5c30b288607c1bbd325793a47cda5",
+      "metadataSanitization": "PNG text chunks removed; all other chunks retained byte-for-byte"
+    },
+    {
+      "id": "GF-10",
+      "file": "GF-10.png",
+      "sourceScene": "Ground floor - selected current",
+      "floorObject": "GF-10 | floor",
+      "floorBoundsMetres": [
+        [
+          -3.7242019176483154,
+          3.9973978996276855
+        ],
+        [
+          -4.905869960784912,
+          0.4535300135612488
+        ],
+        [
+          -0.11900000274181366,
+          0.0010000000474974513
+        ]
+      ],
+      "cameraLocation": [
+        3.74495267868042,
+        4.539500713348389,
+        23.843233108520508
+      ],
+      "cameraRotationEuler": [
+        0.3277384638786316,
+        8.085881830766084e-8,
+        2.6516354084014893
+      ],
+      "cameraOrthoScale": 11.213881492614746,
+      "width": 1280,
+      "height": 1100,
+      "sha256": "dfa0bc9213eb40b2e1c37f4dafac0ce4ac9cf2b54e3f8f48f9a0c0e46a443065",
+      "bytes": 1583208,
+      "engine": "CYCLES",
+      "device": "METAL",
+      "samples": 64,
+      "seconds": 6.14,
+      "objectsHiddenForRender": [],
+      "cameraOnly": true,
+      "neighbouringContextRetained": true,
+      "sourceImageSha256": "eb3dd674182177bae83b4d6996b2c0195fd900fe8761eeccc4e344dc78a94621",
+      "retainedChunksSha256": "23aa27952393aff471910f52158edc1023e49da21497fa169ea2a8d02f368e40",
+      "metadataSanitization": "PNG text chunks removed; all other chunks retained byte-for-byte"
+    },
+    {
+      "id": "FF-01",
+      "file": "FF-01.png",
+      "sourceScene": "First floor - R06 FF02 glass enclosure",
+      "floorObject": "FF-01 | floor",
+      "floorBoundsMetres": [
+        [
+          5.572137832641602,
+          8.924938201904297
+        ],
+        [
+          3.2473483085632324,
+          5.609548091888428
+        ],
+        [
+          3.3557679653167725,
+          3.4757680892944336
+        ]
+      ],
+      "cameraLocation": [
+        9.35649299621582,
+        8.175924301147461,
+        28.187503814697266
+      ],
+      "cameraRotationEuler": [
+        0.18155406415462494,
+        4.2267448208122005e-8,
+        2.6292030811309814
+      ],
+      "cameraOrthoScale": 5.266933441162109,
+      "width": 1280,
+      "height": 1100,
+      "sha256": "56a4d3d0a1d09fb2bf7a464fedcaa53490c8f7efb14e3cfe887e22fc61944e39",
+      "bytes": 1296443,
+      "engine": "CYCLES",
+      "device": "METAL",
+      "samples": 64,
+      "seconds": 6.9,
+      "objectsHiddenForRender": [],
+      "cameraOnly": true,
+      "neighbouringContextRetained": true,
+      "sourceImageSha256": "4af1ef32d73ad181020a47a35c7f1c2ea37386c2a587f79ef51e572a1d7f62ee",
+      "retainedChunksSha256": "3927e944e5c444ec0f9b343dc6b84bb1dea27dc2cc45ff501a5f12bf8d0ca3e1",
+      "metadataSanitization": "PNG text chunks removed; all other chunks retained byte-for-byte"
+    },
+    {
+      "id": "FF-05",
+      "file": "FF-05.png",
+      "sourceScene": "First floor - R06 FF02 glass enclosure",
+      "floorObject": "FF-05 | floor",
+      "floorBoundsMetres": [
+        [
+          -4.4972405433654785,
+          -1.7032406330108643
+        ],
+        [
+          4.365203857421875,
+          5.685524940490723
+        ],
+        [
+          3.3557679653167725,
+          3.4757680892944336
+        ]
+      ],
+      "cameraLocation": [
+        -0.9922857284545898,
+        8.77284049987793,
+        28.187503814697266
+      ],
+      "cameraRotationEuler": [
+        0.18155406415462494,
+        4.2267448208122005e-8,
+        2.6292030811309814
+      ],
+      "cameraOrthoScale": 3.778796911239624,
+      "width": 1280,
+      "height": 1100,
+      "sha256": "e0408df3e4550afb8212e48812155424c5004c39ff070dbe5e098d37a593dab0",
+      "bytes": 1317202,
+      "engine": "CYCLES",
+      "device": "METAL",
+      "samples": 64,
+      "seconds": 7.15,
+      "objectsHiddenForRender": [],
+      "cameraOnly": true,
+      "neighbouringContextRetained": true,
+      "sourceImageSha256": "8c11a36791fc1916c8c4c129a40d318070c61698ce3fa1153d7a2f11b012645f",
+      "retainedChunksSha256": "0ff1c3c37650e44501d414eb2c866c08e867c732964000bb754555de89d6c759",
+      "metadataSanitization": "PNG text chunks removed; all other chunks retained byte-for-byte"
+    }
+  ],
+  "limits": [
+    "Camera-only crops of existing whole-floor scenes, with neighbouring context retained.",
+    "Support/sanitary rooms and retained kitchen contents are schematic, not a new fit-out design.",
+    "No model/CAD/services change, engineering approval or occupied-capacity validation."
+  ]
+}
