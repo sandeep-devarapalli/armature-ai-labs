@@ -3,61 +3,61 @@ import { useState } from "react";
 import { Section } from "../components/Primitives";
 import "./BrandingPage.css";
 
-const BRAND_BASE = "/brand/armature-lab";
-const COMPLETE_PACK = "/brand/armature-lab-assets.zip";
+const BRAND_BASE = "/brand/armature-ai-labs";
+const COMPLETE_PACK = "/brand/armature-ai-labs-assets.zip";
 const oneLineDescription =
-  "Armature AI Labs is a 3,500 sq ft physical AI and robotics lab in HSR Layout, Bengaluru.";
+  "Armature AI Labs is a maker space in HSR Layout, Bengaluru, built for people making physical things with AI.";
 const paragraphDescription =
-  "The armature is the core of every motor: the part that moves. Armature AI Labs is a 3,500 sq ft physical AI and robotics lab in HSR Layout, Bengaluru, built for the full path from idea to working machine: arms, prototyping, machining, ESD-safe benches, and GPU compute, all bookable by the hour.";
+  "Armature AI Labs is a maker space in HSR Layout, Bengaluru, built for people making physical things with AI. Robotics and hardware teams take desks and cabins here, and there is a shared lab with robot arms, GPUs, and Jetson edge kits down the hall, so you can go from idea to working prototype without buying a lab of your own.";
 type AssetDownload = { label: string; path: string };
 type LogoAsset = { title: string; use: string; preview: string; alt: string; downloads: AssetDownload[] };
 const logoAssets: LogoAsset[] = [
   {
     title: "Horizontal lockup",
     use: "The default for website headers, email signatures and signage.",
-    preview: "svg/armature-lab-lockup-h.svg",
+    preview: "svg/armature-ai-labs-lockup-h.svg",
     alt: "Horizontal Armature AI Labs logo",
     downloads: [
-      { label: "SVG · transparent", path: "svg/armature-lab-lockup-h.svg" },
-      { label: "SVG · dark surface", path: "svg/armature-lab-lockup-h-on-ink.svg" },
-      { label: "PNG · transparent · 2×", path: "png/armature-lab-lockup-h-transparent-2x.png" },
-      { label: "PNG · dark surface · 2×", path: "png/armature-lab-lockup-h-on-ink-2x.png" }
+      { label: "SVG · transparent", path: "svg/armature-ai-labs-lockup-h.svg" },
+      { label: "SVG · dark surface", path: "svg/armature-ai-labs-lockup-h-on-ink.svg" },
+      { label: "PNG · transparent · 2×", path: "png/armature-ai-labs-lockup-h-transparent-2x.png" },
+      { label: "PNG · dark surface · 2×", path: "png/armature-ai-labs-lockup-h-on-ink-2x.png" }
     ]
   },
   {
     title: "Vertical lockup",
     use: "For stacked layouts, social graphics, print and the front door.",
-    preview: "svg/armature-lab-lockup-v.svg",
+    preview: "svg/armature-ai-labs-lockup-v.svg",
     alt: "Vertical Armature AI Labs logo",
     downloads: [
-      { label: "SVG · transparent", path: "svg/armature-lab-lockup-v.svg" },
-      { label: "SVG · dark surface", path: "svg/armature-lab-lockup-v-on-ink.svg" },
-      { label: "SVG · saffron surface", path: "svg/armature-lab-lockup-v-on-saffron.svg" },
-      { label: "PNG · transparent · 2×", path: "png/armature-lab-lockup-v-transparent-2x.png" }
+      { label: "SVG · transparent", path: "svg/armature-ai-labs-lockup-v.svg" },
+      { label: "SVG · dark surface", path: "svg/armature-ai-labs-lockup-v-on-ink.svg" },
+      { label: "SVG · saffron surface", path: "svg/armature-ai-labs-lockup-v-on-saffron.svg" },
+      { label: "PNG · transparent · 2×", path: "png/armature-ai-labs-lockup-v-transparent-2x.png" }
     ]
   },
   {
     title: "Commutator mark",
     use: "Use the symbol alone where the Armature AI Labs name is already clear.",
-    preview: "svg/armature-lab-mark.svg",
+    preview: "svg/armature-ai-labs-mark.svg",
     alt: "Armature AI Labs commutator mark",
     downloads: [
-      { label: "SVG · transparent", path: "svg/armature-lab-mark.svg" },
-      { label: "SVG · dark surface", path: "svg/armature-lab-mark-cream.svg" },
-      { label: "PNG · 1024 px", path: "png/armature-lab-mark-1024.png" },
-      { label: "PNG · dark surface · 1024 px", path: "png/armature-lab-mark-cream-1024.png" }
+      { label: "SVG · transparent", path: "svg/armature-ai-labs-mark.svg" },
+      { label: "SVG · dark surface", path: "svg/armature-ai-labs-mark-cream.svg" },
+      { label: "PNG · 1024 px", path: "png/armature-ai-labs-mark-1024.png" },
+      { label: "PNG · dark surface · 1024 px", path: "png/armature-ai-labs-mark-cream-1024.png" }
     ]
   },
   {
     title: "Wordmark",
-    use: "Use the lowercase name without the mark only when space is constrained.",
-    preview: "svg/armature-lab-wordmark.svg",
-    alt: "armature ai labs wordmark",
+    use: "Use the name without the mark only when space is constrained.",
+    preview: "svg/armature-ai-labs-wordmark.svg",
+    alt: "Armature AI Labs wordmark",
     downloads: [
-      { label: "SVG · transparent", path: "svg/armature-lab-wordmark.svg" },
-      { label: "SVG · dark surface", path: "svg/armature-lab-wordmark-cream.svg" },
-      { label: "PNG · transparent · 2×", path: "png/armature-lab-wordmark-2x.png" },
-      { label: "SVG · black", path: "svg/bw/armature-lab-wordmark-black.svg" }
+      { label: "SVG · transparent", path: "svg/armature-ai-labs-wordmark.svg" },
+      { label: "SVG · dark surface", path: "svg/armature-ai-labs-wordmark-cream.svg" },
+      { label: "PNG · transparent · 2×", path: "png/armature-ai-labs-wordmark-2x.png" },
+      { label: "SVG · black", path: "svg/bw/armature-ai-labs-wordmark-black.svg" }
     ]
   }
 ];
@@ -65,29 +65,29 @@ const iconAssets = [
   {
     title: "App and social icon",
     detail: "1024 × 1024 PNG",
-    preview: "png/armature-lab-icon-1024.png",
+    preview: "png/armature-ai-labs-icon-1024.png",
     downloads: [
-      { label: "1024 px", path: "png/armature-lab-icon-1024.png" },
-      { label: "512 px", path: "png/armature-lab-icon-512.png" },
-      { label: "180 px", path: "png/armature-lab-icon-180.png" }
+      { label: "1024 px", path: "png/armature-ai-labs-icon-1024.png" },
+      { label: "512 px", path: "png/armature-ai-labs-icon-512.png" },
+      { label: "180 px", path: "png/armature-ai-labs-icon-180.png" }
     ]
   },
   {
     title: "Paper app icon",
     detail: "512 × 512 PNG",
-    preview: "png/armature-lab-icon-paper-512.png",
+    preview: "png/armature-ai-labs-icon-paper-512.png",
     downloads: [
-      { label: "512 px", path: "png/armature-lab-icon-paper-512.png" },
-      { label: "SVG · paper", path: "svg/armature-lab-icon-paper.svg" },
-      { label: "SVG · ink", path: "svg/armature-lab-icon-ink.svg" }
+      { label: "512 px", path: "png/armature-ai-labs-icon-paper-512.png" },
+      { label: "SVG · paper", path: "svg/armature-ai-labs-icon-paper.svg" },
+      { label: "SVG · ink", path: "svg/armature-ai-labs-icon-ink.svg" }
     ]
   },
   {
     title: "Browser icon",
     detail: "SVG, PNG and ICO",
-    preview: "svg/armature-lab-favicon.svg",
+    preview: "svg/armature-ai-labs-favicon.svg",
     downloads: [
-      { label: "SVG", path: "svg/armature-lab-favicon.svg" },
+      { label: "SVG", path: "svg/armature-ai-labs-favicon.svg" },
       { label: "32 px PNG", path: "png/favicon-32.png" },
       { label: "16 px PNG", path: "png/favicon-16.png" },
       { label: "ICO", path: "png/favicon.ico" }
@@ -155,7 +155,7 @@ export function BrandingPage() {
       <header className="branding-hero">
         <div className="wrap branding-hero-grid">
           <div className="branding-hero-copy">
-            <div className="eyebrow mono">armature ai labs · brand resources</div>
+            <div className="eyebrow mono">Armature AI Labs · brand resources</div>
             <h1>Brand resources</h1>
             <p className="hero-copy">
               Download the approved Armature AI Labs logos, app icons and browser
@@ -163,7 +163,7 @@ export function BrandingPage() {
               guidance below.
             </p>
             <div className="button-row">
-              <a className="button button-primary" href={COMPLETE_PACK} download="armature-lab-assets.zip">
+              <a className="button button-primary" href={COMPLETE_PACK} download="armature-ai-labs-assets.zip">
                 <FileArchive aria-hidden="true" />
                 Download complete pack
               </a>
@@ -173,7 +173,7 @@ export function BrandingPage() {
             </div>
           </div>
           <figure className="branding-hero-preview">
-            <img src={`${BRAND_BASE}/svg/armature-lab-lockup-h-on-paper.svg`} alt="Horizontal Armature AI Labs lockup" />
+            <img src={`${BRAND_BASE}/svg/armature-ai-labs-lockup-h-on-paper.svg`} alt="Horizontal Armature AI Labs lockup" />
             <figcaption className="mono">Primary lockup · on paper</figcaption>
           </figure>
         </div>
@@ -359,7 +359,7 @@ export function BrandingPage() {
           <a
             className="button button-quiet"
             href={`${BRAND_BASE}/USAGE-AND-PERMISSIONS.md`}
-            download="armature-lab-usage-and-permissions.md"
+            download="armature-ai-labs-usage-and-permissions.md"
           >
             <FileText aria-hidden="true" />
             Download usage note

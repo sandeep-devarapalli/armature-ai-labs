@@ -12,7 +12,7 @@ brand assets and planning documents.
 - `supabase/`: database migrations, RLS/RPC tests, seed data, and Edge Functions.
 - `tests/`: frontend and browser tests.
 - `site/`: preserved legacy static site; do not deploy it over the React app.
-- `brand/armature-lab/`: finalized identity; older files in `brand/` are retired and retained for history.
+- `brand/armature-ai-labs/`: finalized identity; older files in `brand/` are retired and retained for history.
 - `linkedin/`: company page logo and banner assets.
 - `docs/`: financial model and phased capex plan.
 - `README.md`: application setup, deploy notes, and known open placeholders.
@@ -25,10 +25,10 @@ identity, approvals, resources, bookings, attendance, and integration state.
 
 - The canonical public website domain is `armatureailabs.com`. Do not substitute the legacy `armaturelab.org` domain or near-match domains.
 - The canonical public information, membership, and brand-permissions mailbox is `hello@armatureailabs.com`; sending, receiving, SPF, and DKIM were verified on 8 September 2026. Keep `hello@armaturelab.org` working for existing contacts, but do not publish it as the public contact address. The booking, calendar-delegation and transactional sender identity is `bookings@armatureailabs.com` (decided 12 September 2026); the code and docs already point at it. Until Sandeep confirms that mailbox exists in the same Google Workspace and sends and receives, treat it as pending: do not enable the member platform, calendar sync or reminders in production against it, and keep `bookings@armaturelab.org` alive only as the legacy fallback for anything already configured with it.
-- The commutator mark geometry in `brand/armature-lab/` is fixed; the exploded-A mark is retired.
+- The commutator mark geometry in `brand/armature-ai-labs/` is fixed; the exploded-A mark is retired.
 - Keep the parent and lab identities separate. The larger parent plan is `Institute for Physical AI`; the lab identity is `Armature AI Labs - The Physical AI and Robotics Lab`.
-- The current public site and asset pack style the lab name in lowercase. Preserve that capitalization in existing site copy and SVG text unless the user explicitly asks for a change.
-- The home hero's visible wordmark must read lowercase `armature ai labs`. Do not shorten it, and preserve its existing type, size, spacing, and mark.
+- The brand name is `Armature AI Labs`, title case (capital A in Armature, capital AI, capital L in Labs). The earlier lowercase styling is retired; do not reintroduce it.
+- The home hero's visible wordmark must read `Armature AI Labs`. Do not shorten it, and preserve its existing type, size, spacing, and mark.
 - Do not flatten the hierarchy into a vague umbrella name like "Armature Institute" unless the user explicitly asks.
 - Keep HSR Layout, Bengaluru as the location signal unless the user gives a replacement.
 - Light assets are the primary assets. Ink/dark variants are for dark surfaces.

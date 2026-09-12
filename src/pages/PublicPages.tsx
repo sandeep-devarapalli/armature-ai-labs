@@ -34,7 +34,7 @@ const equipmentRows = [
 
 const distributionBoards = [
   [ShieldCheck, "Main", "Incomer + master", "Utility incomer, metering, main breaker, and the master E-stop for hazard zones."],
-  [Wrench, "DB-A", "Heavy / 3-phase", "Robot arm cell and machine shop, interlocked with the safety perimeter."],
+  [Wrench, "DB-A", "Heavy / 3-phase", "Robot arm cell and heavy-power benches, interlocked with the safety perimeter."],
   [BatteryCharging, "DB-B", "Prototyping + batteries", "Printing, drone charging, and the battery cabinet on separated circuits."],
   [Cpu, "DB-C", "Clean / UPS", "Isolated grounded power for electronics, compute, networking, and NVR."],
   [Users, "DB-D", "General / demo / pods", "Demo-floor outlets, builder pods, general sockets, lighting, and HVAC."]

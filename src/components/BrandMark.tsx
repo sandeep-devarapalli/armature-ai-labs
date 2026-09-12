@@ -14,12 +14,12 @@ export function BrandMark({
   ].filter(Boolean).join(" ");
 
   return (
-    <span className="brand-lockup" aria-label="armature ai labs">
+    <span className="brand-lockup" aria-label="Armature AI Labs">
       <svg
         className={markClasses}
         viewBox="0 0 100 100"
         role="img"
-        aria-label="armature ai labs mark"
+        aria-label="Armature AI Labs mark"
       >
         <path
           className="brand-mark-segment brand-mark-segment--north-east brand-mark-segment--pair-3"
@@ -87,7 +87,7 @@ export function BrandMark({
         />
         <circle className="brand-mark-shaft" cx="50" cy="50" r="9.5" fill="currentColor" />
       </svg>
-      {!compact && <span>armature ai labs</span>}
+      {!compact && <span>Armature AI Labs</span>}
     </span>
   );
 }
