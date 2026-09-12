@@ -1,0 +1,43 @@
+{
+  "release": "R05",
+  "status": "PASS / CONCEPT GEOMETRY ONLY",
+  "scope": "FF02 workshop terrace enclosure C03: steel frame with 50 mm PUF wall panels, 80 mm PUF roof on a 3 % fall to the west guard, 1 m twin-wall polycarbonate skylight strip along the north wall, three fixed windows, one insulated door to the retained curved balcony, exhaust louvre, and the selected lab layout (one GPU workstation, two printers, soldering with extraction, retained workbench and table, rack, 3 kVA UPS, 1.5-ton split AC).",
+  "decisions": "Sandeep, 12 September 2026: steel frame with insulated panels; opaque insulated roof with a skylight strip (not a glass roof); enclose the north part and keep the curved balcony; keep three modest windows; roof fall towards the west guard; publish as a labelled proposal; lab layout inside; 1.5-ton AC; one GPU workstation and two printers; UPS back to 3 kVA.",
+  "sourceNativeSha256": "5cd3c6657441982c8a0fa4d92711d140d14d52ebd0c4776370053c2f88d61a42",
+  "previousSourceNativeSha256": "9962e93c7cb587f6355a74d6e62bafd046ec5b26b44a4290b2511e6f75a5d4f8",
+  "enclosureCadSha256": "28fab8d70bffa3c43202d02c49f533cb4bf8f7740ae13cc3ec13463c364ee1ce",
+  "firstFloorCadSha256": "ad1397f6b855e309b0093e64baf582db559be5b4ebab1e22ef3f428a3b77d5e9",
+  "nativeSaveReopen": "PASS",
+  "blenderPreservation": {
+    "retainedUnchanged": 1299,
+    "removed": 295,
+    "added": 83,
+    "moved": 14,
+    "groundFloorUnchanged": true
+  },
+  "cadFreshReopen": {
+    "status": "PASS",
+    "objects": 170,
+    "solids": 164,
+    "invalidShapes": 0
+  },
+  "glbFreshReimport": "PASS",
+  "serializedPrivatePathScan": "PASS",
+  "sourcesUnchanged": true,
+  "visualReview": "PENDING until the built page is reviewed",
+  "notCovered": [
+    "structural design, wind uplift and column base fixing into the terrace slab",
+    "roof overhang, flashing and gutter details",
+    "condensation and solar gain",
+    "fresh-air path for soldering extraction",
+    "door threshold at the balcony",
+    "whether the existing guard stays outside the enclosed length",
+    "site measurement of the terrace"
+  ],
+  "sourceEvidence": [
+    "Blender preservation record and fresh reopen against the frozen R04 public copy",
+    "independent GLB reimport in a fresh Blender",
+    "FreeCAD fresh reopen of the C03 document with shape validity",
+    "PNG text-chunk stripping with pixel chunks unchanged"
+  ]
+}

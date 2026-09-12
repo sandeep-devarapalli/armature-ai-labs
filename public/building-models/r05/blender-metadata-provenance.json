@@ -1,0 +1,57 @@
+{
+  "files": [
+    {
+      "file": "selected-layout.blend",
+      "sourceSha256": "5cd3c6657441982c8a0fa4d92711d140d14d52ebd0c4776370053c2f88d61a42",
+      "publicSha256": "5cd3c6657441982c8a0fa4d92711d140d14d52ebd0c4776370053c2f88d61a42",
+      "publicBytes": 2742737,
+      "previousReleaseSourceSha256": "9962e93c7cb587f6355a74d6e62bafd046ec5b26b44a4290b2511e6f75a5d4f8",
+      "nativeSaveReopen": "PASS",
+      "transformationKind": "verified-current-design-copy",
+      "curation": {
+        "retainedGeometryUnchanged": true,
+        "materialsUnchanged": true,
+        "selectedMembershipVerified": true,
+        "reviewViewsVerified": true,
+        "selectedAllowlistSha256": "1984a6411ec3a7d2a6b002a109e6532e79754476d3576f74c7c7f1a52c8fd677",
+        "privateAuditSha256": "5d3db8e8ee391b508a15aea470b885fa05a1b78495af1ce363fc2344dbf1d430",
+        "removedObjects": 295,
+        "removedScenes": 0,
+        "displayChanges": [
+          "One orthographic review camera added inside the new FF02 C03 collection for the enclosure preview; cameras are excluded from browser exports."
+        ],
+        "dependencyDisclosure": [
+          "Exact copy of the freshly reopened R05 native; the R04 public copy is its unchanged source and R03/R04 files remain published as they were.",
+          "R05 retires the FF02 P01 glazed-frame study (295 objects: contour glazing, rails, mullions, outward door, second table and its two chairs) and adds 83 FF02 C03 objects: steel columns, eaves beams, purlins, PUF wall and roof panels, skylight kerb and polycarbonate, three fixed windows, insulated door, louvre, lab furniture and equipment placeholders, a 1.5-ton split AC.",
+          "The retained P01 workbench, one table and three chairs are kept; the table and its two chairs are translated by (+0.727, -0.175, 0) m. All other 1,299 first-floor objects and the whole ground-floor scene are fingerprint-identical to R04.",
+          "Twelve new FF02 C03 materials are added; no retained material is changed. No historical scenes, embedded scripts or source paths."
+        ]
+      },
+      "serializedPrivatePathScan": "PASS",
+      "geometryRevision": {
+        "retainedObjectCount": 1299,
+        "replacedObjectCount": 295,
+        "addedObjectCount": 83,
+        "movedObjectCount": 14,
+        "retainedGeometryMaterialsUVAndPlacementsUnchanged": true
+      },
+      "sourceVerificationSha256": "1c59323c0e152a39e9c4ef70aa19f138ee48a8e61e3c64b23fb97f9c88272c89"
+    },
+    {
+      "file": "first-floor.png",
+      "sourceSha256": "4e1a5d64762896048d3699e03dfd19f75d23c6983ee0ccd76f7d7ac1239aca9f",
+      "publicSha256": "4d19fb10c47f6310b3a7a99bf73c6ac404dd00770d1a5134069cd9611cc0aa03",
+      "metadataOnly": true,
+      "pixelChunksUnchanged": true,
+      "retainedColorProfile": true
+    },
+    {
+      "file": "ff02-enclosure.png",
+      "sourceSha256": "50152ab9cb924aaba87236fdb59033d5287a7dda9b638c00ad813bb111f6677e",
+      "publicSha256": "7038b0d466798a0389cb6a32302e64f9fbd378459a7677e43256eca9dcfcaaad",
+      "metadataOnly": true,
+      "pixelChunksUnchanged": true,
+      "retainedColorProfile": true
+    }
+  ]
+}

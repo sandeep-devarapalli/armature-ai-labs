@@ -1,0 +1,286 @@
+{
+  "schema": "armature.building-web-assets.v1",
+  "release": "Coordinated Selected Layout R05",
+  "date": "2026-09-12",
+  "status": "PASS_GEOMETRY_REIMPORT_AND_EXACT_COPY_CHECKS",
+  "sourceNativeSha256": "5cd3c6657441982c8a0fa4d92711d140d14d52ebd0c4776370053c2f88d61a42",
+  "originalSourceNativeSha256": "5cd3c6657441982c8a0fa4d92711d140d14d52ebd0c4776370053c2f88d61a42",
+  "previousSourceNativeSha256": "9962e93c7cb587f6355a74d6e62bafd046ec5b26b44a4290b2511e6f75a5d4f8",
+  "sourcePreserved": true,
+  "currentDesignOnly": true,
+  "selectedTwinCabinsIncluded": true,
+  "slidingEntrancesRevision": "P03",
+  "ff03EntranceRevision": "P02",
+  "ff02EnclosureRevision": "C03",
+  "floors": [
+    {
+      "id": "ground-floor",
+      "label": "Ground floor",
+      "model": "/building-models/r03/ground-floor.glb",
+      "preview": "/building-models/r03/ground-floor.png",
+      "bytes": 15351516,
+      "sha256": "79ccf1a77c67a38a4a9e189734bc0393b0961a92d090b0875bb7714945b2f7fa",
+      "physicalObjects": 1843,
+      "triangles": 320378,
+      "materials": 55,
+      "boundsGltfYUpMetres": [
+        [
+          -6.730601787567139,
+          9.543726921081543
+        ],
+        [
+          -1.1257041692733765,
+          4.490421295166016
+        ],
+        [
+          -6.9683966636657715,
+          4.965869903564453
+        ]
+      ],
+      "boundsBlenderZUpMetres": [
+        [
+          -6.730601787567139,
+          9.543726921081543
+        ],
+        [
+          -4.965869903564453,
+          6.9683966636657715
+        ],
+        [
+          -1.1257041692733765,
+          4.490421295166016
+        ]
+      ],
+      "sourceScene": "Ground floor - selected current",
+      "sourceCamera": {
+        "position_blender_z_up_m": [
+          -1,
+          -14,
+          22
+        ],
+        "rotation_quaternion_blender": [
+          0.9548884034156799,
+          0.29509449005126953,
+          -0.009825574234127998,
+          -0.03179432079195976
+        ],
+        "ortho_scale_m": 23,
+        "projection": "ORTHO"
+      },
+      "retainedRoomNames": true,
+      "excludedCamerasLightsLabelsAndEmptyRoots": 110,
+      "previewSha256": "80b710cde0de7dcab4543af27228887a54ee9f4da357bcb62a459605f53bb47b",
+      "sourcePreviewSha256": "6333c6c7fdbaf16a2e5de7ab0b087410017b9f6690a3226a60c852061c312e32",
+      "retainedFrom": {
+        "release": "R03",
+        "manifestSha256": "f802f97562458bdcdeecbef145fed9df813b5d6e8c53851be0f886a2b8861409",
+        "sourceNativeSha256": "2bf4638a5d4ec2eaca76316debf06f290d69afe36f667fc8329247460f130a70"
+      }
+    },
+    {
+      "id": "first-floor",
+      "label": "First floor",
+      "model": "/building-models/r05/first-floor.glb",
+      "preview": "/building-models/r05/first-floor.png",
+      "bytes": 6689880,
+      "sha256": "08d33f8a54f1020815b5a41ee774f92366dcd444635fd4d5b01d3fe79f8cc422",
+      "physicalObjects": 1335,
+      "triangles": 130636,
+      "materials": 37,
+      "boundsGltfYUpMetres": [
+        [
+          -8.584599494934082,
+          9.905726432800293
+        ],
+        [
+          -0.11900000274181366,
+          7.688281059265137
+        ],
+        [
+          -6.9683966636657715,
+          6.15752649307251
+        ]
+      ],
+      "boundsBlenderZUpMetres": [
+        [
+          -8.584599494934082,
+          9.905726432800293
+        ],
+        [
+          -6.15752649307251,
+          6.9683966636657715
+        ],
+        [
+          -0.11900000274181366,
+          7.688281059265137
+        ]
+      ],
+      "sourceScene": "First floor - R05 FF02 enclosure",
+      "sourceCamera": {
+        "position_blender_z_up_m": [
+          0.6000000238418579,
+          -15.0,
+          25.0
+        ],
+        "rotation_quaternion_blender": [
+          0.9474759101867676,
+          0.3198271095752716,
+          0.0,
+          0.0
+        ],
+        "ortho_scale_m": 23.0,
+        "projection": "ORTHO"
+      },
+      "retainedRoomNames": true,
+      "excludedCamerasLightsLabelsAndEmptyRoots": 62,
+      "previewSha256": "4d19fb10c47f6310b3a7a99bf73c6ac404dd00770d1a5134069cd9611cc0aa03",
+      "sourcePreviewSha256": "4e1a5d64762896048d3699e03dfd19f75d23c6983ee0ccd76f7d7ac1239aca9f"
+    }
+  ],
+  "downloads": [
+    {
+      "id": "native-cad-ground",
+      "label": "Full ground floor / FreeCAD",
+      "url": "/building-models/r03/ground-floor.FCStd",
+      "bytes": 6212792,
+      "sha256": "3282f8e42579b73b24f097e8b65bad672d5bc2b4dc8d46c486eb163780cff0df",
+      "sourceSha256": "374df20b0b81f03790211ead98471353221c830b1a5cc98f4bdbcf052764c2fc",
+      "exactNativeCopy": true,
+      "copyBasis": "curated-current-design-source",
+      "transformationKind": "current-design-curation-and-metadata-sanitization",
+      "units": "millimetres",
+      "retainedFrom": {
+        "release": "R03",
+        "releaseSha256": "e5cd418b324c13c7a6dc7b2101fb16fef6f6a7ecb607f89346b4aac4fa4f0b6f"
+      },
+      "file": "ground-floor.FCStd",
+      "metadataSanitized": true
+    },
+    {
+      "id": "first-cad",
+      "label": "First-floor CAD",
+      "url": "https://github.com/sandeep-devarapalli/armature-ai-labs/releases/download/building-models-r04/first-floor.FCStd",
+      "bytes": 50172007,
+      "sha256": "ad1397f6b855e309b0093e64baf582db559be5b4ebab1e22ef3f428a3b77d5e9",
+      "sourceSha256": "ad1397f6b855e309b0093e64baf582db559be5b4ebab1e22ef3f428a3b77d5e9",
+      "exactNativeCopy": true,
+      "copyBasis": "verified-current-design-source",
+      "transformationKind": "verified-current-design-copy",
+      "units": "millimetres",
+      "file": "first-floor.FCStd",
+      "serializedPrivatePathScan": "PASS",
+      "retainedFrom": {
+        "release": "R04",
+        "releaseSha256": "5751d4c478275dc9e0195aff2f570d900e72d9f778d88f711b817ac223e32df0"
+      },
+      "note": "Retained R04 full first-floor CAD; it predates the FF02 C03 enclosure, which is published as a separate room-level CAD file."
+    },
+    {
+      "id": "blender",
+      "label": "Selected Blender model",
+      "url": "/building-models/r05/selected-layout.blend",
+      "bytes": 2742737,
+      "sha256": "5cd3c6657441982c8a0fa4d92711d140d14d52ebd0c4776370053c2f88d61a42",
+      "sourceSha256": "5cd3c6657441982c8a0fa4d92711d140d14d52ebd0c4776370053c2f88d61a42",
+      "exactNativeCopy": true,
+      "copyBasis": "verified-current-design-source",
+      "transformationKind": "verified-current-design-copy",
+      "units": "metres",
+      "file": "selected-layout.blend",
+      "serializedPrivatePathScan": "PASS"
+    },
+    {
+      "id": "ff02-enclosure-cad",
+      "label": "FF-02 enclosure C03 / FreeCAD",
+      "url": "/building-models/r05/ff02-enclosure.FCStd",
+      "bytes": 264283,
+      "sha256": "28fab8d70bffa3c43202d02c49f533cb4bf8f7740ae13cc3ec13463c364ee1ce",
+      "sourceSha256": "28fab8d70bffa3c43202d02c49f533cb4bf8f7740ae13cc3ec13463c364ee1ce",
+      "exactNativeCopy": true,
+      "copyBasis": "verified-current-design-source",
+      "transformationKind": "verified-current-design-copy",
+      "units": "millimetres",
+      "file": "ff02-enclosure.FCStd",
+      "serializedPrivatePathScan": "PASS"
+    },
+    {
+      "id": "ff02-enclosure-step",
+      "label": "FF-02 enclosure C03 / STEP",
+      "url": "/building-models/r05/ff02-enclosure.step",
+      "bytes": 1205429,
+      "sha256": "c0a8068e058c3d979091addfb761b154192a29bf1026c6637c3fbc892a9b9071",
+      "sourceSha256": "c0a8068e058c3d979091addfb761b154192a29bf1026c6637c3fbc892a9b9071",
+      "exactNativeCopy": true,
+      "copyBasis": "native-step-export",
+      "transformationKind": "native-step-export",
+      "units": "millimetres",
+      "file": "ff02-enclosure.step",
+      "serializedPrivatePathScan": "PASS"
+    }
+  ],
+  "browserUnits": "metres",
+  "browserAxes": "glTF Y-up; (X,Y,Z) = Blender (X,Z,-Y)",
+  "caveats": [
+    "Selected planning geometry, not measured as-built or installation/occupancy certification.",
+    "GLBs are mesh viewing derivatives; editable CAD and source Blender remain separate downloads.",
+    "Source procedural wood/marble and complex transparency are simplified to portable source-derived PBR values; native renders retain original appearance.",
+    "Lighting rigs, cameras, room-label text, empty parents and hidden planning overlays are excluded from GLBs; source names and room hints remain in node extras.",
+    "Room STEP downloads are exact source reference extracts; full-floor native CAD remains authoritative.",
+    "Native CAD preserves selected current shapes and world coordinates, not every historical parametric dependency; units are millimetres.",
+    "Current floor exports include GF01 cabin A, FF02 workshop, FF03 cabins and FF04/FF06 twin cabins with P03 sliding entrances, retaining FF06 balcony B02.",
+    "FF04 and FF06 each contain eight full-size tables and eight chair proxies, not certified simultaneous capacity. Occupied-chair and installation limitations remain.",
+    "Public native copies contain only selected current design; private source releases and failed earlier trials are preserved separately.",
+    "Previews are direct native renders of the selected scenes; no generated image is used as geometry evidence.",
+    "R04 changes only the FF03 four-person entrance to a sliding proposal; its two-person door, furniture, shared bathroom access and all other-room designs are retained.",
+    "R05 changes only FF02: the P01 glazed-frame study is replaced by the C03 steel-frame insulated-panel enclosure with the lab layout the user selected; every other room, the ground floor and the R04 first-floor CAD are retained.",
+    "The FF02 enclosure is a concept for review: no structural, wind, thermal, waterproofing or fabrication design, and no landlord, BBMP or fire approval is implied."
+  ],
+  "materialRepresentations": [
+    {
+      "source": "Photo 01 - balcony existing grey stone",
+      "browser": "Photo 01 - balcony existing grey stone | browser",
+      "procedural_nodes": [
+        "TEX_NOISE"
+      ],
+      "source_surface": "BSDF_PRINCIPLED",
+      "representation": "Procedural patterns replaced by stored source PBR scalar/base-color values; glass/transparent shader represented by source-weight alpha/transmission where needed."
+    },
+    {
+      "source": "Photo 01 - existing brown wood-look finish",
+      "browser": "Photo 01 - existing brown wood-look finish | browser",
+      "procedural_nodes": [
+        "TEX_BRICK"
+      ],
+      "source_surface": "BSDF_PRINCIPLED",
+      "representation": "Procedural patterns replaced by stored source PBR scalar/base-color values; glass/transparent shader represented by source-weight alpha/transmission where needed."
+    },
+    {
+      "source": "R01 | warm oak",
+      "browser": "R01 | warm oak | browser",
+      "procedural_nodes": [
+        "TEX_NOISE",
+        "TEX_COORD"
+      ],
+      "source_surface": "BSDF_PRINCIPLED",
+      "representation": "Procedural patterns replaced by stored source PBR scalar/base-color values; glass/transparent shader represented by source-weight alpha/transmission where needed."
+    }
+  ],
+  "verification": {
+    "geometryToleranceMetres": 2e-06,
+    "freshReimport": true,
+    "physicalObjectAndRawGlbTriangleCountsMatch": true,
+    "nativeDownloadHashesMatch": true,
+    "sourceNativePreserved": true,
+    "browserVisualReview": "PENDING: to be recorded after the preview build is reviewed in desktop Chrome and a 390 px viewport.",
+    "importerZeroAreaChanges": {
+      "ground-floor": [],
+      "first-floor": [
+        {
+          "name": "First Floor - Planning Base 08 | joined wall display",
+          "source_triangles": 4064,
+          "import_triangles": 4063
+        }
+      ]
+    }
+  }
+}

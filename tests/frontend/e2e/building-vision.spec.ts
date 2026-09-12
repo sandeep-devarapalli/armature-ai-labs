@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 import release from "../../../src/data/buildingModelRelease.json" with { type: "json" };
 import electrical from "../../../src/data/buildingElectricalS02.json" with { type: "json" };
 
-test("R04 updates FF03 while retaining R03 previews and lazy floor models", async ({ page }, testInfo) => {
+test("R05 shows the FF02 enclosure proposal while retaining R03/R04 previews and lazy floor models", async ({ page }, testInfo) => {
   test.setTimeout(120_000);
   const models: string[] = [];
   const errors: string[] = [];
@@ -24,11 +24,27 @@ test("R04 updates FF03 while retaining R03 previews and lazy floor models", asyn
       await expect.poll(() => preview.evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
     }
   }
+  await page.getByLabel("Choose a room").selectOption("FF-02");
+  await expect(page.getByRole("heading", { name: "Enclosure proposal C03 · Blender" })).toBeVisible();
+  const enclosureViews = page.locator("details").filter({ has: page.getByText("Enclosure CAD views: exterior, cutaway and plan", { exact: true }) });
+  if ((await enclosureViews.getAttribute("open")) === null) await enclosureViews.locator("summary").click();
+  for (const label of ["Open FF-02 enclosure Blender render", "Open FF-02 enclosure CAD exterior", "Open FF-02 enclosure CAD cutaway", "Open FF-02 enclosure CAD plan"]) {
+    const preview = page.getByRole("link", { name: label, exact: true }).locator("img");
+    await preview.scrollIntoViewIfNeeded();
+    await expect.poll(() => preview.evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  }
+  await expect(page.getByRole("link", { name: "FF-02 · enclosure FreeCAD", exact: true })).toHaveAttribute("href", release.enclosure.freecad);
+  await expect(page.getByRole("link", { name: "FF-02 · enclosure STEP", exact: true })).toHaveAttribute("href", release.enclosure.step);
+  for (const url of [release.enclosure.freecad, release.enclosure.step, `${release.root}/release.json`]) {
+    const response = await page.request.get(url);
+    expect(response.ok()).toBe(true);
+  }
   expect(models).toEqual([]);
   await page.getByRole("button", { name: "Open interactive 3D" }).click();
   await expect(page.getByRole("status").filter({ hasText: "3D model ready" })).toBeVisible({ timeout: 60_000 });
   await expect(page.locator("model-viewer")).toHaveCount(1);
   expect([...new Set(models)]).toEqual([release.floors.first.model]);
+  expect(release.floors.first.model).toBe("/building-models/r05/first-floor.glb");
   await page.locator(".building-model-stage").screenshot({ path: testInfo.outputPath("first-floor-viewer.png") });
   await page.getByRole("button", { name: "Top view", exact: true }).click();
   await page.getByRole("button", { name: "Reset view", exact: true }).click();
@@ -70,9 +86,9 @@ test("building vision shows current layouts with a simple gallery and full conta
   ]) await expect(page.getByText(text, { exact: false })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Copy prompt" })).toHaveCount(0);
   await expect(page.locator(".building-vision-reference")).toHaveCount(0);
-  await expect(page.getByText("Showing 5 of 5 views")).toBeVisible();
+  await expect(page.getByText("Showing 6 of 6 views")).toBeVisible();
   const gallery = page.locator(".building-vision-model-image img");
-  await expect(gallery).toHaveCount(5);
+  await expect(gallery).toHaveCount(6);
   for (const image of await gallery.all()) {
     await image.scrollIntoViewIfNeeded();
     await expect.poll(() => image.evaluate(node => (node as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
@@ -82,11 +98,12 @@ test("building vision shows current layouts with a simple gallery and full conta
     expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(page.viewportSize()!.width + 1);
   }
   await page.getByRole("button", { name: "Ground floor", exact: true }).click();
-  await expect(page.getByText("Showing 1 of 5 views")).toBeVisible();
+  await expect(page.getByText("Showing 1 of 6 views")).toBeVisible();
   await expect(gallery).toHaveCount(1);
   await page.getByRole("button", { name: "First floor", exact: true }).click();
-  await expect(page.getByText("Showing 4 of 5 views")).toBeVisible();
-  await expect(gallery).toHaveCount(4);
+  await expect(page.getByText("Showing 5 of 6 views")).toBeVisible();
+  await expect(gallery).toHaveCount(5);
+  await expect(page.locator("#ff-02-enclosure img")).toHaveAttribute("src", release.enclosure.blender);
   for (const id of ["FF-03", "FF-04", "FF-06"] as const) {
     await expect(page.locator("#" + id.toLowerCase() + "-cabins img")).toHaveAttribute("src", release.roomPreviews[id].blender);
   }
