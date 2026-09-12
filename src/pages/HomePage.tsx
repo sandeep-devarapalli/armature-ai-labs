@@ -1,29 +1,85 @@
 import {
   ArrowRight,
-  BatteryCharging,
-  Bot,
-  Boxes,
+  Armchair,
   CalendarDays,
   Cctv,
   CheckCircle2,
-  CircuitBoard,
-  Cpu,
-  DraftingCompass,
+  Coffee,
+  Droplets,
   ExternalLink,
+  Layers,
   LockKeyhole,
   PackageOpen,
-  Printer,
+  Presentation,
   ScanLine,
   ShieldCheck,
   ShoppingBasket,
+  Store,
+  Sun,
+  Users,
+  UtensilsCrossed,
   Wrench
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 import { useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { BrandMark } from "../components/BrandMark";
 import { Metric, Section } from "../components/Primitives";
 import { equipmentPageAvailable, memberPlatformAvailable } from "../config/release";
 import { useTheme } from "../context/ThemeContext";
+
+type RoomUse = "work" | "shared" | "outdoor" | "support";
+
+type Room = {
+  id: string;
+  name: string;
+  /** Carpet area in square feet, measured from the published building CAD. */
+  areaSqFt: number;
+  use: RoomUse;
+  note: string;
+  icon: LucideIcon;
+};
+
+/**
+ * Measured room programme. Areas are carpet areas taken from the R03 ground-floor
+ * and R04 first-floor CAD (room boundary polygons and floor slabs), rounded to the
+ * nearest 5 sq ft. The GF-05 patio is excluded by decision; walls, the stair and
+ * the first-floor void are not counted, which is why the rooms sum below the
+ * roughly 3,500 sq ft gross built-up footprint.
+ */
+const roomProgramme: { floor: string; rooms: Room[] }[] = [
+  {
+    floor: "Ground floor",
+    rooms: [
+      { id: "GF-10", name: "Coworking commons", areaSqFt: 385, use: "work", note: "Long tables, window counter · 38 modelled positions", icon: Users },
+      { id: "GF-09", name: "Lounge and presentation hall", areaSqFt: 300, use: "shared", note: "Talks, demos, the spiral stair", icon: Presentation },
+      { id: "GF-01", name: "Four-person cabin", areaSqFt: 235, use: "work", note: "Opposed desks, retained storage", icon: Users },
+      { id: "GF-08", name: "Balcony café", areaSqFt: 205, use: "outdoor", note: "Railed balcony, café tables, wall bar", icon: Coffee },
+      { id: "GF-04", name: "Kitchen", areaSqFt: 190, use: "shared", note: "Existing kitchen, marble retained", icon: UtensilsCrossed },
+      { id: "GF-02", name: "Reception and goodies store", areaSqFt: 90, use: "shared", note: "Visitor check-in, merchandise racks", icon: Store },
+      { id: "GF-07", name: "Enclosed booth", areaSqFt: 45, use: "work", note: "Glass-fronted bench booth", icon: Armchair },
+      { id: "GF-03 · GF-06", name: "Washrooms", areaSqFt: 100, use: "support", note: "Two retained sanitary spaces", icon: Droplets }
+    ]
+  },
+  {
+    floor: "First floor",
+    rooms: [
+      { id: "FF-04", name: "Stair landing and gallery", areaSqFt: 410, use: "work", note: "Twin cabins around the open void", icon: Layers },
+      { id: "FF-06", name: "Office twin cabins", areaSqFt: 350, use: "work", note: "Two four-table cabins, cupboard retained", icon: Users },
+      { id: "FF-02", name: "Workshop terrace", areaSqFt: 260, use: "outdoor", note: "Open, railed · electronics workshop proposal", icon: Wrench },
+      { id: "FF-03", name: "Two- and four-person cabins", areaSqFt: 230, use: "work", note: "Six modelled seats, sliding entrance", icon: Users },
+      { id: "FF-06 B", name: "Balcony", areaSqFt: 100, use: "outdoor", note: "Dedicated lower-cabin balcony", icon: Sun },
+      { id: "FF-01 · FF-05", name: "Washrooms", areaSqFt: 125, use: "support", note: "Retained support and bathroom", icon: Droplets }
+    ]
+  }
+];
+
+const roomUseLabels: Record<RoomUse, string> = {
+  work: "Cabins and desks",
+  shared: "Shared and visitor-facing",
+  outdoor: "Balconies and terrace",
+  support: "Support"
+};
 
 const labRoles = [
   {
@@ -66,9 +122,9 @@ export function HomePage() {
           </div>
           <p className="hero-copy">
             The armature is the core of every motor: the part that moves. Ours is
-            a 3,500 sq ft lab built for the full path from idea to working machine:
-            arms, prototyping, machining, ESD-safe benches, and GPU compute, all
-            bookable by the hour.
+            a 3,500 sq ft lab across two floors, built for the full path from idea
+            to working machine: arms, prototyping, machining, ESD-safe benches, and
+            GPU compute, all bookable by the hour.
           </p>
           <div className="button-row">
             {memberPlatformAvailable ? (
@@ -109,9 +165,9 @@ export function HomePage() {
           </div>
           <div className="metrics-strip">
             <Metric label="Footprint" value="3,500 sq ft" />
-            <Metric label="Zones" value="10" />
-            <Metric label="Builder pods" value="16" />
-            <Metric label="Monitoring" value="9 cameras" />
+            <Metric label="Floors" value="2" />
+            <Metric label="Cabins" value="7" />
+            <Metric label="Balconies + terrace" value="3" />
           </div>
         </div>
       </header>
@@ -119,7 +175,7 @@ export function HomePage() {
       <Section
         number="01"
         title="A working floor, not a club lounge"
-        lede="Every zone is meant to hold a real project in progress."
+        lede="Every room is meant to hold a real project in progress."
       >
         <div className="role-list">
           {labRoles.map((role) => (
@@ -148,89 +204,61 @@ export function HomePage() {
 
       <Section
         number="02"
-        title="The full floor at a glance"
-        lede="Ten zones run from visitor-facing demonstrations to guarded motion, with clean electronics and compute kept grounded and separated."
+        title="Two floors at a glance"
+        lede="Fifteen measured rooms across the ground and first floors: coworking commons, a presentation hall, seven cabins, a workshop terrace, and three balconies."
         dark
       >
-        <div className="floor-map floor-map-complete" aria-label="Armature AI Labs' ten zones">
-          <div className="floor-zone floor-entry" data-floor-zone>
-            <ShieldCheck aria-hidden="true" />
-            <strong>Entry + safety</strong>
-            <span>Access · induction</span>
-          </div>
-          <div className="floor-zone floor-demo" data-floor-zone>
-            <Cctv className="floor-camera" aria-label="Camera coverage" />
-            <ScanLine aria-hidden="true" />
-            <strong>Demo floor</strong>
-            <span>Prototypes · visitor line</span>
-          </div>
-          <div className="floor-zone floor-prototyping" data-floor-zone>
-            <Cctv className="floor-camera" aria-label="Camera coverage" />
-            <Printer aria-hidden="true" />
-            <strong>Rapid prototyping</strong>
-            <span>3D print · laser</span>
-          </div>
-          <div className="floor-zone floor-machine" data-floor-zone>
-            <Cctv className="floor-camera" aria-label="Camera coverage" />
-            <Wrench aria-hidden="true" />
-            <strong>Machine shop</strong>
-            <span>CNC · finishing</span>
-          </div>
-          <div className="floor-zone floor-pods" data-floor-zone>
-            <Cctv className="floor-camera" aria-label="Camera coverage" />
-            <DraftingCompass aria-hidden="true" />
-            <strong>Builder pods ×16</strong>
-            <span>Dedicated desks · project storage</span>
-          </div>
-          <div className="floor-zone floor-arm" data-floor-zone>
-            <Cctv className="floor-camera" aria-label="Camera coverage" />
-            <Bot aria-hidden="true" />
-            <strong>Robot arm cell</strong>
-            <span>Guarded · interlocked</span>
-          </div>
-          <div className="floor-zone floor-test" data-floor-zone>
-            <Cctv className="floor-camera" aria-label="Camera coverage" />
-            <Boxes aria-hidden="true" />
-            <strong>Flexible test bay</strong>
-            <span>Supervised · reconfigurable</span>
-          </div>
-          <div className="floor-zone floor-electronics" data-floor-zone>
-            <Cctv className="floor-camera" aria-label="Camera coverage" />
-            <CircuitBoard aria-hidden="true" />
-            <strong>Electronics</strong>
-            <span>ESD benches · scopes</span>
-          </div>
-          <div className="floor-zone floor-storage" data-floor-zone>
-            <Cctv className="floor-camera" aria-label="Camera coverage" />
-            <BatteryCharging aria-hidden="true" />
-            <strong>Storage + batteries</strong>
-            <span>Lockers · LiPo cabinet</span>
-          </div>
-          <div className="floor-zone floor-compute" data-floor-zone>
-            <Cctv className="floor-camera" aria-label="Camera coverage" />
-            <Cpu aria-hidden="true" />
-            <strong>Compute + storage</strong>
-            <span>GPU queue · NAS · NVR</span>
-          </div>
+        <div className="room-programme" aria-label="Armature AI Labs room programme by floor">
+          {roomProgramme.map((level) => {
+            const floorTotal = level.rooms.reduce((sum, room) => sum + room.areaSqFt, 0);
+            return (
+              <section className="room-floor" key={level.floor} aria-label={level.floor}>
+                <header className="room-floor-header">
+                  <h3>{level.floor}</h3>
+                  <span className="mono">{level.rooms.length} rooms · {floorTotal.toLocaleString("en-IN")} sq ft carpet</span>
+                </header>
+                <div className="room-grid">
+                  {level.rooms.map((room) => {
+                    const Icon = room.icon;
+                    return (
+                      <article className={`room-tile room-${room.use}`} key={room.id} data-room-tile>
+                        <Icon aria-hidden="true" />
+                        <span className="mono room-id">{room.id}</span>
+                        <strong>{room.name}</strong>
+                        <span className="mono room-area">{room.areaSqFt} sq ft</span>
+                        <p>{room.note}</p>
+                      </article>
+                    );
+                  })}
+                </div>
+              </section>
+            );
+          })}
         </div>
         <div className="legend-row mono">
-          <span><i className="legend-brick" /> Hazard / guarded</span>
-          <span><i className="legend-saffron" /> Visitor-facing</span>
-          <span><i className="legend-moss" /> Builder / safe</span>
-          <span><Cctv aria-hidden="true" /> Nine camera positions</span>
+          <span><i className="legend-moss" /> {roomUseLabels.work}</span>
+          <span><i className="legend-saffron" /> {roomUseLabels.shared}</span>
+          <span><i className="legend-sky" /> {roomUseLabels.outdoor}</span>
+          <span><i className="legend-neutral" /> {roomUseLabels.support}</span>
         </div>
+        <p className="room-programme-note">
+          Carpet areas measured from the published building CAD; walls, the stair and the
+          first-floor void are not counted, and the ground-floor patio is excluded. Modelled
+          seats are planning positions, not certified capacity.{" "}
+          <Link to="/building-vision">Open the models and room CAD <ArrowRight aria-hidden="true" /></Link>
+        </p>
       </Section>
 
       <Section
         number="03"
         title="Monitored, end to end"
-        lede="Nine cameras and the access trail make a shared floor accountable without turning it into an unattended room."
+        lede="Cameras and the access trail make a shared floor accountable without turning it into an unattended room."
       >
         <div className="feature-grid">
           <article>
             <Cctv aria-hidden="true" />
             <h3>Whole-floor coverage</h3>
-            <p>The arm cell, test bay, machine shop, prototyping, pods, benches, demo floor, storage, and compute feed the on-site NVR.</p>
+            <p>The commons, presentation hall, cabins, workshop terrace, balconies, kitchen, and entrance feed the on-site NVR.</p>
           </article>
           <article>
             <ShieldCheck aria-hidden="true" />

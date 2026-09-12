@@ -881,125 +881,120 @@ h3 {
   font-size: 13px;
 }
 
-.floor-map {
+.room-programme {
   display: grid;
-  grid-template-columns: 1.2fr 2fr 1fr;
-  grid-template-rows: 150px 180px;
-  gap: 9px;
+  gap: 26px;
   margin-top: 34px;
 }
 
-.floor-zone {
+.room-floor-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px 18px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--feature-hair);
+}
+
+.room-floor-header h3 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 20px;
+}
+
+.room-floor-header span {
+  color: var(--feature-muted);
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.room-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 9px;
+  margin-top: 12px;
+}
+
+.room-tile {
   position: relative;
   display: flex;
   min-width: 0;
   flex-direction: column;
-  justify-content: center;
-  padding: 22px;
+  padding: 18px 18px 16px;
   border: 1px solid var(--feature-hair);
+  border-left: 3px solid var(--feature-hair);
   border-radius: 7px;
   background: var(--feature-panel);
 }
 
-.floor-zone > svg:not(.floor-camera) {
-  margin-bottom: 20px;
+.room-tile > svg {
+  width: 20px;
+  height: 20px;
+  margin-bottom: 14px;
   color: var(--saffron);
 }
 
-.floor-zone .floor-camera {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  width: 15px;
-  height: 15px;
-  color: var(--saffron);
-}
-
-.floor-zone span {
-  margin-top: 5px;
+.room-tile .room-id {
   color: var(--feature-muted);
-  font-family: var(--mono);
   font-size: 10px;
   text-transform: uppercase;
 }
 
-.floor-demo {
-  grid-row: span 2;
-  background: rgba(232, 154, 44, 0.12);
-  border-color: rgba(232, 154, 44, 0.55);
+.room-tile strong {
+  margin-top: 4px;
+  font-size: 15px;
+  line-height: 1.3;
 }
 
-.floor-pods {
-  background: rgba(63, 84, 48, 0.35);
+.room-tile .room-area {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #f4c56e;
 }
 
-.floor-arm,
-.floor-test {
-  background: rgba(196, 74, 42, 0.16);
-  border-color: rgba(196, 74, 42, 0.55);
+.room-tile p {
+  margin: 8px 0 0;
+  color: var(--feature-muted);
+  font-size: 12px;
+  line-height: 1.45;
 }
 
-.floor-compute {
-  grid-column: 2;
+.room-work {
+  border-left-color: #799460;
 }
 
-.floor-map-complete {
-  grid-template-columns: 0.9fr 1.25fr 1.15fr 0.95fr;
-  grid-template-rows: 112px 138px 138px 112px;
+.room-shared {
+  border-left-color: var(--saffron);
+  background: rgba(232, 154, 44, 0.1);
 }
 
-.floor-map-complete .floor-entry {
-  grid-column: 1;
-  grid-row: 1;
+.room-outdoor {
+  border-left-color: #7fb3d5;
 }
 
-.floor-map-complete .floor-demo {
-  grid-column: 1;
-  grid-row: 2 / 5;
+.room-support {
+  border-left-color: rgba(242, 230, 204, 0.35);
 }
 
-.floor-map-complete .floor-prototyping {
-  grid-column: 2;
-  grid-row: 1;
-  background: rgba(214, 191, 146, 0.12);
+.room-programme-note {
+  max-width: 760px;
+  margin: 18px 0 0;
+  color: var(--feature-muted);
+  font-size: 13px;
+  line-height: 1.55;
 }
 
-.floor-map-complete .floor-machine {
-  grid-column: 3;
-  grid-row: 1;
-  background: rgba(196, 74, 42, 0.16);
-  border-color: rgba(196, 74, 42, 0.55);
+.room-programme-note a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--saffron);
 }
 
-.floor-map-complete .floor-pods {
-  grid-column: 2 / 4;
-  grid-row: 2;
-}
-
-.floor-map-complete .floor-electronics {
-  grid-column: 2;
-  grid-row: 3;
-}
-
-.floor-map-complete .floor-storage {
-  grid-column: 3;
-  grid-row: 3;
-  background: rgba(63, 84, 48, 0.28);
-}
-
-.floor-map-complete .floor-arm {
-  grid-column: 4;
-  grid-row: 1 / 3;
-}
-
-.floor-map-complete .floor-test {
-  grid-column: 4;
-  grid-row: 3 / 5;
-}
-
-.floor-map-complete .floor-compute {
-  grid-column: 2 / 4;
-  grid-row: 4;
+.room-programme-note a svg {
+  width: 14px;
+  height: 14px;
 }
 
 .legend-row {
@@ -1038,6 +1033,14 @@ h3 {
 
 .legend-moss {
   background: #799460;
+}
+
+.legend-sky {
+  background: #7fb3d5;
+}
+
+.legend-neutral {
+  background: rgba(242, 230, 204, 0.35);
 }
 
 .process-line,
@@ -5056,37 +5059,8 @@ footer p {
     grid-template-columns: 68px minmax(0, 1fr);
   }
 
-  .floor-map {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: repeat(3, 138px);
-  }
-
-  .floor-demo {
-    grid-row: span 2;
-  }
-
-  .floor-pods {
-    grid-column: 2;
-  }
-
-  .floor-compute {
-    grid-column: span 2;
-  }
-
-  .floor-map-complete {
+  .room-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: none;
-  }
-
-  .floor-map-complete .floor-zone {
-    grid-column: auto;
-    grid-row: auto;
-    min-height: 138px;
-  }
-
-  .floor-map-complete .floor-pods,
-  .floor-map-complete .floor-compute {
-    grid-column: span 2;
   }
 
   .process-line,
@@ -5710,16 +5684,8 @@ footer p {
     height: 52px;
   }
 
-  .floor-map {
+  .room-grid {
     grid-template-columns: 1fr;
-    grid-template-rows: repeat(5, 125px);
-  }
-
-  .floor-demo,
-  .floor-pods,
-  .floor-compute {
-    grid-row: auto;
-    grid-column: auto;
   }
 
   .results-panel .metric-grid {
