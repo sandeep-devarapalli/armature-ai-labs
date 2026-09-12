@@ -1,0 +1,915 @@
+{
+ "revision": "S02",
+ "date": "2026-09-12",
+ "supply": "BESCOM three-phase, 10 kW sanctioned (LT commercial); premises on its own sub-meter",
+ "rooms": [
+  {
+   "id": "GF-01",
+   "floor": "GF",
+   "name": "Four-person cabin",
+   "sqft": 234,
+   "seats": 4,
+   "lux": 300,
+   "fans": 0,
+   "sockets6": 5,
+   "sockets16": 2,
+   "notes": "AC on its own 20 A MCB; 2 duplex desk boards; 1 general 16 A.",
+   "extra": [],
+   "lights": 5,
+   "lights_w": 180,
+   "lamp": "2x2 LED panel 36 W",
+   "fans_w": 0,
+   "exhaust": 0,
+   "seats_w": 380,
+   "ac_units": [
+    "0.8-ton inverter split"
+   ],
+   "ac_w": 800,
+   "ac_run_w": 500,
+   "extra_w": 0,
+   "connected_w": 1360,
+   "typical_w": 874
+  },
+  {
+   "id": "GF-02",
+   "floor": "GF",
+   "name": "Reception and goodies store",
+   "sqft": 90,
+   "seats": 3,
+   "lux": 200,
+   "fans": 1,
+   "sockets6": 5,
+   "sockets16": 1,
+   "notes": "Standing check-in; printer on the 16 A point.",
+   "extra": [
+    {
+     "item": "Display + label printer",
+     "connected_w": 90,
+     "average_w": 40,
+     "feed": "raw",
+     "point": "16A"
+    }
+   ],
+   "lights": 4,
+   "lights_w": 48,
+   "lamp": "LED downlight 12 W",
+   "fans_w": 35,
+   "exhaust": 0,
+   "seats_w": 285,
+   "ac_units": [],
+   "ac_w": 0,
+   "ac_run_w": 0,
+   "extra_w": 90,
+   "connected_w": 458,
+   "typical_w": 303
+  },
+  {
+   "id": "GF-03",
+   "floor": "GF",
+   "name": "Rear sanitary space",
+   "sqft": 68,
+   "seats": 0,
+   "lux": 100,
+   "fans": 0,
+   "exhaust": 1,
+   "sockets6": 1,
+   "sockets16": 0,
+   "notes": "No geyser proposed (each would add 2-3 kW).",
+   "extra": [],
+   "lights": 2,
+   "lights_w": 24,
+   "lamp": "LED downlight 12 W",
+   "fans_w": 0,
+   "seats_w": 0,
+   "ac_units": [],
+   "ac_w": 0,
+   "ac_run_w": 0,
+   "extra_w": 0,
+   "connected_w": 49,
+   "typical_w": 39
+  },
+  {
+   "id": "GF-04",
+   "floor": "GF",
+   "name": "Kitchen",
+   "sqft": 189,
+   "seats": 0,
+   "lux": 200,
+   "fans": 1,
+   "exhaust": 1,
+   "sockets6": 2,
+   "sockets16": 4,
+   "notes": "Four dedicated 16 A points; kettle and microwave on separate MCBs; house rule: not both during an event peak.",
+   "extra": [
+    {
+     "item": "Refrigerator",
+     "connected_w": 300,
+     "average_w": 150,
+     "feed": "raw",
+     "point": "16A"
+    },
+    {
+     "item": "Kettle",
+     "connected_w": 1500,
+     "average_w": 0,
+     "feed": "raw",
+     "point": "16A"
+    },
+    {
+     "item": "Microwave",
+     "connected_w": 1200,
+     "average_w": 0,
+     "feed": "raw",
+     "point": "16A"
+    },
+    {
+     "item": "Water purifier / dispenser (no heating)",
+     "connected_w": 40,
+     "average_w": 40,
+     "feed": "raw",
+     "point": "16A"
+    }
+   ],
+   "lights": 4,
+   "lights_w": 80,
+   "lamp": "LED batten 20 W (IP65 outdoors)",
+   "fans_w": 35,
+   "seats_w": 0,
+   "ac_units": [],
+   "ac_w": 0,
+   "ac_run_w": 0,
+   "extra_w": 3040,
+   "connected_w": 3180,
+   "typical_w": 298
+  },
+  {
+   "id": "GF-06",
+   "floor": "GF",
+   "name": "Stair-side sanitary space",
+   "sqft": 33,
+   "seats": 0,
+   "lux": 100,
+   "fans": 0,
+   "exhaust": 1,
+   "sockets6": 1,
+   "sockets16": 0,
+   "notes": "",
+   "extra": [],
+   "lights": 1,
+   "lights_w": 12,
+   "lamp": "LED downlight 12 W",
+   "fans_w": 0,
+   "seats_w": 0,
+   "ac_units": [],
+   "ac_w": 0,
+   "ac_run_w": 0,
+   "extra_w": 0,
+   "connected_w": 37,
+   "typical_w": 32
+  },
+  {
+   "id": "GF-07",
+   "floor": "GF",
+   "name": "Enclosed booth",
+   "sqft": 45,
+   "seats": 2,
+   "lux": 300,
+   "fans": 0,
+   "sockets6": 2,
+   "sockets16": 0,
+   "notes": "Glass-fronted; shares GF-10 air; small oscillating fan point if needed.",
+   "extra": [],
+   "lights": 3,
+   "lights_w": 36,
+   "lamp": "LED downlight 12 W",
+   "fans_w": 0,
+   "exhaust": 0,
+   "seats_w": 130,
+   "ac_units": [],
+   "ac_w": 0,
+   "ac_run_w": 0,
+   "extra_w": 0,
+   "connected_w": 166,
+   "typical_w": 113
+  },
+  {
+   "id": "GF-08",
+   "floor": "GF",
+   "name": "Balcony cafe",
+   "sqft": 204,
+   "seats": 6,
+   "lux": 100,
+   "fans": 2,
+   "sockets6": 4,
+   "sockets16": 1,
+   "outdoor": true,
+   "notes": "IP44 sockets and IP65 fittings; on an RCBO of its own.",
+   "extra": [],
+   "lights": 3,
+   "lights_w": 60,
+   "lamp": "LED batten 20 W (IP65 outdoors)",
+   "fans_w": 70,
+   "exhaust": 0,
+   "seats_w": 390,
+   "ac_units": [],
+   "ac_w": 0,
+   "ac_run_w": 0,
+   "extra_w": 0,
+   "connected_w": 520,
+   "typical_w": 379
+  },
+  {
+   "id": "GF-09",
+   "floor": "GF",
+   "name": "Lounge and presentation hall",
+   "sqft": 300,
+   "seats": 24,
+   "lux": 250,
+   "fans": 2,
+   "sockets6": 13,
+   "sockets16": 3,
+   "dimmable": true,
+   "notes": "24 audience seats assumed for events (4 lounge chairs day-to-day). Two AC points on 20 A MCBs; AV rack fed from the UPS; 3 audience duplex boards along the walls; projector point at the ceiling opposite the screen wall; PTZ camera facing the screen; mic receiver at the rack.",
+   "extra": [
+    {
+     "item": "Projector (ceiling)",
+     "connected_w": 350,
+     "average_w": 300,
+     "feed": "ups",
+     "point": "6A"
+    },
+    {
+     "item": "Streaming / recording PC + capture",
+     "connected_w": 250,
+     "average_w": 200,
+     "feed": "ups",
+     "point": "6A"
+    },
+    {
+     "item": "Active speakers x2",
+     "connected_w": 120,
+     "average_w": 60,
+     "feed": "ups",
+     "point": "6A"
+    },
+    {
+     "item": "Wireless mic receiver + audio interface",
+     "connected_w": 35,
+     "average_w": 30,
+     "feed": "ups",
+     "point": "6A"
+    },
+    {
+     "item": "PTZ recording camera (PoE)",
+     "connected_w": 20,
+     "average_w": 20,
+     "feed": "ups",
+     "point": "PoE"
+    }
+   ],
+   "lights": 5,
+   "lights_w": 180,
+   "lamp": "2x2 LED panel 36 W",
+   "fans_w": 70,
+   "exhaust": 0,
+   "seats_w": 1560,
+   "ac_units": [
+    "1.5-ton inverter split",
+    "1.5-ton inverter split"
+   ],
+   "ac_w": 3000,
+   "ac_run_w": 2400,
+   "extra_w": 775,
+   "connected_w": 5585,
+   "typical_w": 4280
+  },
+  {
+   "id": "GF-10",
+   "floor": "GF",
+   "name": "Coworking commons",
+   "sqft": 386,
+   "seats": 38,
+   "lux": 300,
+   "fans": 5,
+   "sockets6": 19,
+   "sockets16": 2,
+   "notes": "Three table-mounted power rails (5 duplex each) plus a 4-duplex strip under the window counter; two 16 A general points.",
+   "extra": [],
+   "lights": 7,
+   "lights_w": 252,
+   "lamp": "2x2 LED panel 36 W",
+   "fans_w": 175,
+   "exhaust": 0,
+   "seats_w": 2470,
+   "ac_units": [],
+   "ac_w": 0,
+   "ac_run_w": 0,
+   "extra_w": 0,
+   "connected_w": 2897,
+   "typical_w": 1561
+  },
+  {
+   "id": "FF-01",
+   "floor": "FF",
+   "name": "Rear support / sanitary",
+   "sqft": 85,
+   "seats": 0,
+   "lux": 100,
+   "fans": 0,
+   "exhaust": 1,
+   "sockets6": 1,
+   "sockets16": 0,
+   "notes": "",
+   "extra": [],
+   "lights": 2,
+   "lights_w": 24,
+   "lamp": "LED downlight 12 W",
+   "fans_w": 0,
+   "seats_w": 0,
+   "ac_units": [],
+   "ac_w": 0,
+   "ac_run_w": 0,
+   "extra_w": 0,
+   "connected_w": 49,
+   "typical_w": 39
+  },
+  {
+   "id": "FF-02",
+   "floor": "FF",
+   "name": "Workshop terrace (lab room once enclosed)",
+   "sqft": 260,
+   "seats": 4,
+   "lux": 500,
+   "fans": 2,
+   "exhaust": 1,
+   "sockets6": 10,
+   "sockets16": 9,
+   "notes": "Enclosure is a prerequisite for printers and GPUs (dust, humidity, rain). UPS output DB here: 2 x 16 A GPU, 3 x 16 A printers, 2 x 6 A rack. Raw: bench 6 x 6 A + 2 x 16 A, soldering/extraction 16 A, general 16 A. 500 lux task lighting.",
+   "extra": [
+    {
+     "item": "GPU workstation x2",
+     "connected_w": 1400,
+     "average_w": 1000,
+     "feed": "ups",
+     "point": "16A"
+    },
+    {
+     "item": "3D printers x3 (P1S, A1, one spare bay)",
+     "connected_w": 850,
+     "average_w": 300,
+     "feed": "ups",
+     "point": "16A"
+    },
+    {
+     "item": "Network rack: router, PoE switch (10 cams + PTZ), NVR, NAS",
+     "connected_w": 220,
+     "average_w": 200,
+     "feed": "ups",
+     "point": "6A"
+    },
+    {
+     "item": "Access controller + 6 door locks/readers (12 V via rack)",
+     "connected_w": 108,
+     "average_w": 108,
+     "feed": "ups",
+     "point": "PoE"
+    },
+    {
+     "item": "Soldering station + fume extraction",
+     "connected_w": 180,
+     "average_w": 80,
+     "feed": "raw",
+     "point": "16A"
+    },
+    {
+     "item": "Bench instruments (scope, PSU, meter)",
+     "connected_w": 150,
+     "average_w": 60,
+     "feed": "raw",
+     "point": "6A"
+    }
+   ],
+   "lights": 8,
+   "lights_w": 288,
+   "lamp": "2x2 LED panel 36 W",
+   "fans_w": 70,
+   "seats_w": 380,
+   "ac_units": [],
+   "ac_w": 0,
+   "ac_run_w": 0,
+   "extra_w": 2908,
+   "connected_w": 3671,
+   "typical_w": 2282
+  },
+  {
+   "id": "FF-03",
+   "floor": "FF",
+   "name": "Two- and four-person cabins",
+   "sqft": 228,
+   "seats": 6,
+   "lux": 300,
+   "fans": 0,
+   "sockets6": 7,
+   "sockets16": 4,
+   "notes": "Two cabins: 2-seat (2 duplex) and 4-seat (4 duplex, sliding entrance); one AC and one 16 A general point each.",
+   "extra": [],
+   "lights": 5,
+   "lights_w": 180,
+   "lamp": "2x2 LED panel 36 W",
+   "fans_w": 0,
+   "exhaust": 0,
+   "seats_w": 570,
+   "ac_units": [
+    "0.8-ton inverter split",
+    "0.8-ton inverter split"
+   ],
+   "ac_w": 1600,
+   "ac_run_w": 1000,
+   "extra_w": 0,
+   "connected_w": 2350,
+   "typical_w": 1507
+  },
+  {
+   "id": "FF-04",
+   "floor": "FF",
+   "name": "Stair landing and gallery (twin cabins)",
+   "sqft": 410,
+   "seats": 8,
+   "lux": 300,
+   "fans": 1,
+   "sockets6": 10,
+   "sockets16": 4,
+   "notes": "Two four-table cabins: 4 duplex + AC + 16 A each; landing gets 2 duplex and a fan.",
+   "extra": [],
+   "lights": 8,
+   "lights_w": 288,
+   "lamp": "2x2 LED panel 36 W",
+   "fans_w": 35,
+   "exhaust": 0,
+   "seats_w": 760,
+   "ac_units": [
+    "0.8-ton inverter split",
+    "0.8-ton inverter split"
+   ],
+   "ac_w": 1600,
+   "ac_run_w": 1000,
+   "extra_w": 0,
+   "connected_w": 2683,
+   "typical_w": 1740
+  },
+  {
+   "id": "FF-05",
+   "floor": "FF",
+   "name": "Bathroom",
+   "sqft": 40,
+   "seats": 0,
+   "lux": 100,
+   "fans": 0,
+   "exhaust": 1,
+   "sockets6": 1,
+   "sockets16": 0,
+   "notes": "No geyser proposed.",
+   "extra": [],
+   "lights": 1,
+   "lights_w": 12,
+   "lamp": "LED downlight 12 W",
+   "fans_w": 0,
+   "seats_w": 0,
+   "ac_units": [],
+   "ac_w": 0,
+   "ac_run_w": 0,
+   "extra_w": 0,
+   "connected_w": 37,
+   "typical_w": 32
+  },
+  {
+   "id": "FF-06",
+   "floor": "FF",
+   "name": "Office twin cabins",
+   "sqft": 348,
+   "seats": 8,
+   "lux": 300,
+   "fans": 0,
+   "sockets6": 10,
+   "sockets16": 4,
+   "notes": "Two four-table cabins: 4 duplex + AC + 16 A each; 2 IP44 duplex on the balcony. These are the largest cabins: if the glazing is unshaded, specify 1-ton units here (about +0.15 kW each running).",
+   "extra": [],
+   "lights": 7,
+   "lights_w": 252,
+   "lamp": "2x2 LED panel 36 W",
+   "fans_w": 0,
+   "exhaust": 0,
+   "seats_w": 760,
+   "ac_units": [
+    "0.8-ton inverter split",
+    "0.8-ton inverter split"
+   ],
+   "ac_w": 1600,
+   "ac_run_w": 1000,
+   "extra_w": 0,
+   "connected_w": 2612,
+   "typical_w": 1683
+  }
+ ],
+ "cameras": [
+  {
+   "id": "C1",
+   "floor": "GF",
+   "room": "GF-02",
+   "view": "Main entrance (side C door) from inside reception"
+  },
+  {
+   "id": "C2",
+   "floor": "GF",
+   "room": "GF-02",
+   "view": "Reception desk and commons door"
+  },
+  {
+   "id": "C3",
+   "floor": "GF",
+   "room": "GF-10",
+   "view": "Commons, from the curved front wall toward the tables"
+  },
+  {
+   "id": "C4",
+   "floor": "GF",
+   "room": "GF-09",
+   "view": "Hall wide view including stair foot (separate from the PTZ recording camera)"
+  },
+  {
+   "id": "C5",
+   "floor": "GF",
+   "room": "GF-04",
+   "view": "Kitchen doorway and GF-09 passage"
+  },
+  {
+   "id": "C6",
+   "floor": "GF",
+   "room": "GF-08",
+   "view": "Balcony cafe (IP66 dome)"
+  },
+  {
+   "id": "C7",
+   "floor": "FF",
+   "room": "FF-04",
+   "view": "First-floor landing and gallery void"
+  },
+  {
+   "id": "C8",
+   "floor": "FF",
+   "room": "FF-02",
+   "view": "Workshop: printers, bench and GPU rack"
+  },
+  {
+   "id": "C9",
+   "floor": "GF",
+   "room": "GF-04",
+   "view": "Kitchen / rear service door A3 (added so every access door is covered)"
+  },
+  {
+   "id": "C10",
+   "floor": "FF",
+   "room": "FF-06",
+   "view": "Lower-cabin balcony door A6 and the FF-06 corridor"
+  }
+ ],
+ "access_doors": [
+  {
+   "id": "A1",
+   "floor": "GF",
+   "room": "GF-02",
+   "where": "Main entrance, side C (4 ft door)",
+   "watts": 18
+  },
+  {
+   "id": "A2",
+   "floor": "GF",
+   "room": "GF-10",
+   "where": "Commons street-side door (position to confirm on site)",
+   "watts": 18
+  },
+  {
+   "id": "A3",
+   "floor": "GF",
+   "room": "GF-04",
+   "where": "Kitchen / rear service door (position to confirm on site)",
+   "watts": 18
+  },
+  {
+   "id": "A4",
+   "floor": "FF",
+   "room": "FF-04",
+   "where": "Stair-head door to the first floor",
+   "watts": 18
+  },
+  {
+   "id": "A5",
+   "floor": "FF",
+   "room": "FF-02",
+   "where": "Workshop terrace door",
+   "watts": 18
+  },
+  {
+   "id": "A6",
+   "floor": "FF",
+   "room": "FF-06",
+   "where": "Lower-cabin balcony door",
+   "watts": 18
+  }
+ ],
+ "scenarios": {
+  "design_25": {
+   "items": [
+    [
+     "Cabin ACs, 4 of 7 running at 25 C, 85% simultaneity",
+     1700
+    ],
+    [
+     "Cabin desks, 14 seats at 70%",
+     931
+    ],
+    [
+     "Commons, 11 seats with laptops",
+     715
+    ],
+    [
+     "Reception, booth, cafe (partial)",
+     370
+    ],
+    [
+     "Lighting, 50% of installed (daylight)",
+     958
+    ],
+    [
+     "Fans and exhausts, 80%",
+     512
+    ],
+    [
+     "Workshop: GPUs, printers, rack, bench (average)",
+     1748
+    ],
+    [
+     "Kitchen average (fridge, purifier)",
+     190
+    ],
+    [
+     "Battery chargers at float",
+     300
+    ]
+   ],
+   "total_kw": 7.42
+  },
+  "full_house": {
+   "items": [
+    [
+     "Cabin ACs, 7 x 0.8 t inverter at 25 C, 85% simultaneity",
+     2975
+    ],
+    [
+     "Cabin desks, 26 seats at 70%",
+     1729
+    ],
+    [
+     "Commons, 21 of 38 seats with laptops",
+     1365
+    ],
+    [
+     "Reception, booth, cafe (partial)",
+     564
+    ],
+    [
+     "Lighting, 50% of installed (daylight)",
+     958
+    ],
+    [
+     "Fans and exhausts, 80%",
+     512
+    ],
+    [
+     "Workshop: GPUs, printers, rack, bench (average)",
+     1748
+    ],
+    [
+     "Kitchen average (fridge, purifier; kettle/microwave excluded)",
+     190
+    ],
+    [
+     "Battery chargers at float (UPS + 2 inverters)",
+     300
+    ]
+   ],
+   "total_kw": 10.34
+  },
+  "event": {
+   "items": [
+    [
+     "Hall ACs, 2 x 1.5 t inverter running",
+     2400
+    ],
+    [
+     "Hall AV (projector, PC, audio, camera) average",
+     610
+    ],
+    [
+     "Hall audience laptops, 12 of 24",
+     780
+    ],
+    [
+     "Two cabins still occupied (AC + desks); rule: cabin ACs off by the event start",
+     1532
+    ],
+    [
+     "Commons, 12 seats",
+     780
+    ],
+    [
+     "Lighting, 75% (evening)",
+     1437
+    ],
+    [
+     "Fans and exhausts, 70%",
+     448
+    ],
+    [
+     "Workshop average (GPU job running)",
+     1748
+    ],
+    [
+     "Kitchen average + one kettle cycle allowed",
+     640
+    ],
+    [
+     "Battery chargers at float",
+     300
+    ]
+   ],
+   "total_kw": 10.68
+  },
+  "forbidden_worst": {
+   "items": [
+    [
+     "Cabin ACs, 7 x 0.8 t inverter at 25 C, 85% simultaneity",
+     2975
+    ],
+    [
+     "Cabin desks, 26 seats at 70%",
+     1729
+    ],
+    [
+     "Commons, 21 of 38 seats with laptops",
+     1365
+    ],
+    [
+     "Reception, booth, cafe (partial)",
+     564
+    ],
+    [
+     "Lighting, 50% of installed (daylight)",
+     958
+    ],
+    [
+     "Fans and exhausts, 80%",
+     512
+    ],
+    [
+     "Workshop: GPUs, printers, rack, bench (average)",
+     1748
+    ],
+    [
+     "Kitchen average (fridge, purifier; kettle/microwave excluded)",
+     190
+    ],
+    [
+     "Battery chargers at float (UPS + 2 inverters)",
+     300
+    ],
+    [
+     "Hall ACs + AV + audience (event on top of full house)",
+     3790
+    ],
+    [
+     "Kettle and microwave together",
+     2700
+    ],
+    [
+     "Bulk charging all three battery banks (max charger current)",
+     1900
+    ]
+   ],
+   "total_kw": 18.73
+  },
+  "connected_kw": 25.71
+ },
+ "phases": {
+  "R": [
+   [
+    "GF-01 AC",
+    425.0
+   ],
+   [
+    "FF-04 a/b ACs",
+    850.0
+   ],
+   [
+    "GF lighting + fans",
+    474.0
+   ],
+   [
+    "Commons rails 1-2 (10 of 21 laptops)",
+    650
+   ],
+   [
+    "GF-01 + FF-04 desks",
+    798.0
+   ],
+   [
+    "Hall AC 1 (event only)",
+    0
+   ]
+  ],
+  "Y": [
+   [
+    "FF-03 a/b ACs",
+    850.0
+   ],
+   [
+    "Kitchen",
+    190
+   ],
+   [
+    "Reception, booth, cafe",
+    620
+   ],
+   [
+    "Commons rails 3 + counter (11 laptops)",
+    715
+   ],
+   [
+    "FF lighting + fans",
+    510.0
+   ],
+   [
+    "FF-03 desks",
+    399.0
+   ],
+   [
+    "GF inverter charger (float)",
+    100
+   ],
+   [
+    "Hall AC 2 (event only)",
+    0
+   ]
+  ],
+  "B": [
+   [
+    "FF-06 a/b ACs",
+    850.0
+   ],
+   [
+    "UPS input: workshop + rack + charger float",
+    1848
+   ],
+   [
+    "FF-06 desks",
+    532.0
+   ],
+   [
+    "FF inverter charger (float)",
+    100
+   ]
+  ]
+ },
+ "phase_kw": {
+  "R": 3.2,
+  "Y": 3.38,
+  "B": 3.33
+ },
+ "ups": {
+  "rating_kva": 3.0,
+  "rating_kw_at_pf0_9": 2.7,
+  "connected_w": 3353,
+  "average_w": 2218,
+  "backup_h": 2.0,
+  "energy_needed_kwh": 4.93,
+  "lifepo4_kwh_at_80pct_dod": 6.16,
+  "lifepo4_option": "48 V 120 Ah LiFePO4 (5.8 kWh) minimum; 48 V 150 Ah (7.2 kWh) recommended for headroom",
+  "lead_acid_option": "4 x 12 V 200 Ah tubular at 48 V (9.6 kWh nominal, ~4.8 kWh usable at 50% DoD): meets 2 h only at average load, ~180 kg, needs a ventilated rack",
+  "charger_limit_w": 500,
+  "note": "Connected UPS load (3.25 kW) exceeds a 3 kVA unit; average (2.0 kW) fits. Rule: during an event the AV rides on the UPS while printer starts are held, or step up to 5 kVA."
+ },
+ "inverters": {
+  "GF": {
+   "rating": "2 kVA / 24 V pure sine",
+   "battery": "2 x 12 V 150 Ah tubular (3.6 kWh nominal)",
+   "covers": "GF lights, 8 BLDC fans, reception board, 2 commons duplex per rail",
+   "backup_est_h": 1.7
+  },
+  "FF": {
+   "rating": "1.5 kVA / 24 V pure sine",
+   "battery": "2 x 12 V 150 Ah tubular (3.6 kWh nominal)",
+   "covers": "FF lights, 3 BLDC fans, one duplex per cabin",
+   "backup_est_h": 2.4
+  }
+ }
+}

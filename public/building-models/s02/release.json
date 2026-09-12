@@ -1,0 +1,84 @@
+{
+ "release": "S02",
+ "kind": "electrical-and-setup-plan",
+ "date": "2026-09-12",
+ "root": "/building-models/s02",
+ "status": "planning estimate; not a certified electrical design; positions indicative",
+ "sources": {
+  "groundFloorCad": {
+   "release": "R03",
+   "file": "/building-models/r03/ground-floor.FCStd",
+   "sha256": "3282f8e42579b73b24f097e8b65bad672d5bc2b4dc8d46c486eb163780cff0df"
+  },
+  "firstFloorCad": {
+   "release": "R04",
+   "file": "first-floor.FCStd (building-models-r04 GitHub release)",
+   "sha256": "ad1397f6b855e309b0093e64baf582db559be5b4ebab1e22ef3f428a3b77d5e9"
+  },
+  "decisions": "12 September 2026: three-phase 10 kW; 7 cabins on 0.8-ton inverter splits and the hall on 2 x 1.5-ton; lab equipment in FF-02 once enclosed; 3 kVA online UPS with about 2 h battery; one inverter per floor; hall AV; 10 PoE cameras; at least three access doors per floor"
+ },
+ "method": "Room boundaries and furniture extracted from copies of the source CAD; symbols placed by rule from that geometry (symbols.json); plans rendered from the placement coordinates; native FreeCAD documents rebuilt from the same list with reference shapes copied from the source CAD and freshly reopened (fresh-reopen.json). AI-generated imagery: none.",
+ "supersedes": "S01 room service scenario of 10 September 2026 (historical, retained in buildingRoomServices.json)",
+ "files": [
+  {
+   "path": "electrical-brief.md",
+   "bytes": 17170,
+   "sha256": "0a0f1c3683116573765e7d88043283d4117d78f6871ac06519df8ca9e0078151"
+  },
+  {
+   "path": "first-floor-electrical-symbols.step",
+   "bytes": 589146,
+   "sha256": "95cf3c0def7012518ac2f73aa91f9553785cfbd719ee8953a15defe643d0ace5"
+  },
+  {
+   "path": "first-floor-electrical.FCStd",
+   "bytes": 857924,
+   "sha256": "09d87ba48a64bf2e456178822178f1608d1b07e4be36f0a65bba509402e46b91"
+  },
+  {
+   "path": "first-floor-electrical.png",
+   "bytes": 256958,
+   "sha256": "afcdd8b04ed16a5397fff0649d1717f603f4bee93f5b9e5eded9758d3955c561"
+  },
+  {
+   "path": "first-floor-electrical.svg",
+   "bytes": 55075,
+   "sha256": "55cad7e62ab198cd1cae13e23d3aef98fb5335f157c6bc1ab9f3dfe92583faa8"
+  },
+  {
+   "path": "fresh-reopen.json",
+   "bytes": 931,
+   "sha256": "4e30e7e396e2a5edd65b90b4a6f83f51e875ca58cd67369b2b05a7c3d812f3a1"
+  },
+  {
+   "path": "ground-floor-electrical-symbols.step",
+   "bytes": 543791,
+   "sha256": "afd055300a1964fe678f906da6ead1045360f9965a6d4ea8209906e6a20adabf"
+  },
+  {
+   "path": "ground-floor-electrical.FCStd",
+   "bytes": 285761,
+   "sha256": "f680270b0082d53ec012e8c70cd797e070571272a8b694cb4ad1e366a700b323"
+  },
+  {
+   "path": "ground-floor-electrical.png",
+   "bytes": 270551,
+   "sha256": "0f7af4d6e0ceea3940f449aebc28977e68c213525a36198b7da64731365ea74e"
+  },
+  {
+   "path": "ground-floor-electrical.svg",
+   "bytes": 36714,
+   "sha256": "6244e2db532ca8d16e39585cbe829cc2b6f513003a896cf5c9b57adb3e6835b2"
+  },
+  {
+   "path": "schedule.json",
+   "bytes": 18166,
+   "sha256": "b70e80b9c8630cfca7159aa842627d0b860efad17092c84bece1bc7a05a44f10"
+  },
+  {
+   "path": "symbols.json",
+   "bytes": 34931,
+   "sha256": "c77c9a6fcc815590a5f1170849bac17e8b1807d519e97e61728a9eed3ef80b2e"
+  }
+ ]
+}

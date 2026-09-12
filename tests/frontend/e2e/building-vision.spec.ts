@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import release from "../../../src/data/buildingModelRelease.json" with { type: "json" };
+import electrical from "../../../src/data/buildingElectricalS02.json" with { type: "json" };
 
 test("R04 updates FF03 while retaining R03 previews and lazy floor models", async ({ page }, testInfo) => {
   test.setTimeout(120_000);
@@ -93,4 +94,56 @@ test("building vision shows current layouts with a simple gallery and full conta
   await expect(footer).toContainText("1490, 11th Cross, 20th Main, 1st Sector, HSR Layout, Bengaluru – 560034, Karnataka.");
   await expect(footer.getByRole("link", { name: "hello@armatureailabs.com" })).toHaveAttribute("href", "mailto:hello@armatureailabs.com");
   expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
+});
+
+test("S02 electrical and setup plan publishes both floors with schedules and native downloads", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.goto("/building-vision/");
+  await page.getByRole("link", { name: "Electrical and setup plan", exact: true }).click();
+  const section = page.locator("#electrical-plan");
+  await expect(section.getByRole("heading", { name: "Electrical and setup plan.", exact: true })).toBeVisible();
+  await expect(section).toContainText("Not a certified electrical design");
+  await expect(section).toContainText(`${electrical.scenarios[0].kw} kW`);
+  await expect(section).toContainText(`${electrical.totals.sockets6} × 6 A · ${electrical.totals.sockets16} × 16 A`);
+  await expect(section).toContainText(`${electrical.totals.cameras} cameras, ${electrical.totals.accessDoors} access doors`);
+  const floors = [["Ground floor", "ground", "GF"], ["First floor", "first", "FF"]] as const;
+  for (const [label, key, prefix] of floors) {
+    const tab = section.getByRole("button", { name: `${label} electrical plan`, exact: true });
+    await tab.click();
+    await expect(tab).toHaveAttribute("aria-pressed", "true");
+    const link = section.getByRole("link", { name: `Open the ${label.toLowerCase()} electrical plan`, exact: true });
+    await expect(link).toHaveAttribute("href", electrical.plans[key].svg);
+    const image = link.locator("img");
+    await image.scrollIntoViewIfNeeded();
+    await expect.poll(() => image.evaluate((node) => (node as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+    const bounds = await image.boundingBox();
+    expect(bounds!.x).toBeGreaterThanOrEqual(0);
+    expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(page.viewportSize()!.width + 1);
+    const rows = section.locator(".electrical-table tbody tr");
+    await expect(rows).toHaveCount(electrical.rooms.filter((room) => room.floor === prefix).length);
+    await expect(section.locator(".electrical-table caption")).toHaveText(`${label} schedule per room`);
+  }
+  const workshop = electrical.rooms.find((room) => room.id === "FF-02")!;
+  const workshopRow = section.locator(".electrical-table tbody tr").filter({ hasText: "FF-02" });
+  await expect(workshopRow.locator("td").nth(5)).toHaveText(String(workshop.sockets16));
+  await expect(workshopRow.locator("td").nth(6)).toHaveText(String(workshop.typicalW));
+  for (const [label, href] of [
+    ["Ground floor · FreeCAD electrical", electrical.downloads.groundCad],
+    ["First floor · FreeCAD electrical", electrical.downloads.firstCad],
+    ["Ground floor · STEP symbols", electrical.downloads.groundStep],
+    ["First floor · STEP symbols", electrical.downloads.firstStep],
+    ["Contractor brief · Markdown", electrical.downloads.brief],
+    ["Schedule · JSON", electrical.downloads.schedule],
+    ["S02 manifest and checksums", electrical.downloads.manifest]
+  ] as const) await expect(section.getByRole("link", { name: label, exact: true })).toHaveAttribute("href", href);
+  const manifest = await page.request.get(electrical.downloads.manifest);
+  expect(manifest.ok()).toBe(true);
+  expect((await manifest.json()).release).toBe("S02");
+  await section.getByText("Load scenarios against 10 kW", { exact: true }).click();
+  await expect(section.getByText("Phases at the design case.", { exact: true })).toBeVisible();
+  await section.getByText("Backup power and house rules", { exact: true }).click();
+  await expect(section).toContainText("3 kVA online double-conversion");
+  expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
+  expect(errors).toEqual([]);
 });

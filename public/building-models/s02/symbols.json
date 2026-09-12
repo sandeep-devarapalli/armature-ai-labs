@@ -1,0 +1,2566 @@
+{
+"GF": [
+{
+"kind": "light",
+"x": 6395,
+"y": 687,
+"label": "",
+"room": "GF-01",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": 6395,
+"y": 2682,
+"label": "",
+"room": "GF-01",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": 4559,
+"y": 687,
+"label": "",
+"room": "GF-01",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": 8230,
+"y": 687,
+"label": "",
+"room": "GF-01",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": 4559,
+"y": 2682,
+"label": "",
+"room": "GF-01",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -4461,
+"y": -1680,
+"label": "",
+"room": "GF-02",
+"rating": "LED downlight 12 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -4461,
+"y": -258,
+"label": "",
+"room": "GF-02",
+"rating": "LED downlight 12 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -5934,
+"y": -1680,
+"label": "",
+"room": "GF-02",
+"rating": "LED downlight 12 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -5934,
+"y": -258,
+"label": "",
+"room": "GF-02",
+"rating": "LED downlight 12 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "fan",
+"x": -5197,
+"y": -969,
+"label": "",
+"room": "GF-02",
+"rating": "BLDC 35 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": 8291,
+"y": 4575,
+"label": "",
+"room": "GF-03",
+"rating": "LED downlight 12 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": 6559,
+"y": 4575,
+"label": "",
+"room": "GF-03",
+"rating": "LED downlight 12 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "exhaust",
+"x": 9152,
+"y": 4567,
+"label": "",
+"room": "GF-03",
+"rating": "",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -2962,
+"y": 3710,
+"label": "",
+"room": "GF-04",
+"rating": "LED batten 20 W (IP65 outdoors)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -5401,
+"y": 3710,
+"label": "",
+"room": "GF-04",
+"rating": "LED batten 20 W (IP65 outdoors)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -2962,
+"y": 5514,
+"label": "",
+"room": "GF-04",
+"rating": "LED batten 20 W (IP65 outdoors)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -5401,
+"y": 5514,
+"label": "",
+"room": "GF-04",
+"rating": "LED batten 20 W (IP65 outdoors)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "fan",
+"x": -4181,
+"y": 4612,
+"label": "",
+"room": "GF-04",
+"rating": "BLDC 35 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "exhaust",
+"x": -4181,
+"y": 2809,
+"label": "",
+"room": "GF-04",
+"rating": "",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": 4681,
+"y": 4436,
+"label": "",
+"room": "GF-06",
+"rating": "LED downlight 12 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "exhaust",
+"x": 4677,
+"y": 3674,
+"label": "",
+"room": "GF-06",
+"rating": "",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -3115,
+"y": 2235,
+"label": "",
+"room": "GF-07",
+"rating": "LED downlight 12 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -2200,
+"y": 2235,
+"label": "",
+"room": "GF-07",
+"rating": "LED downlight 12 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -3115,
+"y": 1087,
+"label": "",
+"room": "GF-07",
+"rating": "LED downlight 12 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": 5360,
+"y": -1411,
+"label": "",
+"room": "GF-08",
+"rating": "LED batten 20 W (IP65 outdoors)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": 8109,
+"y": -1411,
+"label": "",
+"room": "GF-08",
+"rating": "LED batten 20 W (IP65 outdoors)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": 5360,
+"y": -3665,
+"label": "",
+"room": "GF-08",
+"rating": "LED batten 20 W (IP65 outdoors)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "fan",
+"x": 5511,
+"y": -2539,
+"label": "",
+"room": "GF-08",
+"rating": "BLDC 35 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "fan",
+"x": 7958,
+"y": -2539,
+"label": "",
+"room": "GF-08",
+"rating": "BLDC 35 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -390,
+"y": 2308,
+"label": "",
+"room": "GF-09",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": 2315,
+"y": 2308,
+"label": "",
+"room": "GF-09",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -390,
+"y": 580,
+"label": "",
+"room": "GF-09",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -390,
+"y": 4035,
+"label": "",
+"room": "GF-09",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": 2315,
+"y": 580,
+"label": "",
+"room": "GF-09",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "fan",
+"x": 961,
+"y": 1162,
+"label": "",
+"room": "GF-09",
+"rating": "BLDC 35 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "fan",
+"x": 961,
+"y": 3452,
+"label": "",
+"room": "GF-09",
+"rating": "BLDC 35 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": 137,
+"y": -2226,
+"label": "",
+"room": "GF-10",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": 137,
+"y": -4013,
+"label": "",
+"room": "GF-10",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": 137,
+"y": -440,
+"label": "",
+"room": "GF-10",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -2437,
+"y": -2226,
+"label": "",
+"room": "GF-10",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": 2710,
+"y": -2226,
+"label": "",
+"room": "GF-10",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -2437,
+"y": -4013,
+"label": "",
+"room": "GF-10",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -2437,
+"y": -440,
+"label": "",
+"room": "GF-10",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "fan",
+"x": 137,
+"y": -3418,
+"label": "",
+"room": "GF-10",
+"rating": "BLDC 35 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "fan",
+"x": 137,
+"y": -1043,
+"label": "",
+"room": "GF-10",
+"rating": "BLDC 35 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "fan",
+"x": -2237,
+"y": -3418,
+"label": "",
+"room": "GF-10",
+"rating": "BLDC 35 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "fan",
+"x": -2237,
+"y": -1043,
+"label": "",
+"room": "GF-10",
+"rating": "BLDC 35 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "fan",
+"x": 2510,
+"y": -3418,
+"label": "",
+"room": "GF-10",
+"rating": "BLDC 35 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "ac_in",
+"x": 8888,
+"y": 1652,
+"label": "",
+"room": "GF-01",
+"rating": "0.8-ton inverter",
+"feed": "raw",
+"note": "indoor unit high on wall"
+},
+{
+"kind": "ac_out",
+"x": 9588,
+"y": 1643,
+"label": "",
+"room": "GF-01",
+"rating": "0.8-ton inverter",
+"feed": "raw",
+"note": "outdoor unit on bracket outside"
+},
+{
+"kind": "socket16",
+"x": 9218,
+"y": 1650,
+"label": "",
+"room": "GF-01",
+"rating": "16 A AC point (20 A MCB)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket16",
+"x": 3758,
+"y": 3608,
+"label": "",
+"room": "GF-01",
+"rating": "16 A general",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "data",
+"x": 4008,
+"y": 3608,
+"label": "",
+"room": "GF-01",
+"rating": "Cat6 outlet",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "db",
+"x": -6321,
+"y": 104,
+"label": "MAIN DB + DB-G",
+"room": "GF-02",
+"rating": "",
+"feed": "raw",
+"note": "40 A TPN isolator, SPD T2, 32 A TPN MCB, RCCBs, energy monitor"
+},
+{
+"kind": "inverter",
+"x": -6321,
+"y": -446,
+"label": "INV-G 2 kVA",
+"room": "GF-02",
+"rating": "",
+"feed": "raw",
+"note": "2 x 150 Ah tubular, ventilated cabinet"
+},
+{
+"kind": "socket6",
+"x": -5771,
+"y": 304,
+"label": "",
+"room": "GF-02",
+"rating": "6 A duplex (staff)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": -5071,
+"y": 304,
+"label": "",
+"room": "GF-02",
+"rating": "6 A duplex (staff)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": -4371,
+"y": 304,
+"label": "",
+"room": "GF-02",
+"rating": "6 A duplex (staff)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": -3874,
+"y": -446,
+"label": "",
+"room": "GF-02",
+"rating": "6 A (display)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": -3874,
+"y": -1491,
+"label": "",
+"room": "GF-02",
+"rating": "6 A (lamp)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket16",
+"x": -3874,
+"y": -46,
+"label": "",
+"room": "GF-02",
+"rating": "16 A (label printer)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "data",
+"x": -5471,
+"y": 54,
+"label": "",
+"room": "GF-02",
+"rating": "Cat6 x2 (desk, display)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "access",
+"x": -5197,
+"y": -2391,
+"label": "A1",
+"room": "GF-02",
+"rating": "",
+"feed": "raw",
+"note": "Main entrance: maglock + reader + contact + exit light"
+},
+{
+"kind": "camera",
+"x": -3924,
+"y": -2191,
+"label": "C1",
+"room": "GF-02",
+"rating": "",
+"feed": "raw",
+"note": "entrance door"
+},
+{
+"kind": "camera",
+"x": -6471,
+"y": -2191,
+"label": "C2",
+"room": "GF-02",
+"rating": "",
+"feed": "raw",
+"note": "reception desk + commons door"
+},
+{
+"kind": "socket6",
+"x": 7429,
+"y": 5370,
+"label": "",
+"room": "GF-03",
+"rating": "6 A (shaver/cleaner)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": 4684,
+"y": 5078,
+"label": "",
+"room": "GF-06",
+"rating": "6 A (shaver/cleaner)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket16",
+"x": -5920,
+"y": 2959,
+"label": "",
+"room": "GF-04",
+"rating": "16 A fridge",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket16",
+"x": -4820,
+"y": 2959,
+"label": "",
+"room": "GF-04",
+"rating": "16 A kettle",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket16",
+"x": -3720,
+"y": 2959,
+"label": "",
+"room": "GF-04",
+"rating": "16 A microwave",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket16",
+"x": -2620,
+"y": 2959,
+"label": "",
+"room": "GF-04",
+"rating": "16 A purifier",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": -1893,
+"y": 4309,
+"label": "",
+"room": "GF-04",
+"rating": "6 A duplex",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": -6470,
+"y": 4309,
+"label": "",
+"room": "GF-04",
+"rating": "6 A duplex",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "camera",
+"x": -1943,
+"y": 3009,
+"label": "C5",
+"room": "GF-04",
+"rating": "",
+"feed": "raw",
+"note": "kitchen doorway + GF-09 passage"
+},
+{
+"kind": "access",
+"x": -2648,
+"y": 6416,
+"label": "A3",
+"room": "GF-04",
+"rating": "",
+"feed": "raw",
+"note": "rear service door: position to confirm on site"
+},
+{
+"kind": "camera",
+"x": -6420,
+"y": 6216,
+"label": "C9",
+"room": "GF-04",
+"rating": "",
+"feed": "raw",
+"note": "rear door A3"
+},
+{
+"kind": "socket6",
+"x": -3452,
+"y": 1661,
+"label": "",
+"room": "GF-07",
+"rating": "6 A duplex",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": -1863,
+"y": 1661,
+"label": "",
+"room": "GF-07",
+"rating": "6 A duplex",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": 4785,
+"y": -435,
+"label": "",
+"room": "GF-08",
+"rating": "6 A IP44",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": 5985,
+"y": -435,
+"label": "",
+"room": "GF-08",
+"rating": "6 A IP44",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": 7185,
+"y": -435,
+"label": "",
+"room": "GF-08",
+"rating": "6 A IP44",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": 8385,
+"y": -435,
+"label": "",
+"room": "GF-08",
+"rating": "6 A IP44",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket16",
+"x": 9334,
+"y": -1485,
+"label": "",
+"room": "GF-08",
+"rating": "16 A IP44 (bar)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "camera",
+"x": 4235,
+"y": -535,
+"label": "C6",
+"room": "GF-08",
+"rating": "",
+"feed": "raw",
+"note": "IP66 dome"
+},
+{
+"kind": "access",
+"x": 9484,
+"y": -1785,
+"label": "A2",
+"room": "GF-08",
+"rating": "",
+"feed": "raw",
+"note": "balcony external gate: position to confirm on site"
+},
+{
+"kind": "ac_in",
+"x": 354,
+"y": 4647,
+"label": "",
+"room": "GF-09",
+"rating": "1.5-ton inverter",
+"feed": "raw",
+"note": "indoor unit high on wall"
+},
+{
+"kind": "ac_out",
+"x": 180,
+"y": 5325,
+"label": "",
+"room": "GF-09",
+"rating": "1.5-ton inverter",
+"feed": "raw",
+"note": "outdoor unit on bracket outside"
+},
+{
+"kind": "socket16",
+"x": 522,
+"y": 4773,
+"label": "",
+"room": "GF-09",
+"rating": "16 A AC point (20 A MCB)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "ac_in",
+"x": -1137,
+"y": 4708,
+"label": "",
+"room": "GF-09",
+"rating": "1.5-ton inverter",
+"feed": "raw",
+"note": "indoor unit high on wall"
+},
+{
+"kind": "ac_out",
+"x": -1596,
+"y": 5236,
+"label": "",
+"room": "GF-09",
+"rating": "1.5-ton inverter",
+"feed": "raw",
+"note": "outdoor unit on bracket outside"
+},
+{
+"kind": "socket16",
+"x": -1022,
+"y": 4806,
+"label": "",
+"room": "GF-09",
+"rating": "16 A AC point (20 A MCB)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "avrack",
+"x": -1443,
+"y": 17,
+"label": "AV RACK (UPS)",
+"room": "GF-09",
+"rating": "",
+"feed": "raw",
+"note": "mic receiver, audio interface, streaming PC, 4 x 6 A UPS points"
+},
+{
+"kind": "projector",
+"x": 962,
+"y": 617,
+"label": "PJ",
+"room": "GF-09",
+"rating": "6 A UPS (ceiling)",
+"feed": "raw",
+"note": "throws north to the screen wall by the stair"
+},
+{
+"kind": "ptz",
+"x": 962,
+"y": 117,
+"label": "PTZ",
+"room": "GF-09",
+"rating": "",
+"feed": "raw",
+"note": "recording camera facing the screen, PoE"
+},
+{
+"kind": "speaker",
+"x": -1443,
+"y": 4298,
+"label": "SP",
+"room": "GF-09",
+"rating": "",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "speaker",
+"x": 3367,
+"y": 4298,
+"label": "SP",
+"room": "GF-09",
+"rating": "",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "screen",
+"x": 962,
+"y": 4778,
+"label": "SCREEN",
+"room": "GF-09",
+"rating": "",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": -1593,
+"y": 917,
+"label": "",
+"room": "GF-09",
+"rating": "6 A duplex (audience)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": -1593,
+"y": 2017,
+"label": "",
+"room": "GF-09",
+"rating": "6 A duplex (audience)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": -1593,
+"y": 3117,
+"label": "",
+"room": "GF-09",
+"rating": "6 A duplex (audience)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": 3517,
+"y": 917,
+"label": "",
+"room": "GF-09",
+"rating": "6 A duplex (audience)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": 3517,
+"y": 2017,
+"label": "",
+"room": "GF-09",
+"rating": "6 A duplex (audience)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": 3517,
+"y": 3117,
+"label": "",
+"room": "GF-09",
+"rating": "6 A duplex (audience)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket16",
+"x": -1593,
+"y": 4598,
+"label": "",
+"room": "GF-09",
+"rating": "16 A general",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "camera",
+"x": 3467,
+"y": -83,
+"label": "C4",
+"room": "GF-09",
+"rating": "",
+"feed": "raw",
+"note": "hall wide + stair foot"
+},
+{
+"kind": "data",
+"x": -1143,
+"y": 17,
+"label": "",
+"room": "GF-09",
+"rating": "Cat6 x3 (rack, PTZ, PC)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "rail",
+"x": -1800,
+"y": -2798,
+"label": "",
+"room": "GF-10",
+"rating": "6 A duplex on table rail 1",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "rail",
+"x": -1800,
+"y": -2417,
+"label": "",
+"room": "GF-10",
+"rating": "6 A duplex on table rail 1",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "rail",
+"x": -1800,
+"y": -2036,
+"label": "",
+"room": "GF-10",
+"rating": "6 A duplex on table rail 1",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "rail",
+"x": -1800,
+"y": -1655,
+"label": "",
+"room": "GF-10",
+"rating": "6 A duplex on table rail 1",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "rail",
+"x": -1800,
+"y": -1274,
+"label": "",
+"room": "GF-10",
+"rating": "6 A duplex on table rail 1",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "rail",
+"x": 100,
+"y": -2798,
+"label": "",
+"room": "GF-10",
+"rating": "6 A duplex on table rail 2",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "rail",
+"x": 100,
+"y": -2417,
+"label": "",
+"room": "GF-10",
+"rating": "6 A duplex on table rail 2",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "rail",
+"x": 100,
+"y": -2036,
+"label": "",
+"room": "GF-10",
+"rating": "6 A duplex on table rail 2",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "rail",
+"x": 100,
+"y": -1655,
+"label": "",
+"room": "GF-10",
+"rating": "6 A duplex on table rail 2",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "rail",
+"x": 100,
+"y": -1274,
+"label": "",
+"room": "GF-10",
+"rating": "6 A duplex on table rail 2",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "rail",
+"x": 1900,
+"y": -2798,
+"label": "",
+"room": "GF-10",
+"rating": "6 A duplex on table rail 3",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "rail",
+"x": 1900,
+"y": -2417,
+"label": "",
+"room": "GF-10",
+"rating": "6 A duplex on table rail 3",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "rail",
+"x": 1900,
+"y": -2036,
+"label": "",
+"room": "GF-10",
+"rating": "6 A duplex on table rail 3",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "rail",
+"x": 1900,
+"y": -1655,
+"label": "",
+"room": "GF-10",
+"rating": "6 A duplex on table rail 3",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "rail",
+"x": 1900,
+"y": -1274,
+"label": "",
+"room": "GF-10",
+"rating": "6 A duplex on table rail 3",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": -2714,
+"y": -2958,
+"label": "",
+"room": "GF-10",
+"rating": "6 A duplex under counter",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": -814,
+"y": -2958,
+"label": "",
+"room": "GF-10",
+"rating": "6 A duplex under counter",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": 1087,
+"y": -2958,
+"label": "",
+"room": "GF-10",
+"rating": "6 A duplex under counter",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": 2987,
+"y": -2958,
+"label": "",
+"room": "GF-10",
+"rating": "6 A duplex under counter",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket16",
+"x": -3574,
+"y": 54,
+"label": "",
+"room": "GF-10",
+"rating": "16 A general",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket16",
+"x": 3847,
+"y": -2406,
+"label": "",
+"room": "GF-10",
+"rating": "16 A general",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "camera",
+"x": 137,
+"y": -4656,
+"label": "C3",
+"room": "GF-10",
+"rating": "",
+"feed": "raw",
+"note": "from the curved front wall toward the tables"
+},
+{
+"kind": "data",
+"x": -3574,
+"y": -346,
+"label": "",
+"room": "GF-10",
+"rating": "Cat6 x2 (AP, spare)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "ap",
+"x": 137,
+"y": -2226,
+"label": "Wi-Fi AP",
+"room": "GF-10",
+"rating": "",
+"feed": "raw",
+"note": ""
+}
+],
+"FF": [
+{
+"kind": "light",
+"x": 6410,
+"y": 4428,
+"label": "",
+"room": "FF-01",
+"rating": "LED downlight 12 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": 8087,
+"y": 4428,
+"label": "",
+"room": "FF-01",
+"rating": "LED downlight 12 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "exhaust",
+"x": 7248,
+"y": 5610,
+"label": "",
+"room": "FF-01",
+"rating": "",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -5093,
+"y": 2931,
+"label": "",
+"room": "FF-03",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -2758,
+"y": 2931,
+"label": "",
+"room": "FF-03",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -5093,
+"y": 1094,
+"label": "",
+"room": "FF-03",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -2758,
+"y": 1094,
+"label": "",
+"room": "FF-03",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -5093,
+"y": 4767,
+"label": "",
+"room": "FF-03",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -16,
+"y": -207,
+"label": "",
+"room": "FF-04",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": 1468,
+"y": -207,
+"label": "",
+"room": "FF-04",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -16,
+"y": 3197,
+"label": "",
+"room": "FF-04",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": 1468,
+"y": 3197,
+"label": "",
+"room": "FF-04",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -1499,
+"y": -207,
+"label": "",
+"room": "FF-04",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": 2951,
+"y": -207,
+"label": "",
+"room": "FF-04",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -1499,
+"y": 3197,
+"label": "",
+"room": "FF-04",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": 2951,
+"y": 3197,
+"label": "",
+"room": "FF-04",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "fan",
+"x": -16,
+"y": 1494,
+"label": "",
+"room": "FF-04",
+"rating": "BLDC 35 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -3100,
+"y": 5025,
+"label": "",
+"room": "FF-05",
+"rating": "LED downlight 12 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "exhaust",
+"x": -3100,
+"y": 5686,
+"label": "",
+"room": "FF-05",
+"rating": "",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": 5231,
+"y": 1180,
+"label": "",
+"room": "FF-06",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": 5231,
+"y": 2952,
+"label": "",
+"room": "FF-06",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": 8307,
+"y": 1180,
+"label": "",
+"room": "FF-06",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": 5231,
+"y": -591,
+"label": "",
+"room": "FF-06",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": 8307,
+"y": 2952,
+"label": "",
+"room": "FF-06",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": 8307,
+"y": -591,
+"label": "",
+"room": "FF-06",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": 5231,
+"y": 4724,
+"label": "",
+"room": "FF-06",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -6124,
+"y": -2961,
+"label": "",
+"room": "FF-02",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -4524,
+"y": -2961,
+"label": "",
+"room": "FF-02",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -6124,
+"y": -870,
+"label": "",
+"room": "FF-02",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -7724,
+"y": -2961,
+"label": "",
+"room": "FF-02",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -4524,
+"y": -870,
+"label": "",
+"room": "FF-02",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -7724,
+"y": -870,
+"label": "",
+"room": "FF-02",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -6124,
+"y": -5052,
+"label": "",
+"room": "FF-02",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": -4524,
+"y": -5052,
+"label": "",
+"room": "FF-02",
+"rating": "2x2 LED panel 36 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "fan",
+"x": -6124,
+"y": -1542,
+"label": "",
+"room": "FF-02",
+"rating": "BLDC 35 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "fan",
+"x": -6124,
+"y": -4379,
+"label": "",
+"room": "FF-02",
+"rating": "BLDC 35 W",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "exhaust",
+"x": -3724,
+"y": -2957,
+"label": "",
+"room": "FF-02",
+"rating": "",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": -6169,
+"y": 5079,
+"label": "",
+"room": "FF-03",
+"rating": "6 A duplex",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": -4499,
+"y": 5079,
+"label": "",
+"room": "FF-03",
+"rating": "6 A duplex",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": -6045,
+"y": 2067,
+"label": "",
+"room": "FF-03",
+"rating": "6 A duplex",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": -3701,
+"y": 294,
+"label": "",
+"room": "FF-03",
+"rating": "6 A duplex",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": -1761,
+"y": 2140,
+"label": "",
+"room": "FF-03",
+"rating": "6 A duplex",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": -2060,
+"y": 2121,
+"label": "",
+"room": "FF-03",
+"rating": "6 A duplex",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "ac_in",
+"x": -5286,
+"y": 5455,
+"label": "",
+"room": "FF-03",
+"rating": "0.8-ton inverter (cabin a)",
+"feed": "raw",
+"note": "1-ton option for FF-06"
+},
+{
+"kind": "ac_out",
+"x": -5558,
+"y": 6100,
+"label": "",
+"room": "FF-03",
+"rating": "outdoor unit",
+"feed": "raw",
+"note": "bracket on exterior wall"
+},
+{
+"kind": "socket16",
+"x": -4986,
+"y": 5455,
+"label": "",
+"room": "FF-03",
+"rating": "16 A AC point (20 A MCB)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket16",
+"x": -5336,
+"y": 5875,
+"label": "",
+"room": "FF-03",
+"rating": "16 A general (cabin a)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "data",
+"x": -5336,
+"y": 5275,
+"label": "",
+"room": "FF-03",
+"rating": "Cat6 outlet",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "ac_in",
+"x": -5919,
+"y": 2071,
+"label": "",
+"room": "FF-03",
+"rating": "0.8-ton inverter (cabin b)",
+"feed": "raw",
+"note": "1-ton option for FF-06"
+},
+{
+"kind": "ac_out",
+"x": -6596,
+"y": 1891,
+"label": "",
+"room": "FF-03",
+"rating": "outdoor unit",
+"feed": "raw",
+"note": "bracket on exterior wall"
+},
+{
+"kind": "socket16",
+"x": -5619,
+"y": 2071,
+"label": "",
+"room": "FF-03",
+"rating": "16 A AC point (20 A MCB)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket16",
+"x": -1761,
+"y": 2450,
+"label": "",
+"room": "FF-03",
+"rating": "16 A general (cabin b)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "data",
+"x": -1761,
+"y": 1850,
+"label": "",
+"room": "FF-03",
+"rating": "Cat6 outlet",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": -1482,
+"y": 291,
+"label": "",
+"room": "FF-04",
+"rating": "6 A duplex",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": -1182,
+"y": 272,
+"label": "",
+"room": "FF-04",
+"rating": "6 A duplex",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": -1493,
+"y": 1016,
+"label": "",
+"room": "FF-04",
+"rating": "6 A duplex",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": -1193,
+"y": 996,
+"label": "",
+"room": "FF-04",
+"rating": "6 A duplex",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": 3575,
+"y": 563,
+"label": "",
+"room": "FF-04",
+"rating": "6 A duplex",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": 3275,
+"y": 563,
+"label": "",
+"room": "FF-04",
+"rating": "6 A duplex",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": 3573,
+"y": 1296,
+"label": "",
+"room": "FF-04",
+"rating": "6 A duplex",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": 3273,
+"y": 1296,
+"label": "",
+"room": "FF-04",
+"rating": "6 A duplex",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "ac_in",
+"x": -2418,
+"y": -1464,
+"label": "",
+"room": "FF-04",
+"rating": "0.8-ton inverter (cabin a)",
+"feed": "raw",
+"note": "1-ton option for FF-06"
+},
+{
+"kind": "ac_out",
+"x": -2946,
+"y": -1923,
+"label": "",
+"room": "FF-04",
+"rating": "outdoor unit",
+"feed": "raw",
+"note": "bracket on exterior wall"
+},
+{
+"kind": "socket16",
+"x": -2118,
+"y": -1464,
+"label": "",
+"room": "FF-04",
+"rating": "16 A AC point (20 A MCB)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket16",
+"x": -1486,
+"y": 945,
+"label": "",
+"room": "FF-04",
+"rating": "16 A general (cabin a)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "data",
+"x": -1486,
+"y": 345,
+"label": "",
+"room": "FF-04",
+"rating": "Cat6 outlet",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "ac_in",
+"x": 2693,
+"y": -1482,
+"label": "",
+"room": "FF-04",
+"rating": "0.8-ton inverter (cabin b)",
+"feed": "raw",
+"note": "1-ton option for FF-06"
+},
+{
+"kind": "ac_out",
+"x": 3121,
+"y": -2037,
+"label": "",
+"room": "FF-04",
+"rating": "outdoor unit",
+"feed": "raw",
+"note": "bracket on exterior wall"
+},
+{
+"kind": "socket16",
+"x": 2993,
+"y": -1482,
+"label": "",
+"room": "FF-04",
+"rating": "16 A AC point (20 A MCB)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket16",
+"x": 3573,
+"y": 1230,
+"label": "",
+"room": "FF-04",
+"rating": "16 A general (cabin b)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "data",
+"x": 3573,
+"y": 630,
+"label": "",
+"room": "FF-04",
+"rating": "Cat6 outlet",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": 7171,
+"y": 3138,
+"label": "",
+"room": "FF-06",
+"rating": "6 A duplex",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": 7904,
+"y": 3157,
+"label": "",
+"room": "FF-06",
+"rating": "6 A duplex",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": 9726,
+"y": 1744,
+"label": "",
+"room": "FF-06",
+"rating": "6 A duplex",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": 9731,
+"y": 2482,
+"label": "",
+"room": "FF-06",
+"rating": "6 A duplex",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": 5949,
+"y": -1358,
+"label": "",
+"room": "FF-06",
+"rating": "6 A duplex",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": 6680,
+"y": -1358,
+"label": "",
+"room": "FF-06",
+"rating": "6 A duplex",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": 9124,
+"y": -49,
+"label": "",
+"room": "FF-06",
+"rating": "6 A duplex",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": 8825,
+"y": -48,
+"label": "",
+"room": "FF-06",
+"rating": "6 A duplex",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "ac_in",
+"x": 7015,
+"y": -1234,
+"label": "",
+"room": "FF-06",
+"rating": "0.8-ton inverter (cabin a)",
+"feed": "raw",
+"note": "1-ton option for FF-06"
+},
+{
+"kind": "ac_out",
+"x": 7180,
+"y": -1914,
+"label": "",
+"room": "FF-06",
+"rating": "outdoor unit",
+"feed": "raw",
+"note": "bracket on exterior wall"
+},
+{
+"kind": "socket16",
+"x": 7315,
+"y": -1234,
+"label": "",
+"room": "FF-06",
+"rating": "16 A AC point (20 A MCB)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket16",
+"x": 7046,
+"y": -1060,
+"label": "",
+"room": "FF-06",
+"rating": "16 A general (cabin a)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "data",
+"x": 7046,
+"y": -1660,
+"label": "",
+"room": "FF-06",
+"rating": "Cat6 outlet",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "ac_in",
+"x": 8722,
+"y": 3101,
+"label": "",
+"room": "FF-06",
+"rating": "0.8-ton inverter (cabin b)",
+"feed": "raw",
+"note": "1-ton option for FF-06"
+},
+{
+"kind": "ac_out",
+"x": 9290,
+"y": 3510,
+"label": "",
+"room": "FF-06",
+"rating": "outdoor unit",
+"feed": "raw",
+"note": "bracket on exterior wall"
+},
+{
+"kind": "socket16",
+"x": 9022,
+"y": 3101,
+"label": "",
+"room": "FF-06",
+"rating": "16 A AC point (20 A MCB)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket16",
+"x": 8118,
+"y": 3462,
+"label": "",
+"room": "FF-06",
+"rating": "16 A general (cabin b)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "data",
+"x": 8118,
+"y": 2862,
+"label": "",
+"room": "FF-06",
+"rating": "Cat6 outlet",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "db",
+"x": 3342,
+"y": 4525,
+"label": "DB-F",
+"room": "FF-04",
+"rating": "",
+"feed": "raw",
+"note": "RCCBs per phase, 6 x 20 A AC MCBs, lighting/socket MCBs, UPS feed"
+},
+{
+"kind": "inverter",
+"x": 3342,
+"y": 3825,
+"label": "INV-F 1.5 kVA",
+"room": "FF-04",
+"rating": "",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": 3342,
+"y": 4225,
+"label": "",
+"room": "FF-04",
+"rating": "6 A duplex (landing)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": 3342,
+"y": 4525,
+"label": "",
+"room": "FF-04",
+"rating": "6 A duplex (landing)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "camera",
+"x": 3342,
+"y": -1330,
+"label": "C7",
+"room": "FF-04",
+"rating": "",
+"feed": "raw",
+"note": "landing + gallery void"
+},
+{
+"kind": "access",
+"x": 3078,
+"y": 4876,
+"label": "A4",
+"room": "FF-04",
+"rating": "",
+"feed": "raw",
+"note": "stair-head door to the first floor"
+},
+{
+"kind": "ap",
+"x": -16,
+"y": 1495,
+"label": "Wi-Fi AP",
+"room": "FF-04",
+"rating": "",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "ups",
+"x": -8025,
+"y": -324,
+"label": "UPS 3 kVA + 48 V 150 Ah LiFePO4",
+"room": "FF-02",
+"rating": "",
+"feed": "raw",
+"note": "ventilated rack, on the electronics earth"
+},
+{
+"kind": "db",
+"x": -8025,
+"y": -1024,
+"label": "UPS-DB",
+"room": "FF-02",
+"rating": "",
+"feed": "raw",
+"note": "GPU, printers, rack, hall AV circuit"
+},
+{
+"kind": "rack",
+"x": -5925,
+"y": -324,
+"label": "NETWORK RACK",
+"room": "FF-02",
+"rating": "",
+"feed": "raw",
+"note": "router, 16-port PoE switch, NVR, NAS, access controller"
+},
+{
+"kind": "socket16",
+"x": -4925,
+"y": 26,
+"label": "",
+"room": "FF-02",
+"rating": "16 A UPS (GPU workstation)",
+"feed": "ups",
+"note": ""
+},
+{
+"kind": "socket16",
+"x": -4225,
+"y": 26,
+"label": "",
+"room": "FF-02",
+"rating": "16 A UPS (GPU workstation)",
+"feed": "ups",
+"note": ""
+},
+{
+"kind": "socket16",
+"x": -3874,
+"y": -424,
+"label": "",
+"room": "FF-02",
+"rating": "16 A UPS (3D printer)",
+"feed": "ups",
+"note": ""
+},
+{
+"kind": "socket16",
+"x": -3874,
+"y": -1224,
+"label": "",
+"room": "FF-02",
+"rating": "16 A UPS (3D printer)",
+"feed": "ups",
+"note": ""
+},
+{
+"kind": "socket16",
+"x": -3874,
+"y": -2024,
+"label": "",
+"room": "FF-02",
+"rating": "16 A UPS (3D printer)",
+"feed": "ups",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": -7225,
+"y": -824,
+"label": "",
+"room": "FF-02",
+"rating": "6 A UPS (rack)",
+"feed": "ups",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": -6825,
+"y": -824,
+"label": "",
+"room": "FF-02",
+"rating": "6 A UPS (rack)",
+"feed": "ups",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": -8459,
+"y": -3239,
+"label": "",
+"room": "FF-02",
+"rating": "6 A duplex (bench)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": -8453,
+"y": -3239,
+"label": "",
+"room": "FF-02",
+"rating": "6 A duplex (bench)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": -8447,
+"y": -3239,
+"label": "",
+"room": "FF-02",
+"rating": "6 A duplex (bench)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": -8442,
+"y": -3239,
+"label": "",
+"room": "FF-02",
+"rating": "6 A duplex (bench)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": -8436,
+"y": -3239,
+"label": "",
+"room": "FF-02",
+"rating": "6 A duplex (bench)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": -8430,
+"y": -3239,
+"label": "",
+"room": "FF-02",
+"rating": "6 A duplex (bench)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket16",
+"x": -8662,
+"y": -3239,
+"label": "",
+"room": "FF-02",
+"rating": "16 A (bench)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket16",
+"x": -8227,
+"y": -3239,
+"label": "",
+"room": "FF-02",
+"rating": "16 A (bench)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket16",
+"x": -6124,
+"y": -5948,
+"label": "",
+"room": "FF-02",
+"rating": "16 A (soldering + extraction)",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket16",
+"x": -7612,
+"y": -3128,
+"label": "",
+"room": "FF-02",
+"rating": "16 A general",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "camera",
+"x": -3924,
+"y": -5898,
+"label": "C8",
+"room": "FF-02",
+"rating": "",
+"feed": "raw",
+"note": "printers, bench, GPU rack"
+},
+{
+"kind": "access",
+"x": -8525,
+"y": -2961,
+"label": "A5",
+"room": "FF-02",
+"rating": "",
+"feed": "raw",
+"note": "workshop door (position to confirm once enclosed)"
+},
+{
+"kind": "data",
+"x": -7225,
+"y": -1124,
+"label": "",
+"room": "FF-02",
+"rating": "Cat6 patch: 10 cams, PTZ, 6 doors, cabins, hall",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": 5350,
+"y": -1627,
+"label": "",
+"room": "FF-06B",
+"rating": "6 A IP44",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": 7937,
+"y": -1627,
+"label": "",
+"room": "FF-06B",
+"rating": "6 A IP44",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "light",
+"x": 6644,
+"y": -2601,
+"label": "",
+"room": "FF-06B",
+"rating": "LED batten 20 W IP65",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "access",
+"x": 6587,
+"y": -1477,
+"label": "A6",
+"room": "FF-06",
+"rating": "",
+"feed": "raw",
+"note": "lower-cabin balcony door"
+},
+{
+"kind": "camera",
+"x": 6987,
+"y": -1077,
+"label": "C10",
+"room": "FF-06",
+"rating": "",
+"feed": "raw",
+"note": "balcony door A6 + FF-06 corridor"
+},
+{
+"kind": "socket6",
+"x": 7248,
+"y": 3367,
+"label": "",
+"room": "FF-01",
+"rating": "6 A",
+"feed": "raw",
+"note": ""
+},
+{
+"kind": "socket6",
+"x": -3100,
+"y": 5566,
+"label": "",
+"room": "FF-05",
+"rating": "6 A",
+"feed": "raw",
+"note": ""
+}
+]
+}
