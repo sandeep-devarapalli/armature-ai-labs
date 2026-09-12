@@ -37,10 +37,9 @@ identity, approvals, resources, bookings, attendance, and integration state.
 
 Keep these facts consistent across `src/`, `docs/`, and `README.md` when any of them change:
 
-- 3,500 sq ft lab footprint.
-- Ten zones.
-- Sixteen dedicated builder pods.
-- Nine cameras.
+- 3,500 sq ft lab footprint: the gross built-up figure for ground plus first floor at HSR 1490, backed by the 12 September 2026 CAD measurement (about 2,460 sq ft of enclosed rooms plus about 560 sq ft of balconies and terrace; walls, stair, first-floor void and entrance passage make up the rest; the GF-05 patio is excluded).
+- Two floors, fifteen modelled rooms. Public room programme and carpet areas live in `src/pages/HomePage.tsx` (`roomProgramme`) and must match `src/data/buildingRoomServices.json` names. Ground: GF-10 commons 385, GF-09 lounge and presentation hall 300, GF-01 cabin 235, GF-08 balcony café 205, GF-04 kitchen 190, GF-02 reception 90, GF-07 booth 45, GF-03 + GF-06 washrooms 100. First: FF-04 landing and gallery 410, FF-06 twin cabins 350, FF-02 workshop terrace 260, FF-03 cabins 230, FF-06 balcony 100, FF-01 + FF-05 washrooms 125 (all sq ft, nearest 5).
+- The earlier single-floor concept (ten zones, sixteen builder pods, nine cameras) is retired from the public home page. It survives only in the historical financial docs under `docs/`; do not reintroduce those counts as current facts.
 - Phase 1 launch capex around Rs 50 lakh.
 - Full build capex around Rs 75 lakh.
 - Monthly cash opex around Rs 7.65 lakh.
