@@ -68,10 +68,26 @@ new migrations. A frontend rollback never rewinds database history.
 Use `hello@armatureailabs.com` as the public inbound mailbox for information,
 membership enquiries, and brand permissions. Sending, receiving, SPF, and DKIM
 were verified on 8 September 2026. Keep `hello@armaturelab.org` working for
-existing contacts without publishing it as the public contact address. Keep
-`bookings@armaturelab.org` working separately for calendar operations,
-reminders, and transactional booking mail until replacement addresses are
-configured and verified.
+existing contacts without publishing it as the public contact address.
+
+The booking identity for calendar operations, reminders, and transactional
+booking mail is `bookings@armatureailabs.com` (decided 12 September 2026).
+Cutover checklist, in order:
+
+1. Create the `bookings@armatureailabs.com` mailbox in the same Google
+   Workspace as `hello@armatureailabs.com`; send and receive one test
+   message each way and keep the headers as the verification record.
+2. Grant the calendar service account domain-wide delegation for
+   `https://www.googleapis.com/auth/calendar` in that Workspace.
+3. Share every per-resource private calendar with
+   `bookings@armatureailabs.com` (make-changes-and-manage-sharing), or
+   recreate them under it, and confirm the identifiers in `calendar_links`.
+4. Set the Supabase function secrets `GOOGLE_WORKSPACE_SUBJECT` and
+   `REMINDER_FROM` to `bookings@armatureailabs.com`, and add the address as
+   a verified sender at the reminder webhook's email provider.
+5. Run one calendar create/update/cancel cycle and one reminder against a
+   test booking in a controlled preview; only then retire
+   `bookings@armaturelab.org` from the legacy configuration.
 
 - Create one private Google Calendar per reservable resource.
 - Store each calendar identifier in the protected calendar link table.

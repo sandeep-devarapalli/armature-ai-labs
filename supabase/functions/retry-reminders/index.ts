@@ -47,7 +47,7 @@ async function deliverReminder(reminder: ReminderRow): Promise<void> {
     body: JSON.stringify({
       type: "booking_reminder",
       idempotency_key: `armature:${reminder.id}`,
-      from: Deno.env.get("REMINDER_FROM") ?? "bookings@armaturelab.org",
+      from: Deno.env.get("REMINDER_FROM") ?? "bookings@armatureailabs.com",
       to: email,
       template: reminder.reminder_kind,
       data: {

@@ -114,8 +114,12 @@ Scheduled functions:
 Google Calendar (`calendar-sync`):
 
 - `GOOGLE_SERVICE_ACCOUNT_JSON`: complete Google service-account JSON.
-- `GOOGLE_WORKSPACE_SUBJECT`: delegated Workspace identity, currently the
-  transitional `bookings@armaturelab.org` mailbox.
+- `GOOGLE_WORKSPACE_SUBJECT`: delegated Workspace identity,
+  `bookings@armatureailabs.com`. The mailbox must exist in the
+  `armatureailabs.com` Workspace and domain-wide delegation must be granted
+  there before calendar sync is enabled; the legacy
+  `bookings@armaturelab.org` value is only a fallback for an already
+  configured project.
 - `GOOGLE_SEND_UPDATES`: `all` by default; use `none` only for controlled
   testing.
 
@@ -129,8 +133,11 @@ Reminders (`retry-reminders`):
 
 - `REMINDER_WEBHOOK_URL`: server-side email delivery endpoint.
 - `REMINDER_WEBHOOK_SECRET`: bearer credential for that endpoint.
-- `REMINDER_FROM`: defaults to the transitional `bookings@armaturelab.org`
-  mailbox until a replacement sender is configured and verified.
+- `REMINDER_FROM`: defaults to `bookings@armatureailabs.com`. Set it
+  explicitly in production and confirm the reminder webhook's provider lists
+  that sender as verified (SPF and DKIM for `armatureailabs.com` were
+  verified on 8 September 2026 for `hello@`; the same domain records cover
+  `bookings@` once the mailbox exists).
 
 The webhook receives an idempotency key, recipient, template name, and booking
 data. It should deliver through the approved Google Workspace sender or the
