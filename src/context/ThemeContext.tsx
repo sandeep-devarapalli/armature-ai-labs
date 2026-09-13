@@ -18,10 +18,13 @@ interface ThemeContextValue {
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 function resolveTheme(): Theme {
-  if (typeof window === "undefined") return "light";
-  const stored = window.localStorage.getItem(STORAGE_KEY);
-  if (stored === "light" || stored === "dark" || stored === "sepia") return stored;
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  try {
+    const stored = window.localStorage.getItem(STORAGE_KEY);
+    if (stored === "light" || stored === "dark" || stored === "sepia") return stored;
+  } catch {
+    // Storage can be unavailable in privacy-restricted browsers.
+  }
+  return "dark";
 }
 
 export function ThemeProvider({ children }: PropsWithChildren) {
@@ -29,9 +32,13 @@ export function ThemeProvider({ children }: PropsWithChildren) {
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
-    window.localStorage.setItem(STORAGE_KEY, theme);
     const color = theme === "dark" ? "#111110" : theme === "sepia" ? "#F0E4C9" : "#ffffff";
     document.querySelector('meta[name="theme-color"]')?.setAttribute("content", color);
+    try {
+      window.localStorage.setItem(STORAGE_KEY, theme);
+    } catch {
+      // Theme controls still work when the preference cannot be persisted.
+    }
   }, [theme]);
 
   const value = useMemo(() => ({ theme, setTheme }), [theme]);

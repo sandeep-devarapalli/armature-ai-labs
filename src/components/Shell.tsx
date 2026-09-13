@@ -240,6 +240,9 @@ export function Shell({ children }: PropsWithChildren) {
             Third-party project media remains subject to its source terms.
           </p>
         </div>
+        <div className="footer-signature" aria-hidden="true">
+          <p className="footer-wordmark">Armature AI Labs</p>
+        </div>
       </footer>
     </div>
   );

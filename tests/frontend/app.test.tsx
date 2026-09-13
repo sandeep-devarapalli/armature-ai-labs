@@ -169,7 +169,7 @@ describe("frontend foundation", () => {
   it("persists the explicit three-mode theme choice", async () => {
     const user = userEvent.setup();
     render(<ThemeProvider><ThemeHarness /></ThemeProvider>);
-    expect(screen.getByText("light")).toBeInTheDocument();
+    expect(screen.getByText("dark")).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "Sepia" }));
     expect(screen.getByText("sepia")).toBeInTheDocument();
     expect(window.localStorage.getItem("armature-theme")).toBe("sepia");
