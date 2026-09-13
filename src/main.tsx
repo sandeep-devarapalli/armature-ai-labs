@@ -6,6 +6,7 @@ import { InventoryProvider } from "./context/InventoryContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import { installChunkRecovery, removeLegacyPwaCaches } from "./lib/pwaMigration";
 import "./styles.css";
+import "./editorial.css";
 
 installChunkRecovery();
 void removeLegacyPwaCaches();

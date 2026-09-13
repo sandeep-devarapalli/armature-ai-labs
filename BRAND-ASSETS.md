@@ -1,5 +1,7 @@
 # Armature AI Labs brand assets
 
+The current editorial identity is in `brand/armature-ai-labs/editorial-2026-09/`, mirrored for download under `public/brand/editorial-2026-09/` and presented at [Brand resources](https://armatureailabs.com/branding). Use its title-case `Armature AI Labs` wordmark, fixed circular symbol and light/dark exports. Its README and manifest list logo sizes, seven social-platform groups, source notes and checksums. Earlier packs remain preserved as history; the permissions below still apply.
+
 The Apache License 2.0 in `LICENSE` applies to this repository's source code
 and documentation.
 

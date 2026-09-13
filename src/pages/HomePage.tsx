@@ -21,12 +21,12 @@ import {
   Wrench
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { BrandMark } from "../components/BrandMark";
 import { Metric, Section } from "../components/Primitives";
 import { equipmentPageAvailable, memberPlatformAvailable } from "../config/release";
-import { useTheme } from "../context/ThemeContext";
+
 
 type RoomUse = "work" | "shared" | "outdoor" | "support";
 
@@ -66,7 +66,7 @@ const roomProgramme: { floor: string; rooms: Room[] }[] = [
     rooms: [
       { id: "FF-04", name: "Stair landing and gallery", areaSqFt: 410, use: "work", note: "Twin cabins around the open void", icon: Layers },
       { id: "FF-06", name: "Office twin cabins", areaSqFt: 350, use: "work", note: "Two four-table cabins, cupboard retained", icon: Users },
-      { id: "FF-02", name: "Workshop terrace", areaSqFt: 260, use: "outdoor", note: "Open, railed · electronics workshop proposal", icon: Wrench },
+      { id: "FF-02", name: "Workshop terrace", areaSqFt: 260, use: "outdoor", note: "Glass-enclosed workshop proposal · curved balcony retained", icon: Wrench },
       { id: "FF-03", name: "Two- and four-person cabins", areaSqFt: 230, use: "work", note: "Six modelled seats, sliding entrance", icon: Users },
       { id: "FF-06 B", name: "Balcony", areaSqFt: 100, use: "outdoor", note: "Dedicated lower-cabin balcony", icon: Sun },
       { id: "FF-01 · FF-05", name: "Washrooms", areaSqFt: 125, use: "support", note: "Retained support and bathroom", icon: Droplets }
@@ -108,24 +108,16 @@ export function HomePage() {
   return (
     <>
       <header className="home-hero">
-        <HeroKernelField />
         <div className="wrap home-hero-inner">
-          <div className="eyebrow mono">
-            The Physical AI and Robotics Lab · HSR Layout, Bengaluru
-          </div>
-          <div className="hero-lockup">
-            <BrandMark compact animated />
-            <div>
-              <h1>armature ai labs</h1>
-              <span className="mono">The physical AI and robotics lab</span>
-            </div>
-          </div>
+          <div className="editorial-hero-grid"><div>
+          <h1>A place to build<br/><span className="muted">physical intelligence.</span></h1>
           <p className="hero-copy">
             The armature is the core of every motor: the part that moves. Ours is
             a 3,500 sq ft lab across two floors, built for the full path from idea
             to working machine: arms, prototyping, machining, ESD-safe benches, and
             GPU compute, all bookable by the hour.
           </p>
+          <p className="hero-location mono">The Physical AI and Robotics Lab · HSR Layout, Bengaluru</p>
           <div className="button-row">
             {memberPlatformAvailable ? (
               <Link className="button button-primary" to="/book">
@@ -163,6 +155,7 @@ export function HomePage() {
               <ExternalLink aria-hidden="true" />
             </a>
           </div>
+          </div><IdentityMotion /></div>
           <div className="metrics-strip">
             <Metric label="Footprint" value="3,500 sq ft" />
             <Metric label="Floors" value="2" />
@@ -208,6 +201,7 @@ export function HomePage() {
         lede="Fifteen measured rooms across the ground and first floors: coworking commons, a presentation hall, seven cabins, a workshop terrace, and three balconies."
         dark
       >
+        <LabModelShowcase />
         <div className="room-programme" aria-label="Armature AI Labs room programme by floor">
           {roomProgramme.map((level) => {
             const floorTotal = level.rooms.reduce((sum, room) => sum + room.areaSqFt, 0);
@@ -215,7 +209,7 @@ export function HomePage() {
               <section className="room-floor" key={level.floor} aria-label={level.floor}>
                 <header className="room-floor-header">
                   <h3>{level.floor}</h3>
-                  <span className="mono">{level.rooms.length} rooms · {floorTotal.toLocaleString("en-IN")} sq ft carpet</span>
+                  <span className="mono">{level.floor === "Ground floor" ? 9 : 6} rooms · {floorTotal.toLocaleString("en-IN")} sq ft carpet</span>
                 </header>
                 <div className="room-grid">
                   {level.rooms.map((room) => {
@@ -360,100 +354,57 @@ export function HomePage() {
   );
 }
 
-function HeroKernelField() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { theme } = useTheme();
+function IdentityMotion() {
+  const figure = useRef<HTMLElement>(null);
+  const [paused, setPaused] = useState(false);
+  const [active, setActive] = useState(false);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const context = canvas.getContext("2d");
-    if (!context) return;
-    const canvasElement = canvas;
-    const drawingContext = context;
-
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const tile = 22;
-    const gap = 7;
-    let width = 0;
-    let height = 0;
-    let columns = 0;
-    let rows = 0;
-    let frame = 0;
-
-    function resize() {
-      const bounds = canvasElement.getBoundingClientRect();
-      if (bounds.width === 0 || bounds.height === 0) return false;
-      const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
-      width = bounds.width;
-      height = bounds.height;
-      canvasElement.width = Math.round(width * pixelRatio);
-      canvasElement.height = Math.round(height * pixelRatio);
-      drawingContext.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-      columns = Math.ceil(width / (tile + gap)) + 1;
-      rows = Math.ceil(height / (tile + gap)) + 1;
-      return true;
-    }
-
-    function jitter(column: number, row: number) {
-      const seed = Math.sin(column * 127.1 + row * 311.7) * 43758.5453;
-      return seed - Math.floor(seed);
-    }
-
-    function draw(time: number) {
-      const lattice = getComputedStyle(document.documentElement)
-        .getPropertyValue("--kernel-grid")
-        .trim();
-      drawingContext.clearRect(0, 0, width, height);
-
-      for (let row = 0; row < rows; row += 1) {
-        for (let column = 0; column < columns; column += 1) {
-          const x = column * (tile + gap);
-          const y = row * (tile + gap);
-          const variation = jitter(column, row);
-          drawingContext.strokeStyle = lattice;
-          drawingContext.lineWidth = 1;
-          drawingContext.strokeRect(x + 0.5, y + 0.5, tile, tile);
-
-          const phase = (
-            (column + row) * 0.55
-            - time * 0.0011
-            + variation * 0.8
-          ) % (columns * 0.16);
-          const wave = Math.max(0, 1 - Math.abs(phase) / 1.5);
-          if (wave > 0.02) {
-            drawingContext.fillStyle = `rgba(232, 154, 44, ${(0.38 * wave).toFixed(3)})`;
-            drawingContext.fillRect(x + 1.5, y + 1.5, tile - 3, tile - 3);
-          }
-
-          if (variation > 0.985 && Math.sin(time * 0.002 + variation * 40) > 0.55) {
-            drawingContext.fillStyle = "rgba(196, 74, 42, 0.30)";
-            drawingContext.fillRect(x + 1.5, y + 1.5, tile - 3, tile - 3);
-          }
-        }
-      }
-    }
-
-    function animate(time: number) {
-      draw(time);
-      frame = window.requestAnimationFrame(animate);
-    }
-
-    const resizeObserver = new ResizeObserver(() => {
-      if (resize() && reducedMotion) draw(900);
+    let inView = false;
+    const update = () => setActive(inView && !document.hidden);
+    const observer = new IntersectionObserver(([entry]) => {
+      inView = entry.isIntersecting;
+      update();
     });
-    resizeObserver.observe(canvasElement);
-
-    if (resize()) {
-      if (reducedMotion) draw(900);
-      else frame = window.requestAnimationFrame(animate);
-    }
-
+    if (figure.current) observer.observe(figure.current);
+    document.addEventListener("visibilitychange", update);
     return () => {
-      resizeObserver.disconnect();
-      window.cancelAnimationFrame(frame);
+      observer.disconnect();
+      document.removeEventListener("visibilitychange", update);
     };
-  }, [theme]);
+  }, []);
 
-  return <canvas className="hero-kernel-field" ref={canvasRef} aria-hidden="true" />;
+  return <figure ref={figure} className="identity-figure" data-running={active && !paused}>
+    <div className="orbit" id="identity-motion" aria-hidden="true">
+      <span className="orbit-ring"/><span className="orbit-ring middle"/><span className="orbit-ring inner"/>
+      <BrandMark compact />
+    </div>
+    <figcaption>Hardware × software × people</figcaption>
+    <button type="button" className="motion-toggle" aria-controls="identity-motion" onClick={() => setPaused(value => !value)}>
+      {paused ? "Play motion" : "Pause motion"}
+    </button>
+  </figure>;
+}
+
+const labModelViews = [
+  { title: "Ground floor", src: "/building-models/r03/ground-floor.png", width: 1250, height: 1100, copy: "Commons, presentation lounge, reception and shared spaces.", target: "ground-floor-overview", release: "R03 · retained in R06" },
+  { title: "First floor", src: "/building-models/r06/first-floor.png", width: 1450, height: 1200, copy: "Cabins, gallery and the proposed glass-enclosed workshop.", target: "first-floor-overview", release: "R06 · current proposal" },
+  { title: "Coworking commons", src: "/building-vision/room-views-r01/GF-10.png", width: 1280, height: 1100, copy: "Joined tables and a wraparound window counter. Modelled seating positions are not certified capacity.", target: "gf-10-room", release: "GF-10 · R06 room view" },
+  { title: "Glass workshop", src: "/building-models/r06/ff02-enclosure.png", width: 1450, height: 1200, copy: "Aluminium-framed glass workshop and roof proposal beside the retained curved balcony. Solar-control film remains provisional.", target: "ff-02-enclosure", release: "FF-02 · R06" }
+];
+
+function LabModelShowcase() {
+  return <div className="lab-model-showcase">
+    <p className="model-label">Blender design renders—not photographs of completed spaces. Layout and installation details remain subject to verification.</p>
+    <div className="lab-model-grid">
+      {labModelViews.map(view => <figure key={view.target}>
+        <Link to={`/building-vision/#${view.target}`} aria-label={`Explore ${view.title} models`}>
+          <img src={view.src} width={view.width} height={view.height} alt={`${view.title} Blender design render`} loading="lazy" decoding="async" />
+        </Link>
+        <figcaption><span className="mono">{view.release}</span><h3>{view.title}</h3><p>{view.copy}</p>
+          <Link to={`/building-vision/#${view.target}`}>Explore the model <ArrowRight aria-hidden="true" /></Link>
+        </figcaption>
+      </figure>)}
+    </div>
+  </div>;
 }

@@ -1,5 +1,9 @@
 # DESIGN.md
 
+## Approved editorial revision — 13 September 2026
+
+For the approved public release, the user-selected editorial system supersedes the older visual tokens below: exact `Armature AI Labs` casing, fixed monochrome circular commutator, Helvetica Neue/Helvetica/Arial bold display and wordmark, and self-hosted Space Mono for prose and controls. Use true white (#fff), neutral near-black (#111110), restrained secondary grey and hairline borders. Dark mode uses #111110 surfaces and white text. Sepia remains an optional reading preference with the same structure. Keep all existing home-page sections and operational routes. Use the approved slow outline-orbit hero with stationary logo, pause control, offscreen/hidden pausing and reduced-motion support. Model renders remain unfiltered and labelled as designs. See `docs/editorial-rollout.md` for scope and copy retention.
+
 ## Design Intent
 
 Armature AI Labs should feel like a real lab floor: precise, physical, useful, and quietly ambitious. The design should avoid generic AI startup polish, vague futurism, and decorative marketing gloss. It should make robotics, fabrication, compute, and safety feel inspectable.

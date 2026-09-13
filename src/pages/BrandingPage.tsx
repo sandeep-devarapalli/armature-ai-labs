@@ -1,107 +1,39 @@
 import { Check, Copy, Download, FileArchive, FileText } from "lucide-react";
 import { useState } from "react";
 import { Section } from "../components/Primitives";
+import manifest from "../../public/brand/editorial-2026-09/manifest.json";
 import "./BrandingPage.css";
 
-const BRAND_BASE = "/brand/armature-lab";
-const COMPLETE_PACK = "/brand/armature-lab-assets.zip";
-const oneLineDescription =
-  "Armature AI Labs is a 3,500 sq ft physical AI and robotics lab in HSR Layout, Bengaluru.";
-const paragraphDescription =
-  "The armature is the core of every motor: the part that moves. Armature AI Labs is a 3,500 sq ft physical AI and robotics lab in HSR Layout, Bengaluru, built for the full path from idea to working machine: arms, prototyping, machining, ESD-safe benches, and GPU compute, all bookable by the hour.";
-type AssetDownload = { label: string; path: string };
-type LogoAsset = { title: string; use: string; preview: string; alt: string; downloads: AssetDownload[] };
-const logoAssets: LogoAsset[] = [
-  {
-    title: "Horizontal lockup",
-    use: "The default for website headers, email signatures and signage.",
-    preview: "svg/armature-lab-lockup-h.svg",
-    alt: "Horizontal Armature AI Labs logo",
-    downloads: [
-      { label: "SVG · transparent", path: "svg/armature-lab-lockup-h.svg" },
-      { label: "SVG · dark surface", path: "svg/armature-lab-lockup-h-on-ink.svg" },
-      { label: "PNG · transparent · 2×", path: "png/armature-lab-lockup-h-transparent-2x.png" },
-      { label: "PNG · dark surface · 2×", path: "png/armature-lab-lockup-h-on-ink-2x.png" }
-    ]
-  },
-  {
-    title: "Vertical lockup",
-    use: "For stacked layouts, social graphics, print and the front door.",
-    preview: "svg/armature-lab-lockup-v.svg",
-    alt: "Vertical Armature AI Labs logo",
-    downloads: [
-      { label: "SVG · transparent", path: "svg/armature-lab-lockup-v.svg" },
-      { label: "SVG · dark surface", path: "svg/armature-lab-lockup-v-on-ink.svg" },
-      { label: "SVG · saffron surface", path: "svg/armature-lab-lockup-v-on-saffron.svg" },
-      { label: "PNG · transparent · 2×", path: "png/armature-lab-lockup-v-transparent-2x.png" }
-    ]
-  },
-  {
-    title: "Commutator mark",
-    use: "Use the symbol alone where the Armature AI Labs name is already clear.",
-    preview: "svg/armature-lab-mark.svg",
-    alt: "Armature AI Labs commutator mark",
-    downloads: [
-      { label: "SVG · transparent", path: "svg/armature-lab-mark.svg" },
-      { label: "SVG · dark surface", path: "svg/armature-lab-mark-cream.svg" },
-      { label: "PNG · 1024 px", path: "png/armature-lab-mark-1024.png" },
-      { label: "PNG · dark surface · 1024 px", path: "png/armature-lab-mark-cream-1024.png" }
-    ]
-  },
-  {
-    title: "Wordmark",
-    use: "Use the lowercase name without the mark only when space is constrained.",
-    preview: "svg/armature-lab-wordmark.svg",
-    alt: "armature ai labs wordmark",
-    downloads: [
-      { label: "SVG · transparent", path: "svg/armature-lab-wordmark.svg" },
-      { label: "SVG · dark surface", path: "svg/armature-lab-wordmark-cream.svg" },
-      { label: "PNG · transparent · 2×", path: "png/armature-lab-wordmark-2x.png" },
-      { label: "SVG · black", path: "svg/bw/armature-lab-wordmark-black.svg" }
-    ]
-  }
-];
-const iconAssets = [
-  {
-    title: "App and social icon",
-    detail: "1024 × 1024 PNG",
-    preview: "png/armature-lab-icon-1024.png",
-    downloads: [
-      { label: "1024 px", path: "png/armature-lab-icon-1024.png" },
-      { label: "512 px", path: "png/armature-lab-icon-512.png" },
-      { label: "180 px", path: "png/armature-lab-icon-180.png" }
-    ]
-  },
-  {
-    title: "Paper app icon",
-    detail: "512 × 512 PNG",
-    preview: "png/armature-lab-icon-paper-512.png",
-    downloads: [
-      { label: "512 px", path: "png/armature-lab-icon-paper-512.png" },
-      { label: "SVG · paper", path: "svg/armature-lab-icon-paper.svg" },
-      { label: "SVG · ink", path: "svg/armature-lab-icon-ink.svg" }
-    ]
-  },
-  {
-    title: "Browser icon",
-    detail: "SVG, PNG and ICO",
-    preview: "svg/armature-lab-favicon.svg",
-    downloads: [
-      { label: "SVG", path: "svg/armature-lab-favicon.svg" },
-      { label: "32 px PNG", path: "png/favicon-32.png" },
-      { label: "16 px PNG", path: "png/favicon-16.png" },
-      { label: "ICO", path: "png/favicon.ico" }
-    ]
-  }
-] as const;
-const brandColors = [
-  { name: "Ink", hex: "#0A1220", use: "Primary text and mono marks" },
-  { name: "Paper", hex: "#FFFEFA", use: "Primary light surface" },
-  { name: "Cream", hex: "#F2E6CC", use: "Mark and wordmark on ink" },
-  { name: "Saffron", hex: "#E89A2C", use: "The two live segments only" }
-] as const;
+const BRAND_BASE = "/brand/editorial-2026-09";
+const oneLineDescription = manifest.copy.oneLine;
+const paragraphDescription = manifest.copy.paragraph;
+type BrandAsset = (typeof manifest.files)[number];
+type AssetMode = "light" | "dark";
 type CopyTarget = "one-line" | "paragraph";
 type CopyState = { target: CopyTarget; result: "copied" | "failed" } | null;
+const logos = [
+  { kind: "lockup", title: "Horizontal lockup", use: "The default for website headers, email signatures and signage.", width: 1140 },
+  { kind: "stacked", title: "Stacked lockup", use: "For vertical layouts, social graphics and print.", width: 1024 },
+  { kind: "mark", title: "Circular symbol", use: "Use the supplied commutator where the lab name is already clear.", width: 512 },
+  { kind: "wordmark", title: "Wordmark", use: "The exact name, Armature AI Labs, without the symbol.", width: 1800 },
+  { kind: "icon", title: "App, profile and browser icons", use: "Square icons from 16 to 2048 px, including the 512 px app icon.", width: 512 }
+];
+const platforms = [
+  { id: "linkedin", title: "LinkedIn", note: "Company logo and cover, personal banner, and a 2× company-cover master." },
+  { id: "x", title: "X / Twitter", note: "Profile icon and header. Check the live header crop before saving." },
+  { id: "instagram", title: "Instagram", note: "Profile icon, square and portrait posts, and story artwork. Practical exports; check the in-app crop." },
+  { id: "github", title: "GitHub", note: "Profile icon and repository social preview." },
+  { id: "youtube", title: "YouTube", note: "Profile icon, channel banner with a conservative central safe area, and watermark." },
+  { id: "discord", title: "Discord", note: "Server icon and a text-free banner. Banners require an eligible server; entitlement has not been checked." },
+  { id: "whatsapp-business", title: "WhatsApp Business", note: "Business profile icon and status artwork. Practical exports; check the in-app crop." }
+];
+const brandColors = [
+  { name: "Ink", hex: manifest.palettes.light.ink, use: "Light-surface lettering and marks" },
+  { name: "White", hex: manifest.palettes.light.background, use: "Light surfaces and reversed artwork" },
+  { name: "Secondary · light", hex: manifest.palettes.light.muted, use: "Supporting text on white" },
+  { name: "Secondary · dark", hex: manifest.palettes.dark.muted, use: "Supporting text on near-black" }
+];
+
 function downloadName(path: string) {
   return path.split("/").pop();
 }
@@ -124,20 +56,62 @@ async function writeClipboard(text: string) {
   }
 }
 
-function DownloadLinks({ downloads }: { downloads: readonly AssetDownload[] }) {
+function AssetLinks({ asset, label }: { asset: BrandAsset; label: string }) {
   return (
     <div className="branding-download-links">
-      {downloads.map((asset) => (
-        <a key={asset.path} href={`${BRAND_BASE}/${asset.path}`} download={downloadName(asset.path)}>
-          <Download aria-hidden="true" />
-          {asset.label}
+      {(["png", "svg"] as const).map((format) => (
+        <a key={format} href={BRAND_BASE + "/" + asset[format]} download={downloadName(asset[format])} aria-label={label + " · " + format.toUpperCase()}>
+          <Download aria-hidden="true" />{format.toUpperCase()}
         </a>
       ))}
     </div>
   );
 }
+
+function variantKey(asset: BrandAsset) {
+  return asset.width + "-" + ("transparent" in asset && asset.transparent ? "transparent" : "solid");
+}
+
+function LogoDownload({ logo, mode }: { logo: (typeof logos)[number]; mode: AssetMode }) {
+  const options = manifest.files.filter((asset) => asset.kind === logo.kind && asset.mode === mode);
+  const preferred = options.find((asset) => asset.width === logo.width) ?? options[0];
+  const [selection, setSelection] = useState(variantKey(preferred));
+  const asset = options.find((item) => variantKey(item) === selection) ?? preferred;
+  return (
+    <article className="branding-logo-row">
+      <div className={"branding-logo-preview branding-surface-" + mode}>
+        <img src={BRAND_BASE + "/" + asset.svg} alt={logo.title + " · " + mode + " surface"} loading="lazy" />
+      </div>
+      <div className="branding-logo-detail">
+        <h3>{logo.title}</h3>
+        <p>{logo.use}</p>
+        <label>
+          <span className="mono">Export size and background</span>
+          <select value={variantKey(asset)} onChange={(event) => setSelection(event.target.value)} aria-label={logo.title + " export size"}>
+            {options.map((option) => (
+              <option key={option.name} value={variantKey(option)}>
+                {option.width} × {option.height} px{"transparent" in option && option.transparent ? " · transparent" : " · solid"}
+              </option>
+            ))}
+          </select>
+        </label>
+        <AssetLinks asset={asset} label={logo.title + " " + mode + " " + asset.width + " px"} />
+      </div>
+    </article>
+  );
+}
+
+function socialLabel(asset: BrandAsset) {
+  return asset.name.split("/").pop()!
+    .replace(/-(light|dark)-/, "-")
+    .replace(/-\d+(x\d+)?$/, "")
+    .replaceAll("-", " ")
+    .replace(/^./, (letter) => letter.toUpperCase());
+}
+
 export function BrandingPage() {
   const [copyState, setCopyState] = useState<CopyState>(null);
+  const [assetMode, setAssetMode] = useState<AssetMode>("light");
   async function copyDescription(target: CopyTarget, text: string) {
     try {
       await writeClipboard(text);
@@ -155,215 +129,138 @@ export function BrandingPage() {
       <header className="branding-hero">
         <div className="wrap branding-hero-grid">
           <div className="branding-hero-copy">
-            <div className="eyebrow mono">armature ai labs · brand resources</div>
             <h1>Brand resources</h1>
-            <p className="hero-copy">
-              Download the approved Armature AI Labs logos, app icons and browser
-              assets, then use them with the spacing, colour and permission
-              guidance below.
-            </p>
+            <p className="hero-copy">The circular mark, a precise wordmark, and the files to use them. Download logos and social artwork for light and dark surfaces.</p>
             <div className="button-row">
-              <a className="button button-primary" href={COMPLETE_PACK} download="armature-lab-assets.zip">
-                <FileArchive aria-hidden="true" />
-                Download complete pack
+              <a className="button button-primary" href={BRAND_BASE + "/armature-ai-labs-editorial-complete.zip"} download="armature-ai-labs-editorial-complete.zip">
+                <FileArchive aria-hidden="true" />Download complete pack
               </a>
-              <a className="button button-quiet" href="#logo-system">
-                Browse individual files
-              </a>
+              <a className="button button-quiet" href="#logo-system">Browse individual files</a>
             </div>
+            <p className="branding-version mono">September 2026 · Brand resources</p>
           </div>
-          <figure className="branding-hero-preview">
-            <img src={`${BRAND_BASE}/svg/armature-lab-lockup-h-on-paper.svg`} alt="Horizontal Armature AI Labs lockup" />
-            <figcaption className="mono">Primary lockup · on paper</figcaption>
+          <figure className="branding-hero-preview branding-surface-light">
+            <img src={BRAND_BASE + "/logos/lockup-light-transparent-570.svg"} width="570" height="100" alt="Armature AI Labs horizontal lockup" />
+            <figcaption>Armature AI Labs · circular symbol retained</figcaption>
           </figure>
         </div>
       </header>
 
-      <Section
-        number="01"
-        title="About Armature AI Labs"
-        lede="Use this approved copy when a publication, event listing or partner page needs a short lab description."
-      >
+      <Section number="01" title="About Armature AI Labs" lede="Ready-to-copy descriptions for publications, event listings and partner pages.">
         <div className="branding-copy-list">
-          <article className="branding-copy-block">
-            <header>
-              <div>
-                <span className="mono">One line</span>
-                <h3>Short description</h3>
-              </div>
-              <button
-                type="button"
-                aria-label="Copy one-line description"
-                onClick={() => void copyDescription("one-line", oneLineDescription)}
-              >
-                {copyState?.target === "one-line" && copyState.result === "copied" ? (
-                  <Check aria-hidden="true" />
-                ) : (
-                  <Copy aria-hidden="true" />
-                )}
-                {copyLabel("one-line")}
-              </button>
-            </header>
-            <p>{oneLineDescription}</p>
-          </article>
-          <article className="branding-copy-block">
-            <header>
-              <div>
-                <span className="mono">One paragraph</span>
-                <h3>Full description</h3>
-              </div>
-              <button
-                type="button"
-                aria-label="Copy one-paragraph description"
-                onClick={() => void copyDescription("paragraph", paragraphDescription)}
-              >
-                {copyState?.target === "paragraph" && copyState.result === "copied" ? (
-                  <Check aria-hidden="true" />
-                ) : (
-                  <Copy aria-hidden="true" />
-                )}
-                {copyLabel("paragraph")}
-              </button>
-            </header>
-            <p>{paragraphDescription}</p>
-          </article>
+          {([
+            ["one-line", "One line", "Short description", oneLineDescription],
+            ["paragraph", "One paragraph", "Full description", paragraphDescription]
+          ] as const).map(([target, label, heading, description]) => (
+            <article className="branding-copy-block" key={target}>
+              <header>
+                <div><span className="mono">{label}</span><h3>{heading}</h3></div>
+                <button type="button" aria-label={target === "one-line" ? "Copy one-line description" : "Copy one-paragraph description"} onClick={() => void copyDescription(target, description)}>
+                  {copyState?.target === target && copyState.result === "copied" ? <Check aria-hidden="true" /> : <Copy aria-hidden="true" />}
+                  {copyLabel(target)}
+                </button>
+              </header>
+              <p>{description}</p>
+            </article>
+          ))}
         </div>
         <p className="branding-copy-status" role="status" aria-live="polite">
-          {copyState
-            ? copyState.result === "copied"
-              ? "Description copied to the clipboard."
-              : "The description could not be copied. Select the text and copy it manually."
-            : ""}
+          {copyState ? copyState.result === "copied" ? "Description copied to the clipboard." : "The description could not be copied. Select the text and copy it manually." : ""}
         </p>
       </Section>
 
-      <Section
-        id="logo-system"
-        number="02"
-        title="Logo system"
-        lede="SVG is the source of truth. Use PNG exports when the destination cannot accept vector artwork."
-        dark
-      >
+      <Section id="logo-system" number="02" title="Logo system" lede="PNG for everyday use. Outlined SVG for sharp, scalable artwork without a font dependency.">
+        <div className="branding-toolbar">
+          <div className="branding-mode" role="group" aria-label="Asset background">
+            {(["light", "dark"] as const).map((mode) => (
+              <button key={mode} type="button" aria-pressed={assetMode === mode} onClick={() => setAssetMode(mode)}>For {mode} surfaces</button>
+            ))}
+          </div>
+          <a href={BRAND_BASE + "/armature-ai-labs-editorial-logos.zip"} download="armature-ai-labs-editorial-logos.zip"><FileArchive aria-hidden="true" />All logo files</a>
+        </div>
         <div className="branding-logo-list">
-          {logoAssets.map((asset) => (
-            <article className="branding-logo-row" key={asset.title}>
-              <div className="branding-logo-preview">
-                <img
-                  src={`${BRAND_BASE}/${asset.preview}`}
-                  alt={asset.alt}
-                  loading="lazy"
-                />
-              </div>
-              <div className="branding-logo-detail">
-                <h3>{asset.title}</h3>
-                <p>{asset.use}</p>
-                <DownloadLinks downloads={asset.downloads} />
-              </div>
-            </article>
-          ))}
+          {logos.map((logo) => <LogoDownload key={logo.kind} logo={logo} mode={assetMode} />)}
         </div>
       </Section>
 
-      <Section
-        number="03"
-        title="Icons and favicons"
-        lede="Square app and social tiles are available at common production sizes, with a separate browser-icon set."
-      >
-        <div className="branding-icon-grid">
-          {iconAssets.map((asset) => (
-            <article className="branding-icon-card" key={asset.title}>
-              <div className="branding-icon-preview">
-                <img
-                  src={`${BRAND_BASE}/${asset.preview}`}
-                  alt={`${asset.title} preview`}
-                  loading="lazy"
-                />
-              </div>
-              <div>
-                <h3>{asset.title}</h3>
-                <p>{asset.detail}</p>
-                <DownloadLinks downloads={asset.downloads} />
-              </div>
-            </article>
-          ))}
+      <Section id="social-assets" number="03" title="Social assets" lede="One identity across seven platforms. Choose PNG when uploading; SVG is included for reuse in artwork.">
+        <div className="branding-toolbar">
+          <div className="branding-mode" role="group" aria-label="Social asset background">
+            {(["light", "dark"] as const).map((mode) => (
+              <button key={mode} type="button" aria-pressed={assetMode === mode} onClick={() => setAssetMode(mode)}>For {mode} surfaces</button>
+            ))}
+          </div>
+          <a href={BRAND_BASE + "/armature-ai-labs-editorial-social.zip"} download="armature-ai-labs-editorial-social.zip"><FileArchive aria-hidden="true" />All social files</a>
         </div>
+        <div className="branding-social-grid">
+          {platforms.map((platform) => {
+            const assets = manifest.files.filter((asset) => "platform" in asset && asset.platform === platform.id && asset.mode === assetMode);
+            const preview = assets.find((asset) => asset.kind !== "social-profile") ?? assets[0];
+            return (
+              <article className="branding-social-card" key={platform.id}>
+                <div className={"branding-social-preview branding-surface-" + assetMode}>
+                  <img src={BRAND_BASE + "/" + preview.png} width={preview.width} height={preview.height} loading="lazy" alt={platform.title + " " + socialLabel(preview) + " · " + assetMode} />
+                </div>
+                <h3>{platform.title}</h3>
+                <p>{platform.note}</p>
+                <ul className="branding-social-files">
+                  {assets.map((asset) => (
+                    <li key={asset.name}>
+                      <div><span>{socialLabel(asset)}</span><small>{asset.width} × {asset.height} px</small></div>
+                      <AssetLinks asset={asset} label={platform.title + " " + socialLabel(asset) + " " + assetMode} />
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            );
+          })}
+        </div>
+        <p className="branding-file-note">Files have not been uploaded to social accounts. Crop behaviour varies by surface; <a href={BRAND_BASE + "/README.md"} download="armature-ai-labs-brand-guide.md">see the export guide and source specifications</a>.</p>
       </Section>
 
-      <Section
-        number="04"
-        title="Use the identity consistently"
-        lede="The commutator geometry and the lowercase wordmark are fixed. Choose the supplied variant that fits the surface."
-      >
+      <Section number="04" title="Use the identity consistently" lede="Write Armature AI Labs. Keep the circular geometry unchanged, and choose the supplied version for its background.">
         <div className="branding-guideline-grid">
           <article>
-            <span className="mono">Do</span>
+            <h3>Give it space</h3>
             <ul>
-              <li>Keep the mark at least 16 px high.</li>
-              <li>Keep the horizontal lockup at least 120 px wide.</li>
-              <li>Leave clear space equal to one quarter of the mark height.</li>
-              <li>Use the all-ink version on a saffron background.</li>
-              <li>Use cream artwork on dark ink surfaces.</li>
+              <li>Use the symbol at 24 px or larger when practical; tiny browser icons have dedicated exports.</li>
+              <li>Keep horizontal lockups at least 190 px wide.</li>
+              <li>Leave one central-shaft diameter around the mark, or half the wordmark capital height around a lockup.</li>
+              <li>Use dark lettering on light surfaces and white lettering on dark surfaces.</li>
             </ul>
           </article>
           <article>
-            <span className="mono">Do not</span>
+            <h3>Keep it recognizable</h3>
             <ul>
-              <li>Rotate the mark; the live segments stay at 3 and 9 o'clock.</li>
-              <li>Change the number, shape or spacing of the eight segments.</li>
-              <li>Add outlines, gradients, shadows or extra colours.</li>
-              <li>Place saffron live segments on a saffron field.</li>
-              <li>Capitalize or re-typeset the outlined lowercase wordmark.</li>
+              <li>Do not rotate, stretch, redraw or change the eight segments.</li>
+              <li>Do not add gradients, shadows, outlines or extra colours.</li>
+              <li>Retain the exact capitals: Armature AI Labs.</li>
+              <li>Use the supplied outlined wordmark instead of substituting another font.</li>
             </ul>
           </article>
         </div>
-
+        <div className="branding-type">
+          <h3>Helvetica Neue + Space Mono</h3>
+          <p>Helvetica Neue Bold sets the wordmark and headings. Space Mono carries supporting copy and labels. Primary SVGs have outlined lettering; editable SVGs require a locally licensed Helvetica Neue. Helvetica font files are not redistributed. Space Mono and its OFL are included.</p>
+        </div>
         <div className="branding-color-grid" aria-label="Armature AI Labs brand colours">
           {brandColors.map((color) => (
             <article key={color.name}>
-              <span
-                className="branding-color-swatch"
-                style={{ backgroundColor: color.hex }}
-                aria-hidden="true"
-              />
-              <div>
-                <h3>{color.name}</h3>
-                <code>{color.hex}</code>
-                <p>{color.use}</p>
-              </div>
+              <span className="branding-color-swatch" style={{ backgroundColor: color.hex }} aria-hidden="true" />
+              <div><h3>{color.name}</h3><code>{color.hex}</code><p>{color.use}</p></div>
             </article>
           ))}
         </div>
       </Section>
 
-      <Section
-        number="05"
-        title="Usage and permissions"
-        lede="The repository's Apache-2.0 license covers source code and documentation, not the Armature AI Labs identity assets."
-        dark
-      >
+      <Section number="05" title="Usage and permissions" lede="The repository's Apache-2.0 license covers source code and documentation, not the Armature AI Labs identity assets.">
         <div className="branding-permissions">
           <div>
-            <p>
-              Reasonable use of the name and marks to identify this project,
-              link to it, or describe the origin of an unmodified copy is
-              permitted. Any other use requires prior written permission.
-            </p>
-            <p>
-              Do not imply endorsement, affiliation, or operation of an
-              official Armature AI Labs facility without permission.
-            </p>
-            <p>
-              Request written permission at <a className="text-link" href="mailto:hello@armatureailabs.com">hello@armatureailabs.com</a>.
-            </p>
+            <p>Reasonable use of the name and marks to identify this project, link to it, or describe the origin of an unmodified copy is permitted. Any other use requires prior written permission.</p>
+            <p>Do not imply endorsement, affiliation, or operation of an official Armature AI Labs facility without permission.</p>
+            <p>Request written permission at <a className="text-link" href="mailto:hello@armatureailabs.com">hello@armatureailabs.com</a>.</p>
           </div>
-          <a
-            className="button button-quiet"
-            href={`${BRAND_BASE}/USAGE-AND-PERMISSIONS.md`}
-            download="armature-lab-usage-and-permissions.md"
-          >
-            <FileText aria-hidden="true" />
-            Download usage note
-          </a>
+          <a className="button button-quiet" href={BRAND_BASE + "/USAGE-AND-PERMISSIONS.md"} download="armature-ai-labs-usage-and-permissions.md"><FileText aria-hidden="true" />Download usage note</a>
         </div>
       </Section>
     </div>
