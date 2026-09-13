@@ -30,7 +30,7 @@ export function ThemeProvider({ children }: PropsWithChildren) {
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
     window.localStorage.setItem(STORAGE_KEY, theme);
-    const color = theme === "dark" ? "#090D13" : theme === "sepia" ? "#F0E4C9" : "#FFFEFA";
+    const color = theme === "dark" ? "#111110" : theme === "sepia" ? "#F0E4C9" : "#ffffff";
     document.querySelector('meta[name="theme-color"]')?.setAttribute("content", color);
   }, [theme]);
 

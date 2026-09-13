@@ -1,0 +1,19 @@
+{
+  "sourceMarkSha256": "dd6fc3ee758f43d7c04dec9f4e7a9db39b10b7c912fa6a6ce20b02596bfc0841",
+  "glyphFonts": {
+    "email": "SpaceMono-Regular",
+    "headlineA": "HelveticaNeue-Bold",
+    "headlineB": "HelveticaNeue-Bold",
+    "location": "SpaceMono-Regular",
+    "tagline": "SpaceMono-Regular",
+    "website": "SpaceMono-Regular",
+    "wordmark": "HelveticaNeue-Bold"
+  },
+  "assetCount": 90,
+  "dimensions": "All PNG dimensions matched requested sizes via sharp metadata.",
+  "maxPngBytes": 74924,
+  "allSocialImagesUnder1MB": true,
+  "geometry": "Source mark SHA-256 pin checked before generation; path data unchanged in generated mark transforms.",
+  "visualReview": "Contact sheet and representative full-size LinkedIn cover, 512 px dark icon, GitHub preview, Instagram portrait and YouTube safe-area crop inspected on 13 September 2026. No clipped text, incorrect casing or distorted marks observed.",
+  "uploadStatus": "Not uploaded."
+}

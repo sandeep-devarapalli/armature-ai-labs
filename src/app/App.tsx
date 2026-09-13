@@ -13,6 +13,8 @@ import {
 
 const ProjectsPage = lazy(() => import("../pages/ProjectsPage").then((module) => ({ default: module.ProjectsPage })));
 const BrandingPage = lazy(() => import("../pages/BrandingPage").then((module) => ({ default: module.BrandingPage })));
+const BlogIndexPage = lazy(() => import("../pages/BlogPages").then((module) => ({ default: module.BlogIndexPage })));
+const BlogArticlePage = lazy(() => import("../pages/BlogPages").then((module) => ({ default: module.BlogArticlePage })));
 const ElectrofluidicMusclesPage = lazy(() => import("../pages/ElectrofluidicMusclesPage").then((module) => ({ default: module.ElectrofluidicMusclesPage })));
 const BuildingVisionPage = lazy(() => import("../pages/BuildingVisionPage").then((module) => ({ default: module.BuildingVisionPage })));
 const EcosystemPage = lazy(() => import("../pages/EcosystemPage").then((module) => ({ default: module.EcosystemPage })));
@@ -89,6 +91,8 @@ export const router = createBrowserRouter([
       { path: "/services", element: <ServicesPage /> },
       { path: "/projects", element: <ProjectsPage /> },
       { path: "/branding", element: <BrandingPage /> },
+      { path: "/blog", element: <BlogIndexPage /> },
+      { path: "/blog/model-hardware-standard", element: <BlogArticlePage /> },
       { path: "/projects/electrofluidic-fiber-muscles", element: <ElectrofluidicMusclesPage /> },
       { path: "/building-vision", element: <BuildingVisionPage /> },
       { path: "/ecosystem", element: <EcosystemPage /> },

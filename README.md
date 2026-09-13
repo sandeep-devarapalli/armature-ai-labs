@@ -95,16 +95,19 @@ for provisioning, kiosk, Google Workspace, release, and rollback procedures.
   revalidating HTML shell.
 
 ## brand/
-The finalized commutator identity lives in `brand/armature-lab/`, with SVG
+The earlier commutator identity lives in `brand/armature-lab/`, with SVG
 sources and PNG exports for the mark, wordmark, lockups, icons, and favicon.
 Older Exploded-A files remain in `brand/` as retired historical assets.
-The public `/branding` route serves its preserved-filename downloads from
-`public/brand/armature-lab/` and the complete pack from
-`public/brand/armature-lab-assets.zip`; keep both synchronized with the source set.
+The current editorial identity lives in `brand/armature-ai-labs/editorial-2026-09/`,
+mirrored at `public/brand/editorial-2026-09/`. The public `/branding` route serves
+its light/dark SVGs, PNGs, social formats and complete ZIP. Keep both copies
+synchronized. Earlier downloads under `public/brand/armature-lab/` and
+`public/brand/armature-lab-assets.zip` remain available for existing links.
 
 ## linkedin/
-Company page assets. Banner 2256x382 (2x retina for 1128x191), logo 800x800.
-Light versions are the primary.
+Preserved earlier company-page assets. Current LinkedIn company covers,
+personal banners, logos and link previews are in the editorial pack's
+`social/linkedin/` directory; its manifest records dimensions and source guidance.
 
 ## docs/
 Financial model and phased capex plan, re-baselined to the 3,500 sq ft plan:

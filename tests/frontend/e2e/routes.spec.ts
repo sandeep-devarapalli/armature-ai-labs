@@ -606,115 +606,66 @@ test("OpenTouch Glove uses official media and an exact project build list", asyn
   await expect(page.getByText(/Do not treat the existing ESP32-C6 stock as a drop-in replacement/)).toBeVisible();
 });
 
-test("home hero restores the mechanical kernel animation", async ({ page }) => {
+test("home hero keeps the circular identity and controllable outline motion", async ({ page }) => {
   await page.goto("/");
-  const canvas = page.locator(".hero-kernel-field");
-  const heroMark = page.locator(".hero-lockup .brand-mark");
+  const figure = page.locator(".identity-figure");
+  const rings = figure.locator(".orbit-ring");
+  const outerRing = rings.first();
+  const heroMark = figure.locator(".brand-mark");
   const heroSegments = heroMark.locator(".brand-mark-segment");
-  await expect(canvas).toBeVisible();
+  await figure.scrollIntoViewIfNeeded();
+  await expect(figure).toHaveAttribute("data-running", "true");
+  await expect(rings).toHaveCount(3);
   await expect(heroMark).toHaveAttribute("viewBox", "0 0 100 100");
   await expect(heroMark).toHaveCSS("transform", "none");
   await expect(heroSegments).toHaveCount(8);
   expect(await heroSegments.evaluateAll((segments) =>
     segments.map((segment) => segment.getAttribute("stroke-width"))
   )).toEqual(Array(8).fill("9"));
-  await expect(heroMark.locator(".brand-mark-segment--east")).toHaveCSS(
-    "animation-name",
-    "brand-mark-commutate"
-  );
-  await expect(page.locator(".brand-mark--animated")).toHaveCount(1);
-  await expect(page.locator(".topbar .brand-lockup")).toHaveAttribute("aria-label", "armature ai labs");
-  await expect(page.locator(".topbar .brand-mark")).toHaveAttribute("aria-label", "armature ai labs mark");
-  await expect(page.locator(".topbar .brand-lockup > span")).toHaveText("armature ai labs");
-  await expect(page.locator(".hero-lockup h1")).toHaveText("armature ai labs");
+  await expect(page.locator(".brand-mark--animated")).toHaveCount(0);
+  expect(await heroSegments.evaluateAll((segments) =>
+    new Set(segments.map(segment => getComputedStyle(segment).color)).size
+  )).toBe(1);
+  await expect(page.locator(".topbar .brand-lockup")).toHaveAttribute("aria-label", "Armature AI Labs");
+  await expect(page.locator(".topbar .brand-mark")).toHaveAttribute("aria-label", "Armature AI Labs mark");
+  await expect(page.locator(".topbar .brand-lockup > span")).toHaveText("Armature AI Labs");
+  await expect(page.locator(".home-hero h1")).toHaveText(/A place to build\s*physical intelligence\./);
+  await expect(page.locator(".home-hero h1")).toHaveCSS("font-family", /Helvetica Neue.*Helvetica.*Arial/);
+  await expect(page.locator("body")).toHaveCSS("font-family", /Space Mono/);
   expect(await page.evaluate(async () => {
-    await document.fonts.load('500 21px "Armature Space Grotesk"');
-    return document.fonts.check('500 21px "Armature Space Grotesk"');
+    await document.fonts.load('400 16px "Space Mono"');
+    return document.fonts.check('400 16px "Space Mono"');
   })).toBe(true);
 
-  const commutationSequence = await heroMark.evaluate((mark) => {
-    const segments = Array.from(mark.querySelectorAll<SVGPathElement>(".brand-mark-segment"));
-    const directions = [
-      "north", "north-east", "east", "south-east",
-      "south", "south-west", "west", "north-west"
-    ];
-    const probe = document.createElement("span");
-    probe.style.color = "var(--saffron)";
-    document.body.append(probe);
-    const saffron = getComputedStyle(probe).color;
-    probe.remove();
+  await expect(outerRing).toHaveCSS("animation-name", "orbit-drift");
+  await expect(outerRing).toHaveCSS("animation-play-state", "running");
+  const firstTransform = await outerRing.evaluate(element => getComputedStyle(element).transform);
+  await expect.poll(() => outerRing.evaluate(element => getComputedStyle(element).transform)).not.toBe(firstTransform);
 
-    return [0, 900, 1800, 2700, 3600].map((time) => {
-      segments.forEach((segment) => {
-        const animation = segment.getAnimations()[0];
-        animation.pause();
-        animation.currentTime = time;
-      });
-      return segments
-        .filter((segment) => getComputedStyle(segment).color === saffron)
-        .map((segment) => directions.find((direction) =>
-          segment.classList.contains(`brand-mark-segment--${direction}`)
-        ))
-        .sort();
-    });
-  });
-  expect(commutationSequence).toEqual([
-    ["east", "west"],
-    ["north-west", "south-east"],
-    ["north", "south"],
-    ["north-east", "south-west"],
-    ["east", "west"]
-  ]);
+  await figure.getByRole("button", { name: "Pause motion" }).click();
+  await expect(figure).toHaveAttribute("data-running", "false");
+  await expect(outerRing).toHaveCSS("animation-play-state", "paused");
+  const pausedTransform = await outerRing.evaluate(element => getComputedStyle(element).transform);
+  await page.waitForTimeout(250);
+  expect(await outerRing.evaluate(element => getComputedStyle(element).transform)).toBe(pausedTransform);
+  await figure.getByRole("button", { name: "Play motion" }).click();
+  await expect(outerRing).toHaveCSS("animation-play-state", "running");
+  await expect.poll(() => outerRing.evaluate(element => getComputedStyle(element).transform)).not.toBe(pausedTransform);
+  await expect(heroMark).toHaveCSS("transform", "none");
 
-  const firstFrame = await canvas.evaluate((element) =>
-    (element as HTMLCanvasElement).toDataURL()
-  );
-  await expect.poll(
-    () => canvas.evaluate((element) =>
-      (element as HTMLCanvasElement).toDataURL()
-    ),
-    { timeout: 3_000 }
-  ).not.toBe(firstFrame);
+  await page.locator("footer").scrollIntoViewIfNeeded();
+  await expect(figure).toHaveAttribute("data-running", "false");
+  await expect(outerRing).toHaveCSS("animation-play-state", "paused");
+  await figure.scrollIntoViewIfNeeded();
+  await expect(figure).toHaveAttribute("data-running", "true");
 
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.reload();
-  const reducedCanvas = page.locator(".hero-kernel-field");
-  const reducedMark = page.locator(".hero-lockup .brand-mark");
-  await expect(reducedMark.locator(".brand-mark-segment--east")).toHaveCSS(
-    "animation-name",
-    "none"
-  );
-  const reducedColors = await reducedMark.evaluate((mark) => {
-    const color = (selector: string) =>
-      getComputedStyle(mark.querySelector<SVGElement>(selector)!).color;
-    const resolveColor = (value: string) => {
-      const probe = document.createElement("span");
-      probe.style.color = value;
-      document.body.append(probe);
-      const resolved = getComputedStyle(probe).color;
-      probe.remove();
-      return resolved;
-    };
-    return {
-      east: color(".brand-mark-segment--east"),
-      west: color(".brand-mark-segment--west"),
-      north: color(".brand-mark-segment--north"),
-      saffron: resolveColor("var(--saffron)"),
-      ink: resolveColor("var(--ink)")
-    };
-  });
-  expect(reducedColors.east).toBe(reducedColors.saffron);
-  expect(reducedColors.west).toBe(reducedColors.saffron);
-  expect(reducedColors.north).toBe(reducedColors.ink);
-  const reducedFrame = await reducedCanvas.evaluate((element) =>
-    (element as HTMLCanvasElement).toDataURL()
-  );
-  await page.waitForTimeout(300);
-  expect(
-    await reducedCanvas.evaluate((element) =>
-      (element as HTMLCanvasElement).toDataURL()
-    )
-  ).toBe(reducedFrame);
+  await figure.scrollIntoViewIfNeeded();
+  for (const ring of await rings.all()) await expect(ring).toHaveCSS("animation-name", "none");
+  await expect(figure.getByRole("button", { name: "Pause motion" })).toBeHidden();
+  await expect(heroMark).toHaveCSS("transform", "none");
+  expect(await rings.evaluateAll(elements => elements.flatMap(element => element.getAnimations()).length)).toBe(0);
 });
 
 test("public routes preserve the useful legacy lab sections", async ({ page }) => {
@@ -722,7 +673,7 @@ test("public routes preserve the useful legacy lab sections", async ({ page }) =
   await expect(page.getByText("a 3,500 sq ft lab across two floors")).toBeVisible();
   await expect(page.getByRole("heading", { name: "Two floors at a glance" })).toBeVisible();
   await expect(page.locator("[data-room-tile]")).toHaveCount(14);
-  await expect(page.getByText("Coworking commons", { exact: true })).toBeVisible();
+  await expect(page.locator("[data-room-tile]").getByText("Coworking commons", { exact: true })).toBeVisible();
   await expect(page.getByText("Workshop terrace", { exact: true })).toBeVisible();
   await expect(page.getByText("Builder pods")).toHaveCount(0);
   await expect(page.getByText(/nine cameras/i)).toHaveCount(0);
@@ -1042,16 +993,16 @@ test("PWA keeps transactional traffic out of Cache Storage", async ({ page, cont
   expect(cachedUrls.some((url) => /\/assets\/index-[^/]+\.js$/.test(url))).toBe(true);
 
   await page.goto("/");
-  await expect(page.getByRole("heading", { name: "armature ai labs", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /A place to build\s*physical intelligence\./ })).toBeVisible();
   await context.setOffline(true);
   await page.reload();
-  await expect(page.getByRole("heading", { name: "armature ai labs", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /A place to build\s*physical intelligence\./ })).toBeVisible();
 });
 
 test("mobile route families stay contained and avoid iOS form zoom", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "mobile");
   const publicRoutes = [
-    "/", "/membership", "/services", "/projects", "/branding", "/ecosystem",
+    "/", "/membership", "/services", "/projects", "/branding", "/blog", "/blog/model-hardware-standard/", "/ecosystem",
     "/components", "/components/bno055-imu", "/components/request",
     "/maker-desk", "/join", "/members", "/auth", "/kiosk"
   ];

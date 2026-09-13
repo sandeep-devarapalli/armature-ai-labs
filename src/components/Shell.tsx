@@ -31,6 +31,7 @@ const publicLinks = [
   ["/join", "Membership"],
   ["/services", "Services"],
   ["/projects", "Projects"],
+  ["/blog", "Blog"],
   ["/ecosystem", "Ecosystem"],
   ["/components", "Components"],
 ] as const;
@@ -67,10 +68,25 @@ function ThemeSwitch() {
 }
 
 function ScrollToTop() {
-  const { pathname } = useLocation();
+  const { pathname, hash, key } = useLocation();
   useEffect(() => {
+    if (hash) {
+      const scrollToTarget = () => {
+        const target = document.getElementById(hash.slice(1));
+        if (!target) return false;
+        target.scrollIntoView({ behavior: "instant", block: "start" });
+        return true;
+      };
+      if (scrollToTarget()) return;
+      const observer = new MutationObserver(() => {
+        if (scrollToTarget()) observer.disconnect();
+      });
+      observer.observe(document.getElementById("main") ?? document.body, { childList: true, subtree: true });
+      const timeout = window.setTimeout(() => observer.disconnect(), 5000);
+      return () => { observer.disconnect(); window.clearTimeout(timeout); };
+    }
     window.scrollTo({ top: 0, behavior: "instant" });
-  }, [pathname]);
+  }, [pathname, hash, key]);
   return null;
 }
 
@@ -89,6 +105,8 @@ export function Shell({ children }: PropsWithChildren) {
 
   return (
     <div className="app-shell">
+      <div className="editorial-frame" aria-hidden="true" />
+      <div className="editorial-rail" aria-hidden="true">Armature AI Labs</div>
       <ScrollToTop />
       <a className="skip-link" href="#main">
         Skip to content
@@ -210,6 +228,9 @@ export function Shell({ children }: PropsWithChildren) {
             <Link to="/members">Members</Link>
             <Link to="/maker-desk">Maker desk</Link>
             <Link to="/branding">Brand assets</Link>
+            <Link to="/building-vision">Building vision</Link>
+            <Link to="/blog">Blog</Link>
+            <a href="https://github.com/sandeep-devarapalli/armature-ai-labs/tree/main/docs">Docs</a>
             {componentRequestsAvailable && <Link to="/components/request">Request a component</Link>}
             {memberPlatformAvailable && <Link to="/kiosk">Kiosk</Link>}
             <Link to="/join">Join the floor</Link>

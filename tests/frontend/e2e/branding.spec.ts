@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import manifest from "../../../public/brand/editorial-2026-09/manifest.json" with { type: "json" };
 
 test("brand resources are discoverable, usable and downloadable", async ({ page, request, baseURL }) => {
   await page.context().grantPermissions(["clipboard-read", "clipboard-write"], {
@@ -9,9 +10,11 @@ test("brand resources are discoverable, usable and downloadable", async ({ page,
 
   await expect(page).toHaveURL(/\/branding$/);
   await expect(page.getByRole("heading", { level: 1, name: "Brand resources" })).toBeVisible();
-  await expect(page.getByText("Armature AI Labs is a 3,500 sq ft physical AI and robotics lab in HSR Layout, Bengaluru.")).toBeVisible();
+  await expect(page.getByText(manifest.copy.oneLine)).toBeVisible();
+  await expect(page.getByText(manifest.copy.paragraph)).toBeVisible();
   await expect(page.getByRole("heading", { name: "Logo system" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Usage and permissions" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Helvetica Neue + Space Mono" })).toBeVisible();
   await expect(page.locator(".branding-permissions").getByRole("link", { name: "hello@armatureailabs.com" })).toHaveAttribute("href", "mailto:hello@armatureailabs.com");
 
   const downloadLinks = page.locator('main a[download][href^="/brand/"]');
@@ -23,16 +26,17 @@ test("brand resources are discoverable, usable and downloadable", async ({ page,
   expect(downloads.every(({ href, download }) => href?.startsWith("/brand/") && Boolean(download))).toBe(true);
 
   for (const [path, contentType] of [
-    ["/brand/armature-lab/svg/armature-lab-lockup-h.svg", "image/svg+xml"],
-    ["/brand/armature-lab/png/armature-lab-icon-512.png", "image/png"],
-    ["/brand/armature-lab-assets.zip", "application/zip"]
+    ["/brand/editorial-2026-09/logos/lockup-light-transparent-570.svg", "image/svg+xml"],
+    ["/brand/editorial-2026-09/logos/mark-dark-transparent-512.svg", "image/svg+xml"],
+    ["/brand/editorial-2026-09/logos/icon-dark-512.png", "image/png"],
+    ["/brand/editorial-2026-09/armature-ai-labs-editorial-complete.zip", "application/zip"]
   ] as const) {
     const response = await request.get(new URL(path, page.url()).href);
     expect(response.ok(), path).toBe(true);
     expect(response.headers()["content-type"], path).toContain(contentType);
   }
 
-  const usageNote = await request.get(new URL("/brand/armature-lab/USAGE-AND-PERMISSIONS.md", page.url()).href);
+  const usageNote = await request.get(new URL("/brand/editorial-2026-09/USAGE-AND-PERMISSIONS.md", page.url()).href);
   expect(usageNote.ok()).toBe(true);
   expect(await usageNote.text()).toContain("hello@armatureailabs.com");
 
@@ -40,10 +44,15 @@ test("brand resources are discoverable, usable and downloadable", async ({ page,
     page.waitForEvent("download"),
     page.getByRole("link", { name: "Download complete pack" }).click()
   ]);
-  expect(pack.suggestedFilename()).toBe("armature-lab-assets.zip");
+  expect(pack.suggestedFilename()).toBe("armature-ai-labs-editorial-complete.zip");
 
   await page.getByRole("button", { name: "Copy one-line description" }).click();
   await expect(page.locator(".branding-copy-status")).toHaveText("Description copied to the clipboard.");
+
+  await page.getByRole("group", { name: "Asset background", exact: true }).getByRole("button", { name: "For dark surfaces" }).click();
+  await expect(page.getByRole("link", { name: "App, profile and browser icons dark 512 px · PNG" })).toHaveAttribute("href", "/brand/editorial-2026-09/logos/icon-dark-512.png");
+  await page.getByRole("combobox", { name: "App, profile and browser icons export size" }).selectOption("32-solid");
+  await expect(page.getByRole("link", { name: "App, profile and browser icons dark 32 px · PNG" })).toHaveAttribute("href", "/brand/editorial-2026-09/logos/icon-dark-32.png");
 
   for (const theme of ["dark", "sepia", "light"] as const) {
     await page.getByRole("button", { name: `${theme} theme` }).click();
