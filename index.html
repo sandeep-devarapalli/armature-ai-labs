@@ -1,9 +1,26 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#ffffff" />
+    <meta name="theme-color" content="#111110" />
+    <style>
+      html { background: #111110; color-scheme: dark; }
+      html[data-theme="light"] { background: #fff; color-scheme: light; }
+      html[data-theme="sepia"] { background: #f0e4c9; color-scheme: light; }
+    </style>
+    <script>
+      (() => {
+        let theme = "dark";
+        try {
+          const stored = localStorage.getItem("armature-theme");
+          if (stored === "light" || stored === "dark" || stored === "sepia") theme = stored;
+        } catch {}
+        document.documentElement.dataset.theme = theme;
+        const color = theme === "dark" ? "#111110" : theme === "sepia" ? "#F0E4C9" : "#ffffff";
+        document.querySelector('meta[name="theme-color"]').setAttribute("content", color);
+      })();
+    </script>
     <meta
       name="description"
       content="Armature AI Labs is a 3,500 sq ft physical AI and robotics lab in HSR Layout, Bengaluru."

@@ -57,6 +57,21 @@ test("the demo kiosk route also recovers from a retired chunk", async ({ browser
   await context.close();
 });
 
+test("home metrics keep equal inset spacing", async ({ page, isMobile }) => {
+  await page.goto("/");
+  const metrics = page.locator(".metrics-strip .metric");
+  await expect(metrics.first()).toContainText("3,500 sq ft");
+  const insets = await metrics.evaluateAll((items) => items.map((item) => ({
+    left: parseFloat(getComputedStyle(item).paddingLeft),
+    right: parseFloat(getComputedStyle(item).paddingRight)
+  })));
+  for (const inset of insets) {
+    expect(inset.left).toBe(isMobile ? 12 : 22);
+    expect(inset.right).toBe(inset.left);
+  }
+  await expectNoHorizontalOverflow(page);
+});
+
 test("public projects and three themes remain usable", async ({ page }) => {
   await page.goto("/projects");
   await expect(page.getByRole("heading", { name: "Projects", exact: true })).toBeVisible();
@@ -70,6 +85,97 @@ test("public projects and three themes remain usable", async ({ page }) => {
   await page.getByRole("button", { name: "light theme" }).click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
 });
+
+for (const palette of [
+  { theme: "light", link: "rgb(153, 86, 0)", hover: "rgb(120, 68, 0)", ink: "rgb(17, 17, 16)", paper: "rgb(255, 255, 255)", panel: "rgb(245, 245, 243)" },
+  { theme: "dark", link: "rgb(217, 154, 80)", hover: "rgb(234, 183, 121)", ink: "rgb(246, 246, 242)", paper: "rgb(17, 17, 16)", panel: "rgb(34, 34, 32)" },
+  { theme: "sepia", link: "rgb(120, 68, 0)", hover: "rgb(96, 54, 0)", ink: "rgb(37, 26, 12)", paper: "rgb(240, 228, 201)", panel: "rgb(232, 215, 179)" }
+]) {
+  test(`Copper hyperlinks remain readable in the ${palette.theme} theme`, async ({ page, isMobile }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: `${palette.theme} theme` }).click();
+    await expect(page.locator("html")).toHaveAttribute("data-theme", palette.theme);
+    const brand = page.locator(".topbar .brand-link");
+    await expect(brand).toHaveCSS("color", palette.ink);
+    await brand.hover();
+    await expect(brand).toHaveCSS("color", palette.ink);
+
+    const primary = page.locator(".home-hero a.button-primary").first();
+    await expect(primary).toHaveCSS("color", palette.paper);
+    await expect(primary).toHaveCSS("background-color", palette.ink);
+    await primary.hover();
+    await expect(primary).toHaveCSS("color", palette.ink);
+    await expect(primary).toHaveCSS("background-color", palette.paper);
+    const quiet = page.locator(".home-hero a.button-quiet").first();
+    await quiet.hover();
+    await expect(quiet).toHaveCSS("color", palette.hover);
+    await expect(quiet).toHaveCSS("background-color", palette.panel);
+    await page.mouse.move(0, 0);
+
+    const modelLink = page.locator(".ink-surface .lab-model-grid figcaption a").first();
+    await expect(modelLink).toHaveCSS("color", "rgb(217, 154, 80)");
+    await modelLink.hover();
+    await expect(modelLink).toHaveCSS("color", "rgb(234, 183, 121)");
+    await page.mouse.move(0, 0);
+    const email = page.locator('footer a[href="mailto:hello@armatureailabs.com"]');
+    const wordmark = page.locator(".footer-wordmark");
+    await expect(wordmark).toHaveText("Armature AI Labs");
+    await expect(wordmark).toHaveCSS("color", palette.ink);
+    await expect(wordmark).toHaveCSS("white-space", "nowrap");
+    expect(await wordmark.evaluate((element) => {
+      const range = document.createRange();
+      range.selectNodeContents(element);
+      const text = range.getBoundingClientRect();
+      const container = element.parentElement!.getBoundingClientRect();
+      return text.left >= container.left && text.right <= container.right && text.bottom <= container.bottom;
+    })).toBe(true);
+    await expect(email).toHaveCSS("color", palette.link);
+    await email.hover();
+    await expect(email).toHaveCSS("color", palette.hover);
+    await expectNoHorizontalOverflow(page);
+
+    await page.mouse.move(0, 0);
+    await page.goto("/blog/");
+    await expect(page.locator(".footer-wordmark")).toHaveText("Armature AI Labs");
+    await expect(page.locator("html")).toHaveAttribute("data-theme", palette.theme);
+    const title = page.locator(".post-summary h2 a");
+    await expect(title).toHaveCSS("color", palette.link);
+    await expect(title.locator(".muted")).toHaveCSS("color", palette.link);
+    await title.hover();
+    await expect(title).toHaveCSS("color", palette.hover);
+    await expect(title.locator(".muted")).toHaveCSS("color", palette.hover);
+    await title.click();
+    await page.mouse.move(0, 0);
+    await expect(page).toHaveURL(/\/blog\/model-hardware-standard\/$/);
+    if (isMobile) await page.locator(".mobile-toc summary").click();
+    const contents = page.locator(isMobile ? ".mobile-toc li a" : ".toc li a").first();
+    await expect(contents).toHaveCSS("color", palette.link);
+    await contents.hover();
+    await expect(contents).toHaveCSS("color", palette.hover);
+    await page.mouse.move(0, 0);
+    const citation = page.locator(".article-body .citation").first();
+    await expect(citation).toHaveCSS("color", palette.link);
+    await expect(citation).toHaveCSS("text-decoration-line", "underline");
+    await page.keyboard.press("Tab");
+    await citation.focus();
+    await expect(citation).toHaveCSS("outline-color", palette.link);
+    await expect(citation).not.toHaveCSS("outline-style", "none");
+    await citation.hover();
+    await expect(citation).toHaveCSS("color", palette.hover);
+    await expectNoHorizontalOverflow(page);
+
+    await page.mouse.move(0, 0);
+    await page.goto("/branding/");
+    await expect(page.locator("html")).toHaveAttribute("data-theme", palette.theme);
+    const download = page.locator(".branding-download-links a").first();
+    await expect(download).toHaveCSS("color", palette.link);
+    await expect(download).toHaveAttribute("download", /\.png$/);
+    await download.hover();
+    await expect(download).toHaveCSS("color", palette.hover);
+    await expect(download).toHaveCSS("background-color", palette.panel);
+    await expectNoHorizontalOverflow(page);
+  });
+}
 
 test("project discovery combines filters and preserves BRIDGE through reload and build-list navigation", async ({ page }) => {
   await page.goto("/projects");

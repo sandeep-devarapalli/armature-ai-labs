@@ -2,6 +2,10 @@
 
 ## Approved editorial revision — 13 September 2026
 
+Footer option A is approved: finish the shared site footer with a complete, full-width `Armature AI Labs` wordmark in the existing bold display face, monochrome in every theme. Scale it with its container; do not crop, wrap or replace the existing mark, contacts, navigation and license information above it.
+
+Hyperlink accent: the user selected Copper (option C). Use `#995600` on light surfaces with `#784400` on hover; use `#D99A50` on dark surfaces with `#EAB779` on hover. Sepia uses deeper Copper `#784400` / `#603600` for readable links on its darker paper panels. Apply shared tokens to navigation, linked titles, citations, downloads and footer contacts; preserve monochrome branding and high-contrast filled button labels. Retain inline underlines and visible keyboard focus. This is a link accent, not a logo or background recolour.
+
 For the approved public release, the user-selected editorial system supersedes the older visual tokens below: exact `Armature AI Labs` casing, fixed monochrome circular commutator, Helvetica Neue/Helvetica/Arial bold display and wordmark, and self-hosted Space Mono for prose and controls. Use true white (#fff), neutral near-black (#111110), restrained secondary grey and hairline borders. Dark mode uses #111110 surfaces and white text. Sepia remains an optional reading preference with the same structure. Keep all existing home-page sections and operational routes. Use the approved slow outline-orbit hero with stationary logo, pause control, offscreen/hidden pausing and reduced-motion support. Model renders remain unfiltered and labelled as designs. See `docs/editorial-rollout.md` for scope and copy retention.
 
 ## Design Intent
@@ -54,7 +58,7 @@ Theme behavior:
 - Keep content, layout, calculator logic, project data, and navigation identical in all three modes.
 - Use the existing CSS variables and semantic surface tokens instead of duplicating page markup.
 - Persist an explicit visitor choice in `localStorage` under `armature-theme`.
-- When no choice exists, respect `prefers-color-scheme`; dark may follow the system, while sepia is always explicit.
+- When no valid choice exists, load dark mode regardless of the system preference. Apply the saved preference before first paint, and retain functional theme controls when storage is unavailable. Sepia remains an explicit choice.
 - Keep the three-swatch theme control in the main navigation.
 - Verify inline marks, diagrams, form controls, cards, tables, and the animated hero field in every mode.
 
