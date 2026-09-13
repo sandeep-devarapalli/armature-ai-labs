@@ -80,6 +80,7 @@
   .branding-color-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; }
 }
 @media (max-width: 760px) {
+  .branding-logo-detail select { font-size: 16px; }
   .branding-hero-grid { grid-template-columns: 1fr; gap: 32px; padding-top: 42px; padding-bottom: 42px; }
   .branding-hero-copy h1 { font-size: 48px; }
   .branding-hero-copy .hero-copy { font-size: 13px; }
