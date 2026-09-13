@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import manifest from "../../../public/brand/editorial-2026-09/manifest.json";
+import manifest from "../../../public/brand/editorial-2026-09/manifest.json" with { type: "json" };
 
 test("brand resources are discoverable, usable and downloadable", async ({ page, request, baseURL }) => {
   await page.context().grantPermissions(["clipboard-read", "clipboard-write"], {
