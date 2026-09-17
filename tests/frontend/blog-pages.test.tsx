@@ -43,6 +43,21 @@ describe("published journal", () => {
     expect(screen.getByText(/A requirement should not be relaxed merely to make a failed test pass/)).toBeInTheDocument();
   });
 
+  it("loads the accessible video only after activation and preserves a YouTube fallback", () => {
+    const { container } = render(<MemoryRouter><BlogArticlePage /></MemoryRouter>);
+    expect(container.querySelector("iframe")).toBeNull();
+    expect(screen.getByRole("img", { name: /Thumbnail for Anthropic’s video/ })).toHaveAttribute("loading", "lazy");
+    expect(screen.getByRole("link", { name: /Watch on YouTube/ })).toHaveAttribute("href", "https://www.youtube.com/watch?v=P1zBiAQU1IA");
+    fireEvent.click(screen.getByRole("button", { name: /^Play video:/ }));
+    const player = screen.getByTitle("AI models can now help run physical science experiments — Anthropic, YouTube video");
+    expect(player).toHaveAttribute("src", "https://www.youtube-nocookie.com/embed/P1zBiAQU1IA?autoplay=1&playsinline=1&cc_load_policy=1");
+    expect(player).toHaveAttribute("referrerpolicy", "strict-origin-when-cross-origin");
+    expect(player).toHaveAttribute("allowfullscreen");
+    expect(player).toHaveFocus();
+    expect(screen.queryByRole("button", { name: /^Play video:/ })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Watch on YouTube/ })).toBeInTheDocument();
+  });
+
   it("links every contents item to an existing article section", () => {
     const { container } = render(<MemoryRouter><BlogArticlePage /></MemoryRouter>);
     const contents = screen.getByRole("navigation", { name: "Article contents" });

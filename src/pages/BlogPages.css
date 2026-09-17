@@ -68,6 +68,18 @@
 .journal-page .article-body { min-width: 0; }
 .journal-page .article-body p { color: var(--fg-3); font-size: 14.5px; line-height: 1.85; margin-bottom: 22px; }
 .journal-page .article-body > .opening { margin-bottom: 36px; color: var(--ink); }
+.journal-page .article-video { margin: 32px 0; border: 1px solid var(--hair); }
+.journal-page .article-video-media { width: 100%; aspect-ratio: 16 / 9; min-height: 200px; background: #111110; }
+.journal-page .article-video-media iframe, .journal-page .article-video-play { display: block; width: 100%; height: 100%; min-height: 200px; border: 0; }
+.journal-page .article-video-play { position: relative; padding: 0; border-radius: 0; background: #111110; cursor: pointer; }
+.journal-page .article-video-play img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.journal-page .article-video-play-label { position: absolute; inset: auto 16px 16px auto; display: inline-flex; align-items: center; gap: 10px; padding: 12px 18px; background: #111110; color: #fff; border: 1px solid #fff; font-size: 12px; }
+.journal-page .article-video-play-label svg { width: 24px; height: 24px; fill: currentColor; }
+.journal-page .article-video-play:hover .article-video-play-label { background: #fff; color: #111110; }
+.journal-page .article-video-play:focus-visible { outline: 3px solid var(--link); outline-offset: 4px; }
+.journal-page .article-video figcaption { display: grid; justify-items: start; gap: 14px; padding: 22px; }
+.journal-page .article-video figcaption > strong { font: 700 24px/1.2 var(--display); letter-spacing: -.025em; }
+.journal-page .article-video-note { color: var(--fg-3); font-size: 10px; line-height: 1.75; }
 .journal-page .article-section { scroll-margin-top: 125px; }
 .journal-page .article-section h2 { font-size: 30px; line-height: 1.1; letter-spacing: -.03em; margin: 42px 0 24px; display: flex; gap: 18px; }
 .journal-page .section-number { color: var(--fg-3); font-family: var(--mono); font-size: 12px; letter-spacing: 0; font-weight: 400; padding-top: 9px; }

@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import articleMarkdown from '../data/blogArticle.md?raw';
 import './BlogPages.css';
@@ -20,6 +20,37 @@ function TextLink({ href, children, className = '' }: { href: string; children: 
 
 function ArticleTitle() {
   return <>MHS could be physical AI’s <span className="muted">MCP moment.</span></>;
+}
+
+function MhsVideo() {
+  const [playing, setPlaying] = useState(false);
+  const player = useRef<HTMLIFrameElement>(null);
+  const videoTitle = 'AI models can now help run physical science experiments';
+  useEffect(() => {
+    if (playing) player.current?.focus();
+  }, [playing]);
+  return <figure className="article-video" aria-labelledby="mhs-video-caption">
+    <div className="article-video-media">
+      {playing ? <iframe
+        ref={player}
+        src="https://www.youtube-nocookie.com/embed/P1zBiAQU1IA?autoplay=1&playsinline=1&cc_load_policy=1"
+        title={`${videoTitle} — Anthropic, YouTube video`}
+        allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+        allowFullScreen
+        referrerPolicy="strict-origin-when-cross-origin"
+        tabIndex={0}
+      /> : <button type="button" className="article-video-play" aria-label={`Play video: ${videoTitle}`} aria-describedby="mhs-video-privacy" onClick={() => setPlaying(true)}>
+        <img src="https://i.ytimg.com/vi/P1zBiAQU1IA/hqdefault.jpg" alt={`Thumbnail for Anthropic’s video: ${videoTitle}`} width="480" height="360" loading="lazy" decoding="async"/>
+        <span className="article-video-play-label" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m9 5 11 7-11 7Z"/></svg>Play video</span>
+      </button>}
+    </div>
+    <figcaption id="mhs-video-caption">
+      <span className="small-meta">Watch · Anthropic</span>
+      <strong>{videoTitle}</strong>
+      <a className="text-link" href="https://www.youtube.com/watch?v=P1zBiAQU1IA" target="_blank" rel="noopener noreferrer">Watch on YouTube <span className="sr-only">(opens in a new tab)</span><Arrow/></a>
+      <span id="mhs-video-privacy" className="article-video-note">The YouTube player loads when you press play. Captions are enabled when available.</span>
+    </figcaption>
+  </figure>;
 }
 
 function InterfaceDiagram({ compact = false }: { compact?: boolean }) {
@@ -82,6 +113,6 @@ export function BlogArticlePage() {
   const contents = <ol>{sections.filter(section => section.heading !== 'References').map(section => <li key={section.id}><a href={`#${section.id}`} aria-current={active === section.id ? 'location' : undefined} onClick={() => setActive(section.id)}><span>{section.number}</span>{' '}{section.heading}</a></li>)}</ol>;
   return <div className="journal-page">
     <div className="article-hero"><div className="breadcrumb"><Link to="/blog/">Blog</Link><span>/ Engineering</span></div><h1><ArticleTitle/></h1><p className="article-deck">{deck}</p><div className="article-meta"><span>Armature AI Labs</span><time dateTime="2026-09-13">13 September 2026</time><span>Updated <time dateTime="2026-09-17">17 September 2026</time></span><span>8 min read</span></div></div>
-    <div className="article-layout wrap"><aside className="toc"><nav aria-label="Article contents"><p className="small-meta">Contents</p>{contents}<a className="source-shortcut" href="#references">Sources [8]</a></nav></aside><details className="mobile-toc"><summary>Contents <span>+</span></summary><nav aria-label="Mobile article contents">{contents}<a href="#references">Sources [8]</a></nav></details><article className="article-body"><p className="opening">Getting an agent to write a test script is one thing. Running it on a bench, checking the measurements and using the result to improve a design is another.</p>{sections.map(section => <section id={section.id} key={section.id} className="article-section"><h2>{section.heading !== 'References' ? <span className="section-number">{section.number}</span> : null}{section.heading}</h2><ArticleBlocks content={section.content}/>{section.number === '03' ? <InterfaceDiagram/> : null}{section.number === '04' ? <blockquote>Make the integration reusable.<br/><span className="muted">Make the result reproducible.</span></blockquote> : null}</section>)}<div className="article-end"><p className="small-meta">Published 13 September 2026 · Updated 17 September 2026</p><TextLink href="/blog/">Back to the journal</TextLink><TextLink href={DISCORD}>Discuss with the community</TextLink></div></article></div>
+    <div className="article-layout wrap"><aside className="toc"><nav aria-label="Article contents"><p className="small-meta">Contents</p>{contents}<a className="source-shortcut" href="#references">Sources [8]</a></nav></aside><details className="mobile-toc"><summary>Contents <span>+</span></summary><nav aria-label="Mobile article contents">{contents}<a href="#references">Sources [8]</a></nav></details><article className="article-body"><p className="opening">Getting an agent to write a test script is one thing. Running it on a bench, checking the measurements and using the result to improve a design is another.</p>{sections.map(section => <section id={section.id} key={section.id} className="article-section"><h2>{section.heading !== 'References' ? <span className="section-number">{section.number}</span> : null}{section.heading}</h2><ArticleBlocks content={section.content}/>{section.number === '01' ? <MhsVideo/> : null}{section.number === '03' ? <InterfaceDiagram/> : null}{section.number === '04' ? <blockquote>Make the integration reusable.<br/><span className="muted">Make the result reproducible.</span></blockquote> : null}</section>)}<div className="article-end"><p className="small-meta">Published 13 September 2026 · Updated 17 September 2026</p><TextLink href="/blog/">Back to the journal</TextLink><TextLink href={DISCORD}>Discuss with the community</TextLink></div></article></div>
   </div>;
 }

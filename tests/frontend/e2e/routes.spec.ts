@@ -177,6 +177,39 @@ for (const palette of [
   });
 }
 
+test("MHS video loads on keyboard activation with an accessible player and fallback", async ({ page }) => {
+  const errors: string[] = [];
+  const embeds: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  await page.route("https://www.youtube-nocookie.com/embed/**", async route => {
+    embeds.push(route.request().url());
+    await route.fulfill({ contentType: "text/html", body: "<!doctype html><title>YouTube test player</title>" });
+  });
+  await page.goto("/blog/model-hardware-standard/");
+  const video = page.locator(".article-video");
+  await expect(video.locator("iframe")).toHaveCount(0);
+  expect(embeds).toEqual([]);
+  const play = video.getByRole("button", { name: /^Play video:/ });
+  const cardSize = await video.boundingBox();
+  const posterSize = await play.boundingBox();
+  expect(posterSize!.x + posterSize!.width).toBeLessThanOrEqual(cardSize!.x + cardSize!.width);
+  await play.focus();
+  await expect(play).toBeFocused();
+  await play.press("Enter");
+  const player = video.locator("iframe");
+  await expect(player).toBeVisible();
+  await expect(player).toHaveAttribute("title", "AI models can now help run physical science experiments — Anthropic, YouTube video");
+  await expect(player).toBeFocused();
+  await expect.poll(() => embeds.length).toBe(1);
+  await expect(video.getByRole("link", { name: /Watch on YouTube/ })).toHaveAttribute("href", "https://www.youtube.com/watch?v=P1zBiAQU1IA");
+  const size = await player.boundingBox();
+  expect(size?.width).toBeGreaterThanOrEqual(200);
+  expect(size?.height).toBeGreaterThanOrEqual(200);
+  expect(size!.x + size!.width).toBeLessThanOrEqual(cardSize!.x + cardSize!.width);
+  await expectNoHorizontalOverflow(page);
+  expect(errors).toEqual([]);
+});
+
 test("MHS journal revision links engineering examples to the design feedback loop", async ({ page, isMobile }) => {
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
