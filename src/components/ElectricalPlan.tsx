@@ -23,8 +23,8 @@ export function ElectricalPlan() {
     <div className="electrical-summary" aria-label="Load summary">
       <div><span className="mono">Design case</span><strong>{design.kw} kW</strong><p>25 people concurrent, four cabins in use, a GPU job running: {(10 - design.kw).toFixed(1)} kW of headroom under 10 kW.</p></div>
       <div><span className="mono">Phase balance</span><strong>{plan.phases.R.kw} · {plan.phases.Y.kw} · {plan.phases.B.kw} kW</strong><p>R, Y, B at the design case. Hall ACs split across R and Y; the UPS sits on B.</p></div>
-      <div><span className="mono">Critical power</span><strong>{plan.ups.rating_kva} kVA UPS · {plan.ups.backup_h} h</strong><p>GPUs, printers, network, hall AV and access doors; {plan.ups.lifepo4_kwh_at_80pct_dod} kWh installed at 80% depth of discharge.</p></div>
-      <div><span className="mono">Installed</span><strong>{plan.totals.sockets6} × 6 A · {plan.totals.sockets16} × 16 A</strong><p>{plan.totals.luminaires} luminaires, {plan.totals.fans} BLDC fans, {plan.totals.acUnits} AC units, {plan.totals.cameras} cameras, {plan.totals.accessDoors} access doors. Connected load {plan.totals.connectedKw} kW.</p></div>
+      <div><span className="mono">Proposed backup</span><strong>{plan.ups.rating_kva} kVA UPS · {plan.ups.backup_h} h target</strong><p>GPUs, printers, network, hall AV and access doors; estimated nominal battery capacity {plan.ups.lifepo4_kwh_at_80pct_dod} kWh, assuming 80% depth of discharge.</p></div>
+      <div><span className="mono">Proposed points</span><strong>{plan.totals.sockets6} × 6 A · {plan.totals.sockets16} × 16 A</strong><p>{plan.totals.luminaires} luminaires, {plan.totals.fans} BLDC fans, {plan.totals.acUnits} AC units, {plan.totals.cameras} cameras, {plan.totals.accessDoors} access doors. Estimated connected load {plan.totals.connectedKw} kW.</p></div>
     </div>
 
     <div className="building-floor-tabs" role="group" aria-label="Choose electrical plan floor">

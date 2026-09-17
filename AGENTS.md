@@ -1,5 +1,7 @@
 # AGENTS.md
 
+- Operational status confirmed, 17 September 2026: Armature AI Labs is pre-launch and accepts enquiries only; membership applications, visits and bookings must not be advertised as available. Public Home and Join copy must present equipment and access as planned. Use the current seven-cabin plan and omit unverified event capacity; the retired sixteen-pod and 50-person claims are not current offerings. Preserve operational release gates and do not enable bookings from copy approval.
+
 - Dark-default and spacing correction, 13 September 2026: new visitors load dark mode before the app renders; retain an existing explicit light/dark/sepia preference. Keep equal inset padding on every home metric, including the first one. The user selected footer option A and authorized publication: use the complete full-width `Armature AI Labs` wordmark without cropping or wrapping, preserving the circular mark and all footer contacts above it.
 
 - Copper hyperlink selection, 13 September 2026: use the user-selected option C for text links across routes: light `#995600`, dark `#D99A50`, with the hover and accessible sepia variants in `DESIGN.md`. Keep the circular logo and wordmark monochrome, preserve readable filled-button labels, and test lazy-loaded pages plus locally inverted surfaces rather than changing only the global anchor default.

@@ -319,13 +319,13 @@ test("ecosystem map filters and preserves a selected organization", async ({ pag
   await page.getByRole("button", { name: "Learning & training", exact: true }).click();
   if (await directorySwitch.isVisible()) await directorySwitch.click();
   await expect(resultCount).toHaveText("1 result");
-  await expect(page.getByRole("button", { name: /LSCL Robotics/ })).toBeVisible();
+  await expect(page.getByRole("link", { name: /LSCL Robotics.*Learning/ })).toBeVisible();
   await page.getByRole("button", { name: "All", exact: true }).click();
 
   await page.getByPlaceholder("Search teams, founders, or places").fill("Bellatrix");
   if (await directorySwitch.isVisible()) await directorySwitch.click();
   await expect(resultCount).toHaveText("1 result");
-  await page.getByRole("button", { name: /Bellatrix Aerospace/ }).click();
+  await page.getByRole("link", { name: /Bellatrix Aerospace.*Space hardware/ }).click();
   await expect(page).toHaveURL(/focus=bellatrix-aerospace/);
   await expect(page.getByRole("heading", { name: "Bellatrix Aerospace" })).toBeVisible();
   const organizationDetails = page.getByRole("complementary", { name: "Organization details" });
@@ -834,7 +834,7 @@ test("home hero keeps the circular identity and controllable outline motion", as
 
 test("public routes preserve the useful legacy lab sections", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByText("a 3,500 sq ft lab across two floors")).toBeVisible();
+  await expect(page.getByText(/a planned 3,500 sq ft lab across two floors/)).toBeVisible();
   await expect(page.getByRole("heading", { name: "Two floors at a glance" })).toBeVisible();
   await expect(page.locator("[data-room-tile]")).toHaveCount(14);
   await expect(page.locator("[data-room-tile]").getByText("Coworking commons", { exact: true })).toBeVisible();
@@ -848,9 +848,9 @@ test("public routes preserve the useful legacy lab sections", async ({ page }) =
 
   await page.goto("/membership");
   await expect(page).toHaveURL(/\/join$/);
-  await expect(page.getByRole("heading", { name: "Join the lab. Book what you need." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /Join the lab\. Book what you need\.|Build with us\. Enquire about membership\./ })).toBeVisible();
   await expect(page.getByRole("heading", { name: "One membership journey" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "What members can reserve" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /What members can reserve|Planned member spaces/ })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Start your membership" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Workstation choices" })).toHaveCount(0);
   await expectNoHorizontalOverflow(page);

@@ -4445,32 +4445,52 @@ footer p {
   overscroll-behavior: contain;
 }
 
-.ecosystem-directory-list > button {
-  display: grid;
+.ecosystem-directory-list > article {
   width: 100%;
-  grid-template-columns: 12px minmax(0, 1fr);
-  gap: 10px;
   padding: 14px 15px;
   text-align: left;
   background: transparent;
-  border: 0;
   border-bottom: 1px solid var(--hair);
-  cursor: pointer;
 }
 
-.ecosystem-directory-list > button:hover {
+.ecosystem-directory-list > article:hover {
   background: var(--panel-2);
 }
 
-.ecosystem-directory-list > button.active {
+.ecosystem-directory-list > article.active {
   background: color-mix(in srgb, var(--saffron) 13%, var(--panel));
   box-shadow: inset 3px 0 0 var(--saffron);
 }
 
-.ecosystem-directory-list button > span:last-child {
+.ecosystem-entity-link {
+  display: grid;
+  grid-template-columns: 12px minmax(0, 1fr);
+  gap: 10px;
+}
+
+.ecosystem-entity-link > span:last-child {
   display: grid;
   min-width: 0;
   gap: 4px;
+}
+
+.ecosystem-directory-list p {
+  margin: 10px 0;
+  color: var(--fg-2);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.ecosystem-directory-list article > a:last-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+}
+
+.ecosystem-directory-list article > a:last-child svg {
+  width: 12px;
+  height: 12px;
 }
 
 .ecosystem-directory-list strong {

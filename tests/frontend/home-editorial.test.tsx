@@ -23,8 +23,11 @@ describe("Full editorial landing page", () => {
     expect(screen.getByText(/6 rooms · 1,475 sq ft carpet/)).toBeInTheDocument();
     expect(screen.getByText("Glass-enclosed workshop proposal · curved balcony retained")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Join Discord" })).toHaveAttribute("href", "https://discord.gg/qGNXGmF8z");
-    expect(screen.getByRole("link", { name: "Join the floor" })).toHaveAttribute("href", "/join");
+    expect(screen.getByRole("link", { name: "Membership enquiries" })).toHaveAttribute("href", "/join");
     expect(screen.queryByText(/sixteen builder pods/i)).not.toBeInTheDocument();
+    expect(screen.getByText(/Pre-launch · enquiries only/)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Enquire about membership" })).toHaveAttribute("href", "mailto:hello@armatureailabs.com");
+    expect(screen.queryByText(/all bookable by the hour|Here you book them by the hour/)).not.toBeInTheDocument();
   });
 
   it("shows only the four selected current model renders, lazily loaded", () => {
