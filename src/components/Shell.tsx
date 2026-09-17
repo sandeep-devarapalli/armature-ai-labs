@@ -24,6 +24,7 @@ import { useApp } from "../context/AppContext";
 import { useTheme } from "../context/ThemeContext";
 import type { Theme } from "../types/domain";
 import { BrandMark } from "./BrandMark";
+import { PageMetadata } from "./PageMetadata";
 
 const publicLinks = [
   ["/", "The lab"],
@@ -105,6 +106,7 @@ export function Shell({ children }: PropsWithChildren) {
 
   return (
     <div className="app-shell">
+      <PageMetadata />
       <div className="editorial-frame" aria-hidden="true" />
       <div className="editorial-rail" aria-hidden="true">Armature AI Labs</div>
       <ScrollToTop />
