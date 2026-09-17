@@ -177,6 +177,31 @@ for (const palette of [
   });
 }
 
+test("MHS journal revision links engineering examples to the design feedback loop", async ({ page, isMobile }) => {
+  const errors: string[] = [];
+  page.on("pageerror", error => errors.push(error.message));
+  await page.goto("/blog/");
+  await page.getByRole("searchbox", { name: "Search the journal" }).fill("test script");
+  await expect(page.locator(".blog-index").getByRole("status")).toHaveText("1 article found");
+  await page.getByRole("link", { name: "Read the article", exact: true }).click();
+  await expect(page).toHaveURL(/\/blog\/model-hardware-standard\/$/);
+  await expect(page.locator(".article-meta")).toContainText("Updated 17 September 2026");
+  if (isMobile) await page.locator(".mobile-toc summary").click();
+  const contents = page.getByRole("navigation", { name: isMobile ? "Mobile article contents" : "Article contents", exact: true });
+  await contents.getByRole("link", { name: /Where engineering AI meets the test bench/ }).click();
+  await expect(page).toHaveURL(/#where-engineering-ai-meets-the-test-bench$/);
+  const examples = page.locator("#where-engineering-ai-meets-the-test-bench");
+  await expect(examples).toContainText("possible applications, not turnkey MHS features");
+  for (const label of ["Hardware-in-the-loop testing.", "Physical component testing.", "Mechatronic system validation."]) {
+    await expect(examples.getByText(label, { exact: true })).toBeVisible();
+  }
+  await contents.getByRole("link", { name: /Close the loop, not just the test report/ }).click();
+  await expect(page).toHaveURL(/#close-the-loop-not-just-the-test-report$/);
+  await expect(page.getByText("Design → Simulation → Physical Test → Learn → Redesign", { exact: true })).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+  expect(errors).toEqual([]);
+});
+
 test("project discovery combines filters and preserves BRIDGE through reload and build-list navigation", async ({ page }) => {
   await page.goto("/projects");
   await page.getByRole("group", { name: "Filter by topic" }).getByRole("button", { name: /^Robotics/ }).click();

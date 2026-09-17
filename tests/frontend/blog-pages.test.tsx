@@ -21,14 +21,26 @@ describe("published journal", () => {
 
   it("retains article sections, eight sources, status and research caveats without a nested shell", () => {
     const { container } = render(<MemoryRouter><BlogArticlePage /></MemoryRouter>);
-    expect(container.querySelectorAll(".article-section")).toHaveLength(8);
+    expect(container.querySelectorAll(".article-section")).toHaveLength(10);
     const references = container.querySelector("#references") as HTMLElement;
     expect(within(references).getAllByRole("link")).toHaveLength(8);
-    expect(screen.getByText("Published 13 September 2026")).toBeInTheDocument();
+    expect(screen.getByText("Published 13 September 2026 · Updated 17 September 2026")).toBeInTheDocument();
     expect(screen.getByText(/does not imply that Armature has MHS access/)).toBeInTheDocument();
     expect(screen.getByText(/Limited research preview, with access by application/)).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Back to the journal" })).toHaveAttribute("href", "/blog/");
     expect(container.querySelector("header, footer, main")).toBeNull();
+  });
+
+  it("presents engineering workflows as proposals and connects evidence to reviewed design changes", () => {
+    const { container } = render(<MemoryRouter><BlogArticlePage /></MemoryRouter>);
+    const useCases = container.querySelector("#where-engineering-ai-meets-the-test-bench") as HTMLElement;
+    expect(within(useCases).getByText(/possible applications, not turnkey MHS features/)).toBeInTheDocument();
+    for (const label of ["Hardware-in-the-loop testing.", "Physical component testing.", "Mechatronic system validation."]) {
+      expect(within(useCases).getByText(label)).toBeInTheDocument();
+    }
+    expect(within(useCases).getByText(/Timing-critical control and protective interlocks/)).toBeInTheDocument();
+    expect(screen.getByText("Design → Simulation → Physical Test → Learn → Redesign")).toBeInTheDocument();
+    expect(screen.getByText(/A requirement should not be relaxed merely to make a failed test pass/)).toBeInTheDocument();
   });
 
   it("links every contents item to an existing article section", () => {
