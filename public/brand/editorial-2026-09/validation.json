@@ -9,11 +9,17 @@
     "website": "SpaceMono-Regular",
     "wordmark": "HelveticaNeue-Bold"
   },
-  "assetCount": 90,
+  "assetCount": 92,
   "dimensions": "All PNG dimensions matched requested sizes via sharp metadata.",
   "maxPngBytes": 74924,
   "allSocialImagesUnder1MB": true,
   "geometry": "Source mark SHA-256 pin checked before generation; path data unchanged in generated mark transforms.",
   "visualReview": "Contact sheet and representative full-size LinkedIn cover, 512 px dark icon, GitHub preview, Instagram portrait and YouTube safe-area crop inspected on 13 September 2026. No clipped text, incorrect casing or distorted marks observed.",
-  "uploadStatus": "Not uploaded."
+  "uploadStatus": "Not uploaded.",
+  "squareLogos": {
+    "date": "2026-09-19",
+    "dimensions": "Named square PNGs verified at 1024 \u00d7 1024.",
+    "geometry": "Existing outlined stacked artwork preserved inside a square canvas with a 128 px vertical translation.",
+    "visualReview": "Verified 19 September 2026: all four square cards inspected in desktop and 390 px light-theme screenshots; dark and sepia layouts checked without horizontal overflow. All preview images load at native 1024 \u00d7 1024 dimensions, and all eight PNG/SVG download links are present."
+  }
 }
