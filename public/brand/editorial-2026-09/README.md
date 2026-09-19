@@ -28,6 +28,7 @@ Description provenance: src/pages/BrandingPage.tsx and src/pages/HomePage.tsx at
 
 - logos/: symbols, square icons, horizontal/stacked lockups and wordmarks. Each design has PNG and SVG versions; PNG sizes include 512 px.
 - logos/square-named-{light,dark}-1024: 1024 × 1024 PNG/SVG named square lockups. Icon-only squares use logos/icon-{light,dark}-1024.
+- logos/square-{named,icon}-black-1024: additional pure-black (#000000) square PNG/SVG exports with all-white artwork, including the named tagline. Existing white and charcoal exports are retained.
 - social/: seven platform folders with light and dark variants.
 - editable/: font-dependent SVG wordmarks for controlled editing.
 - source/: byte-preserved approved circular mark.

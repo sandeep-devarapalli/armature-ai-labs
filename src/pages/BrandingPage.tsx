@@ -19,10 +19,10 @@ const logos = [
   { kind: "icon", title: "App, profile and browser icons", use: "Square icons from 16 to 2048 px, including the 512 px app icon.", width: 512 }
 ];
 const squareLogos = (["named", "icon"] as const).flatMap((kind) =>
-  (["light", "dark"] as const).map((mode) => ({
-    title: `${kind === "named" ? "With name" : "Icon only"} · ${mode === "light" ? "white" : "black"} background`,
-    mode,
-    asset: manifest.files.find((asset) => asset.name === `logos/${kind === "named" ? "square-named" : "icon"}-${mode}-1024`)!
+  (["light", "dark", "black"] as const).map((variant) => ({
+    title: `${kind === "named" ? "With name" : "Icon only"} · ${{ light: "white", dark: "charcoal", black: "pure black" }[variant]} background`,
+    mode: variant === "light" ? "light" : "dark",
+    asset: manifest.files.find((asset) => asset.name === `logos/${kind === "named" ? "square-named" : variant === "black" ? "square-icon" : "icon"}-${variant}-1024`)!
   }))
 );
 const platforms = [

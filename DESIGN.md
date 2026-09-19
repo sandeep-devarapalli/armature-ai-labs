@@ -2,6 +2,8 @@
 
 ## Approved editorial revision — 13 September 2026
 
+Square logo exports also include pure-black (`#000000`) backgrounds with all-white artwork, as requested on 19 September 2026. Label the existing `#111110` square variants charcoal. This additional export palette does not change website theme colours or the circular mark geometry.
+
 Footer option A is approved: finish the shared site footer with a complete, full-width `Armature AI Labs` wordmark in the existing bold display face, monochrome in every theme. Scale it with its container; do not crop, wrap or replace the existing mark, contacts, navigation and license information above it.
 
 Hyperlink accent: the user selected Copper (option C). Use `#995600` on light surfaces with `#784400` on hover; use `#D99A50` on dark surfaces with `#EAB779` on hover. Sepia uses deeper Copper `#784400` / `#603600` for readable links on its darker paper panels. Apply shared tokens to navigation, linked titles, citations, downloads and footer contacts; preserve monochrome branding and high-contrast filled button labels. Retain inline underlines and visible keyboard focus. This is a link accent, not a logo or background recolour.

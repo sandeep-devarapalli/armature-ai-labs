@@ -19,13 +19,13 @@ test("brand resources are discoverable, usable and downloadable", async ({ page,
 
   const squares = page.locator("#square-logos");
   await expect(squares.getByRole("heading", { name: "Square logos", exact: true })).toBeVisible();
-  await expect(squares.locator("article")).toHaveCount(4);
+  await expect(squares.locator("article")).toHaveCount(6);
   for (const kind of ["named", "icon"] as const) {
-    for (const mode of ["light", "dark"] as const) {
-      const title = `${kind === "named" ? "With name" : "Icon only"} · ${mode === "light" ? "white" : "black"} background`;
+    for (const mode of ["light", "dark", "black"] as const) {
+      const title = `${kind === "named" ? "With name" : "Icon only"} · ${{ light: "white", dark: "charcoal", black: "pure black" }[mode]} background`;
       await expect(squares.getByRole("heading", { name: title, exact: true })).toBeVisible();
       for (const format of ["png", "svg"] as const) {
-        const path = `/brand/editorial-2026-09/logos/${kind === "named" ? "square-named" : "icon"}-${mode}-1024.${format}`;
+        const path = `/brand/editorial-2026-09/logos/${kind === "named" ? "square-named" : mode === "black" ? "square-icon" : "icon"}-${mode}-1024.${format}`;
         const link = squares.getByRole("link", { name: `Square logo ${title} · ${format.toUpperCase()}`, exact: true });
         await expect(link).toHaveAttribute("href", path);
         const response = await request.get(new URL(path, page.url()).href);
@@ -38,9 +38,17 @@ test("brand resources are discoverable, usable and downloadable", async ({ page,
         } else {
           expect(bytes.toString()).toContain('viewBox="0 0 1024 1024"');
           expect(bytes.toString()).not.toContain("<text");
+          if (mode === "black") {
+            expect(bytes.toString()).toContain('<rect width="1024" height="1024" fill="#000000"');
+            expect([...bytes.toString().matchAll(/fill="(#[0-9a-fA-F]+)"/g)].map((match) => match[1]))
+              .toEqual(expect.arrayContaining(["#000000", "#ffffff"]));
+            expect(bytes.toString()).not.toMatch(/#111110|#bcbcb7/);
+          }
         }
-        const [download] = await Promise.all([page.waitForEvent("download"), link.click()]);
-        expect(download.suggestedFilename()).toBe(path.split("/").pop());
+        if (mode !== "black") {
+          const [download] = await Promise.all([page.waitForEvent("download"), link.click()]);
+          expect(download.suggestedFilename()).toBe(path.split("/").pop());
+        }
       }
     }
   }
@@ -89,4 +97,17 @@ test("brand resources are discoverable, usable and downloadable", async ({ page,
   }
 
   expect(await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth)).toBe(false);
+});
+
+test("pure-black square logos download as PNG and SVG", async ({ page }) => {
+  await page.goto("/branding");
+  const squares = page.locator("#square-logos");
+  for (const kind of ["named", "icon"] as const) {
+    const title = `${kind === "named" ? "With name" : "Icon only"} · pure black background`;
+    for (const format of ["png", "svg"] as const) {
+      const link = squares.getByRole("link", { name: `Square logo ${title} · ${format.toUpperCase()}`, exact: true });
+      const [download] = await Promise.all([page.waitForEvent("download"), link.click()]);
+      expect(download.suggestedFilename()).toBe(`square-${kind}-black-1024.${format}`);
+    }
+  }
 });
