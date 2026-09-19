@@ -9,7 +9,7 @@
     "website": "SpaceMono-Regular",
     "wordmark": "HelveticaNeue-Bold"
   },
-  "assetCount": 92,
+  "assetCount": 94,
   "dimensions": "All PNG dimensions matched requested sizes via sharp metadata.",
   "maxPngBytes": 74924,
   "allSocialImagesUnder1MB": true,
@@ -21,5 +21,24 @@
     "dimensions": "Named square PNGs verified at 1024 \u00d7 1024.",
     "geometry": "Existing outlined stacked artwork preserved inside a square canvas with a 128 px vertical translation.",
     "visualReview": "Verified 19 September 2026: all four square cards inspected in desktop and 390 px light-theme screenshots; dark and sepia layouts checked without horizontal overflow. All preview images load at native 1024 \u00d7 1024 dimensions, and all eight PNG/SVG download links are present."
+  },
+  "pureBlackSquareLogos": {
+    "date": "2026-09-19",
+    "geometry": "Existing named and icon square SVG paths and transforms preserved; only background and named tagline colours changed.",
+    "pixelChecks": [
+      {
+        "name": "logos/square-named-black-1024",
+        "whitePixels": 40038,
+        "corners": "#000000",
+        "channels": "opaque grayscale; black, white and neutral antialiasing only"
+      },
+      {
+        "name": "logos/square-icon-black-1024",
+        "whitePixels": 133377,
+        "corners": "#000000",
+        "channels": "opaque grayscale; black, white and neutral antialiasing only"
+      }
+    ],
+    "visualReview": "Verified 19 September 2026: native-size named and icon PNGs show crisp, uncropped white artwork on pure black. Desktop browser review distinguishes the named pure-black variant from charcoal; the white icon is visible at 390 px. All 12 square download links are present, with no horizontal overflow or console errors."
   }
 }

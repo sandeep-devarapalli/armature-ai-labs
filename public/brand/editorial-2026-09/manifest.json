@@ -1243,6 +1243,30 @@
       "sha256": "526a1b92b3ae960b66760fc57e74fa953c1ffd566cd4a6b2fa139ceb8ffe6d63",
       "kind": "square-named",
       "mode": "dark"
+    },
+    {
+      "name": "logos/square-named-black-1024",
+      "width": 1024,
+      "height": 1024,
+      "bytes": 29444,
+      "png": "logos/square-named-black-1024.png",
+      "svg": "logos/square-named-black-1024.svg",
+      "sha256": "a1cc87bb79854167ded7235d7b4fd0fd5b496f11d0b61b82e7ec264e3e8bd423",
+      "kind": "square-named",
+      "mode": "dark",
+      "background": "#000000"
+    },
+    {
+      "name": "logos/square-icon-black-1024",
+      "width": 1024,
+      "height": 1024,
+      "bytes": 28438,
+      "png": "logos/square-icon-black-1024.png",
+      "svg": "logos/square-icon-black-1024.svg",
+      "sha256": "132bbe9b44a1bcc1a4a12b5b1987eb40e45d67cc66fd8f4350c5c7c81df88987",
+      "kind": "square-icon",
+      "mode": "dark",
+      "background": "#000000"
     }
   ]
 }
