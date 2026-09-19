@@ -1,5 +1,7 @@
 # AGENTS.md
 
+- Publication scope correction, 19 September 2026: publish only the four square-logo variants (named and icon-only, each on white and black). The selected tactile-machine illustration remains a local preview pending separate publication approval; selecting a style does not authorize adding it to the live website.
+
 - Dark-default and spacing correction, 13 September 2026: new visitors load dark mode before the app renders; retain an existing explicit light/dark/sepia preference. Keep equal inset padding on every home metric, including the first one. The user selected footer option A and authorized publication: use the complete full-width `Armature AI Labs` wordmark without cropping or wrapping, preserving the circular mark and all footer contacts above it.
 
 - Copper hyperlink selection, 13 September 2026: use the user-selected option C for text links across routes: light `#995600`, dark `#D99A50`, with the hover and accessible sepia variants in `DESIGN.md`. Keep the circular logo and wordmark monochrome, preserve readable filled-button labels, and test lazy-loaded pages plus locally inverted surfaces rather than changing only the global anchor default.

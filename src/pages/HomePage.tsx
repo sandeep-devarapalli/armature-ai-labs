@@ -24,7 +24,6 @@ import type { LucideIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { BrandMark } from "../components/BrandMark";
-import { TactileIllustration } from "../components/TactileIllustration";
 import { Metric, Section } from "../components/Primitives";
 import { equipmentPageAvailable, memberPlatformAvailable } from "../config/release";
 
@@ -165,8 +164,6 @@ export function HomePage() {
           </div>
         </div>
       </header>
-
-      <TactileIllustration />
 
       <Section
         number="01"
