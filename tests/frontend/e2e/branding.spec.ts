@@ -17,6 +17,34 @@ test("brand resources are discoverable, usable and downloadable", async ({ page,
   await expect(page.getByRole("heading", { name: "Helvetica Neue + Space Mono" })).toBeVisible();
   await expect(page.locator(".branding-permissions").getByRole("link", { name: "hello@armatureailabs.com" })).toHaveAttribute("href", "mailto:hello@armatureailabs.com");
 
+  const squares = page.locator("#square-logos");
+  await expect(squares.getByRole("heading", { name: "Square logos", exact: true })).toBeVisible();
+  await expect(squares.locator("article")).toHaveCount(4);
+  for (const kind of ["named", "icon"] as const) {
+    for (const mode of ["light", "dark"] as const) {
+      const title = `${kind === "named" ? "With name" : "Icon only"} · ${mode === "light" ? "white" : "black"} background`;
+      await expect(squares.getByRole("heading", { name: title, exact: true })).toBeVisible();
+      for (const format of ["png", "svg"] as const) {
+        const path = `/brand/editorial-2026-09/logos/${kind === "named" ? "square-named" : "icon"}-${mode}-1024.${format}`;
+        const link = squares.getByRole("link", { name: `Square logo ${title} · ${format.toUpperCase()}`, exact: true });
+        await expect(link).toHaveAttribute("href", path);
+        const response = await request.get(new URL(path, page.url()).href);
+        expect(response.ok(), path).toBe(true);
+        expect(response.headers()["content-type"], path).toContain(format === "png" ? "image/png" : "image/svg+xml");
+        const bytes = await response.body();
+        if (format === "png") {
+          expect(bytes.subarray(1, 4).toString()).toBe("PNG");
+          expect([bytes.readUInt32BE(16), bytes.readUInt32BE(20)]).toEqual([1024, 1024]);
+        } else {
+          expect(bytes.toString()).toContain('viewBox="0 0 1024 1024"');
+          expect(bytes.toString()).not.toContain("<text");
+        }
+        const [download] = await Promise.all([page.waitForEvent("download"), link.click()]);
+        expect(download.suggestedFilename()).toBe(path.split("/").pop());
+      }
+    }
+  }
+
   const downloadLinks = page.locator('main a[download][href^="/brand/"]');
   expect(await downloadLinks.count()).toBeGreaterThanOrEqual(20);
   const downloads = await downloadLinks.evaluateAll((links) => links.map((link) => ({

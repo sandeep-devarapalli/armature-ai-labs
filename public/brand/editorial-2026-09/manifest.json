@@ -1221,6 +1221,28 @@
       "spec": "discord",
       "status": "official-recommended-dimensions",
       "note": "No text or logo, and top 48 px clear, per Discord guidance. Server entitlement not verified."
+    },
+    {
+      "name": "logos/square-named-light-1024",
+      "width": 1024,
+      "height": 1024,
+      "bytes": 29329,
+      "png": "logos/square-named-light-1024.png",
+      "svg": "logos/square-named-light-1024.svg",
+      "sha256": "bf99ccc4c038f2edd15493cdcd7cd97a6990134b9ea22980b582213b2481ef29",
+      "kind": "square-named",
+      "mode": "light"
+    },
+    {
+      "name": "logos/square-named-dark-1024",
+      "width": 1024,
+      "height": 1024,
+      "bytes": 29299,
+      "png": "logos/square-named-dark-1024.png",
+      "svg": "logos/square-named-dark-1024.svg",
+      "sha256": "526a1b92b3ae960b66760fc57e74fa953c1ffd566cd4a6b2fa139ceb8ffe6d63",
+      "kind": "square-named",
+      "mode": "dark"
     }
   ]
 }
