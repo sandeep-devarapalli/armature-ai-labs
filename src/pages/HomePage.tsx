@@ -21,9 +21,8 @@ import {
   Wrench
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { BrandMark } from "../components/BrandMark";
+import { FieldOfTouch } from "../components/FieldOfTouch";
 import { Metric, Section } from "../components/Primitives";
 import { equipmentPageAvailable, memberPlatformAvailable } from "../config/release";
 
@@ -109,7 +108,7 @@ export function HomePage() {
     <>
       <header className="home-hero">
         <div className="wrap home-hero-inner">
-          <div className="editorial-hero-grid"><div>
+          <div className="editorial-hero-grid editorial-hero-motion"><div>
           <h1>A place to build<br/><span className="muted">physical intelligence.</span></h1>
           <p className="hero-copy">
             The armature is the core of every motor: the part that moves. Ours is
@@ -155,7 +154,7 @@ export function HomePage() {
               <ExternalLink aria-hidden="true" />
             </a>
           </div>
-          </div><IdentityMotion /></div>
+          </div><FieldOfTouch scene="gripper" priority /></div>
           <div className="metrics-strip">
             <Metric label="Footprint" value="3,500 sq ft" />
             <Metric label="Floors" value="2" />
@@ -272,6 +271,7 @@ export function HomePage() {
         title="From idea to working machine"
         lede="The floor is a pipeline. Work enters as a sketch and leaves as a machine someone has watched run."
       >
+        <div className="section-motion"><FieldOfTouch scene="analyzer" /></div>
         <div className="process-line pipeline-line">
           {[
             ["Sketch", "Define the job and the test."],
@@ -352,38 +352,6 @@ export function HomePage() {
       </div>
     </>
   );
-}
-
-function IdentityMotion() {
-  const figure = useRef<HTMLElement>(null);
-  const [paused, setPaused] = useState(false);
-  const [active, setActive] = useState(false);
-
-  useEffect(() => {
-    let inView = false;
-    const update = () => setActive(inView && !document.hidden);
-    const observer = new IntersectionObserver(([entry]) => {
-      inView = entry.isIntersecting;
-      update();
-    });
-    if (figure.current) observer.observe(figure.current);
-    document.addEventListener("visibilitychange", update);
-    return () => {
-      observer.disconnect();
-      document.removeEventListener("visibilitychange", update);
-    };
-  }, []);
-
-  return <figure ref={figure} className="identity-figure" data-running={active && !paused}>
-    <div className="orbit" id="identity-motion" aria-hidden="true">
-      <span className="orbit-ring"/><span className="orbit-ring middle"/><span className="orbit-ring inner"/>
-      <BrandMark compact />
-    </div>
-    <figcaption>Hardware × software × people</figcaption>
-    <button type="button" className="motion-toggle" aria-controls="identity-motion" onClick={() => setPaused(value => !value)}>
-      {paused ? "Play motion" : "Pause motion"}
-    </button>
-  </figure>;
 }
 
 const labModelViews = [

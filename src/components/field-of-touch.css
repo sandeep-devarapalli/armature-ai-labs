@@ -1,0 +1,9 @@
+.field-of-touch { margin: 0; min-width: 0; }
+.field-of-touch-frame { position: relative; aspect-ratio: 720 / 406; overflow: hidden; background: #060808; border: 1px solid var(--hair); }
+.field-of-touch-frame img, .field-of-touch-frame canvas { display: block; width: 100%; height: 100%; object-fit: cover; }
+.field-of-touch-frame canvas { position: absolute; inset: 0; opacity: 0; touch-action: pan-y pinch-zoom; }
+.field-of-touch-frame canvas.is-ready { opacity: 1; }
+.field-of-touch figcaption { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding-top: 12px; font-size: 11px; line-height: 1.6; }
+.field-of-touch figcaption small { display: block; font-size: 10px; color: inherit; }
+.field-of-touch figcaption button { flex-shrink: 0; border: 1px solid var(--hair); background: transparent; color: inherit; font: inherit; min-height: 44px; min-width: 60px; padding: 8px 12px; cursor: pointer; }
+.field-of-touch figcaption button:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }

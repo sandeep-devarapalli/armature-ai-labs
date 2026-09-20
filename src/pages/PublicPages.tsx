@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Field, PageHeader, Section, Status } from "../components/Primitives";
+import { FieldOfTouch } from "../components/FieldOfTouch";
 import { memberPlatformAvailable } from "../config/release";
 import { useApp } from "../context/AppContext";
 
@@ -194,6 +195,7 @@ export function ServicesPage() {
         <p className="lede">All figures are INR-first planning estimates, not quotes. Final scope, cohort size, hardware, and staffing determine each proposal.</p>
       </Section>
       <Section number="02" title="Build and research services" lede="Hand over a brief or bring researchers to the benches; the same floor that trains builders also does commissioned work." dark>
+        <div className="section-motion"><FieldOfTouch scene="scanner" /></div>
         <div className="service-grid">
           {buildServices.map(([Icon, title, copy, rate]) => (
             <article className="service-card" key={title}>
