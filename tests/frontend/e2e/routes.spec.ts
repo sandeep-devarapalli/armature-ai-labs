@@ -101,15 +101,15 @@ for (const palette of [
     await expect(brand).toHaveCSS("color", palette.ink);
 
     const primary = page.locator(".home-hero a.button-primary").first();
-    await expect(primary).toHaveCSS("color", palette.paper);
-    await expect(primary).toHaveCSS("background-color", palette.ink);
+    await expect(primary).toHaveCSS("color", "rgb(17, 17, 16)");
+    await expect(primary).toHaveCSS("background-color", "rgb(246, 246, 242)");
     await primary.hover();
-    await expect(primary).toHaveCSS("color", palette.ink);
-    await expect(primary).toHaveCSS("background-color", palette.paper);
+    await expect(primary).toHaveCSS("color", "rgb(246, 246, 242)");
+    await expect(primary).toHaveCSS("background-color", "rgb(17, 17, 16)");
     const quiet = page.locator(".home-hero a.button-quiet").first();
     await quiet.hover();
-    await expect(quiet).toHaveCSS("color", palette.hover);
-    await expect(quiet).toHaveCSS("background-color", palette.panel);
+    await expect(quiet).toHaveCSS("color", "rgb(234, 183, 121)");
+    await expect(quiet).toHaveCSS("background-color", "rgb(34, 34, 32)");
     await page.mouse.move(0, 0);
 
     const modelLink = page.locator(".ink-surface .lab-model-grid figcaption a").first();
@@ -714,7 +714,7 @@ test("OpenTouch Glove uses official media and an exact project build list", asyn
 
 test("home hero keeps the circular identity and controllable T2 motion", async ({ page }) => {
   await page.goto("/");
-  const figure = page.locator('.field-of-touch[data-scene="gripper"]');
+  const figure = page.locator('.field-of-touch[data-scene="scanner"]');
   const video = figure.locator("video");
   const heroMark = page.locator(".topbar .brand-mark");
   await figure.scrollIntoViewIfNeeded();
@@ -731,12 +731,12 @@ test("home hero keeps the circular identity and controllable T2 motion", async (
   await expect(page.locator("body")).toHaveCSS("font-family", /Space Mono/);
   const firstTime = await video.evaluate(element => (element as HTMLVideoElement).currentTime);
   await expect.poll(() => video.evaluate(element => (element as HTMLVideoElement).currentTime)).toBeGreaterThan(firstTime);
-  await figure.getByRole("button", { name: "Pause Glass pickup animation" }).click();
+  await figure.getByRole("button", { name: "Pause Microplate stage animation" }).click();
   await expect.poll(() => video.evaluate(element => (element as HTMLVideoElement).paused)).toBe(true);
   const pausedTime = await video.evaluate(element => (element as HTMLVideoElement).currentTime);
   await page.waitForTimeout(300);
   expect(await video.evaluate(element => (element as HTMLVideoElement).currentTime)).toBe(pausedTime);
-  await figure.getByRole("button", { name: "Play Glass pickup animation" }).click();
+  await figure.getByRole("button", { name: "Play Microplate stage animation" }).click();
   await expect.poll(() => video.evaluate(element => (element as HTMLVideoElement).currentTime)).not.toBe(pausedTime);
   await page.locator("footer").scrollIntoViewIfNeeded();
   await expect.poll(() => video.evaluate(element => (element as HTMLVideoElement).paused)).toBe(true);
@@ -751,13 +751,13 @@ test("reduced motion keeps T2 still and defers video until Play", async ({ page 
     if (request.url().includes("/media/field-of-touch/") && request.url().endsWith(".mp4")) videoRequests.push(request.url());
   });
   await page.goto("/");
-  const figure = page.locator('.field-of-touch[data-scene="gripper"]');
+  const figure = page.locator('.field-of-touch[data-scene="scanner"]');
   await figure.scrollIntoViewIfNeeded();
   await expect(figure).toHaveAttribute("data-state", "poster");
   await expect(figure.locator("video")).not.toHaveAttribute("src");
   await expect.poll(() => figure.locator("img").evaluate(image => (image as HTMLImageElement).complete && (image as HTMLImageElement).naturalWidth > 0)).toBe(true);
   expect(videoRequests).toEqual([]);
-  await figure.getByRole("button", { name: "Play Glass pickup animation" }).click();
+  await figure.getByRole("button", { name: "Play Microplate stage animation" }).click();
   await expect(figure).toHaveAttribute("data-state", "ready");
   await expect.poll(() => figure.locator("video").evaluate(video => (video as HTMLVideoElement).currentTime)).toBeGreaterThan(0);
 });

@@ -106,9 +106,9 @@ const labRoles = [
 export function HomePage() {
   return (
     <>
-      <header className="home-hero">
+      <header className="home-hero home-hero-integrated">
         <div className="wrap home-hero-inner">
-          <div className="editorial-hero-grid editorial-hero-motion"><div>
+          <div className="editorial-hero-grid editorial-hero-motion"><div className="editorial-hero-copy">
           <h1>A place to build<br/><span className="muted">physical intelligence.</span></h1>
           <p className="hero-copy">
             The armature is the core of every motor: the part that moves. Ours is
@@ -154,7 +154,7 @@ export function HomePage() {
               <ExternalLink aria-hidden="true" />
             </a>
           </div>
-          </div><FieldOfTouch scene="gripper" priority /></div>
+          </div><FieldOfTouch scene="scanner" priority /></div>
           <div className="metrics-strip">
             <Metric label="Footprint" value="3,500 sq ft" />
             <Metric label="Floors" value="2" />
@@ -169,6 +169,9 @@ export function HomePage() {
         title="A working floor, not a club lounge"
         lede="Every room is meant to hold a real project in progress."
       >
+        <div className="section-motion"><FieldOfTouch scene="interior" />
+          <p className="motion-note">An illustrative laboratory study, not footage of Armature facilities.</p>
+        </div>
         <div className="role-list">
           {labRoles.map((role) => (
             <article className="role-row" key={role.number}>
@@ -271,7 +274,7 @@ export function HomePage() {
         title="From idea to working machine"
         lede="The floor is a pipeline. Work enters as a sketch and leaves as a machine someone has watched run."
       >
-        <div className="section-motion"><FieldOfTouch scene="analyzer" /></div>
+        <div className="section-motion motion-pair"><FieldOfTouch scene="gripper" /><FieldOfTouch scene="arm" /></div>
         <div className="process-line pipeline-line">
           {[
             ["Sketch", "Define the job and the test."],

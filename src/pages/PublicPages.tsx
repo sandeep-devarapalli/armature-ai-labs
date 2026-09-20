@@ -182,6 +182,7 @@ export function ServicesPage() {
         )}
       />
       <Section number="01" title="Talent and training" lede="The fastest way to find, grow, and test hardware talent is to watch it build. Armature AI Labs runs that room.">
+        <div className="section-motion"><FieldOfTouch scene="waves" /></div>
         <div className="service-grid">
           {talentServices.map(([Icon, title, copy, rate]) => (
             <article className="service-card" key={title}>
@@ -195,7 +196,7 @@ export function ServicesPage() {
         <p className="lede">All figures are INR-first planning estimates, not quotes. Final scope, cohort size, hardware, and staffing determine each proposal.</p>
       </Section>
       <Section number="02" title="Build and research services" lede="Hand over a brief or bring researchers to the benches; the same floor that trains builders also does commissioned work." dark>
-        <div className="section-motion"><FieldOfTouch scene="scanner" /></div>
+        <div className="section-motion"><FieldOfTouch scene="analyzer" /></div>
         <div className="service-grid">
           {buildServices.map(([Icon, title, copy, rate]) => (
             <article className="service-card" key={title}>
@@ -347,6 +348,7 @@ export function JoinPage() {
         actions={actions}
       />
       <Section number="01" title="One membership journey">
+        <div className="section-motion membership-motion"><FieldOfTouch scene="birds" /></div>
         <div className="process-list">
           {[
             ["01", "Create an account", "Use a secure email link, add your public name and handle, and tell us what you plan to build."],
@@ -378,6 +380,7 @@ export function JoinPage() {
         <p className="lede">Meeting-room reservations will appear in the same booking screen after a room is commissioned and its capacity and operating hours are approved.</p>
       </Section>
       <Section number="03" title="Start your membership">
+        <div className="section-motion"><FieldOfTouch scene="rain" /></div>
         {!memberPlatformAvailable ? (
           <>
             <Status tone="warn">Online signup is not live yet</Status>
