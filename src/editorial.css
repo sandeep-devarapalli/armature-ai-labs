@@ -291,3 +291,12 @@ footer .footer-wordmark {
   .orbit-ring { animation: none; }
   .motion-toggle { visibility: hidden; }
 }
+
+/* Field of touch keeps moving-image studies separate from facility views. */
+.editorial-hero-motion { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 40px; }
+.editorial-hero-motion h1 { font-size: clamp(42px, 4.1vw, 64px); }
+.section-motion { max-width: 800px; margin: 32px 0 40px; }
+@media (max-width: 800px) {
+  .editorial-hero-motion { display: flex; flex-direction: column; align-items: stretch; }
+  .editorial-hero-motion h1 { font-size: clamp(42px, 8.8vw, 62px); }
+}

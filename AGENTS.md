@@ -1,5 +1,7 @@
 # AGENTS.md
 
+- T2 website direction, 20 September 2026: the user finalized Field of touch in muted source colours and requested website integration. Use glass pickup in the homepage hero, clinical sample automation in the build pipeline, and microplate scanning with research services. Preserve all page content, use labelled third-party motion studies and retain source credits. This supersedes the old orbit animation and local-only scope for these three clips; the earlier tactile still and unlicensed evaluation footage remain unpublished.
+
 - Pure-black square-logo addition, 19 September 2026: provide named and icon-only square exports with `#000000` backgrounds and white artwork. Label the existing `#111110` versions charcoal, retain their files, and keep the tactile illustration unpublished.
 
 - Publication scope correction, 19 September 2026: publish only the four square-logo variants (named and icon-only, each on white and black). The selected tactile-machine illustration remains a local preview pending separate publication approval; selecting a style does not authorize adding it to the live website.

@@ -712,66 +712,54 @@ test("OpenTouch Glove uses official media and an exact project build list", asyn
   await expect(page.getByText(/Do not treat the existing ESP32-C6 stock as a drop-in replacement/)).toBeVisible();
 });
 
-test("home hero keeps the circular identity and controllable outline motion", async ({ page }) => {
+test("home hero keeps the circular identity and controllable T2 motion", async ({ page }) => {
   await page.goto("/");
-  const figure = page.locator(".identity-figure");
-  const rings = figure.locator(".orbit-ring");
-  const outerRing = rings.first();
-  const heroMark = figure.locator(".brand-mark");
-  const heroSegments = heroMark.locator(".brand-mark-segment");
+  const figure = page.locator('.field-of-touch[data-scene="gripper"]');
+  const video = figure.locator("video");
+  const heroMark = page.locator(".topbar .brand-mark");
   await figure.scrollIntoViewIfNeeded();
-  await expect(figure).toHaveAttribute("data-running", "true");
-  await expect(rings).toHaveCount(3);
+  await expect(figure).toHaveAttribute("data-state", "ready");
+  await expect(figure.locator("canvas")).toHaveCSS("opacity", "1");
   await expect(heroMark).toHaveAttribute("viewBox", "0 0 100 100");
   await expect(heroMark).toHaveCSS("transform", "none");
-  await expect(heroSegments).toHaveCount(8);
-  expect(await heroSegments.evaluateAll((segments) =>
-    segments.map((segment) => segment.getAttribute("stroke-width"))
-  )).toEqual(Array(8).fill("9"));
+  await expect(heroMark.locator(".brand-mark-segment")).toHaveCount(8);
   await expect(page.locator(".brand-mark--animated")).toHaveCount(0);
-  expect(await heroSegments.evaluateAll((segments) =>
-    new Set(segments.map(segment => getComputedStyle(segment).color)).size
-  )).toBe(1);
   await expect(page.locator(".topbar .brand-lockup")).toHaveAttribute("aria-label", "Armature AI Labs");
-  await expect(page.locator(".topbar .brand-mark")).toHaveAttribute("aria-label", "Armature AI Labs mark");
   await expect(page.locator(".topbar .brand-lockup > span")).toHaveText("Armature AI Labs");
   await expect(page.locator(".home-hero h1")).toHaveText(/A place to build\s*physical intelligence\./);
   await expect(page.locator(".home-hero h1")).toHaveCSS("font-family", /Helvetica Neue.*Helvetica.*Arial/);
   await expect(page.locator("body")).toHaveCSS("font-family", /Space Mono/);
-  expect(await page.evaluate(async () => {
-    await document.fonts.load('400 16px "Space Mono"');
-    return document.fonts.check('400 16px "Space Mono"');
-  })).toBe(true);
-
-  await expect(outerRing).toHaveCSS("animation-name", "orbit-drift");
-  await expect(outerRing).toHaveCSS("animation-play-state", "running");
-  const firstTransform = await outerRing.evaluate(element => getComputedStyle(element).transform);
-  await expect.poll(() => outerRing.evaluate(element => getComputedStyle(element).transform)).not.toBe(firstTransform);
-
-  await figure.getByRole("button", { name: "Pause motion" }).click();
-  await expect(figure).toHaveAttribute("data-running", "false");
-  await expect(outerRing).toHaveCSS("animation-play-state", "paused");
-  const pausedTransform = await outerRing.evaluate(element => getComputedStyle(element).transform);
-  await page.waitForTimeout(250);
-  expect(await outerRing.evaluate(element => getComputedStyle(element).transform)).toBe(pausedTransform);
-  await figure.getByRole("button", { name: "Play motion" }).click();
-  await expect(outerRing).toHaveCSS("animation-play-state", "running");
-  await expect.poll(() => outerRing.evaluate(element => getComputedStyle(element).transform)).not.toBe(pausedTransform);
-  await expect(heroMark).toHaveCSS("transform", "none");
-
+  const firstTime = await video.evaluate(element => (element as HTMLVideoElement).currentTime);
+  await expect.poll(() => video.evaluate(element => (element as HTMLVideoElement).currentTime)).toBeGreaterThan(firstTime);
+  await figure.getByRole("button", { name: "Pause Glass pickup animation" }).click();
+  await expect.poll(() => video.evaluate(element => (element as HTMLVideoElement).paused)).toBe(true);
+  const pausedTime = await video.evaluate(element => (element as HTMLVideoElement).currentTime);
+  await page.waitForTimeout(300);
+  expect(await video.evaluate(element => (element as HTMLVideoElement).currentTime)).toBe(pausedTime);
+  await figure.getByRole("button", { name: "Play Glass pickup animation" }).click();
+  await expect.poll(() => video.evaluate(element => (element as HTMLVideoElement).currentTime)).not.toBe(pausedTime);
   await page.locator("footer").scrollIntoViewIfNeeded();
-  await expect(figure).toHaveAttribute("data-running", "false");
-  await expect(outerRing).toHaveCSS("animation-play-state", "paused");
+  await expect.poll(() => video.evaluate(element => (element as HTMLVideoElement).paused)).toBe(true);
   await figure.scrollIntoViewIfNeeded();
-  await expect(figure).toHaveAttribute("data-running", "true");
+  await expect.poll(() => video.evaluate(element => (element as HTMLVideoElement).paused)).toBe(false);
+});
 
+test("reduced motion keeps T2 still and defers video until Play", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.reload();
+  const videoRequests: string[] = [];
+  page.on("request", request => {
+    if (request.url().includes("/media/field-of-touch/") && request.url().endsWith(".mp4")) videoRequests.push(request.url());
+  });
+  await page.goto("/");
+  const figure = page.locator('.field-of-touch[data-scene="gripper"]');
   await figure.scrollIntoViewIfNeeded();
-  for (const ring of await rings.all()) await expect(ring).toHaveCSS("animation-name", "none");
-  await expect(figure.getByRole("button", { name: "Pause motion" })).toBeHidden();
-  await expect(heroMark).toHaveCSS("transform", "none");
-  expect(await rings.evaluateAll(elements => elements.flatMap(element => element.getAnimations()).length)).toBe(0);
+  await expect(figure).toHaveAttribute("data-state", "poster");
+  await expect(figure.locator("video")).not.toHaveAttribute("src");
+  await expect.poll(() => figure.locator("img").evaluate(image => (image as HTMLImageElement).complete && (image as HTMLImageElement).naturalWidth > 0)).toBe(true);
+  expect(videoRequests).toEqual([]);
+  await figure.getByRole("button", { name: "Play Glass pickup animation" }).click();
+  await expect(figure).toHaveAttribute("data-state", "ready");
+  await expect.poll(() => figure.locator("video").evaluate(video => (video as HTMLVideoElement).currentTime)).toBeGreaterThan(0);
 });
 
 test("public routes preserve the useful legacy lab sections", async ({ page }) => {

@@ -1,0 +1,70 @@
+{
+  "design": "T2 — Field of touch, muted source colours",
+  "license": {
+    "name": "Pexels License",
+    "url": "https://www.pexels.com/license/",
+    "verified": "2026-09-20"
+  },
+  "disclosure": "Third-party illustrative footage, not Armature hardware or facilities. Authored visual cues are artistic annotations, not measured force, contact or instrument telemetry.",
+  "clips": [
+    {
+      "id": "gripper",
+      "title": "Glass pickup",
+      "author": "Pavel Danilyuk",
+      "source": "https://www.pexels.com/video/robot-holding-a-glass-of-wine-8328090/",
+      "sha256": "79a9d9ac82c36ea5d9f8b17d7b21e0de0e95d91efcc405a4c32c5a9c776efa87",
+      "events": [
+        {
+          "time": 4.0,
+          "x": 0.496,
+          "y": 0.66,
+          "duration": 3.2,
+          "kind": "visible-grip",
+          "note": "At this inspected frame, the fingers visibly surround the glass stem near pixel (357,268). Earlier overlap appears around 3.6 seconds; 4.0 seconds is a conservative authored grip cue, not a measured first-contact instant. Approximate timing uncertainty 0.4 seconds and positional uncertainty 0.02 normalized units."
+        },
+        {
+          "time": 7.2,
+          "x": 0.49,
+          "y": 0.648,
+          "duration": 3.2,
+          "kind": "visible-lift",
+          "note": "The glass base is visibly clear of the table at this inspected frame. Pulse origin is the gripper-stem area near pixel (353,263), not the glass base. Lift begins around 6.8 seconds; this is an authored cue for clear separation, not a second contact event. Approximate timing uncertainty 0.4 seconds and positional uncertainty 0.02 normalized units."
+        }
+      ]
+    },
+    {
+      "id": "analyzer",
+      "title": "Clinical sample automation",
+      "author": "Кайрат Сатдиков",
+      "source": "https://www.pexels.com/video/close-up-on-devices-in-laboratory-11218535/",
+      "sha256": "56c427179a5699542bddf289055f6a49ec56eb76872a3cddcd5531b3317492d5",
+      "events": [
+        {
+          "time": 8.0,
+          "x": 0.236,
+          "y": 0.704,
+          "duration": 3.2,
+          "kind": "sample-approach",
+          "note": "Authored descent/approach cue at the visible probe tip near source pixel (170,286). At 7 seconds the head is raised; at 8–8.5 seconds it is lowered over the carousel; by 9 seconds it has lifted. The interface is partly obscured. Timing is approximate within 0.5 seconds, position within 0.03 normalized units."
+        }
+      ]
+    },
+    {
+      "id": "scanner",
+      "title": "Microplate scanner",
+      "author": "Dominik Zítka",
+      "source": "https://www.pexels.com/video/advanced-laboratory-equipment-in-operation-31767906/",
+      "sha256": "0ba63a6db48c817d69c4fa484b9e21deb32cd1da178d42fa047b15fcd31425e4",
+      "events": [
+        {
+          "time": 11.0,
+          "x": 0.5,
+          "y": 0.424,
+          "duration": 3.2,
+          "kind": "stage-arrival",
+          "note": "Authored arrival cue anchored at the center of the visible white microplate near source pixel (360,172). The stage advances at 6–10 seconds and its position is unchanged in inspected 11, 12 and 14 second frames. This is not a contact, sensor, or scan-start event. Timing is approximate within 0.5 seconds, position within 0.03 normalized units."
+        }
+      ]
+    }
+  ]
+}
