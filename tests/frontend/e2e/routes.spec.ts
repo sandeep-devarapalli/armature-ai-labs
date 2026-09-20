@@ -850,7 +850,9 @@ test("a pending member completes the membership application and keeps its status
   await page.getByLabel("Your name").fill("New Member");
   await page.getByLabel("Public profile handle").fill("new-member");
   await page.getByLabel("What are you building?").fill("A modular mobile robot for indoor mapping.");
-  await page.getByRole("button", { name: "Submit membership application" }).click();
+  const submit = page.getByRole("button", { name: "Submit membership application" });
+  await submit.evaluate(button => button.scrollIntoView({ behavior: "instant", block: "center" }));
+  await submit.click();
 
   await expect(page.getByText("Application under review", { exact: true })).toBeVisible();
   await page.reload();
