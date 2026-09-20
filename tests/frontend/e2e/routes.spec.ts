@@ -712,6 +712,10 @@ test("OpenTouch Glove uses official media and an exact project build list", asyn
   await expect(page.getByText(/Do not treat the existing ESP32-C6 stock as a drop-in replacement/)).toBeVisible();
 });
 
+test.describe("homepage motion controls", () => {
+  // The first-install PWA toast can cover the hero controls; PWA behavior has separate coverage.
+  test.use({ serviceWorkers: "block" });
+
 test("home hero keeps the circular identity and editorial typography", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
@@ -765,6 +769,8 @@ test("reduced motion keeps T2 still and defers video until Play", async ({ page 
   await figure.getByRole("button", { name: "Play Microplate stage animation" }).click();
   await expect(figure).toHaveAttribute("data-state", "ready");
   await expect.poll(() => figure.locator("video").evaluate(video => (video as HTMLVideoElement).currentTime)).toBeGreaterThan(0);
+});
+
 });
 
 test("public routes preserve the useful legacy lab sections", async ({ page }) => {
