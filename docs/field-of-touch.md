@@ -1,14 +1,20 @@
 # Field of touch
 
-The approved T2 design uses a calm point lattice in muted source colours. Glass pickup replaces the homepage orbit, clinical sample automation accompanies the existing build pipeline, and microplate scanning accompanies research services. Existing text, calls to action, room information and operational routes are retained.
+The approved T2 design uses a calm point lattice in muted source colours. The homepage uses microplate scanning as the integrated backdrop (option 03), with a dark fade behind the text and the animation stacked below the copy on mobile. A clearly labelled illustrative laboratory interior accompanies the working-floor introduction; glass pickup and the selected yellow arm accompany the build pipeline. Membership uses birds over water and a closing rain study. Services uses waves with training and clinical sample automation with research. All existing text, calls to action, room information and operational routes are retained.
 
-The three clips are modified Pexels footage; author links, exact source pages, asset hashes and authored cues are recorded in `public/media/field-of-touch/sources.json`. They illustrate robotics and automation, not Armature facilities or owned equipment. No Storyblocks evaluation clip, General Intuition reference clip, or old tactile still is included.
+The user authorized publication of the completed placements on 20 September 2026, superseding the earlier deployment hold and PR #67's glass-pickup hero. Biotech pipetting is explicitly excluded for now: its Storyblocks evaluation source has no acquired publication license. No General Intuition reference footage or earlier tactile still is included.
+
+The eight included clips are modified Pexels footage; author links, exact source pages, asset hashes and authored cues are recorded in `public/media/field-of-touch/sources.json`. They illustrate robotics, automation and nature, not Armature facilities or owned equipment.
 
 The shared renderer is independently implemented for the local studies and copied with its approved T2 shader. A React wrapper loads it near the viewport; videos remain absent until needed, and reduced-motion visitors receive a rendered T2 still until they choose Play. Hidden/offscreen playback stops. Pausing leaves pointer exploration available. Touch retains native vertical scrolling. Asset or graphics failures retain a T2 still.
 
 The local catalogue remains at http://127.0.0.1:4331/catalogue.html, with the finalized design at /t2.html and the earlier comparisons preserved.
 
 ## Validation
+
+The complete selected placement release passed 69 unit tests, 127 browser tests (seven intentional skips), 25 production release gates (three intentional skips), asset integrity and local Pages runtime checks. Additional visual/playback checks covered all eight scenes at 1440px and 390px in dark, light and sepia, plus 900px hero and paired-film layouts. Reduced-motion loads no MP4 on home, membership or services until Play. At taller viewports the next film may preload within the 160px margin; offscreen video remains paused. Local evidence: `/private/tmp/t2-release-qa/results.json` and `/private/tmp/placement-independent-review.json`. Physical Safari/iOS testing remains outstanding.
+
+The selected integrated-backdrop revision passed 69 unit tests, the production build and asset-integrity checks, and four targeted desktop/mobile playback and reduced-motion browser checks. Local visual checks covered 1440px and 390px widths in dark, light and sepia themes, with no horizontal overflow or page errors. Evidence: `evidence/integrated-selected-qa.json` and `integrated-selected-*.png` in the animation study. The performance measurements below describe the earlier glass-pickup hero, not the larger scanner backdrop.
 
 Verified on this Mac in Chromium 151 against a production build at desktop and 390px mobile viewports:
 

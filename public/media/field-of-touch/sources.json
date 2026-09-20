@@ -30,7 +30,12 @@
           "kind": "visible-lift",
           "note": "The glass base is visibly clear of the table at this inspected frame. Pulse origin is the gripper-stem area near pixel (353,263), not the glass base. Lift begins around 6.8 seconds; this is an authored cue for clear separation, not a second contact event. Approximate timing uncertainty 0.4 seconds and positional uncertainty 0.02 normalized units."
         }
-      ]
+      ],
+      "poster": {
+        "sha256": "3e89c03ced5b32ada7c8e0f8d56e02ead1231c31203c313514ccd276ff08b1eb",
+        "bytes": 199059,
+        "rendering": "Approved T2 rendered still"
+      }
     },
     {
       "id": "analyzer",
@@ -47,7 +52,12 @@
           "kind": "sample-approach",
           "note": "Authored descent/approach cue at the visible probe tip near source pixel (170,286). At 7 seconds the head is raised; at 8–8.5 seconds it is lowered over the carousel; by 9 seconds it has lifted. The interface is partly obscured. Timing is approximate within 0.5 seconds, position within 0.03 normalized units."
         }
-      ]
+      ],
+      "poster": {
+        "sha256": "05701f149c3ce7f9aea6aacdb831efcebff025e20edf499520e00fd54ce972d9",
+        "bytes": 303298,
+        "rendering": "Approved T2 rendered still"
+      }
     },
     {
       "id": "scanner",
@@ -64,7 +74,176 @@
           "kind": "stage-arrival",
           "note": "Authored arrival cue anchored at the center of the visible white microplate near source pixel (360,172). The stage advances at 6–10 seconds and its position is unchanged in inspected 11, 12 and 14 second frames. This is not a contact, sensor, or scan-start event. Timing is approximate within 0.5 seconds, position within 0.03 normalized units."
         }
-      ]
+      ],
+      "poster": {
+        "sha256": "9df2dff53efb1f0bd47098d6cb898c2b757785e063fc699899f932707b3cce56",
+        "bytes": 202188,
+        "rendering": "Approved T2 rendered still"
+      }
+    },
+    {
+      "id": "interior",
+      "title": "Clean laboratory interior",
+      "author": "Pavel Danilyuk",
+      "source": "https://www.pexels.com/video/automated-analysers-in-a-laboratory-8381327/",
+      "sha256": "2829392462037b61a087cae618940dfe946e5d9805ae13c277a4ff9f7913df0a",
+      "bytes": 928407,
+      "video": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 720,
+            "height": 406,
+            "r_frame_rate": "25/1"
+          }
+        ],
+        "format": {
+          "duration": "12.200000"
+        }
+      },
+      "events": [],
+      "panelAspect": "720 / 406",
+      "poster": {
+        "sha256": "1dcf0dc2a77c51dd421b2d89c8efc35ae0cddd90fef58bbae73cff206a744eb2",
+        "bytes": 147490,
+        "timeSeconds": 4,
+        "rendering": "T2 styleMode 1, paletteMode 1, cellSize 6; centered cover; captured from the shared WebGL renderer at 720 pixels wide."
+      }
+    },
+    {
+      "id": "arm",
+      "title": "Selected yellow arm",
+      "author": "Usman AbdulrasheedGambo",
+      "source": "https://www.pexels.com/video/industrial-robot-arm-in-high-tech-factory-32386532/",
+      "sha256": "541473d37fd1d263438e3cef7701cf7f1b83ec6cdad707d21b06e39c15aa07d7",
+      "bytes": 1091058,
+      "video": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 720,
+            "height": 406,
+            "r_frame_rate": "30/1"
+          },
+          {
+            "codec_type": "data",
+            "r_frame_rate": "0/0"
+          }
+        ],
+        "format": {
+          "duration": "9.866667"
+        }
+      },
+      "events": [],
+      "panelAspect": "720 / 406",
+      "poster": {
+        "sha256": "6be89d2fd119cc82234c37b24d9b039480b800c34d6131b11e642da63558fc63",
+        "bytes": 165378,
+        "timeSeconds": 7,
+        "rendering": "T2 styleMode 1, paletteMode 1, cellSize 6; centered cover; captured from the shared WebGL renderer at 720 pixels wide."
+      }
+    },
+    {
+      "id": "birds",
+      "title": "Birds over water",
+      "author": "Barış İpekçi",
+      "source": "https://www.pexels.com/video/birds-flying-at-sunset-over-water-and-bridge-32755709/",
+      "sha256": "9d5405d219002aecfac385f5928f00f335271ddd88fe6606284b9002841a35d0",
+      "bytes": 2620395,
+      "video": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 406,
+            "height": 720,
+            "r_frame_rate": "30/1"
+          }
+        ],
+        "format": {
+          "duration": "8.666667"
+        }
+      },
+      "events": [],
+      "panelAspect": "4 / 3",
+      "poster": {
+        "sha256": "f3d75993c36ccffff6c26363ec07d35ba5fe4fc72f9c89fe45ebeef211740ab2",
+        "bytes": 205646,
+        "timeSeconds": 3,
+        "rendering": "T2 styleMode 1, paletteMode 1, cellSize 6; centered cover; captured from the shared WebGL renderer at 720 pixels wide."
+      }
+    },
+    {
+      "id": "waves",
+      "title": "Waves meeting shore",
+      "author": "ArtHouse Studio",
+      "source": "https://www.pexels.com/video/aerial-view-of-ocean-waves-4631571/",
+      "sha256": "450cb3dd4f5d6b0b27e19f130ee5e48cdea68cd2c6eb0d7439964f059033f6f2",
+      "bytes": 1767759,
+      "video": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 768,
+            "height": 432,
+            "r_frame_rate": "24000/1001"
+          }
+        ],
+        "format": {
+          "duration": "12.429083"
+        }
+      },
+      "events": [],
+      "panelAspect": "720 / 406",
+      "poster": {
+        "sha256": "1676c6e5552cf127bf08e55522811827bac32d2c62c86ca94bbb748a8f3eb92a",
+        "bytes": 162622,
+        "timeSeconds": 3,
+        "rendering": "T2 styleMode 1, paletteMode 1, cellSize 6; centered cover; captured from the shared WebGL renderer at 720 pixels wide."
+      }
+    },
+    {
+      "id": "rain",
+      "title": "Rain on water",
+      "author": "Damir K",
+      "source": "https://www.pexels.com/video/raindrops-creating-circular-ripples-on-autumn-pond-34714998/",
+      "sha256": "f898675731c7837a7c91c4bc5452fe43f79989cfd5bfeb8935e9fd44c8de79bc",
+      "bytes": 909966,
+      "video": {
+        "programs": [],
+        "stream_groups": [],
+        "streams": [
+          {
+            "codec_name": "h264",
+            "codec_type": "video",
+            "width": 720,
+            "height": 376,
+            "r_frame_rate": "30/1"
+          }
+        ],
+        "format": {
+          "duration": "12.000000"
+        }
+      },
+      "events": [],
+      "panelAspect": "720 / 406",
+      "poster": {
+        "sha256": "9fed22868bcd5affb445ace98c75cc52142d6e08e1cbeaf211c92ea988e1c682",
+        "bytes": 124625,
+        "timeSeconds": 2,
+        "rendering": "T2 styleMode 1, paletteMode 1, cellSize 6; centered cover; captured from the shared WebGL renderer at 720 pixels wide."
+      }
     }
   ]
 }

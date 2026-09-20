@@ -38,9 +38,9 @@ describe("Full editorial landing page", () => {
 
   it("provides a working motion pause and resume control", () => {
     render(<MemoryRouter><HomePage /></MemoryRouter>);
-    fireEvent.click(screen.getByRole("button", { name: "Pause Glass pickup animation" }));
-    expect(screen.getByRole("button", { name: "Play Glass pickup animation" })).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Play Glass pickup animation" }));
-    expect(screen.getByRole("button", { name: "Pause Glass pickup animation" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Pause Microplate stage animation" }));
+    expect(screen.getByRole("button", { name: "Play Microplate stage animation" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Play Microplate stage animation" }));
+    expect(screen.getByRole("button", { name: "Pause Microplate stage animation" })).toBeInTheDocument();
   });
 });

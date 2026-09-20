@@ -24,6 +24,36 @@ const scenes = {
     description: 'A microplate stage moves through a laboratory instrument in a muted blue point field.',
     contactEvents: [{ time: 11, x: 0.5, y: 0.424, duration: 3.2 }],
   },
+  interior: {
+    title: 'Clean laboratory interior', author: 'Pavel Danilyuk',
+    source: 'https://www.pexels.com/video/automated-analysers-in-a-laboratory-8381327/',
+    description: 'A camera moves through a clinical laboratory in a muted point field; illustrative stock footage, not an Armature facility.',
+    contactEvents: [],
+  },
+  arm: {
+    title: 'Selected yellow arm', author: 'Usman AbdulrasheedGambo',
+    source: 'https://www.pexels.com/video/industrial-robot-arm-in-high-tech-factory-32386532/',
+    description: 'A yellow industrial arm lifts and rotates a rectangular assembly in a muted point field.',
+    contactEvents: [],
+  },
+  birds: {
+    title: 'Birds over water', author: 'Barış İpekçi',
+    source: 'https://www.pexels.com/video/birds-flying-at-sunset-over-water-and-bridge-32755709/',
+    description: 'A flock flies over sunset water beneath a bridge, rendered in muted copper points.',
+    contactEvents: [],
+  },
+  waves: {
+    title: 'Waves meeting shore', author: 'ArtHouse Studio',
+    source: 'https://www.pexels.com/video/aerial-view-of-ocean-waves-4631571/',
+    description: 'Ocean foam gathers and dissolves along a shoreline in a muted point field.',
+    contactEvents: [],
+  },
+  rain: {
+    title: 'Rain on water', author: 'Damir K',
+    source: 'https://www.pexels.com/video/raindrops-creating-circular-ripples-on-autumn-pond-34714998/',
+    description: 'Raindrop rings overlap around floating leaves, rendered in a muted point field.',
+    contactEvents: [],
+  },
 };
 
 export function FieldOfTouch({ scene, priority = false }: { scene: keyof typeof scenes; priority?: boolean }) {
@@ -110,8 +140,8 @@ export function FieldOfTouch({ scene, priority = false }: { scene: keyof typeof 
 
   return (
     <figure ref={figure} className="field-of-touch" data-scene={scene} data-state={failed ? 'fallback' : ready ? 'ready' : 'poster'}>
-      <div className="field-of-touch-frame">
-        <img src={poster} width="720" height="406" alt={study.description} loading={priority ? 'eager' : 'lazy'} />
+      <div className="field-of-touch-frame" style={scene === 'birds' ? { aspectRatio: '4 / 3' } : undefined}>
+        <img src={poster} width="720" height={scene === 'birds' ? 540 : 406} alt={study.description} loading={priority ? 'eager' : 'lazy'} />
         <canvas ref={canvas} aria-hidden="true" className={ready ? 'is-ready' : ''} />
         <video ref={video} muted playsInline loop preload="none" hidden aria-hidden="true" />
       </div>

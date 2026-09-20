@@ -1,5 +1,7 @@
 # DESIGN.md
 
+- Selected homepage layout, 20 September 2026: option 03 Integrated backdrop, using the microplate scanner in muted T2. Keep the text readable on the left and the instrument on the right; stack the film below the copy on phones. This replaces the glass-pickup hero and split layout in the local preview. The user authorized completing the supporting placements and publishing the combined update on 20 September 2026. Deploy only the checked final revision; the earlier glass-hero release is superseded.
+
 ## Approved editorial revision — 13 September 2026
 
 Square logo exports also include pure-black (`#000000`) backgrounds with all-white artwork, as requested on 19 September 2026. Label the existing `#111110` square variants charcoal. This additional export palette does not change website theme colours or the circular mark geometry.

@@ -1,5 +1,9 @@
 # AGENTS.md
 
+- Selected homepage layout, 20 September 2026: option 03 Integrated backdrop, using the microplate scanner in muted T2. Keep the text readable on the left and the instrument on the right; stack the film below the copy on phones. This replaces the glass-pickup hero and split layout in the local preview. The user authorized completing the supporting placements and publishing the combined update on 20 September 2026. Deploy only the checked final revision; the earlier glass-hero release is superseded.
+
+- Supporting T2 placements, 20 September 2026: homepage uses the scanner hero, illustrative laboratory interior, glass pickup and selected yellow arm; membership uses birds and rain; services uses waves and clinical automation. Preserve existing content and reduced-motion behavior. Pipetting is explicitly excluded for now because the selected source is unlicensed.
+
 - T2 website direction, 20 September 2026: the user finalized Field of touch in muted source colours and requested website integration. Use glass pickup in the homepage hero, clinical sample automation in the build pipeline, and microplate scanning with research services. Preserve all page content, use labelled third-party motion studies and retain source credits. This supersedes the old orbit animation and local-only scope for these three clips; the earlier tactile still and unlicensed evaluation footage remain unpublished.
 
 - Pure-black square-logo addition, 19 September 2026: provide named and icon-only square exports with `#000000` backgrounds and white artwork. Label the existing `#111110` versions charcoal, retain their files, and keep the tactile illustration unpublished.
