@@ -712,14 +712,10 @@ test("OpenTouch Glove uses official media and an exact project build list", asyn
   await expect(page.getByText(/Do not treat the existing ESP32-C6 stock as a drop-in replacement/)).toBeVisible();
 });
 
-test("home hero keeps the circular identity and controllable T2 motion", async ({ page }) => {
+test("home hero keeps the circular identity and editorial typography", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto("/");
-  const figure = page.locator('.field-of-touch[data-scene="scanner"]');
-  const video = figure.locator("video");
   const heroMark = page.locator(".topbar .brand-mark");
-  await figure.scrollIntoViewIfNeeded();
-  await expect(figure).toHaveAttribute("data-state", "ready");
-  await expect(figure.locator("canvas")).toHaveCSS("opacity", "1");
   await expect(heroMark).toHaveAttribute("viewBox", "0 0 100 100");
   await expect(heroMark).toHaveCSS("transform", "none");
   await expect(heroMark.locator(".brand-mark-segment")).toHaveCount(8);
@@ -729,6 +725,15 @@ test("home hero keeps the circular identity and controllable T2 motion", async (
   await expect(page.locator(".home-hero h1")).toHaveText(/A place to build\s*physical intelligence\./);
   await expect(page.locator(".home-hero h1")).toHaveCSS("font-family", /Helvetica Neue.*Helvetica.*Arial/);
   await expect(page.locator("body")).toHaveCSS("font-family", /Space Mono/);
+});
+
+test("home hero keeps controllable T2 motion", async ({ page }) => {
+  await page.goto("/");
+  const figure = page.locator('.field-of-touch[data-scene="scanner"]');
+  const video = figure.locator("video");
+  await figure.scrollIntoViewIfNeeded();
+  await expect(figure).toHaveAttribute("data-state", "ready");
+  await expect(figure.locator("canvas")).toHaveCSS("opacity", "1");
   const firstTime = await video.evaluate(element => (element as HTMLVideoElement).currentTime);
   await expect.poll(() => video.evaluate(element => (element as HTMLVideoElement).currentTime)).toBeGreaterThan(firstTime);
   await figure.getByRole("button", { name: "Pause Microplate stage animation" }).click();
