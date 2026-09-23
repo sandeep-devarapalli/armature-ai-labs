@@ -1,10 +1,11 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import articleMarkdown from '../data/blogArticle.md?raw';
 import './BlogPages.css';
 
 const ARTICLE = '/blog/model-hardware-standard/';
 const DISCORD = 'https://discord.gg/qGNXGmF8z';
+const COVER = '/blog-covers/mhs-common-interface.png';
 const title = 'MHS could be physical AI’s MCP moment.';
 const deck = 'A shared interface could change how builders connect models to machines. The hard part is making those connections dependable.';
 
@@ -32,6 +33,38 @@ function InterfaceDiagram({ compact = false }: { compact?: boolean }) {
   </figure>;
 }
 
+function ArticleCover() {
+  const figure = useRef<HTMLElement>(null);
+  const [reduced, setReduced] = useState(() => typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const [playing, setPlaying] = useState(!reduced);
+  const [onScreen, setOnScreen] = useState(true);
+  const [pageVisible, setPageVisible] = useState(!document.hidden);
+
+  useEffect(() => {
+    const preference = typeof window.matchMedia === 'function' ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+    const onPreference = () => { setReduced(Boolean(preference?.matches)); if (preference?.matches) setPlaying(false); };
+    const onVisibility = () => setPageVisible(!document.hidden);
+    preference?.addEventListener('change', onPreference);
+    document.addEventListener('visibilitychange', onVisibility);
+    const observer = typeof IntersectionObserver === 'function' ? new IntersectionObserver(entries => setOnScreen(entries[0].isIntersecting), { threshold: .05 }) : null;
+    if (figure.current && observer) observer.observe(figure.current);
+    return () => { preference?.removeEventListener('change', onPreference); document.removeEventListener('visibilitychange', onVisibility); observer?.disconnect(); };
+  }, []);
+
+  return <figure className="mhs-cover wrap" ref={figure}>
+    <div className="mhs-cover-art" data-playing={playing && !reduced && onScreen && pageVisible}>
+      <img src={COVER} width="1672" height="941" alt="Abstract camera, gripper and instrument stage aligned around one shared circular connector" fetchPriority="high" />
+      <svg className="mhs-cover-motion" viewBox="0 0 1672 941" aria-hidden="true">
+        <circle className="align" cx="836" cy="405" r="188" style={{ transformOrigin: '836px 405px' }}/>
+        <path className="trace" d="M530 405H836M1135 405H836M836 603V405"/>
+        <path className="endpoint left" d="M559 390V420"/><path className="endpoint right" d="M1112 390V420"/><path className="endpoint bottom" d="M821 581H851"/>
+        <circle className="pulse" cx="575" cy="405" r="4"/><circle className="pulse pulse-return" cx="1090" cy="423" r="3.5"/>
+      </svg>
+    </div>
+    <figcaption><span>Common interface · Original Armature AI Labs illustration</span><button type="button" disabled={reduced} aria-pressed={playing} onClick={() => setPlaying(value => !value)}>{reduced ? 'Still image (reduced motion)' : playing ? 'Pause motion' : 'Play motion'}</button></figcaption>
+  </figure>;
+}
+
 export function BlogIndexPage() {
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('All posts');
@@ -40,7 +73,7 @@ export function BlogIndexPage() {
     <section className="index-hero"><h1>The lab <span className="muted">journal.</span></h1><p>Notes on physical AI, the systems behind it, and the work of building them.</p><p className="small-meta">01 article · Engineering</p></section>
     <div className="filter-bar"><div className="filters" aria-label="Filter articles by category">{['All posts', 'Engineering'].map(item => <button key={item} aria-pressed={category === item} className={category === item ? 'selected' : ''} onClick={() => setCategory(item)}>{item}</button>)}</div><div className="search-field"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8" cy="8" r="5.5"/><path d="m12 12 6 6"/></svg><input type="search" aria-label="Search the journal" placeholder="Search the journal" value={query} onChange={event => setQuery(event.target.value)}/></div></div>
     <p className="sr-only" role="status">{matches ? '1 article found' : 'No articles found'}</p>
-    {matches ? <article className="post-row"><div className="small-meta post-meta"><span>Engineering</span><time dateTime="2026-09-13">13 Sep 2026</time><span>Essay</span></div><div className="post-summary"><h2><Link to={ARTICLE}><ArticleTitle/></Link></h2><p>{deck}</p><TextLink href={ARTICLE}>Read the article</TextLink></div><InterfaceDiagram compact/></article> : <div className="empty-results"><h2>No matching notes.</h2><p>Try “MHS”, “MCP” or “hardware”.</p><button className="button" onClick={() => setQuery('')}>Clear search <Arrow/></button></div>}
+    {matches ? <article className="post-row"><div className="small-meta post-meta"><span>Engineering</span><time dateTime="2026-09-13">13 Sep 2026</time><span>Essay</span></div><div className="post-summary"><h2><Link to={ARTICLE}><ArticleTitle/></Link></h2><p>{deck}</p><TextLink href={ARTICLE}>Read the article</TextLink></div><Link className="post-cover" to={ARTICLE} aria-label="Read the MHS article"><img src={COVER} width="1672" height="941" loading="lazy" alt="Common interface: camera, gripper and instrument stage around a shared connector"/></Link></article> : <div className="empty-results"><h2>No matching notes.</h2><p>Try “MHS”, “MCP” or “hardware”.</p><button className="button" onClick={() => setQuery('')}>Clear search <Arrow/></button></div>}
     <section className="journal-closing"><h2>Ideas get better <span className="muted">in the open.</span></h2><TextLink href={DISCORD}>Join the conversation on Discord</TextLink></section>
   </div>;
 }
@@ -82,6 +115,7 @@ export function BlogArticlePage() {
   const contents = <ol>{sections.filter(section => section.heading !== 'References').map(section => <li key={section.id}><a href={`#${section.id}`} aria-current={active === section.id ? 'location' : undefined} onClick={() => setActive(section.id)}><span>{section.number}</span>{' '}{section.heading}</a></li>)}</ol>;
   return <div className="journal-page">
     <div className="article-hero"><div className="breadcrumb"><Link to="/blog/">Blog</Link><span>/ Engineering</span></div><h1><ArticleTitle/></h1><p className="article-deck">{deck}</p><div className="article-meta"><span>Armature AI Labs</span><time dateTime="2026-09-13">13 September 2026</time><span>6 min read</span></div></div>
+    <ArticleCover/>
     <div className="article-layout wrap"><aside className="toc"><nav aria-label="Article contents"><p className="small-meta">Contents</p>{contents}<a className="source-shortcut" href="#references">Sources [8]</a></nav></aside><details className="mobile-toc"><summary>Contents <span>+</span></summary><nav aria-label="Mobile article contents">{contents}<a href="#references">Sources [8]</a></nav></details><article className="article-body"><p className="opening">The next useful robot will need more than a capable model. It will need an understandable connection to the machines around it.</p>{sections.map(section => <section id={section.id} key={section.id} className="article-section"><h2>{section.heading !== 'References' ? <span className="section-number">{section.number}</span> : null}{section.heading}</h2><ArticleBlocks content={section.content}/>{section.number === '03' ? <InterfaceDiagram/> : null}{section.number === '04' ? <blockquote>Make the integration reusable.<br/><span className="muted">Make the result reproducible.</span></blockquote> : null}</section>)}<div className="article-end"><p className="small-meta">Published 13 September 2026</p><TextLink href="/blog/">Back to the journal</TextLink><TextLink href={DISCORD}>Discuss with the community</TextLink></div></article></div>
   </div>;
 }
