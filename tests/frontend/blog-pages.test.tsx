@@ -1,9 +1,9 @@
 import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { MemoryRouter } from "react-router-dom";
 import { BlogArticlePage, BlogIndexPage } from "../../src/pages/BlogPages";
 
-afterEach(cleanup);
+afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
 
 describe("published journal", () => {
   it("searches the article and restores it after clearing search", () => {
@@ -17,6 +17,26 @@ describe("published journal", () => {
     fireEvent.click(screen.getByRole("button", { name: "Engineering" }));
     expect(screen.getByRole("button", { name: "Engineering" })).toHaveAttribute("aria-pressed", "true");
     expect(screen.getByRole("link", { name: "Read the article" })).toBeInTheDocument();
+    expect(screen.getByRole("img", { name: /Common interface/ })).toHaveAttribute("src", "/blog-covers/mhs-common-interface.png");
+    expect(document.querySelector(".mhs-cover-motion")).toBeNull();
+  });
+
+  it("shows the static cover on the article and pauses its motion", () => {
+    const { container } = render(<MemoryRouter><BlogArticlePage /></MemoryRouter>);
+    expect(screen.getByRole("img", { name: /shared circular connector/ })).toHaveAttribute("src", "/blog-covers/mhs-common-interface.png");
+    expect(container.querySelector(".mhs-cover-art")).toHaveAttribute("data-playing", "true");
+    fireEvent.click(screen.getByRole("button", { name: "Pause motion" }));
+    expect(container.querySelector(".mhs-cover-art")).toHaveAttribute("data-playing", "false");
+    expect(screen.getByRole("button", { name: "Play motion" })).toHaveAttribute("aria-pressed", "false");
+    fireEvent.click(screen.getByRole("button", { name: "Play motion" }));
+    expect(container.querySelector(".mhs-cover-art")).toHaveAttribute("data-playing", "true");
+  });
+
+  it("keeps the cover still when reduced motion is requested", () => {
+    vi.stubGlobal("matchMedia", vi.fn().mockReturnValue({ matches: true, addEventListener: vi.fn(), removeEventListener: vi.fn() }));
+    const { container } = render(<MemoryRouter><BlogArticlePage /></MemoryRouter>);
+    expect(container.querySelector(".mhs-cover-art")).toHaveAttribute("data-playing", "false");
+    expect(screen.getByRole("button", { name: "Still image (reduced motion)" })).toBeDisabled();
   });
 
   it("retains article sections, eight sources, status and research caveats without a nested shell", () => {

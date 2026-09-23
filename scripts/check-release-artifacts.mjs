@@ -36,4 +36,21 @@ if (missingPrecacheAssets.length > 0) {
   throw new Error(`Service worker precache is missing: ${missingPrecacheAssets.join(", ")}`);
 }
 
+const coverPath = "/blog-covers/mhs-common-interface.png";
+const cover = await readFile(path.resolve(`dist${coverPath}`));
+if (cover.toString("hex", 0, 8) !== "89504e470d0a1a0a" || cover.readUInt32BE(16) !== 1672 || cover.readUInt32BE(20) !== 941) {
+  throw new Error("MHS cover must be a valid 1672 x 941 PNG.");
+}
+const articleHtml = await readFile(path.resolve("dist/blog/model-hardware-standard/index.html"), "utf8");
+const coverUrl = `https://armatureailabs.com${coverPath}`;
+if (!articleHtml.includes(`<meta property="og:image" content="${coverUrl}" />`) ||
+    !articleHtml.includes(`<meta name="twitter:image" content="${coverUrl}" />`) ||
+    !articleHtml.includes('<meta name="robots" content="max-image-preview:large" />')) {
+  throw new Error("MHS article shell is missing static cover metadata.");
+}
+const articleData = JSON.parse(articleHtml.match(/<script type="application\/ld\+json">([^<]+)<\/script>/)?.[1] ?? "null");
+if (articleData?.["@type"] !== "BlogPosting" || articleData.image?.url !== coverUrl) {
+  throw new Error("MHS article shell is missing BlogPosting image data.");
+}
+
 console.log(`Release artifacts verified: ${assetFiles.length} static assets bypass Functions.`);

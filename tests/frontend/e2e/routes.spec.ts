@@ -86,6 +86,32 @@ test("public projects and three themes remain usable", async ({ page }) => {
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
 });
 
+test("MHS cover is static in the journal and controllable on the article", async ({ page, request }) => {
+  const html = await (await request.get("/blog/model-hardware-standard/")).text();
+  expect(html).toContain('property="og:image" content="https://armatureailabs.com/blog-covers/mhs-common-interface.png"');
+  expect(html).toContain('"@type":"BlogPosting"');
+
+  await page.goto("/blog/");
+  const thumbnail = page.locator(".post-cover img");
+  await expect(thumbnail).toBeVisible();
+  await expect.poll(() => thumbnail.evaluate(image => (image as HTMLImageElement).naturalWidth)).toBe(1672);
+  await expect(page.locator(".mhs-cover-motion")).toHaveCount(0);
+  await expectNoHorizontalOverflow(page);
+
+  await page.goto("/blog/model-hardware-standard/");
+  const cover = page.locator(".mhs-cover-art");
+  await expect(cover.locator("img")).toBeVisible();
+  await expect(cover).toHaveAttribute("data-playing", "true");
+  await page.getByRole("button", { name: "Pause motion" }).click();
+  await expect(cover).toHaveAttribute("data-playing", "false");
+  await page.getByRole("button", { name: "Play motion" }).click();
+  await expect(cover).toHaveAttribute("data-playing", "true");
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await expect(cover).toHaveAttribute("data-playing", "false");
+  await expect(page.getByRole("button", { name: "Still image (reduced motion)" })).toBeDisabled();
+  await expectNoHorizontalOverflow(page);
+});
+
 for (const palette of [
   { theme: "light", link: "rgb(153, 86, 0)", hover: "rgb(120, 68, 0)", ink: "rgb(17, 17, 16)", paper: "rgb(255, 255, 255)", panel: "rgb(245, 245, 243)" },
   { theme: "dark", link: "rgb(217, 154, 80)", hover: "rgb(234, 183, 121)", ink: "rgb(246, 246, 242)", paper: "rgb(17, 17, 16)", panel: "rgb(34, 34, 32)" },
