@@ -86,6 +86,32 @@ test("public projects and three themes remain usable", async ({ page }) => {
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
 });
 
+test("Who We Are and Meet the Team have distinct direct routes and usable artwork", async ({ page, request }) => {
+  const aboutHtml = await (await request.get("/about/")).text();
+  expect(aboutHtml).toContain("Who We Are · Armature AI Labs");
+  expect(aboutHtml).toContain('rel="canonical" href="https://armatureailabs.com/about/"');
+  expect(aboutHtml).toContain("/about/who-we-are-social.png");
+  const teamHtml = await (await request.get("/team/")).text();
+  expect(teamHtml).toContain("Meet the Team · Armature AI Labs");
+
+  await page.goto("/about/");
+  await expect(page.getByRole("heading", { name: "Who We Are" })).toBeVisible();
+  await expect(page.getByText("not a completed Armature AI Labs facility.")).toBeVisible();
+  const hero = page.getByAltText(/Conceptual axonometric drawing/);
+  await expect.poll(() => hero.evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBe(1774);
+  await page.getByRole("button", { name: "light theme" }).click();
+  await expect(hero).toHaveAttribute("src", "/about/lab-light.webp");
+  await page.getByRole("button", { name: "dark theme" }).click();
+  await expect(hero).toHaveAttribute("src", "/about/lab-dark.webp");
+  await expectNoHorizontalOverflow(page);
+
+  await page.getByRole("link", { name: "Meet the Team", exact: true }).click();
+  await expect(page).toHaveURL(/\/team$/);
+  await expect(page.getByRole("heading", { name: "Meet the Team" })).toBeVisible();
+  await expect(page.getByText("The people behind Armature AI Labs will be introduced here as their profiles are ready.")).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+});
+
 test("MHS cover is static in the journal and controllable on the article", async ({ page, request }) => {
   const html = await (await request.get("/blog/model-hardware-standard/")).text();
   expect(html).toContain('property="og:image" content="https://armatureailabs.com/blog-covers/mhs-common-interface.png"');

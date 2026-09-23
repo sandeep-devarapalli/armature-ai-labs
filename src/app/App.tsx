@@ -13,6 +13,8 @@ import {
 
 const ProjectsPage = lazy(() => import("../pages/ProjectsPage").then((module) => ({ default: module.ProjectsPage })));
 const BrandingPage = lazy(() => import("../pages/BrandingPage").then((module) => ({ default: module.BrandingPage })));
+const AboutPage = lazy(() => import("../pages/AboutPages").then((module) => ({ default: module.AboutPage })));
+const TeamPage = lazy(() => import("../pages/AboutPages").then((module) => ({ default: module.TeamPage })));
 const BlogIndexPage = lazy(() => import("../pages/BlogPages").then((module) => ({ default: module.BlogIndexPage })));
 const BlogArticlePage = lazy(() => import("../pages/BlogPages").then((module) => ({ default: module.BlogArticlePage })));
 const ElectrofluidicMusclesPage = lazy(() => import("../pages/ElectrofluidicMusclesPage").then((module) => ({ default: module.ElectrofluidicMusclesPage })));
@@ -86,6 +88,8 @@ export const router = createBrowserRouter([
     ),
     children: [
       { path: "/", element: <HomePage /> },
+      { path: "/about", element: <AboutPage /> },
+      { path: "/team", element: <TeamPage /> },
       { path: "/equipment", element: equipmentPageAvailable ? <EquipmentPage /> : <Navigate to="/" replace /> },
       { path: "/membership", element: <Navigate to="/join" replace /> },
       { path: "/services", element: <ServicesPage /> },
