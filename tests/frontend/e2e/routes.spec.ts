@@ -179,6 +179,7 @@ for (const palette of [
     await contents.hover();
     await expect(contents).toHaveCSS("color", palette.hover);
     await page.mouse.move(0, 0);
+    await page.addStyleTag({ content: "html { scroll-behavior: auto !important; }" });
     const citation = page.locator(".article-body .citation").first();
     await expect(citation).toHaveCSS("color", palette.link);
     await expect(citation).toHaveCSS("text-decoration-line", "underline");
