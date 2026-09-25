@@ -1,6 +1,13 @@
 # Team membership and booking email plan
 
-Updated: 25 September 2026. Status: implemented in a local branch; database and live mail verification pending.
+Updated: 25 September 2026. Status: implemented in a draft PR; preview database
+and outbound mail verification pending.
+
+Preview testing is on hold at the user's request. The live website's public
+bundle points to the existing `armature-lab` Supabase project
+(`uxfhdfagrmaeyuaipaar`); no separate Armature preview project was found among
+the accessible projects. Do not create one or apply this migration to the live
+project until the user resumes that work.
 
 The local implementation adds team applications, staff review and activation,
 named seats, invitations, booking attribution, restricted team reporting and
