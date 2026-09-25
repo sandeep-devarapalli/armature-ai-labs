@@ -151,7 +151,7 @@ export function AcceptTeamInvitationPage() {
 
   return <>
     <PageHeader meta="Team invitation" title="Join your team" description="This invitation is for your verified email address. Accepting it links your member account to the team." />
-    <Section number="01" title="Accept invitation"><button className="button button-primary" type="button" disabled={working || !supabase || !token} onClick={() => void accept()}>{working ? "Joining…" : "Accept invitation"}</button>{error && <p className="form-error" role="alert">{error}</p>}</Section>
+    <Section number="01" title="Accept invitation"><p className="lede">Add your display name in your <Link to="/profile">profile</Link> before accepting.</p><button className="button button-primary" type="button" disabled={working || !supabase || !token} onClick={() => void accept()}>{working ? "Joining…" : "Accept invitation"}</button>{error && <p className="form-error" role="alert">{error}</p>}</Section>
   </>;
 }
 

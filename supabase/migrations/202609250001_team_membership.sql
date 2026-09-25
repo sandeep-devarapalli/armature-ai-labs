@@ -421,6 +421,12 @@ begin
   if v_email is null then
     raise exception using errcode = '42501', message = 'verified email required';
   end if;
+  if not exists (
+    select 1 from public.profiles
+    where id=auth.uid() and nullif(btrim(display_name),'') is not null
+  ) then
+    raise exception using errcode = '22023', message = 'profile display name required';
+  end if;
   select organization_id into v_organization_id from public.organization_invitations
   where token_hash=extensions.digest(p_token,'sha256');
   if not found then

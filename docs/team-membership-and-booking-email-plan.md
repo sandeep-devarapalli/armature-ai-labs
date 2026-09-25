@@ -61,7 +61,7 @@ email configuration is a separate integration and is not changed by this decisio
   Personal membership can coexist with team membership.
 - Admins create single-use, email-bound invitation links valid for seven days,
   copied and shared manually in the first version. Verified users accept with
-  their own login and required profile details.
+  their own login and a completed display name in their profile.
 - Active seats and unexpired invitations count against the allowance, enforced
   atomically. Individual equipment certifications remain required.
 - Show admins per-person team-attributed bookings and usage, not private contact

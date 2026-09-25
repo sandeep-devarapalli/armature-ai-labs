@@ -1,7 +1,7 @@
 begin;
 
 create extension if not exists pgtap with schema extensions;
-select plan(31);
+select plan(32);
 
 select has_table('public','organizations','team organizations exist');
 select has_table('public','organization_invitations','team invitations exist');
@@ -124,6 +124,14 @@ select throws_ok(
 reset role;
 select set_config('request.jwt.claims',
  '{"sub":"30000000-0000-4000-8000-000000000003","role":"authenticated","aal":"aal1"}',true);
+set local role authenticated;
+select throws_ok(
+  $$select public.team_accept_invitation((select token from test_team_token))$$,
+  '22023','profile display name required','invited person must complete their profile'
+);
+reset role;
+update public.profiles set display_name='Teammate'
+where id='30000000-0000-4000-8000-000000000003';
 set local role authenticated;
 select lives_ok(
   $$select public.team_accept_invitation((select token from test_team_token))$$,
