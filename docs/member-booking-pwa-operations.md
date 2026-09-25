@@ -75,8 +75,9 @@ Google Workspace user `hello@armatureailabs.com`. It shares the hello inbox and
 has no separate login. This supersedes the dedicated bookings mailbox plan.
 Cutover checklist, in order:
 
-1. Verify external mail to the bookings alias reaches the hello inbox. Set up
-   and verify Gmail Send mail as for the alias, including a reply test.
+1. Inbound mail to the bookings alias reaching the hello inbox was confirmed by
+   the user on 25 September 2026. Set up and verify Gmail Send mail as for the
+   alias, including a reply test.
 2. Grant the calendar service account domain-wide delegation for
    `https://www.googleapis.com/auth/calendar` in that Workspace.
 3. Share each per-resource private calendar with the primary user

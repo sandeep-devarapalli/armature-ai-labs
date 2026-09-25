@@ -15,15 +15,17 @@ the supplied Google Admin screenshot lists `sandeep`, `bookings` and `privacy`
 under `armatureailabs.com`. This records the reported configuration, not a
 successful delivery or sending test.
 
-The bookings alias shares the hello inbox and has no separate password, login
-or Workspace seat. It replaces the previous dedicated bookings-account plan.
+The user confirmed on 25 September 2026 that mail sent to the bookings alias
+arrives in the hello inbox. Outbound Send mail as and reply delivery remain to
+be verified. The alias shares the hello inbox and has no separate password,
+login or Workspace seat. It replaces the previous dedicated bookings-account plan.
 No bookings subdomain is requested. Use Google Workspace initially; Amazon
 SES and ECS are not part of this setup.
 
 ## Remaining email and calendar setup
 
-1. Verify external mail to the bookings alias arrives in the hello inbox.
-   Optionally organize it with a Bookings label/filter.
+1. Inbound delivery is user-confirmed. Optionally organize bookings mail with
+   a Bookings label/filter.
 2. Configure and verify Gmail Send mail as for `bookings@armatureailabs.com`.
    Verify a recipient sees the intended From and replies reach the shared inbox.
 3. Authenticate calendar operations as the real Workspace user:
