@@ -95,9 +95,11 @@ create or replace function private.is_team_admin(p_organization_id uuid)
 returns boolean language sql stable security definer set search_path = '' as $$
   select exists (
     select 1 from public.organization_members member
+    left join public.memberships personal on personal.user_id = member.user_id
     where member.organization_id = p_organization_id
       and member.user_id = (select auth.uid())
       and member.role = 'admin' and member.removed_at is null
+      and coalesce(personal.status <> 'suspended', true)
   );
 $$;
 
@@ -207,7 +209,6 @@ returns table (
     membership.status = 'active'
       and (membership.starts_at is null or membership.starts_at <= now())
       and (membership.ends_at is null or membership.ends_at > now())
-      and member.seat_enabled
       and coalesce(personal.status <> 'suspended', true),
     membership.starts_at, membership.ends_at
   from public.organization_members member

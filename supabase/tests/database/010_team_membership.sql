@@ -1,7 +1,7 @@
 begin;
 
 create extension if not exists pgtap with schema extensions;
-select plan(30);
+select plan(31);
 
 select has_table('public','organizations','team organizations exist');
 select has_table('public','organization_invitations','team invitations exist');
@@ -78,6 +78,10 @@ select set_config('request.jwt.claims',
  '{"sub":"30000000-0000-4000-8000-000000000002","role":"authenticated","aal":"aal1"}',true);
 set local role authenticated;
 
+select is(
+  (select membership_active from public.list_my_team_access()),
+  true,'admin can manage an active team without occupying a seat'
+);
 select throws_ok(
   $$select public.submit_team_application('Second Team','Team Admin','',1)$$,
   '23505','person already has a team affiliation',
