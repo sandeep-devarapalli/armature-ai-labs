@@ -30,13 +30,17 @@ SES and ECS are not part of this setup.
    `GOOGLE_WORKSPACE_SUBJECT=hello@armatureailabs.com`. Configure the required
    Calendar delegation and resource-calendar permissions for this account.
    Do not impersonate the alias or assume it becomes the Calendar organizer.
-4. Connect the existing reminder webhook to a Google-supported sending
-   integration, using scoped OAuth/Gmail API or an approved Google SMTP setup.
-   Plan `REMINDER_FROM=bookings@armatureailabs.com` and matching Reply-To.
-   The From variable alone does not implement delivery. Keep credentials in
-   managed secrets; no account password belongs in chat, documentation or Git.
+4. Keep the existing reminder webhook as the default. The implemented direct
+   Gmail option requires `REMINDER_PROVIDER=gmail`, delegated `gmail.send` and
+   `gmail.settings.basic` scopes, and an accepted Gmail Send mail as alias.
+   It sends From and Reply-To as `bookings@armatureailabs.com`; the worker checks
+   the primary Workspace identity and alias status before sending. Keep service
+   credentials in managed secrets; no account password belongs in chat,
+   documentation or Git.
 5. Test booking creation, rescheduling, cancellation, invitations, reminders,
-   replies, retries and duplicate prevention before enabling production jobs.
+   replies and retries before enabling production jobs. Gmail has no send
+   idempotency key, so a worker interrupted after acceptance can duplicate a
+   reminder; review that limit before selecting direct Gmail delivery.
    Supabase remains authoritative for bookings and integration state.
 
 An alias cannot provide separately restricted staff access to booking messages:
