@@ -51,6 +51,9 @@ booking, attendance, and operational calendar mirroring.
   sizes during staff assignment.
 - `202607260012_3d_printer_procurement.sql`: adds listing rating snapshots and
   seeds three fixed-bookable FDM printers, dated offers, and project mappings.
+- `202609250001_team_membership.sql`: organizations, named seats, invitations,
+  staff approval and activation, team booking attribution, and restricted
+  roster and booking activity reports.
 
 Migrations `202607260001` through `202607260012` have already been applied to
 the linked project. Treat these files as immutable production history. Fixes
@@ -67,6 +70,16 @@ The required public RPCs are:
 protected operations/admin role, an `aal2` Supabase session, and a reason.
 `set_resource_hours` and `staff_set_booking_status` are audited operations RPCs
 used by the protected staff screens.
+
+Team membership uses `submit_team_application` and `list_my_team_access` for
+applicants and members. Staff review with `staff_decide_team_application`, then
+activate or renew after offline payment with `staff_set_team_membership`.
+Team admins manage invitations and seats through `team_create_invitation`,
+`team_accept_invitation`, `team_revoke_invitation`, `team_remove_member` and
+`team_set_admin_seat`. `create_booking_with_access` records the chosen personal
+or team source and checks the corresponding entitlement. Team-admin reads use
+the restricted roster, invitation, capacity and booking activity RPCs; booking
+notes and personal bookings are excluded.
 
 ## Local Development
 
@@ -114,12 +127,9 @@ Scheduled functions:
 Google Calendar (`calendar-sync`):
 
 - `GOOGLE_SERVICE_ACCOUNT_JSON`: complete Google service-account JSON.
-- `GOOGLE_WORKSPACE_SUBJECT`: delegated Workspace identity,
-  `bookings@armatureailabs.com`. The mailbox must exist in the
-  `armatureailabs.com` Workspace and domain-wide delegation must be granted
-  there before calendar sync is enabled; the legacy
-  `bookings@armaturelab.org` value is only a fallback for an already
-  configured project.
+- `GOOGLE_WORKSPACE_SUBJECT`: delegated Workspace identity, normally
+  `hello@armatureailabs.com`. The `bookings@armatureailabs.com` alias cannot be
+  impersonated as a separate user.
 - `GOOGLE_SEND_UPDATES`: `all` by default; use `none` only for controlled
   testing.
 
@@ -131,18 +141,25 @@ update, and cancel deliveries overwrite external edits.
 
 Reminders (`retry-reminders`):
 
-- `REMINDER_WEBHOOK_URL`: server-side email delivery endpoint.
-- `REMINDER_WEBHOOK_SECRET`: bearer credential for that endpoint.
-- `REMINDER_FROM`: defaults to `bookings@armatureailabs.com`. Set it
-  explicitly in production and confirm the reminder webhook's provider lists
-  that sender as verified (SPF and DKIM for `armatureailabs.com` were
-  verified on 8 September 2026 for `hello@`; the same domain records cover
-  `bookings@` once the mailbox exists).
+- `REMINDER_PROVIDER`: `gmail` for Google Workspace delivery, or `webhook`
+  (the default) for the existing delivery endpoint.
+- `REMINDER_FROM`: defaults to `bookings@armatureailabs.com`. Gmail delivery
+  requires this approved alias and `GOOGLE_WORKSPACE_SUBJECT=hello@armatureailabs.com`.
+- For `gmail`, grant the service account domain-wide delegation for
+  `https://www.googleapis.com/auth/gmail.send` and
+  `https://www.googleapis.com/auth/gmail.settings.basic` in addition to the
+  Calendar scope. Configure and verify the bookings address as a Gmail Send mail
+  as alias before selecting this provider; the worker checks its accepted
+  verification status before sending.
+- For `webhook`, set `REMINDER_WEBHOOK_URL` and `REMINDER_WEBHOOK_SECRET`.
 
 The webhook receives an idempotency key, recipient, template name, and booking
-data. It should deliver through the approved Google Workspace sender or the
-lab's transactional email provider. Supabase Auth custom SMTP is configured
-separately in the project dashboard for OTP and account email.
+data. Gmail delivery sends directly through the primary Workspace user's
+delegated account with bookings as From and Reply-To. A Gmail send accepted just
+before a worker interruption could be retried, since the Gmail API does not
+accept an idempotency key; review duplicate behavior before scheduling this
+provider in production. Supabase Auth custom SMTP is configured separately in
+the project dashboard for OTP and account email.
 
 Public component requests (`component-request`):
 

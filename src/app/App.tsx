@@ -37,6 +37,9 @@ const AdminMakerServicesPage = lazy(() => import("../pages/MakerDeskPages").then
 const EquipmentPage = lazy(() => import("../pages/PublicPages").then((module) => ({ default: module.EquipmentPage })));
 const ServicesPage = lazy(() => import("../pages/PublicPages").then((module) => ({ default: module.ServicesPage })));
 const JoinPage = lazy(() => import("../pages/PublicPages").then((module) => ({ default: module.JoinPage })));
+const TeamWorkspacePage = lazy(() => import("../pages/TeamPages").then((module) => ({ default: module.TeamWorkspacePage })));
+const AcceptTeamInvitationPage = lazy(() => import("../pages/TeamPages").then((module) => ({ default: module.AcceptTeamInvitationPage })));
+const AdminTeamsPage = lazy(() => import("../pages/TeamPages").then((module) => ({ default: module.AdminTeamsPage })));
 const NotFoundPage = lazy(() => import("../pages/PublicPages").then((module) => ({ default: module.NotFoundPage })));
 const AuthPage = lazy(() => import("../pages/AuthPages").then((module) => ({ default: module.AuthPage })));
 const AuthCallbackPage = lazy(() => import("../pages/AuthPages").then((module) => ({ default: module.AuthCallbackPage })));
@@ -108,6 +111,8 @@ export const router = createBrowserRouter([
       { path: "/auth/callback", element: memberFeature(<AuthCallbackPage />) },
       { path: "/dashboard", element: memberFeature(protectedPage(<DashboardPage />)) },
       { path: "/profile", element: memberFeature(protectedPage(<ProfilePage />)) },
+      { path: "/workspace/team", element: memberFeature(protectedPage(<TeamWorkspacePage />)) },
+      { path: "/workspace/team/accept/:token", element: memberFeature(protectedPage(<AcceptTeamInvitationPage />)) },
       { path: "/book", element: memberFeature(protectedPage(<BookPage />)) },
       { path: "/book/:resource", element: memberFeature(protectedPage(<ResourceBookingPage />)) },
       { path: "/bookings", element: memberFeature(protectedPage(<BookingsPage />)) },
@@ -120,6 +125,7 @@ export const router = createBrowserRouter([
       { path: "/toolkits", element: memberFeature(protectedPage(<ToolkitsPage />)) },
       { path: "/admin", element: memberFeature(<Navigate to="/admin/members" replace />) },
       { path: "/admin/members", element: memberFeature(staffPage(<AdminMembersPage />)) },
+      { path: "/admin/teams", element: memberFeature(staffPage(<AdminTeamsPage />)) },
       { path: "/admin/resources", element: memberFeature(staffPage(<AdminResourcesPage />)) },
       { path: "/admin/bookings", element: memberFeature(staffPage(<AdminBookingsPage />)) },
       { path: "/admin/attendance", element: memberFeature(staffPage(<AdminAttendancePage />)) },

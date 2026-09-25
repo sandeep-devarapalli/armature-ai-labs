@@ -70,24 +70,27 @@ membership enquiries, and brand permissions. Sending, receiving, SPF, and DKIM
 were verified on 8 September 2026. Keep `hello@armaturelab.org` working for
 existing contacts without publishing it as the public contact address.
 
-The booking identity for calendar operations, reminders, and transactional
-booking mail is `bookings@armatureailabs.com` (decided 12 September 2026).
+The booking identity `bookings@armatureailabs.com` is an alias of the existing
+Google Workspace user `hello@armatureailabs.com`. It shares the hello inbox and
+has no separate login. This supersedes the dedicated bookings mailbox plan.
 Cutover checklist, in order:
 
-1. Create the `bookings@armatureailabs.com` mailbox in the same Google
-   Workspace as `hello@armatureailabs.com`; send and receive one test
-   message each way and keep the headers as the verification record.
+1. Verify external mail to the bookings alias reaches the hello inbox. Set up
+   and verify Gmail Send mail as for the alias, including a reply test.
 2. Grant the calendar service account domain-wide delegation for
    `https://www.googleapis.com/auth/calendar` in that Workspace.
-3. Share every per-resource private calendar with
-   `bookings@armatureailabs.com` (make-changes-and-manage-sharing), or
-   recreate them under it, and confirm the identifiers in `calendar_links`.
-4. Set the Supabase function secrets `GOOGLE_WORKSPACE_SUBJECT` and
-   `REMINDER_FROM` to `bookings@armatureailabs.com`, and add the address as
-   a verified sender at the reminder webhook's email provider.
-5. Run one calendar create/update/cancel cycle and one reminder against a
-   test booking in a controlled preview; only then retire
-   `bookings@armaturelab.org` from the legacy configuration.
+3. Share each per-resource private calendar with the primary user
+   `hello@armatureailabs.com` and confirm its identifier in `calendar_links`.
+   The alias does not become a Calendar organizer identity.
+4. Set `GOOGLE_WORKSPACE_SUBJECT=hello@armatureailabs.com` and
+   `REMINDER_FROM=bookings@armatureailabs.com` in managed function secrets.
+   Select the Google Workspace reminder provider only after its delegated
+   scopes and Send mail as checks pass.
+5. Run calendar create/update/cancel and reminder tests against controlled
+   bookings before enabling scheduled jobs. Review duplicate reminder behavior.
+
+The [team membership and booking email plan](team-membership-and-booking-email-plan.md)
+records the team workflow and remaining release checks.
 
 - Create one private Google Calendar per reservable resource.
 - Store each calendar identifier in the protected calendar link table.

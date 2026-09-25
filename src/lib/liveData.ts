@@ -9,7 +9,8 @@ import type {
   MembershipApplication,
   PublicProfile,
   Resource,
-  ResourceKind
+  ResourceKind,
+  TeamAccess
 } from "../types/domain";
 
 type Client = SupabaseClient<Database>;
@@ -25,6 +26,7 @@ interface LiveSnapshot {
   state: DemoState;
   isStaff: boolean;
   isAdmin: boolean;
+  teamAccess: TeamAccess[];
 }
 
 export function hasAdminRole(roles: Array<{ role: StaffRole }>) {
@@ -217,6 +219,7 @@ export async function loadLiveSnapshot(
     return {
       isStaff: false,
       isAdmin: false,
+      teamAccess: [],
       state: {
         currentUserId: null,
         profiles: publicProfiles,
@@ -238,6 +241,18 @@ export async function loadLiveSnapshot(
   const roles = rolesResult.data ?? [];
   const isStaff = roles.length > 0;
   const isAdmin = hasAdminRole(roles);
+
+  const teamAccessResult = await client.rpc("list_my_team_access");
+  throwOnError(teamAccessResult.error);
+  const teamAccess: TeamAccess[] = (teamAccessResult.data ?? []).map((row) => ({
+    organizationId: row.organization_id,
+    organizationName: row.organization_name,
+    role: row.role === "admin" ? "admin" : "member",
+    seatEnabled: row.seat_enabled,
+    membershipActive: row.membership_active,
+    startsAt: row.starts_at,
+    endsAt: row.ends_at
+  }));
 
   const [
     profilesResult,
@@ -346,7 +361,9 @@ export async function loadLiveSnapshot(
     guestNames: guestsByBooking.get(booking.id) ?? [],
     state:
       booking.status === "tentative" ? "confirmed" : booking.status,
-    createdAt: booking.created_at
+    createdAt: booking.created_at,
+    accessSource: booking.access_source,
+    organizationId: booking.organization_id
   }));
 
   const attendance: AttendanceSession[] = (attendanceResult.data ?? []).map(
@@ -398,6 +415,7 @@ export async function loadLiveSnapshot(
   return {
     isStaff,
     isAdmin,
+    teamAccess,
     state: {
       currentUserId: session.user.id,
       profiles: Array.from(profileById.values()),
