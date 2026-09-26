@@ -170,3 +170,7 @@ Reference for the new CNAME-style requirements: https://resend.com/docs/dashboar
 ### Browser access correction — 26 September 2026
 
 Owner directed Cloudflare and Supabase administration to the Sandeep Chrome profile (sandeep.devarapalli@gmail.com). Existing GitHub sign-in succeeded for both. Cloudflare shows the correct armatureailabs.com zone under the existing live.com account; Supabase shows armature-lab / uxfhdfagrmaeyuaipaar. The DNS zone contains six records, including Workspace MX/SPF/DKIM. Prepared the Resend DKIM form without saving; explicit browser-time approval for the three sending-subdomain records is pending. No DNS changes, Resend key creation, or SMTP configuration yet.
+
+### Resend DNS applied — 26 September 2026
+
+Owner approved all three DNS records. At turn start the DKIM TXT was already present; verified its exact value and added the two CNAME records with DNS-only/Auto TTL. Public dig queries resolve all three expected values. Resend reports DNS verified and return-path Verified; overall domain, DKIM and regional sending CNAME remain Pending during provider verification. Existing Google Workspace MX/SPF/DKIM were preserved. Tracking configuration has no tracking subdomain configured; no tracking domain was added. API key creation currently offers only All domains, so cancelled without creating a broad key. Next approval required at the browser action: create a Sending access key scoped to mail.armatureailabs.com and store it in Supabase SMTP. SMTP and public registration remain unchanged; no messages sent.
