@@ -101,9 +101,12 @@ records the team workflow and remaining release checks.
   must restore the Supabase booking state.
 - Use the generated ICS endpoint for members who do not use Google Calendar.
 
+Both calendar-sync and retry-reminders require `BOOKING_WORKERS_ENABLED=true` before any database work. Missing, false, or malformed values return a disabled result after job authentication. Keep it unset or false during credential staging. This also pauses the reminder worker's attendance-maintenance call. Deploy and verify this gate before uploading Google credentials; an empty queue alone is not a durable delivery hold.
+
 Recommended function secrets:
 
 ```text
+BOOKING_WORKERS_ENABLED
 GOOGLE_SERVICE_ACCOUNT_JSON
 GOOGLE_WORKSPACE_SUBJECT
 ARMATURE_JOB_SECRET

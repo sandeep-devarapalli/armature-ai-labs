@@ -119,6 +119,9 @@ Deno.serve(async (request) => {
 
   try {
     assertJobSecret(request);
+    if (Deno.env.get("BOOKING_WORKERS_ENABLED") !== "true") {
+      return json(request, { status: "disabled", claimed: 0 });
+    }
     const client = adminClient();
     const { data: maintenance, error: maintenanceError } = await client.rpc(
       "run_attendance_maintenance",
