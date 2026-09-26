@@ -1,5 +1,7 @@
 # AGENTS.md
 
+- Legal operator correction, 26 September 2026: use the exact name `Jayasri Nageshwara Rao and Partners LLP` in the privacy notice. Do not shorten it to Nagesh Rao. The lab contact address is not a confirmed registered-office address.
+
 - Selected homepage layout, 20 September 2026: option 03 Integrated backdrop, using the microplate scanner in muted T2. Keep the text readable on the left and the instrument on the right; stack the film below the copy on phones. This replaces the glass-pickup hero and split layout in the local preview. The user authorized completing the supporting placements and publishing the combined update on 20 September 2026. Deploy only the checked final revision; the earlier glass-hero release is superseded.
 
 - Supporting T2 placements, 20 September 2026: homepage uses the scanner hero, illustrative laboratory interior, glass pickup and selected yellow arm; membership uses birds and rain; services uses waves and clinical automation. Preserve existing content and reduced-motion behavior. Pipetting is explicitly excluded for now because the selected source is unlicensed.
