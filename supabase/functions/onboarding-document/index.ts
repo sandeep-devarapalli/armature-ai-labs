@@ -62,7 +62,8 @@ Deno.serve(async (request) => {
       const { data, error: downloadError } = await client.storage.from(bucket).download(document.object_path);
       if (downloadError || !data) throw new HttpError(404, "Document unavailable.");
       // Proxy instead of issuing a bearer URL that can outlive authorization or expiry.
-      if (Date.parse(document.expires_at) <= Date.now()) throw new HttpError(410, "Document retention period has ended.");
+      const { data: current } = await scopedClient.from("onboarding_documents").select("expires_at,deleted_at").eq("id", id).maybeSingle();
+      if (!current || current.deleted_at || Date.parse(current.expires_at) <= Date.now()) throw new HttpError(410, "Document retention period has ended.");
       return new Response(data, { headers: {
         ...corsHeaders(request), "content-type": "application/octet-stream",
         "content-disposition": 'attachment; filename="onboarding-image"',
@@ -77,9 +78,10 @@ Deno.serve(async (request) => {
       contentType: request.headers.get("content-type")!, cacheControl: "0", upsert: false,
     });
     if (uploadError) throw new HttpError(409, "Document could not be uploaded. Existing uploads cannot be overwritten.");
-    const { error: finalizeError } = await client.rpc("finalize_onboarding_document", { p_document_id: id });
-    const { data: latest, error: latestError } = await client.from("onboarding_documents").select("expires_at,deleted_at").eq("id", id).single();
-    if (finalizeError || latestError || !latest || latest.deleted_at || Date.parse(latest.expires_at) <= Date.now()) {
+    await client.rpc("finalize_onboarding_document", { p_document_id: id });
+    const { data: latest, error: latestError } = await client.from("onboarding_documents").select("expires_at,deleted_at,uploaded_at").eq("id", id).single();
+    if (latestError || !latest) throw new HttpError(503, "Upload status could not be read. Refresh before trying again.");
+    if (!latest.uploaded_at || latest.deleted_at || Date.parse(latest.expires_at) <= Date.now()) {
       await client.storage.from(bucket).remove([document.object_path]);
       throw new HttpError(410, "Document retention period has ended.");
     }

@@ -125,6 +125,7 @@ export function getPageSeo(pathname: string): PageSeo {
   if (!page) {
     const segment = path.split("/")[1];
     const name = import.meta.env.DEV && path === "/membership-preview/" ? "Membership review preview"
+      : import.meta.env.DEV && path === "/onboarding-local/" ? "Local onboarding review"
       : path === "/components/request/" ? "Component Request"
       : Object.hasOwn(operationalNames, segment) ? operationalNames[segment] : "Page Not Found";
     return {

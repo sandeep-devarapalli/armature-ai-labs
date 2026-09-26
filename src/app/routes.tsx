@@ -85,6 +85,8 @@ const membershipPreviewRoutes: RouteObject[] = [];
 if (import.meta.env.DEV && import.meta.env.VITE_DEMO_MODE === "true") {
   const MembershipPreviewPage = lazy(() => import("../pages/MembershipPreviewPage").then((module) => ({ default: module.MembershipPreviewPage })));
   membershipPreviewRoutes.push({ path: "/membership-preview", element: <MembershipPreviewPage /> });
+  const OnboardingLocalPage = lazy(() => import("../pages/OnboardingLocalPage").then((module) => ({ default: module.OnboardingLocalPage })));
+  membershipPreviewRoutes.push({ path: "/onboarding-local", element: <OnboardingLocalPage /> });
 }
 
 export const routes: RouteObject[] = [

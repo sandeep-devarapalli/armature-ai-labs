@@ -1,6 +1,6 @@
 # Basic onboarding — local backend foundation
 
-26 September 2026. Branch `codex/secure-basic-onboarding`, based on preview commit `8643395`. This is a local synthetic-data backend implementation, not a member launch. The existing `/membership-preview` still uses in-memory fixtures; it is not connected to these new endpoints.
+26 September 2026. Branch `codex/secure-basic-onboarding`, based on preview commit `8643395`. This is a local synthetic-data backend implementation, not a member launch. The existing `/membership-preview` still uses in-memory fixtures. The separate development-only `/onboarding-local` page now connects to these endpoints with synthetic local accounts.
 
 ## Implemented
 
@@ -30,14 +30,34 @@ Existing checks: `npm test -- --run`, `npm run build`, and `npx playwright test 
 
 ## Required next steps before member use
 
-1. Connect a gated registration/status screen and authenticated staff-review UI. Current UI preview remains a simulation; there is no production registration or notification workflow in this change.
-2. Add an audited correction/reupload path. This first version locks submissions; rejected applicants cannot resubmit and a wrong image cannot be replaced before its slot expires. Do not enable real intake with this limitation.
-3. Image checks currently validate MIME, size and signature, not complete decoding or malware. Add content decoding/scanning and define handling of invalid images before real IDs. No PDF or thumbnail generation is included.
-4. Confirm guardian receiving mailbox and required email details; define evidence retention/access review and staff operational procedures. The code cannot verify ownership of the supplied LinkedIn URL or authenticity of an ID.
-5. Before any real upload, deploy and monitor a recurring retention runner, independent of registration enablement. No scheduler was installed by this change. Read access stops at expiry, but physical deletion happens on the next successful run; failures need alerts/reconciliation. Define backup/snapshot, logs, downloaded-copy and derivative handling. The local Storage API test proves original-object deletion only, not purge from provider backups or staff downloads.
-6. Connect verified basic membership to paid access/check-in with server-side entitlements. Existing production membership/booking behavior is unchanged; this additive foundation is not the finished pass/equipment system.
-7. Keep real prices, closure calendar, unresolved refund details and payment setup pending. Razorpay, including test mode, remains deferred during the LLP rename. No live migrations, deployment, email enablement or paid preview infrastructure were performed.
+1. Image checks currently validate MIME, size and signature, not complete decoding or malware. Add content decoding/scanning and define handling of invalid images before real IDs. No PDF or thumbnail generation is included.
+2. Confirm guardian receiving mailbox and required email details; define evidence retention/access review and staff operational procedures. The code cannot verify ownership of the supplied LinkedIn URL or authenticity of an ID.
+3. Before any real upload, deploy and monitor a recurring retention runner, independent of registration enablement. A local process scheduler is available and running for synthetic review; no production scheduler or persistent OS service is installed. Read access stops at expiry, but physical deletion happens on the next successful run; failures need alerts/reconciliation. Define backup/snapshot, logs, downloaded-copy and derivative handling. The local Storage API test proves original-object deletion only, not purge from provider backups or staff downloads.
+4. Connect verified basic membership to paid access/check-in with server-side entitlements. Existing production membership/booking behavior is unchanged; this additive foundation is not the finished pass/equipment system.
+5. Keep real prices, closure calendar, unresolved refund details and payment setup pending. Razorpay, including test mode, remains deferred during the LLP rename. No live migrations, deployment, email enablement or paid preview infrastructure were performed.
 
 ## Review
 
 Independent source review found and prompted fixes for reservation-based retention timing, deletion starvation, a missing database gate and punctuation-only phone validation. It found no remaining concrete cross-user file access or self-approval bypass in the revised implementation. Review is not a production security certification. Runtime results and commit identifiers are recorded in `website-work-progress-2026-09-26.md`.
+
+
+## Connected review and corrections — 26 September update
+
+Open `http://127.0.0.1:4341/onboarding-local`. This uses a separate memory-only auth client, fixed to local API55421 and a Vite development/demo-only route. Supply only `VITE_ONBOARDING_LOCAL_ANON_KEY` plus `VITE_DEMO_MODE=true` when starting Vite; service/job keys never enter the client. Local sample login instructions are `/private/tmp/armature-onboarding-local/review-logins.txt`, and a synthetic PNG is beside them. Refreshing the browser requires signing in again. The original preview on4340 is preserved.
+
+The UI supports actual local registration, private image upload/viewing, status refresh, independent staff approval/rejection and guardian evidence. Staff can request corrections for pending/rejected applications with a reason. All prior document copies expire immediately and enter cleanup. The owner resubmits validated details and fresh images. An incremented revision prevents stale staff screens from deciding the newer application; a new minor approval requires explicit guardian evidence again. Previous review/resubmission records remain read-only to clients. Approved basic membership is not reopened by this flow and still grants no paid access.
+
+The local monitor runs with `scripts/run-onboarding-retention-local.mjs --status-file /private/tmp/armature-onboarding-local/retention-status.json --interval-ms 60000` and ARMATURE_JOB_SECRET in its process environment. The script defaults to five minutes; this review instance uses one minute. It refuses non-local URLs, drains bounded batches, prevents overlapping iterations, and writes a private atomic heartbeat/count/failure file. `node scripts/run-onboarding-retention-local.mjs --status --status-file ...` recalculates stale health (ten minutes) and exits nonzero when unhealthy; three consecutive failures also set alert. Alerts are local status/terminal output only, not email or an attended production monitor. Ctrl-C stops the process; it does not restart after a computer/app restart. The Supabase/function/Vite processes must also remain running. Real production cleanup still needs a managed scheduler, monitoring owner, backup policy and authorization.
+
+Verification commands, all Node22:
+
+- `npm test -- --run` — 131 passed.
+- `node --test tests/scripts/onboarding-retention.node.mjs` — 7 passed (network/error sanitization, batches, overlap, stale detection and recovery). Filename intentionally differs from Vitest's pattern.
+- `supabase test db --workdir /private/tmp/armature-onboarding-local` — 285 assertions across13 suites passed, including29 correction checks. Run while the local gate is off and other fixture suites are stopped. Database and browser fixtures mutate the same local gate and must run sequentially.
+- `node scripts/test-onboarding-local.mjs` with captured local credentials —36 actual-storage checks passed.
+- `npx playwright test --config playwright.onboarding-local.config.ts` with local service key in the Node test process —4 adult/minor desktop/mobile correction-to-approval flows passed. User/API secrets are never stored in test source. UI image views, guardian fields, status/review history, three themes and no horizontal overflow/page exceptions verified. No Browser skill was available; existing Playwright tests were used, followed by in-app browser readback and console inspection.
+- `npm run build` and `npx playwright test tests/frontend/e2e/public-release-gates.spec.ts --project=chromium --project=mobile` — build/artifacts passed;13 browser checks passed/1 intentional skip. `/onboarding-local` is absent in production just like `/membership-preview`.
+
+Real local monitor probes also verified a denied job credential produces unhealthy status, a valid retry recovers, and the continuously running scheduler physically deleted a synthetic expired object while recording deletion. This is local-only evidence, not a claim about production scheduling/backups. Four synthetic preview items remain: applicant, reviewer and two unexpired sample images, plus the expired reservation's deletion record. No real membership data or outbound messages were used.
+
+Evidence in `/private/tmp/armature-onboarding-local`: `ui-tests.log`, `db-corrections-tests.log`, `storage-current.log`, `frontend-current.log`, `build-current.log`, `release-current.log`, `retention-status.json`. Screenshots: `/private/tmp/armature-onboarding-panel-chromium.png` and `/private/tmp/armature-onboarding-panel-mobile.png`; full-page and reviewer variants are adjacent. Commit/review tracking is in the main progress note.
