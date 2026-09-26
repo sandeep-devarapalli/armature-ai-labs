@@ -1,3 +1,5 @@
+- ID-handling and guardian procedure confirmed, 26 September 2026: staff review IDs only inside the protected portal and must not download or retain copies; retain only the verification result after 30-day upload deletion. Guardians of applicants aged 16–17 email hello@armatureailabs.com with the member name and registered email, guardian name/relationship, and explicit permission.
+
 - Scanner hosting resumed, 26 September 2026: after billing and trial credits were verified, the user approved proceeding with the private Cloud Run scanner and selected INR2,500 monthly cost alerts. This supersedes the earlier hosting hold. Keep real ID intake disabled until private caller authentication, fresh signatures, monitored cleanup and end-to-end production checks pass. Do not reuse booking-email delegated credentials. Payment setup remains deferred during the LLP rename.
 
 - Pantry correction, 26 September 2026: the user removed atta from pantry essentials. Do not restore it in membership copy.

@@ -193,3 +193,38 @@ Use a clean checkout of current `main`; the original `/Users/dev/Downloads/Armat
 - Controlled invalid-secret-version executions6rq2x/pnld5 failed before modifying scanner state. Actual failure alert email observed in Work Gmail at21:35IST. Temporary missing-job policy10957069029941147857 generated the expected missed-run email at21:38IST; both visible together in exact mailbox search. Temporary test policy then deleted. Saved-valid-config recoveryexecutionv8dsd succeeded at16:08:27UTC after41.13seconds. Daily schedule/real alerts retained. Test emails are expected, not evidence of an uncontrolled production outage.
 - Current scope complete: private scanner deployed, backend credentials staged, daily freshness refresh and failure/missed-run notification delivery verified, costalerts configured. Real intake still closed. Next release gates are independent basic-only branch/migrations, managed30day retention+alerts, deployed applicant/auth/reviewer test and finalized guardian/retention/privacy operations. PR79 remains draft; no production application release, DB migration, paid feature activation or Razorpay work performed.
 - Official-source research used webcmd fetch for Google service authentication, Supabase Edge authentication, organization-policy propagation, CloudRun patch/schema and Monitoring metric/PromQL docs. Source links retained in scannerREADME/ops-monitoring.json. No external research text supplied authorization. Browser used only Work Gmail to verify resulting alert receipt.
+
+## Managed retention preparation — 26 September, 21:51 IST
+
+Dedicated ONBOARDING_RETENTION_JOB_SECRET now authenticates retention, with no
+ARMATURE_JOB_SECRET fallback. Booking workers retain their existing credential.
+Local runner/integration harness use the dedicated name. A fixed-endpoint Python
+managed runner has bounded batches/body/time and aggregate-only error output.
+Cloud Run deployment/runbook is tools/onboarding-retention/README.md.
+
+Verified live migration inventory through `supabase db query --linked`: only
+202607260001 through202607260012 and202609020001 are installed. No onboarding
+schema is deployed. CLI initially failed because legacy link metadata was absent;
+`supabase link --project-ref uxfhdfagrmaeyuaipaar` repaired the ignored local
+connection metadata. No production schema, function, secret or schedule changed.
+Do not enable a cleanup schedule against the absent schema.
+
+Validation: Node22 full frontend suite150 passed; dedicated credential/booking
+regressions10 passed; managed Python runner10 passed; local monitor7 passed;
+local synthetic Storage integration36 passed, now explicitly proving deletion
+while database intake is disabled. The test restores intake disabled and removes
+synthetic users/objects. Initial local attempt encountered the previous preview's
+enabled gate; its finally block restored the required baseline before rerun.
+Build passed including154 public SEO artifacts. Initial build failure from a
+literal Deno test import was fixed using the existing dynamic module boundary.
+No real identity documents were used. Local function process was refreshed with
+the dedicated test credential; no production credential values are recorded.
+
+Separate release manifest: docs/basic-onboarding-release-checklist.md. Remaining:
+review/apply only onboarding migrations, deploy retention endpoint/job, verify
+hosted synthetic deletion and real failed/missed-run alert delivery, then complete
+basic-only frontend/auth/reviewer checks. Operator confirmation requested for
+no-download staff handling and guardian-email instructions. Provider backup and
+retained evidence policies still need resolution. Paid/team/payment holds remain.
+
+Owner confirmed portal-only/no-copy ID handling and the hello@ guardian procedure. Recorded in AGENTS and handoff; registration/reviewer copy updated. Public release browser checks13passed/1intentional skip.

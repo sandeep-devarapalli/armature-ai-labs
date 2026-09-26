@@ -75,3 +75,7 @@ The scanner service and its maintenance job are separate from retention. No prod
 The source audit confirms migrations202609260002/003/004 depend on core auth/staff/storage, not the team migration. Prepare a focused release from currentmain instead of merging the entire PR73→78→79 stack. Bring the shared age helper with the onboarding components. Inventory live migrations and apply only the reviewed onboarding subset with database and function gates false; never blindly dbpush this stacked checkout.
 
 Before opening: verify real-domain email login/callback and an independent staff reviewer; document the guardian receiving mailbox/procedure; finalize retained verification/history, guardian evidence, provider backups/logs and staff-copy handling. Amend the planned-intake privacy copy and immutable notice version together. Add basic-on/paid-off browser checks before enabling VITE_BASIC_ONBOARDING_ENABLED; retain paid/team/booking-worker gates false. Existing public-gate tests intentionally prove onboarding stays closed.
+
+## Confirmed operator procedures
+
+Staff review IDs only inside the protected portal, without downloading or retaining copies. After 30-day upload deletion retain only the verification result. Guardians of applicants aged16–17 email hello@armatureailabs.com with the member name and registered email, guardian name/relationship and explicit permission. Owner confirmed both on26September2026. Provider backup and guardian-message retention still need their own documented procedure.
