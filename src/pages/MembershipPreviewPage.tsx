@@ -111,7 +111,7 @@ export function MembershipPreviewPage() {
     <Section number="03" title="Choose paid access" id="passes" lede="Standard passes: 09:00–17:00 IST. General lab hours: 08:00–23:00. Overnight is a separate adults-only entitlement.">
       <aside className="mp-notice" aria-label="Included workspace perks">
         <h3>Included with your coworking or cabin pass</h3>
-        <p>All paid coworking and cabin passes, including day passes, include unlimited access to pantry essentials such as milk, juices, atta, Maggi and eggs during your valid workspace access.</p>
+        <p>All paid coworking and cabin passes, including day passes, include unlimited access to pantry essentials such as milk, juices, Maggi and eggs during your valid workspace access.</p>
         <p>You may order outside food. Please clean up after yourself and leave shared eating and pantry areas tidy.</p>
         <p>Equipment access is purchased separately and requires a coworking or cabin pass covering the equipment-use period.</p>
       </aside>
