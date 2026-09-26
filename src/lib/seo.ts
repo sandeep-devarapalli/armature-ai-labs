@@ -1,3 +1,4 @@
+import { basicOnboardingAvailable } from "../config/release";
 import { components } from "../data/components";
 
 export const SITE_URL = "https://armatureailabs.com";
@@ -28,7 +29,7 @@ const pages: Record<string, PageDefinition> = {
   },
   "/privacy/": {
     name: "Privacy",
-    description: "How Armature AI Labs handles website visits, browser storage and enquiries, how to contact us about your information, and our planned membership safeguards."
+    description: "How Armature AI Labs handles website visits, browser storage and enquiries, how to contact us about your information, and how free membership registration and private identity review work."
   },
   "/about/": {
     name: "Who We Are",
@@ -125,7 +126,9 @@ const operationalNames: Record<string, string> = {
 export function getPageSeo(pathname: string): PageSeo {
   const cleanPath = pathname.split(/[?#]/, 1)[0];
   const path = cleanPath === "/" ? "/" : `${cleanPath.replace(/\/+$/, "")}/`;
-  const page = Object.hasOwn(pages, path) ? pages[path] : undefined;
+  const page = path === "/join/" && basicOnboardingAvailable
+    ? { name: "Basic Membership", description: "Register for free with Armature AI Labs in HSR Layout, Bengaluru. Complete private identity review; paid coworking, equipment and event bookings remain closed." }
+    : Object.hasOwn(pages, path) ? pages[path] : undefined;
   if (!page) {
     const segment = path.split("/")[1];
     const name = path === "/components/request/" ? "Component Request"

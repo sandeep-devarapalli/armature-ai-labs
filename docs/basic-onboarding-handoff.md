@@ -239,3 +239,27 @@ aliases controlled by the same person do not provide independent review. His DOB
 and private contact details are intentionally not recorded in this Git note.
 
 Release candidate flags: CI now prepares basic/Google=true and paid/components=false. These are source changes only until merge/deploy; live database and document-function gates remain false. Both retention recovery emails were subsequently observed (failure23:22IST; missed-success23:24IST). Google publication confirmation is the remaining owner action.
+
+
+## Returning-browser navigation repair — 26 September 2026
+
+After the basic release, a returning Chrome profile hit net::ERR_FAILED on direct
+/join, /onboarding and /auth/callback navigation while root and client-side links
+worked. An independent anonymous browser reproduced it only after deleting its
+own /app-shell.html precache entry. Fresh intact caches returned200 on every route.
+Cloudflare redirects /app-shell.html to /app-shell. Workbox copies redirected
+responses during precache installation, but its cache-miss network fallback returns
+the redirected response directly; Chrome rejects that navigation response.
+
+Use canonical /app-shell both in navigateFallback and the precache manifest,
+retaining the generated revision from the physical app-shell.html file. The browser
+regression removes only its own cached shell and navigates directly to public,
+auth callback (without tokens) and onboarding paths. The artifact check also verifies
+the canonical URL and final HTML revision. Existing affected profiles must load the
+root and activate the repaired service worker; no credentials, auth storage or
+security protections need to be cleared. This is a browser-cache repair, not an
+onboarding database or scanner change.
+
+The follow-up also removes the remaining closed-applications sentence in homepage
+section06 and labels its lower link Basic membership when basic registration is on.
+Join-page metadata now matches free registration; paid bookings stay disabled.

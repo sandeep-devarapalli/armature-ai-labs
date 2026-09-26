@@ -110,7 +110,11 @@ export default defineConfig(({ mode }) => {
         ]
       },
       workbox: {
-        navigateFallback: "/app-shell.html",
+        navigateFallback: "/app-shell",
+        manifestTransforms: [async (entries) => ({
+          manifest: entries.map(entry => entry.url === "app-shell.html" ? { ...entry, url: "app-shell" } : entry),
+          warnings: [],
+        })],
         skipWaiting: false,
         clientsClaim: true,
         globPatterns: [
