@@ -116,9 +116,10 @@ try {
   const serviceWorker = await readFile(path.join(directory, "sw.js"), "utf8");
   for (const filename of ["index.html", "app-shell.html"]) {
     const revision = createHash("md5").update(await readFile(path.join(directory, filename))).digest("hex");
-    assert.ok(serviceWorker.includes(`url:"${filename}",revision:"${revision}"`), `${filename} precache revision does not match the final HTML`);
+    const precacheUrl = filename === "app-shell.html" ? "app-shell" : filename;
+    assert.ok(serviceWorker.includes(`url:"${precacheUrl}",revision:"${revision}"`), `${filename} precache revision does not match the final HTML`);
   }
-  assert.ok(serviceWorker.includes('createHandlerBoundToURL("/app-shell.html")'), "SPA navigation must not display home-page HTML on other routes");
+  assert.ok(serviceWorker.includes('createHandlerBoundToURL("/app-shell")'), "SPA navigation must not display home-page HTML on other routes");
 } catch (error) {
   failures.push(`sw.js: ${error.message}`);
 }
