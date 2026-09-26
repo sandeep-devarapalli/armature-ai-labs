@@ -145,6 +145,7 @@ for (const palette of [
   { theme: "sepia", link: "rgb(120, 68, 0)", hover: "rgb(96, 54, 0)", ink: "rgb(37, 26, 12)", paper: "rgb(240, 228, 201)", panel: "rgb(232, 215, 179)" }
 ]) {
   test(`Copper hyperlinks remain readable in the ${palette.theme} theme`, async ({ page, isMobile }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto("/");
     await page.getByRole("button", { name: `${palette.theme} theme` }).click();
     await expect(page.locator("html")).toHaveAttribute("data-theme", palette.theme);
