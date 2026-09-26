@@ -49,6 +49,42 @@ const articleShell = (await readFile(source, "utf8"))
 await mkdir(articleDirectory, { recursive: true });
 await writeFile(path.join(articleDirectory, "index.html"), articleShell);
 
+for (const page of [
+  {
+    route: "about",
+    title: "Who We Are",
+    description: "Armature AI Labs is a makers’ lab for learning, building and sharing physical AI and robotics in Bengaluru.",
+    image: "https://armatureailabs.com/about/who-we-are-social.png"
+  },
+  {
+    route: "team",
+    title: "Meet the Team",
+    description: "Meet the people behind Armature AI Labs as their profiles become available."
+  }
+]) {
+  const url = `https://armatureailabs.com/${page.route}/`;
+  const head = `
+    <link rel="canonical" href="${url}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Armature AI Labs" />
+    <meta property="og:title" content="${page.title} · Armature AI Labs" />
+    <meta property="og:description" content="${page.description}" />
+    <meta property="og:url" content="${url}" />${page.image ? `
+    <meta property="og:image" content="${page.image}" />
+    <meta property="og:image:alt" content="Concept illustration of a shared physical AI lab" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="${page.image}" />` : ""}`;
+  const shell = (await readFile(source, "utf8"))
+    .replace(/<meta\s+name="description"\s+content="[^"]*"\s*\/>/, `<meta name="description" content="${page.description}" />`)
+    .replace(/<title>[^<]*<\/title>/, `<title>${page.title} · Armature AI Labs</title>`)
+    .replace("</head>", `${head}\n  </head>`);
+  const directory = path.resolve("dist", page.route);
+  await mkdir(directory, { recursive: true });
+  await writeFile(path.join(directory, "index.html"), shell);
+}
+
 async function listAssetFiles(directory, prefix = "") {
   const entries = await readdir(directory, { withFileTypes: true });
   const files = await Promise.all(entries.map(async (entry) => {

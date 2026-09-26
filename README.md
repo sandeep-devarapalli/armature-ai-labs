@@ -110,6 +110,10 @@ personal banners, logos and link previews are in the editorial pack's
 `social/linkedin/` directory; its manifest records dimensions and source guidance.
 
 ## docs/
+The [Armature AI Labs positioning note](docs/armature-ai-labs-positioning.md)
+records the lab's training, prototyping, community and future-city ambitions.
+Planned equipment and future locations are not described as already operating.
+
 Financial model and phased capex plan, re-baselined to the 3,500 sq ft plan:
 ten zones, sixteen builder pods, nine cameras, ~Rs 7.65 lakh monthly cash opex,
 and the full revenue stream set (memberships, pods, tenants, workshops,
