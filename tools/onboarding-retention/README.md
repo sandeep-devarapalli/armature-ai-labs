@@ -1,7 +1,8 @@
 # Managed onboarding cleanup
 
-Prepared, not deployed. Production inventory on 26 September 2026 contained only
-202607260001–012 and202609020001; onboarding schema is not yet installed.
+Cloud Run job deployed on 26 September 2026; schedule and hosted synthetic deletion
+checks remain pending. See `docs/retention-production-release-2026-09-26.md` for
+resource identifiers, pinned image and verification evidence. Intake remains gated.
 
 The runner calls only the fixed onboarding-retention endpoint. Inject
 ONBOARDING_RETENTION_JOB_SECRET from its own Secret Manager secret and configure
