@@ -81,6 +81,12 @@ const memberComponentRequestFeature = (page: ReactNode) => (
   </ReleaseGate>
 );
 
+const membershipPreviewRoutes: RouteObject[] = [];
+if (import.meta.env.DEV && import.meta.env.VITE_DEMO_MODE === "true") {
+  const MembershipPreviewPage = lazy(() => import("../pages/MembershipPreviewPage").then((module) => ({ default: module.MembershipPreviewPage })));
+  membershipPreviewRoutes.push({ path: "/membership-preview", element: <MembershipPreviewPage /> });
+}
+
 export const routes: RouteObject[] = [
   {
     element: <Shell />,
@@ -139,6 +145,7 @@ export const routes: RouteObject[] = [
       { path: "/admin/component-requests", element: memberComponentRequestFeature(staffPage(<AdminComponentRequestsPage />)) },
       { path: "/admin/cabinets", element: memberFeature(staffPage(<AdminCabinetsPage />)) },
       { path: "/admin/maker-services", element: memberFeature(staffPage(<AdminMakerServicesPage />)) },
+      ...membershipPreviewRoutes,
       { path: "*", element: <NotFoundPage /> }
     ]
   },

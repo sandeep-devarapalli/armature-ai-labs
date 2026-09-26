@@ -68,6 +68,9 @@ test("public-first production gates operational routes", async ({ page }) => {
   await expect(page.getByRole("link", { name: "Request a component" })).toHaveCount(0);
   await expect(page.locator('a[href="/procurement"]')).toHaveCount(0);
 
+  await page.goto("/membership-preview");
+  await expect(page.getByRole("heading", { name: "That bench is not on the floor plan." })).toBeVisible();
+
   await page.goto("/procurement");
   await expect(page.getByRole("heading", { name: "That bench is not on the floor plan." })).toBeVisible();
 

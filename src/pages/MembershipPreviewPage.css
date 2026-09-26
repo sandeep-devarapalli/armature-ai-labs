@@ -1,0 +1,29 @@
+.membership-preview .mp-notice { padding: 1rem; border: 1px solid var(--hair-strong); background: var(--panel-2); font-size: .85rem; }
+.membership-preview .mp-grid { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 3rem; align-items: start; }
+.membership-preview .mp-fields { display: grid; gap: 1rem; border: 0; margin: 1rem 0; padding: 0; min-width: 0; }
+.membership-preview .mp-ledger { border-top: 3px solid var(--ink); padding: 1.5rem; background: var(--panel-2); }
+.membership-preview .mp-ledger dl { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem 1rem; font-size: .85rem; }
+.membership-preview .mp-ledger dd { margin: 0; }
+.membership-preview .mp-check { display: flex; align-items: flex-start; gap: .65rem; margin: 1rem 0; font-size: .85rem; }
+.membership-preview .mp-check input { width: 1rem; height: 1rem; margin-top: .25rem; flex: 0 0 auto; }
+.membership-preview .mp-document { min-height: 125px; padding: 1rem; margin-top: 1.5rem; border: 1px dashed var(--hair-strong); display: grid; align-content: center; gap: .8rem; }
+.membership-preview .mp-document span { font-size: .75rem; }
+.membership-preview .mp-feed { padding-left: 1.2rem; }
+.membership-preview .mp-feed li { padding: .5rem 0; font-size: .85rem; }
+.membership-preview .mp-date-list { display: flex; flex-wrap: wrap; gap: .5rem; }
+.membership-preview .mp-receipt { border-top: 1px solid var(--hair); margin-top: 2rem; padding-top: 1.5rem; }
+.membership-preview .mp-receipt .field { max-width: 28rem; }
+.membership-preview .mp-resources { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2rem; }
+.membership-preview .mp-resources article { border-top: 2px solid var(--ink); padding-top: 1rem; }
+.membership-preview .mp-resources p, .membership-preview .mp-ledger p { font-size: .85rem; }
+.membership-preview .mp-resources .field { margin-bottom: 1rem; }
+.membership-preview button { white-space: normal; }
+.membership-preview input, .membership-preview select { max-width: 100%; min-width: 0; }
+.membership-preview .button-row { margin: 1rem 0; }
+.membership-preview .status { white-space: normal; }
+@media (max-width: 760px) {
+  .membership-preview .mp-grid, .membership-preview .mp-resources { grid-template-columns: 1fr; gap: 2rem; }
+  .membership-preview .mp-ledger { padding: 1rem; }
+  .membership-preview .mp-ledger dl { grid-template-columns: 1fr; gap: .35rem; }
+  .membership-preview .mp-ledger dd { margin-bottom: .6rem; }
+}

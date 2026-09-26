@@ -124,7 +124,8 @@ export function getPageSeo(pathname: string): PageSeo {
   const page = Object.hasOwn(pages, path) ? pages[path] : undefined;
   if (!page) {
     const segment = path.split("/")[1];
-    const name = path === "/components/request/" ? "Component Request"
+    const name = import.meta.env.DEV && path === "/membership-preview/" ? "Membership review preview"
+      : path === "/components/request/" ? "Component Request"
       : Object.hasOwn(operationalNames, segment) ? operationalNames[segment] : "Page Not Found";
     return {
       title: `${name} | ${SITE_NAME}`,
