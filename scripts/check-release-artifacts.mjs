@@ -1,5 +1,6 @@
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
+import { JSDOM } from "jsdom";
 
 async function listAssetFiles(directory, prefix = "") {
   const entries = await readdir(directory, { withFileTypes: true });
@@ -43,14 +44,18 @@ if (cover.toString("hex", 0, 8) !== "89504e470d0a1a0a" || cover.readUInt32BE(16)
 }
 const articleHtml = await readFile(path.resolve("dist/blog/model-hardware-standard/index.html"), "utf8");
 const coverUrl = `https://armatureailabs.com${coverPath}`;
-if (!articleHtml.includes(`<meta property="og:image" content="${coverUrl}" />`) ||
-    !articleHtml.includes(`<meta name="twitter:image" content="${coverUrl}" />`) ||
-    !articleHtml.includes('<meta name="robots" content="max-image-preview:large" />')) {
+const articleDom = new JSDOM(articleHtml);
+const articleHead = articleDom.window.document.head;
+if (articleHead.querySelector('meta[property="og:image"]')?.getAttribute("content") !== coverUrl ||
+    articleHead.querySelector('meta[name="twitter:image"]')?.getAttribute("content") !== coverUrl ||
+    !articleHead.querySelector('meta[name="robots"]')?.getAttribute("content")?.includes("max-image-preview:large")) {
   throw new Error("MHS article shell is missing static cover metadata.");
 }
-const articleData = JSON.parse(articleHtml.match(/<script type="application\/ld\+json">([^<]+)<\/script>/)?.[1] ?? "null");
-if (articleData?.["@type"] !== "BlogPosting" || articleData.image?.url !== coverUrl) {
+const articleData = JSON.parse(articleHead.querySelector('script[type="application/ld+json"]')?.textContent ?? "null");
+const blogPosting = articleData?.["@graph"]?.find((item) => item["@type"] === "BlogPosting");
+if (blogPosting?.image?.url !== coverUrl || blogPosting.image.width !== 1672 || blogPosting.image.height !== 941) {
   throw new Error("MHS article shell is missing BlogPosting image data.");
 }
+articleDom.window.close();
 
 console.log(`Release artifacts verified: ${assetFiles.length} static assets bypass Functions.`);

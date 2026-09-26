@@ -40,6 +40,10 @@ server-side.
 
 The first production release is public-first:
 
+The lab is pre-launch; enquiries only (confirmed 17 September 2026). The current
+seven-cabin layout is a plan, not an installed or bookable capacity. Do not
+advertise the retired sixteen-pod or fifty-person event concepts.
+
 ```text
 VITE_MEMBER_PLATFORM_ENABLED=false
 VITE_COMPONENT_REQUESTS_ENABLED=false
@@ -76,9 +80,16 @@ for provisioning, kiosk, Google Workspace, release, and rollback procedures.
   Turnstile and a verified Resend or Postmark sender are configured.
 - Deploy only a fresh production build from a reviewed, merged `main` commit.
   Never deploy the demo build or the preserved `site/` directory.
-- Production builds materialize React shell files for the historical
-  `/projects/` and `/building-vision/` directory URLs so a Direct Upload
-  replaces their legacy static objects as well as serving the SPA fallback.
+- Production builds prerender the same React public pages, including component
+  references, with route-specific metadata and a generated `sitemap.xml`.
+  Public canonical URLs use trailing slashes. No authenticated data is fetched
+  during prerendering. Explicit operational routes use the anonymous, noindex
+  client shell; unrecognized URLs use a real `404.html` response.
+- Prerendering runs before service-worker generation so its HTML revision is
+  current. Keep `npm run check:pages-runtime` passing: it checks private-route
+  rewrites, public HTML, retired redirects, real 404s and missing chunk behavior.
+  `npm run check:release-artifacts` validates every sitemap document and keeps
+  immutable building assets pinned.
 - The React entrypoint removes the preserved static site's `armature-v16`
   Cache Storage entry so returning visitors cannot retain legacy pages after
   reaching the new application.
@@ -92,7 +103,8 @@ for provisioning, kiosk, Google Workspace, release, and rollback procedures.
 - Post-deploy smoke checks must confirm a built JavaScript asset returns `200`
   with a JavaScript content type, a missing `/assets/*.js` path returns a
   non-HTML `404` with `no-store`, and a representative deep route returns the
-  revalidating HTML shell.
+  revalidating prerendered HTML page. Submit the sitemap to Google Search Console
+  and Bing Webmaster Tools only after the live XML and release checks pass.
 
 ## brand/
 The earlier commutator identity lives in `brand/armature-lab/`, with SVG
@@ -110,6 +122,10 @@ personal banners, logos and link previews are in the editorial pack's
 `social/linkedin/` directory; its manifest records dimensions and source guidance.
 
 ## docs/
+The [Armature AI Labs positioning note](docs/armature-ai-labs-positioning.md)
+records the lab's training, prototyping, community and future-city ambitions.
+Planned equipment and future locations are not described as already operating.
+
 Financial model and phased capex plan, re-baselined to the 3,500 sq ft plan:
 ten zones, sixteen builder pods, nine cameras, ~Rs 7.65 lakh monthly cash opex,
 and the full revenue stream set (memberships, pods, tenants, workshops,

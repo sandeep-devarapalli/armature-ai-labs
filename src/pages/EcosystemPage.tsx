@@ -16,7 +16,7 @@ import {
   useRef,
   useState
 } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { EcosystemMap } from "../components/EcosystemMap";
 import { PageHeader } from "../components/Primitives";
 import {
@@ -32,6 +32,12 @@ type SectorFilter = (typeof allSectors)[number];
 
 const ecosystemContributionUrl =
   "https://github.com/sandeep-devarapalli/armature-ai-labs";
+const latestRecordReview = bengaluruEcosystem.reduce(
+  (latest, item) => item.verifiedAt > latest ? item.verifiedAt : latest,
+  ""
+);
+const latestRecordReviewLabel = new Date(`${latestRecordReview}T00:00:00Z`)
+  .toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
 
 function publicLocality(entity: EcosystemEntity) {
   if (
@@ -291,22 +297,31 @@ export function EcosystemPage() {
               </div>
               <div className="ecosystem-directory-list">
                 {filtered.map((item) => (
-                  <button
+                  <article
                     key={item.slug}
                     className={selected?.slug === item.slug ? "active" : ""}
-                    type="button"
-                    aria-pressed={selected?.slug === item.slug}
-                    onClick={() => selectEntity(item.slug)}
                   >
-                    <span className="ecosystem-entity-marker" data-sector={item.sectors[0]} />
-                    <span>
-                      <strong>{item.name}</strong>
-                      <small>{item.sectors.slice(0, 2).join(" · ")}</small>
-                      <small className="ecosystem-entity-locality">
-                        {publicLocality(item)}
-                      </small>
-                    </span>
-                  </button>
+                    <Link
+                      className="ecosystem-entity-link"
+                      to={`?focus=${encodeURIComponent(item.slug)}`}
+                      replace
+                      aria-current={selected?.slug === item.slug ? "true" : undefined}
+                      onClick={() => setTourActive(false)}
+                    >
+                      <span className="ecosystem-entity-marker" data-sector={item.sectors[0]} />
+                      <span>
+                        <strong>{item.name}</strong>
+                        <small>{item.sectors.slice(0, 2).join(" · ")}</small>
+                        <small className="ecosystem-entity-locality">
+                          {publicLocality(item)}
+                        </small>
+                      </span>
+                    </Link>
+                    <p>{item.summary}</p>
+                    <a href={item.sourceUrl} target="_blank" rel="noreferrer" aria-label={`${item.name} public source`}>
+                      Public source <ArrowUpRight aria-hidden="true" />
+                    </a>
+                  </article>
                 ))}
                 {filtered.length === 0 && (
                   <div className="ecosystem-empty">
@@ -342,8 +357,8 @@ export function EcosystemPage() {
                       <dd>{totalMapped}</dd>
                     </div>
                     <div>
-                      <dt>Last updated</dt>
-                        <dd>7 August 2026</dd>
+                      <dt>Latest record review</dt>
+                      <dd><time dateTime={latestRecordReview}>{latestRecordReviewLabel}</time></dd>
                     </div>
                   </dl>
                   <p className="ecosystem-method-note">

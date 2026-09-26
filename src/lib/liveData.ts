@@ -242,9 +242,11 @@ export async function loadLiveSnapshot(
   const isStaff = roles.length > 0;
   const isAdmin = hasAdminRole(roles);
 
-  const teamAccessResult = await client.rpc("list_my_team_access");
-  throwOnError(teamAccessResult.error);
-  const teamAccess: TeamAccess[] = (teamAccessResult.data ?? []).map((row) => ({
+  const teamAccessResult = import.meta.env.VITE_MEMBER_PLATFORM_ENABLED === "true"
+    ? await client.rpc("list_my_team_access")
+    : null;
+  throwOnError(teamAccessResult?.error ?? null);
+  const teamAccess: TeamAccess[] = (teamAccessResult?.data ?? []).map((row) => ({
     organizationId: row.organization_id,
     organizationName: row.organization_name,
     role: row.role === "admin" ? "admin" : "member",

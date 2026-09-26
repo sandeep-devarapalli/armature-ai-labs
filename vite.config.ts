@@ -2,6 +2,10 @@ import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import { loadEnv } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
+
+const run = promisify(execFile);
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "VITE_");
@@ -16,6 +20,7 @@ export default defineConfig(({ mode }) => {
 
   return {
   build: {
+    manifest: true,
     rollupOptions: {
       output: {
         manualChunks: {
@@ -30,7 +35,26 @@ export default defineConfig(({ mode }) => {
   },
   plugins: [
     react(),
+    {
+      name: "prerender-public-pages",
+      apply: "build",
+      closeBundle: {
+        sequential: true,
+        order: "pre",
+        async handler(error) {
+          if (error) return;
+          const result = await run(process.execPath, ["scripts/prerender-pages.mjs", mode], {
+            cwd: process.cwd(),
+            env: process.env,
+            maxBuffer: 10 * 1024 * 1024
+          });
+          if (result.stdout) console.log(result.stdout.trim());
+          if (result.stderr) console.warn(result.stderr.trim());
+        }
+      }
+    },
     VitePWA({
+      integration: { closeBundleOrder: "post" },
       registerType: "prompt",
       manifest: {
         name: "Armature AI Labs - The Physical AI and Robotics Lab",
@@ -83,11 +107,12 @@ export default defineConfig(({ mode }) => {
         ]
       },
       workbox: {
-        navigateFallback: "/index.html",
+        navigateFallback: "/app-shell.html",
         skipWaiting: false,
         clientsClaim: true,
         globPatterns: [
           "index.html",
+          "app-shell.html",
           "apple-touch-icon.png",
           "assets/*.{js,css}"
         ],

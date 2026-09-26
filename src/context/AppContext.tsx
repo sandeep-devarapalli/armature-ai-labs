@@ -208,18 +208,26 @@ function validateDemoBooking(
   return { starts, ends };
 }
 
-export function AppProvider({ children }: PropsWithChildren) {
-  const [state, setState] = useState<DemoState>(readState);
-  const [online, setOnline] = useState(() => navigator.onLine);
+export function AppProvider({ children, hydrate: hydrating = false }: PropsWithChildren<{ hydrate?: boolean }>) {
+  const [state, setState] = useState<DemoState>(() => hydrating ? emptyLiveState : readState());
+  const [restored, setRestored] = useState(!hydrating);
+  const [online, setOnline] = useState(() => hydrating || typeof navigator === "undefined" ? true : navigator.onLine);
   const [loading, setLoading] = useState(dataMode === "supabase");
   const [isStaff, setIsStaff] = useState(
-    () => dataMode === "demo" && Boolean(readState().currentUserId)
+    () => !hydrating && dataMode === "demo" && Boolean(readState().currentUserId)
   );
   const [isAdmin, setIsAdmin] = useState(
-    () => dataMode === "demo" && Boolean(readState().currentUserId)
+    () => !hydrating && dataMode === "demo" && Boolean(readState().currentUserId)
   );
   const [notice, setNotice] = useState("");
   const [teamAccess, setTeamAccess] = useState<TeamAccess[]>([]);
+
+  useEffect(() => {
+    if (!hydrating) return;
+    if (dataMode === "demo") setState(readState());
+    setOnline(navigator.onLine);
+    setRestored(true);
+  }, [hydrating]);
 
   useEffect(() => {
     if (dataMode === "demo") {
@@ -229,10 +237,10 @@ export function AppProvider({ children }: PropsWithChildren) {
   }, [state.currentUserId]);
 
   useEffect(() => {
-    if (dataMode === "demo") {
+    if (dataMode === "demo" && restored) {
       window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     }
-  }, [state]);
+  }, [state, restored]);
 
   useEffect(() => {
     const goOnline = () => setOnline(true);

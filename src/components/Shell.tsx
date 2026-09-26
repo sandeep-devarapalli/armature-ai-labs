@@ -24,9 +24,11 @@ import { useApp } from "../context/AppContext";
 import { useTheme } from "../context/ThemeContext";
 import type { Theme } from "../types/domain";
 import { BrandMark } from "./BrandMark";
+import { PageMetadata } from "./PageMetadata";
 
 const publicLinks = [
   ["/", "The lab"],
+  ["/about", "Who we are"],
   ...(equipmentPageAvailable ? [["/equipment", "Equipment"]] : []),
   ["/join", "Membership"],
   ["/services", "Services"],
@@ -105,6 +107,7 @@ export function Shell({ children }: PropsWithChildren) {
 
   return (
     <div className="app-shell">
+      <PageMetadata />
       <div className="editorial-frame" aria-hidden="true" />
       <div className="editorial-rail" aria-hidden="true">Armature AI Labs</div>
       <ScrollToTop />
@@ -232,6 +235,8 @@ export function Shell({ children }: PropsWithChildren) {
             <Link to="/members">Members</Link>
             <Link to="/maker-desk">Maker desk</Link>
             <Link to="/branding">Brand assets</Link>
+            <Link to="/about">Who we are</Link>
+            <Link to="/team">Meet the team</Link>
             <Link to="/building-vision">Building vision</Link>
             <Link to="/blog">Blog</Link>
             <a href="https://github.com/sandeep-devarapalli/armature-ai-labs/tree/main/docs">Docs</a>

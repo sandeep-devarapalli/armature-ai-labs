@@ -32,12 +32,11 @@ async function waitForRuntime() {
 }
 
 async function runSmokeCheck() {
-  const check = spawn(process.execPath, [
-    "scripts/check-live-release.mjs",
-    "http://127.0.0.1:8788"
-  ], { stdio: "inherit" });
-  const [code] = await once(check, "exit");
-  if (code !== 0) throw new Error(`Local Pages smoke check exited with code ${code}.`);
+  for (const script of ["scripts/check-live-release.mjs", "scripts/check-seo-http.mjs"]) {
+    const check = spawn(process.execPath, [script, "http://127.0.0.1:8788"], { stdio: "inherit" });
+    const [code] = await once(check, "exit");
+    if (code !== 0) throw new Error(`${script} exited with code ${code}.`);
+  }
 }
 
 try {
