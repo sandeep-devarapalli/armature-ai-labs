@@ -75,7 +75,7 @@ Deno.serve(async (request) => {
     const { data: application, error: appError } = await client.from("basic_onboarding_applications").select("status,revision").eq("user_id", user.id).single();
     if (appError || application?.status !== "pending") throw new HttpError(409, "Application is not awaiting documents.");
     const { data: acceptance, error: acceptanceError } = await scopedClient.from("onboarding_notice_acceptances")
-      .select("notice_version").eq("user_id", user.id).eq("revision", application.revision).eq("notice_version", "2026-09-26").maybeSingle();
+      .select("notice_version").eq("user_id", user.id).eq("revision", application.revision).eq("notice_version", "2026-09-26-release-1").maybeSingle();
     if (acceptanceError) throw new HttpError(503, "Privacy notice acceptance could not be checked. Try again later.");
     if (!acceptance) throw new HttpError(403, "Accept the current privacy notice before uploading.");
     const original = await readImage(request);

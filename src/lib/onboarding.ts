@@ -1,6 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 
-export const ONBOARDING_NOTICE_VERSION = "2026-09-26";
+export const ONBOARDING_NOTICE_VERSION = "2026-09-26-release-1";
 export interface LocalApplication {
   user_id: string; full_name: string; email: string; phone: string; linkedin_url: string;
   date_of_birth: string; status: string; revision: number;

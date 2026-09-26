@@ -21,6 +21,7 @@ Select these complete migrations, in order, after confirming the core schema pre
 - `supabase/migrations/202609260002_basic_onboarding.sql`
 - `supabase/migrations/202609260003_onboarding_corrections.sql`
 - `supabase/migrations/202609260004_onboarding_notice.sql`
+- `supabase/migrations/202609260005_onboarding_launch_notice.sql`
 
 Their prerequisites are existing auth users, `public.staff_roles`, `public.staff_role`, `private.is_staff`, the `extensions` schema/UUID function, and Supabase Storage tables. They do not depend on the team-membership or Gmail-delivery migrations. Migration002 creates the private image bucket, application/document/review tables and deletion RPCs;003 adds revision-safe corrections;004 records versioned notice acceptance. Preserve `enabled=false` throughout installation.
 

@@ -18,6 +18,8 @@ export default defineConfig(({ mode }) => {
     demoModeEnabled ||
     (env.VITE_MEMBER_PLATFORM_ENABLED === "true" && supabaseConfigured);
 
+  let prerenderOutput = "dist";
+
   return {
   build: {
     manifest: true,
@@ -38,12 +40,13 @@ export default defineConfig(({ mode }) => {
     {
       name: "prerender-public-pages",
       apply: "build",
+      configResolved(config) { prerenderOutput = config.build.outDir; },
       closeBundle: {
         sequential: true,
         order: "pre",
         async handler(error) {
           if (error) return;
-          const result = await run(process.execPath, ["scripts/prerender-pages.mjs", mode], {
+          const result = await run(process.execPath, ["scripts/prerender-pages.mjs", mode, prerenderOutput], {
             cwd: process.cwd(),
             env: process.env,
             maxBuffer: 10 * 1024 * 1024

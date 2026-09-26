@@ -1,5 +1,21 @@
 # Basic onboarding notice acceptance
 
+## Launch revision
+
+The current notice is `2026-09-26-release-1`, introduced by additive migration
+`202609260005_onboarding_launch_notice.sql`. Apply it after002/003/004. The original
+`2026-09-26` rows remain valid historical evidence; the migration neither rewrites
+their text/version nor backfills consent. New submissions, corrections, reservation,
+finalization and review require current-revision launch acceptance. Applicants with
+only the older notice must receive a correction request and explicitly resubmit.
+The Edge upload guard and frontend constant use the same version. No paid access
+is activated. The privacy page describes the actual provider roles, guardian mailbox,
+portal-only staff rule and separate retention of non-image records. No automatic
+deletion duration has been adopted for those other records; this is stated rather
+than inventing a retention promise. Provider-wide erasure is not claimed.
+
+## Original notice history
+
 26 September 2026 — additive migration `202609260004_onboarding_notice.sql`.
 
 The public `submit_basic_onboarding` and `resubmit_basic_onboarding` RPCs now require a fifth argument, `p_notice_version`, with the exact value `2026-09-26`. There is no default and the old four-argument public signatures no longer exist. Send this value only after the applicant explicitly accepts the displayed privacy notice; render an unchecked required control linked to `/privacy`. Do not insert acceptance on behalf of existing applicants.

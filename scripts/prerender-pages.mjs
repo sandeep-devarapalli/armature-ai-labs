@@ -5,7 +5,7 @@ import { build } from "vite";
 import react from "@vitejs/plugin-react";
 
 const root = process.cwd();
-const outputDirectory = path.join(root, "dist");
+const outputDirectory = path.resolve(root, process.argv[3] ?? "dist");
 const cacheDirectory = path.join(root, "node_modules/.tmp");
 await mkdir(cacheDirectory, { recursive: true });
 const serverDirectory = await mkdtemp(path.join(cacheDirectory, "prerender-"));

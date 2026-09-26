@@ -26,7 +26,7 @@ it("requires current privacy acceptance before submitting a verified user's regi
   fireEvent.click(screen.getByRole("checkbox", { name: /I accept the privacy notice/ }));
   fireEvent.submit(name.closest("form")!);
   await screen.findByText("Registration saved. Upload your photo and ID for staff review.");
-  expect(rpc).toHaveBeenCalledWith("submit_basic_onboarding", expect.objectContaining({ p_notice_version: "2026-09-26", p_full_name: "Synthetic Member" }));
+  expect(rpc).toHaveBeenCalledWith("submit_basic_onboarding", expect.objectContaining({ p_notice_version: "2026-09-26-release-1", p_full_name: "Synthetic Member" }));
   expect(screen.queryByLabelText("Password")).not.toBeInTheDocument();
 });
 

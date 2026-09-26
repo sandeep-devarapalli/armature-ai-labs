@@ -1,5 +1,5 @@
 begin;
-select plan(23);
+select plan(26);
 insert into auth.users(id,aud,role,email,email_confirmed_at) values
 ('30000000-0000-4000-8000-000000000001','authenticated','authenticated','notice-owner@example.test',now()),
 ('30000000-0000-4000-8000-000000000002','authenticated','authenticated','notice-other@example.test',now()),
@@ -13,11 +13,17 @@ select function_privs_are('private','reserve_onboarding_document',array['text','
 set local role authenticated;
 select set_config('request.jwt.claims','{"sub":"30000000-0000-4000-8000-000000000001","role":"authenticated"}',true);
 select throws_ok($$select public.submit_basic_onboarding('Test Person','+919999999999','https://linkedin.com/in/test','1990-01-01',null)$$,'42501','Current privacy notice acceptance required','null notice rejected');
-select throws_ok($$select public.submit_basic_onboarding('Test Person','+919999999999','https://linkedin.com/in/test','1990-01-01','2026-09-25')$$,'42501','Current privacy notice acceptance required','stale notice rejected');
-select lives_ok($$select public.submit_basic_onboarding('Test Person','+919999999999','https://linkedin.com/in/test','1990-01-01','2026-09-26')$$,'explicit current acceptance registers');
+select throws_ok($$select public.submit_basic_onboarding('Test Person','+919999999999','https://linkedin.com/in/test','1990-01-01','2026-09-26')$$,'42501','Current privacy notice acceptance required','stale notice rejected');
+select lives_ok($$select public.submit_basic_onboarding('Test Person','+919999999999','https://linkedin.com/in/test','1990-01-01','2026-09-26-release-1')$$,'explicit current acceptance registers');
 select is((select revision from public.onboarding_notice_acceptances where user_id=auth.uid()),1,'notice bound to first revision');
 select is((select accepted_at from public.onboarding_notice_acceptances where user_id=auth.uid()),now(),'acceptance time set on server');
-select throws_ok($$insert into public.onboarding_notice_acceptances(user_id,revision,notice_version) values(auth.uid(),2,'2026-09-26')$$,'42501',null,'member cannot manufacture acceptance');
+reset role;
+update public.onboarding_notice_acceptances set notice_version='2026-09-26'
+  where user_id='30000000-0000-4000-8000-000000000001';
+select is((select notice_version from public.onboarding_notice_acceptances where user_id='30000000-0000-4000-8000-000000000001'),'2026-09-26','historical notice version remains valid evidence');
+set local role authenticated;
+select throws_ok($$select public.reserve_onboarding_document('photo')$$,'42501','Current privacy notice acceptance required','historical notice does not authorise a new upload');
+select throws_ok($$insert into public.onboarding_notice_acceptances(user_id,revision,notice_version) values(auth.uid(),2,'2026-09-26-release-1')$$,'42501',null,'member cannot manufacture acceptance');
 select throws_ok($$update public.onboarding_notice_acceptances set accepted_at=now()$$,'42501',null,'member cannot rewrite acceptance');
 select set_config('request.jwt.claims','{"sub":"30000000-0000-4000-8000-000000000002","role":"authenticated"}',true);
 select is((select count(*)::integer from public.onboarding_notice_acceptances),0,'other member cannot read acceptance');
@@ -27,8 +33,9 @@ select throws_ok($$delete from public.onboarding_notice_acceptances$$,'42501',nu
 select public.request_onboarding_corrections('30000000-0000-4000-8000-000000000001','Please correct registration details');
 select set_config('request.jwt.claims','{"sub":"30000000-0000-4000-8000-000000000001","role":"authenticated"}',true);
 select throws_ok($$select public.resubmit_basic_onboarding('Test Person','+919999999999','https://linkedin.com/in/test','1990-01-01',null)$$,'42501','Current privacy notice acceptance required','corrections require fresh acceptance');
-select public.resubmit_basic_onboarding('Test Person','+919999999999','https://linkedin.com/in/test','1990-01-01','2026-09-26');
+select public.resubmit_basic_onboarding('Test Person','+919999999999','https://linkedin.com/in/test','1990-01-01','2026-09-26-release-1');
 select is((select count(*)::integer from public.onboarding_notice_acceptances where user_id=auth.uid()),2,'corrections preserve acceptance history');
+select is((select notice_version from public.onboarding_notice_acceptances where user_id=auth.uid() and revision=1),'2026-09-26','new acceptance does not rewrite the historical version');
 reset role;
 -- Model a pre-notice application and reserved object, without manufacturing acceptance.
 insert into public.basic_onboarding_applications(user_id,full_name,email,phone,linkedin_url,date_of_birth)
