@@ -74,9 +74,9 @@ export function TeamWorkspacePage() {
     setWorking(false);
     if (result.error) { setError(result.error.message); return; }
     const token = (result.data as { token?: string } | null)?.token;
-    if (token) setInviteLink(`${window.location.origin}/workspace/team/accept/${encodeURIComponent(token)}`);
     form.reset();
-    await Promise.all([refresh(), refreshMember()]);
+    await refresh();
+    if (token) setInviteLink(`${window.location.origin}/workspace/team/accept/${encodeURIComponent(token)}`);
   }
 
   async function change(action: () => PromiseLike<{ error: { message: string } | null }>) {
