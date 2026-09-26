@@ -105,3 +105,19 @@ Use a clean checkout of current `main`; the original `/Users/dev/Downloads/Armat
 
 - Recorded successive owner clarifications in the membership plan and AGENTS.md: free basic membership, mandatory LinkedIn, guardian email consent for ages 16–17, ID deletion 30 days after upload, dated day/week/calendar-month access, normal versus paid overnight hours, cabin visitor limits, event rules, optional weekly/monthly renewal and full refunds within agreed windows. Day passes never renew.
 - Razorpay test-mode setup is now explicitly deferred while the owner changes the LLP name. No account creation, payment configuration or production activation was performed. A follow-up reminder is being scheduled; it asks about readiness rather than assuming merchant approval or authorizing setup.
+
+## Local membership review implementation
+
+- Added an isolated dev-and-demo-only `/membership-preview` for synthetic registration, staff/guardian review, document deletion simulation, dated passes, mock payment/refund and resource rule inspection. Uses transient component state, accepts no real ID files and makes no backend/payment calls. Production routes/credentials/workers remain unchanged.
+- Local rules include minimum age16, own LinkedIn, reviewed guardian email for minors, calendar-month and seven-day validity, multi-date day passes without renewal, adults-only23:00–08:00 overnight, IST refund clocks and conservative handling of undefined refund policies. Resource checks cover guest rounding/duration, event capacity/buffers and provisional staff exceptions.
+- Node22 unit tests131/131; production build/artifacts passed; dedicated desktop/mobile preview12/12; production release gates13 passed/1 intentional skip. Read `docs/membership-preview-handoff.md` for commands, screenshot paths, limitations and next server-side steps. This is reviewable UI/rules work, not completed live onboarding or automated ID deletion. Razorpay remains explicitly deferred during LLP rename.
+
+## Workspace perks clarification
+
+- Added owner-approved unlimited pantry essentials and outside-food cleanup wording to the local membership preview and requirements. Clarified equipment as a separately paid add-on requiring coworking/cabin access for its use period, with hourly printer and daily Jetson examples. This is copy/requirements work only; no live entitlement or stock-availability claim is implemented.
+- Verification: 131 unit tests and production build/artifact checks passed; existing desktop/mobile checks passed in all three themes (2 tests), without overflow. In-app browser readback confirmed the new perks wording. Production remains unchanged.
+
+## Membership preview spacing review
+
+- Removed doubled spacing from the global stacked-field margin plus local form grid gap. Added consistent paragraph/heading separation, 1.65 body line height, 20px form gaps, padded pantry/summary panels and a gap beneath section introductions. Resource panels use two columns on tablet widths and one on mobile; no global website styles changed.
+- Existing desktop/mobile all-theme checks passed (2 tests), including no horizontal overflow or uncaught errors; production build/artifact checks passed. Inspected in-app pass section visually and focused mobile evidence; fixed-header/PWA overlays in full-section captures are capture artifacts, not a claim of unobstructed full-page viewport content. No member/payment/backend behavior changed.
