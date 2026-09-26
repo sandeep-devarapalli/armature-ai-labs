@@ -12,7 +12,7 @@
 
 # AGENTS.md
 
-- Legal operator correction, 26 September 2026: use `Jayasri Nageshwara Rao and Partners LLP` exactly on the privacy page and related operator records. This supersedes the earlier `Jayasri Nagesh Rao and Partners LLP` spelling.
+- Legal operator correction, 26 September 2026: use `Jayasri Nageshwara Rao and Partners LLP` exactly on the privacy page and related operator records. This supersedes the earlier `Jayasri Nagesh Rao and Partners LLP` spelling. The lab contact address is not a confirmed registered-office address.
 
 
 - Preview Supabase project decision, 25 September 2026: the live website's public bundle points to the existing `armature-lab` project (`uxfhdfagrmaeyuaipaar`). The user said to hold off creating a separate preview project. Do not create one or apply the team migration to the live project until the user resumes this work.

@@ -26,6 +26,10 @@ const pages: Record<string, PageDefinition> = {
     name: "Physical AI and Robotics Lab in Bengaluru",
     description: "Armature AI Labs is a planned 3,500 sq ft physical AI and robotics lab in HSR Layout, Bengaluru. Explore the designs, projects and lab journal."
   },
+  "/privacy/": {
+    name: "Privacy",
+    description: "How Armature AI Labs handles website visits, browser storage and enquiries, how to contact us about your information, and our planned membership safeguards."
+  },
   "/about/": {
     name: "Who We Are",
     description: "Armature AI Labs is a makers’ lab for learning, building and sharing physical AI and robotics in Bengaluru."

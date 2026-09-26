@@ -237,6 +237,7 @@ export function Shell({ children }: PropsWithChildren) {
             <Link to="/branding">Brand assets</Link>
             <Link to="/about">Who we are</Link>
             <Link to="/team">Meet the team</Link>
+            <Link to="/privacy">Privacy</Link>
             <Link to="/building-vision">Building vision</Link>
             <Link to="/blog">Blog</Link>
             <a href="https://github.com/sandeep-devarapalli/armature-ai-labs/tree/main/docs">Docs</a>

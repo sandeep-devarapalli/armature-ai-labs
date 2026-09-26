@@ -15,6 +15,7 @@ import {
 const OnboardingPage = lazy(() => import("../pages/OnboardingPage").then((module) => ({ default: module.OnboardingPage })));
 const ProjectsPage = lazy(() => import("../pages/ProjectsPage").then((module) => ({ default: module.ProjectsPage })));
 const BrandingPage = lazy(() => import("../pages/BrandingPage").then((module) => ({ default: module.BrandingPage })));
+const PrivacyPage = lazy(() => import("../pages/PrivacyPage").then((module) => ({ default: module.PrivacyPage })));
 const AboutPage = lazy(() => import("../pages/AboutPages").then((module) => ({ default: module.AboutPage })));
 const TeamPage = lazy(() => import("../pages/AboutPages").then((module) => ({ default: module.TeamPage })));
 const BlogIndexPage = lazy(() => import("../pages/BlogPages").then((module) => ({ default: module.BlogIndexPage })));
@@ -101,6 +102,7 @@ export const routes: RouteObject[] = [
     ),
     children: [
       { path: "/", element: <HomePage /> },
+      { path: "/privacy", element: <PrivacyPage />, handle: { module: "src/pages/PrivacyPage.tsx" } },
       { path: "/about", element: <AboutPage />, handle: { module: "src/pages/AboutPages.tsx" } },
       { path: "/team", element: <TeamPage />, handle: { module: "src/pages/AboutPages.tsx" } },
       { path: "/equipment", element: equipmentPageAvailable ? <EquipmentPage /> : <Navigate to="/" replace /> },
