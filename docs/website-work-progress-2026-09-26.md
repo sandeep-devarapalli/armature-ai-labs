@@ -15,6 +15,7 @@ This is an evidence log for a later independent review. It records completed cha
 
 ## SEO and dependency work
 
+- The reconciled SEO work is in [PR #74](https://github.com/sandeep-devarapalli/armature-ai-labs/pull/74), branch `codex/seo-current`, first commit `c5f95bd`. Its GitHub CI, merge and production outcome must be read back separately.
 - Open PR #63 was built before the currently approved T2 scenes, square logos, favicon and MHS cover. A direct merge would overwrite those assets. Its prerender, sitemap, route metadata, redirects and HTTP checks were ported to `codex/seo-current` from merge commit `6427378`, with the current `/about/` indexed and `/team/` prerendered but noindex. The MHS article keeps the selected 1672 × 941 Common interface cover in Open Graph, Twitter and BlogPosting data.
 - The older PR's reviewed MHS engineering revision and click-to-play video were carried forward without replacing the approved cover. Homepage, membership, services, ecosystem and electrical-plan wording now distinguishes planned facilities and resources from operating ones. The newer T2 video placements remain intact.
 - `/about/` and `/team/` use the shared route metadata after hydration; the older page-local title effect was removed so navigation cannot race with the SEO head manager. The final desktop/mobile SEO browser rerun passed all four checks, including About and Team transitions.
