@@ -237,3 +237,9 @@ and seven completed daily physical backups dated19–25September. This does not
 establish Storage-image retention; no backup setting changed. Implementation commits:
 2ea1c04 (cleanup), fc1cdc9 (procedures/checklist), pushed to existing draftPR79.
 Focused main-based extraction underway in managed basic-registration-release worktree.
+
+Owner selected hello@armatureailabs.com as reviewer. Exact-email aggregate lookup in
+live auth.users returned zero matching/confirmed/signed-in accounts. The Workspace
+mailbox is not a website user. No account was fabricated, invitation sent, or role
+granted. Normal verified website sign-in is required before a narrowly reviewed
+staff-access change. This blocks opening intake, not preparation of disabled code.
