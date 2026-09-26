@@ -12,3 +12,7 @@ export function safeAuthReturnPath(value: unknown) {
     return fallbackPath;
   }
 }
+
+export function onboardingAuthReturnPath(value: unknown, basicOnly: boolean) {
+  return basicOnly ? "/onboarding" : safeAuthReturnPath(value);
+}

@@ -6,11 +6,13 @@ import { PageMetadata } from "../components/PageMetadata";
 import { AdminRoute, MemberRoute, StaffRoute } from "../components/RouteGuard";
 import { HomePage } from "../pages/HomePage";
 import {
+  basicOnboardingAvailable,
   componentRequestsAvailable,
   equipmentPageAvailable,
   memberPlatformAvailable
 } from "../config/release";
 
+const OnboardingPage = lazy(() => import("../pages/OnboardingPage").then((module) => ({ default: module.OnboardingPage })));
 const ProjectsPage = lazy(() => import("../pages/ProjectsPage").then((module) => ({ default: module.ProjectsPage })));
 const BrandingPage = lazy(() => import("../pages/BrandingPage").then((module) => ({ default: module.BrandingPage })));
 const AboutPage = lazy(() => import("../pages/AboutPages").then((module) => ({ default: module.AboutPage })));
@@ -119,8 +121,9 @@ export const routes: RouteObject[] = [
       { path: "/join", element: <JoinPage /> },
       { path: "/members", element: <MembersPage /> },
       { path: "/members/:handle", element: <PublicMemberPage /> },
-      { path: "/auth", element: memberFeature(<AuthPage />) },
-      { path: "/auth/callback", element: memberFeature(<AuthCallbackPage />) },
+      { path: "/onboarding", element: <ReleaseGate enabled={basicOnboardingAvailable}><OnboardingPage /></ReleaseGate> },
+      { path: "/auth", element: <ReleaseGate enabled={memberPlatformAvailable || basicOnboardingAvailable}><AuthPage /></ReleaseGate> },
+      { path: "/auth/callback", element: <ReleaseGate enabled={memberPlatformAvailable || basicOnboardingAvailable}><AuthCallbackPage /></ReleaseGate> },
       { path: "/dashboard", element: memberFeature(protectedPage(<DashboardPage />)) },
       { path: "/profile", element: memberFeature(protectedPage(<ProfilePage />)) },
       { path: "/workspace/team", element: memberFeature(protectedPage(<TeamWorkspacePage />)) },

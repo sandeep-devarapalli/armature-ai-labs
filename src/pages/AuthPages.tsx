@@ -11,7 +11,8 @@ import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import { Field, PageHeader, Section, Status } from "../components/Primitives";
 import { MemberAvatar } from "../components/MemberAvatar";
 import { useApp } from "../context/AppContext";
-import { safeAuthReturnPath } from "../lib/authReturnPath";
+import { basicOnboardingAvailable, memberPlatformAvailable } from "../config/release";
+import { onboardingAuthReturnPath } from "../lib/authReturnPath";
 import { googleAuthEnabled, supabase } from "../lib/supabase";
 
 export function AuthPage() {
@@ -21,7 +22,7 @@ export function AuthPage() {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [working, setWorking] = useState(false);
-  const from = safeAuthReturnPath((location.state as { from?: string } | null)?.from);
+  const from = onboardingAuthReturnPath((location.state as { from?: string } | null)?.from, basicOnboardingAvailable && !memberPlatformAvailable);
 
   useEffect(() => {
     if (currentMember) navigate(from, { replace: true });
@@ -46,7 +47,7 @@ export function AuthPage() {
       <div className="auth-context">
         <span className="mono">Member access · {mode}</span>
         <h1>Create your member account.</h1>
-        <p>Use a secure email link to apply for membership. Once approved, you can reserve the floor and manage each booking from one workspace.</p>
+        <p>{basicOnboardingAvailable && !memberPlatformAvailable ? "Use a secure email link for free registration and identity review. Paid space and equipment access are separate and are not available here." : "Use a secure email link to apply for membership. Once approved, you can reserve the floor and manage each booking from one workspace."}</p>
         <div className="auth-points">
           <span><ShieldCheck aria-hidden="true" /> Staff approval before booking</span>
           <span><KeyRound aria-hidden="true" /> Equipment-specific certification gates</span>
@@ -83,7 +84,7 @@ export function AuthPage() {
             Open the local member demo <ArrowRight aria-hidden="true" />
           </button>
         )}
-        <p className="privacy-note">Operational and contact records stay private. Approved member profiles are public by default.</p>
+        <p className="privacy-note">{basicOnboardingAvailable && !memberPlatformAvailable ? "Your basic registration and verification documents are private. Read our privacy notice before applying." : "Operational and contact records stay private. Approved member profiles are public by default."}</p>
       </div>
     </div>
   );
@@ -93,7 +94,7 @@ export function AuthCallbackPage() {
   const navigate = useNavigate();
   const location = useLocation();
   const [message, setMessage] = useState("Finishing secure sign-in…");
-  const returnTo = safeAuthReturnPath(new URLSearchParams(location.search).get("next"));
+  const returnTo = onboardingAuthReturnPath(new URLSearchParams(location.search).get("next"), basicOnboardingAvailable && !memberPlatformAvailable);
   useEffect(() => {
     if (!supabase) {
       setMessage("Supabase is not configured. Return to the demo sign-in.");

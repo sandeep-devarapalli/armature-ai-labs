@@ -109,7 +109,7 @@ const organization: JsonLd = {
 };
 
 const operationalNames: Record<string, string> = {
-  auth: "Sign In", dashboard: "Member Dashboard", profile: "Member Profile",
+  onboarding: "Basic Membership", auth: "Sign In", dashboard: "Member Dashboard", profile: "Member Profile",
   book: "Resource Booking", bookings: "Bookings", "check-in": "Check In",
   "component-requests": "Component Requests", inventory: "Inventory",
   team: "Meet the Team",

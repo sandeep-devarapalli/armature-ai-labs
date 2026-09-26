@@ -21,3 +21,6 @@
 .onboarding-local button:disabled { opacity: .5; cursor: not-allowed; }
 .onboarding-local h2 { margin-bottom: 1rem; }
 @media(max-width:760px) { .onboarding-local .ol-grid { grid-template-columns: minmax(0,1fr); gap: 2.5rem; } }
+
+.onboarding-local .ol-consent { display: block; }
+.onboarding-local .ol-consent input { width: auto; margin-right: .6rem; }
