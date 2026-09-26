@@ -192,23 +192,35 @@ async function callInventoryRpc<T>(
   return data;
 }
 
-export function InventoryProvider({ children }: PropsWithChildren) {
+export function InventoryProvider({ children, hydrate = false }: PropsWithChildren<{ hydrate?: boolean }>) {
   const { currentMember, isStaff, mode, online, refresh, state } = useApp();
   const inventoryRef = useRef<InventoryState | null>(null);
   const [inventory, setInventory] = useState<InventoryState>(() => {
-    const value = mode === "demo" ? readInventoryState() : emptyInventoryState;
+    const value = mode === "demo" && !hydrate ? readInventoryState() : emptyInventoryState;
     inventoryRef.current = value;
     return value;
   });
   const [makerServices, setMakerServices] = useState<MakerServicesDemoState>(
     () =>
-      mode === "demo"
+      mode === "demo" && !hydrate
         ? readMakerServicesDemoState()
         : emptyMakerServicesState
   );
   const [makerAvailability, setMakerAvailability] =
     useState<MakerCatalogAvailability>(initialMakerAvailability);
   const [loading, setLoading] = useState(false);
+  const [restored, setRestored] = useState(!hydrate);
+
+  useEffect(() => {
+    if (!hydrate) return;
+    if (mode === "demo") {
+      const value = readInventoryState();
+      inventoryRef.current = value;
+      setInventory(value);
+      setMakerServices(readMakerServicesDemoState());
+    }
+    setRestored(true);
+  }, [hydrate, mode]);
   const updateInventory = useCallback(
     (updater: (current: InventoryState) => InventoryState) => {
       const next = updater(inventoryRef.current ?? initialInventoryState);
@@ -691,22 +703,22 @@ export function InventoryProvider({ children }: PropsWithChildren) {
   }, []);
 
   useEffect(() => {
-    if (mode === "demo") {
+    if (mode === "demo" && restored) {
       window.localStorage.setItem(
         INVENTORY_STORAGE_KEY,
         JSON.stringify(inventory)
       );
     }
-  }, [inventory, mode]);
+  }, [inventory, mode, restored]);
 
   useEffect(() => {
-    if (mode === "demo") {
+    if (mode === "demo" && restored) {
       window.localStorage.setItem(
         MAKER_SERVICES_STORAGE_KEY,
         JSON.stringify(makerServices)
       );
     }
-  }, [makerServices, mode]);
+  }, [makerServices, mode, restored]);
 
   useEffect(() => {
     void hydrateInventory();

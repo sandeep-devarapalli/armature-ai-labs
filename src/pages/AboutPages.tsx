@@ -1,20 +1,10 @@
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
 import "./AboutPages.css";
 
-function usePageTitle(title: string) {
-  useEffect(() => {
-    const previous = document.title;
-    document.title = `${title} · Armature AI Labs`;
-    return () => { document.title = previous; };
-  }, [title]);
-}
-
 export function AboutPage() {
   const { theme } = useTheme();
   const imageTheme = theme === "dark" ? "dark" : "light";
-  usePageTitle("Who We Are");
 
   return (
     <div className="about-page">
@@ -110,8 +100,6 @@ export function AboutPage() {
 }
 
 export function TeamPage() {
-  usePageTitle("Meet the Team");
-
   return (
     <div className="team-page">
       <header className="wrap team-hero">
