@@ -1,0 +1,95 @@
+{
+  "status": "Prepared, not deployed by this artifact",
+  "notificationChannel": {
+    "type": "email",
+    "displayName": "Armature scanner operations",
+    "description": "Scanner maintenance alerts to lab operator. Delivery requires an independently verified test.",
+    "labels": {
+      "email_address": "hello@armatureailabs.com"
+    },
+    "enabled": true
+  },
+  "alertPolicies": [
+    {
+      "combiner": "OR",
+      "enabled": false,
+      "notificationChannels": [
+        "projects/armature-booking-integration/notificationChannels/REPLACE_WITH_VERIFIED_CHANNEL_ID"
+      ],
+      "severity": "ERROR",
+      "alertStrategy": {
+        "autoClose": "172800s"
+      },
+      "displayName": "Scanner signature refresh: failed execution",
+      "documentation": {
+        "mimeType": "text/markdown",
+        "content": "A scanner-signature-refresh execution failed. Inspect the execution and scanner_refresh_failed logs. Check current scanner authenticated health and signature freshness before reopening intake. Do not make the scanner public or bypass scanning."
+      },
+      "conditions": [
+        {
+          "displayName": "At least one failed execution in 5 minutes",
+          "conditionThreshold": {
+            "filter": "metric.type=\"run.googleapis.com/job/completed_execution_count\" AND metric.labels.result=\"failed\" AND resource.type=\"cloud_run_job\" AND resource.labels.project_id=\"armature-booking-integration\" AND resource.labels.location=\"asia-south1\" AND resource.labels.job_name=\"scanner-signature-refresh\"",
+            "aggregations": [
+              {
+                "alignmentPeriod": "300s",
+                "perSeriesAligner": "ALIGN_SUM",
+                "crossSeriesReducer": "REDUCE_SUM"
+              }
+            ],
+            "comparison": "COMPARISON_GT",
+            "thresholdValue": 0,
+            "duration": "0s",
+            "trigger": {
+              "count": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "combiner": "OR",
+      "enabled": false,
+      "notificationChannels": [
+        "projects/armature-booking-integration/notificationChannels/REPLACE_WITH_VERIFIED_CHANNEL_ID"
+      ],
+      "severity": "ERROR",
+      "alertStrategy": {
+        "autoClose": "172800s"
+      },
+      "displayName": "Scanner signature refresh: no successful run for 26 hours",
+      "documentation": {
+        "mimeType": "text/markdown",
+        "content": "No positive succeeded execution count in the last 26 hours (or no series). Check Scheduler, job execution, IAM, freshclam and authenticated scanner health. A built-in succeeded count reflects verified health only while this reviewed maintenance entrypoint remains deployed. Metric ingestion can postpone alerting. Google disallows retest windows with this 26-hour lookback, so the condition has no extra retest delay."
+      },
+      "conditions": [
+        {
+          "displayName": "No succeeded execution count in 26 hours",
+          "conditionPrometheusQueryLanguage": {
+            "query": "(sum(sum_over_time({\"run.googleapis.com/job/completed_execution_count\",monitored_resource=\"cloud_run_job\",project_id=\"armature-booking-integration\",location=\"asia-south1\",job_name=\"scanner-signature-refresh\",result=\"succeeded\"}[26h])) or vector(0)) < 1",
+            "duration": "0s",
+            "evaluationInterval": "300s"
+          }
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "liveEvidence": "2026-09-26: metric descriptor DELTA INT64, 60s samples, up to120s ingestion; live result label succeeded; email descriptor email_address. Missed-success PromQL accepted by query API and returned empty vector after successful job. No alerts created or notifications sent. Read-only PromQL at 2026-09-26T15:58:24.106000+00:00: positive 26h count=1; actual missed-success condition empty; nonexistent synthetic-job selector yielded one value0 (condition active). No synthetic metric or job created. Parent observed policy API reject26h with300s retest and then60s evaluation. Official PromQL alert docs require no retest and >=300s evaluation for >25h lookback. Proposal now uses duration0s/evaluation300s; successful creation must be verified separately.",
+    "beforeEnable": [
+      "Replace notification channel placeholder with created or existing channel full resource name; check enabled and verificationStatus (UNVERIFIED is unusable).",
+      "Verify raw timeSeries contains positive succeeded counts for scanner-signature-refresh; zero-valued samples alone do not prove success.",
+      "Read-only query the missed-success expression over a window with success: empty vector. For synthetic absent-job selector: one value0 (condition active).",
+      "Verify failed result label through a controlled synthetic failed execution; reconcile count and timestamp with failed execution. Do not intentionally break the production scanner.",
+      "Create policies disabled, inspect returned schema, then enable after checking channel and metric scopes.",
+      "Exercise each alert with controlled test policy/data, record incident and actual inbox receipt, then remove test policy. Policy creation or channel verification alone is not proof of email delivery."
+    ],
+    "sources": [
+      "https://docs.cloud.google.com/monitoring/api/metrics_gcp_p_z#run",
+      "https://docs.cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.alertPolicies",
+      "https://docs.cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.notificationChannels",
+      "https://docs.cloud.google.com/monitoring/promql",
+      "https://docs.cloud.google.com/monitoring/promql/promql-in-alerting"
+    ]
+  }
+}

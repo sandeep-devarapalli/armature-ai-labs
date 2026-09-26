@@ -1,4 +1,10 @@
-- Workspace perks clarification, 26 September 2026: paid coworking/cabin passes, including day passes, include unlimited pantry essentials (milk, juices, atta, Maggi, eggs). Outside food is allowed with cleanup required. Equipment is a separate paid add-on requiring coworking/cabin access covering its use period; examples are hourly 3D-printer use and daily Jetson Orin Nano allocation. Do not imply equipment purchase includes entry or free basic membership includes pantry access.
+- ID-handling and guardian procedure confirmed, 26 September 2026: staff review IDs only inside the protected portal and must not download or retain copies; retain only the verification result after 30-day upload deletion. Guardians of applicants aged 16–17 email hello@armatureailabs.com with the member name and registered email, guardian name/relationship, and explicit permission.
+
+- Scanner hosting resumed, 26 September 2026: after billing and trial credits were verified, the user approved proceeding with the private Cloud Run scanner and selected INR2,500 monthly cost alerts. This supersedes the earlier hosting hold. Keep real ID intake disabled until private caller authentication, fresh signatures, monitored cleanup and end-to-end production checks pass. Do not reuse booking-email delegated credentials. Payment setup remains deferred during the LLP rename.
+
+- Pantry correction, 26 September 2026: the user removed atta from pantry essentials. Do not restore it in membership copy.
+
+- Workspace perks clarification, 26 September 2026: paid coworking/cabin passes, including day passes, include unlimited pantry essentials (milk, juices, Maggi, eggs). Outside food is allowed with cleanup required. Equipment is a separate paid add-on requiring coworking/cabin access covering its use period; examples are hourly 3D-printer use and daily Jetson Orin Nano allocation. Do not imply equipment purchase includes entry or free basic membership includes pantry access.
 
 - Final membership clarification, 26 September 2026: day passes never auto-renew; optional renewal applies to weekly/monthly passes. Adults-only overnight access is 23:00–08:00. Refunds within the agreed windows are full. For 16–17-year-olds, a guardian must email the lab with details and permission; guardian LinkedIn does not substitute. Razorpay test setup is explicitly deferred while the LLP name changes; ask before resuming.
 
@@ -7,6 +13,9 @@
 - Membership clarification, 26 September 2026: LinkedIn is required, not optional; support younger students with guardian consent. Basic registration is free; online prepaid checkout replaces the offline-only target. Preserve unresolved ID-retention, pass-date and refund rules in docs/team-membership-and-booking-email-plan.md rather than inventing them. No production activation is authorized by these decisions.
 
 # AGENTS.md
+
+- Legal operator correction, 26 September 2026: use `Jayasri Nageshwara Rao and Partners LLP` exactly on the privacy page and related operator records. This supersedes the earlier `Jayasri Nagesh Rao and Partners LLP` spelling. The lab contact address is not a confirmed registered-office address.
+
 
 - Preview Supabase project decision, 25 September 2026: the live website's public bundle points to the existing `armature-lab` project (`uxfhdfagrmaeyuaipaar`). The user said to hold off creating a separate preview project. Do not create one or apply the team migration to the live project until the user resumes this work.
 

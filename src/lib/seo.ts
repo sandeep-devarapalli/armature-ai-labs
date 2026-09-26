@@ -26,6 +26,10 @@ const pages: Record<string, PageDefinition> = {
     name: "Physical AI and Robotics Lab in Bengaluru",
     description: "Armature AI Labs is a planned 3,500 sq ft physical AI and robotics lab in HSR Layout, Bengaluru. Explore the designs, projects and lab journal."
   },
+  "/privacy/": {
+    name: "Privacy",
+    description: "How Armature AI Labs handles website visits, browser storage and enquiries, how to contact us about your information, and our planned membership safeguards."
+  },
   "/about/": {
     name: "Who We Are",
     description: "Armature AI Labs is a makers’ lab for learning, building and sharing physical AI and robotics in Bengaluru."
@@ -109,7 +113,7 @@ const organization: JsonLd = {
 };
 
 const operationalNames: Record<string, string> = {
-  auth: "Sign In", dashboard: "Member Dashboard", profile: "Member Profile",
+  onboarding: "Basic Membership", auth: "Sign In", dashboard: "Member Dashboard", profile: "Member Profile",
   book: "Resource Booking", bookings: "Bookings", "check-in": "Check In",
   "component-requests": "Component Requests", inventory: "Inventory",
   team: "Meet the Team",
@@ -125,6 +129,7 @@ export function getPageSeo(pathname: string): PageSeo {
   if (!page) {
     const segment = path.split("/")[1];
     const name = import.meta.env.DEV && path === "/membership-preview/" ? "Membership review preview"
+      : import.meta.env.DEV && path === "/onboarding-local/" ? "Local onboarding review"
       : path === "/components/request/" ? "Component Request"
       : Object.hasOwn(operationalNames, segment) ? operationalNames[segment] : "Page Not Found";
     return {

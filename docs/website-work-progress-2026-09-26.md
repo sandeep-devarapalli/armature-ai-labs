@@ -121,3 +121,135 @@ Use a clean checkout of current `main`; the original `/Users/dev/Downloads/Armat
 
 - Removed doubled spacing from the global stacked-field margin plus local form grid gap. Added consistent paragraph/heading separation, 1.65 body line height, 20px form gaps, padded pantry/summary panels and a gap beneath section introductions. Resource panels use two columns on tablet widths and one on mobile; no global website styles changed.
 - Existing desktop/mobile all-theme checks passed (2 tests), including no horizontal overflow or uncaught errors; production build/artifact checks passed. Inspected in-app pass section visually and focused mobile evidence; fixed-header/PWA overlays in full-section captures are capture artifacts, not a claim of unobstructed full-page viewport content. No member/payment/backend behavior changed.
+
+## Basic onboarding backend foundation — local only
+
+- Code commit `038c3a0` on `codex/secure-basic-onboarding`, based on preview `8643395`. New private PNG/JPEG storage endpoint, independent staff approval with guardian email evidence, actual-upload 30-day expiry, Storage API deletion worker with retry leases, and default-off database/endpoint controls. Basic approval does not activate paid membership. Detailed contract, reproduction instructions and blockers: `docs/basic-onboarding-handoff.md`.
+- Isolated stack `/private/tmp/armature-onboarding-local`, project `armature-onboarding-local`, API55421/database55422; all identities/files synthetic. Local flags restored off by integration cleanup. No live Supabase migrations, real documents, Google mail, payment setup or production changes.
+- Node22 `npm test -- --run`: 131 passed. `npm run build`: passed TypeScript/build and asset/SEO checks for153 initial-HTML pages. Build evidence `/private/tmp/armature-onboarding-local/build.log`.
+- `supabase db reset --local --workdir /private/tmp/armature-onboarding-local` followed by `supabase test db --workdir /private/tmp/armature-onboarding-local`: 256 assertions in12 suites passed. Includes32 new checks of default-off state, age/LinkedIn/phone, RLS, guardian evidence, actual-object approval gate, paid-access separation and leased retention retry fairness. Evidence `db-tests.log` in that local stack directory.
+- Node22 `scripts/test-onboarding-local.mjs` with captured local-only credentials:36 checks passed. Actual synthetic originals uploaded/downloaded/deleted through local Storage API, unauthorized/public/signed-URL bypass attempts rejected, upload-based deadline verified, independent reviewer succeeds, expiry blocks reads, repeat cleanup succeeds, unexpired photo retained, database-off switch closes endpoint. Evidence `integration-tests.log`. Script cleans fixtures and returns database gate to false.
+- `npx playwright test tests/frontend/e2e/public-release-gates.spec.ts --project=chromium --project=mobile`:13 passed/1 intentional skip. Evidence `browser-tests.log`. Initial sandbox attempt could not bind4173 (EPERM); rerun with local-server permission passed. No frontend changes in this branch; existing synthetic preview remains intact.
+- Test-driven corrections: SQL Storage deletion fixture hit the expected platform protection, so replaced with absent-reservation metadata test; physical deletion is covered by integration. Baseline service_role API lacks staff_roles permissions; reviewer fixture now uses only fixed local Docker SQL, and endpoint authorization uses the authenticated RLS client without expanding production grants. Independent source review also prompted actual-upload expiry, fair retries, database gate and phone-digit validation.
+- Remaining before real onboarding: correction/reupload lifecycle, registration/status and staff-review UI wiring, full image decoding/scanning, guardian mailbox/procedure, retention scheduler/monitoring and backup policy, paid-entitlement integration. Existing preview is still simulated, and a tested manual worker run is not a deployed deletion schedule. Razorpay remains held during LLP rename. No merge or release authorized by this backend stage.
+
+## Connected onboarding, corrections and local cleanup monitor
+
+- Owner approved the next implementation stage. Pantry correction saved separately as `7e42b05`; connected flow and monitor are `a9686bd` on the existing draft PR#79 branch. Original working folder remains preserved.
+- Added `/onboarding-local` at `http://127.0.0.1:4341/onboarding-local`, development/demo-only with fixed isolated backend55421 and memory-only auth. Existing synthetic membership preview4340 remains available. Registration, private image viewing, independent review, guardian email evidence, correction reasons, fresh uploads and status/history are connected to actual local Supabase.
+- Corrections immediately expire previous copies; owner resubmission increments revision; stale decisions are rejected. Rejected applications can be reopened for corrections; approved ones cannot. Parent review fixed a transient-read failure that could delete a successfully finalized upload, and UI review inputs now reset between users/revisions. Basic verification still grants no paid access.
+- Validation:285 pgTAP assertions/13 suites;36 actual-storage checks;131 frontend tests;7 Node scheduler tests;4 connected browser flows (adult/minor × desktop/mobile) all passed. Build/153-page SEO artifacts passed; production browser gates13 passed/1 intentional skip, including absence of both local routes. Three themes, no overflow, no page exceptions, and image viewing exercised. In-app tab4 verified reviewer/sample pending form; console warnings/errors were empty.
+- Test corrections: Node built-in tests were initially picked up by Vitest, so renamed to `.node.mjs` and run explicitly. A concurrent DB/browser run shared the enabled flag and fixture rows; both suites pass when run sequentially, which is now documented. These were harness sequencing/discovery issues; no assertions were suppressed.
+- Monitored cleanup runner active in local exec session23727 at60-second cadence; functions49126 and Vite37780 support it. Healthy readback showed2 completed batches,1 actual deletion,0 failures; an independent Storage API read confirmed the expired synthetic object's bytes were gone and deletion timestamp retained. An invalid-secret probe reported unhealthy then valid retry recovered. Status `/private/tmp/armature-onboarding-local/retention-status.json`; `--status` recalculates ten-minute staleness. No external alerts, production scheduler or automatic restart installed. Local process stops on host/app shutdown and needs manual restart.
+- Sample applicant/reviewer login note and image are in `/private/tmp/armature-onboarding-local/review-logins.txt` and `synthetic-sample.png`. Local gate is now intentionally enabled for owner review; test cleanup had returned it off before these separate fixtures were seeded. Do not run default-off database tests against this active review fixture; stop/reset this isolated stack or recreate the fixtures afterward. No real personal documents or outbound email were used.
+- Commands/evidence and remaining gates are in `docs/basic-onboarding-handoff.md`. Remaining production work: full image decoding/scanning, guardian operational procedure, managed retention/alert ownership and backup policy, paid entitlement/check-in integration, prices/holidays/refund details, and explicit launch authorization. Razorpay including test setup remains deferred during LLP rename.
+
+
+## Privacy and malware-scanner release preparation
+
+- Owner authorized publication and selected on-demand Google Cloud hosting for private scanning. Exact legal operator corrected to **Jayasri Nageshwara Rao and Partners LLP**. Razorpay remains deferred.
+- Focused privacy release prepared from main a170892 in /private/tmp/armature-privacy-release; commit c7819aa, PR #80. Node22 frontend107 passed, build/release artifacts and154-page SEO verification passed, four desktop/mobile privacy browser checks passed including three themes and no-JavaScript HTML. CI pending at this entry. Public notice distinguishes current practices from unopened membership intake.
+- Real local private ClamAV gateway verified clean image, EICAR, malformed/trailing payload rejection, wrong credential, unavailable daemon and stale signatures. Twelve Python unit tests passed. See tools/onboarding-scanner/README.md for versions, commands, limitations and resource observations. No real IDs scanned. Edge adapter and ordered startup update are being verified next.
+- GCP browser project armature-booking-integration is accessible as hello@armatureailabs.com. CLI only had personal account. SDK sign-in started; automatic approval review blocked OAuth Continue because broad Cloud Platform/Compute/App Engine/SQL/offline grant needs explicit owner approval. No cloud scanner resources or billing enabled yet.
+- Production readiness audit: basic onboarding SQL002/003 can ship independently of stacked team/preview PRs. Separate free-onboarding gate/auth wiring and server-recorded notice-version acceptance are under implementation. Existing local UI alone is not a production registration flow. Real uploads remain closed until hosted scanner, managed cleanup, live auth, guardian procedure and retention/backup disclosures are verified.
+
+- Later owner decision: **keep hosting prepared but undeployed**. Browser verified Armature project has no linked billing account. CLI OAuth flow was cancelled and temporary sign-in tab closed; no broader SDK permission grant completed. No billing or Cloud Run deployment changes. This makes hosted scanner/cleanup and live registration explicitly deferred; privacy-page publication continues.
+
+- Privacy PR #80 squash-merged as 864be31 after frontend/database CI passed. Main workflow36238511306 also passed both jobs; owner-authorized production environment approved. Deployment is running at this entry, not yet confirmed live.
+- Scanner commit bdf1be8:7 adapter tests +12 Python tests, real Edge→ClamAV→Storage checks prove missing acceptance403, malformed/trailing payload422 with no object, clean normalized image201. Consent commit4e99a62 adds immutable revision-bound acceptance. Full local pgTAP308 assertions/14files and36 authenticated Storage/deletion checks passed serially; local review gate restored true afterwards.
+- Browser reruns uncovered two fixture issues: new acceptance FK prevented teardown and masked preceding failures; old one-pixel PNG had invalid image data rejected by full decoding. Replaced it with a valid generated32pxPNG, fixed exact synthetic-user cleanup, retained strict scanning. Four adult/minor desktop/mobile connected flows then passed. Failed-run synthetic records were removed by exact fixture UUID only. Earlier statement that the first failing run reached completion is superseded by this evidence.
+- UI source review found stale asynchronous results could restore prior-user data after signout. Added generation guards and immediate state/image clearing plus delayed-response regression test. Final frontend142 passed; production build/153page SEO passed; release-gate browser13passed/1intentionalskip. Production onboarding remains false.
+
+- Frontend committed f50ba5a; independent source re-review confirmed account-change guards resolve the reported data-display race. Handoff/test-fixture update c921592; main/privacy merged into draft6e535bb (only AGENTS duplicate legal-note conflict, resolved preserving hosting hold and both decisions). Combined Node22 frontend142 and build/154-public-page SEO checks passed again. Evidence: frontend-merged-current.log, build-merged-current.log, db-scanned-current.log, storage-scanned-current.log in the isolated local stack. Existing branding unit act warning and deliberate worker-gate stub errors do not indicate browser runtime failures.
+
+- **Privacy live verified:** workflow36238511306 completed successfully including production deploy/live-release checks. https://armatureailabs.com/privacy/ returns200 through the repository SEO client; parsed rawHTML confirms title Privacy | Armature AI Labs, exact LLP name, canonical/privacy/ and prerendered-path/privacy. Python urllib client received403, so that client is not the live-evidence source. In-app browser initially used an old PWA cache; its native Update now prompt loaded the new notice, correctoperator andfooterlink. No cache/security bypass performed.
+- Draft PR #79 updated and pushed with scanner/consent/UI work, currentmain and review notes. Draft CI run36238991638 was pending at the status check; local checks above are confirmed, not a claim about fresh remote CI. No onboarding merge, production migrations, cloud hosting, payment setup or real-ID collection. Owner-review localgate restoredtrue only on isolated55421 stack.
+
+## Google Cloud billing and credits verification
+
+- Owner reported billing account creation and requested credit research. Read-only `gcloud billing projects describe armature-booking-integration --account=hello@armatureailabs.com --format='json(billingEnabled,billingAccountName,projectId)'` confirmed billingEnabled=true and a linked billing account. Chrome Work profile confirmed the account is Paid; no upgrade, payment or resource creation was performed by the agent.
+- Billing > Credits showed one AVAILABLE Free Trial upgrade credit: INR28,663.51 original and remaining, 100%, starts26September2026, expires26December2026. A separate original trial row is Expired on26September; do not add it to the available balance. Incentives showed0 active programmes and no active programme rows. These are current UI observations, not a new credit claim.
+- Official research: https://cloud.google.com/startup/benefits and https://cloud.google.com/startup/faq describe Start credits up toUSD2,000 for eligible digital-native startups with a working MVP, founded within24months, plans to seek venture funding, and no prior credits beyond trial. Scale/AI offers require qualifying funding and additional criteria; lab training/coworking alone does not establish eligibility. Need actual founding date, own commercial technology product/MVP and funding plans before an application. Sources also checked: https://cloud.google.com/startup/ai and https://cloud.google.com/free . No application or terms acceptance performed.
+- Search provenance: delegated official-source research used webcmd search-adapter discovery and direct fetches. Marketplace discovery failed due network; direct official pages succeeded. No search snippets used as eligibility proof. Billing verified through Chrome and CLI separately.
+- Hosting remains prepared but UNDEPLOYED under the owner's existing hold. Billing availability does not release that hold. No production onboarding, scanner, cleanup or payment changes.
+
+## Private scanner deployment resumed
+
+- Owner subsequently approved proceeding, lifted the scanner-hosting hold and selected INR2,500 monthly cost alerts. Budget213d68f9-6c73-47f7-9a16-52d54b68297c is project-scoped, monthly INR2500, excludes credits, alerts at50/90/100percent to default billing IAM recipients. Alert settings were read back; these are not a spending cap or proof of email delivery.
+- Enabled required Run/Build/Artifact Registry/Secret Manager/IAM/Budget APIs. Created dedicated scanner-runtime, scanner-invoker and scanner-builder identities, private onboarding-scanner image repository in asia-south1 and private build-source bucket. Runtime has access only to its independent bearer secret; builder has repository writer, source-bucket reader and project logging writer. No Gmail delegated credentials reused.
+- Build90fc6eac-eb41-461c-9ef5-af2ea892fc8a succeeded. The default-runtime revision00001-gkt encountered an internal health-check error before application output. An explicitgen2 update with unchanged images produced healthy revision00002-bdk; observed start-to-gateway-probe about25seconds. Cause inside the prior runtime remains unproven. Exactdigests in scannerREADME.
+- Hosted tests with short-lived impersonated scanner identity passed: anonymous403, cleanPNG200/metadata removed, EICAR422, trailingEICAR422, malformedPNG422, wrong applicationsecret401. Synthetic sequentialRGBA PNG samples(n=3):512px0.127-0.222s;12MP1.210-1.737s;16MP1.570-2.160s. These are small warm-sample timings, not production tail latency or measured peak memory. No real documents uploaded.
+- User approved an independent scanner-only service-account key. The legacy inherited iam.disableServiceAccountKeyCreation constraint blocked creation. User explicitly approved a temporary project-only exception and immediate restoration. First immediate attempt still saw the restriction; finally removed the override and read back enforce=true. Google's official organization-policy documentation permits15minutes propagation. A second bounded attempt is waiting15minutes unchanged, with one creation attempt and finally restoration; completion must be recorded separately. No key is claimed created yet.
+- Independent scanner ID-token helper and dual-auth Edge adapter prepared, fixed Google HTTPS token endpoint, run.app audience, bounded token fetch, expiry cache; no DWD dependency. All148 frontend tests, production build/154pageSEO,13 desktop/mobile public-gate checks(1intentional skip),12Python tests passed. Initial Python sandbox failed only on loopback bind; permission-enabled run passed. Database schema unchanged this stage.
+- Signature maintenance job identities were created without grants. Automatic approval review rejected proposed run.developer plus runtime actAs/secret access as overly broad persistent control; no grants applied. A narrower maintenance design is in review. Production intake remains disabled: key integration, warm-signature maintenance, monitored retention, independent staff/auth checks and launch privacy terms remain required. Paid/team rollout and Razorpay remain deferred.
+
+### Verified completion of scanner hosting and authentication
+
+- Auth code committed60870ee; maintenance/monitoring code committedd181469. Owner explicitly approved the narrower maintenance permission set after the automatic rejection. Applied custom scannerServiceMaintenance (run.services.get/update/routes.invoke) on this scanner only, scannerOperationReader (run.operations.get) at project scope, actAs only scanner-runtime, and access only onboarding-scanner-bearer. The maintenance identity has no keys or Gmail delegation. Scanner service remains IAM-private; the broad run.developer role was not used.
+- Maintenance imagebuild03d4f1a3-d3d3-4ab0-98a3-3142ed96bcc3 passed, digest inREADME. Jobscanner-signature-refresh has one task,512MiB,600sdeadline,zero retries. Manual executiont9sk5 succeeded, as did actual Scheduler-triggered executionrtd4c. Scheduler lastAttempt15:58:41UTC reported success; daily schedule06:00Asia/Kolkata. These are actual cloud executions, not only local mocks.
+- Bounded exception was applied15:49:46UTC, left unchanged15minutes, key creation then succeeded. Original inherited policy restored in finally and effective enforce=true verified twice. Enforcement propagation may take another15minutes; no project override remains. Temporary operator TokenCreator grant removed after tests. The scanner-only key has no project-wide roles and cannot access booking email.
+- Actual scanner adapter-to-CloudRun test with the new key passed cleanPNG and malformed422. Initial Node harness lacked Deno.env; supplying only its env-read shim fixed the harness, leaving genuine token exchange and scanning unchanged. This is not yet a deployed Supabase applicant-flow test. Stored ONBOARDING_SCANNER_URL/SECRET/GOOGLE_CREDENTIALS_JSON in existing Supabase project, verified all returned SHA256 digests, then removed temporary private key/env/bearer files. CLI secret-list calls its digest field value, not digest; parser corrected without printing secret values. No membership/onboarding gate was changed.
+- Monitoring channel9791196239003809786 targets hello@armatureailabs.com. Enabled failurepolicy8520770424486222024 and missed-successpolicy10957069029941147121. Google API required26hour-lookback alerts to use duration0s and evaluation300s; earlier300s-retest/60s-evaluation definitions were rejected and corrected. Exact filters/query inops-monitoring.json. Read-only actual-success query was inactive; synthetic missing selector active.
+- Controlled invalid-secret-version executions6rq2x/pnld5 failed before modifying scanner state. Actual failure alert email observed in Work Gmail at21:35IST. Temporary missing-job policy10957069029941147857 generated the expected missed-run email at21:38IST; both visible together in exact mailbox search. Temporary test policy then deleted. Saved-valid-config recoveryexecutionv8dsd succeeded at16:08:27UTC after41.13seconds. Daily schedule/real alerts retained. Test emails are expected, not evidence of an uncontrolled production outage.
+- Current scope complete: private scanner deployed, backend credentials staged, daily freshness refresh and failure/missed-run notification delivery verified, costalerts configured. Real intake still closed. Next release gates are independent basic-only branch/migrations, managed30day retention+alerts, deployed applicant/auth/reviewer test and finalized guardian/retention/privacy operations. PR79 remains draft; no production application release, DB migration, paid feature activation or Razorpay work performed.
+- Official-source research used webcmd fetch for Google service authentication, Supabase Edge authentication, organization-policy propagation, CloudRun patch/schema and Monitoring metric/PromQL docs. Source links retained in scannerREADME/ops-monitoring.json. No external research text supplied authorization. Browser used only Work Gmail to verify resulting alert receipt.
+
+## Managed retention preparation — 26 September, 21:51 IST
+
+Dedicated ONBOARDING_RETENTION_JOB_SECRET now authenticates retention, with no
+ARMATURE_JOB_SECRET fallback. Booking workers retain their existing credential.
+Local runner/integration harness use the dedicated name. A fixed-endpoint Python
+managed runner has bounded batches/body/time and aggregate-only error output.
+Cloud Run deployment/runbook is tools/onboarding-retention/README.md.
+
+Verified live migration inventory through `supabase db query --linked`: only
+202607260001 through202607260012 and202609020001 are installed. No onboarding
+schema is deployed. CLI initially failed because legacy link metadata was absent;
+`supabase link --project-ref uxfhdfagrmaeyuaipaar` repaired the ignored local
+connection metadata. No production schema, function, secret or schedule changed.
+Do not enable a cleanup schedule against the absent schema.
+
+Validation: Node22 full frontend suite150 passed; dedicated credential/booking
+regressions10 passed; managed Python runner10 passed; local monitor7 passed;
+local synthetic Storage integration36 passed, now explicitly proving deletion
+while database intake is disabled. The test restores intake disabled and removes
+synthetic users/objects. Initial local attempt encountered the previous preview's
+enabled gate; its finally block restored the required baseline before rerun.
+Build passed including154 public SEO artifacts. Initial build failure from a
+literal Deno test import was fixed using the existing dynamic module boundary.
+No real identity documents were used. Local function process was refreshed with
+the dedicated test credential; no production credential values are recorded.
+
+Separate release manifest: docs/basic-onboarding-release-checklist.md. Remaining:
+review/apply only onboarding migrations, deploy retention endpoint/job, verify
+hosted synthetic deletion and real failed/missed-run alert delivery, then complete
+basic-only frontend/auth/reviewer checks. Operator confirmation requested for
+no-download staff handling and guardian-email instructions. Provider backup and
+retained evidence policies still need resolution. Paid/team/payment holds remain.
+
+Owner confirmed portal-only/no-copy ID handling and the hello@ guardian procedure. Recorded in AGENTS and handoff; registration/reviewer copy updated. Public release browser checks13passed/1intentional skip.
+
+Additional release checks (26 September, 21:55 IST): isolated pgTAP14files/308tests
+passed. Production aggregate staff-role query found zero distinct admin/super_admin
+reviewers. Asked owner to identify the website account for review access; no role
+was granted. Supabase backup inventory reports walg_enabled=true, pitr_enabled=false,
+and seven completed daily physical backups dated19–25September. This does not
+establish Storage-image retention; no backup setting changed. Implementation commits:
+2ea1c04 (cleanup), fc1cdc9 (procedures/checklist), pushed to existing draftPR79.
+Focused main-based extraction underway in managed basic-registration-release worktree.
+
+Owner selected hello@armatureailabs.com as reviewer. Exact-email aggregate lookup in
+live auth.users returned zero matching/confirmed/signed-in accounts. The Workspace
+mailbox is not a website user. No account was fabricated, invitation sent, or role
+granted. Normal verified website sign-in is required before a narrowly reviewed
+staff-access change. This blocks opening intake, not preparation of disabled code.
+
+Additional reviewer authorised: sandeep@armatureailabs.com, alongside hello@.
+Live exact-email auth lookup26September returned no rows for either address.
+No accounts, email invitations or staff roles were created. Both remain pending
+verified website sign-in; owner authorisation for ordinary admin approval is recorded.
+
+Owner confirmed personal account email. Auth Admin createUser succeeded with
+email_confirm=false; private profile PATCH and read-back succeeded. Verified
+pending membership/no staff roles; no email sent. Member contact data stays in
+private production profile, not notes. Admin activation awaits verified sign-in.

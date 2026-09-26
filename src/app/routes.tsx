@@ -6,13 +6,16 @@ import { PageMetadata } from "../components/PageMetadata";
 import { AdminRoute, MemberRoute, StaffRoute } from "../components/RouteGuard";
 import { HomePage } from "../pages/HomePage";
 import {
+  basicOnboardingAvailable,
   componentRequestsAvailable,
   equipmentPageAvailable,
   memberPlatformAvailable
 } from "../config/release";
 
+const OnboardingPage = lazy(() => import("../pages/OnboardingPage").then((module) => ({ default: module.OnboardingPage })));
 const ProjectsPage = lazy(() => import("../pages/ProjectsPage").then((module) => ({ default: module.ProjectsPage })));
 const BrandingPage = lazy(() => import("../pages/BrandingPage").then((module) => ({ default: module.BrandingPage })));
+const PrivacyPage = lazy(() => import("../pages/PrivacyPage").then((module) => ({ default: module.PrivacyPage })));
 const AboutPage = lazy(() => import("../pages/AboutPages").then((module) => ({ default: module.AboutPage })));
 const TeamPage = lazy(() => import("../pages/AboutPages").then((module) => ({ default: module.TeamPage })));
 const BlogIndexPage = lazy(() => import("../pages/BlogPages").then((module) => ({ default: module.BlogIndexPage })));
@@ -85,6 +88,8 @@ const membershipPreviewRoutes: RouteObject[] = [];
 if (import.meta.env.DEV && import.meta.env.VITE_DEMO_MODE === "true") {
   const MembershipPreviewPage = lazy(() => import("../pages/MembershipPreviewPage").then((module) => ({ default: module.MembershipPreviewPage })));
   membershipPreviewRoutes.push({ path: "/membership-preview", element: <MembershipPreviewPage /> });
+  const OnboardingLocalPage = lazy(() => import("../pages/OnboardingLocalPage").then((module) => ({ default: module.OnboardingLocalPage })));
+  membershipPreviewRoutes.push({ path: "/onboarding-local", element: <OnboardingLocalPage /> });
 }
 
 export const routes: RouteObject[] = [
@@ -97,6 +102,7 @@ export const routes: RouteObject[] = [
     ),
     children: [
       { path: "/", element: <HomePage /> },
+      { path: "/privacy", element: <PrivacyPage />, handle: { module: "src/pages/PrivacyPage.tsx" } },
       { path: "/about", element: <AboutPage />, handle: { module: "src/pages/AboutPages.tsx" } },
       { path: "/team", element: <TeamPage />, handle: { module: "src/pages/AboutPages.tsx" } },
       { path: "/equipment", element: equipmentPageAvailable ? <EquipmentPage /> : <Navigate to="/" replace /> },
@@ -117,8 +123,9 @@ export const routes: RouteObject[] = [
       { path: "/join", element: <JoinPage /> },
       { path: "/members", element: <MembersPage /> },
       { path: "/members/:handle", element: <PublicMemberPage /> },
-      { path: "/auth", element: memberFeature(<AuthPage />) },
-      { path: "/auth/callback", element: memberFeature(<AuthCallbackPage />) },
+      { path: "/onboarding", element: <ReleaseGate enabled={basicOnboardingAvailable}><OnboardingPage /></ReleaseGate> },
+      { path: "/auth", element: <ReleaseGate enabled={memberPlatformAvailable || basicOnboardingAvailable}><AuthPage /></ReleaseGate> },
+      { path: "/auth/callback", element: <ReleaseGate enabled={memberPlatformAvailable || basicOnboardingAvailable}><AuthCallbackPage /></ReleaseGate> },
       { path: "/dashboard", element: memberFeature(protectedPage(<DashboardPage />)) },
       { path: "/profile", element: memberFeature(protectedPage(<ProfilePage />)) },
       { path: "/workspace/team", element: memberFeature(protectedPage(<TeamWorkspacePage />)) },
