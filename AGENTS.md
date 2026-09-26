@@ -1,3 +1,5 @@
+- Scanner hosting hold, 26 September 2026: user chose Google Cloud on-demand hosting but then explicitly requested hosting remain prepared and undeployed. Do not link billing, provision paid scanner infrastructure or open real ID intake under the earlier general release authorization. The focused privacy-page release remains authorized.
+
 - Pantry correction, 26 September 2026: the user removed atta from pantry essentials. Do not restore it in membership copy.
 
 - Workspace perks clarification, 26 September 2026: paid coworking/cabin passes, including day passes, include unlimited pantry essentials (milk, juices, Maggi, eggs). Outside food is allowed with cleanup required. Equipment is a separate paid add-on requiring coworking/cabin access covering its use period; examples are hourly 3D-printer use and daily Jetson Orin Nano allocation. Do not imply equipment purchase includes entry or free basic membership includes pantry access.
@@ -9,6 +11,9 @@
 - Membership clarification, 26 September 2026: LinkedIn is required, not optional; support younger students with guardian consent. Basic registration is free; online prepaid checkout replaces the offline-only target. Preserve unresolved ID-retention, pass-date and refund rules in docs/team-membership-and-booking-email-plan.md rather than inventing them. No production activation is authorized by these decisions.
 
 # AGENTS.md
+
+- Legal operator correction, 26 September 2026: use `Jayasri Nageshwara Rao and Partners LLP` exactly on the privacy page and related operator records. This supersedes the earlier `Jayasri Nagesh Rao and Partners LLP` spelling.
+
 
 - Preview Supabase project decision, 25 September 2026: the live website's public bundle points to the existing `armature-lab` project (`uxfhdfagrmaeyuaipaar`). The user said to hold off creating a separate preview project. Do not create one or apply the team migration to the live project until the user resumes this work.
 

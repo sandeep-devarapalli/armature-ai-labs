@@ -17,7 +17,7 @@ const options = { auth: { persistSession: false, autoRefreshToken: false } };
 const service = createClient(url, serviceKey, options);
 const users = [];
 const paths = [];
-const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+jRZkAAAAASUVORK5CYII=', 'base64');
+const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAAN0lEQVR4nO3RwQ0AMAjDwJT9d05HMB9+vgGCZF7bXJrT9XhgwR8gEyETIRMhEyETIRMhEyEThXzH8QM9OMM6fAAAAABJRU5ErkJggg==', 'base64');
 let checks = 0;
 function check(condition, label) {
   assert.ok(condition, label);
@@ -40,7 +40,7 @@ async function actor(name) {
 async function application(person) {
   success(await person.client.rpc('submit_basic_onboarding', {
     p_full_name: 'Synthetic Test Member', p_phone: '+919999000000',
-    p_linkedin_url: 'https://www.linkedin.com/in/synthetic-local-only/', p_date_of_birth: '2000-01-01',
+    p_linkedin_url: 'https://www.linkedin.com/in/synthetic-local-only/', p_date_of_birth: '2000-01-01', p_notice_version: '2026-09-26',
   }), 'Submit synthetic application');
 }
 async function reserve(person, kind, idType = null) {
@@ -77,7 +77,7 @@ try {
   check(initialGate.enabled === false, 'Database onboarding gate defaults off');
   check(Boolean((await owner.client.rpc('submit_basic_onboarding', {
     p_full_name: 'Synthetic Test Member', p_phone: '+919999000000',
-    p_linkedin_url: 'https://www.linkedin.com/in/synthetic-local-only/', p_date_of_birth: '2000-01-01',
+    p_linkedin_url: 'https://www.linkedin.com/in/synthetic-local-only/', p_date_of_birth: '2000-01-01', p_notice_version: '2026-09-26',
   })).error), 'Disabled database gate rejects registration');
   success(await service.from('onboarding_settings').update({ enabled: true }).eq('singleton', true), 'Enable isolated local test only');
   await application(owner);
@@ -101,7 +101,8 @@ try {
   check(!(await documentRequest(owner, identity, 'POST', png)).ok, 'Existing original cannot be overwritten');
 
   const ownRead = await documentRequest(owner, identity);
-  check(ownRead.ok && Buffer.from(await ownRead.arrayBuffer()).equals(png), 'Owner retrieves exact original through authenticated endpoint');
+  const normalized = Buffer.from(await ownRead.arrayBuffer());
+  check(ownRead.ok && normalized.subarray(0, 8).equals(png.subarray(0, 8)), 'Owner retrieves normalized PNG through authenticated endpoint');
   check(ownRead.headers.get('cache-control')?.includes('no-store'), 'Document response prevents browser caching');
   check(ownRead.headers.get('x-content-type-options') === 'nosniff', 'Document response disables MIME sniffing');
   check((await documentRequest(staff, identity)).ok, 'Authorized staff can review original');
@@ -119,7 +120,7 @@ try {
   check(reviewed.status === 'approved', 'Independent reviewer approves uploaded application');
   check(!(await retention('invalid-local-secret')).ok, 'Retention rejects invalid job credential');
   const future = success(await service.storage.from('onboarding-documents').download(identity.object_path), 'Read local fixture before expiry');
-  check(future.size === png.length, 'Original exists before expiry');
+  check(Buffer.from(await future.arrayBuffer()).equals(normalized), 'Private stored image matches authenticated normalized response');
   success(await service.from('onboarding_documents').update({ expires_at: new Date(Date.now() - 60000).toISOString() }).eq('id', identity.id), 'Expire synthetic document');
   check(!(await documentRequest(owner, identity)).ok, 'Expired original inaccessible to owner');
   check(!(await documentRequest(staff, identity)).ok, 'Expired original inaccessible to reviewer');
@@ -138,6 +139,11 @@ try {
   success(await service.from('onboarding_settings').update({ enabled: false }).eq('singleton', true), 'Restore disabled database gate');
   if (paths.length) success(await service.storage.from('onboarding-documents').remove(paths), 'Remove synthetic originals');
   if (users.length) {
+    for (const id of users) assert.match(id, /^[0-9a-f-]{36}$/i);
+    execFileSync('docker', ['exec', '-i', 'supabase_db_armature-onboarding-local', 'psql', '-U', 'postgres', '-d', 'postgres', '-v', 'ON_ERROR_STOP=1'], {
+      input: `delete from public.onboarding_notice_acceptances where user_id in (${users.map(id => `'${id}'`).join(',')});`,
+      stdio: ['pipe', 'ignore', 'pipe'],
+    });
     success(await service.from('onboarding_reviews').delete().in('user_id', users), 'Remove synthetic review records');
     success(await service.from('onboarding_documents').delete().in('user_id', users), 'Remove synthetic document records');
     success(await service.from('basic_onboarding_applications').delete().in('user_id', users), 'Remove synthetic applications');
