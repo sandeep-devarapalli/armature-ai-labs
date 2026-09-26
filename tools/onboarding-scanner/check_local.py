@@ -11,7 +11,10 @@ base = os.environ.get('SCANNER_URL', 'http://127.0.0.1:55580')
 
 
 def request(path, data=None, token=secret):
-    req = urllib.request.Request(base + path, data=data, headers={'Authorization': 'Bearer ' + token, 'Content-Type': 'image/png'})
+    headers = {'Authorization': 'Bearer ' + token, 'Content-Type': 'image/png'}
+    if os.environ.get('SCANNER_ID_TOKEN'):
+        headers['X-Serverless-Authorization'] = 'Bearer ' + os.environ['SCANNER_ID_TOKEN']
+    req = urllib.request.Request(base + path, data=data, headers=headers)
     try:
         with urllib.request.urlopen(req, timeout=90) as result:
             return result.status, result.read()
