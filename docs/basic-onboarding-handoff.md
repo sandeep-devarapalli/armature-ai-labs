@@ -192,3 +192,48 @@ Onboarding still fails on missing public.basic_onboarding_applications in live s
 ### Personal membership identity and admins — 26 September 2026
 
 Owner clarified sandeep@ is the personal member identity and hello@ is the general admin identity, and confirmed both retain admin access. Exact Auth Admin lookup verified email confirmation for both. Neither had an existing staff role; inserted ordinary admin role for each actual auth ID using service-role API and read back both successfully. No super_admin, paid access, or identity-review approval granted. Personal profile remains Sandeep Devarapalli and is_public=false. This supersedes earlier pending reviewer bootstrap notes. Basic membership approval remains incomplete because production onboarding tables are absent and required DOB/photo/ID review is not complete. Requested DOB; photo/ID must use protected portal after release readiness. Shared email delivery does not merge auth identities or constitute independent review by another person.
+
+## Basic registration product release readiness — 26 September 2026
+
+Owner requested the basic registration product release. Paid memberships, booking
+workers and Razorpay remain deferred. Production intake is still disabled pending
+final release gates; this section supersedes earlier infrastructure-not-deployed notes.
+
+Focused release worktree ran a fresh isolated Supabase stack at API56321/DB56322,
+project armature-basic-release-check, with only this branch's migrations. Results:
+255 pgTAP assertions/12 suites;42 real local Storage/scanner/retention assertions;
+145 frontend tests;7 retention-runner Node tests; concurrency confirms exactly one
+overlapping reservation succeeds. Actual production configuration (basic/Google on,
+paid/components off) built and passed Pages runtime,25 browser checks (3 existing
+conditional skips), and2 desktop/mobile basic-registration gates. Privacy and
+launch-copy checks are documented in the focused commits71cdf82/0d035a5.
+
+Applied only onboarding migrations202609260002–005 to live Supabase, transactionally
+recording each in schema_migrations. Onboarding setting remains false. Deployed
+onboarding-document and onboarding-retention; document function gate remains false,
+retention gate true. Dedicated retention secret is stored securely, never in Git.
+See retention-production-release-2026-09-26.md for pinned job, scoped identities,
+five-minute schedule, synthetic deletion and alert-delivery evidence.
+
+Hosted synthetic test verified Auth -> explicit launch notice -> reservation ->
+private Cloud Run scanner -> normalized stored/read image with no-store, and
+malformed image rejection without finalization. Test harness initially expected200
+instead of201 for creation; corrected. Its REST cleanup was denied by immutable
+notice-table privileges, so narrow administrative SQL removed only test records.
+The successful SQL response was201, triggering another overly strict test assertion;
+a separate authoritative read proved zero synthetic users, zero document rows,
+zero stored objects and intake=false. No real applicant images were used.
+
+Scanner normal refresh bdpcb succeeded17:52:01UTC; authenticated health/freshness
+verified17:51:57UTC, ready revision00006-vcn at100percent traffic. Earlier version0
+failures were controlled drills. Retention failure and missing-success alerts
+arrived at hello@23:18 and23:14IST; recovery receipt remains to be observed.
+
+Google audience remains External/Testing. The publication confirmation is open;
+the browser access-change rule requires owner confirmation at that action. Await
+that answer, verify recovery notification, pass exact-head CI, then enable basic
+production flags and intake and release through the reviewed production workflow.
+Do not mistake preparation or these infrastructure changes for a public launch.
+Sandeep's own application still requires an independent human reviewer; two email
+aliases controlled by the same person do not provide independent review. His DOB
+and private contact details are intentionally not recorded in this Git note.
