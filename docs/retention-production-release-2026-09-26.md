@@ -43,3 +43,5 @@ The private fixture remains outside Git for final evidence and cleanup. No perso
 Parent agent inspected the actual hello Google Workspace inbox in native Chrome: missed-success notification delivered23:14IST; failed-execution notification delivered23:18IST. Recovery emails not yet observed at this checkpoint. Both policies explicitly request OPENED and CLOSED notifications.
 
 Scheduler-triggered execution `onboarding-retention-2spcv` completed successfully17:48:53Z. This verifies the deployed scheduler identity can invoke the bounded job; it is separate from a natural clock-triggered run.
+
+Natural schedule tick at17:50:00Z invoked `onboarding-retention-shwmr`, completed17:50:13Z. Repeated authoritative checks preserved expired absence and unexpired survival. Afterwards, removed only the recorded two synthetic objects/document rows, synthetic application and synthetic `@example.test` auth user. Verified no fixture document rows remain. Private fixture manifest is retained for audit; temporary plaintext retention credential has been deleted after both managed secret stores were configured.
