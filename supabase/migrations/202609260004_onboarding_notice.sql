@@ -103,4 +103,3 @@ end;
 $$;
 revoke all on function public.review_basic_onboarding(uuid,text,text,text,timestamptz,integer) from public,anon,authenticated,service_role;
 grant execute on function public.review_basic_onboarding(uuid,text,text,text,timestamptz,integer) to authenticated;
-

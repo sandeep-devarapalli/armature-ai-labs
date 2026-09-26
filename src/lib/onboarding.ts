@@ -44,4 +44,3 @@ export function getAgeOnDate(dateOfBirth: string, date: string): number {
   return Number(date.slice(0, 4)) - Number(dateOfBirth.slice(0, 4))
     - (date.slice(5) < dateOfBirth.slice(5) ? 1 : 0)
 }
-
