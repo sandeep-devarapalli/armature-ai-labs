@@ -1,0 +1,67 @@
+# PREPARATION ONLY: replace PROJECT_ID/REGION/IMAGE_DIGEST values before review.
+# Do not deploy or make unauthenticated. No real identity documents before readiness gates.
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: armature-onboarding-scanner
+  annotations:
+    run.googleapis.com/ingress: all
+spec:
+  template:
+    metadata:
+      annotations:
+        autoscaling.knative.dev/minScale: '0'
+        autoscaling.knative.dev/maxScale: '2'
+        run.googleapis.com/cpu-throttling: 'true'
+        run.googleapis.com/startup-cpu-boost: 'true'
+        run.googleapis.com/container-dependencies: '{"gateway":["clamav"]}'
+    spec:
+      serviceAccountName: scanner-runtime@PROJECT_ID.iam.gserviceaccount.com
+      containerConcurrency: 1
+      timeoutSeconds: 120
+      containers:
+        - name: gateway
+          image: REGION-docker.pkg.dev/PROJECT_ID/onboarding-scanner/gateway@sha256:GATEWAY_IMAGE_DIGEST
+          ports:
+            - containerPort: 8080
+          env:
+            - name: CLAMD_HOST
+              value: '127.0.0.1'
+            - name: SCANNER_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: onboarding-scanner-bearer
+                  key: '1'
+          resources:
+            limits:
+              cpu: '1'
+              memory: 512Mi
+          startupProbe:
+            tcpSocket:
+              port: 8080
+            periodSeconds: 5
+            timeoutSeconds: 1
+            failureThreshold: 48
+        - name: clamav
+          image: REGION-docker.pkg.dev/PROJECT_ID/onboarding-scanner/clamav@sha256:CLAMAV_IMAGE_DIGEST
+          env:
+            - name: TZ
+              value: UTC
+          resources:
+            limits:
+              cpu: '1'
+              memory: 3Gi
+          startupProbe:
+            tcpSocket:
+              port: 3310
+            periodSeconds: 5
+            timeoutSeconds: 1
+            failureThreshold: 48
+          volumeMounts:
+            - name: scan-temp
+              mountPath: /tmp
+      volumes:
+        - name: scan-temp
+          emptyDir:
+            medium: Memory
+            sizeLimit: 64Mi

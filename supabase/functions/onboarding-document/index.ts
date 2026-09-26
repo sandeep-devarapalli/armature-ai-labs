@@ -4,6 +4,8 @@ import { corsHeaders } from "../_shared/cors.ts";
 import { HttpError, json } from "../_shared/http.ts";
 import { adminClient, authenticatedUser, bearerToken } from "../_shared/supabase.ts";
 
+import { scanOnboardingImage } from "../_shared/onboarding-scanner.ts";
+
 const bucket = "onboarding-documents";
 const maxBytes = 5 * 1024 * 1024;
 
@@ -70,9 +72,18 @@ Deno.serve(async (request) => {
         "cache-control": "private, no-store, max-age=0", "x-content-type-options": "nosniff",
       } });
     }
-    const { data: application, error: appError } = await client.from("basic_onboarding_applications").select("status").eq("user_id", user.id).single();
+    const { data: application, error: appError } = await client.from("basic_onboarding_applications").select("status,revision").eq("user_id", user.id).single();
     if (appError || application?.status !== "pending") throw new HttpError(409, "Application is not awaiting documents.");
-    const bytes = await readImage(request);
+    const { data: acceptance, error: acceptanceError } = await scopedClient.from("onboarding_notice_acceptances")
+      .select("notice_version").eq("user_id", user.id).eq("revision", application.revision).eq("notice_version", "2026-09-26").maybeSingle();
+    if (acceptanceError) throw new HttpError(503, "Privacy notice acceptance could not be checked. Try again later.");
+    if (!acceptance) throw new HttpError(403, "Accept the current privacy notice before uploading.");
+    const original = await readImage(request);
+    const bytes = await scanOnboardingImage(original, request.headers.get("content-type")!, {
+      url: Deno.env.get("ONBOARDING_SCANNER_URL"),
+      secret: Deno.env.get("ONBOARDING_SCANNER_SECRET"),
+      local: Deno.env.get("ONBOARDING_SCANNER_LOCAL") === "true" && new URL(requiredEnv("SUPABASE_URL")).hostname === "kong",
+    });
     if (Date.parse(document.expires_at) <= Date.now()) throw new HttpError(410, "Document retention period has ended.");
     const { error: uploadError } = await client.storage.from(bucket).upload(document.object_path, bytes, {
       contentType: request.headers.get("content-type")!, cacheControl: "0", upsert: false,

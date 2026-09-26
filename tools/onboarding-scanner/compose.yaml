@@ -1,0 +1,38 @@
+name: armature-onboarding-scanner
+services:
+  gateway:
+    build: .
+    environment:
+      SCANNER_SECRET: ${SCANNER_SECRET:?Provide an ephemeral private scanner secret}
+      CLAMD_HOST: clamav
+    ports:
+      - "127.0.0.1:55580:8080"
+    networks: [scan, ingress]
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 512m
+    pids_limit: 32
+    restart: unless-stopped
+  clamav:
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile.clamav
+    environment:
+      TZ: UTC
+    volumes:
+      - signatures:/var/lib/clamav
+    networks: [scan, updates]
+    tmpfs:
+      - /tmp:size=64m,mode=1777
+    mem_limit: 3g
+    pids_limit: 128
+    restart: unless-stopped
+networks:
+  scan:
+    internal: true
+  updates: {}
+  ingress: {}
+volumes:
+  signatures: {}
