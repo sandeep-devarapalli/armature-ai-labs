@@ -5,20 +5,20 @@ insert into auth.users(id,aud,role,email,email_confirmed_at) values
 ('28000000-0000-4000-8000-000000000002','authenticated','authenticated','other@example.test',now()),
 ('28000000-0000-4000-8000-000000000003','authenticated','authenticated','reviewer@example.test',now());
 insert into public.staff_roles(user_id,role) values('28000000-0000-4000-8000-000000000003','admin');
-select function_privs_are('public','submit_basic_onboarding',array['text','text','text','date'],'anon',array[]::text[],'anonymous cannot apply');
+select function_privs_are('public','submit_basic_onboarding',array['text','text','text','date','text'],'anon',array[]::text[],'anonymous cannot apply');
 select function_privs_are('public','mark_onboarding_document_deleted',array['uuid'],'authenticated',array[]::text[],'member cannot mark storage deleted');
 select function_privs_are('public','list_due_onboarding_documents',array['integer'],'authenticated',array[]::text[],'member cannot enumerate retention queue');
 select is((select enabled from public.onboarding_settings),false,'onboarding is disabled by default');
 set local role authenticated;
 select set_config('request.jwt.claims','{"sub":"28000000-0000-4000-8000-000000000001","role":"authenticated"}',true);
-select throws_ok($$select public.submit_basic_onboarding('Test Person','+919999999999','https://linkedin.com/in/test','1990-01-01')$$,'42501','Onboarding is disabled','DB feature gate blocks direct RPC');
+select throws_ok($$select public.submit_basic_onboarding('Test Person','+919999999999','https://linkedin.com/in/test','1990-01-01','2026-09-26')$$,'42501','Onboarding is disabled','DB feature gate blocks direct RPC');
 reset role;
 update public.onboarding_settings set enabled=true;
 set local role authenticated;
-select throws_ok($$select public.submit_basic_onboarding('Test Person','--------','https://linkedin.com/in/test','1990-01-01')$$,'22023','Name, phone and personal LinkedIn profile are required','phone needs at least seven digits');
-select throws_ok($$select public.submit_basic_onboarding('Test Person','+919999999999','https://linkedin.com/in/test',((now() at time zone 'Asia/Kolkata')::date - interval '15 years')::date)$$,'22023','Minimum age is 16','underage applicants rejected');
-select throws_ok($$select public.submit_basic_onboarding('Test Person','+919999999999','https://linkedin.com/company/test',((now() at time zone 'Asia/Kolkata')::date - interval '17 years')::date)$$,'22023','Name, phone and personal LinkedIn profile are required','requires personal LinkedIn path');
-select lives_ok($$select public.submit_basic_onboarding('Test Person','+919999999999','https://linkedin.com/in/test',((now() at time zone 'Asia/Kolkata')::date - interval '17 years')::date)$$,'minor can submit pending application');
+select throws_ok($$select public.submit_basic_onboarding('Test Person','--------','https://linkedin.com/in/test','1990-01-01','2026-09-26')$$,'22023','Name, phone and personal LinkedIn profile are required','phone needs at least seven digits');
+select throws_ok($$select public.submit_basic_onboarding('Test Person','+919999999999','https://linkedin.com/in/test',((now() at time zone 'Asia/Kolkata')::date - interval '15 years')::date,'2026-09-26')$$,'22023','Minimum age is 16','underage applicants rejected');
+select throws_ok($$select public.submit_basic_onboarding('Test Person','+919999999999','https://linkedin.com/company/test',((now() at time zone 'Asia/Kolkata')::date - interval '17 years')::date,'2026-09-26')$$,'22023','Name, phone and personal LinkedIn profile are required','requires personal LinkedIn path');
+select lives_ok($$select public.submit_basic_onboarding('Test Person','+919999999999','https://linkedin.com/in/test',((now() at time zone 'Asia/Kolkata')::date - interval '17 years')::date,'2026-09-26')$$,'minor can submit pending application');
 select is((select email from public.basic_onboarding_applications where user_id=auth.uid()),'onboard@example.test','email comes from verified auth record');
 select throws_ok($$update public.basic_onboarding_applications set status='approved' where user_id=auth.uid()$$,'42501',null,'no direct self approval');
 select lives_ok($$select public.reserve_onboarding_document('photo')$$,'can reserve private photo');
