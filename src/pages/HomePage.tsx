@@ -329,7 +329,7 @@ export function HomePage() {
       <Section
         number="06"
         title="Book, build, and leave a clean trail"
-        lede="The planned member journey brings accounts, certification gates, reservations, and attendance into one path. Applications and bookings are not open yet."
+        lede={basicOnboardingAvailable ? "Free basic registration and identity review are open. Safety inductions, paid reservations and check-in will follow separately; paid bookings remain closed." : "The planned member journey brings accounts, certification gates, reservations, and attendance into one path. Applications and bookings are not open yet."}
       >
         <div className="process-line">
           {[
@@ -356,7 +356,7 @@ export function HomePage() {
             <strong> We are building a place to share access.</strong>
           </p>
           <Link to="/join">
-            Membership enquiries <ArrowRight aria-hidden="true" />
+            {basicOnboardingAvailable ? "Basic membership" : "Membership enquiries"} <ArrowRight aria-hidden="true" />
           </Link>
         </div>
       </div>

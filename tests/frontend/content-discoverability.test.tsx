@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ElectricalPlan } from "../../src/components/ElectricalPlan";
 import { bengaluruEcosystem } from "../../src/data/bengaluruEcosystem";
 import { EcosystemPage } from "../../src/pages/EcosystemPage";
+import { getPageSeo } from "../../src/lib/seo";
 import { HomePage } from "../../src/pages/HomePage";
 import { JoinPage } from "../../src/pages/PublicPages";
 
@@ -32,6 +33,9 @@ describe("public source and planning context", () => {
     render(<MemoryRouter><HomePage /></MemoryRouter>);
     expect(screen.getByRole("link", { name: "Register for free" })).toHaveAttribute("href", "/onboarding");
     expect(screen.getByText("Free basic registration is open. Paid bookings remain closed.")).toBeInTheDocument();
+    expect(document.body).not.toHaveTextContent(/applications[^.]*not open/i);
+    expect(screen.getByRole("link", { name: "Basic membership" })).toHaveAttribute("href", "/join");
+    expect(getPageSeo("/join/").title).toBe("Basic Membership | Armature AI Labs");
   });
 
   it("includes every ecosystem summary and public source in initial HTML", () => {
