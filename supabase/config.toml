@@ -78,3 +78,9 @@ verify_jwt = false
 
 [functions.component-request]
 verify_jwt = false
+
+[functions.onboarding-document]
+verify_jwt = false
+
+[functions.onboarding-retention]
+verify_jwt = false

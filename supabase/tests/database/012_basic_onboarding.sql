@@ -1,0 +1,63 @@
+begin;
+select plan(32);
+insert into auth.users(id,aud,role,email,email_confirmed_at) values
+('28000000-0000-4000-8000-000000000001','authenticated','authenticated','onboard@example.test',now()),
+('28000000-0000-4000-8000-000000000002','authenticated','authenticated','other@example.test',now()),
+('28000000-0000-4000-8000-000000000003','authenticated','authenticated','reviewer@example.test',now());
+insert into public.staff_roles(user_id,role) values('28000000-0000-4000-8000-000000000003','admin');
+select function_privs_are('public','submit_basic_onboarding',array['text','text','text','date'],'anon',array[]::text[],'anonymous cannot apply');
+select function_privs_are('public','mark_onboarding_document_deleted',array['uuid'],'authenticated',array[]::text[],'member cannot mark storage deleted');
+select function_privs_are('public','list_due_onboarding_documents',array['integer'],'authenticated',array[]::text[],'member cannot enumerate retention queue');
+select is((select enabled from public.onboarding_settings),false,'onboarding is disabled by default');
+set local role authenticated;
+select set_config('request.jwt.claims','{"sub":"28000000-0000-4000-8000-000000000001","role":"authenticated"}',true);
+select throws_ok($$select public.submit_basic_onboarding('Test Person','+919999999999','https://linkedin.com/in/test','1990-01-01')$$,'42501','Onboarding is disabled','DB feature gate blocks direct RPC');
+reset role;
+update public.onboarding_settings set enabled=true;
+set local role authenticated;
+select throws_ok($$select public.submit_basic_onboarding('Test Person','--------','https://linkedin.com/in/test','1990-01-01')$$,'22023','Name, phone and personal LinkedIn profile are required','phone needs at least seven digits');
+select throws_ok($$select public.submit_basic_onboarding('Test Person','+919999999999','https://linkedin.com/in/test',((now() at time zone 'Asia/Kolkata')::date - interval '15 years')::date)$$,'22023','Minimum age is 16','underage applicants rejected');
+select throws_ok($$select public.submit_basic_onboarding('Test Person','+919999999999','https://linkedin.com/company/test',((now() at time zone 'Asia/Kolkata')::date - interval '17 years')::date)$$,'22023','Name, phone and personal LinkedIn profile are required','requires personal LinkedIn path');
+select lives_ok($$select public.submit_basic_onboarding('Test Person','+919999999999','https://linkedin.com/in/test',((now() at time zone 'Asia/Kolkata')::date - interval '17 years')::date)$$,'minor can submit pending application');
+select is((select email from public.basic_onboarding_applications where user_id=auth.uid()),'onboard@example.test','email comes from verified auth record');
+select throws_ok($$update public.basic_onboarding_applications set status='approved' where user_id=auth.uid()$$,'42501',null,'no direct self approval');
+select lives_ok($$select public.reserve_onboarding_document('photo')$$,'can reserve private photo');
+select lives_ok($$select public.reserve_onboarding_document('government_id','pan')$$,'can reserve private ID');
+select throws_ok($$select public.reserve_onboarding_document('government_id','passport')$$,'23505','An unexpired document slot already exists','cannot accumulate active IDs');
+select throws_ok($$select public.review_basic_onboarding(auth.uid(),'approved')$$,'42501','Independent admin review required','member cannot approve');
+select set_config('request.jwt.claims','{"sub":"28000000-0000-4000-8000-000000000002","role":"authenticated"}',true);
+select is((select count(*)::integer from public.basic_onboarding_applications),0,'other member cannot read application');
+select is((select count(*)::integer from public.onboarding_documents),0,'other member cannot read document paths');
+select set_config('request.jwt.claims','{"sub":"28000000-0000-4000-8000-000000000003","role":"authenticated"}',true);
+select throws_ok($$select public.review_basic_onboarding('28000000-0000-4000-8000-000000000001','approved')$$,'22023','Unexpired photo and government ID uploads required','metadata alone cannot pass approval');
+reset role;
+insert into storage.objects(bucket_id,name) select 'onboarding-documents',object_path from public.onboarding_documents where user_id='28000000-0000-4000-8000-000000000001';
+select public.finalize_onboarding_document(id) from public.onboarding_documents where user_id='28000000-0000-4000-8000-000000000001';
+update public.onboarding_documents set expires_at=now()-interval '1 second' where kind='government_id' and user_id='28000000-0000-4000-8000-000000000001';
+set local role authenticated;
+select throws_ok($$select public.review_basic_onboarding('28000000-0000-4000-8000-000000000001','approved','guardian@example.test','message-reference-synthetic',now()-interval '1 hour')$$,'22023','Unexpired photo and government ID uploads required','expired stored ID cannot pass review');
+reset role;
+update public.onboarding_documents set expires_at=uploaded_at+interval '30 days' where kind='government_id' and user_id='28000000-0000-4000-8000-000000000001';
+set local role authenticated;
+select throws_ok($$select public.review_basic_onboarding('28000000-0000-4000-8000-000000000001','approved')$$,'22023','Reviewed guardian email evidence required','minor needs staff reviewed guardian email');
+select throws_ok($$select public.review_basic_onboarding('28000000-0000-4000-8000-000000000001','approved','guardian@example.test','message-reference-synthetic',now()+interval '1 hour')$$,'22023','Reviewed guardian email evidence required','guardian evidence cannot have a future receipt');
+select lives_ok($$select public.review_basic_onboarding('28000000-0000-4000-8000-000000000001','approved','guardian@example.test','message-reference-synthetic',now()-interval '1 hour')$$,'admin approves with guardian email evidence');
+select is((select count(*)::integer from public.onboarding_reviews where user_id='28000000-0000-4000-8000-000000000001'),1,'review evidence retained');
+select throws_ok($$delete from public.onboarding_reviews$$,'42501',null,'review evidence immutable to authenticated staff');
+reset role;
+select is((select count(*)::integer from public.memberships where user_id='28000000-0000-4000-8000-000000000001' and status='active'),0,'basic approval never activates paid membership');
+update public.onboarding_documents set expires_at=now()-interval '1 second' where user_id='28000000-0000-4000-8000-000000000001';
+select is((select count(*)::integer from public.list_due_onboarding_documents()),2,'expired copies queued even after approval');
+select is((select count(*)::integer from public.list_due_onboarding_documents()),0,'active deletion lease prevents duplicate claims');
+select throws_ok($$select public.mark_onboarding_document_deleted(id) from public.onboarding_documents where user_id='28000000-0000-4000-8000-000000000001' limit 1$$,'22023','Delete the storage object first','cannot claim deletion while object exists');
+-- An abandoned reservation has no object to delete. Actual byte deletion is covered by the Storage API integration test.
+insert into public.onboarding_documents(id,user_id,kind,expires_at)
+values('28000000-0000-4000-8000-000000000004','28000000-0000-4000-8000-000000000001','photo',now()-interval '1 second');
+select is((select count(*)::integer from public.list_due_onboarding_documents()),1,'new expired row is not starved by leased failures');
+update public.onboarding_documents set deletion_attempted_at=now()-interval '6 minutes' where user_id='28000000-0000-4000-8000-000000000001' and kind='government_id';
+select is((select count(*)::integer from public.list_due_onboarding_documents()),1,'failed deletion becomes retryable after lease');
+select public.mark_onboarding_document_deleted('28000000-0000-4000-8000-000000000004');
+select ok((select deleted_at is not null from public.onboarding_documents where id='28000000-0000-4000-8000-000000000004'),'absent object reservation can be marked deleted');
+select is((select status from public.basic_onboarding_applications where user_id='28000000-0000-4000-8000-000000000001'),'approved','document cleanup preserves verification result');
+select * from finish();
+rollback;
