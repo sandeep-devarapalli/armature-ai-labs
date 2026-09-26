@@ -237,3 +237,5 @@ Do not mistake preparation or these infrastructure changes for a public launch.
 Sandeep's own application still requires an independent human reviewer; two email
 aliases controlled by the same person do not provide independent review. His DOB
 and private contact details are intentionally not recorded in this Git note.
+
+Release candidate flags: CI now prepares basic/Google=true and paid/components=false. These are source changes only until merge/deploy; live database and document-function gates remain false. Both retention recovery emails were subsequently observed (failure23:22IST; missed-success23:24IST). Google publication confirmation is the remaining owner action.
