@@ -1,3 +1,9 @@
+- Final membership clarification, 26 September 2026: day passes never auto-renew; optional renewal applies to weekly/monthly passes. Adults-only overnight access is 23:00–08:00. Refunds within the agreed windows are full. For 16–17-year-olds, a guardian must email the lab with details and permission; guardian LinkedIn does not substitute. Razorpay test setup is explicitly deferred while the LLP name changes; ask before resuming.
+
+- Pass clarification, 26 September 2026: automatic renewal is requested as opt-in; do not retain the manual-renewal-only recommendation as a requirement. Weeks are seven consecutive days; months are calendar months; multiple day-pass dates may be selected within a month. General lab hours 08:00–23:00 differ from standard access 09:00–17:00. Minimum membership age 16 with guardian consent/email for minors; overnight is adults-only with hours unresolved. ID copies delete 30 days after upload. See the membership plan for exact rules and open questions.
+
+- Membership clarification, 26 September 2026: LinkedIn is required, not optional; support younger students with guardian consent. Basic registration is free; online prepaid checkout replaces the offline-only target. Preserve unresolved ID-retention, pass-date and refund rules in docs/team-membership-and-booking-email-plan.md rather than inventing them. No production activation is authorized by these decisions.
+
 # AGENTS.md
 
 - Preview Supabase project decision, 25 September 2026: the live website's public bundle points to the existing `armature-lab` project (`uxfhdfagrmaeyuaipaar`). The user said to hold off creating a separate preview project. Do not create one or apply the team migration to the live project until the user resumes this work.
