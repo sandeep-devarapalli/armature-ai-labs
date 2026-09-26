@@ -19,7 +19,7 @@ try {
   assert.ifError((await admin.from('onboarding_settings').update({ enabled: true }).eq('singleton', true)).error);
   const signed = await client.auth.signInWithPassword({ email, password });
   assert.ifError(signed.error);
-  assert.ifError((await client.rpc('submit_basic_onboarding', { p_full_name: 'Synthetic Scanner Test', p_phone: '+919999000000', p_linkedin_url: 'https://www.linkedin.com/in/synthetic-scanner-test/', p_date_of_birth: '2000-01-01', p_notice_version: '2026-09-26' })).error);
+  assert.ifError((await client.rpc('submit_basic_onboarding', { p_full_name: 'Synthetic Scanner Test', p_phone: '+919999000000', p_linkedin_url: 'https://www.linkedin.com/in/synthetic-scanner-test/', p_date_of_birth: '2000-01-01', p_notice_version: '2026-09-26-release-1' })).error);
   const clean = Buffer.from(execFileSync('/private/tmp/armature-scanner-venv/bin/python', ['-c', "import io,sys;from PIL import Image;o=io.BytesIO();Image.new('RGB',(32,32),'white').save(o,format='PNG');sys.stdout.buffer.write(o.getvalue())"]));
   const eicar = Buffer.from('X5O!P%@AP[4\\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*');
   const reserved = await client.rpc('reserve_onboarding_document', { p_kind: 'photo', p_id_type: null });
@@ -32,7 +32,7 @@ try {
   assert.equal(noConsent.status, 403, 'Legacy reservation without current notice must reject before storage');
   assert.ok((await admin.storage.from('onboarding-documents').download(document.object_path)).error);
   console.log('missing current notice: 403; no storage object');
-  sql(`insert into public.onboarding_notice_acceptances(user_id,revision,notice_version) select user_id,revision,'2026-09-26' from public.basic_onboarding_applications where user_id='${user.id}'::uuid`);
+  sql(`insert into public.onboarding_notice_acceptances(user_id,revision,notice_version) select user_id,revision,'2026-09-26-release-1' from public.basic_onboarding_applications where user_id='${user.id}'::uuid`);
   for (const [name, body, expected] of [['truncated', clean.subarray(0, 30), 422], ['trailing-eicar', Buffer.concat([clean, eicar]), 422], ['clean', clean, 201]]) {
     const response = await fetch(`${status.API_URL}/functions/v1/onboarding-document?id=${document.id}`, { method: 'POST', headers: { Authorization: `Bearer ${signed.data.session.access_token}`, apikey: status.ANON_KEY, 'Content-Type': 'image/png' }, body });
     assert.equal(response.status, expected, `${name}: ${await response.text()}`);

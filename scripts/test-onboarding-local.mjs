@@ -4,7 +4,17 @@ import { execFileSync } from 'node:child_process';
 import { createClient } from '@supabase/supabase-js';
 
 const url = process.env.ONBOARDING_LOCAL_URL;
-assert.equal(url, 'http://127.0.0.1:55421', 'Only the isolated local onboarding API is allowed.');
+const local = new URL(url);
+assert.equal(local.origin, url, 'Use a bare local API origin.');
+assert.equal(local.protocol, 'http:');
+assert.equal(local.hostname, '127.0.0.1', 'Only explicit loopback APIs are allowed.');
+assert.ok(Number(local.port) >= 1024, 'An explicit local API port is required.');
+const dbContainer = process.env.ONBOARDING_LOCAL_DB_CONTAINER;
+assert.match(dbContainer ?? '', /^supabase_db_armature-[a-z0-9-]+$/, 'Explicit isolated Armature database container required.');
+const project = dbContainer.slice('supabase_db_'.length);
+const kong = JSON.parse(execFileSync('docker', ['inspect', `supabase_kong_${project}`], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }))[0];
+const ports = kong.NetworkSettings.Ports['8000/tcp'] ?? [];
+assert.ok(ports.some(port => port.HostPort === local.port && ['0.0.0.0', '127.0.0.1'].includes(port.HostIp)), 'API must match the isolated database project.');
 assert.equal(Number(process.versions.node.split('.')[0]), 22, 'Run with Node 22.');
 const required = name => {
   assert.ok(process.env[name], `Missing ${name}`);
@@ -40,7 +50,7 @@ async function actor(name) {
 async function application(person) {
   success(await person.client.rpc('submit_basic_onboarding', {
     p_full_name: 'Synthetic Test Member', p_phone: '+919999000000',
-    p_linkedin_url: 'https://www.linkedin.com/in/synthetic-local-only/', p_date_of_birth: '2000-01-01', p_notice_version: '2026-09-26',
+    p_linkedin_url: 'https://www.linkedin.com/in/synthetic-local-only/', p_date_of_birth: '2000-01-01', p_notice_version: '2026-09-26-release-1',
   }), 'Submit synthetic application');
 }
 async function reserve(person, kind, idType = null) {
@@ -69,7 +79,7 @@ try {
   const outsider = await actor('outsider');
   const staff = await actor('staff');
   assert.match(staff.id, /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i);
-  execFileSync('docker', ['exec', '-i', 'supabase_db_armature-onboarding-local', 'psql', '-U', 'postgres', '-d', 'postgres', '-v', 'ON_ERROR_STOP=1'], {
+  execFileSync('docker', ['exec', '-i', dbContainer, 'psql', '-U', 'postgres', '-d', 'postgres', '-v', 'ON_ERROR_STOP=1'], {
     input: `insert into public.staff_roles(user_id, role, granted_by) values ('${staff.id}', 'admin', '${staff.id}');`,
     stdio: ['pipe', 'ignore', 'pipe'],
   });
@@ -77,7 +87,7 @@ try {
   check(initialGate.enabled === false, 'Database onboarding gate defaults off');
   check(Boolean((await owner.client.rpc('submit_basic_onboarding', {
     p_full_name: 'Synthetic Test Member', p_phone: '+919999000000',
-    p_linkedin_url: 'https://www.linkedin.com/in/synthetic-local-only/', p_date_of_birth: '2000-01-01', p_notice_version: '2026-09-26',
+    p_linkedin_url: 'https://www.linkedin.com/in/synthetic-local-only/', p_date_of_birth: '2000-01-01', p_notice_version: '2026-09-26-release-1',
   })).error), 'Disabled database gate rejects registration');
   success(await service.from('onboarding_settings').update({ enabled: true }).eq('singleton', true), 'Enable isolated local test only');
   await application(owner);
@@ -93,6 +103,13 @@ try {
   const oversized = Buffer.alloc(5 * 1024 * 1024 + 1);
   png.copy(oversized);
   check((await documentRequest(owner, photo, 'POST', oversized)).status === 413, 'Oversized image rejected before storage');
+  const eicar = Buffer.from('X5O!P%@AP[4\\PZX54(P^)7CC)7}$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*');
+  for (const [label, bytes] of [['Truncated PNG', png.subarray(0, 30)], ['Trailing EICAR', Buffer.concat([png, eicar])]]) {
+    check((await documentRequest(owner, photo, 'POST', bytes)).status === 422, `${label} rejected by scanner`);
+    check(Boolean((await service.storage.from('onboarding-documents').download(photo.object_path)).error), `${label} leaves no stored object`);
+    const rejected = success(await service.from('onboarding_documents').select('uploaded_at').eq('id', photo.id).single(), 'Read rejected upload');
+    check(rejected.uploaded_at === null, `${label} never finalizes reservation`);
+  }
   check((await documentRequest(owner, photo, 'POST', png)).ok, 'Owner uploads synthetic photo');
   check((await documentRequest(owner, identity, 'POST', png)).ok, 'Owner uploads synthetic identity image');
   const uploaded = success(await service.from('onboarding_documents').select('created_at,uploaded_at,expires_at').eq('id', identity.id).single(), 'Read upload retention clock');
@@ -141,7 +158,7 @@ try {
   if (paths.length) success(await service.storage.from('onboarding-documents').remove(paths), 'Remove synthetic originals');
   if (users.length) {
     for (const id of users) assert.match(id, /^[0-9a-f-]{36}$/i);
-    execFileSync('docker', ['exec', '-i', 'supabase_db_armature-onboarding-local', 'psql', '-U', 'postgres', '-d', 'postgres', '-v', 'ON_ERROR_STOP=1'], {
+    execFileSync('docker', ['exec', '-i', dbContainer, 'psql', '-U', 'postgres', '-d', 'postgres', '-v', 'ON_ERROR_STOP=1'], {
       input: `delete from public.onboarding_notice_acceptances where user_id in (${users.map(id => `'${id}'`).join(',')});`,
       stdio: ['pipe', 'ignore', 'pipe'],
     });
