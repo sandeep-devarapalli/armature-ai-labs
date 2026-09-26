@@ -79,3 +79,11 @@ Before opening: verify real-domain email login/callback and an independent staff
 ## Confirmed operator procedures
 
 Staff review IDs only inside the protected portal, without downloading or retaining copies. After 30-day upload deletion retain only the verification result. Guardians of applicants aged16–17 email hello@armatureailabs.com with the member name and registered email, guardian name/relationship and explicit permission. Owner confirmed both on26September2026. Provider backup and guardian-message retention still need their own documented procedure.
+
+Provider backup check,26September2026: the live project reports seven completed daily
+physical database backups and PITR disabled. Supabase documents that database backups
+contain Storage metadata, not uploaded objects, and restoring a database backup does
+not restore a deleted Storage object: https://supabase.com/docs/guides/platform/backups .
+This establishes the database-backup boundary, not a verified provider-wide erasure
+SLA. Restore procedures must reconcile metadata with actual Storage objects and keep
+intake disabled until access/retention checks pass again.
