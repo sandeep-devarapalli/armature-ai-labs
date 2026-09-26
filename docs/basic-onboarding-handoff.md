@@ -106,3 +106,37 @@ No sign-in/invitation email was sent because the production callback remains gat
 After verified sign-in, assign the previously authorised ordinary admin role;
 do not bypass identity review or activate paid access. hello@ remains uncreated.
 This supersedes the earlier zero-account observation for sandeep@ only.
+
+## Google and email sign-in setup —26September2026
+
+Google Auth Platform created for Armature AI Labs in armature-booking-integration,
+external/testing, support/developer hello@. Owner explicitly approved policy
+acceptance and the sign-in-only OAuth web client. Client ID:
+863263629225-f59eddpr7vvo0ij7pi07uca1hea1ag5p.apps.googleusercontent.com .
+Origin https://armatureailabs.com; callback
+https://uxfhdfagrmaeyuaipaar.supabase.co/auth/v1/callback .
+Supabase Google provider enabled and matching client ID read back through the
+Management API; credential never committed and temporary secret file deleted.
+Live authorization-start check returned302 to accounts.google.com with expected
+client/callback and email/profile scopes. This is not end-to-end sign-in proof.
+Frontend basic/Google flags stay false; Google app remains testing, with no test
+users configured yet. No Gmail/Calendar scopes or delegated identities reused.
+
+Supabase email provider enabled, signup allowed, confirmation required. SMTP is
+not configured. Owner chose a separate transactional service rather than Workspace
+SMTP. Resend setup opened for owner signup; no paid plan, credential, domain change
+or message sent. Needs verified sending domain, restricted sending key, SMTP
+configuration, actual sign-in email/callback verification and provider limits review.
+Provider guide: https://resend.com/docs/send-with-supabase-smtp .
+
+Google sign-in returns the Workspace primary hello@ identity. The sandeep@ alias
+can use email sign-in; never automatically merge or grant admin based on alias
+assumptions. Both reviewer emails are owner-authorised, but grant only after
+verified account identity.
+
+Code fixes: callback provider errors take precedence over cached sessions and
+session promise failures show recovery; Google/email requests share pending state.
+Node22:144unit tests passed,14focused auth tests passed,build/154SEO passed,
+2desktop/mobile basic-on/paid-off checks passed. First full-suite attempt hit
+managed-worktree Vite cache sandbox EPERM; rerun with filesystem permission passed.
+No live login, public launch, admin grant or payment activation performed.

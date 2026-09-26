@@ -67,6 +67,7 @@ jobs:
       VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
       VITE_SITE_URL: https://armatureailabs.com
       VITE_BASIC_ONBOARDING_ENABLED: 'false'
+      VITE_GOOGLE_AUTH_ENABLED: 'false'
       VITE_MEMBER_PLATFORM_ENABLED: 'false'
       VITE_COMPONENT_REQUESTS_ENABLED: 'false'
     steps:

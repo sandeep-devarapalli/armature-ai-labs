@@ -30,6 +30,7 @@ export function AuthPage() {
 
   async function submit(event: FormEvent) {
     event.preventDefault();
+    if (working) return;
     setWorking(true);
     setError("");
     try {
@@ -37,6 +38,20 @@ export function AuthPage() {
       if (mode === "demo") navigate(from);
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : "Sign-in failed.");
+    } finally {
+      setWorking(false);
+    }
+  }
+
+  async function continueWithGoogle() {
+    if (working) return;
+    setWorking(true);
+    setError("");
+    try {
+      await signInGoogle(from);
+      if (mode === "demo") navigate(from);
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : "Google sign-in failed.");
     } finally {
       setWorking(false);
     }
@@ -62,8 +77,8 @@ export function AuthPage() {
         <button
           className="button button-google"
           type="button"
-          disabled={!googleAuthEnabled}
-          onClick={() => void signInGoogle(from).then(() => mode === "demo" && navigate(from)).catch((reason: Error) => setError(reason.message))}
+          disabled={!googleAuthEnabled || working}
+          onClick={() => void continueWithGoogle()}
         >
           <LogIn aria-hidden="true" />
           {googleAuthEnabled ? "Continue with Google" : "Google sign-in setup pending"}
@@ -96,18 +111,31 @@ export function AuthCallbackPage() {
   const [message, setMessage] = useState("Finishing secure sign-in…");
   const returnTo = onboardingAuthReturnPath(new URLSearchParams(location.search).get("next"), basicOnboardingAvailable && !memberPlatformAvailable);
   useEffect(() => {
+    const parameters = [
+      new URLSearchParams(location.search),
+      new URLSearchParams(location.hash.slice(1))
+    ];
+    if (parameters.some((params) => ["error", "error_code", "error_description"].some((key) => params.has(key)))) {
+      setMessage("Sign-in was not completed. Please return to sign in and try again.");
+      return;
+    }
     if (!supabase) {
       setMessage("Supabase is not configured. Return to the demo sign-in.");
       return;
     }
+    let active = true;
     void supabase.auth.getSession().then(({ data, error }) => {
+      if (!active) return;
       if (error || !data.session) {
         setMessage(error?.message ?? "No active session was returned.");
         return;
       }
       navigate(returnTo, { replace: true });
+    }).catch(() => {
+      if (active) setMessage("We could not finish sign-in. Please return to sign in and try again.");
     });
-  }, [navigate, returnTo]);
+    return () => { active = false; };
+  }, [location.search, location.hash, navigate, returnTo]);
   return (
     <PageHeader
       meta="Auth callback"
