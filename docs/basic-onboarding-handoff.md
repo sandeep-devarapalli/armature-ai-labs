@@ -166,3 +166,7 @@ mail tests (creation form showed click tracking checked but disabled; inspect fi
 domain settings). Preserve existing Workspace routing, do not enable receiving,
 and do not mark email sign-in ready until delivery and callback tests succeed.
 Reference for the new CNAME-style requirements: https://resend.com/docs/dashboard/domains/manage-domains .
+
+### Browser access correction — 26 September 2026
+
+Owner directed Cloudflare and Supabase administration to the Sandeep Chrome profile (sandeep.devarapalli@gmail.com). Existing GitHub sign-in succeeded for both. Cloudflare shows the correct armatureailabs.com zone under the existing live.com account; Supabase shows armature-lab / uxfhdfagrmaeyuaipaar. The DNS zone contains six records, including Workspace MX/SPF/DKIM. Prepared the Resend DKIM form without saving; explicit browser-time approval for the three sending-subdomain records is pending. No DNS changes, Resend key creation, or SMTP configuration yet.

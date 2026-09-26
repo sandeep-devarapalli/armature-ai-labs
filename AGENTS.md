@@ -1,5 +1,7 @@
 # AGENTS.md
 
+- Browser profile correction, 26 September 2026: use the Sandeep Chrome profile (sandeep.devarapalli@gmail.com) for Cloudflare and Supabase administration. The browser profile email is not necessarily the service account email; verify the Armature domain/project after signing in.
+
 - Basic registration policy, 26 September 2026: staff review IDs only in the protected portal, never download or retain copies, and retain only verification results after the 30-day uploaded-image deletion. For members aged 16–17, guardians email hello@armatureailabs.com with member name and registered email, guardian name and relationship, and explicit permission. Basic registration does not grant paid access; keep intake gates false until release checks pass.
 
 - Legal operator correction, 26 September 2026: use the exact name `Jayasri Nageshwara Rao and Partners LLP` in the privacy notice. Do not shorten it to Nagesh Rao. The lab contact address is not a confirmed registered-office address.
