@@ -116,3 +116,8 @@ Use a clean checkout of current `main`; the original `/Users/dev/Downloads/Armat
 
 - Added owner-approved unlimited pantry essentials and outside-food cleanup wording to the local membership preview and requirements. Clarified equipment as a separately paid add-on requiring coworking/cabin access for its use period, with hourly printer and daily Jetson examples. This is copy/requirements work only; no live entitlement or stock-availability claim is implemented.
 - Verification: 131 unit tests and production build/artifact checks passed; existing desktop/mobile checks passed in all three themes (2 tests), without overflow. In-app browser readback confirmed the new perks wording. Production remains unchanged.
+
+## Membership preview spacing review
+
+- Removed doubled spacing from the global stacked-field margin plus local form grid gap. Added consistent paragraph/heading separation, 1.65 body line height, 20px form gaps, padded pantry/summary panels and a gap beneath section introductions. Resource panels use two columns on tablet widths and one on mobile; no global website styles changed.
+- Existing desktop/mobile all-theme checks passed (2 tests), including no horizontal overflow or uncaught errors; production build/artifact checks passed. Inspected in-app pass section visually and focused mobile evidence; fixed-header/PWA overlays in full-section captures are capture artifacts, not a claim of unobstructed full-page viewport content. No member/payment/backend behavior changed.
