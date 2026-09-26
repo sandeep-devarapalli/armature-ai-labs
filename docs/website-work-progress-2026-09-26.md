@@ -243,3 +243,8 @@ live auth.users returned zero matching/confirmed/signed-in accounts. The Workspa
 mailbox is not a website user. No account was fabricated, invitation sent, or role
 granted. Normal verified website sign-in is required before a narrowly reviewed
 staff-access change. This blocks opening intake, not preparation of disabled code.
+
+Additional reviewer authorised: sandeep@armatureailabs.com, alongside hello@.
+Live exact-email auth lookup26September returned no rows for either address.
+No accounts, email invitations or staff roles were created. Both remain pending
+verified website sign-in; owner authorisation for ordinary admin approval is recorded.

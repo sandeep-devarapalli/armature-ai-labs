@@ -87,3 +87,12 @@ not restore a deleted Storage object: https://supabase.com/docs/guides/platform/
 This establishes the database-backup boundary, not a verified provider-wide erasure
 SLA. Restore procedures must reconcile metadata with actual Storage objects and keep
 intake disabled until access/retention checks pass again.
+
+## Approved membership reviewers
+
+The owner authorised both hello@armatureailabs.com and sandeep@armatureailabs.com
+as membership-approval admins on26September2026. A fresh exact-email live auth
+lookup found neither website account. Both must complete verified website sign-in
+before admin access can be granted to their actual auth user IDs. Do not create
+accounts or grant roles from email aliases alone; do not grant super_admin.
+The independent-review rule still prohibits approving one's own application.
