@@ -1,4 +1,4 @@
-- Scanner hosting hold, 26 September 2026: user chose Google Cloud on-demand hosting but then explicitly requested hosting remain prepared and undeployed. Do not link billing, provision paid scanner infrastructure or open real ID intake under the earlier general release authorization. The focused privacy-page release remains authorized.
+- Scanner hosting resumed, 26 September 2026: after billing and trial credits were verified, the user approved proceeding with the private Cloud Run scanner and selected INR2,500 monthly cost alerts. This supersedes the earlier hosting hold. Keep real ID intake disabled until private caller authentication, fresh signatures, monitored cleanup and end-to-end production checks pass. Do not reuse booking-email delegated credentials. Payment setup remains deferred during the LLP rename.
 
 - Pantry correction, 26 September 2026: the user removed atta from pantry essentials. Do not restore it in membership copy.
 
