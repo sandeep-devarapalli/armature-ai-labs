@@ -228,3 +228,12 @@ no-download staff handling and guardian-email instructions. Provider backup and
 retained evidence policies still need resolution. Paid/team/payment holds remain.
 
 Owner confirmed portal-only/no-copy ID handling and the hello@ guardian procedure. Recorded in AGENTS and handoff; registration/reviewer copy updated. Public release browser checks13passed/1intentional skip.
+
+Additional release checks (26 September, 21:55 IST): isolated pgTAP14files/308tests
+passed. Production aggregate staff-role query found zero distinct admin/super_admin
+reviewers. Asked owner to identify the website account for review access; no role
+was granted. Supabase backup inventory reports walg_enabled=true, pitr_enabled=false,
+and seven completed daily physical backups dated19–25September. This does not
+establish Storage-image retention; no backup setting changed. Implementation commits:
+2ea1c04 (cleanup), fc1cdc9 (procedures/checklist), pushed to existing draftPR79.
+Focused main-based extraction underway in managed basic-registration-release worktree.
