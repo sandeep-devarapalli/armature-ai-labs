@@ -245,3 +245,40 @@ Keep the previous Cloudflare Pages deployment available until the new release
 has passed live smoke checks. A frontend rollback does not revert database
 migrations. Database changes must remain backward compatible until the previous
 frontend is no longer a supported rollback target.
+
+## Gmail reminder reconciliation
+
+Stop reminder jobs and drain old workers, then deploy migration
+`202609260001_gmail_delivery_guard.sql` before the updated reminder worker.
+If Gmail was previously enabled, reconcile old failed/processing attempts before
+resuming: the guard cannot retroactively protect sends made by older workers. Keep Gmail delivery disabled until the delegated send/reply
+check and release gates pass. The worker records `gmail_delivery_state =
+'review_required'` atomically just before the send POST, using the current claim
+token. Neither a failure nor the 15-minute lease recovery makes that row
+eligible for another automatic send. Confirmed completion changes it to `sent`.
+This prevents automatic duplicate attempts, not exactly-once delivery: a crash
+between the database fence and Gmail can leave a message unsent.
+
+Operators should inspect all review-required rows after each job run and worker
+failure (the flag can also briefly represent an in-flight send):
+
+```sql
+select id, booking_id, status, updated_at, last_error
+from public.reminder_deliveries
+where gmail_delivery_state = 'review_required';
+```
+
+Stop reminder jobs and ensure old workers have exited before reconciliation.
+Search the hello mailbox's Sent mail using
+`rfc822msgid:armature-reminder-<reminder-id>@armatureailabs.com` and check the
+recipient and booking. This Message-ID is a search aid, not Gmail idempotency.
+For confirmed acceptance, call `complete_reminder(id)` with service credentials.
+For unknown outcomes, keep the flag and do not resend; absence from a search alone
+is not proof that delivery failed. If an operator establishes that no send was
+attempted or explicitly accepts resend risk, record the evidence/decision in the
+incident log, then clear `gmail_delivery_state` and `claim_token` and set `status`
+to `pending` for that single ID. Recheck booking eligibility before restarting.
+Do not bulk-clear review flags or use live member data to test recovery.
+
+The webhook provider still requires the receiver to honor its existing
+`idempotency_key`; this guard specifically covers the direct Gmail provider.

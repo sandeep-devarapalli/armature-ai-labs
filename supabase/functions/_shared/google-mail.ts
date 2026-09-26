@@ -13,7 +13,7 @@ const gmailScopes = [
   "https://www.googleapis.com/auth/gmail.settings.basic",
 ].join(" ");
 
-export async function sendBookingMail(mail: BookingMail): Promise<void> {
+export async function sendBookingMail(mail: BookingMail, beforeSend: () => Promise<void>): Promise<void> {
   assertBookingMailIdentity(
     requiredEnv("GOOGLE_WORKSPACE_SUBJECT"),
     Deno.env.get("REMINDER_FROM") ?? bookingAlias,
@@ -35,6 +35,8 @@ export async function sendBookingMail(mail: BookingMail): Promise<void> {
     throw new Error("The bookings alias is not verified for Gmail sending.");
   }
 
+  const raw = bookingMailRaw(mail);
+  await beforeSend();
   const response = await fetch(
     "https://gmail.googleapis.com/gmail/v1/users/me/messages/send",
     {
@@ -43,7 +45,7 @@ export async function sendBookingMail(mail: BookingMail): Promise<void> {
         authorization: `Bearer ${token}`,
         "content-type": "application/json",
       },
-      body: JSON.stringify({ raw: bookingMailRaw(mail) }),
+      body: JSON.stringify({ raw }),
     },
   );
   if (!response.ok) {

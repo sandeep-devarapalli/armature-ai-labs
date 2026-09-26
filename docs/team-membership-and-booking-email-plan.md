@@ -48,8 +48,11 @@ SES and ECS are not part of this setup.
    documentation or Git.
 5. Test booking creation, rescheduling, cancellation, invitations, reminders,
    replies and retries before enabling production jobs. Gmail has no send
-   idempotency key, so a worker interrupted after acceptance can duplicate a
-   reminder; review that limit before selecting direct Gmail delivery.
+   idempotency key. The local delivery guard records `review_required` before
+   the Gmail POST and excludes that reminder from automatic retries, including
+   lease recovery. Ambiguous outcomes require operator reconciliation; a
+   crash before the POST may therefore leave an unsent reminder on hold.
+   See the operations runbook before selecting direct Gmail delivery.
    Supabase remains authoritative for bookings and integration state.
 
 An alias cannot provide separately restricted staff access to booking messages:

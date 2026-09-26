@@ -9,6 +9,7 @@ interface ReminderRow {
   booking_id: string;
   reminder_kind: string;
   scheduled_for: string;
+  claim_token: string;
 }
 
 async function deliverReminder(reminder: ReminderRow): Promise<void> {
@@ -60,6 +61,14 @@ async function deliverReminder(reminder: ReminderRow): Promise<void> {
         "",
         "Armature AI Labs",
       ].join("\n"),
+    }, async () => {
+      const { data: started, error } = await client.rpc("begin_gmail_reminder", {
+        p_id: reminder.id,
+        p_claim_token: reminder.claim_token,
+      });
+      if (error || !started) {
+        throw new Error("Gmail delivery guard was not acquired; inspect reminder state.");
+      }
     });
     return;
   }

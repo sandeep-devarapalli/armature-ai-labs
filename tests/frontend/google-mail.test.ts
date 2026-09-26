@@ -22,7 +22,7 @@ const mail = {
 };
 
 const loadGoogleMail = () => import("../../supabase/functions/_shared/" + "google-mail.ts") as Promise<{
-  sendBookingMail: (value: typeof mail) => Promise<void>;
+  sendBookingMail: (value: typeof mail, beforeSend: () => Promise<void>) => Promise<void>;
 }>;
 
 it("encodes UTF-8 reminder content with the approved From and Reply-To", () => {
@@ -75,7 +75,7 @@ it("refuses Gmail delivery until Send mail as is accepted", async () => {
   });
   vi.stubGlobal("fetch", fetch);
 
-  await expect(sendBookingMail(mail)).rejects.toThrow("not verified");
+  await expect(sendBookingMail(mail, async () => {})).rejects.toThrow("not verified");
   expect(fetch).toHaveBeenCalledTimes(1);
 });
 
@@ -90,7 +90,7 @@ it("sends the encoded reminder only after checking the accepted alias", async ()
     .mockResolvedValueOnce({ ok: true });
   vi.stubGlobal("fetch", fetch);
 
-  await sendBookingMail(mail);
+  await sendBookingMail(mail, async () => {});
   expect(fetch).toHaveBeenCalledTimes(2);
   expect(fetch.mock.calls[1][0]).toBe("https://gmail.googleapis.com/gmail/v1/users/me/messages/send");
   expect(fetch.mock.calls[1][1]).toMatchObject({
@@ -98,4 +98,33 @@ it("sends the encoded reminder only after checking the accepted alias", async ()
     headers: { authorization: "Bearer mock-token" },
     body: JSON.stringify({ raw: bookingMailRaw(mail) }),
   });
+});
+
+it("never sends when the durable delivery guard fails", async () => {
+  const { sendBookingMail } = await loadGoogleMail();
+  vi.stubGlobal("Deno", { env: { get: () => undefined } });
+  const fetch = vi.fn().mockResolvedValue({
+    ok: true,
+    json: async () => ({ sendAsEmail: "bookings@armatureailabs.com", verificationStatus: "accepted" }),
+  });
+  vi.stubGlobal("fetch", fetch);
+  await expect(sendBookingMail(mail, async () => { throw new Error("guard unavailable"); }))
+    .rejects.toThrow("guard unavailable");
+  expect(fetch).toHaveBeenCalledTimes(1);
+});
+
+it.each(["network", "server"])("takes the guard before an ambiguous %s failure and never retries the POST", async (failure) => {
+  const { sendBookingMail } = await loadGoogleMail();
+  vi.stubGlobal("Deno", { env: { get: () => undefined } });
+  const guard = vi.fn(async () => {});
+  const fetch = vi.fn()
+    .mockResolvedValueOnce({ ok: true, json: async () => ({ sendAsEmail: "bookings@armatureailabs.com", verificationStatus: "accepted" }) })
+    .mockImplementationOnce(async () => {
+      expect(guard).toHaveBeenCalledTimes(1);
+      if (failure === "network") throw new Error("connection lost");
+      return { ok: false, status: 503 };
+    });
+  vi.stubGlobal("fetch", fetch);
+  await expect(sendBookingMail(mail, guard)).rejects.toThrow();
+  expect(fetch).toHaveBeenCalledTimes(2);
 });
