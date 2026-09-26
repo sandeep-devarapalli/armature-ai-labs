@@ -8,7 +8,8 @@ test("basic registration opens independently while paid access remains closed", 
   await page.getByRole("link", { name: "Sign in with your email" }).click();
   await expect(page.getByRole("heading", { name: "Create your member account." })).toBeVisible();
   await expect(page.getByText("Use a secure email link for free registration", { exact: false })).toBeVisible();
-  for (const path of ["/book", "/bookings", "/dashboard", "/admin/members", "/components/request"]) {
+  await expect(page.getByRole("button", { name: "Continue with Google" })).toBeVisible();
+  for (const path of ["/book", "/bookings", "/dashboard", "/check-in", "/inventory", "/financials", "/admin/members", "/kiosk", "/components/request"]) {
     await page.goto(path);
     await expect(page.getByRole("heading", { name: "Operational access is opening soon." })).toBeVisible();
   }

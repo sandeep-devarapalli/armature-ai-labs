@@ -20,7 +20,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "npm run build:demo && playwright test",
+    "test:e2e": "npm run build:demo && VITE_DEMO_MODE=true playwright test",
     "test:e2e:production": "playwright test tests/frontend/e2e/public-release-gates.spec.ts tests/frontend/e2e/building-vision.spec.ts tests/frontend/e2e/reliability.spec.ts --project=chromium --project=mobile",
     "prepare:building-models": "node scripts/building-vision/release-manifest.mjs",
     "check:building-models": "node scripts/check-building-models.mjs && node scripts/check-electrical-plan.mjs"

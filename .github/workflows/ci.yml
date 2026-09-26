@@ -81,6 +81,8 @@ jobs:
       - run: npm run check:pages-runtime
       - run: npx playwright install --only-shell chromium
       - run: npm run test:e2e:production
+      - if: env.VITE_BASIC_ONBOARDING_ENABLED == 'true'
+        run: PLAYWRIGHT_PREBUILT=true npx playwright test --config playwright.basic-registration.config.ts
       - run: >-
           npx wrangler pages deploy dist
           --project-name armature-lab
