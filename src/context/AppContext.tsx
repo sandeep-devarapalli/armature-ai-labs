@@ -23,7 +23,8 @@ import type {
   CheckinIntent,
   DemoState,
   MemberProfile,
-  Resource
+  Resource,
+  TeamAccess
 } from "../types/domain";
 
 const STORAGE_KEY = "armature-demo-state-v1";
@@ -34,6 +35,8 @@ interface BookingInput {
   durationMinutes: number;
   purpose: string;
   guestNames: string[];
+  accessSource?: "personal" | "team";
+  organizationId?: string;
 }
 
 interface MembershipApplicationInput {
@@ -70,6 +73,7 @@ interface AppContextValue {
   loading: boolean;
   isStaff: boolean;
   isAdmin: boolean;
+  teamAccess: TeamAccess[];
   notice: string;
   clearNotice: () => void;
   refresh: () => Promise<void>;
@@ -166,7 +170,7 @@ function validateDemoBooking(
   resource: Resource,
   input: BookingInput
 ) {
-  if (member.membershipState !== "active") {
+  if ((input.accessSource ?? "personal") !== "personal" || member.membershipState !== "active") {
     throw new Error("An active membership is required to book.");
   }
   if (!resource.available) throw new Error("This resource is not available.");
@@ -216,6 +220,7 @@ export function AppProvider({ children, hydrate: hydrating = false }: PropsWithC
     () => !hydrating && dataMode === "demo" && Boolean(readState().currentUserId)
   );
   const [notice, setNotice] = useState("");
+  const [teamAccess, setTeamAccess] = useState<TeamAccess[]>([]);
 
   useEffect(() => {
     if (!hydrating) return;
@@ -258,6 +263,7 @@ export function AppProvider({ children, hydrate: hydrating = false }: PropsWithC
       setState(snapshot.state);
       setIsStaff(snapshot.isStaff);
       setIsAdmin(snapshot.isAdmin);
+      setTeamAccess(snapshot.teamAccess);
     } catch (error) {
       setNotice(
         error instanceof Error ? error.message : "Could not load live data."
@@ -315,6 +321,7 @@ export function AppProvider({ children, hydrate: hydrating = false }: PropsWithC
       await hydrate(null);
     } else {
       setState((value) => ({ ...value, currentUserId: null }));
+      setTeamAccess([]);
       setIsStaff(false);
       setIsAdmin(false);
     }
@@ -588,13 +595,15 @@ export function AppProvider({ children, hydrate: hydrating = false }: PropsWithC
       const ends = addMinutes(starts, input.durationMinutes);
 
       if (supabase) {
-        const { data, error } = await supabase.rpc("create_booking", {
+        const { data, error } = await supabase.rpc("create_booking_with_access", {
           p_resource_id: resource.id,
           p_starts_at: starts.toISOString(),
           p_ends_at: ends.toISOString(),
           p_guest_names: input.guestNames,
           p_notes: input.purpose,
-          p_idempotency_key: crypto.randomUUID()
+          p_idempotency_key: crypto.randomUUID(),
+          p_access_source: input.accessSource ?? "personal",
+          p_organization_id: input.accessSource === "team" ? input.organizationId ?? null : null
         });
         if (error) throw error;
         const created: Booking = {
@@ -606,7 +615,9 @@ export function AppProvider({ children, hydrate: hydrating = false }: PropsWithC
           purpose: input.purpose,
           guestNames: input.guestNames,
           state: "confirmed",
-          createdAt: new Date().toISOString()
+          createdAt: new Date().toISOString(),
+          accessSource: input.accessSource ?? "personal",
+          organizationId: input.accessSource === "team" ? input.organizationId : null
         };
         await refresh();
         setNotice("Booking confirmed.");
@@ -623,7 +634,9 @@ export function AppProvider({ children, hydrate: hydrating = false }: PropsWithC
         purpose: input.purpose,
         guestNames: input.guestNames,
         state: "confirmed",
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
+        accessSource: "personal",
+        organizationId: null
       };
       setState((value) => ({
         ...value,
@@ -1192,6 +1205,7 @@ export function AppProvider({ children, hydrate: hydrating = false }: PropsWithC
       loading,
       isStaff,
       isAdmin,
+      teamAccess,
       notice,
       clearNotice: () => setNotice(""),
       refresh,
@@ -1225,6 +1239,7 @@ export function AppProvider({ children, hydrate: hydrating = false }: PropsWithC
       loading,
       isStaff,
       isAdmin,
+      teamAccess,
       notice,
       refresh,
       signInDemo,

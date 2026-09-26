@@ -350,8 +350,93 @@ export type Database = {
           },
         ]
       }
+      organizations: {
+        Row: { id: string; name: string; created_at: string }
+        Insert: { id?: string; name: string; created_at?: string }
+        Update: { id?: string; name?: string; created_at?: string }
+        Relationships: []
+      }
+      organization_memberships: {
+        Row: {
+          organization_id: string
+          status: Database["public"]["Enums"]["membership_status"]
+          seat_allowance: number
+          starts_at: string | null
+          ends_at: string | null
+          approved_by: string | null
+          updated_at: string
+        }
+        Insert: {
+          organization_id: string
+          status?: Database["public"]["Enums"]["membership_status"]
+          seat_allowance?: number
+          starts_at?: string | null
+          ends_at?: string | null
+          approved_by?: string | null
+          updated_at?: string
+        }
+        Update: {
+          organization_id?: string
+          status?: Database["public"]["Enums"]["membership_status"]
+          seat_allowance?: number
+          starts_at?: string | null
+          ends_at?: string | null
+          approved_by?: string | null
+          updated_at?: string
+        }
+        Relationships: [{
+          foreignKeyName: "organization_memberships_organization_id_fkey"
+          columns: ["organization_id"]
+          isOneToOne: true
+          referencedRelation: "organizations"
+          referencedColumns: ["id"]
+        }]
+      }
+      team_membership_applications: {
+        Row: {
+          id: string
+          applicant_id: string
+          organization_name: string
+          contact_name: string
+          summary: string
+          requested_seats: number
+          status: Database["public"]["Enums"]["membership_application_status"]
+          created_at: string
+          decided_at: string | null
+          decided_by: string | null
+          decision_notes: string | null
+        }
+        Insert: {
+          id?: string
+          applicant_id: string
+          organization_name: string
+          contact_name: string
+          summary?: string
+          requested_seats: number
+          status?: Database["public"]["Enums"]["membership_application_status"]
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_notes?: string | null
+        }
+        Update: {
+          id?: string
+          applicant_id?: string
+          organization_name?: string
+          contact_name?: string
+          summary?: string
+          requested_seats?: number
+          status?: Database["public"]["Enums"]["membership_application_status"]
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_notes?: string | null
+        }
+        Relationships: []
+      }
       bookings: {
         Row: {
+          access_source: "personal" | "team"
           cancellation_reason: string | null
           cancelled_at: string | null
           cancelled_by: string | null
@@ -361,12 +446,14 @@ export type Database = {
           idempotency_key: string | null
           member_id: string
           notes: string | null
+          organization_id: string | null
           resource_id: string
           starts_at: string
           status: Database["public"]["Enums"]["booking_status"]
           updated_at: string
         }
         Insert: {
+          access_source?: "personal" | "team"
           cancellation_reason?: string | null
           cancelled_at?: string | null
           cancelled_by?: string | null
@@ -376,12 +463,14 @@ export type Database = {
           idempotency_key?: string | null
           member_id: string
           notes?: string | null
+          organization_id?: string | null
           resource_id: string
           starts_at: string
           status?: Database["public"]["Enums"]["booking_status"]
           updated_at?: string
         }
         Update: {
+          access_source?: "personal" | "team"
           cancellation_reason?: string | null
           cancelled_at?: string | null
           cancelled_by?: string | null
@@ -391,6 +480,7 @@ export type Database = {
           idempotency_key?: string | null
           member_id?: string
           notes?: string | null
+          organization_id?: string | null
           resource_id?: string
           starts_at?: string
           status?: Database["public"]["Enums"]["booking_status"]
@@ -3318,6 +3408,87 @@ export type Database = {
           p_starts_at: string
         }
         Returns: string
+      }
+      create_booking_with_access: {
+        Args: {
+          p_resource_id: string
+          p_starts_at: string
+          p_ends_at: string
+          p_guest_names: string[]
+          p_notes: string
+          p_idempotency_key: string
+          p_access_source: "personal" | "team"
+          p_organization_id: string | null
+        }
+        Returns: string
+      }
+      list_my_team_access: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          organization_id: string
+          organization_name: string
+          role: string
+          seat_enabled: boolean
+          membership_active: boolean
+          starts_at: string | null
+          ends_at: string | null
+        }[]
+      }
+      submit_team_application: {
+        Args: { p_organization_name: string; p_contact_name: string; p_summary: string; p_requested_seats: number }
+        Returns: string
+      }
+      team_create_invitation: {
+        Args: { p_organization_id: string; p_email: string }
+        Returns: Json
+      }
+      team_accept_invitation: {
+        Args: { p_token: string }
+        Returns: string
+      }
+      team_revoke_invitation: {
+        Args: { p_invitation_id: string }
+        Returns: undefined
+      }
+      team_remove_member: {
+        Args: { p_organization_id: string; p_user_id: string }
+        Returns: undefined
+      }
+      team_set_admin_seat: {
+        Args: { p_organization_id: string; p_seat_enabled: boolean }
+        Returns: undefined
+      }
+      list_team_roster: {
+        Args: { p_organization_id: string }
+        Returns: { user_id: string; display_name: string; role: string; seat_enabled: boolean; joined_at: string }[]
+      }
+      list_team_invitations: {
+        Args: { p_organization_id: string }
+        Returns: { invitation_id: string; email: string; expires_at: string }[]
+      }
+      list_team_usage: {
+        Args: { p_organization_id: string }
+        Returns: { member_id: string; display_name: string; resource_name: string; starts_at: string; ends_at: string; usage_hours: number; attended_hours: number }[]
+      }
+      get_team_capacity: {
+        Args: { p_organization_id: string }
+        Returns: { seat_allowance: number; occupied_seats: number; pending_invitations: number }[]
+      }
+      staff_decide_team_application: {
+        Args: { p_application_id: string; p_approve: boolean; p_notes: string; p_starts_at: string | null; p_ends_at: string | null }
+        Returns: string | null
+      }
+      staff_create_team: {
+        Args: { p_organization_name: string; p_admin_user_id: string; p_seat_allowance: number; p_starts_at: string | null; p_ends_at: string | null }
+        Returns: string
+      }
+      staff_set_team_membership: {
+        Args: { p_organization_id: string; p_status: Database["public"]["Enums"]["membership_status"]; p_seat_allowance: number; p_starts_at: string | null; p_ends_at: string | null }
+        Returns: undefined
+      }
+      staff_transfer_team_admin: {
+        Args: { p_organization_id: string; p_new_admin_user_id: string }
+        Returns: undefined
       }
       create_cabinet_access_intent: {
         Args: { p_cabinet_device_id: string }

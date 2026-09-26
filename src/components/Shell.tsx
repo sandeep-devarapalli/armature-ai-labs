@@ -187,6 +187,10 @@ export function Shell({ children }: PropsWithChildren) {
                 <UserRound aria-hidden="true" />
                 Profile
               </NavLink>
+              <NavLink to="/workspace/team">
+                <UserRound aria-hidden="true" />
+                Team
+              </NavLink>
               {isStaff && <NavLink to="/admin/members">
                 <Wrench aria-hidden="true" />
                 Operations

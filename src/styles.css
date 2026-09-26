@@ -1936,6 +1936,20 @@ input[type="range"] {
   margin-top: 16px;
 }
 
+.team-check {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+  font-size: 13px;
+}
+
+.team-check input {
+  width: 18px;
+  min-height: 18px;
+  accent-color: var(--saffron);
+}
+
 .filter-bar {
   display: flex;
   align-items: center;

@@ -85,10 +85,13 @@ test("public-first production gates operational routes", async ({ page }) => {
     "/auth",
     "/book",
     "/bookings",
+    "/workspace/team",
+    "/workspace/team/accept/test-token",
     "/check-in",
     "/inventory",
     "/financials",
     "/admin/members",
+    "/admin/teams",
     "/kiosk",
     "/components/request"
   ]) {

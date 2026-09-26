@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import {
   ArrowRight,
   BatteryCharging,
@@ -14,11 +14,12 @@ import {
   Users,
   Wrench
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { Field, PageHeader, Section, Status } from "../components/Primitives";
 import { FieldOfTouch } from "../components/FieldOfTouch";
 import { memberPlatformAvailable } from "../config/release";
 import { useApp } from "../context/AppContext";
+import { supabase } from "../lib/supabase";
 
 const equipmentRows = [
   ["Robot arm cell", "Planned guarded robot arm, controller and safety interlocks", "Power and safety design to be confirmed", "DB-A"],
@@ -298,6 +299,8 @@ export function ServicesPage() {
 
 export function JoinPage() {
   const { currentMember, state, submitApplication } = useApp();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const applicationPath = searchParams.get("path") === "team" ? "team" : "individual";
   const pendingApplication = state.applications.find(
     (application) => application.memberId === currentMember?.id && application.state === "pending"
   );
@@ -305,6 +308,8 @@ export function JoinPage() {
 
   const membershipAction = !memberPlatformAvailable ? (
     <a className="button button-primary" href="mailto:hello@armatureailabs.com">Email the lab</a>
+  ) : applicationPath === "team" ? (
+    <a className="button button-primary" href="#membership-application">Start a team application <ArrowRight aria-hidden="true" /></a>
   ) : membershipActive ? (
     <Link className="button button-primary" to="/book">Book a resource <ArrowRight aria-hidden="true" /></Link>
   ) : pendingApplication ? (
@@ -383,12 +388,24 @@ export function JoinPage() {
       </Section>
       <Section number="03" title="Start your membership">
         <div className="section-motion"><FieldOfTouch scene="rain" /></div>
+        <div className="button-row" role="group" aria-label="Membership path">
+          <button className={`button ${applicationPath === "individual" ? "button-primary" : "button-quiet"}`} type="button" aria-pressed={applicationPath === "individual"} onClick={() => setSearchParams({ path: "individual" })}>Individual</button>
+          <button className={`button ${applicationPath === "team" ? "button-primary" : "button-quiet"}`} type="button" aria-pressed={applicationPath === "team"} onClick={() => setSearchParams({ path: "team" })}>Team</button>
+        </div>
+        {applicationPath === "team" && <p className="lede">One team admin applies for a fixed number of named seats. Staff activate the membership after offline payment. Members use their own accounts to book; the admin manages the roster and sees team usage.</p>}
         {!memberPlatformAvailable ? (
           <>
             <Status tone="warn">Pre-launch · enquiries only</Status>
             <p className="lede">
               Membership applications and bookings are not open yet. For questions about the planned lab, membership, or events, email <a className="text-link" href="mailto:hello@armatureailabs.com">hello@armatureailabs.com</a> or call <a className="text-link" href="tel:+919748485583">+91 9748485583</a>.
             </p>
+          </>
+        ) : applicationPath === "team" && currentMember ? (
+          <TeamApplicationForm memberId={currentMember.id} />
+        ) : applicationPath === "team" ? (
+          <>
+            <p className="lede">Create an account or sign in to apply for your team.</p>
+            <div className="section-actions"><Link className="button button-primary" to="/auth" state={{ from: "/join?path=team" }}>Create account or sign in <ArrowRight aria-hidden="true" /></Link></div>
           </>
         ) : membershipActive ? (
           <>
@@ -413,6 +430,65 @@ export function JoinPage() {
       </Section>
     </>
   );
+}
+
+function TeamApplicationForm({ memberId }: { memberId: string }) {
+  const [working, setWorking] = useState(false);
+  const [checking, setChecking] = useState(Boolean(supabase));
+  const [submitted, setSubmitted] = useState(false);
+  const [existingTeam, setExistingTeam] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (!supabase) return;
+    let active = true;
+    void Promise.all([
+      supabase.from("team_membership_applications").select("id").eq("applicant_id", memberId).eq("status", "pending").maybeSingle(),
+      supabase.rpc("list_my_team_access")
+    ]).then(([pending, access]) => {
+      if (!active) return;
+      setChecking(false);
+      if (pending.error || access.error) setError((pending.error ?? access.error)?.message ?? "Team status could not be loaded.");
+      else {
+        setSubmitted(Boolean(pending.data));
+        setExistingTeam(Boolean(access.data?.length));
+      }
+    });
+    return () => { active = false; };
+  }, [memberId]);
+
+  async function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!supabase) return;
+    setWorking(true);
+    setError("");
+    const data = new FormData(event.currentTarget);
+    const { error: submitError } = await supabase.rpc("submit_team_application", {
+      p_organization_name: String(data.get("organizationName")).trim(),
+      p_contact_name: String(data.get("contactName")).trim(),
+      p_summary: String(data.get("summary")).trim(),
+      p_requested_seats: Number(data.get("seats"))
+    });
+    setWorking(false);
+    if (submitError) setError(submitError.message);
+    else setSubmitted(true);
+  }
+
+  if (checking) return <p id="membership-application" className="lede">Checking your team membership…</p>;
+  if (existingTeam) return <div id="membership-application"><Status tone="good">Team recorded</Status><p className="lede">Open your team workspace to see its membership status and roster.</p><Link className="button button-quiet" to="/workspace/team">Open team workspace</Link></div>;
+  if (submitted) return <div id="membership-application"><Status tone="warn">Team application submitted</Status><p className="lede">Staff will review your request and arrange offline payment and activation.</p></div>;
+
+  return <form id="membership-application" className="inline-form" onSubmit={(event) => void submit(event)}>
+    <div className="form-grid">
+      <Field label="Organization name"><input name="organizationName" required minLength={2} maxLength={160} autoComplete="organization" /></Field>
+      <Field label="Your name"><input name="contactName" required maxLength={120} autoComplete="name" /></Field>
+      <Field label="Named seats requested"><input name="seats" type="number" required min={1} max={10000} defaultValue={2} /></Field>
+    </div>
+    <Field label="What will your team build?"><textarea name="summary" required rows={4} maxLength={2000} placeholder="Describe the work and resources your team expects to use." /></Field>
+    {error && <p className="form-error" role="alert">{error}</p>}
+    <button className="button button-primary" type="submit" disabled={working || !supabase}>{working ? "Submitting…" : "Submit team application"}</button>
+    {!supabase && <p className="lede">Team applications require the connected member service.</p>}
+  </form>;
 }
 
 function ApplicationForm({

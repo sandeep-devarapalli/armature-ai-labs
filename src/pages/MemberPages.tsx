@@ -59,7 +59,7 @@ function parseLinks(value: FormDataEntryValue | null) {
 }
 
 export function DashboardPage() {
-  const { currentMember, state, mode } = useApp();
+  const { currentMember, state, mode, teamAccess } = useApp();
   if (!currentMember) return null;
   const bookings = state.bookings
     .filter((booking) => booking.ownerId === currentMember.id && booking.state === "confirmed")
@@ -68,6 +68,8 @@ export function DashboardPage() {
     (session) => session.memberId === currentMember.id && session.state === "open"
   );
   const next = bookings.find((booking) => isAfter(parseISO(booking.endsAt), new Date()));
+  const activeTeam = teamAccess.find((team) => team.membershipActive && team.seatEnabled);
+  const membershipLabel = currentMember.membershipState === "active" ? "Personal active" : activeTeam ? `${activeTeam.organizationName} team` : currentMember.membershipState;
 
   return (
     <>
@@ -86,7 +88,7 @@ export function DashboardPage() {
       </header>
       <section className="workspace-metrics">
         <div className="wrap metric-grid four">
-          <Metric label="Membership" value={<Status tone={currentMember.membershipState === "active" ? "good" : "warn"}>{currentMember.membershipState}</Status>} />
+          <Metric label="Membership" value={<Status tone={currentMember.membershipState === "active" || activeTeam ? "good" : "warn"}>{membershipLabel}</Status>} />
           <Metric label="Certifications" value={currentMember.certifications.length} note="active in demo" />
           <Metric label="Upcoming" value={bookings.length} note="confirmed bookings" />
           <Metric label="Attendance" value={activeAttendance ? "On site" : "Checked out"} />
@@ -361,7 +363,8 @@ function MfaPanel({ mode }: { mode: "demo" | "supabase" }) {
 }
 
 export function BookPage() {
-  const { currentMember, state } = useApp();
+  const { currentMember, state, teamAccess } = useApp();
+  const canBook = currentMember?.membershipState === "active" || teamAccess.some((team) => team.membershipActive && team.seatEnabled);
   return (
     <>
       <PageHeader
@@ -369,14 +372,14 @@ export function BookPage() {
         title="Reserve a working block."
         description="One approved member owns each booking. Availability, certification, guest, maintenance, and conflict rules are checked again when the reservation is created."
       />
-      {currentMember?.membershipState !== "active" && (
-        <div className="gate-banner"><div className="wrap"><AlertTriangle aria-hidden="true" /><p>Your membership is {currentMember?.membershipState}. Booking unlocks after staff approval.</p><Link to="/join">View application</Link></div></div>
+      {!canBook && (
+        <div className="gate-banner"><div className="wrap"><AlertTriangle aria-hidden="true" /><p>Booking unlocks after your personal membership or team seat is active.</p><Link to="/join">View application</Link></div></div>
       )}
       <Section number="01" title="Bookable resources">
         <div className="book-resource-list">
           {state.resources.map((resource) => {
             const missing = resource.certifications.filter((cert) => !currentMember?.certifications.includes(cert));
-            const blocked = !resource.available || missing.length > 0 || currentMember?.membershipState !== "active";
+            const blocked = !resource.available || missing.length > 0 || !canBook;
             return (
               <article className="book-resource-row" key={resource.id}>
                 <div className="resource-symbol"><Wrench aria-hidden="true" /></div>
@@ -416,7 +419,7 @@ function toLocalInput(date: Date) {
 
 export function ResourceBookingPage() {
   const { resource: slug } = useParams();
-  const { state, currentMember, createBooking, listAvailability, online } = useApp();
+  const { state, currentMember, teamAccess, createBooking, listAvailability, online } = useApp();
   const navigate = useNavigate();
   const resource = state.resources.find((item) => item.slug === slug);
   const [start, setStart] = useState(toLocalInput(nextQuarterHour()));
@@ -426,6 +429,14 @@ export function ResourceBookingPage() {
   const [working, setWorking] = useState(false);
   const [availability, setAvailability] = useState<Array<{ startsAt: string; endsAt: string; available: boolean; reason: string | null }>>([]);
   const [availabilityError, setAvailabilityError] = useState("");
+  const activeTeams = teamAccess.filter((team) => team.membershipActive && team.seatEnabled);
+  const personalActive = currentMember?.membershipState === "active";
+  const [accessChoice, setAccessChoice] = useState(personalActive ? "personal" : activeTeams[0]?.organizationId ?? "personal");
+  useEffect(() => {
+    if (accessChoice === "personal" && personalActive) return;
+    if (activeTeams.some((team) => team.organizationId === accessChoice)) return;
+    setAccessChoice(personalActive ? "personal" : activeTeams[0]?.organizationId ?? "personal");
+  }, [accessChoice, activeTeams, personalActive]);
   if (!resource || !currentMember) return <PageHeader title="Resource not found." description="Return to the live resource directory." actions={<Link className="button button-quiet" to="/book">Resources</Link>} />;
   const resourceId = resource.id;
 
@@ -469,7 +480,9 @@ export function ResourceBookingPage() {
         startsAt: new Date(start).toISOString(),
         durationMinutes: duration,
         purpose: String(data.get("purpose")),
-        guestNames: guests.split(",").map((guest) => guest.trim()).filter(Boolean)
+        guestNames: guests.split(",").map((guest) => guest.trim()).filter(Boolean),
+        accessSource: accessChoice === "personal" ? "personal" : "team",
+        organizationId: accessChoice === "personal" ? undefined : accessChoice
       });
       navigate(`/bookings/${booking.id}`);
     } catch (reason) {
@@ -485,6 +498,12 @@ export function ResourceBookingPage() {
       <Section number="01" title="Choose a live block">
         <div className="booking-layout">
           <form className="booking-form" onSubmit={submit}>
+            <Field label="Membership used for this booking">
+              <select value={accessChoice} onChange={(event) => setAccessChoice(event.target.value)} required>
+                {personalActive && <option value="personal">Personal membership</option>}
+                {activeTeams.map((team) => <option key={team.organizationId} value={team.organizationId}>{team.organizationName} · team seat</option>)}
+              </select>
+            </Field>
             <Field label="Start time" hint="Asia/Kolkata · 15-minute increments">
               <input type="datetime-local" required step={900} value={start} onChange={(event) => setStart(event.target.value)} />
             </Field>
@@ -497,7 +516,7 @@ export function ResourceBookingPage() {
             <Field label="Purpose of session"><textarea name="purpose" rows={4} required placeholder="What will you build or test during this block?" /></Field>
             {resource.certifications.length > 0 && <div className="cert-gate"><ShieldCheck aria-hidden="true" /><span>Required: {resource.certifications.join(", ")}</span></div>}
             {error && <p className="form-error" role="alert">{error}</p>}
-            <button className="button button-primary button-wide" type="submit" disabled={!online || working}>{working ? "Confirming…" : "Confirm booking"} <ArrowRight aria-hidden="true" /></button>
+            <button className="button button-primary button-wide" type="submit" disabled={!online || working || (!personalActive && activeTeams.length === 0)}>{working ? "Confirming…" : "Confirm booking"} <ArrowRight aria-hidden="true" /></button>
           </form>
           <aside className="availability-panel">
             <span className="mono">Anonymous live availability</span>

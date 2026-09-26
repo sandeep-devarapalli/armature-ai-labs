@@ -43,6 +43,7 @@ jobs:
       - run: supabase start
       - run: supabase test db supabase/tests/database
       - run: supabase/tests/concurrent_booking.sh
+      - run: supabase/tests/concurrent_team_seat.sh
       - if: always()
         run: supabase stop --no-backup
 
