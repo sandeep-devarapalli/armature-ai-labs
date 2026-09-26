@@ -5,7 +5,7 @@ import { adminClient } from "../_shared/supabase.ts";
 Deno.serve(async (request) => {
   if (request.method !== "POST") return json(request, { error: "method_not_allowed" }, 405);
   try {
-    assertJobSecret(request);
+    assertJobSecret(request, "ONBOARDING_RETENTION_JOB_SECRET");
     if (Deno.env.get("ONBOARDING_RETENTION_ENABLED") !== "true") return json(request, { error: "retention_disabled" }, 503);
     const client = adminClient();
     const { data: documents, error } = await client.rpc("list_due_onboarding_documents", { p_limit: 100 });

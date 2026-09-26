@@ -12,7 +12,7 @@ const required = name => {
 };
 const anonKey = required('ONBOARDING_LOCAL_ANON_KEY');
 const serviceKey = required('ONBOARDING_LOCAL_SERVICE_KEY');
-const jobSecret = required('ARMATURE_JOB_SECRET');
+const jobSecret = required('ONBOARDING_RETENTION_JOB_SECRET');
 const options = { auth: { persistSession: false, autoRefreshToken: false } };
 const service = createClient(url, serviceKey, options);
 const users = [];
@@ -124,7 +124,8 @@ try {
   success(await service.from('onboarding_documents').update({ expires_at: new Date(Date.now() - 60000).toISOString() }).eq('id', identity.id), 'Expire synthetic document');
   check(!(await documentRequest(owner, identity)).ok, 'Expired original inaccessible to owner');
   check(!(await documentRequest(staff, identity)).ok, 'Expired original inaccessible to reviewer');
-  check((await retention(jobSecret)).ok, 'Retention worker runs against local storage');
+  success(await service.from('onboarding_settings').update({ enabled: false }).eq('singleton', true), 'Close intake before cleanup');
+  check((await retention(jobSecret)).ok, 'Retention worker runs while intake is disabled');
   check(Boolean((await service.storage.from('onboarding-documents').download(identity.object_path)).error), 'Retention physically deletes expired original');
   const expired = success(await service.from('onboarding_documents').select('deleted_at').eq('id', identity.id).single(), 'Read deletion record');
   check(Boolean(expired.deleted_at), 'Deletion audit timestamp recorded');

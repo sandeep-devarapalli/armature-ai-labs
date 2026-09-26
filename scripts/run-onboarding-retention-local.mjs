@@ -15,7 +15,7 @@ export function health(status, now = Date.now()) {
 export function createRunner({ secret, url = LOCAL_URL, intervalMs = 300_000,
   fetcher = fetch, persist, now = Date.now, log = console.log }) {
   if (url !== LOCAL_URL) throw new Error('Only the isolated local onboarding API is allowed.');
-  if (!secret) throw new Error('ARMATURE_JOB_SECRET is required.');
+  if (!secret) throw new Error('ONBOARDING_RETENTION_JOB_SECRET is required.');
   if (!Number.isInteger(intervalMs) || intervalMs < 60_000 || intervalMs > 300_000) {
     throw new Error('Interval must be 60000–300000 milliseconds.');
   }
@@ -109,7 +109,7 @@ async function main() {
     process.exitCode = status.healthy ? 0 : 1;
     return;
   }
-  const runner = createRunner({ secret: process.env.ARMATURE_JOB_SECRET,
+  const runner = createRunner({ secret: process.env.ONBOARDING_RETENTION_JOB_SECRET,
     url: process.env.ONBOARDING_LOCAL_URL ?? LOCAL_URL, intervalMs,
     persist: async status => {
       const temporary = `${filename}.${process.pid}.tmp`;
