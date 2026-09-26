@@ -248,3 +248,8 @@ Additional reviewer authorised: sandeep@armatureailabs.com, alongside hello@.
 Live exact-email auth lookup26September returned no rows for either address.
 No accounts, email invitations or staff roles were created. Both remain pending
 verified website sign-in; owner authorisation for ordinary admin approval is recorded.
+
+Owner confirmed personal account email. Auth Admin createUser succeeded with
+email_confirm=false; private profile PATCH and read-back succeeded. Verified
+pending membership/no staff roles; no email sent. Member contact data stays in
+private production profile, not notes. Admin activation awaits verified sign-in.
