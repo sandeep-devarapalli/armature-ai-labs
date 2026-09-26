@@ -74,6 +74,28 @@ describe("public-first release gates", () => {
     expect(backend.supabase).toBeNull();
   });
 
+  it("does not initialize a backend client while prerendering a configured production build", async () => {
+    vi.stubEnv("SSR", true);
+    vi.stubEnv("VITE_DEMO_MODE", "false");
+    vi.stubEnv("VITE_SUPABASE_URL", "https://reserved.invalid");
+    vi.stubEnv("VITE_SUPABASE_PUBLISHABLE_KEY", "public-test-key");
+    vi.stubEnv("VITE_MEMBER_PLATFORM_ENABLED", "false");
+    vi.stubEnv("VITE_COMPONENT_REQUESTS_ENABLED", "false");
+    const fetch = vi.spyOn(globalThis, "fetch");
+    try {
+      const backend = await import("../../src/lib/supabase");
+      const release = await import("../../src/config/release");
+      expect(backend.isSupabaseConfigured).toBe(true);
+      expect(backend.isBackendAvailable).toBe(true);
+      expect(backend.supabase).toBeNull();
+      expect(release.memberPlatformAvailable).toBe(false);
+      expect(release.componentRequestsAvailable).toBe(false);
+      expect(fetch).not.toHaveBeenCalled();
+    } finally {
+      fetch.mockRestore();
+    }
+  });
+
   it("keeps both production feature gates opt-in", async () => {
     vi.stubEnv("VITE_MEMBER_PLATFORM_ENABLED", "");
     vi.stubEnv("VITE_COMPONENT_REQUESTS_ENABLED", "");

@@ -14,7 +14,7 @@ export const isSupabaseConfigured = Boolean(url && publishableKey);
 export const isBackendAvailable = demoModeEnabled || isSupabaseConfigured;
 
 export const supabase: SupabaseClient<Database> | null =
-  url && publishableKey
+  !import.meta.env.SSR && url && publishableKey
     ? createClient<Database>(url, publishableKey, {
         auth: {
           persistSession: true,

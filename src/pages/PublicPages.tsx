@@ -21,8 +21,8 @@ import { memberPlatformAvailable } from "../config/release";
 import { useApp } from "../context/AppContext";
 
 const equipmentRows = [
-  ["Robot arm cell", "6-axis industrial arm, controller, safety PLC, light curtains", "3-phase 415V · dedicated · interlocked", "DB-A"],
-  ["Machine shop", "CNC router, grinder, drill press, metrology, extraction", "3-phase 415V + extraction", "DB-A"],
+  ["Robot arm cell", "Planned guarded robot arm, controller and safety interlocks", "Power and safety design to be confirmed", "DB-A"],
+  ["Heavy-power benches", "Proposed equipment and circuits to be confirmed before commissioning", "Power design to be confirmed", "DB-A"],
   ["Rapid prototyping", "FDM and resin printers, laser cutter, hand finishing", "1-phase 230V · four 16A circuits", "DB-B"],
   ["Flexible test bay", "Reconfigurable test fixtures and portable safety barriers", "1-phase 230V · general circuits", "DB-B"],
   ["Storage + batteries", "Fire-rated LiPo charging cabinet, shelving, safe bags", "1-phase 230V · dedicated charging", "DB-B"],
@@ -35,7 +35,7 @@ const equipmentRows = [
 
 const distributionBoards = [
   [ShieldCheck, "Main", "Incomer + master", "Utility incomer, metering, main breaker, and the master E-stop for hazard zones."],
-  [Wrench, "DB-A", "Heavy / 3-phase", "Robot arm cell and machine shop, interlocked with the safety perimeter."],
+  [Wrench, "DB-A", "Heavy / 3-phase", "Planned robot arm cell and heavy-power benches, with safety boundaries to be confirmed."],
   [BatteryCharging, "DB-B", "Prototyping + batteries", "Printing, drone charging, and the battery cabinet on separated circuits."],
   [Cpu, "DB-C", "Clean / UPS", "Isolated grounded power for electronics, compute, networking, and NVR."],
   [Users, "DB-D", "General / demo / pods", "Demo-floor outlets, builder pods, general sockets, lighting, and HVAC."]
@@ -173,7 +173,7 @@ export function ServicesPage() {
       <PageHeader
         meta="Services · deployments · research"
         title="Build here, or bring the lab to the site."
-        description="Armature AI Labs combines a bookable robotics floor with engineering services for organizations that need working hardware, private AI infrastructure, or credible physical datasets."
+        description="Armature AI Labs is developing a robotics floor and engineering services for organizations that need working hardware, private AI infrastructure, or credible physical datasets. We are pre-launch and accepting enquiries."
         actions={(
           <>
             <Link className="button button-primary" to="/join">Become a member <ArrowRight aria-hidden="true" /></Link>
@@ -343,11 +343,13 @@ export function JoinPage() {
     <>
       <PageHeader
         meta="Membership · booking · HSR Layout"
-        title="Join the lab. Book what you need."
-        description="Create one member account, tell us what you are building, and complete staff approval. Approved members can reserve builder pods, equipment, compute, and the Demo floor from one workspace."
+        title={memberPlatformAvailable ? "Join the lab. Book what you need." : "Build with us. Enquire about membership."}
+        description={memberPlatformAvailable
+          ? "Create one member account, tell us what you are building, and complete staff approval. Approved members can reserve commissioned resources from one workspace."
+          : "Armature AI Labs is pre-launch. We are accepting enquiries about the planned lab, membership, and events; applications and bookings are not open yet."}
         actions={actions}
       />
-      <Section number="01" title="One membership journey">
+      <Section number="01" title="One membership journey" lede={!memberPlatformAvailable ? "The planned process once membership opens." : undefined}>
         <div className="section-motion membership-motion"><FieldOfTouch scene="birds" /></div>
         <div className="process-list">
           {[
@@ -359,22 +361,22 @@ export function JoinPage() {
           ))}
         </div>
       </Section>
-      <Section number="02" title="What members can reserve" lede="The booking screen follows the live resource board, so members see the capacity, duration, availability, and safety requirements before choosing a time." dark>
+      <Section number="02" title={memberPlatformAvailable ? "What members can reserve" : "Planned member spaces"} lede="Resources will become bookable after commissioning, with confirmed availability, operating rules, and any required safety induction." dark>
         <div className="service-grid">
           <article className="service-card">
             <Users aria-hidden="true" />
-            <h3>A builder pod</h3>
-            <p>Reserve one of sixteen two-person builder pods with a desk, power, monitor, locker, and access to the shared floor.</p>
+            <h3>Cabins and shared desks</h3>
+            <p>The current layout proposes seven cabins across the ground and first floors, alongside coworking commons. Final capacity and booking options remain to be confirmed.</p>
           </article>
           <article className="service-card">
             <Cpu aria-hidden="true" />
             <h3>Equipment and compute</h3>
-            <p>Book electronics benches, fabrication equipment, robot cells, GPUs, or edge AI kits when the required induction is current.</p>
+            <p>Electronics benches, fabrication equipment, robot cells, GPUs, and edge AI kits are planned. Availability and induction requirements will be confirmed before bookings open.</p>
           </article>
           <article className="service-card">
             <Sparkles aria-hidden="true" />
-            <h3>The Demo floor</h3>
-            <p>Reserve the 50-person demonstration and event area for a member event, working session, or live prototype demonstration.</p>
+            <h3>Lounge and presentation hall</h3>
+            <p>The proposed hall is intended for events, working sessions, and live prototype demonstrations. Event capacity and operating arrangements have not been confirmed.</p>
           </article>
         </div>
         <p className="lede">Meeting-room reservations will appear in the same booking screen after a room is commissioned and its capacity and operating hours are approved.</p>
@@ -383,9 +385,9 @@ export function JoinPage() {
         <div className="section-motion"><FieldOfTouch scene="rain" /></div>
         {!memberPlatformAvailable ? (
           <>
-            <Status tone="warn">Online signup is not live yet</Status>
+            <Status tone="warn">Pre-launch · enquiries only</Status>
             <p className="lede">
-              Applications and bookings will open here after secure member sign-in and the end-to-end member journey pass the production launch check. For membership questions or a visit, email <a className="text-link" href="mailto:hello@armatureailabs.com">hello@armatureailabs.com</a>.
+              Membership applications and bookings are not open yet. For questions about the planned lab, membership, or events, email <a className="text-link" href="mailto:hello@armatureailabs.com">hello@armatureailabs.com</a> or call <a className="text-link" href="tel:+919748485583">+91 9748485583</a>.
             </p>
           </>
         ) : membershipActive ? (

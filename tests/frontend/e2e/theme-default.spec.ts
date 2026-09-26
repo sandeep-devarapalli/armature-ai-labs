@@ -16,7 +16,8 @@ for (const saved of [null, "invalid", "light", "dark", "sepia"]) {
     await page.goto("/", { waitUntil: "commit" });
     await expect(page.locator("html")).toHaveAttribute("data-theme", expected);
     await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute("content", colors[expected]);
-    await expect(page.locator("#root")).toBeEmpty();
+    await expect(page.locator("#root")).toHaveAttribute("data-prerendered-path", "/");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText("physical intelligence");
     await expect(page.locator("html")).toHaveCSS("background-color", expected === "dark" ? "rgb(17, 17, 16)" : expected === "sepia" ? "rgb(240, 228, 201)" : "rgb(255, 255, 255)");
     releaseScripts();
     await expect(page.getByRole("button", { name: `${expected} theme` })).toHaveAttribute("aria-pressed", "true");
@@ -45,5 +46,28 @@ test("dark startup and theme controls survive blocked theme storage", async ({ p
   await page.getByRole("button", { name: "light theme" }).click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
   await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute("content", "#ffffff");
+  expect(errors).toEqual([]);
+});
+
+test("all public route families hydrate without errors and keep query filters usable", async ({ page }) => {
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  page.on("console", (message) => {
+    if (message.type() === "error" && /hydrat|Minified React error/i.test(message.text())) errors.push(message.text());
+  });
+  await page.addInitScript(() => localStorage.setItem("armature-theme", "sepia"));
+  for (const pathname of [
+    "/", "/services/", "/projects/", "/branding/", "/blog/",
+    "/blog/model-hardware-standard/", "/projects/electrofluidic-fiber-muscles/",
+    "/building-vision/", "/ecosystem/", "/components/", "/maker-desk/",
+    "/join/", "/members/", "/components/weather-pico-w-controller/",
+    "/projects/?q=BRIDGE", "/components/?project=bridge", "/ecosystem/?focus=niqo-robotics"
+  ]) {
+    await page.goto(pathname);
+    await expect(page.locator("main h1")).toBeVisible();
+    await expect(page.getByRole("button", { name: "sepia theme", exact: true })).toHaveAttribute("aria-pressed", "true");
+    await expect(page.getByText("Unexpected Application Error!", { exact: true })).toHaveCount(0);
+    await expect(page.getByRole("heading", { name: "This page did not load.", exact: true })).toHaveCount(0);
+  }
   expect(errors).toEqual([]);
 });

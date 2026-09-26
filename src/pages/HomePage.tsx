@@ -89,12 +89,12 @@ const labRoles = [
   {
     number: "02",
     title: "A showroom",
-    copy: "Resident teams keep prototypes and demo material on the floor, so visitors see working physical AI rather than a pitch deck."
+    copy: "A place for resident teams to keep prototypes and demo material on the floor, so visitors can see working physical AI rather than a pitch deck."
   },
   {
     number: "03",
     title: "A room",
-    copy: "Founders, engineers, researchers, and backers share the space. Hard questions get answered by people who have built the thing."
+    copy: "A shared space for founders, engineers, researchers, and backers. Hard questions deserve people who have built the thing."
   },
   {
     number: "04",
@@ -112,10 +112,12 @@ export function HomePage() {
           <h1>A place to build<br/><span className="muted">physical intelligence.</span></h1>
           <p className="hero-copy">
             The armature is the core of every motor: the part that moves. Ours is
-            a 3,500 sq ft lab across two floors, built for the full path from idea
-            to working machine: arms, prototyping, machining, ESD-safe benches, and
-            GPU compute, all bookable by the hour.
+            a planned 3,500 sq ft lab across two floors, designed for the full path
+            from idea to working machine: robotics, prototyping, ESD-safe
+            benches, and GPU compute. Equipment and hourly access are planned,
+            not yet available to book.
           </p>
+          {!memberPlatformAvailable && <p className="hero-location mono">Pre-launch · enquiries only. Membership applications and bookings are not open yet.</p>}
           <p className="hero-location mono">The Physical AI and Robotics Lab · HSR Layout, Bengaluru</p>
           <div className="button-row">
             {memberPlatformAvailable ? (
@@ -124,10 +126,10 @@ export function HomePage() {
                 Book a workstation
               </Link>
             ) : (
-              <Link className="button button-primary" to="/projects">
-                Explore projects
+              <a className="button button-primary" href="mailto:hello@armatureailabs.com">
+                Enquire about membership
                 <ArrowRight aria-hidden="true" />
-              </Link>
+              </a>
             )}
             {equipmentPageAvailable && (
               <Link className="button button-quiet" to="/equipment">
@@ -158,7 +160,7 @@ export function HomePage() {
           <div className="metrics-strip">
             <Metric label="Footprint" value="3,500 sq ft" />
             <Metric label="Floors" value="2" />
-            <Metric label="Cabins" value="7" />
+            <Metric label="Planned cabins" value="7" />
             <Metric label="Balconies + terrace" value="3" />
           </div>
         </div>
@@ -167,7 +169,7 @@ export function HomePage() {
       <Section
         number="01"
         title="A working floor, not a club lounge"
-        lede="Every room is meant to hold a real project in progress."
+        lede="The plan is for every room to hold a real project in progress."
       >
         <div className="section-motion"><FieldOfTouch scene="interior" />
           <p className="motion-note">An illustrative laboratory study, not footage of Armature facilities.</p>
@@ -184,14 +186,14 @@ export function HomePage() {
           ))}
         </div>
         <div className="community-context">
-          <span className="mono">Events and build days with</span>
+          <span className="mono">Planned events and build days with</span>
           <div className="tag-row community-tags">
             <span>HSR Founders Club</span>
             <span>Robotics India community</span>
             <span>Partner communities</span>
           </div>
           <p>
-            Armature AI Labs is the first working facility in a larger plan: the
+            Armature AI Labs is the first planned facility in a larger vision: the
             Institute for Physical AI.
           </p>
         </div>
@@ -200,7 +202,7 @@ export function HomePage() {
       <Section
         number="02"
         title="Two floors at a glance"
-        lede="Fifteen measured rooms across the ground and first floors: coworking commons, a presentation hall, seven cabins, a workshop terrace, and three balconies."
+        lede="The proposed layout uses fifteen measured rooms across the ground and first floors: coworking commons, a presentation hall, seven cabins, a workshop terrace, and three balconies."
         dark
       >
         <LabModelShowcase />
@@ -248,23 +250,23 @@ export function HomePage() {
       <Section
         number="03"
         title="Monitored, end to end"
-        lede="Cameras and the access trail make a shared floor accountable without turning it into an unattended room."
+        lede="The planned cameras and access trail are intended to keep a shared floor accountable, not unattended."
       >
         <div className="feature-grid">
           <article>
             <Cctv aria-hidden="true" />
             <h3>Whole-floor coverage</h3>
-            <p>The commons, presentation hall, cabins, workshop terrace, balconies, kitchen, and entrance feed the on-site NVR.</p>
+            <p>The plan connects the commons, presentation hall, cabins, workshop terrace, balconies, kitchen, and entrance to an on-site NVR.</p>
           </article>
           <article>
             <ShieldCheck aria-hidden="true" />
             <h3>Hazard-zone visibility</h3>
-            <p>Guarded equipment remains subject to induction, booking, interlocks, and staff operating rules.</p>
+            <p>Guarded equipment will require induction, booking, interlocks, and staff operating rules before use.</p>
           </article>
           <article>
             <ScanLine aria-hidden="true" />
             <h3>Tied to attendance</h3>
-            <p>Each booking has a responsible member and a check-in trail, while recordings remain access-controlled.</p>
+            <p>The proposed workflow ties each booking to a responsible member and a check-in trail, with access-controlled recordings.</p>
           </article>
         </div>
       </Section>
@@ -272,7 +274,7 @@ export function HomePage() {
       <Section
         number="04"
         title="From idea to working machine"
-        lede="The floor is a pipeline. Work enters as a sketch and leaves as a machine someone has watched run."
+        lede="The intended workflow: work enters as a sketch and leaves as a machine someone has watched run."
       >
         <div className="section-motion motion-pair"><FieldOfTouch scene="gripper" /><FieldOfTouch scene="arm" /></div>
         <div className="process-line pipeline-line">
@@ -295,25 +297,25 @@ export function HomePage() {
       <Section
         number="05"
         title="The maker desk keeps small friction small"
-        lede="Secure storage, build-sized consumables, and complete portable toolkits sit beside the heavy equipment."
+        lede="The planned maker desk brings secure storage, build-sized consumables, and complete portable toolkits alongside the equipment."
       >
         <div className="feature-grid">
           <article>
             <LockKeyhole aria-hidden="true" />
             <h3>Lock the project here</h3>
-            <p>Subscribe to a small, medium, or tall secure locker for a week, month, or year.</p>
+            <p>Planned small, medium, and tall secure lockers, with weekly, monthly, or yearly options to be confirmed.</p>
             <Link to="/maker-desk">Locker options <ArrowRight aria-hidden="true" /></Link>
           </article>
           <article>
             <ShoppingBasket aria-hidden="true" />
             <h3>Buy the handful</h3>
-            <p>Pick up screws, wire, headers, heat-shrink, solder, and other low-cost bench stock in useful quantities.</p>
+            <p>Planned bench stock includes screws, wire, headers, heat-shrink, solder, and other low-cost supplies in useful quantities.</p>
             <Link to="/maker-desk">Bench stock <ArrowRight aria-hidden="true" /></Link>
           </article>
           <article>
             <PackageOpen aria-hidden="true" />
             <h3>Rent a complete toolbox</h3>
-            <p>Use a tagged electronics, mechanical, soldering, precision, or diagnostics kit and return it checked.</p>
+            <p>Planned tagged electronics, mechanical, soldering, precision, and diagnostics kits, with checked returns.</p>
             <Link to="/maker-desk">Toolkit library <ArrowRight aria-hidden="true" /></Link>
           </article>
         </div>
@@ -322,7 +324,7 @@ export function HomePage() {
       <Section
         number="06"
         title="Book, build, and leave a clean trail"
-        lede="Accounts, certification gates, reservations, and attendance are one operational path."
+        lede="The planned member journey brings accounts, certification gates, reservations, and attendance into one path. Applications and bookings are not open yet."
       >
         <div className="process-line">
           {[
@@ -345,11 +347,11 @@ export function HomePage() {
       <div className="quote-band">
         <div className="wrap">
           <p>
-            Most builders will never own a six-axis arm, a machine shop, and
-            dedicated GPU compute. <strong>Here you book them by the hour.</strong>
+            Most builders will never own a robot arm and dedicated GPU compute.
+            <strong> We are building a place to share access.</strong>
           </p>
           <Link to="/join">
-            Join the floor <ArrowRight aria-hidden="true" />
+            Membership enquiries <ArrowRight aria-hidden="true" />
           </Link>
         </div>
       </div>

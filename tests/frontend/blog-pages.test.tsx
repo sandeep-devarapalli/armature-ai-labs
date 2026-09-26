@@ -39,12 +39,22 @@ describe("published journal", () => {
     expect(screen.getByRole("button", { name: "Still image (reduced motion)" })).toBeDisabled();
   });
 
+  it("loads the Anthropic video only after activation", () => {
+    const { container } = render(<MemoryRouter><BlogArticlePage /></MemoryRouter>);
+    expect(container.querySelector("iframe")).toBeNull();
+    const play = screen.getByRole("button", { name: /Play video: AI models can now help run physical science experiments/ });
+    expect(play).toHaveAttribute("aria-describedby", "mhs-video-privacy");
+    expect(screen.getByRole("link", { name: /Watch on YouTube/ })).toHaveAttribute("href", "https://www.youtube.com/watch?v=P1zBiAQU1IA");
+    fireEvent.click(play);
+    expect(container.querySelector("iframe")).toHaveAttribute("src", expect.stringContaining("youtube-nocookie.com/embed/P1zBiAQU1IA"));
+  });
+
   it("retains article sections, eight sources, status and research caveats without a nested shell", () => {
     const { container } = render(<MemoryRouter><BlogArticlePage /></MemoryRouter>);
-    expect(container.querySelectorAll(".article-section")).toHaveLength(8);
+    expect(container.querySelectorAll(".article-section")).toHaveLength(10);
     const references = container.querySelector("#references") as HTMLElement;
     expect(within(references).getAllByRole("link")).toHaveLength(8);
-    expect(screen.getByText("Published 13 September 2026")).toBeInTheDocument();
+    expect(screen.getByText("Published 13 September 2026 · Updated 17 September 2026")).toBeInTheDocument();
     expect(screen.getByText(/does not imply that Armature has MHS access/)).toBeInTheDocument();
     expect(screen.getByText(/Limited research preview, with access by application/)).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Back to the journal" })).toHaveAttribute("href", "/blog/");

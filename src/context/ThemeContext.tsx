@@ -27,10 +27,18 @@ function resolveTheme(): Theme {
   return "dark";
 }
 
-export function ThemeProvider({ children }: PropsWithChildren) {
-  const [theme, setTheme] = useState<Theme>(resolveTheme);
+export function ThemeProvider({ children, hydrate = false }: PropsWithChildren<{ hydrate?: boolean }>) {
+  const [theme, setTheme] = useState<Theme>(() => hydrate ? "dark" : resolveTheme());
+  const [restored, setRestored] = useState(!hydrate);
 
   useEffect(() => {
+    if (!hydrate) return;
+    setTheme(resolveTheme());
+    setRestored(true);
+  }, [hydrate]);
+
+  useEffect(() => {
+    if (!restored) return;
     document.documentElement.dataset.theme = theme;
     const color = theme === "dark" ? "#111110" : theme === "sepia" ? "#F0E4C9" : "#ffffff";
     document.querySelector('meta[name="theme-color"]')?.setAttribute("content", color);
@@ -39,7 +47,7 @@ export function ThemeProvider({ children }: PropsWithChildren) {
     } catch {
       // Theme controls still work when the preference cannot be persisted.
     }
-  }, [theme]);
+  }, [theme, restored]);
 
   const value = useMemo(() => ({ theme, setTheme }), [theme]);
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;

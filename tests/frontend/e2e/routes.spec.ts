@@ -88,11 +88,12 @@ test("public projects and three themes remain usable", async ({ page }) => {
 
 test("Who We Are and Meet the Team have distinct direct routes and usable artwork", async ({ page, request }) => {
   const aboutHtml = await (await request.get("/about/")).text();
-  expect(aboutHtml).toContain("Who We Are · Armature AI Labs");
+  expect(aboutHtml).toContain("Who We Are | Armature AI Labs");
   expect(aboutHtml).toContain('rel="canonical" href="https://armatureailabs.com/about/"');
   expect(aboutHtml).toContain("/about/who-we-are-social.png");
   const teamHtml = await (await request.get("/team/")).text();
-  expect(teamHtml).toContain("Meet the Team · Armature AI Labs");
+  expect(teamHtml).toContain("Meet the Team | Armature AI Labs");
+  expect(teamHtml).toContain('name="robots" content="noindex, follow"');
 
   await page.goto("/about/");
   await expect(page.getByRole("heading", { name: "Who We Are" })).toBeVisible();
@@ -313,13 +314,13 @@ test("ecosystem map filters and preserves a selected organization", async ({ pag
   await page.getByRole("button", { name: "Learning & training", exact: true }).click();
   if (await directorySwitch.isVisible()) await directorySwitch.click();
   await expect(resultCount).toHaveText("1 result");
-  await expect(page.getByRole("button", { name: /LSCL Robotics/ })).toBeVisible();
+  await expect(page.locator(".ecosystem-entity-link").filter({ hasText: "LSCL Robotics" })).toBeVisible();
   await page.getByRole("button", { name: "All", exact: true }).click();
 
   await page.getByPlaceholder("Search teams, founders, or places").fill("Bellatrix");
   if (await directorySwitch.isVisible()) await directorySwitch.click();
   await expect(resultCount).toHaveText("1 result");
-  await page.getByRole("button", { name: /Bellatrix Aerospace/ }).click();
+  await page.locator(".ecosystem-entity-link").filter({ hasText: "Bellatrix Aerospace" }).click();
   await expect(page).toHaveURL(/focus=bellatrix-aerospace/);
   await expect(page.getByRole("heading", { name: "Bellatrix Aerospace" })).toBeVisible();
   const organizationDetails = page.getByRole("complementary", { name: "Organization details" });
@@ -827,7 +828,7 @@ test("reduced motion keeps T2 still and defers video until Play", async ({ page 
 
 test("public routes preserve the useful legacy lab sections", async ({ page }) => {
   await page.goto("/");
-  await expect(page.getByText("a 3,500 sq ft lab across two floors")).toBeVisible();
+  await expect(page.getByText(/a planned 3,500 sq ft lab across two floors/)).toBeVisible();
   await expect(page.getByRole("heading", { name: "Two floors at a glance" })).toBeVisible();
   await expect(page.locator("[data-room-tile]")).toHaveCount(14);
   await expect(page.locator("[data-room-tile]").getByText("Coworking commons", { exact: true })).toBeVisible();

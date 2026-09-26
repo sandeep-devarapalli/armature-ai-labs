@@ -13,5 +13,16 @@
 /index.html
   Cache-Control: public, max-age=0, must-revalidate
 
+/app-shell
+  Cache-Control: private, no-store
+  X-Robots-Tag: noindex, follow
+
+/app-shell.html
+  Cache-Control: private, no-store
+  X-Robots-Tag: noindex, follow
+
+/404.html
+  X-Robots-Tag: noindex, follow
+
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
