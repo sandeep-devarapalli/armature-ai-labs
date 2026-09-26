@@ -82,6 +82,7 @@ Deno.serve(async (request) => {
     const bytes = await scanOnboardingImage(original, request.headers.get("content-type")!, {
       url: Deno.env.get("ONBOARDING_SCANNER_URL"),
       secret: Deno.env.get("ONBOARDING_SCANNER_SECRET"),
+      googleCredentials: Deno.env.get("ONBOARDING_SCANNER_GOOGLE_CREDENTIALS_JSON"),
       local: Deno.env.get("ONBOARDING_SCANNER_LOCAL") === "true" && new URL(requiredEnv("SUPABASE_URL")).hostname === "kong",
     });
     if (Date.parse(document.expires_at) <= Date.now()) throw new HttpError(410, "Document retention period has ended.");

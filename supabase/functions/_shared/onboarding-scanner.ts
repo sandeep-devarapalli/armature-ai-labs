@@ -1,11 +1,12 @@
 import { HttpError } from "./http.ts";
+import { scannerIdentityToken } from "./scanner-identity.ts";
 
 const limit = 5 * 1024 * 1024;
 
 export async function scanOnboardingImage(
   bytes: Uint8Array,
   contentType: string,
-  config: { url?: string; secret?: string; local?: boolean },
+  config: { url?: string; secret?: string; local?: boolean; googleCredentials?: string },
   fetcher: typeof fetch = fetch,
 ): Promise<Uint8Array> {
   const unavailable = () => new HttpError(503, "Image safety checks are temporarily unavailable. Try again later.");
@@ -16,12 +17,17 @@ export async function scanOnboardingImage(
   if (endpoint.username || endpoint.password || endpoint.search || endpoint.hash ||
       (endpoint.protocol !== "https:" && !(config.local && endpoint.protocol === "http:" && localHosts.includes(endpoint.hostname)))) throw unavailable();
   if (!bytes.length || bytes.length > limit || !["image/png", "image/jpeg"].includes(contentType)) throw new HttpError(415, "Use a PNG or JPEG image of at most 5 MiB.");
+  let identity: string | undefined;
+  if (!(config.local && endpoint.protocol === "http:" && localHosts.includes(endpoint.hostname))) {
+    if (!config.googleCredentials) throw unavailable();
+    try { identity = await scannerIdentityToken(config.googleCredentials, endpoint, fetcher); } catch { throw unavailable(); }
+  }
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 60000);
   try {
     const response = await fetcher(endpoint, {
       method: "POST", redirect: "error", signal: controller.signal,
-      headers: { Authorization: `Bearer ${config.secret}`, "Content-Type": contentType, "Content-Length": String(bytes.length) },
+      headers: { Authorization: `Bearer ${config.secret}`, "Content-Type": contentType, "Content-Length": String(bytes.length), ...(identity ? { "X-Serverless-Authorization": `Bearer ${identity}` } : {}) },
       body: new Uint8Array(bytes).buffer,
     });
     if (response.status === 422) throw new HttpError(422, "The image could not pass safety checks. Use a different PNG or JPEG.");

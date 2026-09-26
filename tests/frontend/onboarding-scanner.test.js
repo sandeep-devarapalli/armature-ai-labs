@@ -6,13 +6,13 @@ beforeAll(async () => {
   scan = (await import('../../supabase/functions/_shared/onboarding-scanner')).scanOnboardingImage;
 });
 const png = new Uint8Array([137, 80, 78, 71, 13, 10, 26, 10]);
-const config = { url: 'https://scanner.example.test/scan', secret: 'synthetic-only-secret-of-32-characters' };
+const config = { url: 'http://host.docker.internal:55580/scan', local: true, secret: 'synthetic-only-secret-of-32-characters' };
 const good = () => new Response(png, { headers: { 'content-type': 'image/png' } });
 
 describe('private onboarding scan boundary', () => {
   it('fails closed without configuration or unsafe transport', async () => {
     const fetcher = vi.fn();
-    for (const value of [{}, { url: config.url }, { ...config, url: 'http://scanner.example.test/scan' }, { ...config, url: 'https://user:password@example.test/scan' }, { ...config, url: 'http://127.0.0.1/scan' }, { ...config, url: 'http://public.example.test/scan', local: true }]) {
+    for (const value of [{}, { url: config.url }, { ...config, url: 'http://scanner.example.test/scan' }, { ...config, url: 'https://user:password@example.test/scan' }, { ...config, url: 'http://127.0.0.1/scan', local: false }, { ...config, url: 'http://public.example.test/scan', local: true }]) {
       await expect(scan(png, 'image/png', value, fetcher)).rejects.toMatchObject({ status: 503 });
     }
     expect(fetcher).not.toHaveBeenCalled();
