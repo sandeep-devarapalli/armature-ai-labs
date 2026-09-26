@@ -17,7 +17,7 @@ import {
 import { Link } from "react-router-dom";
 import { Field, PageHeader, Section, Status } from "../components/Primitives";
 import { FieldOfTouch } from "../components/FieldOfTouch";
-import { memberPlatformAvailable } from "../config/release";
+import { basicOnboardingAvailable, memberPlatformAvailable } from "../config/release";
 import { useApp } from "../context/AppContext";
 
 const equipmentRows = [
@@ -302,8 +302,11 @@ export function JoinPage() {
     (application) => application.memberId === currentMember?.id && application.state === "pending"
   );
   const membershipActive = currentMember?.membershipState === "active";
+  const basicOnly = basicOnboardingAvailable && !memberPlatformAvailable;
 
-  const membershipAction = !memberPlatformAvailable ? (
+  const membershipAction = basicOnly ? (
+    <Link className="button button-primary" to="/onboarding">Register for free <ArrowRight aria-hidden="true" /></Link>
+  ) : !memberPlatformAvailable ? (
     <a className="button button-primary" href="mailto:hello@armatureailabs.com">Email the lab</a>
   ) : membershipActive ? (
     <Link className="button button-primary" to="/book">Book a resource <ArrowRight aria-hidden="true" /></Link>
@@ -343,20 +346,26 @@ export function JoinPage() {
     <>
       <PageHeader
         meta="Membership · booking · HSR Layout"
-        title={memberPlatformAvailable ? "Join the lab. Book what you need." : "Build with us. Enquire about membership."}
-        description={memberPlatformAvailable
+        title={basicOnly ? "Create your basic membership." : memberPlatformAvailable ? "Join the lab. Book what you need." : "Build with us. Enquire about membership."}
+        description={basicOnly
+          ? "Register for free, complete your profile and submit your photo and ID for private staff review. Paid bookings remain closed."
+          : memberPlatformAvailable
           ? "Create one member account, tell us what you are building, and complete staff approval. Approved members can reserve commissioned resources from one workspace."
           : "Armature AI Labs is pre-launch. We are accepting enquiries about the planned lab, membership, and events; applications and bookings are not open yet."}
         actions={actions}
       />
-      <Section number="01" title="One membership journey" lede={!memberPlatformAvailable ? "The planned process once membership opens." : undefined}>
+      <Section number="01" title="One membership journey" lede={basicOnly ? "Start with free registration. Paid access will follow separately." : !memberPlatformAvailable ? "The planned process once membership opens." : undefined}>
         <div className="section-motion membership-motion"><FieldOfTouch scene="birds" /></div>
         <div className="process-list">
-          {[
+          {(basicOnly ? [
+            ["01", "Create an account", "Sign in with Google or a secure email link. Add your name, phone, date of birth and personal LinkedIn profile."],
+            ["02", "Complete identity review", "Upload your photo and one accepted government ID through the protected portal. Staff review your registration; applicants aged 16–17 also need guardian permission by email."],
+            ["03", "Choose paid access later", "Basic approval does not include a desk, cabin or equipment. Paid bookings remain closed and will open separately."]
+          ] : [
             ["01", "Create an account", "Use a secure email link, add your public name and handle, and tell us what you plan to build."],
             ["02", "Complete approval", "Staff review the application and issue any safety inductions required by the resources you intend to use."],
             ["03", "Book and build", "Choose an available resource, reserve the time, and manage the booking from your member workspace."]
-          ].map(([number, title, copy]) => (
+          ]).map(([number, title, copy]) => (
             <div className="process-row" key={number}><span className="mono">{number}</span><h3>{title}</h3><p>{copy}</p></div>
           ))}
         </div>
@@ -383,7 +392,13 @@ export function JoinPage() {
       </Section>
       <Section number="03" title="Start your membership">
         <div className="section-motion"><FieldOfTouch scene="rain" /></div>
-        {!memberPlatformAvailable ? (
+        {basicOnly ? (
+          <>
+            <Status tone="good">Free basic registration open</Status>
+            <p className="lede">Complete your registration and follow its review status in the protected portal. Paid bookings remain closed.</p>
+            <div className="section-actions"><Link className="button button-primary" to="/onboarding">Open registration <ArrowRight aria-hidden="true" /></Link></div>
+          </>
+        ) : !memberPlatformAvailable ? (
           <>
             <Status tone="warn">Pre-launch · enquiries only</Status>
             <p className="lede">

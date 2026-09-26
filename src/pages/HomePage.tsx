@@ -24,7 +24,7 @@ import type { LucideIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { FieldOfTouch } from "../components/FieldOfTouch";
 import { Metric, Section } from "../components/Primitives";
-import { equipmentPageAvailable, memberPlatformAvailable } from "../config/release";
+import { basicOnboardingAvailable, equipmentPageAvailable, memberPlatformAvailable } from "../config/release";
 
 
 type RoomUse = "work" | "shared" | "outdoor" | "support";
@@ -117,13 +117,18 @@ export function HomePage() {
             benches, and GPU compute. Equipment and hourly access are planned,
             not yet available to book.
           </p>
-          {!memberPlatformAvailable && <p className="hero-location mono">Pre-launch · enquiries only. Membership applications and bookings are not open yet.</p>}
+          {!memberPlatformAvailable && <p className="hero-location mono">{basicOnboardingAvailable ? "Free basic registration is open. Paid bookings remain closed." : "Pre-launch · enquiries only. Membership applications and bookings are not open yet."}</p>}
           <p className="hero-location mono">The Physical AI and Robotics Lab · HSR Layout, Bengaluru</p>
           <div className="button-row">
             {memberPlatformAvailable ? (
               <Link className="button button-primary" to="/book">
                 <CalendarDays aria-hidden="true" />
                 Book a workstation
+              </Link>
+            ) : basicOnboardingAvailable ? (
+              <Link className="button button-primary" to="/onboarding">
+                Register for free
+                <ArrowRight aria-hidden="true" />
               </Link>
             ) : (
               <a className="button button-primary" href="mailto:hello@armatureailabs.com">

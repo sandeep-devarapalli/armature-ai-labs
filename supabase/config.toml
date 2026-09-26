@@ -34,9 +34,11 @@ enabled = true
 site_url = "https://armatureailabs.com"
 additional_redirect_urls = [
   "http://localhost:5173/auth/callback",
+  "http://localhost:5173/auth/callback?next=%2Fonboarding",
   "http://localhost:4173/auth/callback",
   "https://codex-member-booking-pwa.armature-lab.pages.dev/auth/callback",
   "https://armatureailabs.com/auth/callback",
+  "https://armatureailabs.com/auth/callback?next=%2Fonboarding",
   "https://armaturelab.org/auth/callback",
 ]
 jwt_expiry = 3600
@@ -77,4 +79,10 @@ verify_jwt = false
 verify_jwt = false
 
 [functions.component-request]
+verify_jwt = false
+
+[functions.onboarding-document]
+verify_jwt = false
+
+[functions.onboarding-retention]
 verify_jwt = false

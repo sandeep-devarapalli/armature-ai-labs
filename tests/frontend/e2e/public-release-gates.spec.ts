@@ -45,16 +45,15 @@ test("landing and membership pages publish verified community links", async ({ p
 });
 
 test("public-first production gates operational routes", async ({ page }) => {
+  test.skip(process.env.VITE_DEMO_MODE === "true", "Explicit demo build.");
+  const basicEnabled = process.env.VITE_BASIC_ONBOARDING_ENABLED === "true";
   await page.goto("/auth");
-  const directRouteHeading = page.getByRole("heading", { level: 1 });
-  await directRouteHeading.waitFor();
-  test.skip(
-    await directRouteHeading.textContent() !== "Operational access is opening soon.",
-    "Production gating is intentionally disabled in an explicit demo build."
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    basicEnabled ? "Create your member account." : "Operational access is opening soon."
   );
 
   await page.goto("/");
-  await expect(page.getByTitle("Sign in")).toHaveCount(0);
+  if (!basicEnabled) await expect(page.getByTitle("Sign in")).toHaveCount(0);
   await expect(page.getByRole("navigation", { name: "Primary navigation" }).locator('a[href="/financials"]')).toHaveCount(0);
   await expect(page.locator('a[href="/procurement"]')).toHaveCount(0);
   await expect(page.getByRole("link", { name: "Kiosk" })).toHaveCount(0);
@@ -71,18 +70,19 @@ test("public-first production gates operational routes", async ({ page }) => {
   await page.goto("/procurement");
   await expect(page.getByRole("heading", { name: "That bench is not on the floor plan." })).toBeVisible();
 
-  await page.goto("/join");
-  await expect(page.getByRole("heading", { name: "Build with us. Enquire about membership." })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Create member account" })).toHaveCount(0);
-  await expect(page.getByText("Pre-launch · enquiries only")).toBeVisible();
-  await expect(page.getByRole("link", { name: "Email the lab" })).toHaveAttribute("href", "mailto:hello@armatureailabs.com");
+  if (!basicEnabled) {
+    await page.goto("/join");
+    await expect(page.getByRole("heading", { name: "Build with us. Enquire about membership." })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Create member account" })).toHaveCount(0);
+    await expect(page.getByText("Pre-launch · enquiries only")).toBeVisible();
+    await expect(page.getByRole("link", { name: "Email the lab" })).toHaveAttribute("href", "mailto:hello@armatureailabs.com");
 
-  await page.goto("/membership");
-  await expect(page).toHaveURL(/\/join$/);
-  await expect(page.getByRole("heading", { name: "One membership journey" })).toBeVisible();
+    await page.goto("/membership");
+    await expect(page).toHaveURL(/\/join$/);
+    await expect(page.getByRole("heading", { name: "One membership journey" })).toBeVisible();
+  }
 
   for (const path of [
-    "/auth",
     "/book",
     "/bookings",
     "/check-in",

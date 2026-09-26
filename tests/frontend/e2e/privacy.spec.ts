@@ -1,12 +1,15 @@
 import { expect, test } from "@playwright/test";
 
-test("privacy is discoverable, readable in every theme and separates planned collection", async ({ page }) => {
+test("privacy is discoverable, readable in every theme and explains registration and document retention", async ({ page }) => {
   await page.goto("/join/");
   await page.locator("footer").getByRole("link", { name: "Privacy", exact: true }).click();
   await expect(page).toHaveTitle("Privacy | Armature AI Labs");
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://armatureailabs.com/privacy/");
-  await expect(page.getByRole("heading", { name: "Membership: planned, not open yet" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Basic membership and identity review" })).toBeVisible();
   await expect(page.locator("main")).toContainText("Jayasri Nageshwara Rao and Partners LLP");
+  await expect(page.locator("main")).toContainText("2026-09-26-release-1");
+  await expect(page.locator("main")).toContainText("30 days after upload");
+  await expect(page.locator("main")).toContainText("not covered by the 30-day upload cleanup");
   await expect(page.locator('main a[href="mailto:privacy@armatureailabs.com"]').first()).toBeVisible();
   await expect(page.locator('main input[type="file"]')).toHaveCount(0);
   for (const theme of ["light", "dark", "sepia"]) {

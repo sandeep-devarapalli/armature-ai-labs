@@ -1,5 +1,11 @@
 # AGENTS.md
 
+- Account separation, 26 September 2026: sandeep@armatureailabs.com is Sandeep Devarapalli's private personal membership identity; hello@armatureailabs.com is the general administration identity. Both are explicitly authorised ordinary admins. A shared Workspace mailbox does not merge website identities; Google identifies hello@, while personal sandeep@ uses email-link sign-in. Admin rights do not approve basic identity verification or grant paid access.
+
+- Browser profile correction, 26 September 2026: use the Sandeep Chrome profile (sandeep.devarapalli@gmail.com) for Cloudflare and Supabase administration. The browser profile email is not necessarily the service account email; verify the Armature domain/project after signing in.
+
+- Basic registration policy, 26 September 2026: staff review IDs only in the protected portal, never download or retain copies, and retain only verification results after the 30-day uploaded-image deletion. For members aged 16–17, guardians email hello@armatureailabs.com with member name and registered email, guardian name and relationship, and explicit permission. Basic registration does not grant paid access; keep intake gates false until release checks pass.
+
 - Legal operator correction, 26 September 2026: use the exact name `Jayasri Nageshwara Rao and Partners LLP` in the privacy notice. Do not shorten it to Nagesh Rao. The lab contact address is not a confirmed registered-office address.
 
 - Selected homepage layout, 20 September 2026: option 03 Integrated backdrop, using the microplate scanner in muted T2. Keep the text readable on the left and the instrument on the right; stack the film below the copy on phones. This replaces the glass-pickup hero and split layout in the local preview. The user authorized completing the supporting placements and publishing the combined update on 20 September 2026. Deploy only the checked final revision; the earlier glass-hero release is superseded.
