@@ -140,3 +140,29 @@ Node22:144unit tests passed,14focused auth tests passed,build/154SEO passed,
 2desktop/mobile basic-on/paid-off checks passed. First full-suite attempt hit
 managed-worktree Vite cache sandbox EPERM; rerun with filesystem permission passed.
 No live login, public launch, admin grant or payment activation performed.
+
+## Resend domain preparation —26September2026
+
+Owner completed Resend signup; armatureailabs team verified in dashboard. Created
+mail.armatureailabs.com (domain ID ac65aa50-729f-4844-ad44-b512b80b8db2), Tokyo
+ap-northeast-1, sending only; receiving remains off. It is not DNS-verified yet.
+Exact dashboard DNS requirements (names relative to armatureailabs.com):
+
+- TXT resend._domainkey.mail: p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDiTgabGFvesC3JxPsHWvdSdGhj9iMKHnpBwr2x0mNVIFOoHUIDFz3KH9sY/MmVk4cA46ThOzulYN4UtsYCG4Yx9GR9MWHaS75Nw8yPd2CUkr5Su7ZoIqhy5zfaahqQHWYP18Uo/hYbqkTMyt+vzNhfY8opp0UH0SrYbOANF1RsdwIDAQAB
+- CNAME rsend.mail: rsend-apne1.forge.rmta.net, DNS-only
+- CNAME send.mail: send.forge.rmta.net, DNS-only
+
+Do not add the dashboard's optional root _dmarc p=none suggestion without reviewing
+the domain-wide policy. No DNS records were changed. Public lookup confirms
+Cloudflare nameservers and root MX1smtp.google.com; required new records absent.
+Cloudflare CLI identity sandeep.devarapalli@live.com has zone-read but no DNS-write
+scope. Work Chrome Cloudflare is signed out; owner login requested in open tab.
+Do not broaden CLI credentials merely to avoid this handoff.
+
+No Resend key created: Sending access selector offered only All domains while
+verification is unfinished. Create a domain-restricted sending key after verification,
+then store it securely in Supabase SMTP. Disable click/open tracking before auth
+mail tests (creation form showed click tracking checked but disabled; inspect final
+domain settings). Preserve existing Workspace routing, do not enable receiving,
+and do not mark email sign-in ready until delivery and callback tests succeed.
+Reference for the new CNAME-style requirements: https://resend.com/docs/dashboard/domains/manage-domains .
