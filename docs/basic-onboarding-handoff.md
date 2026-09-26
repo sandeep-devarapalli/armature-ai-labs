@@ -96,3 +96,13 @@ lookup found neither website account. Both must complete verified website sign-i
 before admin access can be granted to their actual auth user IDs. Do not create
 accounts or grant roles from email aliases alone; do not grant super_admin.
 The independent-review rule still prohibits approving one's own application.
+
+Reviewer bootstrap update,26September2026: following explicit owner confirmation,
+the sandeep@ website identity was created through the supported Auth Admin API
+with email_confirm=false. The supplied member details were saved to a private
+profile (is_public=false); contact details are intentionally omitted from Git.
+Read-back confirmed unverified email, pending membership and no staff role.
+No sign-in/invitation email was sent because the production callback remains gated.
+After verified sign-in, assign the previously authorised ordinary admin role;
+do not bypass identity review or activate paid access. hello@ remains uncreated.
+This supersedes the earlier zero-account observation for sandeep@ only.
