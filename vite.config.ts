@@ -147,7 +147,7 @@ export default defineConfig(({ mode }) => {
     setupFiles: ["./tests/frontend/setup.ts"],
     css: true,
     globals: true,
-    exclude: ["tests/frontend/e2e/**", "node_modules/**", "dist/**"]
+    exclude: ["tests/frontend/e2e/**", "tests/basic-registration/**", "node_modules/**", "dist/**"]
   }
   };
 });

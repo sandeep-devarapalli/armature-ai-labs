@@ -6,11 +6,13 @@ import { PageMetadata } from "../components/PageMetadata";
 import { AdminRoute, MemberRoute, StaffRoute } from "../components/RouteGuard";
 import { HomePage } from "../pages/HomePage";
 import {
+  basicOnboardingAvailable,
   componentRequestsAvailable,
   equipmentPageAvailable,
   memberPlatformAvailable
 } from "../config/release";
 
+const OnboardingPage = lazy(() => import("../pages/OnboardingPage").then((module) => ({ default: module.OnboardingPage })));
 const ProjectsPage = lazy(() => import("../pages/ProjectsPage").then((module) => ({ default: module.ProjectsPage })));
 const BrandingPage = lazy(() => import("../pages/BrandingPage").then((module) => ({ default: module.BrandingPage })));
 const PrivacyPage = lazy(() => import("../pages/PrivacyPage").then((module) => ({ default: module.PrivacyPage })));
@@ -79,6 +81,12 @@ const memberComponentRequestFeature = (page: ReactNode) => (
   </ReleaseGate>
 );
 
+const onboardingLocalRoutes: RouteObject[] = [];
+if (import.meta.env.DEV && import.meta.env.VITE_DEMO_MODE === "true") {
+  const OnboardingLocalPage = lazy(() => import("../pages/OnboardingLocalPage").then((module) => ({ default: module.OnboardingLocalPage })));
+  onboardingLocalRoutes.push({ path: "/onboarding-local", element: <OnboardingLocalPage /> });
+}
+
 export const routes: RouteObject[] = [
   {
     element: <Shell />,
@@ -110,8 +118,9 @@ export const routes: RouteObject[] = [
       { path: "/join", element: <JoinPage /> },
       { path: "/members", element: <MembersPage /> },
       { path: "/members/:handle", element: <PublicMemberPage /> },
-      { path: "/auth", element: memberFeature(<AuthPage />) },
-      { path: "/auth/callback", element: memberFeature(<AuthCallbackPage />) },
+      { path: "/onboarding", element: <ReleaseGate enabled={basicOnboardingAvailable}><OnboardingPage /></ReleaseGate> },
+      { path: "/auth", element: <ReleaseGate enabled={memberPlatformAvailable || basicOnboardingAvailable}><AuthPage /></ReleaseGate> },
+      { path: "/auth/callback", element: <ReleaseGate enabled={memberPlatformAvailable || basicOnboardingAvailable}><AuthCallbackPage /></ReleaseGate> },
       { path: "/dashboard", element: memberFeature(protectedPage(<DashboardPage />)) },
       { path: "/profile", element: memberFeature(protectedPage(<ProfilePage />)) },
       { path: "/book", element: memberFeature(protectedPage(<BookPage />)) },
@@ -135,6 +144,7 @@ export const routes: RouteObject[] = [
       { path: "/admin/component-requests", element: memberComponentRequestFeature(staffPage(<AdminComponentRequestsPage />)) },
       { path: "/admin/cabinets", element: memberFeature(staffPage(<AdminCabinetsPage />)) },
       { path: "/admin/maker-services", element: memberFeature(staffPage(<AdminMakerServicesPage />)) },
+      ...onboardingLocalRoutes,
       { path: "*", element: <NotFoundPage /> }
     ]
   },

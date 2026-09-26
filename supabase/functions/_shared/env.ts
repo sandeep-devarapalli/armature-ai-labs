@@ -8,8 +8,8 @@ export function requiredEnv(name: string): string {
   return value;
 }
 
-export function assertJobSecret(request: Request): void {
-  const expected = requiredEnv("ARMATURE_JOB_SECRET");
+export function assertJobSecret(request: Request, variable = "ARMATURE_JOB_SECRET"): void {
+  const expected = requiredEnv(variable);
   const supplied = request.headers.get("x-armature-job-secret") ?? "";
 
   if (!constantTimeEqual(expected, supplied)) {

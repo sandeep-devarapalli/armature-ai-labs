@@ -1,4 +1,4 @@
-import { demoModeEnabled, isBackendAvailable } from "../lib/supabase";
+import { demoModeEnabled, isBackendAvailable, isSupabaseConfigured } from "../lib/supabase";
 
 const enabled = (value: string | undefined) => value === "true";
 
@@ -17,3 +17,6 @@ export const memberPlatformAvailable =
 
 export const componentRequestsAvailable =
   isBackendAvailable && (demoModeEnabled || componentRequestsEnabled);
+
+export const basicOnboardingAvailable = !demoModeEnabled && isSupabaseConfigured
+  && enabled(import.meta.env.VITE_BASIC_ONBOARDING_ENABLED);
