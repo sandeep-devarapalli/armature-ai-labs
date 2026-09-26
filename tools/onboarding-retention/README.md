@@ -1,8 +1,8 @@
 # Managed onboarding cleanup
 
 Cloud Run job and five-minute schedule deployed on 26 September 2026 after hosted
-synthetic deletion and idempotency checks passed. Operator alert delivery verification
-remains a release gate. See `docs/retention-production-release-2026-09-26.md` for
+synthetic deletion and idempotency checks passed. Operator failure, missed-success and recovery emails were
+verified in the hello inbox. See `docs/retention-production-release-2026-09-26.md` for
 resource identifiers, pinned image and verification evidence. Intake remains gated.
 
 The runner calls only the fixed onboarding-retention endpoint. Inject

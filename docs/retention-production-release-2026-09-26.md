@@ -21,7 +21,7 @@ No hosted deletion or operator notification delivery claimed yet. Controlled fai
 ## Release gates still pending
 
 - Hosted synthetic expiry/marker/idempotency/unexpired-survival checks passed, as detailed below.
-- Observe both failure and missed-success emails and recovery, then verify real five-minute scheduler path.
+- Both failure/missed-success and recovery emails observed; actual five-minute scheduler path verified.
 - Reconcile expiry backlog separately from successful job executions.
 - Provider backup retention is not proven by Storage object deletion; retain no staff-downloaded copies.
 
@@ -45,3 +45,9 @@ Parent agent inspected the actual hello Google Workspace inbox in native Chrome:
 Scheduler-triggered execution `onboarding-retention-2spcv` completed successfully17:48:53Z. This verifies the deployed scheduler identity can invoke the bounded job; it is separate from a natural clock-triggered run.
 
 Natural schedule tick at17:50:00Z invoked `onboarding-retention-shwmr`, completed17:50:13Z. Repeated authoritative checks preserved expired absence and unexpired survival. Afterwards, removed only the recorded two synthetic objects/document rows, synthetic application and synthetic `@example.test` auth user. Verified no fixture document rows remain. Private fixture manifest is retained for audit; temporary plaintext retention credential has been deleted after both managed secret stores were configured.
+
+## Recovery verified
+
+Parent inspected both recovery messages in the actual hello Gmail threads: failed-execution recovered23:22IST (incident4m22s), and missed-success recovered23:24IST (incident10m7s). Both notification receipt gates are passed.
+
+Read-only Monitoring PromQL queries at17:55:02Z independently returned four successful executions in15minutes, zero failures in5minutes, and an empty result for the exact heartbeat alert predicate (condition not firing). No policy changes were made during diagnosis. Google documents that PromQL incidents close after the larger of270seconds or twice the evaluation interval after the condition last holds; metric ingestion and notification transport add further delay. The configured60s evaluation therefore has a270s closure interval, not instant recovery. Source: https://docs.cloud.google.com/monitoring/alerts/using-promql .
