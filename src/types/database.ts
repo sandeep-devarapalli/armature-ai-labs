@@ -34,6 +34,97 @@ export type Database = {
   }
   public: {
     Tables: {
+      workspace_pass_allocations: {
+        Row: {
+          booking_ids: string[]
+          created_at: string
+          id: string
+          member_id: string
+          period: unknown
+          product_id: string
+          released_at: string | null
+          resource_id: string
+        }
+        Insert: {
+          booking_ids: string[]
+          created_at?: string
+          id?: string
+          member_id: string
+          period: unknown
+          product_id: string
+          released_at?: string | null
+          resource_id: string
+        }
+        Update: {
+          booking_ids?: string[]
+          created_at?: string
+          id?: string
+          member_id?: string
+          period?: unknown
+          product_id?: string
+          released_at?: string | null
+          resource_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workspace_pass_allocations_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "booking_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "workspace_pass_allocations_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: false
+            referencedRelation: "public_resources"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "workspace_pass_allocations_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: false
+            referencedRelation: "resources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      booking_inventory: {
+        Row: {
+          code: string
+          floor: string
+          resource_id: string
+          room: string
+        }
+        Insert: {
+          code: string
+          floor: string
+          resource_id: string
+          room: string
+        }
+        Update: {
+          code?: string
+          floor?: string
+          resource_id?: string
+          room?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "booking_inventory_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: true
+            referencedRelation: "public_resources"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "booking_inventory_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: true
+            referencedRelation: "resources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       access_events: {
         Row: {
           booking_id: string | null
@@ -4094,6 +4185,23 @@ export type Database = {
       }
     }
     Functions: {
+      set_booking_resource_enabled: {
+        Args: { p_enabled: boolean; p_reason: string; p_resource_id: string }
+        Returns: undefined
+      }
+      reserve_workspace_pass: {
+        Args: {
+          p_dates: string[]
+          p_organization_id?: string | null
+          p_product_id: string
+          p_resource_id: string
+        }
+        Returns: string[]
+      }
+      get_workspace_availability: {
+        Args: { p_dates: string[]; p_product_id: string }
+        Returns: Json
+      }
       add_toolkit_rental_item: {
         Args: {
           p_checkout_condition_note?: string
