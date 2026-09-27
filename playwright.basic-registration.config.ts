@@ -4,7 +4,7 @@ const baseURL = process.env.PLAYWRIGHT_BASE_URL || "http://127.0.0.1:4352";
 
 export default defineConfig({
   testDir: "./tests/basic-registration",
-  use: { baseURL, trace: "retain-on-failure" },
+  use: { baseURL, serviceWorkers: "block", trace: "retain-on-failure" },
   webServer: process.env.PLAYWRIGHT_BASE_URL ? undefined : {
     command: process.env.PLAYWRIGHT_PREBUILT === "true"
       ? "npx vite preview --host 127.0.0.1 --port 4352 --strictPort"

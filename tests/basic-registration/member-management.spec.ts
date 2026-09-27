@@ -1,4 +1,5 @@
 import { expect, test, type Page } from "@playwright/test";
+import { backendOrigin, authStorageKey } from "./backend-fixture";
 test.beforeEach(async ({ page }) => {
   page.on("pageerror", (error) => { throw new Error(`Browser runtime error: ${error.message}`); });
 });
@@ -9,10 +10,10 @@ async function mockMembers(page: Page, role: string) {
   let targetRole = "member";
   let status = "pending";
   const user = { id: actor, aud: "authenticated", role: "authenticated", email: "reviewer@example.test", email_confirmed_at: "2026-09-01T00:00:00Z", app_metadata: { provider: "email" }, user_metadata: {}, created_at: "2026-09-01T00:00:00Z" };
-  await page.addInitScript((user) => {
-    localStorage.setItem("sb-reserved-auth-token", JSON.stringify({ access_token: "synthetic-access-token", refresh_token: "synthetic-refresh-token", expires_at: Math.floor(Date.now() / 1000) + 36000, expires_in: 36000, token_type: "bearer", user }));
-  }, user);
-  await page.route("https://reserved.invalid/**", async (route) => {
+  await page.addInitScript(({ user, storageKey }) => {
+    localStorage.setItem(storageKey, JSON.stringify({ access_token: "synthetic-access-token", refresh_token: "synthetic-refresh-token", expires_at: Math.floor(Date.now() / 1000) + 36000, expires_in: 36000, token_type: "bearer", user }));
+  }, { user, storageKey: authStorageKey });
+  await page.route(`${backendOrigin}/**`, async (route) => {
     const url = new URL(route.request().url());
     const name = url.pathname.split("/").at(-1)!;
     const body = route.request().postDataJSON() || {};
@@ -26,7 +27,7 @@ async function mockMembers(page: Page, role: string) {
     } else if (name === "staff_roles") data = [{ role }];
     else if (name === "basic_onboarding_applications") data = status === "approved" && role === "membership_reviewer" ? [] : [{ user_id: applicant, full_name: "Synthetic Applicant", email: "applicant@example.test", phone: "+919999999999", linkedin_url: "https://www.linkedin.com/in/synthetic", date_of_birth: "1990-01-01", status, revision: 1 }];
     else if (name === "onboarding_documents") data = ["photo", "government_id"].map((kind, index) => ({ id: `document-${index}`, user_id: applicant, kind, uploaded_at: "2026-09-27T00:00:00Z", expires_at: "2035-01-01T00:00:00Z", deleted_at: null }));
-    else if (name === "user") data = { user };
+    else if (name === "user") data = user;
     else if (name === "member-avatar") { await route.fulfill({ status: 404, contentType: "application/json", body: JSON.stringify({ error: "No avatar" }) }); return; }
     await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(data) });
   });

@@ -35,3 +35,9 @@ Required: local SQL permission/transition/concurrency tests; frontend/unit/build
 ## Owner interaction after release
 
 Sign in with personal sandeep identity for Super admin controls and the one-time owner confirmation. The implementation does not automatically approve the personal application or copy its photo: review/confirmation and avatar consent remain explicit actions in the portal. hello retains Admin permissions and cannot appoint Admins. Paid access remains closed.
+
+## Production checkpoint and fixture correction
+
+PR83/84/85 were squash-merged as f32a47e,25cdc1a,5d93cf8. Migrations006–008 and avatar/retention functions were deployed; exact role assignments and unused owner exception verified. A disposable synthetic PNG passed private scanner upload, consent/access/removal and managed cleanup, then its account was removed. No real ID was accessed. Managed cleanup jobs p4nbm/d8trk succeeded.
+
+Workflow36296042655 stopped before website publication: the browser fixture hardcoded reserved.invalid storage and routes, while the prebuilt production bundle used its configured backend. The fix derives both from the build environment, fails if that environment is missing, blocks service workers for mocked tests, and adds an alternate-origin prebuilt regression run to PR CI. This changes tests only; website release remains pending until the corrected workflow passes.
