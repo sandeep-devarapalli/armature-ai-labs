@@ -88,8 +88,10 @@ class Clamd:
 
 
 def normalize(data, content_type):
-    expected = {'image/png': ('PNG', b'\x89PNG\r\n\x1a\n'), 'image/jpeg': ('JPEG', b'\xff\xd8\xff')}
+    expected = {'image/png': ('PNG', b'\x89PNG\r\n\x1a\n'), 'image/jpeg': ('JPEG', b'\xff\xd8\xff'), 'image/webp': ('WEBP', b'RIFF')}
     if content_type not in expected or not data.startswith(expected[content_type][1]):
+        raise Rejected()
+    if content_type == 'image/webp' and (len(data) < 12 or data[8:12] != b'WEBP' or struct.unpack('<I', data[4:8])[0] + 8 != len(data)):
         raise Rejected()
     if content_type == 'image/jpeg' and not data.endswith(b'\xff\xd9'):
         raise Rejected()
@@ -119,7 +121,7 @@ def normalize(data, content_type):
             source.load()
             oriented = ImageOps.exif_transpose(source)
             # A fresh pixel-only image prevents metadata/exif/profile copying.
-            mode = 'RGBA' if content_type == 'image/png' and ('A' in oriented.getbands() or 'transparency' in oriented.info) else 'RGB'
+            mode = 'RGBA' if content_type in ('image/png', 'image/webp') and ('A' in oriented.getbands() or 'transparency' in oriented.info) else 'RGB'
             converted = oriented.convert(mode)
             clean = Image.new(mode, converted.size)
             clean.paste(converted)

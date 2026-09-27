@@ -41,6 +41,11 @@ export function PrivacyPage() {
         <p>Supabase database backups contain database records and Storage metadata, not the uploaded Storage image files. Deleting an uploaded image does not erase related database history or every provider log or backup. Restored records must be checked against expired or deleted uploads before document access is restored.</p>
         <p>Identity-review notice version: <strong>2026-09-26-release-1</strong>. We record your explicit acceptance with the application revision and server timestamp. Corrections require a new acceptance; previous acceptance records are retained.</p>
       </section>
+      <section aria-labelledby="privacy-wishlist">
+        <h2 id="privacy-wishlist">Equipment requests and votes</h2>
+        <p>Approved members can suggest equipment and support requests. Administrators review suggestions before publication. Published equipment names, intended uses, product images, procurement updates and vote totals are public; requester email addresses and voter identities are not. Please do not include personal information in your suggestion or upload images you do not have permission to share.</p>
+        <p>Optional product images are scanned and stripped of image metadata before private storage. Unpublished images are accessible to their submitter and authorised Admins or Super admins. Publication makes the image public. These images are kept while attached to a request and do not follow the 30-day identity-document rule. Replaced images, images from merged or deleted requests, and unsuccessful upload remnants are queued for monitored deletion. We retain request, vote and moderation records to manage demand and accountability. Contact our privacy address to request removal or review of these records.</p>
+      </section>
       <section aria-labelledby="privacy-retention">
         <h2 id="privacy-retention">Retention, providers and your choices</h2>
         <p>We keep enquiry correspondence while it is needed to respond and maintain the related relationship, or to meet applicable obligations and resolve disputes. Service-provider logs and backups follow their own retention arrangements. Depending on the provider, processing may take place outside India.</p>

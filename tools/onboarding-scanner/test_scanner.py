@@ -20,7 +20,7 @@ def fixture(format='PNG', size=(32, 32)):
 
 class ImageTests(unittest.TestCase):
     def test_png_and_jpeg(self):
-        for format, mime in [('PNG', 'image/png'), ('JPEG', 'image/jpeg')]:
+        for format, mime in [('PNG', 'image/png'), ('JPEG', 'image/jpeg'), ('WEBP', 'image/webp')]:
             with Image.open(io.BytesIO(normalize(fixture(format), mime))) as image:
                 self.assertEqual(image.size, (32, 32))
                 self.assertNotIn('private', image.info)
@@ -29,6 +29,20 @@ class ImageTests(unittest.TestCase):
         for value, mime in [(b'notimage', 'image/png'), (fixture(), 'image/jpeg'), (fixture()[:30], 'image/png'), (fixture() + b'trailing', 'image/png'), (fixture('JPEG') + b'trailing', 'image/jpeg')]:
             with self.assertRaises(Rejected):
                 normalize(value, mime)
+
+    def test_webp_container_and_metadata(self):
+        image = Image.new('RGB', (8, 8), 'red')
+        out = io.BytesIO()
+        exif = Image.Exif()
+        exif[270] = 'private metadata'
+        image.save(out, format='WEBP', exif=exif)
+        clean = normalize(out.getvalue(), 'image/webp')
+        self.assertNotIn(b'private metadata', clean)
+        for data in [out.getvalue() + b'trailing', out.getvalue()[:20]]:
+            with self.assertRaises(Rejected): normalize(data, 'image/webp')
+        animated = io.BytesIO()
+        image.save(animated, format='WEBP', save_all=True, append_images=[Image.new('RGB', (8, 8), 'blue')], duration=100)
+        with self.assertRaises(Rejected): normalize(animated.getvalue(), 'image/webp')
 
     def test_dimensions(self):
         with self.assertRaises(Rejected):

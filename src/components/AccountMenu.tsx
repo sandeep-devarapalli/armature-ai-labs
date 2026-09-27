@@ -23,6 +23,7 @@ export function AccountMenu() {
       <Link to="/onboarding">My registration</Link>
       <Link to="/booking-beta">Explore booking beta</Link>
       {account && ["admin", "super_admin", "membership_reviewer"].includes(account.role) && <Link to="/admin/members">{account.role === "membership_reviewer" ? "Membership reviews" : "Admin → Members"}</Link>}
+      {account && ["admin", "super_admin"].includes(account.role) && <Link to="/admin/equipment-wishlist">Admin → Equipment wishlist</Link>}
       {signedIn && <button type="button" onClick={() => void signOut()}>Sign out</button>}
     </div>
   </details>;

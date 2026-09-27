@@ -14,5 +14,6 @@ export function safeAuthReturnPath(value: unknown) {
 }
 
 export function onboardingAuthReturnPath(value: unknown, basicOnly: boolean) {
-  return basicOnly ? "/onboarding" : safeAuthReturnPath(value);
+  const safe = safeAuthReturnPath(value);
+  return basicOnly && safe.split(/[?#]/)[0] !== "/components/wishlist" ? "/onboarding" : safe;
 }

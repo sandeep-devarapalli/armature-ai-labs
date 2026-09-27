@@ -60,7 +60,7 @@ function retention(removeFails, documentCount = 0) {
   const chain = { select(){return this;},lte(){return this;},order(){return this;},limit,delete(){return this;},eq: async () => { erased(); return {error:null}; } };
   const remove = vi.fn(async () => ({ error: removeFails ? new Error('retry') : null }));
   let handler;
-  new Function('Deno','assertJobSecret','HttpError','json','adminClient',code)({ serve: (fn) => {handler=fn;},env:{get:()=> 'true'} },()=>{},HttpError,(_r,body,status=200)=>Response.json(body,{status}),()=>({ rpc: async (name)=>({data: name === 'list_due_onboarding_documents' ? Array.from({length:documentCount},(_,id)=>({id,object_path:`document-${id}`})) : null}),from:()=>chain,storage:{from:()=>({remove})} }));
+  new Function('Deno','assertJobSecret','HttpError','json','adminClient',code)({ serve: (fn) => {handler=fn;},env:{get:(name)=> name === 'ONBOARDING_RETENTION_ENABLED' ? 'true' : undefined} },()=>{},HttpError,(_r,body,status=200)=>Response.json(body,{status}),()=>({ rpc: async (name)=>({data: name === 'list_due_onboarding_documents' ? Array.from({length:documentCount},(_,id)=>({id,object_path:`document-${id}`})) : null}),from:()=>chain,storage:{from:()=>({remove})} }));
   return {handler,erased,remove,limit};
 }
 it('managed retention retries avatar storage failures without losing queued paths', async () => {

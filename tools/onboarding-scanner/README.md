@@ -1,8 +1,8 @@
 # Private onboarding image scanner
 
-Authenticated binary POST `/scan`: PNG/JPEG only, `Content-Length` 1..5 MiB, `Authorization: Bearer <SCANNER_SECRET>`. Success 200 returns the normalized image with the original MIME; failure 422 means unsafe/invalid, 503 means no safe verdict (including stale signatures), 413 size limit, 401 unauthorized. Callers must reject every non-200 or unexpected content type. GET `/health` requires the same token and exposes only `ready`.
+Authenticated binary POST `/scan`: PNG/JPEG/WebP, `Content-Length` 1..5 MiB, `Authorization: Bearer <SCANNER_SECRET>`. Success 200 returns the normalized image with the original MIME; failure 422 means unsafe/invalid, 503 means no safe verdict (including stale signatures), 413 size limit, 401 unauthorized. Callers must reject every non-200 or unexpected content type. GET `/health` requires the same token and exposes only `ready`.
 
-Raw bytes are scanned **before** Pillow is invoked. Full image verification/decode rejects malformed, animated, oversized (>16 million pixels or >8192 per side) images. A fresh pixel-only PNG/JPEG removes EXIF/comments/profiles, applies EXIF orientation, and the output is scanned again. Only normalized bytes may enter private storage. No document or request-body logging or persistence; no third-party scanning service receives uploads. ClamAV is defense in depth, not a guarantee against all malware.
+Raw bytes are scanned **before** Pillow is invoked. Registration and avatar callers remain PNG/JPEG-only; WebP is enabled only by the equipment wishlist adapter. Full image verification/decode rejects malformed, animated, oversized (>16 million pixels or >8192 per side) images. A fresh pixel-only PNG/JPEG removes EXIF/comments/profiles, applies EXIF orientation, and the output is scanned again. Only normalized bytes may enter private storage. No document or request-body logging or persistence; no third-party scanning service receives uploads. ClamAV is defense in depth, not a guarantee against all malware.
 
 ## Local synthetic-only verification
 
