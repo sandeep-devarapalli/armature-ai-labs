@@ -61,6 +61,7 @@ describe("admin role classification", () => {
     expect(hasAdminRole([])).toBe(false);
     expect(hasAdminRole([{ role: "operations" }])).toBe(false);
     expect(hasAdminRole([{ role: "safety" }])).toBe(false);
+    expect(hasAdminRole([{ role: "membership_reviewer" }])).toBe(false);
     expect(hasAdminRole([{ role: "admin" }])).toBe(true);
     expect(hasAdminRole([{ role: "super_admin" }])).toBe(true);
   });

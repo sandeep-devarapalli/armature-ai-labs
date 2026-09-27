@@ -108,3 +108,11 @@ Final handoff:
 - Desktop/mobile inventory journey: 2 passed, 57.1s. Additional desktop evidence capture: 1 passed, 24.6s (/private/tmp/inventory-browser-evidence.log). Readable selected-chair evidence: /private/tmp/inventory-map-chromium.png.
 - Final test cleanup verified: mock grants false, tested products disabled, temporary inventory test users zero. 29 synthetic inventory resources remain for repeatable local testing, not production.
 - No merge, deployment, payment setup or real booking/email operations. Existing draft PR #73 remains the review target. The authoritative new local app is http://127.0.0.1:4342/passes and requires a synthetic local account; production credentials should not be used there. The accepted standalone design study remains available at4343.
+
+## Equipment dependency reconciliation
+
+- Merged current deployed main (catalogue/wishlist squash9e655388) with the held draft; mergec05b71c preserves live building geometry, anonymous booking beta and current role hierarchy. Original working folder preserved.
+- Node22 frontend checks:369 tests/45files pass after rental UI addition; baseline alone364/44. Build,156-page SEO artifacts and building/electrical checks pass.
+- Fresh synthetic chain at API58321/DB58322:23 baseline SQL files and nine concurrency scripts pass; logs `/private/tmp/rental-baseline-regression/summary.txt`. Existing workspace-pass race is now explicitly included in CI on54322.
+- Public desktop/mobile browser checks:28pass,3 intentional skips, one model-load timeout. Captured page showed all25chairs after the5-second assertion; changed only model-ready timeout to15seconds and both desktop/mobile booking-beta tests pass (`/private/tmp/rental-beta-browser.log`).
+- PR73 remains draft, with paid/team production migrations, outbound booking delivery and payment processors held. Rental021 depends on this draft and must not be pushed to production with pending migrations. Local production project-ref was preserved under a disabled filename.

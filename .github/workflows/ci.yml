@@ -62,6 +62,7 @@ jobs:
       - run: supabase/tests/concurrent_booking.sh
       - run: supabase/tests/concurrent_team_seat.sh
       - run: sh supabase/tests/concurrent_team_transfer.sh
+      - run: DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres sh supabase/tests/concurrent_workspace_pass.sh
       - run: sh supabase/tests/concurrent_membership.sh
       - run: sh supabase/tests/concurrent_notifications.sh
       - run: sh supabase/tests/concurrent_notification_delivery.sh

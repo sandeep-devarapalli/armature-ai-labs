@@ -9,7 +9,8 @@ vi.mock('../../src/context/AppContext', () => ({ useApp: () => ({ refresh: mocks
 const roster = [{ user_id: 'member-1', display_name: 'Builder One', role: 'member' as const, seat_enabled: true, joined_at: '2026-09-27' }];
 const resource = { id: 'resource-1', name: 'Lab desk', available: true } as never;
 beforeEach(() => { mocks.rpc.mockReset(); mocks.role = 'membership_reviewer'; vi.restoreAllMocks(); });
-it('prevents membership-review Staff from loading operational team records', () => {
+it.each(['membership_reviewer', 'member'])('prevents %s from loading operational team records', (role) => {
+  mocks.role = role;
   render(<AdminTeamsPage />);
   expect(screen.getByRole('heading', { name: 'Lab admin access required' })).toBeVisible();
   expect(mocks.rpc).not.toHaveBeenCalled();
