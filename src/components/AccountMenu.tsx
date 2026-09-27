@@ -21,6 +21,7 @@ export function AccountMenu() {
     <div className="account-panel">
       {error && <><p role="alert">{error}</p><button type="button" onClick={() => void refresh()}>Retry</button></>}
       <Link to="/onboarding">My registration</Link>
+      <Link to="/booking-beta">Explore booking beta</Link>
       {account && ["admin", "super_admin", "membership_reviewer"].includes(account.role) && <Link to="/admin/members">{account.role === "membership_reviewer" ? "Membership reviews" : "Admin → Members"}</Link>}
       {signedIn && <button type="button" onClick={() => void signOut()}>Sign out</button>}
     </div>

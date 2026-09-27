@@ -119,7 +119,7 @@ export function HomePage() {
             benches, and GPU compute. Equipment and hourly access are planned,
             not yet available to book.
           </p>
-          {!memberPlatformAvailable && <p className="hero-location mono">{basicOnboardingAvailable ? "Free basic registration is open. Paid bookings remain closed." : "Pre-launch · enquiries only. Membership applications and bookings are not open yet."}</p>}
+          {!memberPlatformAvailable && <p className="hero-location mono">{basicOnboardingAvailable ? "Free basic registration and the booking preview are open. Paid bookings remain closed." : "Pre-launch · enquiries only. Membership applications and bookings are not open yet."}</p>}
           <p className="hero-location mono">The Physical AI and Robotics Lab · HSR Layout, Bengaluru</p>
           <div className="button-row">
             {memberPlatformAvailable ? (
@@ -138,6 +138,7 @@ export function HomePage() {
                 <ArrowRight aria-hidden="true" />
               </a>
             )}
+            <Link className="button button-quiet" to="/booking-beta">Explore booking beta <ArrowRight aria-hidden="true" /></Link>
             {equipmentPageAvailable && (
               <Link className="button button-quiet" to="/equipment">
                 See the space

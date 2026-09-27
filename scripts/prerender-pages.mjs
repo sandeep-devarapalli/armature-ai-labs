@@ -55,7 +55,7 @@ try {
   await writeFile(path.join(outputDirectory, "app-shell.html"), documentFor("/auth/"));
   await writeFile(path.join(outputDirectory, "sitemap.xml"),
     `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${publicSeoPaths.map((pathname) => `  <url><loc>${SITE_URL}${pathname}</loc></url>`).join("\n")}\n</urlset>\n`);
-  const paths = [...new Set([...publicSeoPaths, "/members/", "/team/"])];
+  const paths = [...new Set([...publicSeoPaths, "/members/", "/team/", "/booking-beta/"])];
   for (const pathname of paths) {
     const { html, modules } = await renderPage(pathname);
     if (!html.includes("<h1")) throw new Error(`Prerendered page is missing its heading: ${pathname}`);

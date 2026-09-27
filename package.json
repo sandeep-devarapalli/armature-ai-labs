@@ -21,7 +21,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "npm run build:demo && VITE_DEMO_MODE=true playwright test",
-    "test:e2e:production": "playwright test tests/frontend/e2e/public-release-gates.spec.ts tests/frontend/e2e/building-vision.spec.ts tests/frontend/e2e/reliability.spec.ts --project=chromium --project=mobile",
+    "test:e2e:production": "playwright test tests/frontend/e2e/booking-beta.spec.ts tests/frontend/e2e/public-release-gates.spec.ts tests/frontend/e2e/building-vision.spec.ts tests/frontend/e2e/reliability.spec.ts --project=chromium --project=mobile",
     "prepare:building-models": "node scripts/building-vision/release-manifest.mjs",
     "check:building-models": "node scripts/check-building-models.mjs && node scripts/check-electrical-plan.mjs"
   },
@@ -35,7 +35,8 @@
     "qrcode": "^1.5.4",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "react-router-dom": "7.18.2"
+    "react-router-dom": "7.18.2",
+    "three": "0.183.2"
   },
   "devDependencies": {
     "@playwright/test": "^1.55.1",

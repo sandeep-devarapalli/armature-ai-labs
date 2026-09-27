@@ -1,0 +1,10 @@
+.booking-floor-map { min-width: 0; margin: 24px 0; }
+.booking-floor-canvas { position: relative; height: 560px; background: #e7eadf; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; margin-top: 16px; }
+.booking-place-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 8px; }
+.booking-place-list button { display: flex; flex-direction: column; align-items: flex-start; text-align: left; white-space: normal; }
+.booking-place-list button[aria-pressed="true"] { outline: 3px solid var(--link-color, #995600); outline-offset: 1px; }
+.booking-place-list small { font-size: 10px; overflow-wrap: anywhere; }
+@media (max-width: 600px) { .booking-floor-canvas { height: 430px; } .booking-place-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+.booking-map-fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.booking-map-fieldset:disabled { opacity: .65; pointer-events: none; }

@@ -1,0 +1,10 @@
+.booking-beta-controls { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 20px; }
+.booking-beta-controls > label { flex: 1 1 210px; min-width: 0; }
+.booking-beta-controls > button { align-self: center; }
+.booking-beta-dates { display: flex; flex-wrap: wrap; gap: 12px 24px; padding: 16px 0; list-style: none; }
+.booking-beta-dates li { display: flex; align-items: center; gap: 8px; }
+.booking-beta-summary { margin-top: 28px; padding: 24px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.booking-beta-summary h3 { margin-top: 16px; }
+.booking-beta-price { display: flex; flex-wrap: wrap; gap: 10px; align-items: baseline; }
+.booking-beta-price strong { font-size: clamp(24px, 4vw, 38px); }
+@media (max-width: 600px) { .booking-beta-controls { gap: 14px; } .booking-beta-controls > label { flex-basis: 100%; } }
