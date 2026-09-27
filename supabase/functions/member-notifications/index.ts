@@ -37,7 +37,18 @@ Deno.serve(async (request: Request) => {
   const supplied = request.headers.get("x-armature-job-secret") ?? "";
   let difference = secret.length ^ supplied.length;
   for (let i = 0; i < secret.length; i++) difference |= secret.charCodeAt(i) ^ (supplied.charCodeAt(i) || 0);
-  if (difference !== 0) return response({ error: "unauthorised" }, 401);
+  if (difference !== 0) {
+    const signingKey = Deno.env.get("MEMBER_NOTIFICATIONS_WAKEUP_KEY") ?? "";
+    const stamp = request.headers.get("x-armature-wakeup-time") ?? "";
+    const signature = request.headers.get("x-armature-wakeup-signature") ?? "";
+    const age = Math.floor(Date.now() / 1000) - Number(stamp);
+    if (signingKey.length < 32 || signingKey.length > 256 || !/^\d{10}$/.test(stamp)
+      || age < -5 || age > 30 || !/^[a-f0-9]{64}$/.test(signature)) return response({ error: "unauthorised" }, 401);
+    const encoder = new TextEncoder();
+    const signing = await crypto.subtle.importKey("raw", encoder.encode(signingKey), { name: "HMAC", hash: "SHA-256" }, false, ["verify"]);
+    const bytes = Uint8Array.from(signature.match(/../g)!, (pair) => parseInt(pair, 16));
+    if (!await crypto.subtle.verify("HMAC", signing, bytes, encoder.encode(`member-notifications:${stamp}`))) return response({ error: "unauthorised" }, 401);
+  }
   const key = Deno.env.get("MEMBER_NOTIFICATIONS_RESEND_KEY") ?? "";
   if (!/^re_[A-Za-z0-9_-]{16,}$/.test(key)) return response({ error: "sender_unconfigured" }, 503);
   try {

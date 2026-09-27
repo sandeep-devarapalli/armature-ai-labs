@@ -172,3 +172,5 @@ Use the narrowest checks that match the edit:
 - Browser-profile correction, 27 September 2026: Resend uses the Armature Work Chrome profile and hello@armatureailabs.com. Do not use the personal Gmail Resend account. Cloudflare/Supabase retain the earlier explicitly requested personal Chrome profile. Verify the service-specific identity before configuration.
 
 - Notification rollout correction, 27 September 2026: owner approved automatic membership-status notifications for all members, superseding the two-address pilot restriction. Use a separate explicit all-member switch, preserve verified-recipient/suppression checks, never promote held history, and keep paid services and cleanup gates unchanged. Resend uses Work Chrome/hello.
+
+- Immediate notification delivery, 27 September 2026: wake the existing sender after committed new pending events; retain five-minute recovery polling and fifteen-minute health monitoring. No held-history replay or payment activation. Never put reusable credentials in the pg_net queue: use a separate Vault-held key to sign short-lived, fixed-purpose wake-ups.
