@@ -1,6 +1,6 @@
 # Membership notifications — implementation handoff
 
-27 September 2026. Scope: build the isolated queue and sender with mocked delivery tests. Outbound delivery stays disabled; pilot participants will be chosen later. This is a preparation change, not authority to contact volunteers, approve the owner application, activate bookings or enable payments.
+27 September 2026. Scope: build the isolated queue and sender with mocked delivery tests. Outbound delivery stays disabled; the owner selected pilot participants on 27 September 2026 (see below). This is a preparation change, not authority to contact volunteers, approve the owner application, activate bookings or enable payments.
 
 ## Baseline and ownership
 
@@ -20,7 +20,7 @@
 
 ## Deferred before controlled delivery
 
-- Confirm pilot names/addresses and authorise controlled test sends.
+- Pilot addresses are confirmed below; controlled test sends still require explicit authorization.
 - Verify current sending domain and create a separate narrowly scoped notification credential; keep existing Supabase auth SMTP untouched.
 - Signed delivery/bounce/complaint webhook processing, suppression and admin delivery-status UI; current queue outcome accepted must not be labelled delivered.
 - Confirm log retention and job cadence/monitoring. No scheduler is provisioned here.
@@ -84,3 +84,39 @@ The owner explicitly approved 30 days for completed notification history and unm
 - SQL: 452 assertions across 17 files passed, including 32 new operations assertions. Concurrent tests passed inverse enqueue order, complaints in both arrival orders, two cleanup workers and account deletion in both arrival orders. Fixture accounts were removed and cleanup_enabled remained false. Only `supabase_db_armature-basic-release-check` was used. No new rendered website changes in this stage; desktop/mobile evidence belongs to the prior delivery-status PR.
 
 Remaining before pilot activation: review the three stacked PRs and CI, test hosted Deno runtime/dry run, provision separate credentials and a paused job, verify failure/missing-run/recovery alerts with actual receipt, release the approved cleanup controls, select pilot recipients and authorize controlled notification delivery. Previous sending and webhook gates remain disabled, and the paid-service/payment holds remain unchanged.
+
+## Pilot participants selected — 27 September 2026
+
+- priyanka@armatureailabs.com
+- rejoe@armatureailabs.com
+
+Selection only: no invitations sent, accounts created, roles granted, production allowlist changed or notification gates enabled. Each participant should register using their own address; account creation is not membership approval. If an address is a Workspace alias, use email sign-in for that exact address rather than Google sign-in as a different primary account.
+
+### Invitation text — individually sent after authorization
+
+Subject: Try basic membership registration at Armature AI Labs
+
+Hi,
+
+Please try our basic membership registration at https://armatureailabs.com/onboarding using the email address receiving this invitation.
+
+Complete your profile and submit the required photo and government ID only through the protected website. Please do not send identity documents by email or chat. We will review your application through the admin portal.
+
+Please let us know if any instructions are unclear or anything fails, including on your phone. Share the step and error message, without personal documents or sensitive details.
+
+This pilot covers free basic registration and approval; paid passes and equipment bookings are not open yet.
+
+Thanks,
+Armature AI Labs
+
+### Pilot review checklist
+
+Record completion or issues separately for each participant: sign-in to the intended account, profile and privacy acceptance, secure uploads, pending status, administrator review, approved status across pages, and sign-out/sign-in on mobile. Request corrections only when actually needed; do not reject or revoke real membership solely for a test. Do not claim notification delivery while outbound notification delivery remains disabled.
+
+## Pilot invitations sent — 27 September 2026
+
+The owner said “ok, proceed” after participant selection and invitation preparation. Sent separate invitations from hello@armatureailabs.com to priyanka@armatureailabs.com and rejoe@armatureailabs.com through direct Gmail compose windows in the Armature Work Chrome profile. Subject: Try basic membership registration at Armature AI Labs. Each message used the invitation text above with a personal greeting.
+
+Gmail displayed “Message sent” for each recipient. This verifies send submission, not recipient inbox delivery, reading or completion of registration. No automated notification worker, recipient allowlist, role, membership or payment setting was changed. The personal-account Gmail connector was not used for sending. An automatic review blocked opening the work inbox due to unrelated private-message exposure; direct compose was permitted and used instead.
+
+Next: participants complete their own registration; authorized reviewers inspect actual submissions and record pilot feedback. No scheduled monitoring or reminder sends were configured.
