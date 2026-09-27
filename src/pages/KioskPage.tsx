@@ -50,7 +50,9 @@ export function KioskPage() {
         setResult({ good: true, text: await redeemCheckinIntent(token) });
       } else {
         const scan = await scanMemberToken(token);
-        const action = scan.action === "check_out" ? "Check-out" : "Check-in";
+        const action = scan.equipment_session
+          ? (scan.action === "check_out" ? "Equipment return" : "Equipment use")
+          : (scan.action === "check_out" ? "Check-out" : "Check-in");
         setResult({ good: true, text: `${action} recorded.` });
       }
       setManual("");

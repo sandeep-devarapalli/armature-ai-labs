@@ -285,6 +285,8 @@ export type Database = {
           commissioned_at: string | null
           commissioned_by: string | null
           id: string
+          kit_contents: Json
+          maintenance_note: string | null
           reason: string
           resource_id: string
         }
@@ -294,6 +296,8 @@ export type Database = {
           commissioned_at?: string | null
           commissioned_by?: string | null
           id?: string
+          kit_contents?: Json
+          maintenance_note?: string | null
           reason: string
           resource_id: string
         }
@@ -303,6 +307,8 @@ export type Database = {
           commissioned_at?: string | null
           commissioned_by?: string | null
           id?: string
+          kit_contents?: Json
+          maintenance_note?: string | null
           reason?: string
           resource_id?: string
         }
@@ -1239,6 +1245,8 @@ export type Database = {
           action: Database["public"]["Enums"]["checkin_action"]
           booking_id: string | null
           created_at: string
+          equipment_rental_order_id: string | null
+          equipment_use_date: string | null
           expires_at: string
           id: string
           redeemed_at: string | null
@@ -1251,6 +1259,8 @@ export type Database = {
           action: Database["public"]["Enums"]["checkin_action"]
           booking_id?: string | null
           created_at?: string
+          equipment_rental_order_id?: string | null
+          equipment_use_date?: string | null
           expires_at: string
           id?: string
           redeemed_at?: string | null
@@ -1263,6 +1273,8 @@ export type Database = {
           action?: Database["public"]["Enums"]["checkin_action"]
           booking_id?: string | null
           created_at?: string
+          equipment_rental_order_id?: string | null
+          equipment_use_date?: string | null
           expires_at?: string
           id?: string
           redeemed_at?: string | null
@@ -1277,6 +1289,13 @@ export type Database = {
             columns: ["booking_id"]
             isOneToOne: false
             referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "checkin_intents_equipment_rental_order_id_fkey"
+            columns: ["equipment_rental_order_id"]
+            isOneToOne: false
+            referencedRelation: "equipment_rental_orders"
             referencedColumns: ["id"]
           },
           {
@@ -3621,6 +3640,7 @@ export type Database = {
           kind: string
           name: string
           price_paise: number | null
+          tax_bps: number | null
           unit: string
         }
         Insert: {
@@ -3630,6 +3650,7 @@ export type Database = {
           kind: string
           name: string
           price_paise?: number | null
+          tax_bps?: number | null
           unit: string
         }
         Update: {
@@ -3639,6 +3660,7 @@ export type Database = {
           kind?: string
           name?: string
           price_paise?: number | null
+          tax_bps?: number | null
           unit?: string
         }
         Relationships: []
@@ -4256,6 +4278,61 @@ export type Database = {
             columns: ["resource_id"]
             isOneToOne: true
             referencedRelation: "resources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      equipment_daily_sessions: {
+        Row: {
+          checked_in_at: string
+          checked_in_by_device: string
+          checked_out_at: string | null
+          checked_out_by_device: string | null
+          id: string
+          order_id: string
+          use_date: string
+          user_id: string
+        }
+        Insert: {
+          checked_in_at: string
+          checked_in_by_device: string
+          checked_out_at?: string | null
+          checked_out_by_device?: string | null
+          id?: string
+          order_id: string
+          use_date: string
+          user_id: string
+        }
+        Update: {
+          checked_in_at?: string
+          checked_in_by_device?: string
+          checked_out_at?: string | null
+          checked_out_by_device?: string | null
+          id?: string
+          order_id?: string
+          use_date?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "equipment_daily_sessions_checked_in_by_device_fkey"
+            columns: ["checked_in_by_device"]
+            isOneToOne: false
+            referencedRelation: "kiosk_devices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "equipment_daily_sessions_checked_out_by_device_fkey"
+            columns: ["checked_out_by_device"]
+            isOneToOne: false
+            referencedRelation: "kiosk_devices"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "equipment_daily_sessions_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "equipment_rental_orders"
             referencedColumns: ["id"]
           },
         ]
@@ -5392,6 +5469,45 @@ export type Database = {
         }
         Returns: undefined
       }
+      admin_approve_equipment_rate: {
+        Args: {
+          p_charge_unit: string
+          p_price_paise: number
+          p_reason: string
+          p_tax_bps: number
+          p_unit_id: string
+          p_valid_from: string
+          p_valid_until: string
+        }
+        Returns: string
+      }
+      admin_list_equipment_operations: { Args: never; Returns: Json }
+      admin_replace_equipment_rate: {
+        Args: {
+          p_current_rate_id: string
+          p_effective_from: string
+          p_price_paise: number
+          p_reason: string
+          p_tax_bps: number
+          p_valid_until: string
+        }
+        Returns: string
+      }
+      admin_update_equipment_unit: {
+        Args: {
+          p_inventory_location_id: string
+          p_kit_contents: Json
+          p_maintenance: boolean
+          p_note: string
+          p_unit_id: string
+        }
+        Returns: undefined
+      }
+      configure_workspace_tax: {
+        Args: { p_product_id: string; p_reason: string; p_tax_bps: number }
+        Returns: undefined
+      }
+      get_my_equipment_daily_use: { Args: never; Returns: Json }
     }
     Enums: {
       access_event_type:

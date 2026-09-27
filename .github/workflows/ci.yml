@@ -69,6 +69,7 @@ jobs:
       - run: sh supabase/tests/concurrent_notification_operations.sh
       - run: DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres sh supabase/tests/concurrent_equipment_wishlist.sh
       - run: DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres sh supabase/tests/concurrent_equipment_rental.sh
+      - run: DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres sh supabase/tests/concurrent_equipment_daily_use.sh
       - if: always()
         run: supabase stop --no-backup
 

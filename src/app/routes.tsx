@@ -64,6 +64,7 @@ const BookingDetailPage = lazy(() => import("../pages/MemberPages").then((module
 const CheckInPage = lazy(() => import("../pages/MemberPages").then((module) => ({ default: module.CheckInPage })));
 const AdminMembersPage = lazy(() => import("../pages/AdminPages").then((module) => ({ default: module.AdminMembersPage })));
 const MemberManagementPage = lazy(() => import("../pages/MemberManagementPage").then((module) => ({ default: module.MemberManagementPage })));
+const AdminEquipmentPage = lazy(() => import("../pages/AdminEquipmentPage").then((module) => ({ default: module.AdminEquipmentPage })));
 const AdminResourcesPage = lazy(() => import("../pages/AdminPages").then((module) => ({ default: module.AdminResourcesPage })));
 const AdminBookingsPage = lazy(() => import("../pages/AdminPages").then((module) => ({ default: module.AdminBookingsPage })));
 const AdminAttendancePage = lazy(() => import("../pages/AdminPages").then((module) => ({ default: module.AdminAttendancePage })));
@@ -152,6 +153,7 @@ export const routes: RouteObject[] = [
       { path: "/admin", element: <ReleaseGate enabled={basicOnboardingAvailable || memberPlatformAvailable}><Navigate to="/admin/members" replace /></ReleaseGate> },
       { path: "/admin/members", element: basicOnboardingAvailable ? <MemberManagementPage /> : memberFeature(staffPage(<AdminMembersPage />)) },
       { path: "/admin/teams", element: memberFeature(adminPage(<AdminTeamsPage />)) },
+      { path: "/admin/equipment", element: memberFeature(adminPage(<AdminEquipmentPage />)) },
       { path: "/admin/resources", element: memberFeature(staffPage(<AdminResourcesPage />)) },
       { path: "/admin/bookings", element: memberFeature(staffPage(<AdminBookingsPage />)) },
       { path: "/admin/attendance", element: memberFeature(staffPage(<AdminAttendancePage />)) },

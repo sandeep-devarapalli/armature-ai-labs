@@ -198,6 +198,7 @@ export function Shell({ children }: PropsWithChildren) {
                 <Wrench aria-hidden="true" />
                 Operations
               </NavLink>}
+              {isAdmin && <NavLink to="/admin/equipment"><Wrench aria-hidden="true" />Equipment operations</NavLink>}
               {isAdmin && <NavLink to="/admin/access"><Wrench aria-hidden="true" />Access settings</NavLink>}
               {isAdmin && <NavLink to="/financials">
                 <CircleDollarSign aria-hidden="true" />
