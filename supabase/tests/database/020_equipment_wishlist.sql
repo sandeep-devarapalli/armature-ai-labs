@@ -73,6 +73,18 @@ select lives_ok($$select public.merge_equipment_wishes(current_setting('test.sec
 select is((select vote_count from public.public_equipment_wishlist where id=current_setting('test.wish')::uuid),2,'merged votes deduplicate by member');
 select is((select count(*)::integer from public.public_equipment_wishlist where id=current_setting('test.second')::uuid),0,'merged source disappears from public view');
 select is((select count(*)::integer from public.audit_events where entity_id=current_setting('test.second')::uuid and action='equipment_wishlist.merged'),1,'merge records audit');
+select is((select image_path from public.component_requests where id=current_setting('test.second')::uuid),null::text,'merge detaches source image');
+select ok(exists(select 1 from public.equipment_wishlist_image_cleanup where object_path=current_setting('test.second')||'/b2000000-0000-4000-8000-000000000002.webp'),'merge queues discarded source image');
+insert into public.component_requests(id,requester_user_id,requester_email,component_name,project_use_case,request_scope,verified_at,image_path,image_content_type)
+values('b2000000-0000-4000-8000-000000000010','b1000000-0000-4000-8000-000000000005','delete@example.test','Deletion fixture','Synthetic image deletion fixture','equipment_wishlist',now(),'deletion-test.png','image/png');
+delete from public.component_requests where id='b2000000-0000-4000-8000-000000000010';
+select ok(exists(select 1 from public.equipment_wishlist_image_cleanup where object_path='deletion-test.png'),'request deletion queues image');
+insert into public.component_requests(id,requester_user_id,requester_email,component_name,project_use_case,request_scope,verified_at,image_path,image_content_type)
+values('b2000000-0000-4000-8000-000000000011','b1000000-0000-4000-8000-000000000005','delete@example.test','Owner fixture','Synthetic owner deletion fixture','equipment_wishlist',now(),'owner-deletion-test.png','image/png');
+delete from public.basic_onboarding_applications where user_id='b1000000-0000-4000-8000-000000000005';
+delete from auth.users where id='b1000000-0000-4000-8000-000000000005';
+select ok(exists(select 1 from public.equipment_wishlist_image_cleanup where object_path='owner-deletion-test.png'),'owner deletion set-null queues image');
+select is((select image_path from public.component_requests where id='b2000000-0000-4000-8000-000000000011'),null::text,'owner deletion detaches image');
 update public.basic_onboarding_applications set status='revoked' where user_id='b1000000-0000-4000-8000-000000000002';
 select set_config('request.jwt.claims','{"sub":"b1000000-0000-4000-8000-000000000002","role":"authenticated"}',true);
 select throws_ok($$select public.vote_component_request(current_setting('test.wish')::uuid,false)$$,'42501','Approved basic membership required','revoked member loses mutation access immediately');

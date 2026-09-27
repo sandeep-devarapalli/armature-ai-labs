@@ -132,7 +132,10 @@ begin
  insert into public.component_request_votes(request_id,member_id,created_at) select target.id,member_id,created_at from public.component_request_votes where request_id=source.id on conflict do nothing;
  delete from public.component_request_votes where request_id=source.id;
  update public.component_requests set merged_into=target.id where merged_into=source.id;
- update public.component_requests set merged_into=target.id,is_published=false,decision_note=trim(p_note) where id=source.id;
+ if source.image_path is not null then
+  insert into public.equipment_wishlist_image_cleanup(object_path) values(source.image_path) on conflict do nothing;
+ end if;
+ update public.component_requests set merged_into=target.id,is_published=false,decision_note=trim(p_note),image_path=null,image_content_type=null where id=source.id;
  perform private.record_audit(auth.uid(),'staff','equipment_wishlist.merged','component_request',source.id,jsonb_build_object('published',source.is_published),jsonb_build_object('merged_into',target.id),trim(p_note));
 end; $$;
 
@@ -141,6 +144,25 @@ create table public.equipment_wishlist_image_cleanup(object_path text primary ke
 alter table public.equipment_wishlist_image_cleanup enable row level security;
 revoke all on public.equipment_wishlist_image_cleanup from public,anon,authenticated;
 grant all on public.equipment_wishlist_image_cleanup to service_role;
+create function private.cleanup_deleted_equipment_wish_image() returns trigger
+language plpgsql security definer set search_path='' as $$
+begin
+ if old.request_scope='equipment_wishlist' and old.image_path is not null then
+  insert into public.equipment_wishlist_image_cleanup(object_path) values(old.image_path) on conflict do nothing;
+ end if;
+ if TG_OP='UPDATE' then
+  new.image_path:=null;
+  new.image_content_type:=null;
+  return new;
+ end if;
+ return old;
+end; $$;
+revoke all on function private.cleanup_deleted_equipment_wish_image() from public,anon,authenticated;
+create trigger equipment_wish_deleted_image after delete on public.component_requests
+for each row execute function private.cleanup_deleted_equipment_wish_image();
+create trigger equipment_wish_deleted_owner_image before update of requester_user_id on public.component_requests
+for each row when (old.request_scope='equipment_wishlist' and old.requester_user_id is not null and new.requester_user_id is null)
+execute function private.cleanup_deleted_equipment_wish_image();
 create function public.claim_equipment_wish_images(p_limit integer default 100) returns table(object_path text)
 language sql security definer set search_path='' as $$
  with due as (

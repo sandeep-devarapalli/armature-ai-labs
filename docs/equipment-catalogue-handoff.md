@@ -59,7 +59,7 @@ Wishlist images use authenticated raw uploads after draft creation, max 5MiB JPE
 
 - Node 22.23.2 used from the existing local npm runtime cache.
 - Production-equivalent build passed: 159 prerendered anonymous pages, 156 SEO page records; building/model/electrical/release/SEO checks passed.
-- Local SQL suite: 18 files, 510 assertions; duplicate-vote and merge/vote concurrency checks passed. Isolated API58321/DB58322 only, synthetic data.
+- Local SQL suite: 18 files, 515 assertions; duplicate-vote and merge/vote concurrency checks passed. Isolated API58321/DB58322 only, synthetic data.
 - Browser wishlist journey: desktop/mobile submit, publication, vote/withdraw, merge and membership-review Staff rejection passed; all three themes checked.
 - P2S/Jetson: desktop1440/mobile390, all themes, two source references each decoded; simplified Three.js views visibly nonblank, hotspots usable, no horizontal overflow. Idle frame count unchanged after settling; repeated mount/dispose checked. Real-device memory performance remains unmeasured.
 - Scanner: 22 Python tests pass, including WebP metadata stripping, malformed/trailing payload and animation rejection; Edge authorization/scan-failure/cleanup tests pass.
@@ -68,3 +68,5 @@ Wishlist images use authenticated raw uploads after draft creation, max 5MiB JPE
 - Real local Edge/scanner integration passed: Chromium cross-origin JPEG/PNG/WebP uploads201, metadata removed, malware/malformed422, private owner/admin access, anonymous denial, role/membership revocation, moderated public image and unpublication. Synthetic accounts and stored images cleaned to zero. Reproduce with tools/onboarding-scanner/check_wishlist_edge.mjs against its guarded isolated local stack.
 - Evidence: /private/tmp/equipment-final-tests.log, /private/tmp/equipment-e2e.log, /private/tmp/equipment-e2e-corrections.log, /private/tmp/equipment-wishlist-browser.log, /private/tmp/wishlist-image-check.log and /private/tmp/equipment-wishlist-db-logs/summary.txt. Visual review evidence remains local under output/equipment-catalogue-evidence; unlicensed photo references are excluded from Git and production builds.
 - Draft PR91 contains commits953711a and5680619; follow-up verification fixes are recorded in Git. Read-only production migration history matches every prior migration through202609270011; only020 is pending. CI and deployment results follow below. No production migration, scanner deployment or paid activation is claimed yet.
+
+- Final retention review added cleanup for merged/deleted requests and deleted owner accounts, with five additional SQL assertions. Privacy notice explains moderated public equipment images and separate retention. Targeted cleanup/image/voting tests passed.
