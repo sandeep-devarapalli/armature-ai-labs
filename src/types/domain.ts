@@ -64,6 +64,18 @@ export interface Booking {
   guestNames: string[];
   state: BookingState;
   createdAt: string;
+  accessSource?: "personal" | "team";
+  organizationId?: string | null;
+}
+
+export interface TeamAccess {
+  organizationId: string;
+  organizationName: string;
+  role: "admin" | "member";
+  seatEnabled: boolean;
+  membershipActive: boolean;
+  startsAt: string | null;
+  endsAt: string | null;
 }
 
 export interface AttendanceSession {

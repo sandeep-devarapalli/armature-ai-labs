@@ -25,6 +25,8 @@ import { resourceFor, useApp } from "../context/AppContext";
 
 const adminLinks = [
   ["/admin/members", "Members", Users],
+  ["/admin/teams", "Teams", Users],
+  ["/admin/access", "Access and prices", CalendarClock],
   ["/admin/resources", "Resources", Wrench],
   ["/admin/bookings", "Bookings", CalendarClock],
   ["/admin/attendance", "Attendance", DoorOpen],

@@ -1,4 +1,6 @@
 begin;
+-- Enable mock activation only inside this rolled-back local fixture.
+update public.booking_policy_settings set mock_grants_enabled=true;
 
 create extension if not exists pgtap with schema extensions;
 
@@ -74,6 +76,14 @@ where user_id in (
   '20000000-0000-4000-8000-000000000001',
   '20000000-0000-4000-8000-000000000003'
 );
+insert into public.basic_onboarding_applications(user_id,full_name,email,phone,linkedin_url,date_of_birth,status)
+select u.id,'Fixture Member',u.email,'9999999999','https://linkedin.com/in/test','1990-01-01','approved'
+from auth.users u join public.memberships m on m.user_id=u.id where u.id::text like '20000000%' and m.status='active';
+insert into public.paid_access_entitlements(user_id,product_id,starts_at,ends_at,seats,price_paise,granted_by)
+select u.id,p.id,now()-interval '1 day',now()+interval '30 days',1,0,u.id
+from auth.users u join public.memberships m on m.user_id=u.id cross join public.booking_products p
+where u.id::text like '20000000%' and m.status='active' and p.code='workspace-day';
+
 
 insert into public.membership_applications (user_id)
 values
@@ -87,6 +97,7 @@ values (
   '20000000-0000-4000-8000-000000000003'
 );
 
+insert into public.resource_booking_policies(resource_id,kind) select id,'workspace' from public.resources where slug='builder-pod-02';
 set local role anon;
 
 select is(
@@ -136,7 +147,7 @@ select throws_ok(
 );
 select throws_ok(
   $$select public.create_booking(
-    (select id from public.public_resources limit 1),
+    (select id from public.public_resources where slug='builder-pod-02'),
     date_trunc('hour', now() + interval '1 day'),
     date_trunc('hour', now() + interval '1 day') + interval '1 hour',
     '{}',
@@ -144,7 +155,7 @@ select throws_ok(
     'pending-member-attempt'
   )$$,
   '42501',
-  'active membership is required',
+  'Approved basic membership and dated paid access required',
   'pending member cannot create a booking'
 );
 

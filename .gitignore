@@ -8,6 +8,7 @@ node_modules/
 coverage/
 playwright-report/
 test-results/
+test-results-team-local/
 .wrangler/
 supabase/.temp/
 tmp/
@@ -21,3 +22,6 @@ tmp/
 
 # Isolated basic-registration browser build
 dist-basic-registration/
+
+# Isolated inventory browser test artifacts
+test-results-inventory-local/

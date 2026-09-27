@@ -1,0 +1,12 @@
+-- Synthetic inventory only. Run manually against isolated local Supabase, never production.
+insert into public.locations(id,slug,name) values('95000000-0000-4000-8000-000000000001','booking-preview','Synthetic booking preview') on conflict(id) do nothing;
+insert into public.resources(id,location_id,slug,name,kind,capacity,max_guests,guests_allowed,max_duration_minutes,booking_horizon_days,metadata)
+select ('95000000-0000-4000-8000-'||lpad(n::text,12,'0'))::uuid,'95000000-0000-4000-8000-000000000001','preview-s'||lpad(n::text,2,'0'),'Chair S'||lpad(n::text,2,'0'),'workspace',1,0,false,480,3650,jsonb_build_object('synthetic',true,'placement','provisional') from generate_series(1,25)n
+on conflict(id) do nothing;
+insert into public.resources(id,location_id,slug,name,kind,capacity,max_guests,guests_allowed,max_duration_minutes,booking_horizon_days,metadata)
+select ('95000000-0000-4000-8000-'||lpad((100+n)::text,12,'0'))::uuid,'95000000-0000-4000-8000-000000000001','preview-c0'||n,'Whole cabin C0'||n,'room',6,3,true,480,3650,jsonb_build_object('synthetic',true,'placement','provisional six-seat study') from generate_series(1,4)n on conflict(id) do nothing;
+insert into public.resource_booking_policies select id,case when capacity=1 then 'workspace' else 'cabin' end from public.resources where location_id='95000000-0000-4000-8000-000000000001' on conflict(resource_id) do nothing;
+insert into public.booking_inventory select id,case when capacity=1 then upper(right(slug,3)) else upper(right(slug,3)) end,case when capacity=1 or slug='preview-c01' then 'GF' else 'FF' end,case when capacity=1 then 'GF-10' when slug='preview-c01' then 'GF-01' when slug='preview-c02' then 'FF-03' when slug='preview-c03' then 'FF-04' else 'FF-06' end from public.resources where location_id='95000000-0000-4000-8000-000000000001' on conflict(resource_id) do nothing;
+insert into public.resource_hours(resource_id,day_of_week,opens_at,closes_at) select id,d,time '09:00',time '17:00' from public.resources cross join generate_series(0,6)d where location_id='95000000-0000-4000-8000-000000000001' and not exists(select 1 from public.resource_hours h where h.resource_id=resources.id and h.day_of_week=d);
+-- Standard prices only: dated launch-offer support is a separate configuration step.
+update public.booking_products set price_paise=case code when 'workspace-day' then 50000 when 'workspace-week' then 250000 when 'workspace-month' then 1000000 when 'cabin-month' then 1250000 end where code in ('workspace-day','workspace-week','workspace-month','cabin-month');

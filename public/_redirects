@@ -66,3 +66,14 @@
 /bookings/:id/ /app-shell 200
 /members/:handle /app-shell 200
 /members/:handle/ /app-shell 200
+
+/passes /app-shell 200
+/passes/ /app-shell 200
+/admin/access /app-shell 200
+/admin/access/ /app-shell 200
+/admin/teams /app-shell 200
+/admin/teams/ /app-shell 200
+/workspace/team /app-shell 200
+/workspace/team/ /app-shell 200
+/workspace/team/accept/:token /app-shell 200
+/workspace/team/accept/:token/ /app-shell 200

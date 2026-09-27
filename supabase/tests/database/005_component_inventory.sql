@@ -1,4 +1,6 @@
 begin;
+-- Enable mock activation only inside this rolled-back local fixture.
+update public.booking_policy_settings set mock_grants_enabled=true;
 
 create extension if not exists pgtap with schema extensions;
 
@@ -64,6 +66,14 @@ where user_id in (
   '25000000-0000-4000-8000-000000000002',
   '25000000-0000-4000-8000-000000000003'
 );
+insert into public.basic_onboarding_applications(user_id,full_name,email,phone,linkedin_url,date_of_birth,status)
+select u.id,'Fixture Member',u.email,'9999999999','https://linkedin.com/in/test','1990-01-01','approved'
+from auth.users u join public.memberships m on m.user_id=u.id where u.id::text like '25000000%' and m.status='active';
+insert into public.paid_access_entitlements(user_id,product_id,starts_at,ends_at,seats,price_paise,granted_by)
+select u.id,p.id,now()-interval '1 day',now()+interval '30 days',1,0,u.id
+from auth.users u join public.memberships m on m.user_id=u.id cross join public.booking_products p
+where u.id::text like '25000000%' and m.status='active' and p.code='workspace-day';
+
 
 insert into public.staff_roles (user_id, role, granted_by)
 values (
@@ -81,7 +91,20 @@ values (
   true
 );
 
+insert into public.resources(id,location_id,slug,name,kind,capacity)
+values('25000000-0000-4000-8000-000000000020','25000000-0000-4000-8000-000000000010','fixture-25000000','Fixture workspace','workspace',3);
+insert into public.resource_booking_policies(resource_id,kind) values('25000000-0000-4000-8000-000000000020','workspace');
+update public.paid_access_entitlements set resource_id='25000000-0000-4000-8000-000000000020' where user_id::text like '25000000%';
+insert into public.resource_hours(resource_id,day_of_week,opens_at,closes_at) select '25000000-0000-4000-8000-000000000020',n,'09:00','17:00' from generate_series(0,6) n;
+insert into public.bookings(id,resource_id,member_id,starts_at,ends_at,status)
+select ('25000000-0000-4000-8000-'||lpad((20+n)::text,12,'0'))::uuid,'25000000-0000-4000-8000-000000000020',
+('25000000-0000-4000-8000-'||lpad(n::text,12,'0'))::uuid,
+((now() at time zone 'Asia/Kolkata')::date+time '09:00') at time zone 'Asia/Kolkata',
+((now() at time zone 'Asia/Kolkata')::date+time '17:00') at time zone 'Asia/Kolkata','confirmed' from generate_series(1,2) n;
+
 insert into public.attendance_sessions (
+  booking_id,
+  resource_id,
   id,
   user_id,
   location_id,
@@ -90,6 +113,8 @@ insert into public.attendance_sessions (
 )
 values
   (
+    '25000000-0000-4000-8000-000000000021',
+    '25000000-0000-4000-8000-000000000020',
     '25000000-0000-4000-8000-000000000011',
     '25000000-0000-4000-8000-000000000001',
     '25000000-0000-4000-8000-000000000010',
@@ -97,6 +122,8 @@ values
     now()
   ),
   (
+    '25000000-0000-4000-8000-000000000022',
+    '25000000-0000-4000-8000-000000000020',
     '25000000-0000-4000-8000-000000000012',
     '25000000-0000-4000-8000-000000000002',
     '25000000-0000-4000-8000-000000000010',

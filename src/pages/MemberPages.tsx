@@ -1,3 +1,4 @@
+import { useBookingInventory } from "../lib/useBookingInventory";
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import QRCode from "qrcode";
 import {
@@ -31,10 +32,12 @@ import { MemberAvatar } from "../components/MemberAvatar";
 import { EmptyState, Field, Metric, PageHeader, Section, Status } from "../components/Primitives";
 import { resourceFor, useApp } from "../context/AppContext";
 import { supabase } from "../lib/supabase";
+import { useAccount } from "../context/AccountContext";
+import { labDateTimeInput, labInstant } from "../lib/bookingTime";
 import type { MemberProfile } from "../types/domain";
 
-const dateTime = (value: string) => format(parseISO(value), "EEE, d MMM · h:mm a");
-const time = (value: string) => format(parseISO(value), "h:mm a");
+const dateTime = (value: string) => new Intl.DateTimeFormat("en-IN", { timeZone: "Asia/Kolkata", weekday: "short", day: "numeric", month: "short", hour: "numeric", minute: "2-digit" }).format(new Date(value)) + " IST";
+const time = (value: string) => new Intl.DateTimeFormat("en-IN", { timeZone: "Asia/Kolkata", hour: "numeric", minute: "2-digit" }).format(new Date(value));
 
 function serializeLinks(links: MemberProfile["projectLinks"]) {
   return links.map((link) => `${link.label} | ${link.url}`).join("\n");
@@ -59,7 +62,7 @@ function parseLinks(value: FormDataEntryValue | null) {
 }
 
 export function DashboardPage() {
-  const { currentMember, state, mode } = useApp();
+  const { currentMember, state, mode, teamAccess } = useApp();
   if (!currentMember) return null;
   const bookings = state.bookings
     .filter((booking) => booking.ownerId === currentMember.id && booking.state === "confirmed")
@@ -68,6 +71,8 @@ export function DashboardPage() {
     (session) => session.memberId === currentMember.id && session.state === "open"
   );
   const next = bookings.find((booking) => isAfter(parseISO(booking.endsAt), new Date()));
+  const activeTeam = teamAccess.find((team) => team.membershipActive && team.seatEnabled);
+  const membershipLabel = currentMember.membershipState === "active" ? "Personal active" : activeTeam ? `${activeTeam.organizationName} team` : currentMember.membershipState;
 
   return (
     <>
@@ -86,7 +91,7 @@ export function DashboardPage() {
       </header>
       <section className="workspace-metrics">
         <div className="wrap metric-grid four">
-          <Metric label="Membership" value={<Status tone={currentMember.membershipState === "active" ? "good" : "warn"}>{currentMember.membershipState}</Status>} />
+          <Metric label="Membership" value={<Status tone={currentMember.membershipState === "active" || activeTeam ? "good" : "warn"}>{membershipLabel}</Status>} />
           <Metric label="Certifications" value={currentMember.certifications.length} note="active in demo" />
           <Metric label="Upcoming" value={bookings.length} note="confirmed bookings" />
           <Metric label="Attendance" value={activeAttendance ? "On site" : "Checked out"} />
@@ -361,7 +366,10 @@ function MfaPanel({ mode }: { mode: "demo" | "supabase" }) {
 }
 
 export function BookPage() {
-  const { currentMember, state } = useApp();
+  const inventory = useBookingInventory();
+  const { currentMember, state, mode } = useApp();
+  const { account } = useAccount();
+  const canBook = mode === "demo" ? currentMember?.membershipState === "active" : account?.status === "approved";
   return (
     <>
       <PageHeader
@@ -369,14 +377,16 @@ export function BookPage() {
         title="Reserve a working block."
         description="One approved member owns each booking. Availability, certification, guest, maintenance, and conflict rules are checked again when the reservation is created."
       />
-      {currentMember?.membershipState !== "active" && (
-        <div className="gate-banner"><div className="wrap"><AlertTriangle aria-hidden="true" /><p>Your membership is {currentMember?.membershipState}. Booking unlocks after staff approval.</p><Link to="/join">View application</Link></div></div>
+      {!canBook && (
+        <div className="gate-banner"><div className="wrap"><AlertTriangle aria-hidden="true" /><p>Booking requires approved basic membership and a paid access pass covering the selected time.</p><Link to="/onboarding">My registration</Link></div></div>
       )}
       <Section number="01" title="Bookable resources">
+        {inventory.error && <p role="alert">{inventory.error}</p>}
+        <p>Workspace and cabin access includes pantry essentials. Equipment is an additional in-lab booking and requires workspace access. <Link to="/passes">View passes and access dates</Link>.</p>
         <div className="book-resource-list">
           {state.resources.map((resource) => {
             const missing = resource.certifications.filter((cert) => !currentMember?.certifications.includes(cert));
-            const blocked = !resource.available || missing.length > 0 || currentMember?.membershipState !== "active";
+            const blocked = inventory.loading || Boolean(inventory.error) || !resource.available || missing.length > 0 || !canBook;
             return (
               <article className="book-resource-row" key={resource.id}>
                 <div className="resource-symbol"><Wrench aria-hidden="true" /></div>
@@ -392,7 +402,7 @@ export function BookPage() {
                 </div>
                 <div className="book-row-action">
                   {missing.length ? <Status tone="warn">{missing[0]} required</Status> : <Status tone={resource.available ? "good" : "bad"}>{resource.available ? "Ready" : "Maintenance"}</Status>}
-                  {blocked ? <button className="button button-quiet" disabled>Unavailable</button> : <Link className="button button-primary" to={`/book/${resource.slug}`}>Choose time</Link>}
+                  {blocked ? <button className="button button-quiet" disabled>Unavailable</button> : <Link className="button button-primary" to={inventory.ids.includes(resource.id) ? "/passes" : `/book/${resource.slug}`}>{inventory.ids.includes(resource.id) ? "Choose chair and dates" : "Choose time"}</Link>}
                 </div>
               </article>
             );
@@ -410,13 +420,14 @@ function nextQuarterHour() {
 }
 
 function toLocalInput(date: Date) {
-  const offset = date.getTimezoneOffset();
-  return new Date(date.getTime() - offset * 60000).toISOString().slice(0, 16);
+  return labDateTimeInput(date);
 }
 
 export function ResourceBookingPage() {
+  const inventory = useBookingInventory();
   const { resource: slug } = useParams();
-  const { state, currentMember, createBooking, listAvailability, online } = useApp();
+  const { state, currentMember, teamAccess, createBooking, listAvailability, online, mode } = useApp();
+  const { account } = useAccount();
   const navigate = useNavigate();
   const resource = state.resources.find((item) => item.slug === slug);
   const [start, setStart] = useState(toLocalInput(nextQuarterHour()));
@@ -426,12 +437,20 @@ export function ResourceBookingPage() {
   const [working, setWorking] = useState(false);
   const [availability, setAvailability] = useState<Array<{ startsAt: string; endsAt: string; available: boolean; reason: string | null }>>([]);
   const [availabilityError, setAvailabilityError] = useState("");
-  if (!resource || !currentMember) return <PageHeader title="Resource not found." description="Return to the live resource directory." actions={<Link className="button button-quiet" to="/book">Resources</Link>} />;
-  const resourceId = resource.id;
+  const activeTeams = teamAccess.filter((team) => team.membershipActive && team.seatEnabled);
+  const personalActive = mode === "demo" ? currentMember?.membershipState === "active" : account?.status === "approved";
+  const [accessChoice, setAccessChoice] = useState(personalActive ? "personal" : activeTeams[0]?.organizationId ?? "personal");
+  useEffect(() => {
+    if (accessChoice === "personal" && personalActive) return;
+    if (activeTeams.some((team) => team.organizationId === accessChoice)) return;
+    setAccessChoice(personalActive ? "personal" : activeTeams[0]?.organizationId ?? "personal");
+  }, [accessChoice, activeTeams, personalActive]);
+  const resourceId = resource?.id;
 
   useEffect(() => {
-    const selected = new Date(start);
-    if (Number.isNaN(selected.getTime())) return;
+    if (!resourceId || !start) return;
+    let selected: Date;
+    try { selected = labInstant(start); } catch { return; }
     let active = true;
     const timer = window.setTimeout(() => {
       void listAvailability(
@@ -454,6 +473,12 @@ export function ResourceBookingPage() {
     };
   }, [duration, listAvailability, resourceId, start]);
 
+  if (!resource || !currentMember) return <PageHeader title="Resource not found." description="Return to the live resource directory." actions={<Link className="button button-quiet" to="/book">Resources</Link>} />;
+
+  if (inventory.loading) return <PageHeader title="Checking booking inventory…" description="Loading the correct reservation flow." />;
+  if (inventory.error) return <PageHeader title="Inventory unavailable" description={inventory.error} />;
+  if (inventory.ids.includes(resource.id)) return <PageHeader title="Choose your chair and pass dates" description="Shared chairs and whole-team cabins use the floor map and dated reservation flow." actions={<Link className="button button-primary" to="/passes">Choose chair and dates</Link>} />;
+
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
@@ -465,15 +490,17 @@ export function ResourceBookingPage() {
     setWorking(true);
     try {
       const booking = await createBooking({
-        resourceId,
-        startsAt: new Date(start).toISOString(),
+        resourceId: resourceId!,
+        startsAt: labInstant(start).toISOString(),
         durationMinutes: duration,
         purpose: String(data.get("purpose")),
-        guestNames: guests.split(",").map((guest) => guest.trim()).filter(Boolean)
+        guestNames: guests.split(",").map((guest) => guest.trim()).filter(Boolean),
+        accessSource: accessChoice === "personal" ? "personal" : "team",
+        organizationId: accessChoice === "personal" ? undefined : accessChoice
       });
       navigate(`/bookings/${booking.id}`);
     } catch (reason) {
-      setError(reason instanceof Error ? reason.message : "Booking failed.");
+      setError(reason instanceof Error ? reason.message : typeof reason === "object" && reason !== null && "message" in reason && typeof reason.message === "string" ? reason.message : "Booking failed.");
     } finally {
       setWorking(false);
     }
@@ -485,19 +512,25 @@ export function ResourceBookingPage() {
       <Section number="01" title="Choose a live block">
         <div className="booking-layout">
           <form className="booking-form" onSubmit={submit}>
+            <Field label="Membership used for this booking">
+              <select value={accessChoice} onChange={(event) => setAccessChoice(event.target.value)} required>
+                {personalActive && <option value="personal">Personal access pass</option>}
+                {activeTeams.map((team) => <option key={team.organizationId} value={team.organizationId}>{team.organizationName} · team seat</option>)}
+              </select>
+            </Field>
             <Field label="Start time" hint="Asia/Kolkata · 15-minute increments">
               <input type="datetime-local" required step={900} value={start} onChange={(event) => setStart(event.target.value)} />
             </Field>
             <Field label={`Duration · ${duration} minutes`}>
               <input type="range" min={15} max={resource.maxDurationMinutes} step={15} value={duration} onChange={(event) => setDuration(Number(event.target.value))} />
             </Field>
-            <Field label={`Guests · maximum ${resource.maxGuests}`} hint={resource.hazardous ? "Guests are prohibited for this hazardous resource." : "Comma-separated names"}>
+            <Field label={`Guests · maximum ${resource.maxGuests}`} hint={resource.hazardous ? "Guests are prohibited for this hazardous resource." : "Comma-separated names. Cabin guests visit for the first three hours of the booking, or its shorter duration."}>
               <input value={guests} onChange={(event) => setGuests(event.target.value)} disabled={resource.maxGuests === 0} placeholder={resource.maxGuests ? "Guest names" : "No guests permitted"} />
             </Field>
             <Field label="Purpose of session"><textarea name="purpose" rows={4} required placeholder="What will you build or test during this block?" /></Field>
             {resource.certifications.length > 0 && <div className="cert-gate"><ShieldCheck aria-hidden="true" /><span>Required: {resource.certifications.join(", ")}</span></div>}
             {error && <p className="form-error" role="alert">{error}</p>}
-            <button className="button button-primary button-wide" type="submit" disabled={!online || working}>{working ? "Confirming…" : "Confirm booking"} <ArrowRight aria-hidden="true" /></button>
+            <button className="button button-primary button-wide" type="submit" disabled={!online || working || (!personalActive && activeTeams.length === 0)}>{working ? "Confirming…" : "Confirm booking"} <ArrowRight aria-hidden="true" /></button>
           </form>
           <aside className="availability-panel">
             <span className="mono">Anonymous live availability</span>
@@ -517,7 +550,7 @@ export function ResourceBookingPage() {
               </button>
             ))}
             {!availability.length && !availabilityError && <p>Checking operating hours and reservations…</p>}
-            <p className="estimate-note">The final conflict and certification check runs atomically in Postgres.</p>
+            <p className="estimate-note">Open blocks show resource availability. Your paid pass must cover the time; standard passes cover 9 am–5 pm IST. Eligibility is checked when you confirm.</p>
           </aside>
         </div>
       </Section>
@@ -563,7 +596,7 @@ export function BookingDetailPage() {
     try {
       await rescheduleBooking(
         booking!.id,
-        new Date(String(data.get("startsAt"))).toISOString(),
+        labInstant(String(data.get("startsAt"))).toISOString(),
         Number(data.get("duration"))
       );
     } catch (reason) {
