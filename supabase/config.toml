@@ -86,3 +86,6 @@ verify_jwt = false
 
 [functions.onboarding-retention]
 verify_jwt = false
+
+[functions.member-avatar]
+verify_jwt = false
