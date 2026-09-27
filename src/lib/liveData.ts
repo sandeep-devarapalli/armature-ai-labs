@@ -239,7 +239,7 @@ export async function loadLiveSnapshot(
     .eq("user_id", session.user.id);
   throwOnError(rolesResult.error);
   const roles = rolesResult.data ?? [];
-  const isStaff = roles.length > 0;
+  const isStaff = roles.some((entry) => entry.role !== "membership_reviewer");
   const isAdmin = hasAdminRole(roles);
 
   const teamAccessResult = import.meta.env.VITE_MEMBER_PLATFORM_ENABLED === "true"
@@ -364,7 +364,7 @@ export async function loadLiveSnapshot(
     state:
       booking.status === "tentative" ? "confirmed" : booking.status,
     createdAt: booking.created_at,
-    accessSource: booking.access_source,
+    accessSource: booking.access_source === "team" ? "team" : "personal",
     organizationId: booking.organization_id
   }));
 

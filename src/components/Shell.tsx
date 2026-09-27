@@ -43,6 +43,7 @@ const publicLinks = [
 const memberLinks = [
   ["/dashboard", "Dashboard", ClipboardCheck],
   ["/book", "Book", BookOpen],
+  ["/passes", "Passes", CalendarDays],
   ["/bookings", "Bookings", CalendarDays],
   ["/check-in", "Check in", QrCode],
   ["/inventory", "Inventory", Boxes],
@@ -198,6 +199,7 @@ export function Shell({ children }: PropsWithChildren) {
                 <Wrench aria-hidden="true" />
                 Operations
               </NavLink>}
+              {isAdmin && <NavLink to="/admin/access"><Wrench aria-hidden="true" />Access settings</NavLink>}
               {isAdmin && <NavLink to="/financials">
                 <CircleDollarSign aria-hidden="true" />
                 Financials

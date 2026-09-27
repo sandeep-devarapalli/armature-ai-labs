@@ -31,10 +31,12 @@ import { MemberAvatar } from "../components/MemberAvatar";
 import { EmptyState, Field, Metric, PageHeader, Section, Status } from "../components/Primitives";
 import { resourceFor, useApp } from "../context/AppContext";
 import { supabase } from "../lib/supabase";
+import { useAccount } from "../context/AccountContext";
+import { labDateTimeInput, labInstant } from "../lib/bookingTime";
 import type { MemberProfile } from "../types/domain";
 
-const dateTime = (value: string) => format(parseISO(value), "EEE, d MMM · h:mm a");
-const time = (value: string) => format(parseISO(value), "h:mm a");
+const dateTime = (value: string) => new Intl.DateTimeFormat("en-IN", { timeZone: "Asia/Kolkata", weekday: "short", day: "numeric", month: "short", hour: "numeric", minute: "2-digit" }).format(new Date(value)) + " IST";
+const time = (value: string) => new Intl.DateTimeFormat("en-IN", { timeZone: "Asia/Kolkata", hour: "numeric", minute: "2-digit" }).format(new Date(value));
 
 function serializeLinks(links: MemberProfile["projectLinks"]) {
   return links.map((link) => `${link.label} | ${link.url}`).join("\n");
@@ -363,8 +365,9 @@ function MfaPanel({ mode }: { mode: "demo" | "supabase" }) {
 }
 
 export function BookPage() {
-  const { currentMember, state, teamAccess } = useApp();
-  const canBook = currentMember?.membershipState === "active" || teamAccess.some((team) => team.membershipActive && team.seatEnabled);
+  const { currentMember, state, mode } = useApp();
+  const { account } = useAccount();
+  const canBook = mode === "demo" ? currentMember?.membershipState === "active" : account?.status === "approved";
   return (
     <>
       <PageHeader
@@ -373,9 +376,10 @@ export function BookPage() {
         description="One approved member owns each booking. Availability, certification, guest, maintenance, and conflict rules are checked again when the reservation is created."
       />
       {!canBook && (
-        <div className="gate-banner"><div className="wrap"><AlertTriangle aria-hidden="true" /><p>Booking unlocks after your personal membership or team seat is active.</p><Link to="/join">View application</Link></div></div>
+        <div className="gate-banner"><div className="wrap"><AlertTriangle aria-hidden="true" /><p>Booking requires approved basic membership and a paid access pass covering the selected time.</p><Link to="/onboarding">My registration</Link></div></div>
       )}
       <Section number="01" title="Bookable resources">
+        <p>Workspace and cabin access includes pantry essentials. Equipment is an additional in-lab booking and requires workspace access. <Link to="/passes">View passes and access dates</Link>.</p>
         <div className="book-resource-list">
           {state.resources.map((resource) => {
             const missing = resource.certifications.filter((cert) => !currentMember?.certifications.includes(cert));
@@ -413,13 +417,13 @@ function nextQuarterHour() {
 }
 
 function toLocalInput(date: Date) {
-  const offset = date.getTimezoneOffset();
-  return new Date(date.getTime() - offset * 60000).toISOString().slice(0, 16);
+  return labDateTimeInput(date);
 }
 
 export function ResourceBookingPage() {
   const { resource: slug } = useParams();
-  const { state, currentMember, teamAccess, createBooking, listAvailability, online } = useApp();
+  const { state, currentMember, teamAccess, createBooking, listAvailability, online, mode } = useApp();
+  const { account } = useAccount();
   const navigate = useNavigate();
   const resource = state.resources.find((item) => item.slug === slug);
   const [start, setStart] = useState(toLocalInput(nextQuarterHour()));
@@ -430,19 +434,19 @@ export function ResourceBookingPage() {
   const [availability, setAvailability] = useState<Array<{ startsAt: string; endsAt: string; available: boolean; reason: string | null }>>([]);
   const [availabilityError, setAvailabilityError] = useState("");
   const activeTeams = teamAccess.filter((team) => team.membershipActive && team.seatEnabled);
-  const personalActive = currentMember?.membershipState === "active";
+  const personalActive = mode === "demo" ? currentMember?.membershipState === "active" : account?.status === "approved";
   const [accessChoice, setAccessChoice] = useState(personalActive ? "personal" : activeTeams[0]?.organizationId ?? "personal");
   useEffect(() => {
     if (accessChoice === "personal" && personalActive) return;
     if (activeTeams.some((team) => team.organizationId === accessChoice)) return;
     setAccessChoice(personalActive ? "personal" : activeTeams[0]?.organizationId ?? "personal");
   }, [accessChoice, activeTeams, personalActive]);
-  if (!resource || !currentMember) return <PageHeader title="Resource not found." description="Return to the live resource directory." actions={<Link className="button button-quiet" to="/book">Resources</Link>} />;
-  const resourceId = resource.id;
+  const resourceId = resource?.id;
 
   useEffect(() => {
-    const selected = new Date(start);
-    if (Number.isNaN(selected.getTime())) return;
+    if (!resourceId || !start) return;
+    let selected: Date;
+    try { selected = labInstant(start); } catch { return; }
     let active = true;
     const timer = window.setTimeout(() => {
       void listAvailability(
@@ -465,6 +469,8 @@ export function ResourceBookingPage() {
     };
   }, [duration, listAvailability, resourceId, start]);
 
+  if (!resource || !currentMember) return <PageHeader title="Resource not found." description="Return to the live resource directory." actions={<Link className="button button-quiet" to="/book">Resources</Link>} />;
+
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
@@ -476,8 +482,8 @@ export function ResourceBookingPage() {
     setWorking(true);
     try {
       const booking = await createBooking({
-        resourceId,
-        startsAt: new Date(start).toISOString(),
+        resourceId: resourceId!,
+        startsAt: labInstant(start).toISOString(),
         durationMinutes: duration,
         purpose: String(data.get("purpose")),
         guestNames: guests.split(",").map((guest) => guest.trim()).filter(Boolean),
@@ -486,7 +492,7 @@ export function ResourceBookingPage() {
       });
       navigate(`/bookings/${booking.id}`);
     } catch (reason) {
-      setError(reason instanceof Error ? reason.message : "Booking failed.");
+      setError(reason instanceof Error ? reason.message : typeof reason === "object" && reason !== null && "message" in reason && typeof reason.message === "string" ? reason.message : "Booking failed.");
     } finally {
       setWorking(false);
     }
@@ -500,7 +506,7 @@ export function ResourceBookingPage() {
           <form className="booking-form" onSubmit={submit}>
             <Field label="Membership used for this booking">
               <select value={accessChoice} onChange={(event) => setAccessChoice(event.target.value)} required>
-                {personalActive && <option value="personal">Personal membership</option>}
+                {personalActive && <option value="personal">Personal access pass</option>}
                 {activeTeams.map((team) => <option key={team.organizationId} value={team.organizationId}>{team.organizationName} · team seat</option>)}
               </select>
             </Field>
@@ -510,7 +516,7 @@ export function ResourceBookingPage() {
             <Field label={`Duration · ${duration} minutes`}>
               <input type="range" min={15} max={resource.maxDurationMinutes} step={15} value={duration} onChange={(event) => setDuration(Number(event.target.value))} />
             </Field>
-            <Field label={`Guests · maximum ${resource.maxGuests}`} hint={resource.hazardous ? "Guests are prohibited for this hazardous resource." : "Comma-separated names"}>
+            <Field label={`Guests · maximum ${resource.maxGuests}`} hint={resource.hazardous ? "Guests are prohibited for this hazardous resource." : "Comma-separated names. Cabin guests visit for the first three hours of the booking, or its shorter duration."}>
               <input value={guests} onChange={(event) => setGuests(event.target.value)} disabled={resource.maxGuests === 0} placeholder={resource.maxGuests ? "Guest names" : "No guests permitted"} />
             </Field>
             <Field label="Purpose of session"><textarea name="purpose" rows={4} required placeholder="What will you build or test during this block?" /></Field>
@@ -536,7 +542,7 @@ export function ResourceBookingPage() {
               </button>
             ))}
             {!availability.length && !availabilityError && <p>Checking operating hours and reservations…</p>}
-            <p className="estimate-note">The final conflict and certification check runs atomically in Postgres.</p>
+            <p className="estimate-note">Open blocks show resource availability. Your paid pass must cover the time; standard passes cover 9 am–5 pm IST. Eligibility is checked when you confirm.</p>
           </aside>
         </div>
       </Section>
@@ -582,7 +588,7 @@ export function BookingDetailPage() {
     try {
       await rescheduleBooking(
         booking!.id,
-        new Date(String(data.get("startsAt"))).toISOString(),
+        labInstant(String(data.get("startsAt"))).toISOString(),
         Number(data.get("duration"))
       );
     } catch (reason) {

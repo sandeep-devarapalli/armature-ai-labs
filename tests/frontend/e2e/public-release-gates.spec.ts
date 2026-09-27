@@ -92,6 +92,8 @@ test("public-first production gates operational routes", async ({ page }) => {
   for (const path of [
     "/book",
     "/bookings",
+    "/passes",
+    "/admin/access",
     "/workspace/team",
     "/workspace/team/accept/test-token",
     "/check-in",
