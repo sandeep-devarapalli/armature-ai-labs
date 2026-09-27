@@ -48,6 +48,7 @@ export function estimateBookingBeta({ product, dates: inputDates, studentDiscoun
     const end = new Date(start);
     if (product === 'week') end.setUTCDate(end.getUTCDate() + 6);
     else end.setUTCMonth(end.getUTCMonth() + 1, 0);
+    if (end.getUTCFullYear() > 9999) throw new Error("The pass must end within a four-digit calendar year.");
     dates = [];
     for (const day = new Date(start); day <= end; day.setUTCDate(day.getUTCDate() + 1)) {
       dates.push(day.toISOString().slice(0, 10));

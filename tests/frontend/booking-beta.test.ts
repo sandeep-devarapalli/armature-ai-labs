@@ -82,3 +82,7 @@ describe('read-only booking beta estimates', () => {
     expect(() => estimateBookingBeta({ product: 'cabin', dates: ['2026-12-01'], studentDiscountPercent: 20 })).toThrow('individual coworking');
   });
 });
+
+it('rejects a week that overflows the supported calendar', () => {
+  expect(() => estimateBookingBeta({ product: 'week', dates: ['9999-12-31'] })).toThrow(/four-digit/);
+});
