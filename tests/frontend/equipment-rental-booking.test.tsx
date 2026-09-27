@@ -68,3 +68,12 @@ it("requests owned same-unit extensions and passes the parent without changing i
   await waitFor(() => expect(mock.rpc).toHaveBeenLastCalledWith("create_equipment_rental_quote", expect.objectContaining({ p_parent_order_id: "previous-order" })));
   expect(mock.rpc).toHaveBeenCalledWith("get_equipment_rental_extensions", { p_unit_id: "unit", p_operator_id: "member", p_organization_id: null });
 });
+
+it("only offers dated coverage and clears it after moving to another date", async () => {
+  await quote();
+  expect(screen.getByLabelText(/S01 chair/)).toBeChecked();
+  fireEvent.change(screen.getByLabelText("First date · IST"), { target: { value: "2026-11-19" } });
+  expect(screen.queryByLabelText(/S01 chair/)).not.toBeInTheDocument();
+  fireEvent.change(screen.getByLabelText("First date · IST"), { target: { value: "2026-11-18" } });
+  expect(screen.getByLabelText(/S01 chair/)).not.toBeChecked();
+});
