@@ -8,6 +8,7 @@ node_modules/
 coverage/
 playwright-report/
 test-results/
+test-results-team-local/
 .wrangler/
 supabase/.temp/
 tmp/
