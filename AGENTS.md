@@ -166,3 +166,5 @@ Use the narrowest checks that match the edit:
 - For design changes, confirm palette, typography, layout, and placeholders still follow `DESIGN.md`.
 - For theme changes, verify light, dark, and sepia modes at desktop and 390px.
 - For auth, booking, kiosk, or PWA changes, run the relevant Playwright flows.
+
+- Equipment release routing correction, 27 September 2026: new operational React routes must also have explicit production app-shell rewrites. Verify direct HTTP access with and without the trailing slash and noindex/private-state checks; a passing Vite browser test does not establish Cloudflare routing.

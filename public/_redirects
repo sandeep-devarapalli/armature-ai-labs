@@ -38,6 +38,8 @@
 /toolkits/ /app-shell 200
 /admin /app-shell 200
 /admin/ /app-shell 200
+/admin/equipment /app-shell 200
+/admin/equipment/ /app-shell 200
 /admin/members /app-shell 200
 /admin/members/ /app-shell 200
 /admin/resources /app-shell 200
