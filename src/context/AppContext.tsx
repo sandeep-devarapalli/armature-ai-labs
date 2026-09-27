@@ -4,6 +4,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type PropsWithChildren
 } from "react";
@@ -221,6 +222,8 @@ export function AppProvider({ children, hydrate: hydrating = false }: PropsWithC
   );
   const [notice, setNotice] = useState("");
   const [teamAccess, setTeamAccess] = useState<TeamAccess[]>([]);
+  const hydrationVersion = useRef(0);
+  const sessionUserId = useRef<string | null>(null);
 
   useEffect(() => {
     if (!hydrating) return;
@@ -253,29 +256,44 @@ export function AppProvider({ children, hydrate: hydrating = false }: PropsWithC
     };
   }, []);
 
-  const hydrate = useCallback(async (session: Session | null) => {
-    if (!supabase) return;
+  const startHydration = useCallback((session: Session | null) => {
+    const userId = session?.user.id ?? null;
+    if (sessionUserId.current !== userId) {
+      sessionUserId.current = userId;
+      setState(emptyLiveState);
+      setTeamAccess([]);
+      setNotice("");
+    }
     setIsStaff(false);
     setIsAdmin(false);
     setLoading(true);
+    return ++hydrationVersion.current;
+  }, []);
+
+  const hydrate = useCallback(async (session: Session | null, version = startHydration(session)) => {
+    if (!supabase || version !== hydrationVersion.current) return;
     try {
       const snapshot = await loadLiveSnapshot(supabase, session);
+      if (version !== hydrationVersion.current) return;
       setState(snapshot.state);
       setIsStaff(snapshot.isStaff);
       setIsAdmin(snapshot.isAdmin);
       setTeamAccess(snapshot.teamAccess);
     } catch (error) {
+      if (version !== hydrationVersion.current) return;
       setNotice(
         error instanceof Error ? error.message : "Could not load live data."
       );
     } finally {
-      setLoading(false);
+      if (version === hydrationVersion.current) setLoading(false);
     }
-  }, []);
+  }, [startHydration]);
 
   const refresh = useCallback(async () => {
     if (!supabase) return;
+    const version = hydrationVersion.current;
     const { data, error } = await supabase.auth.getSession();
+    if (version !== hydrationVersion.current) return;
     if (error) throw error;
     await hydrate(data.session);
   }, [hydrate]);
@@ -283,8 +301,9 @@ export function AppProvider({ children, hydrate: hydrating = false }: PropsWithC
   useEffect(() => {
     if (!supabase) return;
     let active = true;
+    const version = hydrationVersion.current;
     void supabase.auth.getSession().then(({ data, error }) => {
-      if (!active) return;
+      if (!active || version !== hydrationVersion.current) return;
       if (error) {
         setNotice(error.message);
         setLoading(false);
@@ -293,15 +312,17 @@ export function AppProvider({ children, hydrate: hydrating = false }: PropsWithC
       void hydrate(data.session);
     });
     const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+      const version = startHydration(session);
       window.setTimeout(() => {
-        if (active) void hydrate(session);
+        if (active) void hydrate(session, version);
       }, 0);
     });
     return () => {
       active = false;
+      hydrationVersion.current++;
       data.subscription.unsubscribe();
     };
-  }, [hydrate]);
+  }, [hydrate, startHydration]);
 
   const currentMember =
     state.profiles.find((profile) => profile.id === state.currentUserId) ?? null;
