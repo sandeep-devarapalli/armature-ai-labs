@@ -1,7 +1,8 @@
 import { expect, test } from "@playwright/test";
+import { backendOrigin } from "./backend-fixture";
 
 test("basic registration opens independently while paid access remains closed", async ({ page }) => {
-  await page.route("https://reserved.invalid/**", route => route.abort());
+  await page.route(`${backendOrigin}/**`, route => route.abort());
   await page.goto("/join");
   await expect(page.getByRole("heading", { name: "Create your basic membership." })).toBeVisible();
   await page.getByRole("link", { name: "Register for free" }).first().click();
