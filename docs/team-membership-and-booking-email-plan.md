@@ -2,13 +2,13 @@
 
 Updated: 26 September 2026. The owner decisions below supersede conflicting earlier planning assumptions. They are requirements, not claims of implemented or live functionality. Google setup and test evidence is tracked in website-work-progress-2026-09-26.md.
 
-Preview testing is on hold at the user's request. The live website's public
+Local synthetic preview testing resumed with owner approval on 27 September 2026; see `team-booking-next-phase-2026-09-27.md`. Paid preview infrastructure and production paid activation remain on hold. The live website's public
 bundle points to the existing `armature-lab` Supabase project
 (`uxfhdfagrmaeyuaipaar`); no separate Armature preview project was found among
 the accessible projects. Do not create one or apply this migration to the live
 project until the user resumes that work.
 
-The local implementation adds team applications, staff review and activation,
+The local implementation adds team applications, website Admin review and local mock activation,
 named seats, invitations, booking attribution, restricted team reporting and
 an optional Google Workspace reminder sender. The member-platform release gate
 stays in place. The Gmail reminder provider is not selected by default.
