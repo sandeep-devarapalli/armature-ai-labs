@@ -19,7 +19,17 @@ Deno.serve(async (request) => {
       if (markError) { failed++; continue; }
       deleted++;
     }
-    return json(request, { examined: documents?.length ?? 0, deleted, failed }, failed ? 503 : 200);
+    const { data: avatars, error: avatarError } = await client.from("member_avatar_cleanup").select("object_path").lte("queued_at", new Date().toISOString()).order("queued_at").limit(100);
+    if (avatarError) throw new Error("Avatar cleanup lookup failed");
+    let avatarsDeleted = 0;
+    for (const avatar of avatars ?? []) {
+      const { error: removeError } = await client.storage.from("member-avatars").remove([avatar.object_path]);
+      if (removeError) { failed++; continue; }
+      const { error: markError } = await client.from("member_avatar_cleanup").delete().eq("object_path", avatar.object_path);
+      if (markError) { failed++; continue; }
+      avatarsDeleted++;
+    }
+    return json(request, { examined: documents?.length ?? 0, deleted, avatarsDeleted, failed }, failed ? 503 : 200);
   } catch (error) {
     return json(request, { error: error instanceof HttpError ? error.message : "Retention run failed." }, error instanceof HttpError ? error.status : 500);
   }
