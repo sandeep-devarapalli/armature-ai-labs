@@ -1,3 +1,5 @@
+- Equipment admin release authorization, 27 September 2026: owner explicitly requested publication with rates editable later, then confirmed “Publish equipment administration; keep payments closed.” Release the protected Admin/Super admin equipment page and its required gated schema only. Keep payment/mock gates false, paid/team customer routes closed, no commissioned inventory or invented rates, and defer independent Gmail and combined-checkout migrations. This supersedes the local-only equipment administration hold, not the LLP/Razorpay hold.
+
 # AGENTS.md
 
 - Equipment catalogue approval, 27 September 2026: extend /components and existing detail URLs with beginner specifications, product galleries, lazy Three.js models and a moderated equipment wishlist. Use sourced manufacturer/e-commerce images initially; unconfirmed reuse rights stay local-only. Product images and vendor stock never imply lab availability. Planned inventory, prices and GF/FF placements remain provisional until commissioned/approved. Preserve the payment hold; membership-review Staff have no procurement powers.
