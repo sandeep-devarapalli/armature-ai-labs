@@ -1,10 +1,12 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import { beforeEach, expect, it, vi } from 'vitest';
 import { AdminAccessPage, PassSelectionPage } from '../../src/pages/BookingPolicyPages';
 const mocks = vi.hoisted(() => ({ rpc: vi.fn(), from: vi.fn(), role: 'member', userId: '' }));
 vi.mock('../../src/lib/supabase', () => ({ supabase: { rpc: mocks.rpc, from: mocks.from } }));
 vi.mock('../../src/context/AccountContext', () => ({ useAccount: () => ({ account: { role: mocks.role, user_id: mocks.userId }, loading: false }) }));
-vi.mock('../../src/context/AppContext', () => ({ useApp: () => ({ state: { resources: [{ id: 'desk-1', name: 'Lab desk' }], profiles: [] } }) }));
+vi.mock('../../src/context/AppContext', () => ({ useApp: () => ({ teamAccess: [], online: true, refresh: vi.fn(), state: { resources: [{ id: 'desk-1', name: 'Lab desk' }], profiles: [] } }) }));
+vi.mock('../../src/components/BookingFloorMap', () => ({ BookingFloorMap: ({ onSelect }: { onSelect: (id: string) => void }) => <button onClick={() => onSelect('desk-1')}>S01 chair</button> }));
 const products = [{ id: 'day-1', code: 'workspace-day', name: 'Day pass', kind: 'workspace', unit: 'day', price_paise: null, enabled: false }];
 beforeEach(() => {
   mocks.rpc.mockReset(); mocks.from.mockReset(); mocks.role = 'member'; mocks.userId = '';
@@ -15,19 +17,21 @@ beforeEach(() => {
 });
 it('shows server-calculated dates, closure reason and unconfigured price without payment controls', async () => {
   mocks.rpc.mockResolvedValue({ error: null, data: { starts_on: '2026-10-01', ends_on: '2026-10-02', dates: ['2026-10-01', '2026-10-02'], closed_dates: [{ date: '2026-10-02', reason: 'Mandatory holiday' }], configured: false, total_paise: null } });
-  render(<PassSelectionPage />);
+  render(<MemoryRouter><PassSelectionPage /></MemoryRouter>);
   await screen.findByRole('option', { name: 'Day pass · Price not configured' });
   fireEvent.change(screen.getByLabelText('Access product'), { target: { value: 'day-1' } });
-  fireEvent.change(screen.getByLabelText('Pass resource'), { target: { value: 'desk-1' } });
   for (const value of ['2026-10-01', '2026-10-02']) { fireEvent.change(screen.getByLabelText('Day-pass date'), { target: { value } }); fireEvent.click(screen.getByRole('button', { name: 'Add date' })); }
-  fireEvent.click(screen.getByRole('button', { name: 'Check dates and price' }));
+  mocks.rpc.mockResolvedValueOnce({ error: null, data: [{ resource_id: 'desk-1', code: 'S01', available: true }] });
+  fireEvent.click(screen.getByRole('button', { name: 'Check chair availability' }));
+  fireEvent.click(await screen.findByRole('button', { name: 'S01 chair' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Review reservation' }));
   await screen.findByText('Price not configured. Paid activation remains unavailable.');
   expect(screen.getByText(/2 October 2026: Mandatory holiday/)).toBeVisible();
   expect(mocks.rpc).toHaveBeenCalledWith('quote_access_pass', { p_product_id: 'day-1', p_dates: ['2026-10-01', '2026-10-02'], p_discount_percent: 0, p_resource_id: 'desk-1' });
   expect(screen.queryByRole('button', { name: /pay|purchase/i })).not.toBeInTheDocument();
 });
 it('rejects day-pass selections spanning calendar months before requesting a quote', async () => {
-  render(<PassSelectionPage />); await screen.findByRole('option', { name: /Day pass/ });
+  render(<MemoryRouter><PassSelectionPage /></MemoryRouter>); await screen.findByRole('option', { name: /Day pass/ });
   fireEvent.change(screen.getByLabelText('Access product'), { target: { value: 'day-1' } });
   for (const value of ['2026-10-31', '2026-11-01']) { fireEvent.change(screen.getByLabelText('Day-pass date'), { target: { value } }); fireEvent.click(screen.getByRole('button', { name: 'Add date' })); }
   expect(screen.getByRole('alert')).toHaveTextContent('same calendar month'); expect(mocks.rpc).not.toHaveBeenCalled();
@@ -45,10 +49,46 @@ it('stores week renewal preference without charging or renewing a day pass', asy
     const query = { select: () => query, order: () => query, limit: () => query, eq: () => query, is: () => query, then: (fn: (value: unknown) => unknown) => Promise.resolve({ data, error: null }).then(fn) }; return query;
   });
   mocks.rpc.mockResolvedValue({ error: null });
-  render(<PassSelectionPage />);
+  render(<MemoryRouter><PassSelectionPage /></MemoryRouter>);
   fireEvent.click(await screen.findByRole('checkbox', { name: /Renew Week pass/ }));
   await screen.findByText('Renewal preference saved; automatic billing remains unavailable.');
   expect(mocks.rpc).toHaveBeenCalledWith('set_access_renewal', { p_entitlement_id: 'grant-week-2', p_enabled: true });
   expect(screen.getAllByRole('checkbox')).toHaveLength(1);
   expect(screen.queryByRole('checkbox', { name: /Day pass/ })).not.toBeInTheDocument();
+});
+
+it('requires explicit confirmation and clears a stale reservation after a server conflict', async () => {
+  mocks.rpc.mockImplementation((name) => Promise.resolve({ error: name === 'reserve_workspace_pass' ? { message: 'Chair already reserved' } : null, data: name === 'get_workspace_availability' ? [{ resource_id: 'desk-1', code: 'S01', available: true }] : { starts_on: '2026-11-17', ends_on: '2026-11-17', dates: ['2026-11-17'], closed_dates: [], configured: true, total_paise: 35000 } }));
+  render(<MemoryRouter><PassSelectionPage /></MemoryRouter>);
+  await screen.findByRole('option', { name: /Day pass/ });
+  fireEvent.change(screen.getByLabelText('Access product'), { target: { value: 'day-1' } });
+  fireEvent.change(screen.getByLabelText('Day-pass date'), { target: { value: '2026-11-17' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Add date' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Check chair availability' }));
+  fireEvent.click(await screen.findByRole('button', { name: 'S01 chair' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Review reservation' }));
+  const confirm = await screen.findByRole('button', { name: 'Confirm reservation' });
+  expect(confirm).toBeDisabled();
+  fireEvent.click(screen.getByRole('checkbox', { name: 'I confirm these dates and this chair or whole cabin.' }));
+  fireEvent.click(confirm);
+  await screen.findByText('Chair already reserved');
+  expect(screen.queryByRole('button', { name: 'Confirm reservation' })).not.toBeInTheDocument();
+  expect(mocks.rpc).toHaveBeenCalledWith('reserve_workspace_pass', { p_resource_id: 'desk-1', p_product_id: 'day-1', p_dates: ['2026-11-17'], p_organization_id: null });
+});
+
+it('discards availability returned after the signed-in account changes', async () => {
+  let resolve: (value: unknown) => void = () => {};
+  mocks.rpc.mockImplementation(() => new Promise(done => { resolve = done; }));
+  mocks.userId = 'first';
+  const view = render(<MemoryRouter><PassSelectionPage /></MemoryRouter>);
+  await screen.findByRole('option', { name: /Day pass/ });
+  fireEvent.change(screen.getByLabelText('Access product'), { target: { value: 'day-1' } });
+  fireEvent.change(screen.getByLabelText('Day-pass date'), { target: { value: '2026-11-17' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Add date' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Check chair availability' }));
+  mocks.userId = 'second';
+  view.rerender(<MemoryRouter><PassSelectionPage /></MemoryRouter>);
+  resolve({ error: null, data: [{ resource_id: 'desk-1', code: 'S01', available: true }] });
+  await waitFor(() => expect(screen.getByRole('button', { name: 'Check chair availability' })).toBeEnabled());
+  expect(screen.queryByRole('button', { name: 'S01 chair' })).not.toBeInTheDocument();
 });

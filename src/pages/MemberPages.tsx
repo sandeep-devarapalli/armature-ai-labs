@@ -1,3 +1,4 @@
+import { useBookingInventory } from "../lib/useBookingInventory";
 import { useEffect, useMemo, useState, type FormEvent } from "react";
 import QRCode from "qrcode";
 import {
@@ -365,6 +366,7 @@ function MfaPanel({ mode }: { mode: "demo" | "supabase" }) {
 }
 
 export function BookPage() {
+  const inventory = useBookingInventory();
   const { currentMember, state, mode } = useApp();
   const { account } = useAccount();
   const canBook = mode === "demo" ? currentMember?.membershipState === "active" : account?.status === "approved";
@@ -379,11 +381,12 @@ export function BookPage() {
         <div className="gate-banner"><div className="wrap"><AlertTriangle aria-hidden="true" /><p>Booking requires approved basic membership and a paid access pass covering the selected time.</p><Link to="/onboarding">My registration</Link></div></div>
       )}
       <Section number="01" title="Bookable resources">
+        {inventory.error && <p role="alert">{inventory.error}</p>}
         <p>Workspace and cabin access includes pantry essentials. Equipment is an additional in-lab booking and requires workspace access. <Link to="/passes">View passes and access dates</Link>.</p>
         <div className="book-resource-list">
           {state.resources.map((resource) => {
             const missing = resource.certifications.filter((cert) => !currentMember?.certifications.includes(cert));
-            const blocked = !resource.available || missing.length > 0 || !canBook;
+            const blocked = inventory.loading || Boolean(inventory.error) || !resource.available || missing.length > 0 || !canBook;
             return (
               <article className="book-resource-row" key={resource.id}>
                 <div className="resource-symbol"><Wrench aria-hidden="true" /></div>
@@ -399,7 +402,7 @@ export function BookPage() {
                 </div>
                 <div className="book-row-action">
                   {missing.length ? <Status tone="warn">{missing[0]} required</Status> : <Status tone={resource.available ? "good" : "bad"}>{resource.available ? "Ready" : "Maintenance"}</Status>}
-                  {blocked ? <button className="button button-quiet" disabled>Unavailable</button> : <Link className="button button-primary" to={`/book/${resource.slug}`}>Choose time</Link>}
+                  {blocked ? <button className="button button-quiet" disabled>Unavailable</button> : <Link className="button button-primary" to={inventory.ids.includes(resource.id) ? "/passes" : `/book/${resource.slug}`}>{inventory.ids.includes(resource.id) ? "Choose chair and dates" : "Choose time"}</Link>}
                 </div>
               </article>
             );
@@ -421,6 +424,7 @@ function toLocalInput(date: Date) {
 }
 
 export function ResourceBookingPage() {
+  const inventory = useBookingInventory();
   const { resource: slug } = useParams();
   const { state, currentMember, teamAccess, createBooking, listAvailability, online, mode } = useApp();
   const { account } = useAccount();
@@ -470,6 +474,10 @@ export function ResourceBookingPage() {
   }, [duration, listAvailability, resourceId, start]);
 
   if (!resource || !currentMember) return <PageHeader title="Resource not found." description="Return to the live resource directory." actions={<Link className="button button-quiet" to="/book">Resources</Link>} />;
+
+  if (inventory.loading) return <PageHeader title="Checking booking inventory…" description="Loading the correct reservation flow." />;
+  if (inventory.error) return <PageHeader title="Inventory unavailable" description={inventory.error} />;
+  if (inventory.ids.includes(resource.id)) return <PageHeader title="Choose your chair and pass dates" description="Shared chairs and whole-team cabins use the floor map and dated reservation flow." actions={<Link className="button button-primary" to="/passes">Choose chair and dates</Link>} />;
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();

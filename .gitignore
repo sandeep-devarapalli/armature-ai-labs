@@ -22,3 +22,6 @@ tmp/
 
 # Isolated basic-registration browser build
 dist-basic-registration/
+
+# Isolated inventory browser test artifacts
+test-results-inventory-local/
