@@ -64,3 +64,23 @@ Prepared as a stacked draft on queue/sender commit `e77ff4c2fee9ee76aba3a6f82b1a
 ### Remaining activation requirements
 
 Signed-event handling, suppression and the read-only admin UI are now implemented locally. Still required: review/CI, release preparation and runtime checks, separate notification credentials/provider webhook registration, confirmed retention for unmatched events and delivery history, monitored job cadence and reconciliation of unknown/unmatched outcomes, pilot addresses and explicit controlled-send authorization. Existing held backlog will not be released automatically. Paid services and the LLP/payment hold remain unchanged.
+
+## Retention and monitoring preparation — 27 September 2026
+
+The owner explicitly approved 30 days for completed notification history and unmatched webhook receipts, while retaining blocked-address records. This is independent of identity-document retention. See `tools/member-notifications/README.md` for the exact policy and release checklist.
+
+- Migration 011 adds a separate default-off cleanup gate, bounded dry-run/mutation RPC, retained deduplication markers and protected aggregate health reporting. Held history expires without ever becoming sendable. Unknown outcomes and unconfirmed accepted messages remain for reconciliation.
+- Minimal event/account/provider identifiers and address hashes remain as pseudonymous deduplication metadata, not anonymous data. These markers prevent archival from permitting duplicate sends and allow late complaints to block future sends without retaining the original address in history. They are removed when either linked account is deleted. Blocked-address records remain separately retained.
+- Maintenance endpoint defaults disabled; mutation additionally requires its apply environment flag and database cleanup gate. It accepts no body, uses a separate job secret and makes only cleanup/health RPCs. It never calls the sender.
+- Prepared Python monitor validates aggregate response fields, prohibits redirects, bounds response/time and logs no addresses or secrets. It reports failed requests, queue/lease delays, unknown/failed outcomes, missing delivery receipts, unmatched receipts and missed cleanup. Held/dry-run backlog alone is not an alert.
+- Independent review found and corrected a cleanup/enqueue lock-order risk by skipping busy advisory locks. Account-deletion coordination is checked separately. Notification concurrency scripts and Python runner tests are included in CI.
+- No production migration, deployment, secret, cron job, alert policy or send. Proposed 15-minute pilot cadence and actual alert-channel delivery still require release review and controlled operational testing. Endpoint logs alone do not verify missed-run monitoring.
+
+### Local verification
+
+- `npm test`: 281 tests in 31 files passed, including 23 maintenance-handler tests using the real job-secret helper and mocked database requests.
+- `npm run build`: TypeScript, production build and release/SEO artifacts passed.
+- `python3 -m unittest discover -s tools/member-notifications -v`: seven tests passed, with subcases covering every actionable signal and invalid responses; no HTTP sent.
+- SQL: 452 assertions across 17 files passed, including 32 new operations assertions. Concurrent tests passed inverse enqueue order, complaints in both arrival orders, two cleanup workers and account deletion in both arrival orders. Fixture accounts were removed and cleanup_enabled remained false. Only `supabase_db_armature-basic-release-check` was used. No new rendered website changes in this stage; desktop/mobile evidence belongs to the prior delivery-status PR.
+
+Remaining before pilot activation: review the three stacked PRs and CI, test hosted Deno runtime/dry run, provision separate credentials and a paused job, verify failure/missing-run/recovery alerts with actual receipt, release the approved cleanup controls, select pilot recipients and authorize controlled notification delivery. Previous sending and webhook gates remain disabled, and the paid-service/payment holds remain unchanged.
