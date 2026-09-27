@@ -63,3 +63,30 @@ test("the service worker precaches every built JavaScript and CSS asset", async 
 
   expect(expected.filter((asset) => !cachedPaths.includes(asset))).toEqual([]);
 });
+
+
+test("deep navigation survives an evicted service-worker app shell", async ({ page }) => {
+  await page.goto("/");
+  await page.evaluate(() => navigator.serviceWorker.ready);
+  await page.reload();
+  const removed = await page.evaluate(async () => {
+    const paths: string[] = [];
+    for (const name of await caches.keys()) {
+      const cache = await caches.open(name);
+      for (const request of await cache.keys()) {
+        const pathname = new URL(request.url).pathname;
+        if (pathname === "/app-shell" || pathname === "/app-shell.html") {
+          paths.push(pathname);
+          await cache.delete(request);
+        }
+      }
+    }
+    return paths;
+  });
+  expect(removed).toEqual(["/app-shell"]);
+  for (const route of ["/join/", "/auth/callback?next=%2Fonboarding", "/onboarding"]) {
+    const response = await page.goto(route);
+    expect(response?.status()).toBe(200);
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  }
+});

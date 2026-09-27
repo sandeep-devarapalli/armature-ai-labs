@@ -1,0 +1,9 @@
+FROM clamav/clamav:stable@sha256:0e31ce089574268aefa0b543767d66b70240ab51ed49eec53e07f18d5629d817
+COPY clamd.conf /etc/clamav/armature-clamd.conf
+COPY freshclam.conf /etc/clamav/armature-freshclam.conf
+COPY clamav-start.sh /usr/local/bin/armature-clamav-start
+RUN chmod 755 /usr/local/bin/armature-clamav-start
+USER 100:101
+ENV TZ=UTC
+ENTRYPOINT ["/usr/local/bin/armature-clamav-start"]
+HEALTHCHECK NONE

@@ -1,3 +1,4 @@
+import { useRegistrationLabel } from "../context/AccountContext";
 import {
   ArrowRight,
   Armchair,
@@ -24,7 +25,7 @@ import type { LucideIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { FieldOfTouch } from "../components/FieldOfTouch";
 import { Metric, Section } from "../components/Primitives";
-import { equipmentPageAvailable, memberPlatformAvailable } from "../config/release";
+import { basicOnboardingAvailable, equipmentPageAvailable, memberPlatformAvailable } from "../config/release";
 
 
 type RoomUse = "work" | "shared" | "outdoor" | "support";
@@ -104,6 +105,7 @@ const labRoles = [
 ];
 
 export function HomePage() {
+  const registrationLabel = useRegistrationLabel();
   return (
     <>
       <header className="home-hero home-hero-integrated">
@@ -117,13 +119,18 @@ export function HomePage() {
             benches, and GPU compute. Equipment and hourly access are planned,
             not yet available to book.
           </p>
-          {!memberPlatformAvailable && <p className="hero-location mono">Pre-launch · enquiries only. Membership applications and bookings are not open yet.</p>}
+          {!memberPlatformAvailable && <p className="hero-location mono">{basicOnboardingAvailable ? "Free basic registration is open. Paid bookings remain closed." : "Pre-launch · enquiries only. Membership applications and bookings are not open yet."}</p>}
           <p className="hero-location mono">The Physical AI and Robotics Lab · HSR Layout, Bengaluru</p>
           <div className="button-row">
             {memberPlatformAvailable ? (
               <Link className="button button-primary" to="/book">
                 <CalendarDays aria-hidden="true" />
                 Book a workstation
+              </Link>
+            ) : basicOnboardingAvailable ? (
+              <Link className="button button-primary" to="/onboarding">
+                {registrationLabel}
+                <ArrowRight aria-hidden="true" />
               </Link>
             ) : (
               <a className="button button-primary" href="mailto:hello@armatureailabs.com">
@@ -324,7 +331,7 @@ export function HomePage() {
       <Section
         number="06"
         title="Book, build, and leave a clean trail"
-        lede="The planned member journey brings accounts, certification gates, reservations, and attendance into one path. Applications and bookings are not open yet."
+        lede={basicOnboardingAvailable ? "Free basic registration and identity review are open. Safety inductions, paid reservations and check-in will follow separately; paid bookings remain closed." : "The planned member journey brings accounts, certification gates, reservations, and attendance into one path. Applications and bookings are not open yet."}
       >
         <div className="process-line">
           {[
@@ -351,7 +358,7 @@ export function HomePage() {
             <strong> We are building a place to share access.</strong>
           </p>
           <Link to="/join">
-            Membership enquiries <ArrowRight aria-hidden="true" />
+            {basicOnboardingAvailable ? "Basic membership" : "Membership enquiries"} <ArrowRight aria-hidden="true" />
           </Link>
         </div>
       </div>

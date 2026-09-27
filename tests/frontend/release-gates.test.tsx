@@ -96,6 +96,21 @@ describe("public-first release gates", () => {
     }
   });
 
+  it("requires an explicit configured basic-onboarding gate without enabling paid access", async () => {
+    vi.stubEnv("SSR", true);
+    vi.stubEnv("VITE_DEMO_MODE", "false");
+    vi.stubEnv("VITE_SUPABASE_URL", "https://reserved.invalid");
+    vi.stubEnv("VITE_SUPABASE_PUBLISHABLE_KEY", "public-test-key");
+    vi.stubEnv("VITE_MEMBER_PLATFORM_ENABLED", "false");
+    vi.stubEnv("VITE_BASIC_ONBOARDING_ENABLED", "true");
+    const release = await import("../../src/config/release");
+    expect(release.basicOnboardingAvailable).toBe(true);
+    expect(release.memberPlatformAvailable).toBe(false);
+    vi.stubEnv("VITE_BASIC_ONBOARDING_ENABLED", "false");
+    vi.resetModules();
+    expect((await import("../../src/config/release")).basicOnboardingAvailable).toBe(false);
+  });
+
   it("keeps both production feature gates opt-in", async () => {
     vi.stubEnv("VITE_MEMBER_PLATFORM_ENABLED", "");
     vi.stubEnv("VITE_COMPONENT_REQUESTS_ENABLED", "");

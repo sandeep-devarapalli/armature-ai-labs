@@ -1,3 +1,4 @@
+import { useRegistrationLabel } from "../context/AccountContext";
 import { useEffect, useState, type FormEvent } from "react";
 import {
   ArrowRight,
@@ -17,7 +18,7 @@ import {
 import { Link, useSearchParams } from "react-router-dom";
 import { Field, PageHeader, Section, Status } from "../components/Primitives";
 import { FieldOfTouch } from "../components/FieldOfTouch";
-import { memberPlatformAvailable } from "../config/release";
+import { basicOnboardingAvailable, memberPlatformAvailable } from "../config/release";
 import { useApp } from "../context/AppContext";
 import { supabase } from "../lib/supabase";
 
@@ -298,6 +299,8 @@ export function ServicesPage() {
 }
 
 export function JoinPage() {
+  const registrationLabel = useRegistrationLabel();
+  const registrationFooterLabel = useRegistrationLabel("Open registration");
   const { currentMember, state, submitApplication } = useApp();
   const [searchParams, setSearchParams] = useSearchParams();
   const applicationPath = searchParams.get("path") === "team" ? "team" : "individual";
@@ -305,8 +308,11 @@ export function JoinPage() {
     (application) => application.memberId === currentMember?.id && application.state === "pending"
   );
   const membershipActive = currentMember?.membershipState === "active";
+  const basicOnly = basicOnboardingAvailable && !memberPlatformAvailable;
 
-  const membershipAction = !memberPlatformAvailable ? (
+  const membershipAction = basicOnly ? (
+    <Link className="button button-primary" to="/onboarding">{registrationLabel} <ArrowRight aria-hidden="true" /></Link>
+  ) : !memberPlatformAvailable ? (
     <a className="button button-primary" href="mailto:hello@armatureailabs.com">Email the lab</a>
   ) : applicationPath === "team" ? (
     <a className="button button-primary" href="#membership-application">Start a team application <ArrowRight aria-hidden="true" /></a>
@@ -348,20 +354,26 @@ export function JoinPage() {
     <>
       <PageHeader
         meta="Membership · booking · HSR Layout"
-        title={memberPlatformAvailable ? "Join the lab. Book what you need." : "Build with us. Enquire about membership."}
-        description={memberPlatformAvailable
+        title={basicOnly ? "Create your basic membership." : memberPlatformAvailable ? "Join the lab. Book what you need." : "Build with us. Enquire about membership."}
+        description={basicOnly
+          ? "Register for free, complete your profile and submit your photo and ID for private staff review. Paid bookings remain closed."
+          : memberPlatformAvailable
           ? "Create one member account, tell us what you are building, and complete staff approval. Approved members can reserve commissioned resources from one workspace."
           : "Armature AI Labs is pre-launch. We are accepting enquiries about the planned lab, membership, and events; applications and bookings are not open yet."}
         actions={actions}
       />
-      <Section number="01" title="One membership journey" lede={!memberPlatformAvailable ? "The planned process once membership opens." : undefined}>
+      <Section number="01" title="One membership journey" lede={basicOnly ? "Start with free registration. Paid access will follow separately." : !memberPlatformAvailable ? "The planned process once membership opens." : undefined}>
         <div className="section-motion membership-motion"><FieldOfTouch scene="birds" /></div>
         <div className="process-list">
-          {[
+          {(basicOnly ? [
+            ["01", "Create an account", "Sign in with Google or a secure email link. Add your name, phone, date of birth and personal LinkedIn profile."],
+            ["02", "Complete identity review", "Upload your photo and one accepted government ID through the protected portal. Staff review your registration; applicants aged 16–17 also need guardian permission by email."],
+            ["03", "Choose paid access later", "Basic approval does not include a desk, cabin or equipment. Paid bookings remain closed and will open separately."]
+          ] : [
             ["01", "Create an account", "Use a secure email link, add your public name and handle, and tell us what you plan to build."],
             ["02", "Complete approval", "Staff review the application and issue any safety inductions required by the resources you intend to use."],
             ["03", "Book and build", "Choose an available resource, reserve the time, and manage the booking from your member workspace."]
-          ].map(([number, title, copy]) => (
+          ]).map(([number, title, copy]) => (
             <div className="process-row" key={number}><span className="mono">{number}</span><h3>{title}</h3><p>{copy}</p></div>
           ))}
         </div>
@@ -388,12 +400,18 @@ export function JoinPage() {
       </Section>
       <Section number="03" title="Start your membership">
         <div className="section-motion"><FieldOfTouch scene="rain" /></div>
-        <div className="button-row" role="group" aria-label="Membership path">
+        {memberPlatformAvailable && <div className="button-row" role="group" aria-label="Membership path">
           <button className={`button ${applicationPath === "individual" ? "button-primary" : "button-quiet"}`} type="button" aria-pressed={applicationPath === "individual"} onClick={() => setSearchParams({ path: "individual" })}>Individual</button>
           <button className={`button ${applicationPath === "team" ? "button-primary" : "button-quiet"}`} type="button" aria-pressed={applicationPath === "team"} onClick={() => setSearchParams({ path: "team" })}>Team</button>
-        </div>
-        {applicationPath === "team" && <p className="lede">One team admin applies for a fixed number of named seats. Staff activate the membership after offline payment. Members use their own accounts to book; the admin manages the roster and sees team usage.</p>}
-        {!memberPlatformAvailable ? (
+        </div>}
+        {memberPlatformAvailable && applicationPath === "team" && <p className="lede">One team admin applies for a fixed number of named seats. Each person needs approved basic membership. The team admin manages named seats and team bookings; paid access is activated separately.</p>}
+        {basicOnly ? (
+          <>
+            <Status tone="good">Free basic registration open</Status>
+            <p className="lede">Complete your registration and follow its review status in the protected portal. Paid bookings remain closed.</p>
+            <div className="section-actions"><Link className="button button-primary" to="/onboarding">{registrationFooterLabel} <ArrowRight aria-hidden="true" /></Link></div>
+          </>
+        ) : !memberPlatformAvailable ? (
           <>
             <Status tone="warn">Pre-launch · enquiries only</Status>
             <p className="lede">

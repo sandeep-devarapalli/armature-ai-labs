@@ -22,10 +22,25 @@ jobs:
       - run: npm run audit:production
       - run: npm run audit:all
       - run: npm test
+      - run: node --test tests/scripts/onboarding-retention.node.mjs
+      - run: python3 -m unittest discover -s tools/member-notifications -v
       - run: npm run build
       - run: npm run check:pages-runtime
       - run: npx playwright install --only-shell chromium
       - run: npm run test:e2e
+      - run: npx playwright test --config playwright.basic-registration.config.ts
+      - name: Verify membership fixtures against a prebuilt alternate backend
+        env:
+          VITE_DEMO_MODE: 'false'
+          VITE_BASIC_ONBOARDING_ENABLED: 'true'
+          VITE_GOOGLE_AUTH_ENABLED: 'true'
+          VITE_MEMBER_PLATFORM_ENABLED: 'false'
+          VITE_COMPONENT_REQUESTS_ENABLED: 'false'
+          VITE_SUPABASE_URL: https://production-fixture.invalid
+          VITE_SUPABASE_PUBLISHABLE_KEY: public-test-key
+        run: |
+          npx vite build
+          PLAYWRIGHT_PREBUILT=true npx playwright test --config playwright.basic-registration.config.ts
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: failure()
         with:
@@ -44,6 +59,10 @@ jobs:
       - run: supabase test db supabase/tests/database
       - run: supabase/tests/concurrent_booking.sh
       - run: supabase/tests/concurrent_team_seat.sh
+      - run: sh supabase/tests/concurrent_membership.sh
+      - run: sh supabase/tests/concurrent_notifications.sh
+      - run: sh supabase/tests/concurrent_notification_delivery.sh
+      - run: sh supabase/tests/concurrent_notification_operations.sh
       - if: always()
         run: supabase stop --no-backup
 
@@ -65,6 +84,8 @@ jobs:
       VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
       VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
       VITE_SITE_URL: https://armatureailabs.com
+      VITE_BASIC_ONBOARDING_ENABLED: 'true'
+      VITE_GOOGLE_AUTH_ENABLED: 'true'
       VITE_MEMBER_PLATFORM_ENABLED: 'false'
       VITE_COMPONENT_REQUESTS_ENABLED: 'false'
     steps:
@@ -78,6 +99,8 @@ jobs:
       - run: npm run check:pages-runtime
       - run: npx playwright install --only-shell chromium
       - run: npm run test:e2e:production
+      - if: env.VITE_BASIC_ONBOARDING_ENABLED == 'true'
+        run: PLAYWRIGHT_PREBUILT=true npx playwright test --config playwright.basic-registration.config.ts
       - run: >-
           npx wrangler pages deploy dist
           --project-name armature-lab

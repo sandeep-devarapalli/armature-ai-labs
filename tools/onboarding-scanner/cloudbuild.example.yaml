@@ -1,0 +1,12 @@
+# Submit from tools/onboarding-scanner only after billing/hosting authorization.
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args: ['build', '--platform=linux/amd64', '-f', 'Dockerfile', '-t', '${_REGION}-docker.pkg.dev/$PROJECT_ID/onboarding-scanner/gateway:${_TAG}', '.']
+  - name: gcr.io/cloud-builders/docker
+    args: ['build', '--platform=linux/amd64', '-f', 'Dockerfile.clamav', '-t', '${_REGION}-docker.pkg.dev/$PROJECT_ID/onboarding-scanner/clamav:${_TAG}', '.']
+images:
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/onboarding-scanner/gateway:${_TAG}'
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/onboarding-scanner/clamav:${_TAG}'
+substitutions:
+  _REGION: asia-south1
+  _TAG: review-only

@@ -1,0 +1,12 @@
+.privacy-content { max-width: 880px; padding-block: 24px 80px; }
+.privacy-content section { padding-block: 32px; border-bottom: 1px solid var(--hair); }
+.privacy-content h2 { font-size: clamp(24px, 3vw, 36px); line-height: 1.2; margin: 0 0 24px; }
+.privacy-content p, .privacy-content li { line-height: 1.8; overflow-wrap: anywhere; }
+.privacy-content p + p { margin-top: 20px; }
+.privacy-content ul { padding-left: 24px; }
+.privacy-content li + li { margin-top: 16px; }
+.privacy-content a { text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 600px) {
+  .privacy-content { padding-block: 8px 48px; }
+  .privacy-content section { padding-block: 28px; }
+}

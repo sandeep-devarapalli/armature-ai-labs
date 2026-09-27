@@ -1,10 +1,12 @@
 import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { MemoryRouter } from "react-router-dom";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ElectricalPlan } from "../../src/components/ElectricalPlan";
 import { bengaluruEcosystem } from "../../src/data/bengaluruEcosystem";
 import { EcosystemPage } from "../../src/pages/EcosystemPage";
+import { getPageSeo } from "../../src/lib/seo";
+import { HomePage } from "../../src/pages/HomePage";
 import { JoinPage } from "../../src/pages/PublicPages";
 
 vi.mock("../../src/components/EcosystemMap", () => ({ EcosystemMap: () => <div>Map</div> }));
@@ -12,11 +14,30 @@ vi.mock("../../src/components/FieldOfTouch", () => ({ FieldOfTouch: () => <div>M
 vi.mock("../../src/context/AppContext", () => ({
   useApp: () => ({ currentMember: null, state: { applications: [] }, submitApplication: vi.fn() })
 }));
-vi.mock("../../src/config/release", () => ({ memberPlatformAvailable: false }));
+const release = vi.hoisted(() => ({ memberPlatformAvailable: false, basicOnboardingAvailable: false, equipmentPageAvailable: false }));
+vi.mock("../../src/config/release", () => release);
+beforeEach(() => { release.basicOnboardingAvailable = false; });
 
 afterEach(cleanup);
 
 describe("public source and planning context", () => {
+  it("makes free registration discoverable while keeping paid bookings closed", () => {
+    release.basicOnboardingAvailable = true;
+    const join = render(<MemoryRouter><JoinPage /></MemoryRouter>);
+    expect(screen.getByRole("heading", { name: "Create your basic membership." })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Register for free" })).toHaveAttribute("href", "/onboarding");
+    expect(screen.getByRole("link", { name: "Open registration" })).toHaveAttribute("href", "/onboarding");
+    expect(screen.queryByText(/applications and bookings are not open yet/)).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Book a resource" })).not.toBeInTheDocument();
+    join.unmount();
+    render(<MemoryRouter><HomePage /></MemoryRouter>);
+    expect(screen.getByRole("link", { name: "Register for free" })).toHaveAttribute("href", "/onboarding");
+    expect(screen.getByText("Free basic registration is open. Paid bookings remain closed.")).toBeInTheDocument();
+    expect(document.body).not.toHaveTextContent(/applications[^.]*not open/i);
+    expect(screen.getByRole("link", { name: "Basic membership" })).toHaveAttribute("href", "/join");
+    expect(getPageSeo("/join/").title).toBe("Basic Membership | Armature AI Labs");
+  });
+
   it("includes every ecosystem summary and public source in initial HTML", () => {
     const html = renderToStaticMarkup(<MemoryRouter initialEntries={["/ecosystem/"]}><EcosystemPage /></MemoryRouter>);
     const document = new DOMParser().parseFromString(html, "text/html");

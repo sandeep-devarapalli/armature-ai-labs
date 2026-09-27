@@ -14,7 +14,7 @@ afterEach(() => {
 
 describe("search metadata", () => {
   it("has unique public titles, descriptions and canonical URLs for the complete static catalog", () => {
-    expect(publicSeoPaths).toHaveLength(13 + components.length);
+    expect(publicSeoPaths).toHaveLength(14 + components.length);
     expect(new Set(publicSeoPaths).size).toBe(publicSeoPaths.length);
     const pages = publicSeoPaths.map(getPageSeo);
     expect(new Set(pages.map((page) => page.title)).size).toBe(pages.length);

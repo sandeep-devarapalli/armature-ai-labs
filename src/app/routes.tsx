@@ -6,13 +6,16 @@ import { PageMetadata } from "../components/PageMetadata";
 import { AdminRoute, MemberRoute, StaffRoute } from "../components/RouteGuard";
 import { HomePage } from "../pages/HomePage";
 import {
+  basicOnboardingAvailable,
   componentRequestsAvailable,
   equipmentPageAvailable,
   memberPlatformAvailable
 } from "../config/release";
 
+const OnboardingPage = lazy(() => import("../pages/OnboardingPage").then((module) => ({ default: module.OnboardingPage })));
 const ProjectsPage = lazy(() => import("../pages/ProjectsPage").then((module) => ({ default: module.ProjectsPage })));
 const BrandingPage = lazy(() => import("../pages/BrandingPage").then((module) => ({ default: module.BrandingPage })));
+const PrivacyPage = lazy(() => import("../pages/PrivacyPage").then((module) => ({ default: module.PrivacyPage })));
 const AboutPage = lazy(() => import("../pages/AboutPages").then((module) => ({ default: module.AboutPage })));
 const TeamPage = lazy(() => import("../pages/AboutPages").then((module) => ({ default: module.TeamPage })));
 const BlogIndexPage = lazy(() => import("../pages/BlogPages").then((module) => ({ default: module.BlogIndexPage })));
@@ -55,6 +58,7 @@ const BookingsPage = lazy(() => import("../pages/MemberPages").then((module) => 
 const BookingDetailPage = lazy(() => import("../pages/MemberPages").then((module) => ({ default: module.BookingDetailPage })));
 const CheckInPage = lazy(() => import("../pages/MemberPages").then((module) => ({ default: module.CheckInPage })));
 const AdminMembersPage = lazy(() => import("../pages/AdminPages").then((module) => ({ default: module.AdminMembersPage })));
+const MemberManagementPage = lazy(() => import("../pages/MemberManagementPage").then((module) => ({ default: module.MemberManagementPage })));
 const AdminResourcesPage = lazy(() => import("../pages/AdminPages").then((module) => ({ default: module.AdminResourcesPage })));
 const AdminBookingsPage = lazy(() => import("../pages/AdminPages").then((module) => ({ default: module.AdminBookingsPage })));
 const AdminAttendancePage = lazy(() => import("../pages/AdminPages").then((module) => ({ default: module.AdminAttendancePage })));
@@ -81,6 +85,12 @@ const memberComponentRequestFeature = (page: ReactNode) => (
   </ReleaseGate>
 );
 
+const onboardingLocalRoutes: RouteObject[] = [];
+if (import.meta.env.DEV && import.meta.env.VITE_DEMO_MODE === "true") {
+  const OnboardingLocalPage = lazy(() => import("../pages/OnboardingLocalPage").then((module) => ({ default: module.OnboardingLocalPage })));
+  onboardingLocalRoutes.push({ path: "/onboarding-local", element: <OnboardingLocalPage /> });
+}
+
 export const routes: RouteObject[] = [
   {
     element: <Shell />,
@@ -91,6 +101,7 @@ export const routes: RouteObject[] = [
     ),
     children: [
       { path: "/", element: <HomePage /> },
+      { path: "/privacy", element: <PrivacyPage />, handle: { module: "src/pages/PrivacyPage.tsx" } },
       { path: "/about", element: <AboutPage />, handle: { module: "src/pages/AboutPages.tsx" } },
       { path: "/team", element: <TeamPage />, handle: { module: "src/pages/AboutPages.tsx" } },
       { path: "/equipment", element: equipmentPageAvailable ? <EquipmentPage /> : <Navigate to="/" replace /> },
@@ -111,8 +122,9 @@ export const routes: RouteObject[] = [
       { path: "/join", element: <JoinPage /> },
       { path: "/members", element: <MembersPage /> },
       { path: "/members/:handle", element: <PublicMemberPage /> },
-      { path: "/auth", element: memberFeature(<AuthPage />) },
-      { path: "/auth/callback", element: memberFeature(<AuthCallbackPage />) },
+      { path: "/onboarding", element: <ReleaseGate enabled={basicOnboardingAvailable}><OnboardingPage /></ReleaseGate> },
+      { path: "/auth", element: <ReleaseGate enabled={memberPlatformAvailable || basicOnboardingAvailable}><AuthPage /></ReleaseGate> },
+      { path: "/auth/callback", element: <ReleaseGate enabled={memberPlatformAvailable || basicOnboardingAvailable}><AuthCallbackPage /></ReleaseGate> },
       { path: "/dashboard", element: memberFeature(protectedPage(<DashboardPage />)) },
       { path: "/profile", element: memberFeature(protectedPage(<ProfilePage />)) },
       { path: "/workspace/team", element: memberFeature(protectedPage(<TeamWorkspacePage />)) },
@@ -127,8 +139,8 @@ export const routes: RouteObject[] = [
       { path: "/lockers", element: memberFeature(protectedPage(<LockersPage />)) },
       { path: "/consumables", element: memberFeature(protectedPage(<ConsumablesPage />)) },
       { path: "/toolkits", element: memberFeature(protectedPage(<ToolkitsPage />)) },
-      { path: "/admin", element: memberFeature(<Navigate to="/admin/members" replace />) },
-      { path: "/admin/members", element: memberFeature(staffPage(<AdminMembersPage />)) },
+      { path: "/admin", element: <ReleaseGate enabled={basicOnboardingAvailable || memberPlatformAvailable}><Navigate to="/admin/members" replace /></ReleaseGate> },
+      { path: "/admin/members", element: basicOnboardingAvailable ? <MemberManagementPage /> : memberFeature(staffPage(<AdminMembersPage />)) },
       { path: "/admin/teams", element: memberFeature(staffPage(<AdminTeamsPage />)) },
       { path: "/admin/resources", element: memberFeature(staffPage(<AdminResourcesPage />)) },
       { path: "/admin/bookings", element: memberFeature(staffPage(<AdminBookingsPage />)) },
@@ -139,6 +151,7 @@ export const routes: RouteObject[] = [
       { path: "/admin/component-requests", element: memberComponentRequestFeature(staffPage(<AdminComponentRequestsPage />)) },
       { path: "/admin/cabinets", element: memberFeature(staffPage(<AdminCabinetsPage />)) },
       { path: "/admin/maker-services", element: memberFeature(staffPage(<AdminMakerServicesPage />)) },
+      ...onboardingLocalRoutes,
       { path: "*", element: <NotFoundPage /> }
     ]
   },

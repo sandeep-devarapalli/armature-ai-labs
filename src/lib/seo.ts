@@ -1,3 +1,4 @@
+import { basicOnboardingAvailable } from "../config/release";
 import { components } from "../data/components";
 
 export const SITE_URL = "https://armatureailabs.com";
@@ -25,6 +26,10 @@ const pages: Record<string, PageDefinition> = {
   "/": {
     name: "Physical AI and Robotics Lab in Bengaluru",
     description: "Armature AI Labs is a planned 3,500 sq ft physical AI and robotics lab in HSR Layout, Bengaluru. Explore the designs, projects and lab journal."
+  },
+  "/privacy/": {
+    name: "Privacy",
+    description: "How Armature AI Labs handles website visits, browser storage and enquiries, how to contact us about your information, and how free membership registration and private identity review work."
   },
   "/about/": {
     name: "Who We Are",
@@ -109,7 +114,7 @@ const organization: JsonLd = {
 };
 
 const operationalNames: Record<string, string> = {
-  auth: "Sign In", dashboard: "Member Dashboard", profile: "Member Profile",
+  onboarding: "Basic Membership", auth: "Sign In", dashboard: "Member Dashboard", profile: "Member Profile",
   book: "Resource Booking", bookings: "Bookings", "check-in": "Check In",
   "component-requests": "Component Requests", inventory: "Inventory",
   team: "Meet the Team",
@@ -121,7 +126,9 @@ const operationalNames: Record<string, string> = {
 export function getPageSeo(pathname: string): PageSeo {
   const cleanPath = pathname.split(/[?#]/, 1)[0];
   const path = cleanPath === "/" ? "/" : `${cleanPath.replace(/\/+$/, "")}/`;
-  const page = Object.hasOwn(pages, path) ? pages[path] : undefined;
+  const page = path === "/join/" && basicOnboardingAvailable
+    ? { name: "Basic Membership", description: "Register for free with Armature AI Labs in HSR Layout, Bengaluru. Complete private identity review; paid coworking, equipment and event bookings remain closed." }
+    : Object.hasOwn(pages, path) ? pages[path] : undefined;
   if (!page) {
     const segment = path.split("/")[1];
     const name = path === "/components/request/" ? "Component Request"
