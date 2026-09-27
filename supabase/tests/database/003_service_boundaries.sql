@@ -1,4 +1,6 @@
 begin;
+-- Enable mock activation only inside this rolled-back local fixture.
+update public.booking_policy_settings set mock_grants_enabled=true;
 
 create extension if not exists pgtap with schema extensions;
 
@@ -20,6 +22,14 @@ where id = '24000000-0000-4000-8000-000000000001';
 update public.memberships
 set status = 'active', starts_at = now() - interval '1 day'
 where user_id = '24000000-0000-4000-8000-000000000001';
+insert into public.basic_onboarding_applications(user_id,full_name,email,phone,linkedin_url,date_of_birth,status)
+select u.id,'Fixture Member',u.email,'9999999999','https://linkedin.com/in/test','1990-01-01','approved'
+from auth.users u join public.memberships m on m.user_id=u.id where u.id::text like '24000000%' and m.status='active';
+insert into public.paid_access_entitlements(user_id,product_id,starts_at,ends_at,seats,price_paise,granted_by)
+select u.id,p.id,now()-interval '1 day',now()+interval '30 days',1,0,u.id
+from auth.users u join public.memberships m on m.user_id=u.id cross join public.booking_products p
+where u.id::text like '24000000%' and m.status='active' and p.code='workspace-day';
+
 
 insert into public.member_certifications (
   member_id,
@@ -34,6 +44,9 @@ select
   now() + interval '1 year'
 from public.certification_types certification
 where certification.slug = 'lab-orientation';
+
+insert into public.resource_booking_policies(resource_id,kind) select id,'workspace' from public.resources where slug in ('builder-pod-02','builder-pod-03');
+update public.paid_access_entitlements set resource_id=(select id from public.resources where slug='builder-pod-02') where user_id='24000000-0000-4000-8000-000000000001';
 
 create temporary table valid_booking_slot as
 select
@@ -151,7 +164,7 @@ select throws_ok(
     )
   $$,
   '42501',
-  'active membership is required',
+  'Approved basic membership and dated paid access required',
   'suspended member cannot create a booking'
 );
 

@@ -1,4 +1,5 @@
 begin;
+update public.booking_policy_settings set mock_grants_enabled=true;
 
 create extension if not exists pgtap with schema extensions;
 select plan(44);
@@ -14,6 +15,10 @@ insert into auth.users(id,aud,role,email,email_confirmed_at) values
  ('30000000-0000-4000-8000-000000000002','authenticated','authenticated','team-admin@example.test',now()),
  ('30000000-0000-4000-8000-000000000003','authenticated','authenticated','teammate@example.test',now()),
  ('30000000-0000-4000-8000-000000000004','authenticated','authenticated','outsider@example.test',now());
+
+insert into public.basic_onboarding_applications(user_id,full_name,email,phone,linkedin_url,date_of_birth,status)
+select id,'Test Member',email,'9999999999','https://linkedin.com/in/test','1990-01-01','approved'
+from auth.users where id::text like '30000000%';
 
 insert into public.staff_roles(user_id,role,granted_by) values
  ('30000000-0000-4000-8000-000000000001','admin','30000000-0000-4000-8000-000000000001');
@@ -228,6 +233,14 @@ select throws_ok(
 );
 reset role;
 
+insert into public.resource_booking_policies(resource_id,kind) select id,'workspace' from public.resources where slug='builder-pod-01' on conflict(resource_id) do update set kind='workspace';
+insert into public.paid_access_entitlements(user_id,organization_id,product_id,resource_id,starts_at,ends_at,seats,price_paise,granted_by)
+select case when source='personal' then '30000000-0000-4000-8000-000000000003'::uuid end,
+ case when source='team' then (select organization_id from test_first_team_id) end,
+ p.id,r.id,now()-interval '1 day',now()+interval '30 days',1,100,
+ '30000000-0000-4000-8000-000000000001'::uuid
+from public.booking_products p cross join public.resources r cross join (values('personal'),('team')) sources(source)
+where p.code='workspace-day' and r.slug='builder-pod-01';
 update public.memberships set status='active',starts_at=now()-interval '1 day'
 where user_id='30000000-0000-4000-8000-000000000003';
 insert into public.bookings
@@ -260,12 +273,12 @@ set local role authenticated;
 select throws_ok(
   $$select public.create_booking_with_access(
     (select id from public.resources where slug='builder-pod-01'),
-    date_trunc('day',now()+interval '11 days')+interval '12 hours',
-    date_trunc('day',now()+interval '11 days')+interval '13 hours',
+    (((now() at time zone 'Asia/Kolkata')::date+11)+time '12:00') at time zone 'Asia/Kolkata',
+    (((now() at time zone 'Asia/Kolkata')::date+11)+time '13:00') at time zone 'Asia/Kolkata',
     '{}'::text[],null,'team-booking-cert-test','team',
     (select organization_id from public.organization_members
      where user_id='30000000-0000-4000-8000-000000000003'))$$,
-  '42501','required certification is missing or expired',
+  '42501','Required certification is missing or expired',
   'team seat does not bypass personal equipment certification'
 );
 reset role;
@@ -279,8 +292,8 @@ set local role authenticated;
 select lives_ok(
   $$select public.create_booking_with_access(
     (select id from public.resources where slug='builder-pod-01'),
-    date_trunc('day',now()+interval '11 days')+interval '12 hours',
-    date_trunc('day',now()+interval '11 days')+interval '13 hours',
+    (((now() at time zone 'Asia/Kolkata')::date+11)+time '12:00') at time zone 'Asia/Kolkata',
+    (((now() at time zone 'Asia/Kolkata')::date+11)+time '13:00') at time zone 'Asia/Kolkata',
     '{}'::text[],null,'team-booking-rpc-test','team',
     (select organization_id from public.organization_members
      where user_id='30000000-0000-4000-8000-000000000003'))$$,
@@ -295,14 +308,14 @@ select is(
 select lives_ok(
   $$select public.reschedule_booking(
     (select id from public.bookings where idempotency_key='team-booking-rpc-test'),
-    date_trunc('day',now()+interval '12 days')+interval '12 hours',
-    date_trunc('day',now()+interval '12 days')+interval '13 hours')$$,
+    (((now() at time zone 'Asia/Kolkata')::date+12)+time '12:00') at time zone 'Asia/Kolkata',
+    (((now() at time zone 'Asia/Kolkata')::date+12)+time '13:00') at time zone 'Asia/Kolkata')$$,
   'team booking can be rescheduled within membership dates'
 );
 select is(
   (select starts_at from public.bookings
    where idempotency_key='team-booking-rpc-test'),
-  date_trunc('day',now()+interval '12 days')+interval '12 hours',
+  (((now() at time zone 'Asia/Kolkata')::date+12)+time '12:00') at time zone 'Asia/Kolkata',
   'team booking retains its attribution after rescheduling'
 );
 reset role;
@@ -310,8 +323,8 @@ reset role;
 insert into public.bookings
   (id,resource_id,member_id,starts_at,ends_at,access_source,organization_id)
 select '31000000-0000-4000-8000-000000000003',resource.id,
-  '30000000-0000-4000-8000-000000000003',now()-interval '10 minutes',
-  now()+interval '50 minutes','team',member.organization_id
+  '30000000-0000-4000-8000-000000000003',(((now() at time zone 'Asia/Kolkata')::date)+time '10:00') at time zone 'Asia/Kolkata',
+  (((now() at time zone 'Asia/Kolkata')::date)+time '11:00') at time zone 'Asia/Kolkata','team',member.organization_id
 from public.resources resource
 cross join public.organization_members member
 where resource.slug='builder-pod-01'
