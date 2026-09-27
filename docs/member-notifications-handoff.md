@@ -40,3 +40,27 @@ Completed locally on Node 22. The original Downloads checkout remains untouched 
 - Existing app browser regression uses repository Playwright; no rendered website surface changed. Browser plugin skill was unavailable.
 
 Evidence logs are retained under the original project's `docs/release-evidence/member-notifications-2026-09-27/`. No real email, production migration, function deployment, scheduler or secret change occurred. PR is intentionally draft; activation prerequisites above remain open.
+
+## Delivery tracking and admin status — 27 September 2026
+
+Prepared as a stacked draft on queue/sender commit `e77ff4c2fee9ee76aba3a6f82b1a76cf4d087c33` (PR #87). No production settings changed.
+
+- Added a default-off `member-notification-events` endpoint. `MEMBER_NOTIFICATIONS_WEBHOOK_ENABLED=true` and a dedicated `MEMBER_NOTIFICATIONS_WEBHOOK_SECRET` would be required later. Raw bodies are bounded to 64 KiB and five seconds; official Svix 2.5.0 verifies signatures/timestamp before JSON parsing or database access. The older tested pin was replaced after its transitive dependency audit reported an advisory; current npm audit reports zero vulnerabilities.
+- Receipts store only event ID, provider ID, event type and timestamps. Duplicate receipts are idempotent; conflicting IDs fail. Provider acknowledgement and receipt processing serialize on the provider ID, including events arriving before acknowledgement. Delivery status cannot downgrade on late events. No message bodies or recipient details from webhook payloads are retained.
+- Bounced, complained and provider-suppressed addresses are blocked at subsequent claim/prepare checks. This cannot recall requests already prepared or in flight. There is no unsuppress control in this release.
+- Admin/Super admin only: expandable notification history under Members, with search, status filter, pagination and refresh. Staff/member requests are denied by the database. Logout/account changes clear the view; failed refresh clears stale records. Provider acceptance and recipient-server delivery are explicitly separate; neither proves reading.
+- Official protocol sources: https://resend.com/docs/webhooks/verify-webhooks-requests and https://www.svix.com/guides/receiving/receive-webhooks-with-javascript-nextjs/ . Svix 2 verification returns no parsed value; parsing happens only after successful verification.
+
+### Verification
+
+- `npm test`: 30 frontend files, 258 tests, including 37 real HMAC webhook tests plus UI filtering, failed refresh, collapsed-request and logout checks.
+- Local SQL: 16 suites, 420 assertions, including 56 new delivery assertions. Container `supabase_db_armature-basic-release-check` only, commands as above.
+- `supabase/tests/concurrent_notification_delivery.sh`: overlapping webhook-first and acknowledgement-first transactions and duplicate event race passed using local Docker psql wrapper. Fixtures are synthetic and cleaned up.
+- `npm run build`: TypeScript and all production/artifact/SEO checks passed.
+- Existing `npm run test:e2e:production`: 27 passed, three existing project-specific skips.
+- Synthetic real-component browser preview at `http://127.0.0.1:4350/notification-review.html`: 1440×1000 and 390×844, light/dark/sepia, search and collapse, no document overflow or runtime errors. Used repository Playwright because Browser plugin skill was unavailable. Preview includes both production stylesheets; no real member data used. An initial preview timeout occurred during source changes; stable final runs are recorded separately.
+- Deno hosted runtime, actual signed provider requests, inbox delivery and production UI remain unverified. Tests use real signature verification with synthetic secrets and mocked DB responses; no email was sent.
+
+### Remaining activation requirements
+
+Signed-event handling, suppression and the read-only admin UI are now implemented locally. Still required: review/CI, release preparation and runtime checks, separate notification credentials/provider webhook registration, confirmed retention for unmatched events and delivery history, monitored job cadence and reconciliation of unknown/unmatched outcomes, pilot addresses and explicit controlled-send authorization. Existing held backlog will not be released automatically. Paid services and the LLP/payment hold remain unchanged.

@@ -35,6 +35,7 @@ it("offers Admin appointments only to Super admins", async () => {
 it("restricts Staff requests to pending and hides management filters", async () => {
  const rpc = setup("membership_reviewer"); await screen.findByText("person@example.test");
  expect(rpc).toHaveBeenCalledWith("list_basic_members", expect.objectContaining({ p_status: "pending", p_role: null }));
+ expect(screen.queryByRole("button", { name: "View notification status" })).not.toBeInTheDocument();
  expect(screen.queryByLabelText("Membership status")).not.toBeInTheDocument();
  fireEvent.click(screen.getByRole("button", { name: /View Synthetic/ }));
  expect(screen.queryByRole("button", { name: "Manage staff role" })).not.toBeInTheDocument();
@@ -62,4 +63,19 @@ it("offers reinstatement for revoked membership without implying role removal", 
  fireEvent.change(screen.getByLabelText("Reason"), { target: { value: "Synthetic reinstatement decision" } });
  fireEvent.click(screen.getByRole("checkbox")); fireEvent.click(screen.getByRole("button", { name: "Confirm change" }));
  await waitFor(() => expect(rpc).toHaveBeenCalledWith("change_basic_membership", expect.objectContaining({ p_action: "reinstate", p_expected_revision: 4 })));
+});
+
+it("removes notification history on logout and ignores an outstanding response", async () => {
+ let authChanged!: (event: string, session: unknown) => void;
+ let finish!: (value: unknown) => void;
+ const rpc = vi.fn((name: string) => name === "list_member_notification_status" ? new Promise((resolve) => { finish = resolve; }) : Promise.resolve({ error: null, data: name === "get_basic_account_summary" ? { role: "admin" } : { items: [], total: 0, counts: {} } }));
+ const client = { rpc, auth: { getSession: async () => ({ data: { session: { user: { id: "actor" } } } }), onAuthStateChange: (callback: typeof authChanged) => { authChanged = callback; return { data: { subscription: { unsubscribe() {} } } }; } } } as unknown as SupabaseClient;
+ render(<MemoryRouter><MemberManagementPage client={client} /></MemoryRouter>);
+ fireEvent.click(await screen.findByRole("button", { name: "View notification status" }));
+ await waitFor(() => expect(rpc).toHaveBeenCalledWith("list_member_notification_status", expect.anything()));
+ authChanged("SIGNED_OUT", null);
+ await screen.findByRole("link", { name: "Sign in" });
+ finish({ error: null, data: { items: [{ id: "secret", recipient_email: "private@example.test", kind: "approved", state: "held", delivery_state: "unconfirmed", attempts: 0, created_at: "2026-09-27", suppressed: false }], total: 1 } });
+ await waitFor(() => expect(screen.queryByText(/private@example.test/)).not.toBeInTheDocument());
+ expect(screen.queryByRole("region", { name: "Membership notification status" })).not.toBeInTheDocument();
 });
