@@ -120,3 +120,25 @@ The owner said “ok, proceed” after participant selection and invitation prep
 Gmail displayed “Message sent” for each recipient. This verifies send submission, not recipient inbox delivery, reading or completion of registration. No automated notification worker, recipient allowlist, role, membership or payment setting was changed. The personal-account Gmail connector was not used for sending. An automatic review blocked opening the work inbox due to unrelated private-message exposure; direct compose was permitted and used instead.
 
 Next: participants complete their own registration; authorized reviewers inspect actual submissions and record pilot feedback. No scheduled monitoring or reminder sends were configured.
+
+## Automatic pilot activation preflight — 27 September 2026
+
+Owner authorized automatic notifications limited to Priyanka/Rejoe and explicitly approved Resend key/webhook settings access, a separate domain-restricted sending key and secure Supabase storage. Approval does not release held history, unrelated recipients, payment or booking workers.
+
+Live read-only checks: migrations009/010/011 present; notification queue empty; DB.enabled=false, cleanup_enabled=false and pilot_recipients empty. Neither pilot address has an Auth account yet. Notification endpoints are deployed; sender/webhook enable flags hash to false. Dedicated sender Resend key, worker token and webhook signing secret are absent from the secret-name inventory. Existing Cloud Scheduler list contains only scanner refresh and document retention; no notification sender exists.
+
+Independent source audit verified the address allowlist at enqueue and claim/prepare, stale-event suppression, idempotent retry handling and held-history exclusion. Only the two participant addresses may enter the pilot allowlist; hello admin-ready messages remain held.
+
+Provider blocker: current Resend Google login sandeep.devarapalli@gmail.com shows No domains yet. Requested the account owning the already-verified mail.armatureailabs.com domain. No new key/domain/webhook, scheduler, database setting or notification send was created. Automatic approval review initially blocked sensitive dashboard inspection; owner subsequently approved that exact access.
+
+Resume with correct provider account: verify domain, create scoped key and signed webhook, store secrets, configure a paused sender plus monitoring, test runtime authentication/signatures, recheck queue, then enable the exact two-recipient pilot. Delivery/reply evidence requires genuine participant events and participant confirmation; do not manufacture approvals or release historical events to test email.
+
+## General notification release authorization
+
+Owner superseded pilot-only delivery with “yes, lets enable it in general”. Migration024 introduces default-off all_members_enabled and preserves current eligibility, suppression, deduplication and historical held exclusions. Local verification:160 SQL assertions plus3 concurrent scripts;109 sender/webhook/maintenance tests and7 Python monitor tests. Initial test command used nonexistent .ts paths; corrected to existing .js files and all109 passed.
+
+Work Chrome Resend/hello owns the verified mail.armatureailabs.com domain. Created separate Sending-access key81c3b40c-1a40-450c-b314-f02c7daea8ab, limited to that domain; stored in Supabase. Existing Auth key unchanged. Registered webhookcfde5f07-7659-4ae0-b5a7-03e4f9de3322 for sent/delivered/delivery_delayed/bounced/complained/failed/suppressed, with its dedicated secret in Supabase. No open/click tracking subscription.
+
+Hosted runtime checks with database delivery still disabled: sender missing-secret401; authenticated sender200/zero claims; webhook unsigned401; correctly signed unsupported probe200/ignored (no synthetic member event or email). Existing read-only Cloud Run monitor execution member-notification-monitor-pdjp6 succeeded. Cleanup remainsfalse.
+
+Scheduler/IAM creation attempt was blocked by automatic approval review before execution; requested exact authorization for five-minute sender, fifteen-minute read-only monitor, narrowly scoped job invocation, and hello failure/missing-run alerts. No activation claimed until read-back is recorded below.
