@@ -41,3 +41,10 @@ Next operational work is purchase/receipt intake, exact kit and location confirm
 
 - Deployment36330978787 completed, but additional direct URL verification found `/admin/equipment` returned404 because its app-shell rewrite was missing. Follow-up adds both slash variants and exact live HTTP/noindex probes. No additional database changes.
 - Routing follow-up: Node22 build and actual Cloudflare Pages runtime passed all22 HTTP probes, including both equipment-admin paths. Independent review found no issues. Logs: `/private/tmp/equipment-route-build.log`, `/private/tmp/equipment-route-runtime.log`.
+
+## Final routing release verification
+
+- PR96 squash-merged as `a3c0b3d0f3b3d59e949d796c278330643cb4a3ae`. PR run36331987954 and main production run36332562713 succeeded (frontend, database and deployment).
+- Independent live SEO HTTP run passed22 probes, including HTTP200 for `/admin/equipment` and `/admin/equipment/`, noindex and no private prerendered state. Evidence `/private/tmp/equipment-route-live.log`.
+- Live anonymous browser reload shows Equipment operations / Admin access required, with explicit Admin/Super admin scope. Authenticated role/device coverage remains the local10-case test and production SQL authorization checks described above; no real-user browser session was impersonated.
+- Payments remain closed; no subsequent database mutation, stock or rates were introduced by the routing correction.
