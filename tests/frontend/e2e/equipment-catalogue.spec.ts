@@ -58,7 +58,7 @@ test("catalogue search carries an unmatched request to the real wishlist without
   await expect(page.locator('a[href="/components/bambu-lab-p2s"]').first()).toBeVisible();
   const query = "Unlisted optical bench 7291";
   await page.getByRole("textbox", { name: "Search equipment and components", exact: true }).fill(query);
-  await expect(page.getByRole("heading", { name: "No components match" })).toBeVisible();
+  await expect(page.getByText("No components match", { exact: true })).toBeVisible();
   const sidebar = page.getByRole("complementary", { name: "Equipment wishlist" });
   await expect(sidebar.getByText("Loading equipment requests…")).toHaveCount(0);
   await expect(sidebar.locator("li")).toHaveCount(0);

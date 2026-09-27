@@ -280,3 +280,5 @@ begin
   return p_status;
 end;
 $$;
+-- The private image endpoint authorizes each read before serving an object.
+grant select on public.component_requests, public.staff_roles to service_role;

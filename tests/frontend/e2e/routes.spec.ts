@@ -1188,8 +1188,8 @@ test("mobile route families stay contained and avoid iOS form zoom", async ({ pa
   await page.goto("/projects");
   await page.getByRole("button", { name: "Open navigation" }).click();
   await expect(page.getByRole("link", { name: "Equipment", exact: true })).toHaveCount(0);
-  await expect(page.getByRole("link", { name: "Components", exact: true })).toBeVisible();
-  await page.getByRole("link", { name: "Components", exact: true }).click();
+  await expect(page.getByRole("link", { name: "Equipment & Components", exact: true })).toBeVisible();
+  await page.getByRole("link", { name: "Equipment & Components", exact: true }).click();
   await expect(page).toHaveURL(/\/components$/);
   await expect(page.locator("#mobile-public-menu")).toHaveCount(0);
 
