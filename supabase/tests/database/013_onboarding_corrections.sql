@@ -47,7 +47,7 @@ select throws_ok($$select public.request_onboarding_corrections('29000000-0000-4
 select set_config('request.jwt.claims','{"sub":"29000000-0000-4000-8000-000000000002","role":"authenticated"}',true);
 select public.submit_basic_onboarding('Rejected Person','+919999999999','https://linkedin.com/in/rejected','1990-01-01','2026-09-26-release-1');
 select set_config('request.jwt.claims','{"sub":"29000000-0000-4000-8000-000000000003","role":"authenticated"}',true);
-select public.review_basic_onboarding('29000000-0000-4000-8000-000000000002','rejected');
+select public.review_basic_onboarding('29000000-0000-4000-8000-000000000002','rejected',p_reason=>'Identity cannot be verified');
 select lives_ok($$select public.request_onboarding_corrections('29000000-0000-4000-8000-000000000002','Provide a readable identity photograph')$$,'staff can return rejected application for corrections');
 select set_config('request.jwt.claims','{"sub":"29000000-0000-4000-8000-000000000002","role":"authenticated"}',true);
 select throws_ok($$select public.resubmit_basic_onboarding('Rejected Person','--------','https://linkedin.com/in/test','1990-01-01','2026-09-26-release-1')$$,'22023','Name, phone and personal LinkedIn profile are required','resubmission requires valid phone');
