@@ -1,6 +1,6 @@
 # Membership notifications — implementation handoff
 
-27 September 2026. Scope: build the isolated queue and sender with mocked delivery tests. Outbound delivery stays disabled; pilot participants will be chosen later. This is a preparation change, not authority to contact volunteers, approve the owner application, activate bookings or enable payments.
+27 September 2026. Scope: build the isolated queue and sender with mocked delivery tests. Outbound delivery stays disabled; the owner selected pilot participants on 27 September 2026 (see below). This is a preparation change, not authority to contact volunteers, approve the owner application, activate bookings or enable payments.
 
 ## Baseline and ownership
 
@@ -20,7 +20,7 @@
 
 ## Deferred before controlled delivery
 
-- Confirm pilot names/addresses and authorise controlled test sends.
+- Pilot addresses are confirmed below; controlled test sends still require explicit authorization.
 - Verify current sending domain and create a separate narrowly scoped notification credential; keep existing Supabase auth SMTP untouched.
 - Signed delivery/bounce/complaint webhook processing, suppression and admin delivery-status UI; current queue outcome accepted must not be labelled delivered.
 - Confirm log retention and job cadence/monitoring. No scheduler is provisioned here.
@@ -84,3 +84,61 @@ The owner explicitly approved 30 days for completed notification history and unm
 - SQL: 452 assertions across 17 files passed, including 32 new operations assertions. Concurrent tests passed inverse enqueue order, complaints in both arrival orders, two cleanup workers and account deletion in both arrival orders. Fixture accounts were removed and cleanup_enabled remained false. Only `supabase_db_armature-basic-release-check` was used. No new rendered website changes in this stage; desktop/mobile evidence belongs to the prior delivery-status PR.
 
 Remaining before pilot activation: review the three stacked PRs and CI, test hosted Deno runtime/dry run, provision separate credentials and a paused job, verify failure/missing-run/recovery alerts with actual receipt, release the approved cleanup controls, select pilot recipients and authorize controlled notification delivery. Previous sending and webhook gates remain disabled, and the paid-service/payment holds remain unchanged.
+
+## Pilot participants selected — 27 September 2026
+
+- priyanka@armatureailabs.com
+- rejoe@armatureailabs.com
+
+Selection only: no invitations sent, accounts created, roles granted, production allowlist changed or notification gates enabled. Each participant should register using their own address; account creation is not membership approval. If an address is a Workspace alias, use email sign-in for that exact address rather than Google sign-in as a different primary account.
+
+### Invitation text — individually sent after authorization
+
+Subject: Try basic membership registration at Armature AI Labs
+
+Hi,
+
+Please try our basic membership registration at https://armatureailabs.com/onboarding using the email address receiving this invitation.
+
+Complete your profile and submit the required photo and government ID only through the protected website. Please do not send identity documents by email or chat. We will review your application through the admin portal.
+
+Please let us know if any instructions are unclear or anything fails, including on your phone. Share the step and error message, without personal documents or sensitive details.
+
+This pilot covers free basic registration and approval; paid passes and equipment bookings are not open yet.
+
+Thanks,
+Armature AI Labs
+
+### Pilot review checklist
+
+Record completion or issues separately for each participant: sign-in to the intended account, profile and privacy acceptance, secure uploads, pending status, administrator review, approved status across pages, and sign-out/sign-in on mobile. Request corrections only when actually needed; do not reject or revoke real membership solely for a test. Do not claim notification delivery while outbound notification delivery remains disabled.
+
+## Pilot invitations sent — 27 September 2026
+
+The owner said “ok, proceed” after participant selection and invitation preparation. Sent separate invitations from hello@armatureailabs.com to priyanka@armatureailabs.com and rejoe@armatureailabs.com through direct Gmail compose windows in the Armature Work Chrome profile. Subject: Try basic membership registration at Armature AI Labs. Each message used the invitation text above with a personal greeting.
+
+Gmail displayed “Message sent” for each recipient. This verifies send submission, not recipient inbox delivery, reading or completion of registration. No automated notification worker, recipient allowlist, role, membership or payment setting was changed. The personal-account Gmail connector was not used for sending. An automatic review blocked opening the work inbox due to unrelated private-message exposure; direct compose was permitted and used instead.
+
+Next: participants complete their own registration; authorized reviewers inspect actual submissions and record pilot feedback. No scheduled monitoring or reminder sends were configured.
+
+## Automatic pilot activation preflight — 27 September 2026
+
+Owner authorized automatic notifications limited to Priyanka/Rejoe and explicitly approved Resend key/webhook settings access, a separate domain-restricted sending key and secure Supabase storage. Approval does not release held history, unrelated recipients, payment or booking workers.
+
+Live read-only checks: migrations009/010/011 present; notification queue empty; DB.enabled=false, cleanup_enabled=false and pilot_recipients empty. Neither pilot address has an Auth account yet. Notification endpoints are deployed; sender/webhook enable flags hash to false. Dedicated sender Resend key, worker token and webhook signing secret are absent from the secret-name inventory. Existing Cloud Scheduler list contains only scanner refresh and document retention; no notification sender exists.
+
+Independent source audit verified the address allowlist at enqueue and claim/prepare, stale-event suppression, idempotent retry handling and held-history exclusion. Only the two participant addresses may enter the pilot allowlist; hello admin-ready messages remain held.
+
+Provider blocker: current Resend Google login sandeep.devarapalli@gmail.com shows No domains yet. Requested the account owning the already-verified mail.armatureailabs.com domain. No new key/domain/webhook, scheduler, database setting or notification send was created. Automatic approval review initially blocked sensitive dashboard inspection; owner subsequently approved that exact access.
+
+Resume with correct provider account: verify domain, create scoped key and signed webhook, store secrets, configure a paused sender plus monitoring, test runtime authentication/signatures, recheck queue, then enable the exact two-recipient pilot. Delivery/reply evidence requires genuine participant events and participant confirmation; do not manufacture approvals or release historical events to test email.
+
+## General notification release authorization
+
+Owner superseded pilot-only delivery with “yes, lets enable it in general”. Migration024 introduces default-off all_members_enabled and preserves current eligibility, suppression, deduplication and historical held exclusions. Local verification:160 SQL assertions plus3 concurrent scripts;109 sender/webhook/maintenance tests and7 Python monitor tests. Initial test command used nonexistent .ts paths; corrected to existing .js files and all109 passed.
+
+Work Chrome Resend/hello owns the verified mail.armatureailabs.com domain. Created separate Sending-access key81c3b40c-1a40-450c-b314-f02c7daea8ab, limited to that domain; stored in Supabase. Existing Auth key unchanged. Registered webhookcfde5f07-7659-4ae0-b5a7-03e4f9de3322 for sent/delivered/delivery_delayed/bounced/complained/failed/suppressed, with its dedicated secret in Supabase. No open/click tracking subscription.
+
+Hosted runtime checks with database delivery still disabled: sender missing-secret401; authenticated sender200/zero claims; webhook unsigned401; correctly signed unsupported probe200/ignored (no synthetic member event or email). Existing read-only Cloud Run monitor execution member-notification-monitor-pdjp6 succeeded. Cleanup remainsfalse.
+
+Scheduler/IAM creation attempt was blocked by automatic approval review before execution; requested exact authorization for five-minute sender, fifteen-minute read-only monitor, narrowly scoped job invocation, and hello failure/missing-run alerts. No activation claimed until read-back is recorded below.

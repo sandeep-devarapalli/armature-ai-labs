@@ -168,3 +168,7 @@ Use the narrowest checks that match the edit:
 - For auth, booking, kiosk, or PWA changes, run the relevant Playwright flows.
 
 - Equipment release routing correction, 27 September 2026: new operational React routes must also have explicit production app-shell rewrites. Verify direct HTTP access with and without the trailing slash and noindex/private-state checks; a passing Vite browser test does not establish Cloudflare routing.
+
+- Browser-profile correction, 27 September 2026: Resend uses the Armature Work Chrome profile and hello@armatureailabs.com. Do not use the personal Gmail Resend account. Cloudflare/Supabase retain the earlier explicitly requested personal Chrome profile. Verify the service-specific identity before configuration.
+
+- Notification rollout correction, 27 September 2026: owner approved automatic membership-status notifications for all members, superseding the two-address pilot restriction. Use a separate explicit all-member switch, preserve verified-recipient/suppression checks, never promote held history, and keep paid services and cleanup gates unchanged. Resend uses Work Chrome/hello.
