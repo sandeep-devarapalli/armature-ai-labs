@@ -95,3 +95,6 @@ verify_jwt = false
 
 [functions.member-notification-events]
 verify_jwt = false
+
+[functions.member-notification-maintenance]
+verify_jwt = false

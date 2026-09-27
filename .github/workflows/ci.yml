@@ -23,6 +23,7 @@ jobs:
       - run: npm run audit:all
       - run: npm test
       - run: node --test tests/scripts/onboarding-retention.node.mjs
+      - run: python3 -m unittest discover -s tools/member-notifications -v
       - run: npm run build
       - run: npm run check:pages-runtime
       - run: npx playwright install --only-shell chromium
@@ -58,6 +59,9 @@ jobs:
       - run: supabase test db supabase/tests/database
       - run: supabase/tests/concurrent_booking.sh
       - run: sh supabase/tests/concurrent_membership.sh
+      - run: sh supabase/tests/concurrent_notifications.sh
+      - run: sh supabase/tests/concurrent_notification_delivery.sh
+      - run: sh supabase/tests/concurrent_notification_operations.sh
       - if: always()
         run: supabase stop --no-backup
 
