@@ -1,3 +1,4 @@
+import { createHmac } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import ts from 'typescript';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -9,8 +10,8 @@ const id = 'aaaaaaaa-aaaa-4aaa-aaaa-aaaaaaaaaaaa';
 const lease = 'bbbbbbbb-bbbb-4bbb-bbbb-bbbbbbbbbbbb';
 const providerId = 'cccccccc-cccc-4ccc-cccc-cccccccccccc';
 const row = { id, lease_token: lease, kind: 'approved', recipient_email: 'synthetic@example.test', template_version: 1, first_attempt_at: null };
-function fixture({ enabled = 'true', secret = token, key = 're_synthetic_dedicated_key', rows = [row], prepare = true, finish = true, rpcError = null, fetcher = async () => Response.json({ id: providerId }) } = {}) {
-  const env = { MEMBER_NOTIFICATIONS_ENABLED: enabled, MEMBER_NOTIFICATIONS_WORKER_TOKEN: secret, MEMBER_NOTIFICATIONS_RESEND_KEY: key };
+function fixture({ enabled = 'true', secret = token, wakeupKey = '', key = 're_synthetic_dedicated_key', rows = [row], prepare = true, finish = true, rpcError = null, fetcher = async () => Response.json({ id: providerId }) } = {}) {
+  const env = { MEMBER_NOTIFICATIONS_WAKEUP_KEY: wakeupKey, MEMBER_NOTIFICATIONS_ENABLED: enabled, MEMBER_NOTIFICATIONS_WORKER_TOKEN: secret, MEMBER_NOTIFICATIONS_RESEND_KEY: key };
   let sending = false;
   const rpc = vi.fn((name) => ({ abortSignal: () => {
     if(name === 'prepare_member_notification') sending = prepare;
@@ -115,4 +116,16 @@ it('rejects an unfinished request body within five seconds without admin access'
 
 it('does not automatically retry an unparseable409 conflict',async()=>{
   const f=fixture({fetcher:async()=>new Response('not-json',{status:409})}); expect(await(await f.handler(f.request())).json()).toMatchObject({unknown:1,retry:0});
+});
+
+it('accepts fresh scoped wakeup signatures and rejects stale, future and forged signatures', async () => {
+  const key = 'synthetic-wakeup-signing-key-at-least-32-chars';
+  const f = fixture({ wakeupKey: key, rows: [] });
+  const now = Math.floor(Date.now()/1000);
+  for (const [stamp, valid, status] of [[now,true,200],[now-31,true,401],[now+10,true,401],[now,false,401]]) {
+    const signature = createHmac('sha256',key).update(`member-notifications:${stamp}`).digest('hex');
+    const req = new Request('https://example.test', {method:'POST',headers:{'x-armature-wakeup-time':String(stamp),'x-armature-wakeup-signature':valid?signature:'a'.repeat(64)},body:'{}'});
+    expect((await f.handler(req)).status).toBe(status);
+  }
+  expect(f.rpc).toHaveBeenCalledTimes(1);
 });

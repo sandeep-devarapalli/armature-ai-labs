@@ -142,3 +142,13 @@ Work Chrome Resend/hello owns the verified mail.armatureailabs.com domain. Creat
 Hosted runtime checks with database delivery still disabled: sender missing-secret401; authenticated sender200/zero claims; webhook unsigned401; correctly signed unsupported probe200/ignored (no synthetic member event or email). Existing read-only Cloud Run monitor execution member-notification-monitor-pdjp6 succeeded. Cleanup remainsfalse.
 
 Scheduler/IAM creation attempt was blocked by automatic approval review before execution; requested exact authorization for five-minute sender, fifteen-minute read-only monitor, narrowly scoped job invocation, and hello failure/missing-run alerts. No activation claimed until read-back is recorded below.
+
+## Immediate delivery update
+
+Owner approved event-triggered notification sending with five-minute recovery polling and unchanged fifteen-minute monitoring. Migration025 adds a default-off immediate_enabled gate and an AFTER INSERT transition-table trigger for actually inserted pending rows. pg_net dispatches after commit; registration does not wait for HTTP. Held/duplicate events do not trigger delivery.
+
+Local inspection found pg_net request queue SELECT and schema USAGE granted to PUBLIC. The original reusable-header approach was rejected before production. The trigger sends only a 30-second HMAC signature over a fixed purpose/timestamp; its separate signing key stays in Vault and Edge secrets. No member data or long-lived credential enters the request. A captured signature can briefly re-invoke this fixed empty-body sender; existing queue leases and provider idempotency prevent duplicate email, but this is not one-time authentication. Five seconds of positive clock skew is tolerated.
+
+Missing keys or SQL enqueue errors preserve the notification for scheduled recovery. HTTP failures after commit are handled by the existing backup/overdue health checks. One wakeup claims up to ten items; retries and larger backlogs can take longer. This improves dispatch latency, not a guaranteed inbox-delivery SLA.
+
+Verification: SQL027 transactional tests cover default gate, credential access, missing key, pending insertion, duplicates, held history and absence of reusable credentials in HTTP requests; rolled back fixtures generate no outbound calls. Sender tests cover valid/forged/expired/future signatures with mocked delivery. Existing notification concurrency and provider/maintenance tests remain required. Production activation requires matching dedicated signing key in Vault/Edge, reviewed migration/function deployment, signed empty-queue probe and immediate_enabled=true. Existing master gate remains the kill switch; immediate_enabled=false rolls back to scheduled delivery.
