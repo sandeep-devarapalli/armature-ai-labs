@@ -1,4 +1,6 @@
 import { readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { createRunner } from '../../scripts/run-onboarding-retention-local.mjs';
 import ts from 'typescript';
 import { expect, it, vi } from 'vitest';
 vi.hoisted(() => { globalThis.Deno = { env: { get: () => undefined } }; });
@@ -50,24 +52,61 @@ it('deletes only the authenticated account and invalidates inflight uploads', as
   const f = setup(); expect((await f.handler(new Request('https://example.test?user_id=other', { method: 'DELETE' }))).status).toBe(200);
   expect(f.client.rpc).toHaveBeenCalledWith('begin_member_avatar_change', { p_user_id: 'owner', p_remove: true });
 });
-function retention(removeFails) {
+function retention(removeFails, documentCount = 0) {
   const source = readFileSync(`${process.cwd()}/supabase/functions/onboarding-retention/index.ts`, 'utf8').replace(/^import .*;\n/gm, '');
   const code = ts.transpileModule(source, { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText;
   const erased = vi.fn();
-  const chain = { select(){return this;},lte(){return this;},order(){return this;},limit: async () => ({ data: [{ object_path: 'old-avatar' }] }),delete(){return this;},eq: async () => { erased(); return {error:null}; } };
+  const limit = vi.fn(async () => ({ data: [{ object_path: 'old-avatar' }] }));
+  const chain = { select(){return this;},lte(){return this;},order(){return this;},limit,delete(){return this;},eq: async () => { erased(); return {error:null}; } };
   const remove = vi.fn(async () => ({ error: removeFails ? new Error('retry') : null }));
   let handler;
-  new Function('Deno','assertJobSecret','HttpError','json','adminClient',code)({ serve: (fn) => {handler=fn;},env:{get:()=> 'true'} },()=>{},HttpError,(_r,body,status=200)=>Response.json(body,{status}),()=>({ rpc: async ()=>({data:[]}),from:()=>chain,storage:{from:()=>({remove})} }));
-  return {handler,erased,remove};
+  new Function('Deno','assertJobSecret','HttpError','json','adminClient',code)({ serve: (fn) => {handler=fn;},env:{get:()=> 'true'} },()=>{},HttpError,(_r,body,status=200)=>Response.json(body,{status}),()=>({ rpc: async (name)=>({data: name === 'list_due_onboarding_documents' ? Array.from({length:documentCount},(_,id)=>({id,object_path:`document-${id}`})) : null}),from:()=>chain,storage:{from:()=>({remove})} }));
+  return {handler,erased,remove,limit};
 }
 it('managed retention retries avatar storage failures without losing queued paths', async () => {
   const f=retention(true);
-  expect((await f.handler(new Request('https://example.test',{method:'POST'}))).status).toBe(503);
+  const response=await f.handler(new Request('https://example.test',{method:'POST'}));
+  expect(response.status).toBe(503);
+  expect(await response.json()).toEqual({examined:1,deleted:0,failed:1});
   expect(f.erased).not.toHaveBeenCalled();
 });
 it('managed retention deletes queued bytes before acknowledging cleanup', async () => {
   const f=retention(false);
   const response=await f.handler(new Request('https://example.test',{method:'POST'}));
-  expect(await response.json()).toMatchObject({avatarsDeleted:1,failed:0});
+  expect(await response.json()).toEqual({examined:1,deleted:1,failed:0});
   expect(f.remove).toHaveBeenCalledWith(['old-avatar']);expect(f.erased).toHaveBeenCalledOnce();
+});
+
+it('shares a single 100-object batch budget with documents', async () => {
+  const full=retention(false,100);
+  const response=await full.handler(new Request('https://example.test',{method:'POST'}));
+  expect(await response.json()).toEqual({examined:100,deleted:100,failed:0});
+  expect(full.limit).not.toHaveBeenCalled();
+  const partial=retention(false,99);
+  expect(await (await partial.handler(new Request('https://example.test',{method:'POST'}))).json()).toEqual({examined:100,deleted:100,failed:0});
+  expect(partial.limit).toHaveBeenCalledWith(1);
+});
+it('actual avatar cleanup results satisfy both local and production monitors', async () => {
+  const f=retention(false,2);
+  const response=await f.handler(new Request('https://example.test',{method:'POST'}));
+  const body=await response.json();
+  const runner=createRunner({secret:'synthetic-only',fetcher:async()=>Response.json(body),persist:async()=>{},log:()=>{}});
+  expect(await runner.run()).toMatchObject({state:'idle',error:null,counts:{examined:3,deleted:3,failed:0}});
+  const output=execFileSync('python3',['-c',`
+import importlib.util,json,sys
+spec=importlib.util.spec_from_file_location('runner','tools/onboarding-retention/runner.py')
+r=importlib.util.module_from_spec(spec);spec.loader.exec_module(r)
+body=sys.stdin.buffer.read()
+class Response:
+ status=200
+ def __enter__(self): return self
+ def __exit__(self,*args): pass
+ def geturl(self): return r.ENDPOINT
+ def read(self,n): return body[:n]
+class Opener:
+ def open(self,*args,**kwargs): return Response()
+r.build_opener=lambda *args:Opener()
+print(json.dumps(r.request_batch('synthetic-only')))
+`],{input:JSON.stringify(body),encoding:'utf8'});
+  expect(JSON.parse(output)).toEqual(body);
 });
