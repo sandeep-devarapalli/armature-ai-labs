@@ -78,4 +78,17 @@ Wishlist images use authenticated raw uploads after draft creation, max 5MiB JPE
 - Hosted synthetic PNG/JPEG/WebP scans returned200 and removed metadata; anonymous requests denied, malformed/EICAR422. Existing signed-in identity used; no IAM expansion. Builder default source bucket denied access; rerun used the existing authorized scanner source bucket successfully.
 - equipment-wishlist-image and onboarding-retention deployed. EQUIPMENT_WISHLIST_CLEANUP_ENABLED=true. Anonymous missing-image404 and browser-origin preflight204 verified. Authenticated wishlist upload remains end-to-end proven locally, while hosted scanner and public endpoint boundaries are checked separately.
 - Auto-review blocked manually invoking the shared retention job because its pending real-document deletion scope was not established. No workaround or manual run attempted; inspect the already-enabled scheduled execution for release verification.
-- Existing scheduled retention execution at2026-09-27T13:55:11Z reported onboarding_retention_verified: batches1, examined0, deleted0, failed0 after the endpoint/flag update. This proves scheduled execution health with an empty queue, not a production synthetic deletion test. Website CI/deployment remains pending below.
+- Existing scheduled retention execution at2026-09-27T13:55:11Z reported onboarding_retention_verified: batches1, examined0, deleted0, failed0 after the endpoint/flag update. This proves scheduled execution health with an empty queue, not a production synthetic deletion test. Website publication evidence follows below.
+
+## Website publication
+
+- PR91 squash commit9e655388a4d6a96c8ae4330b084b092a7ab236b5 is live. Main workflow36324321288 passed frontend, database and deploy-production. Production environment approval used the owner-authorized catalogue/wishlist scope. Production build, public gates, basic-registration fixtures, Cloudflare upload and live release/SEO/building checks passed.
+- No paid rental checkout, commissioned inventory, final rental rates, procurement orders or Razorpay/Dodo activation was enabled. Rental UI remains planning-only. External product-photo rights remain unresolved; public pages use original schematics/Three.js studies, with manufacturer reference galleries kept locally.
+- Independent live anonymous desktop/mobile checks passed: both models visibly render, idle rendering stops, disposal works, no overflow, no unlicensed photo requests, late printer slots blocked. Four live wishlist candidates remain at zero votes before/after read-only reload. Application writes were blocked; only Cloudflare analytics attempted POST. Evidence /tmp/armature-equipment-live-results.json and /tmp/armature-live-*.png.
+- Live SEO HTTP readiness passed20 bounded probes. No authenticated production membership or upload mutations were used for this release's checks.
+
+## Remaining rental implementation and operational gates
+
+This release completes catalogue/wishlist delivery and a read-only equipment-session preview. It does not implement atomic combined equipment/workspace checkout, equipment-specific physical-unit commissioning/rate administration, paid extensions or fault-refund transactions. Those need a separate focused implementation and synthetic transaction tests before any paid rental activation; existing booking APIs were preserved. Do not interpret the preview or passing existing booking tests as completion of these new rental flows.
+
+Supplier quotations, exact models, image publication rights, purchased-unit commissioning and actual building positions remain unresolved. Final rates, equipment purchases and payment activation require owner decisions. Existing workspace geometry/capacity and basic memberships remain unchanged.
