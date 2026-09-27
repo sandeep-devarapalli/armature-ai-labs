@@ -90,7 +90,7 @@ export async function mountViewer(host, { kind = 'printer', onPin = () => {}, on
       if(disposed)return api;
       const result=await new GLTFLoader().parseAsync(bytes,modelDirectory);
       if(disposed){release(result.scene);return api;}root=result.scene;
-      notice.textContent=seatMode?(kind==='ground-seats'?'25 source-position chairs · 13 removed in this preview only · final positions pending':'Current R06 first floor · four-cabin study · fit review pending'):'Existing building model · working prototype · final equipment positions to be confirmed';
+      notice.textContent=seatMode?(kind==='ground-seats'?'25 chairs · proposed layout · final positions to be confirmed':'First-floor cabin layout · final arrangement under review'):'Existing building model · working prototype · final equipment positions to be confirmed';
     } else {
       throw new Error('Only building floors are supported.');
       notice.textContent='Illustrative model · feature markers are not electrical pinouts';
