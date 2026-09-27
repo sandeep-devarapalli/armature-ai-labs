@@ -6,7 +6,7 @@ const limit = 5 * 1024 * 1024;
 export async function scanOnboardingImage(
   bytes: Uint8Array,
   contentType: string,
-  config: { url?: string; secret?: string; local?: boolean; googleCredentials?: string },
+  config: { url?: string; secret?: string; local?: boolean; googleCredentials?: string; allowWebp?: boolean },
   fetcher: typeof fetch = fetch,
 ): Promise<Uint8Array> {
   const unavailable = () => new HttpError(503, "Image safety checks are temporarily unavailable. Try again later.");
@@ -16,7 +16,7 @@ export async function scanOnboardingImage(
   const localHosts = ["127.0.0.1", "localhost", "host.docker.internal", "armature-onboarding-scanner-gateway-1"];
   if (endpoint.username || endpoint.password || endpoint.search || endpoint.hash ||
       (endpoint.protocol !== "https:" && !(config.local && endpoint.protocol === "http:" && localHosts.includes(endpoint.hostname)))) throw unavailable();
-  if (!bytes.length || bytes.length > limit || !["image/png", "image/jpeg"].includes(contentType)) throw new HttpError(415, "Use a PNG or JPEG image of at most 5 MiB.");
+  if (!bytes.length || bytes.length > limit || !["image/png", "image/jpeg", ...(config.allowWebp ? ["image/webp"] : [])].includes(contentType)) throw new HttpError(415, "Use a supported image of at most 5 MiB.");
   let identity: string | undefined;
   if (!(config.local && endpoint.protocol === "http:" && localHosts.includes(endpoint.hostname))) {
     if (!config.googleCredentials) throw unavailable();
@@ -52,7 +52,8 @@ export async function scanOnboardingImage(
     for (const chunk of chunks) { result.set(chunk, offset); offset += chunk.length; }
     const png = [137, 80, 78, 71, 13, 10, 26, 10].every((value, i) => result[i] === value);
     const jpeg = result[0] === 255 && result[1] === 216 && result[2] === 255;
-    if (!((contentType === "image/png" && png) || (contentType === "image/jpeg" && jpeg))) throw unavailable();
+    const webp = result.length >= 12 && new TextDecoder().decode(result.slice(0, 4)) === "RIFF" && new TextDecoder().decode(result.slice(8, 12)) === "WEBP" && new DataView(result.buffer).getUint32(4, true) + 8 === result.length;
+    if (!((contentType === "image/png" && png) || (contentType === "image/jpeg" && jpeg) || (config.allowWebp && contentType === "image/webp" && webp))) throw unavailable();
     return result;
   } catch (error) {
     if (error instanceof HttpError) throw error;

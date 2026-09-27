@@ -49,3 +49,13 @@ describe('private onboarding scan boundary', () => {
     } finally { vi.useRealTimers(); }
   });
 });
+
+it('allows WebP only for opted-in product images and checks the RIFF length', async () => {
+  const webp = new Uint8Array([82,73,70,70,4,0,0,0,87,69,66,80]);
+  const fetcher = vi.fn(async () => new Response(webp, { headers: { 'content-type': 'image/webp' } }));
+  await expect(scan(webp, 'image/webp', config, fetcher)).rejects.toMatchObject({status:415});
+  expect(fetcher).not.toHaveBeenCalled();
+  await expect(scan(webp, 'image/webp', {...config,allowWebp:true}, fetcher)).resolves.toEqual(webp);
+  const bad = new Uint8Array(webp); bad[4] = 99;
+  await expect(scan(webp, 'image/webp', {...config,allowWebp:true}, async () => new Response(bad, {headers:{'content-type':'image/webp'}}))).rejects.toMatchObject({status:503});
+});
