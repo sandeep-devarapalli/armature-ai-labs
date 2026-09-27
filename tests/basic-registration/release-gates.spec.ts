@@ -4,7 +4,7 @@ test("basic registration opens independently while paid access remains closed", 
   await page.route("https://reserved.invalid/**", route => route.abort());
   await page.goto("/join");
   await expect(page.getByRole("heading", { name: "Create your basic membership." })).toBeVisible();
-  await page.getByRole("link", { name: "Register for free" }).click();
+  await page.getByRole("link", { name: "Register for free" }).first().click();
   await expect(page).toHaveURL(/\/onboarding$/);
   await expect(page.getByRole("link", { name: "Sign in with your email" })).toBeVisible();
   await expect(page.getByText("Staff approval verifies your registration", { exact: false })).toBeVisible();
@@ -12,10 +12,14 @@ test("basic registration opens independently while paid access remains closed", 
   await expect(page.getByRole("heading", { name: "Create your member account." })).toBeVisible();
   await expect(page.getByText("Use a secure email link for free registration", { exact: false })).toBeVisible();
   await expect(page.getByRole("button", { name: "Continue with Google" })).toBeVisible();
-  for (const path of ["/book", "/bookings", "/dashboard", "/check-in", "/inventory", "/financials", "/admin/members", "/kiosk", "/components/request"]) {
+  for (const path of ["/book", "/bookings", "/dashboard", "/check-in", "/inventory", "/financials", "/kiosk", "/components/request"]) {
     await page.goto(path);
     await expect(page.getByRole("heading", { name: "Operational access is opening soon." })).toBeVisible();
   }
+  await page.goto("/admin/members");
+  await expect(page.getByRole("heading", { name: "Members", exact: true })).toBeVisible();
+  await expect(page.locator("main").getByRole("link", { name: "Sign in", exact: true })).toBeVisible();
+  await expect(page.getByRole("table")).toHaveCount(0);
   await page.goto("/onboarding-local");
   await expect(page.getByRole("heading", { name: "That bench is not on the floor plan." })).toBeVisible();
 });

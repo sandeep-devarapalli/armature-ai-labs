@@ -55,6 +55,7 @@ const BookingsPage = lazy(() => import("../pages/MemberPages").then((module) => 
 const BookingDetailPage = lazy(() => import("../pages/MemberPages").then((module) => ({ default: module.BookingDetailPage })));
 const CheckInPage = lazy(() => import("../pages/MemberPages").then((module) => ({ default: module.CheckInPage })));
 const AdminMembersPage = lazy(() => import("../pages/AdminPages").then((module) => ({ default: module.AdminMembersPage })));
+const MemberManagementPage = lazy(() => import("../pages/MemberManagementPage").then((module) => ({ default: module.MemberManagementPage })));
 const AdminResourcesPage = lazy(() => import("../pages/AdminPages").then((module) => ({ default: module.AdminResourcesPage })));
 const AdminBookingsPage = lazy(() => import("../pages/AdminPages").then((module) => ({ default: module.AdminBookingsPage })));
 const AdminAttendancePage = lazy(() => import("../pages/AdminPages").then((module) => ({ default: module.AdminAttendancePage })));
@@ -133,8 +134,8 @@ export const routes: RouteObject[] = [
       { path: "/lockers", element: memberFeature(protectedPage(<LockersPage />)) },
       { path: "/consumables", element: memberFeature(protectedPage(<ConsumablesPage />)) },
       { path: "/toolkits", element: memberFeature(protectedPage(<ToolkitsPage />)) },
-      { path: "/admin", element: memberFeature(<Navigate to="/admin/members" replace />) },
-      { path: "/admin/members", element: memberFeature(staffPage(<AdminMembersPage />)) },
+      { path: "/admin", element: <ReleaseGate enabled={basicOnboardingAvailable || memberPlatformAvailable}><Navigate to="/admin/members" replace /></ReleaseGate> },
+      { path: "/admin/members", element: basicOnboardingAvailable ? <MemberManagementPage /> : memberFeature(staffPage(<AdminMembersPage />)) },
       { path: "/admin/resources", element: memberFeature(staffPage(<AdminResourcesPage />)) },
       { path: "/admin/bookings", element: memberFeature(staffPage(<AdminBookingsPage />)) },
       { path: "/admin/attendance", element: memberFeature(staffPage(<AdminAttendancePage />)) },

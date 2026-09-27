@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import {
+  basicOnboardingAvailable,
   componentRequestsAvailable,
   equipmentPageAvailable,
   memberPlatformAvailable
@@ -23,6 +24,7 @@ import {
 import { useApp } from "../context/AppContext";
 import { useTheme } from "../context/ThemeContext";
 import type { Theme } from "../types/domain";
+import { AccountMenu } from "./AccountMenu";
 import { BrandMark } from "./BrandMark";
 import { PageMetadata } from "./PageMetadata";
 
@@ -115,7 +117,7 @@ export function Shell({ children }: PropsWithChildren) {
         Skip to content
       </a>
       <header className="topbar">
-        <div className="wrap topbar-inner">
+        <div className={`wrap topbar-inner${basicOnboardingAvailable ? " with-basic-account" : ""}`}>
           <Link to="/" className="brand-link">
             <BrandMark />
           </Link>
@@ -139,7 +141,8 @@ export function Shell({ children }: PropsWithChildren) {
               <Menu aria-hidden="true" />
               <span className="sr-only">{mobileMenuOpen ? "Close navigation" : "Open navigation"}</span>
             </button>
-            {memberPlatformAvailable && (currentMember ? (
+            {basicOnboardingAvailable && <AccountMenu />}
+            {!basicOnboardingAvailable && memberPlatformAvailable && (currentMember ? (
               <button className="icon-button" type="button" onClick={() => void signOut()} title="Sign out">
                 <LogOut aria-hidden="true" />
                 <span className="sr-only">Sign out</span>

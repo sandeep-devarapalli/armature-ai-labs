@@ -1,3 +1,4 @@
+import { useRegistrationLabel } from "../context/AccountContext";
 import {
   ArrowRight,
   Armchair,
@@ -104,6 +105,7 @@ const labRoles = [
 ];
 
 export function HomePage() {
+  const registrationLabel = useRegistrationLabel();
   return (
     <>
       <header className="home-hero home-hero-integrated">
@@ -127,7 +129,7 @@ export function HomePage() {
               </Link>
             ) : basicOnboardingAvailable ? (
               <Link className="button button-primary" to="/onboarding">
-                Register for free
+                {registrationLabel}
                 <ArrowRight aria-hidden="true" />
               </Link>
             ) : (

@@ -1,3 +1,4 @@
+import { useRegistrationLabel } from "../context/AccountContext";
 import { useState, type FormEvent } from "react";
 import {
   ArrowRight,
@@ -297,6 +298,8 @@ export function ServicesPage() {
 }
 
 export function JoinPage() {
+  const registrationLabel = useRegistrationLabel();
+  const registrationFooterLabel = useRegistrationLabel("Open registration");
   const { currentMember, state, submitApplication } = useApp();
   const pendingApplication = state.applications.find(
     (application) => application.memberId === currentMember?.id && application.state === "pending"
@@ -305,7 +308,7 @@ export function JoinPage() {
   const basicOnly = basicOnboardingAvailable && !memberPlatformAvailable;
 
   const membershipAction = basicOnly ? (
-    <Link className="button button-primary" to="/onboarding">Register for free <ArrowRight aria-hidden="true" /></Link>
+    <Link className="button button-primary" to="/onboarding">{registrationLabel} <ArrowRight aria-hidden="true" /></Link>
   ) : !memberPlatformAvailable ? (
     <a className="button button-primary" href="mailto:hello@armatureailabs.com">Email the lab</a>
   ) : membershipActive ? (
@@ -396,7 +399,7 @@ export function JoinPage() {
           <>
             <Status tone="good">Free basic registration open</Status>
             <p className="lede">Complete your registration and follow its review status in the protected portal. Paid bookings remain closed.</p>
-            <div className="section-actions"><Link className="button button-primary" to="/onboarding">Open registration <ArrowRight aria-hidden="true" /></Link></div>
+            <div className="section-actions"><Link className="button button-primary" to="/onboarding">{registrationFooterLabel} <ArrowRight aria-hidden="true" /></Link></div>
           </>
         ) : !memberPlatformAvailable ? (
           <>
