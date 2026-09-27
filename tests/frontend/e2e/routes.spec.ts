@@ -282,7 +282,7 @@ test("project discovery recovers from conflicting and invalid filters and sorts 
   await expect(cards).toHaveCount(total);
   await page.getByLabel("Sort by").selectOption("name");
   const names = await cards.locator("h3").allTextContents();
-  expect(names).toEqual([...names].sort((a, b) => a.localeCompare(b)));
+  await expect.poll(() => cards.locator("h3").allTextContents()).toEqual([...names].sort((a, b) => a.localeCompare(b)));
   await page.goBack();
   await expect(page.getByLabel("Sort by")).toHaveValue("");
   await page.locator("#p0-builds").getByRole("link", { name: /Local Dataset NAS/ }).focus();
