@@ -95,4 +95,4 @@ STATE=$("$PSQL" "$DATABASE_URL" -Atqc "select count(*) from public.paid_access_e
 [ "$STATE" = '0' ] || { echo 'Losing payer retained an entitlement'; exit 1; }
 STATE=$("$PSQL" "$DATABASE_URL" -Atqc "select count(*) filter(where captured_at is not null)||':'||sum(cardinality(entitlement_ids)) from public.equipment_workspace_quotes where quote_id in(select id from public.equipment_rental_quotes where user_id::text like 'b1000000%')")
 [ "$STATE" = '1:1' ] || { echo "Unexpected bundle state $STATE"; exit 1; }
-echo 'PASS: one combined checkout captures; loser remains authorized; no orphan workspace or equipment entitlement; exact tax ledger' 
+echo 'PASS: one combined checkout captures; loser remains authorized; no orphan workspace or equipment entitlement; exact tax ledger'
