@@ -8,6 +8,8 @@
 
 # AGENTS.md
 
+- Connected booking inventory, 27 September 2026: retain the accepted full-floor chair-map design, with S01–S25 in one shared desk pool and whole six-seat team cabins C01/GF-01, C02/FF-03, C03/FF-04 and C04/FF-06. Cabin geometry remains a planning study. Book through date-checked server operations; no individual cabin-chair sales. Local synthetic inventory, entitlements and tests do not authorize production paid-booking activation or lift the Razorpay/LLP hold. Preserve original Blender/CAD assets.
+
 - Preview Supabase project decision, 25 September 2026: the live website's public bundle points to the existing `armature-lab` project (`uxfhdfagrmaeyuaipaar`). The user said to hold off creating a separate preview project. Do not create one or apply the team migration to the live project until the user resumes this work.
 
 - Booking email and team membership, 25 September 2026: `bookings@armatureailabs.com` is an alias of the Google Workspace user `hello@armatureailabs.com`, not a separate account. Calendar delegation impersonates the primary user; booking mail uses the alias after Send mail as verification. The team membership plan uses staff approval, offline payment and separate activation, fixed named seats, team-admin roster and team-attributed booking reports. Keep the member platform behind its release gate. See `docs/team-membership-and-booking-email-plan.md`.
