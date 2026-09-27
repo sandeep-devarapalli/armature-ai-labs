@@ -1,6 +1,8 @@
 # AGENTS.md
 
-- Account separation, 26 September 2026: sandeep@armatureailabs.com is Sandeep Devarapalli's private personal membership identity; hello@armatureailabs.com is the general administration identity. Both are explicitly authorised ordinary admins. A shared Workspace mailbox does not merge website identities; Google identifies hello@, while personal sandeep@ uses email-link sign-in. Admin rights do not approve basic identity verification or grant paid access.
+- Role hierarchy correction, 27 September 2026: only Super admins appoint/remove/demote Admins. Admins manage Staff only. Sandeep personal account is the approved Super admin bootstrap; hello remains Admin. Membership-review Staff can inspect pending applications and approve only; no other operational rights. Roles do not approve membership or release paid access. Retained profile-photo avatars require separate permission and storage; government ID and verification originals retain their 30-day deletion policy.
+
+- Account separation, 26 September 2026: sandeep@armatureailabs.com is Sandeep Devarapalli's private personal membership identity; hello@armatureailabs.com is the general administration identity. The 27 September role hierarchy supersedes the original ordinary-admin assignment: personal Sandeep is Super admin; hello remains Admin. A shared Workspace mailbox does not merge website identities; Google identifies hello@, while personal sandeep@ uses email-link sign-in. Admin rights do not approve basic identity verification or grant paid access.
 
 - Browser profile correction, 26 September 2026: use the Sandeep Chrome profile (sandeep.devarapalli@gmail.com) for Cloudflare and Supabase administration. The browser profile email is not necessarily the service account email; verify the Armature domain/project after signing in.
 

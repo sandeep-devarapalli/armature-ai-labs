@@ -82,13 +82,20 @@ test("public-first production gates operational routes", async ({ page }) => {
     await expect(page.getByRole("heading", { name: "One membership journey" })).toBeVisible();
   }
 
+  if (basicEnabled) {
+    await page.goto("/admin/members");
+    await expect(page.getByRole("heading", { name: "Members", exact: true })).toBeVisible();
+    await expect(page.locator("main").getByRole("link", { name: "Sign in", exact: true })).toBeVisible();
+    await expect(page.getByRole("table")).toHaveCount(0);
+  }
+
   for (const path of [
     "/book",
     "/bookings",
     "/check-in",
     "/inventory",
     "/financials",
-    "/admin/members",
+    ...(!basicEnabled ? ["/admin/members"] : []),
     "/kiosk",
     "/components/request"
   ]) {

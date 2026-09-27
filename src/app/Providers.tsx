@@ -1,4 +1,5 @@
 import type { PropsWithChildren } from "react";
+import { AccountProvider } from "../context/AccountContext";
 import { AppProvider } from "../context/AppContext";
 import { InventoryProvider } from "../context/InventoryContext";
 import { ThemeProvider } from "../context/ThemeContext";
@@ -7,7 +8,7 @@ export function Providers({ children, hydrate = false }: PropsWithChildren<{ hyd
   return (
     <ThemeProvider hydrate={hydrate}>
       <AppProvider hydrate={hydrate}>
-        <InventoryProvider hydrate={hydrate}>{children}</InventoryProvider>
+        <AccountProvider><InventoryProvider hydrate={hydrate}>{children}</InventoryProvider></AccountProvider>
       </AppProvider>
     </ThemeProvider>
   );
