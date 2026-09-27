@@ -34,6 +34,309 @@ export type Database = {
   }
   public: {
     Tables: {
+      equipment_rental_faults: {
+        Row: {
+          created_at: string
+          ends_at: string
+          id: string
+          order_id: string
+          processed_at: string | null
+          reason: string
+          recorded_by: string
+          refund_due_paise: number
+          starts_at: string
+        }
+        Insert: {
+          created_at?: string
+          ends_at: string
+          id?: string
+          order_id: string
+          processed_at?: string | null
+          reason: string
+          recorded_by: string
+          refund_due_paise: number
+          starts_at: string
+        }
+        Update: {
+          created_at?: string
+          ends_at?: string
+          id?: string
+          order_id?: string
+          processed_at?: string | null
+          reason?: string
+          recorded_by?: string
+          refund_due_paise?: number
+          starts_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "equipment_rental_faults_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "equipment_rental_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      equipment_rental_orders: {
+        Row: {
+          booking_id: string
+          created_at: string
+          entitlement_id: string
+          id: string
+          parent_order_id: string | null
+          quote_id: string
+          workspace_booking_ids: string[]
+        }
+        Insert: {
+          booking_id: string
+          created_at?: string
+          entitlement_id: string
+          id?: string
+          parent_order_id?: string | null
+          quote_id: string
+          workspace_booking_ids: string[]
+        }
+        Update: {
+          booking_id?: string
+          created_at?: string
+          entitlement_id?: string
+          id?: string
+          parent_order_id?: string | null
+          quote_id?: string
+          workspace_booking_ids?: string[]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "equipment_rental_orders_booking_id_fkey"
+            columns: ["booking_id"]
+            isOneToOne: true
+            referencedRelation: "bookings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "equipment_rental_orders_entitlement_id_fkey"
+            columns: ["entitlement_id"]
+            isOneToOne: false
+            referencedRelation: "paid_access_entitlements"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "equipment_rental_orders_parent_order_id_fkey"
+            columns: ["parent_order_id"]
+            isOneToOne: true
+            referencedRelation: "equipment_rental_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "equipment_rental_orders_quote_id_fkey"
+            columns: ["quote_id"]
+            isOneToOne: true
+            referencedRelation: "equipment_rental_quotes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      equipment_rental_quotes: {
+        Row: {
+          amount_paise: number
+          authorized_by: string | null
+          captured_at: string | null
+          created_at: string
+          dates: string[]
+          ends_at: string
+          expires_at: string
+          id: string
+          operator_id: string
+          organization_id: string | null
+          parent_order_id: string | null
+          payment_state: string
+          rate_id: string
+          starts_at: string
+          tax_paise: number
+          total_paise: number
+          user_id: string
+        }
+        Insert: {
+          amount_paise: number
+          authorized_by?: string | null
+          captured_at?: string | null
+          created_at?: string
+          dates: string[]
+          ends_at: string
+          expires_at?: string
+          id?: string
+          operator_id: string
+          organization_id?: string | null
+          parent_order_id?: string | null
+          payment_state?: string
+          rate_id: string
+          starts_at: string
+          tax_paise: number
+          total_paise: number
+          user_id: string
+        }
+        Update: {
+          amount_paise?: number
+          authorized_by?: string | null
+          captured_at?: string | null
+          created_at?: string
+          dates?: string[]
+          ends_at?: string
+          expires_at?: string
+          id?: string
+          operator_id?: string
+          organization_id?: string | null
+          parent_order_id?: string | null
+          payment_state?: string
+          rate_id?: string
+          starts_at?: string
+          tax_paise?: number
+          total_paise?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "equipment_rental_quotes_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "equipment_rental_quotes_parent_order_id_fkey"
+            columns: ["parent_order_id"]
+            isOneToOne: false
+            referencedRelation: "equipment_rental_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "equipment_rental_quotes_rate_id_fkey"
+            columns: ["rate_id"]
+            isOneToOne: false
+            referencedRelation: "equipment_rental_rates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      equipment_rental_rates: {
+        Row: {
+          approved_at: string
+          approved_by: string
+          charge_unit: string
+          id: string
+          price_paise: number
+          tax_bps: number | null
+          unit_id: string
+          valid_from: string
+          valid_until: string | null
+        }
+        Insert: {
+          approved_at?: string
+          approved_by: string
+          charge_unit: string
+          id?: string
+          price_paise: number
+          tax_bps?: number | null
+          unit_id: string
+          valid_from: string
+          valid_until?: string | null
+        }
+        Update: {
+          approved_at?: string
+          approved_by?: string
+          charge_unit?: string
+          id?: string
+          price_paise?: number
+          tax_bps?: number | null
+          unit_id?: string
+          valid_from?: string
+          valid_until?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "equipment_rental_rates_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "equipment_rental_units"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      equipment_rental_settings: {
+        Row: {
+          mock_payments_enabled: boolean
+          singleton: boolean
+        }
+        Insert: {
+          mock_payments_enabled?: boolean
+          singleton?: boolean
+        }
+        Update: {
+          mock_payments_enabled?: boolean
+          singleton?: boolean
+        }
+        Relationships: []
+      }
+      equipment_rental_units: {
+        Row: {
+          asset_unit_id: string
+          commissioned: boolean
+          commissioned_at: string | null
+          commissioned_by: string | null
+          id: string
+          reason: string
+          resource_id: string
+        }
+        Insert: {
+          asset_unit_id: string
+          commissioned?: boolean
+          commissioned_at?: string | null
+          commissioned_by?: string | null
+          id?: string
+          reason: string
+          resource_id: string
+        }
+        Update: {
+          asset_unit_id?: string
+          commissioned?: boolean
+          commissioned_at?: string | null
+          commissioned_by?: string | null
+          id?: string
+          reason?: string
+          resource_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "equipment_rental_units_asset_unit_id_fkey"
+            columns: ["asset_unit_id"]
+            isOneToOne: true
+            referencedRelation: "asset_units"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "equipment_rental_units_asset_unit_id_fkey"
+            columns: ["asset_unit_id"]
+            isOneToOne: true
+            referencedRelation: "member_checkout_assets"
+            referencedColumns: ["asset_unit_id"]
+          },
+          {
+            foreignKeyName: "equipment_rental_units_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: true
+            referencedRelation: "public_resources"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "equipment_rental_units_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: true
+            referencedRelation: "resources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       workspace_pass_allocations: {
         Row: {
           booking_ids: string[]
@@ -4185,6 +4488,75 @@ export type Database = {
       }
     }
     Functions: {
+      approve_equipment_rental_rate: {
+        Args: {
+          p_charge_unit: string
+          p_price_paise: number
+          p_tax_bps?: number
+          p_unit_id: string
+          p_valid_from: string
+          p_valid_until?: string
+        }
+        Returns: string
+      }
+      authorize_mock_equipment_payment: {
+        Args: { p_quote_id: string }
+        Returns: undefined
+      }
+      configure_equipment_rental_unit: {
+        Args: {
+          p_asset_unit_id: string
+          p_commissioned: boolean
+          p_reason: string
+          p_resource_id: string
+        }
+        Returns: string
+      }
+      create_equipment_rental_quote: {
+        Args: {
+          p_dates?: string[]
+          p_ends_at: string
+          p_operator_id?: string
+          p_organization_id?: string
+          p_parent_order_id?: string
+          p_rate_id: string
+          p_starts_at: string
+        }
+        Returns: string
+      }
+      get_equipment_rental_extensions: {
+        Args: {
+          p_operator_id?: string
+          p_organization_id?: string
+          p_unit_id: string
+        }
+        Returns: Json
+      }
+      get_equipment_workspace_coverage: {
+        Args: { p_organization_id?: string }
+        Returns: Json
+      }
+      record_equipment_rental_fault: {
+        Args: {
+          p_ends_at: string
+          p_order_id: string
+          p_reason: string
+          p_refund_due_paise: number
+          p_starts_at: string
+        }
+        Returns: string
+      }
+      reserve_equipment_rental: {
+        Args: {
+          p_organization_id?: string
+          p_quote_id: string
+          p_workspace_booking_ids?: string[]
+          p_workspace_dates?: string[]
+          p_workspace_product_id?: string
+          p_workspace_resource_id?: string
+        }
+        Returns: string
+      }
       set_booking_resource_enabled: {
         Args: { p_enabled: boolean; p_reason: string; p_resource_id: string }
         Returns: undefined
