@@ -34,3 +34,5 @@
 .member-management > .page-hero h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
 .member-management > .section { padding-block: 2rem; }
 @media (max-width: 600px) { .member-management table { display: block; min-width: 0; } }
+
+.member-notification-history > div > p { margin-block: 1rem; }
