@@ -9,7 +9,8 @@ import { BookingFloorMap, type WorkspacePlace } from "./BookingFloorMap";
 
 type Unit = { unit_id: string; component_slug: string; resource_id: string; name: string; rate_id: string; charge_unit: "hour" | "day"; price_paise: number; tax_bps: number; valid_until: string | null };
 type Quote = { id: string; amount_paise: number; tax_paise: number; total_paise: number; expires_at: string; payment_state: "unpaid" | "authorized" | "captured" };
-type Product = { id: string; name: string };
+type Product = { id: string; name: string; kind: "workspace" | "cabin"; unit: "day" | "week" | "month"; tax_bps: number | null };
+type Bundle = { dates: string[]; seats: number; workspace_paise: number; workspace_tax_paise: number; total_paise: number; authorized_by: string | null };
 const money = (paise: number) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(paise / 100);
 const client = supabase as SupabaseClient | null;
 
@@ -35,6 +36,9 @@ function RentalForm({ slug }: { slug: string }) {
   const [start, setStart] = useState("09:00");
   const [end, setEnd] = useState("10:00");
   const [combined, setCombined] = useState(false);
+  const [buyWorkspace, setBuyWorkspace] = useState(false);
+  const [workspaceDate, setWorkspaceDate] = useState("");
+  const [bundle, setBundle] = useState<Bundle | null>(null);
   const [bookings, setBookings] = useState<string[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [productId, setProductId] = useState("");
@@ -45,13 +49,15 @@ function RentalForm({ slug }: { slug: string }) {
   const [error, setError] = useState("");
   const [order, setOrder] = useState("");
   const context = useRef("");
-  context.current = JSON.stringify([rateId, date, endDate, start, end, combined, bookings, productId, resourceId, organizationId, operatorId, parentId]);
+  context.current = JSON.stringify([rateId, date, endDate, start, end, combined, bookings, productId, resourceId, organizationId, operatorId, parentId, buyWorkspace, workspaceDate]);
   const unit = units.find(item => item.rate_id === rateId);
+  const product = products.find(item => item.id === productId);
+  const paymentReady = quote?.payment_state === "authorized" && (!combined || !buyWorkspace || Boolean(bundle?.authorized_by));
   const [workspaceBookings, setWorkspaceBookings] = useState<{ id: string; name: string; starts_at: string; ends_at: string }[]>([]);
   useEffect(() => {
     let active = true;
     if (!client) return;
-    void Promise.all([client.rpc("get_equipment_rental_options"), client.from("booking_products").select("id,name").eq("kind", "workspace").eq("unit", "day").eq("enabled", true)]).then(([options, passes]) => {
+    void Promise.all([client.rpc("get_equipment_rental_options"), client.from("booking_products").select("id,name,kind,unit,tax_bps").in("kind", ["workspace", "cabin"]).eq("enabled", true)]).then(([options, passes]) => {
       if (!active) return;
       const failure = options.error ?? passes.error;
       if (failure) setError(failure.message);
@@ -60,7 +66,7 @@ function RentalForm({ slug }: { slug: string }) {
     return () => { active = false; };
   }, [slug]);
   useEffect(() => {
-    setOperatorId(account!.user_id); setBookings([]); setResourceId(""); setPlaces([]); setRoster([]); setParentId("");
+    setOperatorId(account!.user_id); setProductId(""); setBookings([]); setResourceId(""); setPlaces([]); setRoster([]); setParentId("");
     let active = true; setWorkspaceBookings([]);
     void client!.rpc("get_equipment_workspace_coverage", { p_organization_id: organizationId || null }).then(result => {
       if (!active) return;
@@ -81,8 +87,8 @@ function RentalForm({ slug }: { slug: string }) {
     });
     return () => { active = false; };
   }, [rateId, operatorId, organizationId]);
-  useEffect(() => { setQuote(null); setOrder(""); }, [rateId, date, endDate, start, end, combined, bookings, productId, resourceId, organizationId, operatorId, parentId]);
-  useEffect(() => { setPlaces([]); setResourceId(""); }, [date, endDate, rateId, productId]);
+  useEffect(() => { setQuote(null); setBundle(null); setOrder(""); }, [rateId, date, endDate, start, end, combined, bookings, productId, resourceId, organizationId, operatorId, parentId, buyWorkspace, workspaceDate]);
+  useEffect(() => { setPlaces([]); setResourceId(""); }, [date, endDate, rateId, productId, workspaceDate]);
   function dates() {
     if (!date) throw new Error("Choose a session date.");
     const last = unit?.charge_unit === "day" ? endDate || date : date;
@@ -103,9 +109,12 @@ function RentalForm({ slug }: { slug: string }) {
     try { await action(); } catch (failure) { setError((failure as Error).message || "Unable to complete the request."); }
     finally { setBusy(false); }
   }
+  function workspaceDates() {
+    return product?.unit === "week" || product?.unit === "month" ? [workspaceDate || (product.unit === "month" ? `${date.slice(0, 7)}-01` : date)] : dates();
+  }
   async function checkChairs() {
     const key = context.current;
-    const result = await client!.rpc("get_workspace_availability", { p_product_id: productId, p_dates: dates() });
+    const result = await client!.rpc("get_workspace_availability", { p_product_id: productId, p_dates: workspaceDates() });
     if (key !== context.current) return;
     if (result.error) throw result.error;
     setPlaces(result.data as WorkspacePlace[]);
@@ -114,20 +123,26 @@ function RentalForm({ slug }: { slug: string }) {
     const result = await client!.from("equipment_rental_quotes").select("id,amount_paise,tax_paise,total_paise,expires_at,payment_state").eq("id", id).single();
     if (key !== context.current) return;
     if (result.error) throw result.error;
+    if (combined && buyWorkspace) {
+      const detail = await client!.from("equipment_workspace_quotes").select("dates,seats,workspace_paise,workspace_tax_paise,total_paise,authorized_by").eq("quote_id", id).single();
+      if (key !== context.current) return;
+      if (detail.error) throw detail.error;
+      setBundle(detail.data as Bundle);
+    }
     setQuote(result.data as Quote);
   }
   async function getQuote() {
     if (!unit) return;
     const chosen = dates(), daily = unit.charge_unit === "day", key = context.current;
-    const result = await client!.rpc("create_equipment_rental_quote", { p_rate_id: rateId, p_starts_at: labInstant(`${date}T${daily ? "09:00" : start}`).toISOString(), p_ends_at: labInstant(`${chosen.at(-1)}T${daily ? "17:00" : end}`).toISOString(), p_dates: daily ? chosen : null, p_operator_id: operatorId, p_organization_id: organizationId || null, p_parent_order_id: parentId || null });
+    const result = await client!.rpc(combined && buyWorkspace ? "create_equipment_workspace_quote" : "create_equipment_rental_quote", { ...(combined && buyWorkspace ? { p_workspace_resource_id: resourceId, p_workspace_product_id: productId, p_workspace_dates: workspaceDates() } : {}), p_rate_id: rateId, p_starts_at: labInstant(`${date}T${daily ? "09:00" : start}`).toISOString(), p_ends_at: labInstant(`${chosen.at(-1)}T${daily ? "17:00" : end}`).toISOString(), p_dates: daily ? chosen : null, p_operator_id: operatorId, p_organization_id: organizationId || null, p_parent_order_id: parentId || null });
     if (key !== context.current) return;
     if (result.error) throw result.error;
     await readQuote(result.data as string, key);
   }
   async function reserve() {
-    if (!quote || quote.payment_state !== "authorized") return;
+    if (!quote || !paymentReady) return;
     const key = context.current;
-    const result = await client!.rpc("reserve_equipment_rental", { p_quote_id: quote.id, p_workspace_booking_ids: combined ? null : bookings, p_workspace_resource_id: combined ? resourceId : null, p_workspace_product_id: combined ? productId : null, p_workspace_dates: combined ? dates() : null, p_organization_id: organizationId || null });
+    const result = combined && buyWorkspace ? await client!.rpc("reserve_equipment_workspace_bundle", { p_quote_id: quote.id }) : await client!.rpc("reserve_equipment_rental", { p_quote_id: quote.id, p_workspace_booking_ids: combined ? null : bookings, p_workspace_resource_id: combined ? resourceId : null, p_workspace_product_id: combined ? productId : null, p_workspace_dates: combined ? workspaceDates() : null, p_organization_id: organizationId || null });
     if (key !== context.current) return;
     if (result.error) throw result.error;
     setOrder(result.data as string); setQuote(null);
@@ -145,11 +160,11 @@ function RentalForm({ slug }: { slug: string }) {
     </div>
     {parents.length > 0 && <label>Existing rental to extend<select value={parentId} onChange={event => setParentId(event.target.value)}><option value="">New rental</option>{parents.map(item => <option key={item.id} value={item.id}>{item.id} · ends {new Date(item.ends_at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })} IST</option>)}</select></label>}
     {parentId && <p>Choose a session immediately after the previous rental: the same ending time for hourly equipment, or the next calendar day for daily equipment. The original reservation stays unchanged if the extension fails.</p>}
-    <label className="rental-checkbox"><input type="checkbox" checked={combined} onChange={event => setCombined(event.target.checked)} />Reserve a chair using an existing paid day-pass entitlement</label>
-    {combined ? <><label>Paid workspace product<select value={productId} onChange={event => setProductId(event.target.value)}><option value="">Choose a day pass</option>{products.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label><button type="button" disabled={!productId || !date} onClick={() => void run(checkChairs)}>Check chairs for equipment dates</button>{places.length > 0 && <BookingFloorMap places={places} selectedId={resourceId} onSelect={setResourceId} cabin={false} />}</> : <div><p>Select existing workspace reservations covering every equipment date.</p>{visibleCoverage.map(item => <label className="rental-checkbox" key={item.id}><input type="checkbox" checked={bookings.includes(item.id)} onChange={event => setBookings(current => event.target.checked ? [...current, item.id] : current.filter(id => id !== item.id))} />{item.name} · {new Date(item.starts_at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })} IST</label>)}{!visibleCoverage.length && <p>Choose equipment dates to see matching workspace reservations. No matching coverage is selected. <Link to="/passes">Open workspace passes</Link>.</p>}</div>}
+    <label className="rental-checkbox"><input type="checkbox" checked={combined} onChange={event => setCombined(event.target.checked)} />Reserve workspace together with equipment</label>
+    {combined ? <><label className="rental-checkbox"><input type="checkbox" checked={buyWorkspace} onChange={event => setBuyWorkspace(event.target.checked)} />Include a new workspace pass in the mock checkout</label><p>{buyWorkspace ? "One mock authorization covers both items. Team purchases reserve a whole six-seat cabin; individual chair passes use a personal booking account." : "Uses an existing paid workspace entitlement; no new workspace charge."}</p><label>Workspace product<select value={productId} onChange={event => setProductId(event.target.value)}><option value="">Choose a workspace pass</option>{products.filter(item => organizationId ? item.kind === "cabin" : item.kind === "workspace").map(item => <option key={item.id} value={item.id}>{item.name}</option>)}</select></label>{product && product.unit !== "day" && <label>Workspace pass start · IST<input type="date" value={workspaceDate || (product.unit === "month" ? `${date.slice(0, 7)}-01` : date)} onChange={event => setWorkspaceDate(event.target.value)} /></label>}{buyWorkspace && product?.tax_bps == null && <p>Workspace tax is not configured; a combined quote cannot be issued yet.</p>}<button type="button" disabled={!productId || !date} onClick={() => void run(checkChairs)}>Check chairs for equipment dates</button>{places.length > 0 && <BookingFloorMap places={places} selectedId={resourceId} onSelect={setResourceId} cabin={product?.kind === "cabin"} />}</> : <div><p>Select existing workspace reservations covering every equipment date.</p>{visibleCoverage.map(item => <label className="rental-checkbox" key={item.id}><input type="checkbox" checked={bookings.includes(item.id)} onChange={event => setBookings(current => event.target.checked ? [...current, item.id] : current.filter(id => id !== item.id))} />{item.name} · {new Date(item.starts_at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })} IST</label>)}{!visibleCoverage.length && <p>Choose equipment dates to see matching workspace reservations. No matching coverage is selected. <Link to="/passes">Open workspace passes</Link>.</p>}</div>}
     <button type="button" disabled={!unit || !date || !operatorId || (combined ? !resourceId : !bookings.length)} onClick={() => void run(getQuote)}>Get equipment quote</button>
     </fieldset>
-    {quote && <div aria-label="Rental quote"><p>A quote does not reserve equipment or guarantee availability. The server checks availability, training and workspace coverage again when you confirm.</p><p>Equipment: {money(quote.amount_paise)} · Tax: {money(quote.tax_paise)} · Total: {money(quote.total_paise)}</p><p>Workspace: covered by your existing paid entitlement; no additional workspace charge in this transaction. Consumables are separate and unquoted.</p><p>Quote {quote.id}. Expires {new Date(quote.expires_at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })} IST.</p><p>{quote.payment_state === "authorized" ? "Local mock receipt authorized by an Admin." : "Awaiting local Admin mock authorization. No payment has been taken."}</p><button type="button" disabled={busy} onClick={() => void run(() => readQuote(quote.id, context.current))}>Refresh authorization</button><button type="button" disabled={busy || quote.payment_state !== "authorized"} onClick={() => void run(reserve)}>Reserve with authorized test receipt</button></div>}
+    {quote && <div aria-label="Rental quote"><p>A quote does not reserve equipment or guarantee availability. The server checks availability, training and workspace coverage again when you confirm.</p><p>Equipment: {money(quote.amount_paise)} · Tax: {money(quote.tax_paise)} · Total: {money(quote.total_paise)}</p><p>{bundle ? `Workspace: ${money(bundle.workspace_paise)} · Workspace tax: ${money(bundle.workspace_tax_paise)} · Combined total: ${money(bundle.total_paise)}` : "Workspace: covered by your existing paid entitlement; no additional workspace charge in this transaction."} Consumables are separate and unquoted.</p><p>{bundle && `Workspace pass: ${bundle.dates[0]} through ${bundle.dates.at(-1)} inclusive, 09:00–17:00 IST, ${bundle.seats} seat${bundle.seats === 1 ? "" : "s"}. No discounts applied in this mock quote.`}</p><p>Quote {quote.id}. Expires {new Date(quote.expires_at).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })} IST.</p><p>{paymentReady ? "Local mock receipt authorized by an Admin." : "Awaiting local Admin mock authorization. No payment has been taken."}</p><button type="button" disabled={busy} onClick={() => void run(() => readQuote(quote.id, context.current))}>Refresh authorization</button><button type="button" disabled={busy || !paymentReady} onClick={() => void run(reserve)}>Reserve with authorized test receipt</button></div>}
     {order && <p role="status">Local test reservation created: {order}. <Link to="/bookings">View bookings</Link>.</p>}
   </section>;
 }

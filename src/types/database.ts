@@ -4337,6 +4337,83 @@ export type Database = {
           },
         ]
       }
+      equipment_workspace_quotes: {
+        Row: {
+          authorized_by: string | null
+          captured_at: string | null
+          dates: string[]
+          entitlement_ids: string[]
+          product_id: string
+          quote_id: string
+          resource_id: string
+          seats: number
+          tax_bps: number
+          total_paise: number
+          unit_price_paise: number
+          workspace_paise: number
+          workspace_tax_paise: number
+        }
+        Insert: {
+          authorized_by?: string | null
+          captured_at?: string | null
+          dates: string[]
+          entitlement_ids?: string[]
+          product_id: string
+          quote_id: string
+          resource_id: string
+          seats: number
+          tax_bps: number
+          total_paise: number
+          unit_price_paise: number
+          workspace_paise: number
+          workspace_tax_paise: number
+        }
+        Update: {
+          authorized_by?: string | null
+          captured_at?: string | null
+          dates?: string[]
+          entitlement_ids?: string[]
+          product_id?: string
+          quote_id?: string
+          resource_id?: string
+          seats?: number
+          tax_bps?: number
+          total_paise?: number
+          unit_price_paise?: number
+          workspace_paise?: number
+          workspace_tax_paise?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "equipment_workspace_quotes_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "booking_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "equipment_workspace_quotes_quote_id_fkey"
+            columns: ["quote_id"]
+            isOneToOne: true
+            referencedRelation: "equipment_rental_quotes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "equipment_workspace_quotes_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: false
+            referencedRelation: "public_resources"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "equipment_workspace_quotes_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: false
+            referencedRelation: "resources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       member_active_cabinets: {
@@ -5508,6 +5585,29 @@ export type Database = {
         Returns: undefined
       }
       get_my_equipment_daily_use: { Args: never; Returns: Json }
+      authorize_mock_equipment_bundle: {
+        Args: { p_quote_id: string }
+        Returns: undefined
+      }
+      create_equipment_workspace_quote: {
+        Args: {
+          p_dates?: string[]
+          p_ends_at: string
+          p_operator_id?: string
+          p_organization_id?: string
+          p_parent_order_id?: string
+          p_rate_id: string
+          p_starts_at: string
+          p_workspace_dates: string[]
+          p_workspace_product_id: string
+          p_workspace_resource_id: string
+        }
+        Returns: string
+      }
+      reserve_equipment_workspace_bundle: {
+        Args: { p_quote_id: string }
+        Returns: string
+      }
     }
     Enums: {
       access_event_type:
