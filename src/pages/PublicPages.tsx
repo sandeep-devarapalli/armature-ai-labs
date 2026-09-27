@@ -308,7 +308,7 @@ export function JoinPage() {
   const basicOnly = basicOnboardingAvailable && !memberPlatformAvailable;
 
   const membershipAction = basicOnly ? (
-    <Link className="button button-primary" to="/onboarding">{registrationLabel} <ArrowRight aria-hidden="true" /></Link>
+    <><Link className="button button-primary" to="/onboarding">{registrationLabel} <ArrowRight aria-hidden="true" /></Link><Link className="button button-quiet" to="/booking-beta">Explore booking beta <ArrowRight aria-hidden="true" /></Link></>
   ) : !memberPlatformAvailable ? (
     <a className="button button-primary" href="mailto:hello@armatureailabs.com">Email the lab</a>
   ) : membershipActive ? (

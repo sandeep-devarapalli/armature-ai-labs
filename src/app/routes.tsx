@@ -12,6 +12,7 @@ import {
   memberPlatformAvailable
 } from "../config/release";
 
+const BookingBetaPage = lazy(() => import("../pages/BookingBetaPage").then((module) => ({ default: module.BookingBetaPage })));
 const OnboardingPage = lazy(() => import("../pages/OnboardingPage").then((module) => ({ default: module.OnboardingPage })));
 const ProjectsPage = lazy(() => import("../pages/ProjectsPage").then((module) => ({ default: module.ProjectsPage })));
 const BrandingPage = lazy(() => import("../pages/BrandingPage").then((module) => ({ default: module.BrandingPage })));
@@ -117,6 +118,7 @@ export const routes: RouteObject[] = [
       { path: "/components/:slug", element: <ComponentDetailPage /> },
       { path: "/maker-desk", element: <MakerDeskPage /> },
       { path: "/join", element: <JoinPage /> },
+      { path: "/booking-beta", element: <BookingBetaPage />, handle: { module: "src/pages/BookingBetaPage.tsx" } },
       { path: "/members", element: <MembersPage /> },
       { path: "/members/:handle", element: <PublicMemberPage /> },
       { path: "/onboarding", element: <ReleaseGate enabled={basicOnboardingAvailable}><OnboardingPage /></ReleaseGate> },

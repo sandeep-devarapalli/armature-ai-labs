@@ -32,7 +32,7 @@ describe("public source and planning context", () => {
     join.unmount();
     render(<MemoryRouter><HomePage /></MemoryRouter>);
     expect(screen.getByRole("link", { name: "Register for free" })).toHaveAttribute("href", "/onboarding");
-    expect(screen.getByText("Free basic registration is open. Paid bookings remain closed.")).toBeInTheDocument();
+    expect(screen.getByText("Free basic registration and the booking preview are open. Paid bookings remain closed.")).toBeInTheDocument();
     expect(document.body).not.toHaveTextContent(/applications[^.]*not open/i);
     expect(screen.getByRole("link", { name: "Basic membership" })).toHaveAttribute("href", "/join");
     expect(getPageSeo("/join/").title).toBe("Basic Membership | Armature AI Labs");
