@@ -71,7 +71,7 @@ for (const [pathname, destination, search] of [["/membership/", "/join/", ""], [
   });
 }
 
-for (const pathname of ["/auth/", "/admin/members/", "/book/sample-resource/", "/components/request/", "/members/", "/members/seo-check-no-profile/"]) {
+for (const pathname of ["/auth/", "/admin/members/", "/admin/equipment", "/admin/equipment/", "/book/sample-resource/", "/components/request/", "/members/", "/members/seo-check-no-profile/"]) {
   await probe(pathname, (response, text, document) => {
     assert.equal(response.status, 200, "Known operational/member route should remain reachable");
     noindex(response, document);

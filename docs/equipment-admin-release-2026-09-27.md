@@ -30,3 +30,14 @@ Next operational work is purchase/receipt intake, exact kit and location confirm
 - Public gate/browser run initially passed14 cases/1 skip but the desktop building model exceeded the old5-second seat-load assertion; the same15-second bounded model readiness assertion already validated in the held rental draft is included here. No application failure or missing seats was observed; the mobile case passed. Targeted rerun is recorded below.
 
 - Targeted booking-beta rerun passed desktop and mobile (2/2); combined with the initial successful cases,15 public/browser cases pass with1 intentional skip. Log `/private/tmp/equipment-admin-release-beta-rerun.log`.
+
+## Production execution
+
+- Release commit `fd8c9ac5dda16c2fea2ac2b47431cb750972371b`; PR95 frontend/database CI36330346268 passed. Squash merge is `3585b6e8077e28e3d3e559e029d9031c1cd0dd79`. Main workflow36330978787 is the deployment run.
+- Reviewed atomic batch SHA256 `51202a0e5e054b21fef5cb2d9b2f80d2fe9e51fd60d3feaa03129a422ec9b2af` applied successfully through `supabase db query --linked --workdir /private/tmp/armature-equipment-production-release --file .../apply-equipment-admin.sql`. Result `equipment_admin_schema_committed`; all six ledger records read back.
+- Read-only verification: mock grants=false, mock payments=false, units0, rates0, configured products0, combined-checkout table absent, anonymous execute denied. Both existing configured Admin accounts passed the operations function under their account claims; this is SQL-level authorization verification, not a real browser login claim. Missing-account denial also passed.
+- Applications, avatars, staff roles and review-history aggregate hashes exactly match before/after. Existing function definitions saved privately before the batch. Evidence: `applied.json`, `verified.json`, `baseline.json`, `after.json`, `before-functions.json` in the private temporary release directory.
+- The held customer/team/combined-checkout drafts remain separate. This release does not authorise their remaining UI, independent Gmail delivery change, purchases, real rates/tax, payments or real stock commissioning.
+
+- Deployment36330978787 completed, but additional direct URL verification found `/admin/equipment` returned404 because its app-shell rewrite was missing. Follow-up adds both slash variants and exact live HTTP/noindex probes. No additional database changes.
+- Routing follow-up: Node22 build and actual Cloudflare Pages runtime passed all22 HTTP probes, including both equipment-admin paths. Independent review found no issues. Logs: `/private/tmp/equipment-route-build.log`, `/private/tmp/equipment-route-runtime.log`.
