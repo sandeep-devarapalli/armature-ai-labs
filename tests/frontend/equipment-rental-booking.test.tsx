@@ -4,17 +4,17 @@ import { beforeEach, expect, it, vi } from "vitest";
 const mock = vi.hoisted(() => ({ rpc: vi.fn(), payment: "unpaid", status: "approved" }));
 vi.mock("../../src/context/AccountContext", () => ({ useAccount: () => ({ account: { user_id: "member", status: mock.status } }) }));
 vi.mock("../../src/context/AppContext", () => ({ useApp: () => ({ teamAccess: [{ organizationId: "team", organizationName: "Robotics team", role: "admin", membershipActive: true, seatEnabled: true }] }) }));
-vi.mock("../../src/lib/supabase", () => ({ supabase: { rpc: mock.rpc, from: () => {
-  const query = { select: () => query, eq: () => query, is: () => query,
-    then: (resolve: (value: unknown) => unknown) => Promise.resolve({ data: [], error: null }).then(resolve),
-    single: async () => ({ data: { id: "quote", amount_paise: 20000, tax_paise: 3600, total_paise: 23600, expires_at: "2026-11-18T04:00:00Z", payment_state: mock.payment }, error: null }) };
+vi.mock("../../src/lib/supabase", () => ({ supabase: { rpc: mock.rpc, from: (table: string) => {
+  const query = { select: () => query, eq: () => query, is: () => query, in: () => query,
+    then: (resolve: (value: unknown) => unknown) => Promise.resolve({ data: table === "booking_products" ? [{ id: "day-pass", name: "Day pass", kind: "workspace", unit: "day", tax_bps: 1800 }] : [], error: null }).then(resolve),
+    single: async () => ({ data: table === "equipment_workspace_quotes" ? { dates: ["2026-11-18"], seats: 1, workspace_paise: 35000, workspace_tax_paise: 6300, total_paise: 64900, authorized_by: mock.payment === "authorized" ? "admin" : null } : { id: "quote", amount_paise: 20000, tax_paise: 3600, total_paise: 23600, expires_at: "2026-11-18T04:00:00Z", payment_state: mock.payment }, error: null }) };
   return query;
 } } }));
-vi.mock("../../src/components/BookingFloorMap", () => ({ BookingFloorMap: () => null }));
+vi.mock("../../src/components/BookingFloorMap", () => ({ BookingFloorMap: ({ onSelect }: { onSelect: (id: string) => void }) => <button onClick={() => onSelect("chair")}>Choose test chair</button> }));
 import { EquipmentRentalBooking } from "../../src/components/EquipmentRentalBooking";
 beforeEach(() => {
   mock.payment = "unpaid"; mock.status = "approved"; mock.rpc.mockReset();
-  mock.rpc.mockImplementation(async (name: string, args: { p_organization_id?: string } = {}) => ({ data: name === "get_equipment_rental_options" ? [{ component_slug: "bambu-lab-p2s", unit_id: "unit", rate_id: "rate", name: "Printer 01", charge_unit: "hour", price_paise: 20000, tax_bps: 1800 }] : name === "get_equipment_workspace_coverage" ? [{ id: "workspace-booking", name: args.p_organization_id ? "C01 whole cabin · booked by team admin" : "S01 chair", starts_at: "2026-11-18T03:30:00Z" }] : name === "get_equipment_rental_extensions" ? [{ id: "previous-order", ends_at: "2026-11-18T03:30:00Z" }] : name === "list_team_roster" ? [{ user_id: "operator", display_name: "Team builder", seat_enabled: true }] : name === "create_equipment_rental_quote" ? "quote" : "order", error: null }));
+  mock.rpc.mockImplementation(async (name: string, args: { p_organization_id?: string } = {}) => ({ data: name === "get_equipment_rental_options" ? [{ component_slug: "bambu-lab-p2s", unit_id: "unit", rate_id: "rate", name: "Printer 01", charge_unit: "hour", price_paise: 20000, tax_bps: 1800 }] : name === "get_equipment_workspace_coverage" ? [{ id: "workspace-booking", name: args.p_organization_id ? "C01 whole cabin · booked by team admin" : "S01 chair", starts_at: "2026-11-18T03:30:00Z" }] : name === "get_equipment_rental_extensions" ? [{ id: "previous-order", ends_at: "2026-11-18T03:30:00Z" }] : name === "list_team_roster" ? [{ user_id: "operator", display_name: "Team builder", seat_enabled: true }] : name === "get_workspace_availability" ? [{ resource_id: "chair" }] : name === "create_equipment_rental_quote" || name === "create_equipment_workspace_quote" ? "quote" : "order", error: null }));
 });
 function show() { render(<MemoryRouter><EquipmentRentalBooking slug="bambu-lab-p2s" /></MemoryRouter>); }
 async function quote() {
@@ -76,4 +76,23 @@ it("only offers dated coverage and clears it after moving to another date", asyn
   expect(screen.queryByLabelText(/S01 chair/)).not.toBeInTheDocument();
   fireEvent.change(screen.getByLabelText("First date · IST"), { target: { value: "2026-11-18" } });
   expect(screen.getByLabelText(/S01 chair/)).not.toBeChecked();
+});
+
+it("quotes and reserves both items through the combined server transaction", async () => {
+  await quote();
+  fireEvent.click(screen.getByLabelText("Reserve workspace together with equipment"));
+  fireEvent.click(screen.getByLabelText("Include a new workspace pass in the mock checkout"));
+  fireEvent.change(screen.getByLabelText("Workspace product"), { target: { value: "day-pass" } });
+  fireEvent.click(screen.getByRole("button", { name: "Check chairs for equipment dates" }));
+  fireEvent.click(await screen.findByRole("button", { name: "Choose test chair" }));
+  fireEvent.click(screen.getByRole("button", { name: "Get equipment quote" }));
+  await screen.findByText(/Combined total: ₹649.00/);
+  expect(mock.rpc).toHaveBeenCalledWith("create_equipment_workspace_quote", expect.objectContaining({ p_workspace_resource_id: "chair", p_workspace_product_id: "day-pass", p_workspace_dates: ["2026-11-18"] }));
+  expect(screen.getByRole("button", { name: "Reserve with authorized test receipt" })).toBeDisabled();
+  mock.payment = "authorized";
+  fireEvent.click(screen.getByRole("button", { name: "Refresh authorization" }));
+  await waitFor(() => expect(screen.getByRole("button", { name: "Reserve with authorized test receipt" })).toBeEnabled());
+  fireEvent.click(screen.getByRole("button", { name: "Reserve with authorized test receipt" }));
+  await screen.findByRole("status");
+  expect(mock.rpc).toHaveBeenCalledWith("reserve_equipment_workspace_bundle", { p_quote_id: "quote" });
 });
