@@ -4,6 +4,7 @@ import { useAccount, membershipLabels, accountRoleLabels } from "../context/Acco
 import { supabase } from "../lib/supabase";
 import { AccountAvatar } from "./AccountAvatar";
 import "./AccountMenu.css";
+import { basicOnboardingAvailable } from "../config/release";
 
 export function AccountMenu() {
   const { account, signedIn, loading, error, refresh, signOut } = useAccount();
@@ -24,6 +25,7 @@ export function AccountMenu() {
       <Link to="/booking-beta">Explore booking beta</Link>
       {account && ["admin", "super_admin", "membership_reviewer"].includes(account.role) && <Link to="/admin/members">{account.role === "membership_reviewer" ? "Membership reviews" : "Admin → Members"}</Link>}
       {account && ["admin", "super_admin"].includes(account.role) && <Link to="/admin/equipment-wishlist">Admin → Equipment wishlist</Link>}
+      {basicOnboardingAvailable && account && ["admin", "super_admin"].includes(account.role) && <Link to="/admin/equipment">Admin → Equipment operations</Link>}
       {signedIn && <button type="button" onClick={() => void signOut()}>Sign out</button>}
     </div>
   </details>;

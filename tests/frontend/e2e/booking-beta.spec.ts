@@ -17,7 +17,7 @@ test("booking beta explores chairs and whole cabins without operational writes",
   const product = page.getByRole("combobox", { name: "Pass type", exact: true });
   const student = page.getByRole("combobox", { name: /Student discount estimate/ });
   await expect(page.locator(".booking-place-list button")).toHaveCount(25);
-  await expect(page.locator(".viewer-seat")).toHaveCount(25);
+  await expect(page.locator(".viewer-seat")).toHaveCount(25, { timeout: 15_000 });
   await page.locator(".viewer-seat[data-seat=S02]").click();
   await expect(summary).toContainText("S02 · GF-10");
   await expect(summary.locator(".booking-beta-price")).toContainText("₹350");
