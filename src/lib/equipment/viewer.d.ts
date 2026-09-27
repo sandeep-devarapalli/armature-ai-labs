@@ -1,0 +1,1 @@
+export function mountEquipment(host: HTMLElement, kind: "printer" | "jetson", hotspots: { title: string; position: [number, number, number] }[], onSelect: (index: number) => void): { zoom: (amount: number) => void; reset: () => void; dispose: () => void };

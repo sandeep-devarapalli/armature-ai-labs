@@ -133,7 +133,7 @@ test("public catalogs remain available", async ({ page }) => {
 
   await page.goto("/components");
   await expect(
-    page.getByRole("heading", { name: "Know what the lab can build with." })
+    page.getByRole("heading", { name: "Equipment & Components." })
   ).toBeVisible();
 
   await page.goto("/maker-desk");

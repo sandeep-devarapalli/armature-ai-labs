@@ -70,8 +70,13 @@ const pages: Record<string, PageDefinition> = {
     description: "Explore a source-linked directory of Bengaluru robotics companies, research labs and learning spaces, with evidence and location notes."
   },
   "/components/": {
-    name: "Component Reference Catalog",
-    description: "Browse project-linked controllers, sensors, motion parts and compute references. Availability and vendor prices are dated snapshots, not live stock or quotes."
+    name: "Equipment & Components",
+    description: "Explore planned robotics, fabrication and AI equipment, beginner-friendly specifications and interactive hardware studies. Rental prices and lab availability await confirmation."
+  },
+  "/components/wishlist/": {
+    name: "Equipment Wishlist",
+    description: "Suggest equipment and support member requests for Armature AI Labs. Community interest guides procurement review; votes are not purchase commitments.",
+    parent: "/components/"
   },
   "/maker-desk/": {
     name: "Maker Desk Plans",

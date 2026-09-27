@@ -1,0 +1,25 @@
+.equipment-guide { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(0,1fr); gap:40px; margin:32px 0; }
+.equipment-gallery { min-width:0; }
+.equipment-product-image { display:block; width:100%; height:350px; object-fit:contain; background:#f2f3ed; color:#293b35; border-radius:8px; margin:16px 0; }
+.equipment-3d { position:relative; height:390px; background:#e8e9e4; overflow:hidden; border-radius:8px; margin:16px 0; }
+.equipment-3d canvas { display:block; }
+.equipment-pin { position:absolute; transform:translate(-50%,-50%); min-width:36px; min-height:36px; border-radius:50%; border:2px solid #fff; background:#294a3b; color:#fff; cursor:pointer; }
+.equipment-specs > div { display:flex; justify-content:space-between; gap:18px; padding:10px 0; border-bottom:1px solid var(--hair); }
+.equipment-specs dd { margin:0; text-align:right; }
+.equipment-guide-copy h3 { margin-top:24px; }
+.equipment-hotspot-list { display:flex; flex-wrap:wrap; gap:8px; }
+.equipment-hotspot-list button { background:var(--panel); color:var(--ink); border:1px solid var(--hair); padding:9px; border-radius:4px; cursor:pointer; }
+.equipment-hotspot-list button[aria-pressed=true] { outline:2px solid var(--link-color,#995600); }
+.equipment-feature { min-height:76px; margin-top:18px; }
+.equipment-guide li { margin:8px 0; }
+.equipment-plan-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:18px; }
+.equipment-plan-card { border:1px solid var(--hair); padding:24px; background:var(--panel); border-radius:8px; }
+.equipment-plan-card h3 { margin:14px 0; }
+.equipment-plan-card .equipment-product-image { height:180px; }
+.equipment-catalogue-layout { display:grid; grid-template-columns:minmax(0,1fr) 280px; gap:32px; align-items:start; }
+@media(max-width:900px) { .equipment-guide,.equipment-catalogue-layout { grid-template-columns:1fr; } .equipment-plan-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
+@media(max-width:600px) { .equipment-plan-grid { grid-template-columns:1fr; } .equipment-product-image { height:280px; } .equipment-3d { height:340px; } .equipment-guide { gap:24px; } }
+
+.equipment-rental-preview { margin:24px 0; padding:20px 0; border-top:1px solid var(--hair); border-bottom:1px solid var(--hair); }
+.equipment-rental-fields { display:flex; flex-wrap:wrap; gap:12px; margin:16px 0; }
+.equipment-rental-fields label { display:grid; gap:6px; flex:1 1 130px; min-width:0; }

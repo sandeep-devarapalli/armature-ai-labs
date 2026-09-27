@@ -11,6 +11,19 @@ export const OFFER_STALE_AFTER_DAYS = 30;
 
 export const components: CatalogComponent[] = [
   {
+    slug: "bambu-lab-p2s",
+    name: "Bambu Lab P2S enclosed FDM printer",
+    category: "Fabrication",
+    description: "Proposed enclosed printer for robotics fixtures, brackets and enclosures. Purchase and commissioning are pending.",
+    inventoryClass: "fixed_equipment",
+    availability: "unavailable",
+    validationState: "validate_before_po",
+    quantityTarget: 2,
+    quantityUnit: "printers",
+    tags: ["FDM", "P2S", "planned equipment"],
+    validationNotes: ["Confirm the exact India-market P2S variant, warranty, electrical supply, extraction and operator requirements before purchase.", "Two matching units are proposed. No rental availability, rate or floor position is confirmed."]
+  },
+  {
     slug: "weather-pico-w-controller",
     name: "DIY Weather Station Pico W controller",
     category: "Controllers",

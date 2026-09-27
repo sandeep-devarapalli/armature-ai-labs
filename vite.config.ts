@@ -1,3 +1,4 @@
+import { equipmentReferencePreview } from "./scripts/vite/equipmentReferencePreview";
 import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
 import { loadEnv } from "vite";
@@ -36,6 +37,7 @@ export default defineConfig(({ mode }) => {
     }
   },
   plugins: [
+    equipmentReferencePreview(),
     react(),
     {
       name: "prerender-public-pages",

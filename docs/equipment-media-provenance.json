@@ -1,0 +1,26 @@
+[
+  {
+    "file": "p2s-product.jpg",
+    "source": "https://storage.ghost.io/c/8d/d9/8dd9f85b-21c3-4782-bba8-8778cd8f2f93/content/images/size/w1200/2025/10/P2S--1-.jpg",
+    "sha256": "9b5e344b73d06820bf7866ce4e3300d46de0b669b75050c390a2ab7848d73614",
+    "rights": "Unconfirmed. Local reference only. Not a lab photograph."
+  },
+  {
+    "file": "jetson-layout.png",
+    "source": "https://docs.nvidia.com/jetson/orin-nano-devkit/user-guide/latest/_images/jetson-orin-nano-qtr_numbered.png",
+    "sha256": "a961cccb670e025ee1eb35cd01f9331e72d3ea1b6d5d57f69a52f2faf5318a50",
+    "rights": "Unconfirmed. Local reference only. Not a lab photograph."
+  },
+  {
+    "file": "p2s-screen.jpg",
+    "source": "https://storage.ghost.io/c/8d/d9/8dd9f85b-21c3-4782-bba8-8778cd8f2f93/content/images/2025/10/P2S--4-.jpg",
+    "sha256": "cddd1e12bbbf9660132b5fa74a8477479e3709f4cce6291421199eef097588f3",
+    "rights": "Unconfirmed. Local reference only. Not a lab photograph."
+  },
+  {
+    "file": "jetson-product.jpg",
+    "source": "https://docs.nvidia.com/jetson/orin-nano-devkit/user-guide/latest/_images/jetson-orin-nano-super-developer-kit-hero.jpg",
+    "sha256": "13a73a1750ef876d099c2135e066f0d092e06bbcf4a45714721428bcec00fd83",
+    "rights": "Unconfirmed. Local reference only. Not a lab photograph."
+  }
+]

@@ -1,3 +1,6 @@
+import { EquipmentGuide, EquipmentReference } from "../components/EquipmentGuide";
+import { equipmentGuides, plannedEquipment } from "../data/equipmentGuides";
+import { WishlistSidebar } from "../components/WishlistSidebar";
 import { useMemo, useState } from "react";
 import {
   ArrowLeft,
@@ -83,9 +86,9 @@ export function ComponentsPage() {
   return (
     <>
       <PageHeader
-        meta="Component catalog · audited 26 July 2026"
-        title={selectedProject ? `Build list for ${selectedProject.title}.` : "Know what the lab can build with."}
-        description="A project-linked catalog of assembled systems, controllers, motion parts, sensors, compute, and sourcing gaps. Availability is intentionally coarse; prices are dated snapshots, not live quotes."
+        meta="Equipment & components · planning catalogue"
+        title={selectedProject ? `Build list for ${selectedProject.title}.` : "Equipment & Components."}
+        description="Explore the proposed lab equipment, understand what each tool does, and trace components to projects and dated vendor records. Planned equipment is not yet bookable."
         actions={(componentRequestsAvailable || selectedProject) ? (
           <>
             {componentRequestsAvailable && (
@@ -101,17 +104,19 @@ export function ComponentsPage() {
           </>
         ) : undefined}
       />
+      <div className="wrap" style={{ paddingTop: 24 }}><label className="search-box"><Search aria-hidden="true" /><span className="sr-only">Search equipment and components</span><input value={query} onChange={event=>setQuery(event.target.value)} placeholder="Search equipment and components" /></label></div>
+      {!selectedProject && <Section number="01" title="The first equipment collection" lede="A proposed starting kit for physical AI, robotics and prototyping. Quantities are planning targets; purchase and commissioning are pending."><div className="equipment-catalogue-layout"><div className="equipment-plan-grid">{plannedEquipment.filter(item=>item.join(" ").toLowerCase().includes(query.toLowerCase())).map(([quantity,title,detail,slug]) => { const guide=equipmentGuides.find(item=>item.slug===slug); return <article className="equipment-plan-card" key={title}>{guide && <EquipmentReference guide={guide} />}<span className="mono">{quantity} planned · not bookable</span><h3>{title}</h3><p>{detail}</p>{slug ? <Link to={`/components/${slug}`}>Explore equipment <ArrowRight aria-hidden="true" /></Link> : <span className="estimate-note">Exact model and kit to confirm</span>}</article>; })}</div><WishlistSidebar query={query} /></div></Section>}
       <section className="procurement-summary">
         <div className="wrap metrics-strip">
           <Metric label="Catalog" value={`${components.length} component classes`} />
           <Metric label="Dated offers" value={`${componentOffers.length} vendor variants`} />
           <Metric label="Price rule" value="Recheck after 30 days" />
-          <Metric label="Stock view" value="Coarse public state" />
+          <Metric label="Stock view" value="Supplier audit, not lab stock" />
         </div>
       </section>
       <Section
         number="01"
-        title="Component index"
+        title="Project-linked component records"
         lede={`${filtered.length} of ${components.length} component classes shown${selectedProject ? ` for ${selectedProject.title}` : ""}.`}
       >
         <div className="filter-bar">
@@ -160,7 +165,7 @@ export function ComponentsPage() {
           </div>
         ) : (
           <EmptyState title="No components match">
-            Clear a filter or search for a broader component class.
+            <p>Clear a filter or search for a broader component class.</p><Link to={`/components/wishlist?name=${encodeURIComponent(query.trim())}`}>Request equipment for the lab</Link>
           </EmptyState>
         )}
       </Section>
@@ -204,13 +209,13 @@ function ComponentCard({
         <div className="row-between">
           <span className="mono">{component.category}</span>
           <Status tone={availabilityTone(component.availability)}>
-            {availabilityLabel(component.availability)}
+            {equipmentGuides.some(guide=>guide.slug===component.slug) ? "Planned · not bookable" : `Supplier: ${availabilityLabel(component.availability)}`}
           </Status>
         </div>
         <h3>{component.name}</h3>
         <p>{component.description}</p>
         <div className="resource-meta mono">
-          <span>Target · {component.quantityTarget} {component.quantityUnit}</span>
+          <span>{equipmentGuides.some(guide=>guide.slug===component.slug) ? "Planned" : "Audit target"} · {component.slug === "jetson-orin-nano" ? 4 : component.quantityTarget} {component.quantityUnit}</span>
           <span>{projectCount} project{projectCount === 1 ? "" : "s"}</span>
           <span>
             {pricedOffers.length
@@ -251,6 +256,7 @@ export function ComponentDetailPage() {
     );
   }
 
+  const guide = equipmentGuides.find(item => item.slug === component.slug);
   const offers = getOffersForComponent(component.slug);
   const exactStock = inventory.lots.filter((lot) => lot.componentSlug === component.slug);
   const linkedProjects = getProjectsForComponent(component.slug)
@@ -264,18 +270,19 @@ export function ComponentDetailPage() {
     <>
       <PageHeader
         meta={`${component.category} · component record`}
-        title={component.name}
-        description={component.description}
+        title={guide?.title ?? component.name}
+        description={guide?.summary ?? component.description}
         actions={
           <Link className="button button-primary" to="/components">
             <ArrowLeft aria-hidden="true" /> All components
           </Link>
         }
       />
+      {guide && <section className="section"><div className="wrap"><EquipmentGuide key={guide.slug} guide={guide} /></div></section>}
       <section className="procurement-summary">
         <div className="wrap metrics-strip">
-          <Metric label="Availability" value={availabilityLabel(component.availability)} />
-          <Metric label="Target" value={`${component.quantityTarget} ${component.quantityUnit}`} />
+          <Metric label="Supplier audit" value={availabilityLabel(component.availability)} />
+          <Metric label={guide ? "Planned quantity" : "Audit target"} value={`${component.slug === "jetson-orin-nano" ? 4 : component.quantityTarget} ${component.quantityUnit}`} />
           <Metric label="Inventory class" value={component.inventoryClass.replaceAll("_", " ")} />
           <Metric
             label={currentMember ? "Exact stock" : "PO state"}

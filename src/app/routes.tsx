@@ -29,6 +29,8 @@ const FinancialsPage = lazy(() => import("../pages/PlanningPages").then((module)
 const ComponentsPage = lazy(() => import("../pages/ComponentsPages").then((module) => ({ default: module.ComponentsPage })));
 const ComponentDetailPage = lazy(() => import("../pages/ComponentsPages").then((module) => ({ default: module.ComponentDetailPage })));
 const PublicComponentRequestPage = lazy(() => import("../pages/InventoryPages").then((module) => ({ default: module.PublicComponentRequestPage })));
+const EquipmentWishlistPage = lazy(() => import("../pages/EquipmentWishlistPage").then(module => ({ default: module.EquipmentWishlistPage })));
+const AdminEquipmentWishlistPage = lazy(() => import("../pages/EquipmentWishlistPage").then(module => ({ default: module.AdminEquipmentWishlistPage })));
 const ComponentRequestsPage = lazy(() => import("../pages/InventoryPages").then((module) => ({ default: module.ComponentRequestsPage })));
 const InventoryPage = lazy(() => import("../pages/InventoryPages").then((module) => ({ default: module.InventoryPage })));
 const AdminComponentsPage = lazy(() => import("../pages/InventoryPages").then((module) => ({ default: module.AdminComponentsPage })));
@@ -114,6 +116,8 @@ export const routes: RouteObject[] = [
       { path: "/ecosystem", element: <EcosystemPage />, handle: { module: "src/pages/EcosystemPage.tsx" } },
       { path: "/financials", element: memberFeature(adminPage(<FinancialsPage />)) },
       { path: "/components", element: <ComponentsPage /> },
+      { path: "/components/wishlist", element: <EquipmentWishlistPage /> },
+      { path: "/admin/equipment-wishlist", element: <AdminEquipmentWishlistPage /> },
       { path: "/components/request", element: componentRequestFeature(<PublicComponentRequestPage />) },
       { path: "/components/:slug", element: <ComponentDetailPage /> },
       { path: "/maker-desk", element: <MakerDeskPage /> },

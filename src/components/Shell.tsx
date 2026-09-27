@@ -17,7 +17,6 @@ import {
 import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import {
   basicOnboardingAvailable,
-  componentRequestsAvailable,
   equipmentPageAvailable,
   memberPlatformAvailable
 } from "../config/release";
@@ -37,7 +36,7 @@ const publicLinks = [
   ["/projects", "Projects"],
   ["/blog", "Blog"],
   ["/ecosystem", "Ecosystem"],
-  ["/components", "Components"],
+  ["/components", "Equipment & Components"],
 ] as const;
 
 const memberLinks = [
@@ -240,7 +239,7 @@ export function Shell({ children }: PropsWithChildren) {
             <Link to="/building-vision">Building vision</Link>
             <Link to="/blog">Blog</Link>
             <a href="https://github.com/sandeep-devarapalli/armature-ai-labs/tree/main/docs">Docs</a>
-            {componentRequestsAvailable && <Link to="/components/request">Request a component</Link>}
+            <Link to="/components/wishlist">Equipment wishlist</Link>
             {memberPlatformAvailable && <Link to="/kiosk">Kiosk</Link>}
             <Link to="/join">Join the floor</Link>
           </div>
