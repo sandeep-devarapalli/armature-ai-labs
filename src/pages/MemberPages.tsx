@@ -1,5 +1,8 @@
+import { DailyEquipmentAccess } from "../components/DailyEquipmentAccess";
+import { memberPlatformEnabled } from "../config/release";
+import { demoModeEnabled, isSupabaseConfigured } from "../lib/supabase";
 import { useBookingInventory } from "../lib/useBookingInventory";
-import { useEffect, useMemo, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
 import QRCode from "qrcode";
 import {
   AlertTriangle,
@@ -657,6 +660,10 @@ export function BookingDetailPage() {
 }
 
 export function CheckInPage() {
+  const [equipmentReset, setEquipmentReset] = useState(0);
+  const [dailyBookingIds, setDailyBookingIds] = useState<string[] | null>(null);
+  const onDailyBookingsLoaded = useCallback((ids: string[] | null) => setDailyBookingIds(ids), []);
+  const dailyEnabled = memberPlatformEnabled && !demoModeEnabled && isSupabaseConfigured;
   const { state, currentMember, createCheckinIntent, mode, online } = useApp();
   const [intent, setIntent] = useState<{ token: string; expiresAt: string; action: "check_in" | "check_out" } | null>(null);
   const [image, setImage] = useState("");
@@ -677,10 +684,17 @@ export function CheckInPage() {
 
   async function generate() {
     if (!online) return;
+    setEquipmentReset(value => value + 1);
     setWorking(true);
     setError("");
     try {
-      setIntent(await createCheckinIntent(activeSession?.bookingId, action));
+      let bookingId = activeSession?.bookingId;
+      if (dailyEnabled && !bookingId && action === "check_in") {
+        if (dailyBookingIds === null) throw new Error("Wait for equipment bookings to load, or retry the equipment-session refresh below.");
+        bookingId = state.bookings.find(booking => booking.ownerId === currentMember?.id && booking.state === "confirmed" && !dailyBookingIds.includes(booking.id) && Date.now() >= Date.parse(booking.startsAt) - 15 * 60_000 && Date.now() <= Date.parse(booking.startsAt) + 30 * 60_000)?.id;
+        if (!bookingId) throw new Error("No lab booking is inside its check-in window. Use the separate daily equipment controls when collecting a kit.");
+      }
+      setIntent(await createCheckinIntent(bookingId, action));
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : "Could not create a code.");
     } finally {
@@ -703,7 +717,7 @@ export function CheckInPage() {
               <span className="mono">60-second one-use {action.replace("_", "-")} intent</span>
               <h3>{intent && seconds > 0 ? `${seconds} seconds remaining` : "Ready when you reach the kiosk"}</h3>
               <p>The code is single-use and contains no profile, booking, or contact details. It cannot be generated offline.</p>
-              <button className="button button-primary" type="button" onClick={() => void generate()} disabled={!online || working}>{working ? "Generating…" : intent ? "Generate a fresh code" : `Generate ${action === "check_in" ? "check-in" : "check-out"} code`}</button>
+              <button className="button button-primary" type="button" onClick={() => void generate()} disabled={!online || working || (dailyEnabled && !activeSession && dailyBookingIds === null)}>{working ? "Generating…" : intent ? "Generate a fresh code" : `Generate ${action === "check_in" ? "check-in" : "check-out"} code`}</button>
               {error && <p className="form-error" role="alert">{error}</p>}
               {intent && mode === "demo" && <code className="demo-token">{intent.token}</code>}
             </div>
@@ -716,6 +730,7 @@ export function CheckInPage() {
           <Metric label="Code expiry" value="60 seconds" />
         </div>
       </Section>
+      {memberPlatformEnabled && !demoModeEnabled && isSupabaseConfigured && <DailyEquipmentAccess onBookingsLoaded={onDailyBookingsLoaded} key={currentMember?.id} resetSignal={equipmentReset} onCodeCreated={() => { setIntent(null); setImage(""); }} />}
     </>
   );
 }

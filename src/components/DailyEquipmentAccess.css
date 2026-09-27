@@ -1,0 +1,3 @@
+.daily-equipment-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:20px; margin:24px 0; }
+.daily-equipment-grid article { padding:20px; border:1px solid var(--hair); overflow-wrap:anywhere; }
+.daily-equipment-grid p { margin:12px 0; }
