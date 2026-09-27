@@ -1,4 +1,5 @@
 import { bytesToBase64Url } from "./crypto.ts";
+import { primaryUser } from "./booking-mail.ts";
 import { requiredEnv } from "./env.ts";
 
 interface ServiceAccount {
@@ -7,7 +8,7 @@ interface ServiceAccount {
   token_uri?: string;
 }
 
-let cachedToken: { value: string; expiresAt: number } | null = null;
+const cachedTokens = new Map<string, { value: string; expiresAt: number }>();
 
 function pemToBytes(pem: string): Uint8Array {
   const base64 = pem
@@ -17,7 +18,13 @@ function pemToBytes(pem: string): Uint8Array {
   return Uint8Array.from(atob(base64), (character) => character.charCodeAt(0));
 }
 
-async function serviceAccountToken(): Promise<string> {
+export async function googleAccessToken(scope: string): Promise<string> {
+  const subject = requiredEnv("GOOGLE_WORKSPACE_SUBJECT");
+  if (subject.toLowerCase() !== primaryUser) {
+    throw new Error("Google delegation must impersonate the primary Workspace user.");
+  }
+  const cacheKey = `${subject}:${scope}`;
+  const cachedToken = cachedTokens.get(cacheKey);
   if (cachedToken && cachedToken.expiresAt > Date.now() + 60_000) {
     return cachedToken.value;
   }
@@ -25,7 +32,6 @@ async function serviceAccountToken(): Promise<string> {
   const account = JSON.parse(
     requiredEnv("GOOGLE_SERVICE_ACCOUNT_JSON"),
   ) as ServiceAccount;
-  const subject = requiredEnv("GOOGLE_WORKSPACE_SUBJECT");
   const now = Math.floor(Date.now() / 1000);
   const tokenUri = account.token_uri ?? "https://oauth2.googleapis.com/token";
   const header = bytesToBase64Url(
@@ -36,7 +42,7 @@ async function serviceAccountToken(): Promise<string> {
       JSON.stringify({
         iss: account.client_email,
         sub: subject,
-        scope: "https://www.googleapis.com/auth/calendar",
+        scope,
         aud: tokenUri,
         iat: now,
         exp: now + 3600,
@@ -75,18 +81,19 @@ async function serviceAccountToken(): Promise<string> {
     access_token: string;
     expires_in: number;
   };
-  cachedToken = {
+  const token = {
     value: payload.access_token,
     expiresAt: Date.now() + payload.expires_in * 1000,
   };
-  return cachedToken.value;
+  cachedTokens.set(cacheKey, token);
+  return token.value;
 }
 
 export async function googleCalendarRequest(
   path: string,
   init: RequestInit,
 ): Promise<Response> {
-  const token = await serviceAccountToken();
+  const token = await googleAccessToken("https://www.googleapis.com/auth/calendar");
   return fetch(`https://www.googleapis.com/calendar/v3${path}`, {
     ...init,
     headers: {

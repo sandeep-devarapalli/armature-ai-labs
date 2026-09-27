@@ -22,6 +22,8 @@ export default defineConfig(({ mode }) => {
   let prerenderOutput = "dist";
 
   return {
+  server: { watch: { ignored: ["**/test-results*/**", "**/dist-*/**"] } },
+  optimizeDeps: { include: ["three", "three/addons/controls/OrbitControls.js", "three/addons/loaders/GLTFLoader.js"] },
   build: {
     manifest: true,
     rollupOptions: {

@@ -70,24 +70,28 @@ membership enquiries, and brand permissions. Sending, receiving, SPF, and DKIM
 were verified on 8 September 2026. Keep `hello@armaturelab.org` working for
 existing contacts without publishing it as the public contact address.
 
-The booking identity for calendar operations, reminders, and transactional
-booking mail is `bookings@armatureailabs.com` (decided 12 September 2026).
+The booking identity `bookings@armatureailabs.com` is an alias of the existing
+Google Workspace user `hello@armatureailabs.com`. It shares the hello inbox and
+has no separate login. This supersedes the dedicated bookings mailbox plan.
 Cutover checklist, in order:
 
-1. Create the `bookings@armatureailabs.com` mailbox in the same Google
-   Workspace as `hello@armatureailabs.com`; send and receive one test
-   message each way and keep the headers as the verification record.
+1. Inbound mail to the bookings alias reaching the hello inbox was confirmed by
+   the user on 25 September 2026. Set up and verify Gmail Send mail as for the
+   alias, including a reply test.
 2. Grant the calendar service account domain-wide delegation for
    `https://www.googleapis.com/auth/calendar` in that Workspace.
-3. Share every per-resource private calendar with
-   `bookings@armatureailabs.com` (make-changes-and-manage-sharing), or
-   recreate them under it, and confirm the identifiers in `calendar_links`.
-4. Set the Supabase function secrets `GOOGLE_WORKSPACE_SUBJECT` and
-   `REMINDER_FROM` to `bookings@armatureailabs.com`, and add the address as
-   a verified sender at the reminder webhook's email provider.
-5. Run one calendar create/update/cancel cycle and one reminder against a
-   test booking in a controlled preview; only then retire
-   `bookings@armaturelab.org` from the legacy configuration.
+3. Share each per-resource private calendar with the primary user
+   `hello@armatureailabs.com` and confirm its identifier in `calendar_links`.
+   The alias does not become a Calendar organizer identity.
+4. Set `GOOGLE_WORKSPACE_SUBJECT=hello@armatureailabs.com` and
+   `REMINDER_FROM=bookings@armatureailabs.com` in managed function secrets.
+   Select the Google Workspace reminder provider only after its delegated
+   scopes and Send mail as checks pass.
+5. Run calendar create/update/cancel and reminder tests against controlled
+   bookings before enabling scheduled jobs. Review duplicate reminder behavior.
+
+The [team membership and booking email plan](team-membership-and-booking-email-plan.md)
+records the team workflow and remaining release checks.
 
 - Create one private Google Calendar per reservable resource.
 - Store each calendar identifier in the protected calendar link table.
@@ -97,9 +101,12 @@ Cutover checklist, in order:
   must restore the Supabase booking state.
 - Use the generated ICS endpoint for members who do not use Google Calendar.
 
+Both calendar-sync and retry-reminders require `BOOKING_WORKERS_ENABLED=true` before any database work. Missing, false, or malformed values return a disabled result after job authentication. Keep it unset or false during credential staging. This also pauses the reminder worker's attendance-maintenance call. Deploy and verify this gate before uploading Google credentials; an empty queue alone is not a durable delivery hold.
+
 Recommended function secrets:
 
 ```text
+BOOKING_WORKERS_ENABLED
 GOOGLE_SERVICE_ACCOUNT_JSON
 GOOGLE_WORKSPACE_SUBJECT
 ARMATURE_JOB_SECRET
@@ -241,3 +248,40 @@ Keep the previous Cloudflare Pages deployment available until the new release
 has passed live smoke checks. A frontend rollback does not revert database
 migrations. Database changes must remain backward compatible until the previous
 frontend is no longer a supported rollback target.
+
+## Gmail reminder reconciliation
+
+Stop reminder jobs and drain old workers, then deploy migration
+`202609260001_gmail_delivery_guard.sql` before the updated reminder worker.
+If Gmail was previously enabled, reconcile old failed/processing attempts before
+resuming: the guard cannot retroactively protect sends made by older workers. Keep Gmail delivery disabled until the delegated send/reply
+check and release gates pass. The worker records `gmail_delivery_state =
+'review_required'` atomically just before the send POST, using the current claim
+token. Neither a failure nor the 15-minute lease recovery makes that row
+eligible for another automatic send. Confirmed completion changes it to `sent`.
+This prevents automatic duplicate attempts, not exactly-once delivery: a crash
+between the database fence and Gmail can leave a message unsent.
+
+Operators should inspect all review-required rows after each job run and worker
+failure (the flag can also briefly represent an in-flight send):
+
+```sql
+select id, booking_id, status, updated_at, last_error
+from public.reminder_deliveries
+where gmail_delivery_state = 'review_required';
+```
+
+Stop reminder jobs and ensure old workers have exited before reconciliation.
+Search the hello mailbox's Sent mail using
+`rfc822msgid:armature-reminder-<reminder-id>@armatureailabs.com` and check the
+recipient and booking. This Message-ID is a search aid, not Gmail idempotency.
+For confirmed acceptance, call `complete_reminder(id)` with service credentials.
+For unknown outcomes, keep the flag and do not resend; absence from a search alone
+is not proof that delivery failed. If an operator establishes that no send was
+attempted or explicitly accepts resend risk, record the evidence/decision in the
+incident log, then clear `gmail_delivery_state` and `claim_token` and set `status`
+to `pending` for that single ID. Recheck booking eligibility before restarting.
+Do not bulk-clear review flags or use live member data to test recovery.
+
+The webhook provider still requires the receiver to honor its existing
+`idempotency_key`; this guard specifically covers the direct Gmail provider.

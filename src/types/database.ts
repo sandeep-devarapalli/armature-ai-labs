@@ -34,6 +34,97 @@ export type Database = {
   }
   public: {
     Tables: {
+      workspace_pass_allocations: {
+        Row: {
+          booking_ids: string[]
+          created_at: string
+          id: string
+          member_id: string
+          period: unknown
+          product_id: string
+          released_at: string | null
+          resource_id: string
+        }
+        Insert: {
+          booking_ids: string[]
+          created_at?: string
+          id?: string
+          member_id: string
+          period: unknown
+          product_id: string
+          released_at?: string | null
+          resource_id: string
+        }
+        Update: {
+          booking_ids?: string[]
+          created_at?: string
+          id?: string
+          member_id?: string
+          period?: unknown
+          product_id?: string
+          released_at?: string | null
+          resource_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workspace_pass_allocations_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "booking_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "workspace_pass_allocations_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: false
+            referencedRelation: "public_resources"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "workspace_pass_allocations_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: false
+            referencedRelation: "resources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      booking_inventory: {
+        Row: {
+          code: string
+          floor: string
+          resource_id: string
+          room: string
+        }
+        Insert: {
+          code: string
+          floor: string
+          resource_id: string
+          room: string
+        }
+        Update: {
+          code?: string
+          floor?: string
+          resource_id?: string
+          room?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "booking_inventory_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: true
+            referencedRelation: "public_resources"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "booking_inventory_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: true
+            referencedRelation: "resources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       access_events: {
         Row: {
           booking_id: string | null
@@ -325,6 +416,8 @@ export type Database = {
           email: string | null
           id: string
           name: string
+          visit_ends_at: string | null
+          visit_starts_at: string | null
         }
         Insert: {
           booking_id: string
@@ -332,6 +425,8 @@ export type Database = {
           email?: string | null
           id?: string
           name: string
+          visit_ends_at?: string | null
+          visit_starts_at?: string | null
         }
         Update: {
           booking_id?: string
@@ -339,6 +434,8 @@ export type Database = {
           email?: string | null
           id?: string
           name?: string
+          visit_ends_at?: string | null
+          visit_starts_at?: string | null
         }
         Relationships: [
           {
@@ -350,8 +447,94 @@ export type Database = {
           },
         ]
       }
+      organizations: {
+        Row: { id: string; name: string; created_at: string }
+        Insert: { id?: string; name: string; created_at?: string }
+        Update: { id?: string; name?: string; created_at?: string }
+        Relationships: []
+      }
+      organization_memberships: {
+        Row: {
+          organization_id: string
+          status: Database["public"]["Enums"]["membership_status"]
+          seat_allowance: number
+          starts_at: string | null
+          ends_at: string | null
+          approved_by: string | null
+          updated_at: string
+        }
+        Insert: {
+          organization_id: string
+          status?: Database["public"]["Enums"]["membership_status"]
+          seat_allowance?: number
+          starts_at?: string | null
+          ends_at?: string | null
+          approved_by?: string | null
+          updated_at?: string
+        }
+        Update: {
+          organization_id?: string
+          status?: Database["public"]["Enums"]["membership_status"]
+          seat_allowance?: number
+          starts_at?: string | null
+          ends_at?: string | null
+          approved_by?: string | null
+          updated_at?: string
+        }
+        Relationships: [{
+          foreignKeyName: "organization_memberships_organization_id_fkey"
+          columns: ["organization_id"]
+          isOneToOne: true
+          referencedRelation: "organizations"
+          referencedColumns: ["id"]
+        }]
+      }
+      team_membership_applications: {
+        Row: {
+          id: string
+          applicant_id: string
+          organization_name: string
+          contact_name: string
+          summary: string
+          requested_seats: number
+          status: Database["public"]["Enums"]["membership_application_status"]
+          created_at: string
+          decided_at: string | null
+          decided_by: string | null
+          decision_notes: string | null
+        }
+        Insert: {
+          id?: string
+          applicant_id: string
+          organization_name: string
+          contact_name: string
+          summary?: string
+          requested_seats: number
+          status?: Database["public"]["Enums"]["membership_application_status"]
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_notes?: string | null
+        }
+        Update: {
+          id?: string
+          applicant_id?: string
+          organization_name?: string
+          contact_name?: string
+          summary?: string
+          requested_seats?: number
+          status?: Database["public"]["Enums"]["membership_application_status"]
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          decision_notes?: string | null
+        }
+        Relationships: []
+      }
       bookings: {
         Row: {
+          access_source: string
+          booked_by: string | null
           cancellation_reason: string | null
           cancelled_at: string | null
           cancelled_by: string | null
@@ -361,12 +544,15 @@ export type Database = {
           idempotency_key: string | null
           member_id: string
           notes: string | null
+          organization_id: string | null
           resource_id: string
           starts_at: string
           status: Database["public"]["Enums"]["booking_status"]
           updated_at: string
         }
         Insert: {
+          access_source?: string
+          booked_by?: string | null
           cancellation_reason?: string | null
           cancelled_at?: string | null
           cancelled_by?: string | null
@@ -376,12 +562,15 @@ export type Database = {
           idempotency_key?: string | null
           member_id: string
           notes?: string | null
+          organization_id?: string | null
           resource_id: string
           starts_at: string
           status?: Database["public"]["Enums"]["booking_status"]
           updated_at?: string
         }
         Update: {
+          access_source?: string
+          booked_by?: string | null
           cancellation_reason?: string | null
           cancelled_at?: string | null
           cancelled_by?: string | null
@@ -391,12 +580,20 @@ export type Database = {
           idempotency_key?: string | null
           member_id?: string
           notes?: string | null
+          organization_id?: string | null
           resource_id?: string
           starts_at?: string
           status?: Database["public"]["Enums"]["booking_status"]
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "bookings_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "bookings_resource_id_fkey"
             columns: ["resource_id"]
@@ -2984,6 +3181,782 @@ export type Database = {
         }
         Relationships: []
       }
+      access_renewal_preferences: {
+        Row: {
+          enabled: boolean
+          product_id: string
+          resource_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          enabled?: boolean
+          product_id: string
+          resource_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          enabled?: boolean
+          product_id?: string
+          resource_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "access_renewal_preferences_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "booking_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "access_renewal_preferences_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: false
+            referencedRelation: "public_resources"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "access_renewal_preferences_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: false
+            referencedRelation: "resources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      basic_onboarding_applications: {
+        Row: {
+          created_at: string
+          date_of_birth: string
+          email: string
+          full_name: string
+          linkedin_url: string
+          phone: string
+          reviewed_at: string | null
+          revision: number
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          date_of_birth: string
+          email: string
+          full_name: string
+          linkedin_url: string
+          phone: string
+          reviewed_at?: string | null
+          revision?: number
+          status?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          date_of_birth?: string
+          email?: string
+          full_name?: string
+          linkedin_url?: string
+          phone?: string
+          reviewed_at?: string | null
+          revision?: number
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      booking_closures: {
+        Row: {
+          closed_on: string
+          id: string
+          location_id: string
+          reason: string
+        }
+        Insert: {
+          closed_on: string
+          id?: string
+          location_id: string
+          reason: string
+        }
+        Update: {
+          closed_on?: string
+          id?: string
+          location_id?: string
+          reason?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "booking_closures_location_id_fkey"
+            columns: ["location_id"]
+            isOneToOne: false
+            referencedRelation: "locations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      booking_policy_settings: {
+        Row: {
+          mock_grants_enabled: boolean
+          singleton: boolean
+        }
+        Insert: {
+          mock_grants_enabled?: boolean
+          singleton?: boolean
+        }
+        Update: {
+          mock_grants_enabled?: boolean
+          singleton?: boolean
+        }
+        Relationships: []
+      }
+      booking_products: {
+        Row: {
+          code: string
+          enabled: boolean
+          id: string
+          kind: string
+          name: string
+          price_paise: number | null
+          unit: string
+        }
+        Insert: {
+          code: string
+          enabled?: boolean
+          id?: string
+          kind: string
+          name: string
+          price_paise?: number | null
+          unit: string
+        }
+        Update: {
+          code?: string
+          enabled?: boolean
+          id?: string
+          kind?: string
+          name?: string
+          price_paise?: number | null
+          unit?: string
+        }
+        Relationships: []
+      }
+      member_avatar_cleanup: {
+        Row: {
+          object_path: string
+          queued_at: string
+        }
+        Insert: {
+          object_path: string
+          queued_at?: string
+        }
+        Update: {
+          object_path?: string
+          queued_at?: string
+        }
+        Relationships: []
+      }
+      member_avatar_operations: {
+        Row: {
+          token: string
+          user_id: string
+        }
+        Insert: {
+          token: string
+          user_id: string
+        }
+        Update: {
+          token?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      member_avatars: {
+        Row: {
+          consent_version: string
+          consented_at: string
+          content_type: string
+          object_path: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          consent_version: string
+          consented_at?: string
+          content_type: string
+          object_path: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          consent_version?: string
+          consented_at?: string
+          content_type?: string
+          object_path?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      member_notification_events: {
+        Row: {
+          event_id: string
+          event_type: string
+          occurred_at: string
+          provider_id: string
+          received_at: string
+        }
+        Insert: {
+          event_id: string
+          event_type: string
+          occurred_at: string
+          provider_id: string
+          received_at?: string
+        }
+        Update: {
+          event_id?: string
+          event_type?: string
+          occurred_at?: string
+          provider_id?: string
+          received_at?: string
+        }
+        Relationships: []
+      }
+      member_notification_settings: {
+        Row: {
+          cleanup_enabled: boolean
+          enabled: boolean
+          last_cleanup_at: string | null
+          pilot_recipients: string[]
+          singleton: boolean
+        }
+        Insert: {
+          cleanup_enabled?: boolean
+          enabled?: boolean
+          last_cleanup_at?: string | null
+          pilot_recipients?: string[]
+          singleton?: boolean
+        }
+        Update: {
+          cleanup_enabled?: boolean
+          enabled?: boolean
+          last_cleanup_at?: string | null
+          pilot_recipients?: string[]
+          singleton?: boolean
+        }
+        Relationships: []
+      }
+      member_notification_suppressions: {
+        Row: {
+          created_at: string
+          reason: string
+          recipient_email: string
+        }
+        Insert: {
+          created_at?: string
+          reason: string
+          recipient_email: string
+        }
+        Update: {
+          created_at?: string
+          reason?: string
+          recipient_email?: string
+        }
+        Relationships: []
+      }
+      member_notification_tombstones: {
+        Row: {
+          event_key: string
+          kind: string
+          provider_id: string | null
+          recipient_hash: string
+          recipient_id: string
+          template_version: number
+          user_id: string
+        }
+        Insert: {
+          event_key: string
+          kind: string
+          provider_id?: string | null
+          recipient_hash: string
+          recipient_id: string
+          template_version: number
+          user_id: string
+        }
+        Update: {
+          event_key?: string
+          kind?: string
+          provider_id?: string | null
+          recipient_hash?: string
+          recipient_id?: string
+          template_version?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      member_notifications: {
+        Row: {
+          application_revision: number
+          attempts: number
+          available_at: string
+          completed_at: string | null
+          created_at: string
+          delivery_state: string
+          delivery_updated_at: string | null
+          event_key: string
+          expected_status: string
+          first_attempt_at: string | null
+          id: string
+          kind: string
+          lease_token: string | null
+          lease_until: string | null
+          provider_id: string | null
+          recipient_email: string
+          recipient_id: string
+          state: string
+          template_version: number
+          user_id: string
+        }
+        Insert: {
+          application_revision: number
+          attempts?: number
+          available_at?: string
+          completed_at?: string | null
+          created_at?: string
+          delivery_state?: string
+          delivery_updated_at?: string | null
+          event_key: string
+          expected_status: string
+          first_attempt_at?: string | null
+          id?: string
+          kind: string
+          lease_token?: string | null
+          lease_until?: string | null
+          provider_id?: string | null
+          recipient_email: string
+          recipient_id: string
+          state: string
+          template_version?: number
+          user_id: string
+        }
+        Update: {
+          application_revision?: number
+          attempts?: number
+          available_at?: string
+          completed_at?: string | null
+          created_at?: string
+          delivery_state?: string
+          delivery_updated_at?: string | null
+          event_key?: string
+          expected_status?: string
+          first_attempt_at?: string | null
+          id?: string
+          kind?: string
+          lease_token?: string | null
+          lease_until?: string | null
+          provider_id?: string | null
+          recipient_email?: string
+          recipient_id?: string
+          state?: string
+          template_version?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      membership_role_audit: {
+        Row: {
+          actor_id: string | null
+          created_at: string
+          id: string
+          new_role: string
+          previous_role: string
+          reason: string
+          user_id: string | null
+        }
+        Insert: {
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          new_role: string
+          previous_role: string
+          reason: string
+          user_id?: string | null
+        }
+        Update: {
+          actor_id?: string | null
+          created_at?: string
+          id?: string
+          new_role?: string
+          previous_role?: string
+          reason?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      onboarding_documents: {
+        Row: {
+          created_at: string
+          deleted_at: string | null
+          deletion_attempted_at: string | null
+          expires_at: string
+          id: string
+          id_type: string | null
+          kind: string
+          object_path: string
+          uploaded_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          deleted_at?: string | null
+          deletion_attempted_at?: string | null
+          expires_at?: string
+          id?: string
+          id_type?: string | null
+          kind: string
+          object_path?: string
+          uploaded_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          deleted_at?: string | null
+          deletion_attempted_at?: string | null
+          expires_at?: string
+          id?: string
+          id_type?: string | null
+          kind?: string
+          object_path?: string
+          uploaded_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "onboarding_documents_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "basic_onboarding_applications"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      onboarding_notice_acceptances: {
+        Row: {
+          accepted_at: string
+          notice_version: string
+          revision: number
+          user_id: string
+        }
+        Insert: {
+          accepted_at?: string
+          notice_version: string
+          revision: number
+          user_id: string
+        }
+        Update: {
+          accepted_at?: string
+          notice_version?: string
+          revision?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "onboarding_notice_acceptances_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "basic_onboarding_applications"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      onboarding_resubmissions: {
+        Row: {
+          created_at: string
+          id: string
+          revision: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          revision: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          revision?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "onboarding_resubmissions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "basic_onboarding_applications"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      onboarding_reviews: {
+        Row: {
+          application_revision: number | null
+          created_at: string
+          decision: string
+          guardian_email: string | null
+          guardian_evidence: string | null
+          guardian_received_at: string | null
+          id: string
+          previous_status: string | null
+          reason: string | null
+          reviewer_id: string
+          reviewer_role: string | null
+          user_id: string
+        }
+        Insert: {
+          application_revision?: number | null
+          created_at?: string
+          decision: string
+          guardian_email?: string | null
+          guardian_evidence?: string | null
+          guardian_received_at?: string | null
+          id?: string
+          previous_status?: string | null
+          reason?: string | null
+          reviewer_id: string
+          reviewer_role?: string | null
+          user_id: string
+        }
+        Update: {
+          application_revision?: number | null
+          created_at?: string
+          decision?: string
+          guardian_email?: string | null
+          guardian_evidence?: string | null
+          guardian_received_at?: string | null
+          id?: string
+          previous_status?: string | null
+          reason?: string | null
+          reviewer_id?: string
+          reviewer_role?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "onboarding_reviews_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "basic_onboarding_applications"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
+      onboarding_settings: {
+        Row: {
+          enabled: boolean
+          singleton: boolean
+        }
+        Insert: {
+          enabled?: boolean
+          singleton?: boolean
+        }
+        Update: {
+          enabled?: boolean
+          singleton?: boolean
+        }
+        Relationships: []
+      }
+      organization_invitations: {
+        Row: {
+          accepted_at: string | null
+          created_at: string
+          email: string
+          expires_at: string
+          id: string
+          invited_by: string
+          organization_id: string
+          revoked_at: string | null
+          token_hash: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          created_at?: string
+          email: string
+          expires_at?: string
+          id?: string
+          invited_by: string
+          organization_id: string
+          revoked_at?: string | null
+          token_hash: string
+        }
+        Update: {
+          accepted_at?: string | null
+          created_at?: string
+          email?: string
+          expires_at?: string
+          id?: string
+          invited_by?: string
+          organization_id?: string
+          revoked_at?: string | null
+          token_hash?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_invitations_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      organization_members: {
+        Row: {
+          joined_at: string
+          organization_id: string
+          removed_at: string | null
+          role: string
+          seat_enabled: boolean
+          user_id: string
+        }
+        Insert: {
+          joined_at?: string
+          organization_id: string
+          removed_at?: string | null
+          role: string
+          seat_enabled?: boolean
+          user_id: string
+        }
+        Update: {
+          joined_at?: string
+          organization_id?: string
+          removed_at?: string | null
+          role?: string
+          seat_enabled?: boolean
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "organization_members_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      paid_access_entitlements: {
+        Row: {
+          created_at: string
+          daytime_event_approved: boolean
+          discount_percent: number
+          ends_at: string
+          granted_by: string
+          id: string
+          organization_id: string | null
+          price_paise: number
+          product_id: string
+          resource_id: string | null
+          revoked_at: string | null
+          seats: number
+          source: string
+          starts_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          daytime_event_approved?: boolean
+          discount_percent?: number
+          ends_at: string
+          granted_by: string
+          id?: string
+          organization_id?: string | null
+          price_paise: number
+          product_id: string
+          resource_id?: string | null
+          revoked_at?: string | null
+          seats: number
+          source?: string
+          starts_at: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          daytime_event_approved?: boolean
+          discount_percent?: number
+          ends_at?: string
+          granted_by?: string
+          id?: string
+          organization_id?: string | null
+          price_paise?: number
+          product_id?: string
+          resource_id?: string | null
+          revoked_at?: string | null
+          seats?: number
+          source?: string
+          starts_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "paid_access_entitlements_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "paid_access_entitlements_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "booking_products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "paid_access_entitlements_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: false
+            referencedRelation: "public_resources"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "paid_access_entitlements_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: false
+            referencedRelation: "resources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      resource_booking_policies: {
+        Row: {
+          kind: string
+          resource_id: string
+        }
+        Insert: {
+          kind: string
+          resource_id: string
+        }
+        Update: {
+          kind?: string
+          resource_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "resource_booking_policies_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: true
+            referencedRelation: "public_resources"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "resource_booking_policies_resource_id_fkey"
+            columns: ["resource_id"]
+            isOneToOne: true
+            referencedRelation: "resources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       member_active_cabinets: {
@@ -3212,6 +4185,23 @@ export type Database = {
       }
     }
     Functions: {
+      set_booking_resource_enabled: {
+        Args: { p_enabled: boolean; p_reason: string; p_resource_id: string }
+        Returns: undefined
+      }
+      reserve_workspace_pass: {
+        Args: {
+          p_dates: string[]
+          p_organization_id?: string | null
+          p_product_id: string
+          p_resource_id: string
+        }
+        Returns: string[]
+      }
+      get_workspace_availability: {
+        Args: { p_dates: string[]; p_product_id: string }
+        Returns: Json
+      }
       add_toolkit_rental_item: {
         Args: {
           p_checkout_condition_note?: string
@@ -3318,6 +4308,87 @@ export type Database = {
           p_starts_at: string
         }
         Returns: string
+      }
+      create_booking_with_access: {
+        Args: {
+          p_resource_id: string
+          p_starts_at: string
+          p_ends_at: string
+          p_guest_names: string[]
+          p_notes: string
+          p_idempotency_key: string
+          p_access_source: "personal" | "team"
+          p_organization_id: string | null
+        }
+        Returns: string
+      }
+      list_my_team_access: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          organization_id: string
+          organization_name: string
+          role: string
+          seat_enabled: boolean
+          membership_active: boolean
+          starts_at: string | null
+          ends_at: string | null
+        }[]
+      }
+      submit_team_application: {
+        Args: { p_organization_name: string; p_contact_name: string; p_summary: string; p_requested_seats: number }
+        Returns: string
+      }
+      team_create_invitation: {
+        Args: { p_organization_id: string; p_email: string }
+        Returns: Json
+      }
+      team_accept_invitation: {
+        Args: { p_token: string }
+        Returns: string
+      }
+      team_revoke_invitation: {
+        Args: { p_invitation_id: string }
+        Returns: undefined
+      }
+      team_remove_member: {
+        Args: { p_organization_id: string; p_user_id: string }
+        Returns: undefined
+      }
+      team_set_admin_seat: {
+        Args: { p_organization_id: string; p_seat_enabled: boolean }
+        Returns: undefined
+      }
+      list_team_roster: {
+        Args: { p_organization_id: string }
+        Returns: { user_id: string; display_name: string; role: string; seat_enabled: boolean; joined_at: string }[]
+      }
+      list_team_invitations: {
+        Args: { p_organization_id: string }
+        Returns: { invitation_id: string; email: string; expires_at: string }[]
+      }
+      list_team_usage: {
+        Args: { p_organization_id: string }
+        Returns: { member_id: string; display_name: string; resource_name: string; starts_at: string; ends_at: string; usage_hours: number; attended_hours: number }[]
+      }
+      get_team_capacity: {
+        Args: { p_organization_id: string }
+        Returns: { seat_allowance: number; occupied_seats: number; pending_invitations: number }[]
+      }
+      staff_decide_team_application: {
+        Args: { p_application_id: string; p_approve: boolean; p_notes: string; p_starts_at: string | null; p_ends_at: string | null }
+        Returns: string | null
+      }
+      staff_create_team: {
+        Args: { p_organization_name: string; p_admin_user_id: string; p_seat_allowance: number; p_starts_at: string | null; p_ends_at: string | null }
+        Returns: string
+      }
+      staff_set_team_membership: {
+        Args: { p_organization_id: string; p_status: Database["public"]["Enums"]["membership_status"]; p_seat_allowance: number; p_starts_at: string | null; p_ends_at: string | null }
+        Returns: undefined
+      }
+      staff_transfer_team_admin: {
+        Args: { p_organization_id: string; p_new_admin_user_id: string }
+        Returns: undefined
       }
       create_cabinet_access_intent: {
         Args: { p_cabinet_device_id: string }
@@ -3570,6 +4641,385 @@ export type Database = {
         Args: { p_enabled?: boolean; p_request_id: string }
         Returns: number
       }
+      approve_owner_basic_membership: {
+        Args: { p_confirm: boolean; p_expected_revision: number }
+        Returns: {
+          created_at: string
+          date_of_birth: string
+          email: string
+          full_name: string
+          linkedin_url: string
+          phone: string
+          reviewed_at: string | null
+          revision: number
+          status: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "basic_onboarding_applications"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      begin_gmail_reminder: {
+        Args: { p_claim_token: string; p_id: string }
+        Returns: boolean
+      }
+      begin_member_avatar_change: {
+        Args: { p_remove?: boolean; p_user_id: string }
+        Returns: string
+      }
+      can_review_basic_application: {
+        Args: { p_user_id: string }
+        Returns: boolean
+      }
+      change_basic_membership: {
+        Args: {
+          p_action: string
+          p_expected_revision: number
+          p_reason: string
+          p_user_id: string
+        }
+        Returns: {
+          created_at: string
+          date_of_birth: string
+          email: string
+          full_name: string
+          linkedin_url: string
+          phone: string
+          reviewed_at: string | null
+          revision: number
+          status: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "basic_onboarding_applications"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      claim_member_notifications: {
+        Args: { p_limit?: number }
+        Returns: {
+          first_attempt_at: string
+          id: string
+          kind: string
+          lease_token: string
+          recipient_email: string
+          template_version: number
+        }[]
+      }
+      configure_booking_product: {
+        Args: { p_enabled: boolean; p_id: string; p_price_paise: number | null }
+        Returns: undefined
+      }
+      configure_resource_booking_policy: {
+        Args: { p_kind: string; p_resource_id: string }
+        Returns: undefined
+      }
+      finalize_onboarding_document: {
+        Args: { p_document_id: string }
+        Returns: {
+          created_at: string
+          deleted_at: string | null
+          deletion_attempted_at: string | null
+          expires_at: string
+          id: string
+          id_type: string | null
+          kind: string
+          object_path: string
+          uploaded_at: string | null
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "onboarding_documents"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      finish_member_avatar_change: {
+        Args: {
+          p_path: string
+          p_token: string
+          p_type: string
+          p_user_id: string
+        }
+        Returns: boolean
+      }
+      finish_member_notification: {
+        Args: {
+          p_id: string
+          p_lease_token: string
+          p_outcome: string
+          p_provider_id?: string
+        }
+        Returns: boolean
+      }
+      grant_mock_access: {
+        Args: {
+          p_dates: string[]
+          p_discount_percent?: number
+          p_organization_id?: string | null
+          p_product_id: string
+          p_resource_id: string
+          p_seats?: number
+          p_user_id: string | null
+        }
+        Returns: string[]
+      }
+      grant_mock_resource_access: {
+        Args: {
+          p_daytime_event_approved?: boolean
+          p_discount_percent?: number
+          p_ends_at: string
+          p_organization_id?: string | null
+          p_product_id: string
+          p_resource_id: string
+          p_starts_at: string
+          p_user_id: string | null
+        }
+        Returns: string
+      }
+      list_basic_members: {
+        Args: {
+          p_page?: number
+          p_page_size?: number
+          p_role?: string
+          p_search?: string
+          p_status?: string
+        }
+        Returns: Json
+      }
+      list_due_onboarding_documents: {
+        Args: { p_limit?: number }
+        Returns: {
+          created_at: string
+          deleted_at: string | null
+          deletion_attempted_at: string | null
+          expires_at: string
+          id: string
+          id_type: string | null
+          kind: string
+          object_path: string
+          uploaded_at: string | null
+          user_id: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "onboarding_documents"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      list_member_notification_status: {
+        Args: { p_page?: number; p_search?: string; p_state?: string }
+        Returns: Json
+      }
+      maintain_member_notifications: {
+        Args: { p_dry_run?: boolean; p_limit?: number }
+        Returns: Json
+      }
+      mark_onboarding_document_deleted: {
+        Args: { p_document_id: string }
+        Returns: undefined
+      }
+      prepare_member_notification: {
+        Args: { p_id: string; p_lease_token: string }
+        Returns: boolean
+      }
+      quote_access_pass: {
+        Args: {
+          p_dates: string[]
+          p_discount_percent?: number
+          p_product_id: string
+          p_resource_id?: string | null
+          p_seats?: number
+        }
+        Returns: Json
+      }
+      record_member_notification_event: {
+        Args: {
+          p_event_id: string
+          p_event_type: string
+          p_occurred_at: string
+          p_provider_id: string
+        }
+        Returns: boolean
+      }
+      request_onboarding_corrections: {
+        Args: {
+          p_expected_revision?: number
+          p_reason: string
+          p_user_id: string
+        }
+        Returns: {
+          created_at: string
+          date_of_birth: string
+          email: string
+          full_name: string
+          linkedin_url: string
+          phone: string
+          reviewed_at: string | null
+          revision: number
+          status: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "basic_onboarding_applications"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      reserve_onboarding_document: {
+        Args: { p_id_type?: string; p_kind: string }
+        Returns: {
+          created_at: string
+          deleted_at: string | null
+          deletion_attempted_at: string | null
+          expires_at: string
+          id: string
+          id_type: string | null
+          kind: string
+          object_path: string
+          uploaded_at: string | null
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "onboarding_documents"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      resubmit_basic_onboarding: {
+        Args: {
+          p_date_of_birth: string
+          p_full_name: string
+          p_linkedin_url: string
+          p_notice_version: string
+          p_phone: string
+        }
+        Returns: {
+          created_at: string
+          date_of_birth: string
+          email: string
+          full_name: string
+          linkedin_url: string
+          phone: string
+          reviewed_at: string | null
+          revision: number
+          status: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "basic_onboarding_applications"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      review_basic_onboarding: {
+        Args: {
+          p_decision: string
+          p_expected_revision?: number
+          p_guardian_email?: string
+          p_guardian_evidence?: string
+          p_guardian_received_at?: string
+          p_reason?: string
+          p_user_id: string
+        }
+        Returns: {
+          created_at: string
+          date_of_birth: string
+          email: string
+          full_name: string
+          linkedin_url: string
+          phone: string
+          reviewed_at: string | null
+          revision: number
+          status: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "basic_onboarding_applications"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      revoke_paid_access: {
+        Args: { p_entitlement_id: string }
+        Returns: undefined
+      }
+      set_access_renewal: {
+        Args: { p_enabled: boolean; p_entitlement_id: string }
+        Returns: undefined
+      }
+      set_booking_closure: {
+        Args: {
+          p_closed: boolean
+          p_closed_on: string
+          p_location_id: string
+          p_reason: string
+        }
+        Returns: undefined
+      }
+      set_membership_staff_role: {
+        Args: { p_expected_role: string; p_role: string; p_user_id: string }
+        Returns: string
+      }
+      submit_basic_onboarding: {
+        Args: {
+          p_date_of_birth: string
+          p_full_name: string
+          p_linkedin_url: string
+          p_notice_version: string
+          p_phone: string
+        }
+        Returns: {
+          created_at: string
+          date_of_birth: string
+          email: string
+          full_name: string
+          linkedin_url: string
+          phone: string
+          reviewed_at: string | null
+          revision: number
+          status: string
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "basic_onboarding_applications"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      team_create_booking: {
+        Args: {
+          p_ends_at: string
+          p_guest_names: string[]
+          p_idempotency_key: string
+          p_member_id: string
+          p_notes: string
+          p_organization_id: string
+          p_resource_id: string
+          p_starts_at: string
+        }
+        Returns: string
+      }
+      team_transfer_admin: {
+        Args: {
+          p_confirm: boolean
+          p_new_admin_user_id: string
+          p_organization_id: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       access_event_type:
@@ -3705,7 +5155,7 @@ export type Database = {
         | "sensor"
         | "other"
       resource_risk: "low" | "controlled" | "hazardous"
-      staff_role: "operations" | "safety" | "admin" | "super_admin"
+      staff_role: "operations" | "safety" | "admin" | "super_admin" | "membership_reviewer"
       toolkit_evidence_phase: "checkout" | "return" | "discrepancy"
       toolkit_item_status:
         | "available"
@@ -4551,7 +6001,7 @@ export const Constants = {
         "other",
       ],
       resource_risk: ["low", "controlled", "hazardous"],
-      staff_role: ["operations", "safety", "admin", "super_admin"],
+      staff_role: ["operations", "safety", "admin", "super_admin", "membership_reviewer"],
       toolkit_evidence_phase: ["checkout", "return", "discrepancy"],
       toolkit_item_status: [
         "available",

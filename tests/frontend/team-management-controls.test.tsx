@@ -1,0 +1,42 @@
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+import { beforeEach, expect, it, vi } from 'vitest';
+import { AdminTeamsPage, TeamBookingForm, TeamWorkspacePage } from '../../src/pages/TeamPages';
+const mocks = vi.hoisted(() => ({ rpc: vi.fn(), role: 'membership_reviewer', refresh: vi.fn(async () => {}) }));
+vi.mock('../../src/lib/supabase', () => ({ supabase: { rpc: mocks.rpc } }));
+vi.mock('../../src/context/AccountContext', () => ({ useAccount: () => ({ account: { role: mocks.role }, loading: false }) }));
+vi.mock('../../src/context/AppContext', () => ({ useApp: () => ({ refresh: mocks.refresh, state: { resources: [], profiles: [] } }) }));
+const roster = [{ user_id: 'member-1', display_name: 'Builder One', role: 'member' as const, seat_enabled: true, joined_at: '2026-09-27' }];
+const resource = { id: 'resource-1', name: 'Lab desk', available: true } as never;
+beforeEach(() => { mocks.rpc.mockReset(); mocks.role = 'membership_reviewer'; vi.restoreAllMocks(); });
+it.each(['membership_reviewer', 'member'])('prevents %s from loading operational team records', (role) => {
+  mocks.role = role;
+  render(<AdminTeamsPage />);
+  expect(screen.getByRole('heading', { name: 'Lab admin access required' })).toBeVisible();
+  expect(mocks.rpc).not.toHaveBeenCalled();
+});
+it('books only the selected named member with explicit India time and preserves retries', async () => {
+  mocks.rpc.mockResolvedValueOnce({ error: { message: 'Temporary issue' } }).mockResolvedValueOnce({ error: null, data: 'booking-1' });
+  render(<TeamBookingForm organizationId="org-1" roster={roster} resources={[resource]} active onSaved={mocks.refresh} />);
+  fireEvent.change(screen.getByLabelText('Team member'), { target: { value: 'member-1' } });
+  fireEvent.change(screen.getByLabelText('Shared resource'), { target: { value: 'resource-1' } });
+  fireEvent.change(screen.getByLabelText('Start · IST'), { target: { value: '2026-10-01T09:00' } });
+  fireEvent.change(screen.getByLabelText('End · IST'), { target: { value: '2026-10-01T10:00' } });
+  fireEvent.change(screen.getByLabelText('Booking purpose'), { target: { value: 'Prototype' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Book for member' }));
+  await screen.findByText('Temporary issue');
+  fireEvent.click(screen.getByRole('button', { name: 'Book for member' }));
+  await screen.findByText('Team booking saved for the selected member.');
+  expect(mocks.rpc.mock.calls[0]).toEqual(mocks.rpc.mock.calls[1]);
+  expect(mocks.rpc).toHaveBeenCalledWith('team_create_booking', expect.objectContaining({ p_organization_id: 'org-1', p_member_id: 'member-1', p_starts_at: '2026-10-01T03:30:00.000Z', p_ends_at: '2026-10-01T04:30:00.000Z' }));
+});
+it('requires confirmation before transferring team administration', async () => {
+  mocks.rpc.mockImplementation(async (name) => ({ error: null, data: name === 'list_my_team_access' ? [{ organization_id: 'org-1', organization_name: 'Synthetic team', role: 'admin', membership_active: true, seat_enabled: true }] : name === 'list_team_roster' ? roster : [] }));
+  const confirm = vi.spyOn(window, 'confirm').mockReturnValue(false);
+  render(<MemoryRouter><TeamWorkspacePage /></MemoryRouter>);
+  const button = await screen.findByRole('button', { name: 'Make Builder One team admin' });
+  fireEvent.click(button);
+  expect(mocks.rpc).not.toHaveBeenCalledWith('team_transfer_admin', expect.anything());
+  confirm.mockReturnValue(true); fireEvent.click(button);
+  await waitFor(() => expect(mocks.rpc).toHaveBeenCalledWith('team_transfer_admin', { p_organization_id: 'org-1', p_new_admin_user_id: 'member-1', p_confirm: true }));
+});

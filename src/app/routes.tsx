@@ -45,6 +45,11 @@ const AdminMakerServicesPage = lazy(() => import("../pages/MakerDeskPages").then
 const EquipmentPage = lazy(() => import("../pages/PublicPages").then((module) => ({ default: module.EquipmentPage })));
 const ServicesPage = lazy(() => import("../pages/PublicPages").then((module) => ({ default: module.ServicesPage })));
 const JoinPage = lazy(() => import("../pages/PublicPages").then((module) => ({ default: module.JoinPage })));
+const PassSelectionPage = lazy(() => import("../pages/BookingPolicyPages").then((module) => ({ default: module.PassSelectionPage })));
+const AdminAccessPage = lazy(() => import("../pages/BookingPolicyPages").then((module) => ({ default: module.AdminAccessPage })));
+const TeamWorkspacePage = lazy(() => import("../pages/TeamPages").then((module) => ({ default: module.TeamWorkspacePage })));
+const AcceptTeamInvitationPage = lazy(() => import("../pages/TeamPages").then((module) => ({ default: module.AcceptTeamInvitationPage })));
+const AdminTeamsPage = lazy(() => import("../pages/TeamPages").then((module) => ({ default: module.AdminTeamsPage })));
 const NotFoundPage = lazy(() => import("../pages/PublicPages").then((module) => ({ default: module.NotFoundPage })));
 const AuthPage = lazy(() => import("../pages/AuthPages").then((module) => ({ default: module.AuthPage })));
 const AuthCallbackPage = lazy(() => import("../pages/AuthPages").then((module) => ({ default: module.AuthCallbackPage })));
@@ -130,6 +135,10 @@ export const routes: RouteObject[] = [
       { path: "/auth/callback", element: <ReleaseGate enabled={memberPlatformAvailable || basicOnboardingAvailable}><AuthCallbackPage /></ReleaseGate> },
       { path: "/dashboard", element: memberFeature(protectedPage(<DashboardPage />)) },
       { path: "/profile", element: memberFeature(protectedPage(<ProfilePage />)) },
+      { path: "/workspace/team", element: memberFeature(protectedPage(<TeamWorkspacePage />)) },
+      { path: "/workspace/team/accept/:token", element: memberFeature(protectedPage(<AcceptTeamInvitationPage />)) },
+      { path: "/passes", element: memberFeature(protectedPage(<PassSelectionPage />)) },
+      { path: "/admin/access", element: memberFeature(adminPage(<AdminAccessPage />)) },
       { path: "/book", element: memberFeature(protectedPage(<BookPage />)) },
       { path: "/book/:resource", element: memberFeature(protectedPage(<ResourceBookingPage />)) },
       { path: "/bookings", element: memberFeature(protectedPage(<BookingsPage />)) },
@@ -142,6 +151,7 @@ export const routes: RouteObject[] = [
       { path: "/toolkits", element: memberFeature(protectedPage(<ToolkitsPage />)) },
       { path: "/admin", element: <ReleaseGate enabled={basicOnboardingAvailable || memberPlatformAvailable}><Navigate to="/admin/members" replace /></ReleaseGate> },
       { path: "/admin/members", element: basicOnboardingAvailable ? <MemberManagementPage /> : memberFeature(staffPage(<AdminMembersPage />)) },
+      { path: "/admin/teams", element: memberFeature(adminPage(<AdminTeamsPage />)) },
       { path: "/admin/resources", element: memberFeature(staffPage(<AdminResourcesPage />)) },
       { path: "/admin/bookings", element: memberFeature(staffPage(<AdminBookingsPage />)) },
       { path: "/admin/attendance", element: memberFeature(staffPage(<AdminAttendancePage />)) },

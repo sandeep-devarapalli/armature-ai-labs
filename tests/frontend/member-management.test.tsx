@@ -79,3 +79,17 @@ it("removes notification history on logout and ignores an outstanding response",
  await waitFor(() => expect(screen.queryByText(/private@example.test/)).not.toBeInTheDocument());
  expect(screen.queryByRole("region", { name: "Membership notification status" })).not.toBeInTheDocument();
 });
+
+it.each(["admin", "super_admin"])("%s cannot modify a Super admin through role controls", async (role) => {
+ setup(role, "super_admin"); await screen.findByText("person@example.test");
+ fireEvent.click(screen.getByRole("button", { name: /View Synthetic/ }));
+ expect(screen.queryByRole("button", { name: "Manage staff role" })).not.toBeInTheDocument();
+});
+it("Super admins can demote an Admin to membership-review Staff with expected-role protection", async () => {
+ const rpc = setup("super_admin", "admin"); await screen.findByText("person@example.test");
+ fireEvent.click(screen.getByRole("button", { name: /View Synthetic/ }));
+ fireEvent.click(screen.getByRole("button", { name: "Manage staff role" }));
+ fireEvent.change(screen.getByLabelText("New role"), { target: { value: "membership_reviewer" } });
+ fireEvent.click(screen.getByRole("checkbox")); fireEvent.click(screen.getByRole("button", { name: "Confirm change" }));
+ await waitFor(() => expect(rpc).toHaveBeenCalledWith("set_membership_staff_role", { p_user_id: "other", p_role: "membership_reviewer", p_expected_role: "admin" }));
+});

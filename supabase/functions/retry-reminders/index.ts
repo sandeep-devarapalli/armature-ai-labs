@@ -1,6 +1,7 @@
 import { corsHeaders } from "../_shared/cors.ts";
 import { assertJobSecret, requiredEnv } from "../_shared/env.ts";
 import { errorResponse, HttpError, json } from "../_shared/http.ts";
+import { sendBookingMail } from "../_shared/google-mail.ts";
 import { adminClient } from "../_shared/supabase.ts";
 
 interface ReminderRow {
@@ -8,6 +9,7 @@ interface ReminderRow {
   booking_id: string;
   reminder_kind: string;
   scheduled_for: string;
+  claim_token: string;
 }
 
 async function deliverReminder(reminder: ReminderRow): Promise<void> {
@@ -36,6 +38,44 @@ async function deliverReminder(reminder: ReminderRow): Promise<void> {
     throw new Error("Member does not have a deliverable email address.");
   }
 
+  const bookingUrl = `https://armatureailabs.com/bookings/${booking.id}`;
+  const provider = Deno.env.get("REMINDER_PROVIDER") ?? "webhook";
+  if (provider === "gmail") {
+    const startsAt = new Date(booking.starts_at).toLocaleString("en-IN", {
+      timeZone: "Asia/Kolkata",
+      dateStyle: "medium",
+      timeStyle: "short",
+    });
+    const when = reminder.reminder_kind === "24_hours"
+      ? "tomorrow"
+      : "in one hour";
+    await sendBookingMail({
+      reminderId: reminder.id,
+      to: email,
+      subject: `Your Armature booking starts ${when}`,
+      body: [
+        `Hello ${profile?.display_name || "Armature member"},`,
+        "",
+        `Your booking for ${resource?.name || "an Armature resource"} starts ${startsAt} (India time).`,
+        `Manage your booking: ${bookingUrl}`,
+        "",
+        "Armature AI Labs",
+      ].join("\n"),
+    }, async () => {
+      const { data: started, error } = await client.rpc("begin_gmail_reminder", {
+        p_id: reminder.id,
+        p_claim_token: reminder.claim_token,
+      });
+      if (error || !started) {
+        throw new Error("Gmail delivery guard was not acquired; inspect reminder state.");
+      }
+    });
+    return;
+  }
+  if (provider !== "webhook") {
+    throw new Error("Unsupported reminder provider.");
+  }
+
   const webhookUrl = requiredEnv("REMINDER_WEBHOOK_URL");
   const webhookSecret = requiredEnv("REMINDER_WEBHOOK_SECRET");
   const response = await fetch(webhookUrl, {
@@ -48,6 +88,7 @@ async function deliverReminder(reminder: ReminderRow): Promise<void> {
       type: "booking_reminder",
       idempotency_key: `armature:${reminder.id}`,
       from: Deno.env.get("REMINDER_FROM") ?? "bookings@armatureailabs.com",
+      reply_to: "bookings@armatureailabs.com",
       to: email,
       template: reminder.reminder_kind,
       data: {
@@ -55,7 +96,7 @@ async function deliverReminder(reminder: ReminderRow): Promise<void> {
         resource_name: resource?.name || "Armature AI Labs resource",
         starts_at: booking.starts_at,
         ends_at: booking.ends_at,
-        booking_url: `https://armatureailabs.com/bookings/${booking.id}`,
+        booking_url: bookingUrl,
       },
     }),
   });
@@ -78,6 +119,9 @@ Deno.serve(async (request) => {
 
   try {
     assertJobSecret(request);
+    if (Deno.env.get("BOOKING_WORKERS_ENABLED") !== "true") {
+      return json(request, { status: "disabled", claimed: 0 });
+    }
     const client = adminClient();
     const { data: maintenance, error: maintenanceError } = await client.rpc(
       "run_attendance_maintenance",
