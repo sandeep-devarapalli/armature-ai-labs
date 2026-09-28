@@ -1,3 +1,6 @@
+import { trackRegistrationMilestone } from "../../src/lib/analytics";
+vi.mock("../../src/lib/analytics", () => ({ trackRegistrationMilestone: vi.fn() }));
+beforeEach(() => vi.mocked(trackRegistrationMilestone).mockClear());
 import { fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import type { SupabaseClient } from "@supabase/supabase-js";
@@ -23,9 +26,11 @@ it("requires current privacy acceptance before submitting a verified user's regi
   fireEvent.submit(name.closest("form")!);
   expect(await screen.findByRole("alert")).toHaveTextContent("Accept the privacy notice");
   expect(rpc).not.toHaveBeenCalled();
+  expect(trackRegistrationMilestone).not.toHaveBeenCalled();
   fireEvent.click(screen.getByRole("checkbox", { name: /I accept the privacy notice/ }));
   fireEvent.submit(name.closest("form")!);
   await screen.findByText("Details saved. Submit your photo and ID, then submit your application.");
+  expect(trackRegistrationMilestone).toHaveBeenCalledExactlyOnceWith("details_saved");
   expect(rpc).toHaveBeenCalledWith("submit_basic_onboarding", expect.objectContaining({ p_notice_version: "2026-09-26-release-1", p_full_name: "Synthetic Member" }));
   expect(screen.queryByLabelText("Password")).not.toBeInTheDocument();
 });
@@ -76,6 +81,7 @@ it("does not mark reserved documents uploaded or submit when files are merely se
   expect(screen.getByRole("button", { name: "Submit photo" })).toBeEnabled();
   expect(screen.getByRole("button", { name: "Submit application" })).toBeDisabled();
   expect(screen.queryByText("Photo Uploaded")).not.toBeInTheDocument();
+  expect(trackRegistrationMilestone).not.toHaveBeenCalled();
   expect(requestDocument).not.toHaveBeenCalled(); expect(fixture.rpc).not.toHaveBeenCalled();
 });
 it("explicitly submits the current revision and shows received confirmation only after server success", async () => {
@@ -88,6 +94,7 @@ it("explicitly submits the current revision and shows received confirmation only
   expect(await screen.findByRole("dialog", { name: "Your details have been received" })).toBeVisible();
   expect(fixture.rpc).toHaveBeenCalledWith("submit_basic_application_for_review", { p_expected_revision: 3 });
   expect(screen.getByRole("button", { name: "Application submitted" })).toBeDisabled();
+  expect(trackRegistrationMilestone).toHaveBeenCalledExactlyOnceWith("application_submitted");
   delete (HTMLDialogElement.prototype as unknown as Record<string, unknown>).showModal;
 });
 it("keeps the application unsubmitted and shows a server validation failure", async () => {
@@ -96,6 +103,7 @@ it("keeps the application unsubmitted and shows a server validation failure", as
   fireEvent.click(await screen.findByRole("button", { name: "Submit application" }));
   expect(await screen.findByRole("alert")).toHaveTextContent("Documents expired; upload again.");
   expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  expect(trackRegistrationMilestone).not.toHaveBeenCalled();
 });
 it("keeps upload failures visible without marking an image uploaded", async () => {
   const fixture = submissionFixture(false), requestDocument = vi.fn().mockRejectedValue(new Error("Security scan unavailable. Please retry."));
