@@ -25,7 +25,7 @@ async function mockMembers(page: Page, role: string) {
       if (name === "set_membership_staff_role") { targetRole = String(body.p_role); data = targetRole; }
       if (name === "review_basic_onboarding") { status = "approved"; data = {}; }
     } else if (name === "staff_roles") data = [{ role }];
-    else if (name === "basic_onboarding_applications") data = status === "approved" && role === "membership_reviewer" ? [] : [{ user_id: applicant, full_name: "Synthetic Applicant", email: "applicant@example.test", phone: "+919999999999", linkedin_url: "https://www.linkedin.com/in/synthetic", date_of_birth: "1990-01-01", status, revision: 1 }];
+    else if (name === "basic_onboarding_applications") data = status === "approved" && role === "membership_reviewer" ? [] : [{ user_id: applicant, full_name: "Synthetic Applicant", email: "applicant@example.test", phone: "+919999999999", linkedin_url: "https://www.linkedin.com/in/synthetic", date_of_birth: "1990-01-01", status, revision: 1, submitted_revision: 1, submitted_at: "2026-09-27T00:00:00Z" }];
     else if (name === "onboarding_documents") data = ["photo", "government_id"].map((kind, index) => ({ id: `document-${index}`, user_id: applicant, kind, uploaded_at: "2026-09-27T00:00:00Z", expires_at: "2035-01-01T00:00:00Z", deleted_at: null }));
     else if (name === "user") data = user;
     else if (name === "member-avatar") { await route.fulfill({ status: 404, contentType: "application/json", body: JSON.stringify({ error: "No avatar" }) }); return; }

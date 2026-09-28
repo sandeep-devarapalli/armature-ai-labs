@@ -5,6 +5,8 @@ case "$DATABASE_URL" in *'@127.0.0.1:'*|*'@localhost:'*) ;; *) echo 'Use an isol
 PSQL="${PSQL:-psql}"
 RUN_DIR=$(mktemp -d)
 SUBJECT=61000000-0000-4000-8000-000000000001
+ADMIN=61000000-0000-4000-8000-000000000002
+OLD_GATE=$($PSQL "$DATABASE_URL" -Atc 'select enabled from public.onboarding_settings')
 cleanup() {
  "$PSQL" "$DATABASE_URL" -q -v ON_ERROR_STOP=1 <<SQL
  begin;
@@ -13,7 +15,8 @@ cleanup() {
  delete from public.onboarding_documents where user_id='$SUBJECT';
  delete from public.onboarding_notice_acceptances where user_id='$SUBJECT';
  delete from public.basic_onboarding_applications where user_id='$SUBJECT';
- delete from auth.users where id='$SUBJECT';
+ delete from auth.users where id in ('$SUBJECT','$ADMIN');
+ update public.onboarding_settings set enabled='$OLD_GATE';
  commit;
 SQL
  rm -f "$RUN_DIR/one.log" "$RUN_DIR/two.log"
@@ -21,6 +24,9 @@ SQL
 }
 trap cleanup EXIT INT TERM
 "$PSQL" "$DATABASE_URL" -q -v ON_ERROR_STOP=1 <<SQL
+ update public.onboarding_settings set enabled=true;
+ insert into auth.users(id,aud,role,email,email_confirmed_at) values('$ADMIN','authenticated','authenticated','hello@armatureailabs.com',now());
+ insert into public.staff_roles(user_id,role) values('$ADMIN','admin');
  insert into auth.users(id,aud,role,email,email_confirmed_at) values('$SUBJECT','authenticated','authenticated','notification-race@example.test',now());
  insert into public.basic_onboarding_applications(user_id,full_name,email,phone,linkedin_url,date_of_birth)
  values('$SUBJECT','Notification Race','notification-race@example.test','+919999999999','https://linkedin.com/in/test','1990-01-01');
@@ -43,5 +49,25 @@ sleep 0.2
 SQL
 wait "$PID"
 COUNT=$($PSQL "$DATABASE_URL" -Atc "select count(*) from public.member_notifications where user_id='$SUBJECT' and kind='ready'")
-[ "$COUNT" = 1 ] || { echo 'FAIL: simultaneous document completions lost or duplicated readiness'; exit 1; }
-echo 'PASS: simultaneous scan completion creates exactly one readiness event'
+[ "$COUNT" = 0 ] || { echo 'FAIL: scan completion queued readiness before submission'; exit 1; }
+"$PSQL" "$DATABASE_URL" -q -v ON_ERROR_STOP=1 > "$RUN_DIR/one.log" 2>&1 <<SQL &
+ begin;
+ set local role authenticated;
+ select set_config('request.jwt.claims','{"sub":"$SUBJECT","role":"authenticated"}',true);
+ select public.submit_basic_application_for_review(1);
+ select pg_sleep(1);
+ commit;
+SQL
+PID=$!
+sleep 0.2
+"$PSQL" "$DATABASE_URL" -q -v ON_ERROR_STOP=1 > "$RUN_DIR/two.log" 2>&1 <<SQL
+ begin;
+ set local role authenticated;
+ select set_config('request.jwt.claims','{"sub":"$SUBJECT","role":"authenticated"}',true);
+ select public.submit_basic_application_for_review(1);
+ commit;
+SQL
+wait "$PID"
+COUNT=$($PSQL "$DATABASE_URL" -Atc "select count(*) from public.member_notifications where user_id='$SUBJECT' and kind in ('ready','admin_ready')")
+[ "$COUNT" = 2 ] || { echo 'FAIL: concurrent submission lost or duplicated member/admin readiness'; exit 1; }
+echo 'PASS: concurrent scans do not submit; racing explicit submissions create one member and one admin event'

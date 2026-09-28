@@ -38,6 +38,12 @@ set local role authenticated;
 select throws_ok($$select public.review_basic_onboarding('28000000-0000-4000-8000-000000000001','approved','guardian@example.test','message-reference-synthetic',now()-interval '1 hour')$$,'22023','Unexpired photo and government ID uploads required','expired stored ID cannot pass review');
 reset role;
 update public.onboarding_documents set expires_at=uploaded_at+interval '30 days' where kind='government_id' and user_id='28000000-0000-4000-8000-000000000001';
+do $$ declare old_claims text:=current_setting('request.jwt.claims',true); begin
+ perform set_config('request.jwt.claims','{"sub":"28000000-0000-4000-8000-000000000001","role":"authenticated"}',true);
+ perform public.submit_basic_application_for_review(1);
+ perform set_config('request.jwt.claims',coalesce(old_claims,''),true);
+end $$;
+
 set local role authenticated;
 select throws_ok($$select public.review_basic_onboarding('28000000-0000-4000-8000-000000000001','approved')$$,'22023','Reviewed guardian email evidence required','minor needs staff reviewed guardian email');
 select throws_ok($$select public.review_basic_onboarding('28000000-0000-4000-8000-000000000001','approved','guardian@example.test','message-reference-synthetic',now()+interval '1 hour')$$,'22023','Reviewed guardian email evidence required','guardian evidence cannot have a future receipt');

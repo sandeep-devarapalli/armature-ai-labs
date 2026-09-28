@@ -263,3 +263,17 @@ onboarding database or scanner change.
 The follow-up also removes the remaining closed-applications sentence in homepage
 section06 and labels its lower link Basic membership when basic registration is on.
 Join-page metadata now matches free registration; paid bookings stay disabled.
+
+## Explicit submission and upload feedback — 28 September 2026
+
+The owner reported a photo missing after an applicant pressed Upload photo. A narrowly scoped live metadata check found a stored government ID but no verification-photo reservation or retained avatar. No document contents were opened. The cause is unconfirmed: client format/size validation or a reservation failure can occur before a record exists. This is not evidence of a scanner rejection.
+
+The updated flow separates saving details, submitting/scanning each private image, and final application submission. Only confirmed uploaded_at produces a green upload state. Failed uploads reuse their existing reservation. The optional consented avatar is separate from the required verification photo. Final submission uses a revision-bound, idempotent RPC and records submitted_revision/submitted_at. Existing complete pending applications retain eligibility without replaying notifications. New admin checklist emails use immutable template version 2; version 1 retries remain unchanged.
+
+Release order: deploy the backward-compatible notification sender with template v2 support; apply reviewed migrations; publish the frontend through CI. Verify the applicant's existing ID remains intact, no photo or approval was fabricated, the final submission gate is enforced, and paid services/cleanup settings remain unchanged. Detailed commands/results are recorded in the local release-evidence onboarding-submit-2026-09-28 progress note.
+
+Local verification: 28 SQL files / 803 assertions and four membership/notification concurrency suites passed. Node 22 frontend regression: 39 files / 345 tests passed. Build and release-artifact checks passed. Browser and CI results are recorded below after completion. No real application was submitted or approved during these tests.
+
+Final database regression: all 11 existing concurrency scripts passed, including booking/team/equipment boundaries. Local synthetic fixtures cleaned up. Submission-aware summary and Staff RLS preserve owner/Admin access and existing approved/revoked statuses.
+
+Browser verification: all 12 basic-registration scenarios passed across desktop/mobile, including upload failure/retry and final receipt in light/dark/sepia. Seven focused onboarding unit tests and TypeScript build passed. No production documents were used in browser fixtures.

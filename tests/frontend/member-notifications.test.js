@@ -100,6 +100,15 @@ describe('immutable privacy-preserving templates',()=>{
     expect(template.subject).not.toMatch(/approved|rejected|revoked/i);
     if(kind==='admin_ready') expect(template.text).not.toContain('synthetic@example.test');
   });
+  it('lists submitted details in new admin alerts without changing version-one retries', () => {
+    const original = memberNotificationTemplate('admin_ready', 1);
+    const submitted = memberNotificationTemplate('admin_ready', 2);
+    expect(original.text).toBe('An application is ready for review. Open https://armatureailabs.com/admin/members and sign in with your authorised reviewer account. Review identity documents only inside the protected portal. Do not download or retain copies.');
+    for (const detail of ['full name', 'email', 'phone number', 'LinkedIn URL', 'date of birth', 'privacy acceptance', 'scanned profile photo', 'scanned government ID']) expect(submitted.text).toContain(detail);
+    expect(submitted.text).toContain('Guardian permission, where required, must still be reviewed');
+    expect(submitted.html).not.toMatch(/<img|storage\/|signed|token=/i);
+    expect(memberNotificationTemplate('admin_ready', 3)).toBeNull();
+  });
   it('rejects unsupported template versions without silently switching payloads',()=>expect(memberNotificationTemplate('approved',2)).toBeNull());
 });
 

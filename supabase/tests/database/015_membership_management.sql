@@ -27,6 +27,18 @@ select throws_ok($$select public.approve_owner_basic_membership(1,true)$$,'22023
 reset role;
 insert into storage.objects(bucket_id,name) select 'onboarding-documents',object_path from public.onboarding_documents where user_id in ('31000000-0000-4000-8000-000000000001','31000000-0000-4000-8000-000000000004');
 select public.finalize_onboarding_document(id) from public.onboarding_documents where user_id in ('31000000-0000-4000-8000-000000000001','31000000-0000-4000-8000-000000000004');
+do $$ declare old_claims text:=current_setting('request.jwt.claims',true); begin
+ perform set_config('request.jwt.claims','{"sub":"31000000-0000-4000-8000-000000000001","role":"authenticated"}',true);
+ perform public.submit_basic_application_for_review(1);
+ perform set_config('request.jwt.claims',coalesce(old_claims,''),true);
+end $$;
+
+do $$ declare old_claims text:=current_setting('request.jwt.claims',true); begin
+ perform set_config('request.jwt.claims','{"sub":"31000000-0000-4000-8000-000000000004","role":"authenticated"}',true);
+ perform public.submit_basic_application_for_review(1);
+ perform set_config('request.jwt.claims',coalesce(old_claims,''),true);
+end $$;
+
 set local role authenticated;
 select set_config('request.jwt.claims','{"sub":"31000000-0000-4000-8000-000000000002","role":"authenticated"}',true);
 select is(public.has_staff_role(null),false,'reviewer is not operational staff');

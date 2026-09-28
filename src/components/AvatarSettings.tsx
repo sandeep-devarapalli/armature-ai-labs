@@ -32,9 +32,9 @@ export function AvatarSettings({ client, userId, name }: {
         }
     }
     return <section className="panel" aria-labelledby="avatar-settings-title">
-    <h2 id="avatar-settings-title">Profile photo</h2>
+    <h2 id="avatar-settings-title">Optional member avatar</h2>
     <AccountAvatar client={client} userId={userId} name={name} large/>
-    <p>Your avatar is visible to approved members and authorised reviewers. A separate copy remains until you replace or remove it, or delete your account. Verification originals still expire after 30 days. Government ID images are never used.</p>
+    <p>This optional avatar does not replace your required verification photo. Your avatar is visible to approved members and authorised reviewers. A separate copy remains until you replace or remove it, or delete your account. Verification originals still expire after 30 days. Government ID images are never used.</p>
     <label><input type="checkbox" checked={consent} onChange={(event) => setConsent(event.target.checked)} disabled={busy}/> I agree to use my photo as a retained member avatar.</label>
     <div className="button-row">
       <button className="button secondary" disabled={busy || !consent} onClick={() => void update("POST")}>Use submitted profile photo</button>

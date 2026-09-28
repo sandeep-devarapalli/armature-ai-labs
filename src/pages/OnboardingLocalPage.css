@@ -24,3 +24,15 @@
 
 .onboarding-local .ol-consent { display: block; }
 .onboarding-local .ol-consent input { width: auto; margin-right: .6rem; }
+
+.onboarding-local .ol-steps { display:flex; flex-wrap:wrap; gap:1rem 2rem; margin:2rem 0; padding:1.25rem 0; border-block:1px solid var(--hair-strong); }
+.onboarding-local .ol-uploaded { color:#176b36; background:#e6f4e9; padding:.65rem 1rem; border:1px solid #8bbe98; font-weight:700; }
+.onboarding-local .ol-submit, .onboarding-local .ol-optional-avatar { margin-top:3rem; padding-top:2rem; border-top:1px solid var(--hair-strong); }
+.onboarding-local .ol-checklist { display:grid; gap:.6rem; list-style:none; padding:0; margin:1.5rem 0; }
+.onboarding-local [id] { scroll-margin-top:8rem; }
+.ol-confirmation { width:min(36rem,calc(100% - 2rem)); padding:2rem; border:1px solid var(--hair-strong); background:var(--panel); color:var(--ink); }
+.ol-confirmation::backdrop { background:rgb(0 0 0 / .6); }
+.ol-confirmation p { margin:1rem 0 1.5rem; }
+
+.onboarding-local .ol-optional-avatar label:has(input[type=checkbox]) { display:flex; align-items:flex-start; gap:.65rem; }
+.onboarding-local .ol-optional-avatar input[type=checkbox] { width:auto; flex:0 0 auto; margin:.25rem 0 0; padding:0; }

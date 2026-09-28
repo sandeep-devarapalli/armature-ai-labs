@@ -40,6 +40,12 @@ select throws_ok($$select public.review_basic_onboarding('29000000-0000-4000-800
 reset role;
 insert into storage.objects(bucket_id,name) select 'onboarding-documents',object_path from public.onboarding_documents where user_id='29000000-0000-4000-8000-000000000001' and expires_at>now();
 select public.finalize_onboarding_document(id) from public.onboarding_documents where user_id='29000000-0000-4000-8000-000000000001' and expires_at>now();
+do $$ declare old_claims text:=current_setting('request.jwt.claims',true); begin
+ perform set_config('request.jwt.claims','{"sub":"29000000-0000-4000-8000-000000000001","role":"authenticated"}',true);
+ perform public.submit_basic_application_for_review(2);
+ perform set_config('request.jwt.claims',coalesce(old_claims,''),true);
+end $$;
+
 set local role authenticated;
 select throws_ok($$select public.review_basic_onboarding('29000000-0000-4000-8000-000000000001','approved',p_expected_revision=>2)$$,'22023','Reviewed guardian email evidence required','guardian evidence explicitly required anew');
 select lives_ok($$select public.review_basic_onboarding('29000000-0000-4000-8000-000000000001','approved','guardian@example.test','synthetic-message-reference',now()-interval '1 hour',2)$$,'fresh review approves corrected application');
