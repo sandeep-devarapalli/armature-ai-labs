@@ -5,7 +5,7 @@ test.beforeEach(async ({ page }) => {
 });
 const actor = "10000000-0000-4000-8000-000000000001";
 const applicant = "10000000-0000-4000-8000-000000000002";
-async function mockMembers(page: Page, role: string) {
+async function mockMembers(page: Page, role: string, incomplete = false) {
   const calls: { name: string; body: Record<string, unknown> }[] = [];
   let targetRole = "member";
   let status = "pending";
@@ -21,7 +21,7 @@ async function mockMembers(page: Page, role: string) {
     if (url.pathname.includes("/rpc/")) {
       calls.push({ name, body });
       if (name === "get_basic_account_summary") data = { user_id: actor, name: "Synthetic Reviewer", email: user.email, status: "approved", application_status: "approved", role, revision: 1, owner_approval_available: false };
-      if (name === "list_basic_members") data = { items: status === "approved" && role === "membership_reviewer" ? [] : [{ user_id: applicant, name: "Synthetic Applicant", email: "applicant@example.test", registered_at: "2026-09-01T00:00:00Z", status, application_status: status, role: targetRole, revision: 1, photo_available: true, id_available: true, reviewed_at: null }], total: 1, counts: { pending: 1 } };
+      if (name === "list_basic_members") data = { items: status === "approved" && role === "membership_reviewer" ? [] : [{ user_id: applicant, name: "Synthetic Applicant", email: "applicant@example.test", registered_at: "2026-09-01T00:00:00Z", status, application_status: incomplete ? null : status, role: targetRole, revision: 1, photo_available: true, id_available: true, reviewed_at: null }], total: 1, counts: { pending: 1 } };
       if (name === "set_membership_staff_role") { targetRole = String(body.p_role); data = targetRole; }
       if (name === "review_basic_onboarding") { status = "approved"; data = {}; }
     } else if (name === "staff_roles") data = [{ role }];
@@ -81,4 +81,19 @@ test("Staff can approve pending applications without administrative controls", a
   await page.getByRole("button", { name: "Approve registration" }).click();
   await expect.poll(() => calls.some((call) => call.name === "review_basic_onboarding" && call.body.p_decision === "approved")).toBe(true);
   await expect(page.getByRole("button", { name: "Approve registration" })).toHaveCount(0);
+});
+
+for (const incomplete of [true, false]) test(`View brings ${incomplete ? "incomplete" : "submitted"} member details into view`, async ({ page }, info) => {
+  await mockMembers(page, "admin", incomplete);
+  await page.goto("/admin/members");
+  const view = page.getByRole("button", { name: "View Synthetic Applicant" });
+  const heading = page.getByRole("region", { name: "Selected member" }).getByRole("heading", { name: "Synthetic Applicant", exact: true });
+  for (let attempt = 0; attempt < 2; attempt++) {
+    await view.click();
+    await expect(heading).toBeFocused(); await expect(heading).toBeInViewport();
+    await expect(view).toHaveAttribute("aria-expanded", "true");
+  }
+  if (incomplete) await expect(page.getByText("This account has not submitted an application yet.")).toBeVisible();
+  else await expect(page.getByRole("button", { name: "Approve registration" })).toBeVisible();
+  await page.screenshot({ path: info.outputPath(`member-view-${incomplete ? "incomplete" : "submitted"}.png`) });
 });
