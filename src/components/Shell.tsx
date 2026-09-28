@@ -218,6 +218,7 @@ export function Shell({ children }: PropsWithChildren) {
         </div>
       )}
 
+      <AnalyticsConsent />
       <main id="main">{children ?? <Outlet />}</main>
       <footer>
         <div className="wrap footer-grid">
@@ -254,7 +255,6 @@ export function Shell({ children }: PropsWithChildren) {
           <p className="footer-wordmark">Armature AI Labs</p>
         </div>
       </footer>
-      <AnalyticsConsent />
     </div>
   );
 }

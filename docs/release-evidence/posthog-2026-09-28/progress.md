@@ -20,3 +20,8 @@ Public-page analytics and anonymous registration step counts. Explicit optional 
 
 ## Release
 Pending PR checks, squash merge, production workflow and live event read-back. No database migration required.
+
+## Production preflight correction
+PR #100 merged as 5e6c5c6d4ecdd70d79c505307f39edcf1f4d4fb0 after required checks passed. Main workflow 36402075124 then stopped before deployment: the analytics-enabled mobile fixture revealed that the fixed consent banner covered Building Vision controls. The follow-up puts mobile consent in normal document flow before main; visitors can use the site without deciding. Analytics-enabled production browser tests now run before merge using a synthetic token, with an explicit undecided-consent regression. Existing service-worker coverage remains enabled.
+
+Project display name is Armature AI Labs; Asia/Kolkata reporting timezone and disabled autocapture are verified. Dashboard 2143789 provides pageviews and documents the four registration_step values; no fake membership submission was sent. Final live read-back remains required after the corrected release.
