@@ -79,3 +79,21 @@ it("removes notification history on logout and ignores an outstanding response",
  await waitFor(() => expect(screen.queryByText(/private@example.test/)).not.toBeInTheDocument());
  expect(screen.queryByRole("region", { name: "Membership notification status" })).not.toBeInTheDocument();
 });
+
+it.each([null, "pending"])("View focuses details repeatedly without background refresh stealing focus (%s)", async applicationStatus => {
+ const scroll = vi.fn();
+ const previous = HTMLElement.prototype.scrollIntoView;
+ HTMLElement.prototype.scrollIntoView = scroll;
+ try {
+  setup("admin", "member", applicationStatus);
+  const view = await screen.findByRole("button", { name: /View Synthetic/ });
+  fireEvent.click(view);
+  const heading = screen.getByRole("heading", { name: "Synthetic Person" });
+  expect(heading).toHaveFocus(); expect(view).toHaveAttribute("aria-expanded", "true");
+  view.focus(); fireEvent.click(view); expect(heading).toHaveFocus(); expect(scroll).toHaveBeenCalledTimes(2);
+  const search = screen.getByLabelText("Search members"); search.focus();
+  fireEvent.click(screen.getByRole("button", { name: "Refresh list" }));
+  await waitFor(() => expect(screen.queryByText("Loading members…")).not.toBeInTheDocument());
+  expect(search).toHaveFocus(); expect(scroll).toHaveBeenCalledTimes(2);
+ } finally { HTMLElement.prototype.scrollIntoView = previous; }
+});

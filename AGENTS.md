@@ -1,3 +1,5 @@
+- Member View navigation correction, 28 September 2026: selecting View in member management must visibly navigate to and focus the selected member details, including repeated clicks on the same member. Background list refresh must not steal focus. Preserve incomplete-account visibility and existing role/review permissions.
+
 - Equipment admin release authorization, 27 September 2026: owner explicitly requested publication with rates editable later, then confirmed “Publish equipment administration; keep payments closed.” Release the protected Admin/Super admin equipment page and its required gated schema only. Keep payment/mock gates false, paid/team customer routes closed, no commissioned inventory or invented rates, and defer independent Gmail and combined-checkout migrations. This supersedes the local-only equipment administration hold, not the LLP/Razorpay hold.
 
 # AGENTS.md
