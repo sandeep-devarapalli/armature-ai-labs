@@ -4,6 +4,7 @@ import type { Session, SupabaseClient } from "@supabase/supabase-js";
 import { documentAvailable, ONBOARDING_NOTICE_VERSION, type LocalApplication, type LocalDocument, type LocalReview } from "../lib/onboarding";
 import { getAgeOnDate } from "../lib/onboarding";
 import "./OnboardingLocalPage.css";
+import { trackRegistrationMilestone } from "../lib/analytics";
 import { AvatarSettings } from "../components/AvatarSettings";
 
 export function OnboardingForm({ client, requestDocument, localLogin, initialUserId }: { initialUserId?: string; client: SupabaseClient | null; requestDocument: (id: string, file?: File) => Promise<Response>; localLogin?: (event: FormEvent<HTMLFormElement>) => Promise<Session> }) {
@@ -107,6 +108,7 @@ export function OnboardingForm({ client, requestDocument, localLogin, initialUse
         p_full_name: fields.get("full_name"), p_phone: fields.get("phone"), p_linkedin_url: fields.get("linkedin_url"), p_date_of_birth: fields.get("date_of_birth"), p_notice_version: ONBOARDING_NOTICE_VERSION,
       });
       if (result.error) throw result.error;
+      if (!local) trackRegistrationMilestone("details_saved");
       await refresh(); setNotice(local ? "Details saved. Submit both synthetic images, then submit your application." : "Details saved. Submit your photo and ID, then submit your application."); document.getElementById("private-documents")?.scrollIntoView({ behavior: "auto", block: "start" });
     });
   }
@@ -120,6 +122,7 @@ export function OnboardingForm({ client, requestDocument, localLogin, initialUse
       if (identity.current !== userId) return;
       await refresh();
       if (identity.current !== userId) return;
+      if (!local) trackRegistrationMilestone("application_submitted");
       setReceived(true); window.dispatchEvent(new Event("armature:account-changed"));
     });
   }
@@ -145,6 +148,7 @@ export function OnboardingForm({ client, requestDocument, localLogin, initialUse
         if (!response.ok) throw new Error("Upload could not be confirmed. Please try again.");
         if (identity.current !== userId) return;
         await refresh();
+        if (!local && identity.current === userId) trackRegistrationMilestone(kind === "photo" ? "photo_uploaded" : "government_id_uploaded");
         setNotice("Upload checked. Confirm its uploaded status below before submitting your application.");
       } finally { if (identity.current === userId) setUploading(null); }
       } catch (failure) {

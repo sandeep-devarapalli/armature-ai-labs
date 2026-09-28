@@ -25,6 +25,7 @@ import { useTheme } from "../context/ThemeContext";
 import type { Theme } from "../types/domain";
 import { AccountMenu } from "./AccountMenu";
 import { BrandMark } from "./BrandMark";
+import { AnalyticsConsent, AnalyticsSettingsButton } from "./AnalyticsConsent";
 import { PageMetadata } from "./PageMetadata";
 
 const publicLinks = [
@@ -236,6 +237,7 @@ export function Shell({ children }: PropsWithChildren) {
             <Link to="/about">Who we are</Link>
             <Link to="/team">Meet the team</Link>
             <Link to="/privacy">Privacy</Link>
+            <AnalyticsSettingsButton />
             <Link to="/building-vision">Building vision</Link>
             <Link to="/blog">Blog</Link>
             <a href="https://github.com/sandeep-devarapalli/armature-ai-labs/tree/main/docs">Docs</a>
@@ -252,6 +254,7 @@ export function Shell({ children }: PropsWithChildren) {
           <p className="footer-wordmark">Armature AI Labs</p>
         </div>
       </footer>
+      <AnalyticsConsent />
     </div>
   );
 }

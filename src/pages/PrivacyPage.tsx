@@ -1,10 +1,11 @@
 import { basicOnboardingAvailable } from "../config/release";
 import { PageHeader } from "../components/Primitives";
 import "./PrivacyPage.css";
+import { AnalyticsSettingsButton } from "../components/AnalyticsConsent";
 
 export function PrivacyPage() {
   return <div className="privacy-page">
-    <PageHeader meta="Privacy · Updated 27 September 2026" title="Your information, handled with care." description="How Armature AI Labs handles website visits, enquiries and free membership registration." />
+    <PageHeader meta="Privacy · Updated 28 September 2026" title="Your information, handled with care." description="How Armature AI Labs handles website visits, enquiries and free membership registration." />
     <div className="wrap privacy-content">
       <section aria-labelledby="privacy-operator">
         <h2 id="privacy-operator">Who is responsible</h2>
@@ -26,6 +27,13 @@ export function PrivacyPage() {
           <li>Following links to services such as Discord, LinkedIn or GitHub takes you to websites governed by their own privacy notices.</li>
         </ul>
         <p>Third-party content and services may use their own storage and processing practices. Their privacy notices apply alongside this one when you use them.</p>
+      </section>
+      <section id="privacy-analytics" aria-labelledby="privacy-analytics-title">
+        <h2 id="privacy-analytics-title">Optional website analytics</h2>
+        <p>Only if you select Allow analytics, we use PostHog, processed in the United States, to measure public page visits and anonymous registration milestones. We do not send names, email addresses, phone numbers, membership or account identifiers, profile fields, government ID contents, uploaded images, or form input values. Private account and administration pages are excluded from page-view measurement.</p>
+        <p>Measurement uses a temporary anonymous identifier rather than a persistent member profile. Session recording and automatic interaction capture are disabled. Your analytics preference is saved in this browser so we can honour it on later visits. PostHog receives connection information needed to deliver the analytics request; anonymous events should not be treated as a promise of complete anonymity from the service provider.</p>
+        <p>You can decline without affecting registration or website access. Withdraw consent through Analytics settings to stop future measurement in this browser. Withdrawal does not automatically delete events already received; contact privacy@armatureailabs.com about privacy requests.</p>
+        <AnalyticsSettingsButton />
       </section>
       <section aria-labelledby="privacy-membership">
         <h2 id="privacy-membership">Basic membership and identity review</h2>
