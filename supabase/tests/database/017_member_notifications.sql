@@ -1,4 +1,5 @@
 begin;
+update public.onboarding_settings set enabled=true;
 select no_plan();
 select ok(not has_table_privilege('authenticated','public.member_notifications','SELECT'),'authenticated has no queue privilege');
 select ok(not has_table_privilege('anon','public.member_notifications','INSERT'),'anonymous cannot inject notifications');
@@ -31,6 +32,12 @@ insert into storage.objects(bucket_id,name) values('onboarding-documents','notif
 update public.onboarding_documents set uploaded_at=now() where id='60000000-0000-4000-8000-000000000011';
 select is((select count(*)::integer from public.member_notifications),1,'one scanned document is not ready');
 update public.onboarding_documents set uploaded_at=now() where id='60000000-0000-4000-8000-000000000012';
+do $$ declare old_claims text:=current_setting('request.jwt.claims',true); begin
+ perform set_config('request.jwt.claims','{"sub":"60000000-0000-4000-8000-000000000001","role":"authenticated"}',true);
+ perform public.submit_basic_application_for_review(1);
+ perform set_config('request.jwt.claims',coalesce(old_claims,''),true);
+end $$;
+
 select is((select count(*)::integer from public.member_notifications where kind='ready' and state='pending'),1,'both uploaded storage-backed documents queue ready');
 select is((select count(*)::integer from public.member_notifications where kind='admin_ready'),1,'only hello receives admin readiness, not alias super admin');
 update public.onboarding_documents set uploaded_at=now() where user_id='60000000-0000-4000-8000-000000000001';
@@ -129,6 +136,12 @@ insert into storage.objects(bucket_id,name) select 'onboarding-documents',object
  where user_id='60000000-0000-4000-8000-000000000001' and uploaded_at is null;
 select public.finalize_onboarding_document(id) from public.onboarding_documents
  where user_id='60000000-0000-4000-8000-000000000001' and uploaded_at is null;
+do $$ declare old_claims text:=current_setting('request.jwt.claims',true); begin
+ perform set_config('request.jwt.claims','{"sub":"60000000-0000-4000-8000-000000000001","role":"authenticated"}',true);
+ perform public.submit_basic_application_for_review(4);
+ perform set_config('request.jwt.claims',coalesce(old_claims,''),true);
+end $$;
+
 select is((select count(*)::integer from public.member_notifications where kind='resubmission_ready' and application_revision=4),1,'replacement completion queues exactly one current resubmission');
 select is((select count(*)::integer from public.claim_member_notifications()),1,'stale correction is suppressed while new readiness is claimed');
 select ok(not exists(select 1 from public.member_notifications where kind='corrections_requested' and state='pending'),'prior revision decision does not notify after resubmission');

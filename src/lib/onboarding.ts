@@ -4,6 +4,7 @@ export const ONBOARDING_NOTICE_VERSION = "2026-09-26-release-1";
 export interface LocalApplication {
   user_id: string; full_name: string; email: string; phone: string; linkedin_url: string;
   date_of_birth: string; status: string; revision: number;
+  submitted_revision?: number | null; submitted_at?: string | null;
 }
 export interface LocalDocument {
   id: string; user_id: string; kind: "photo" | "government_id"; id_type: string | null;

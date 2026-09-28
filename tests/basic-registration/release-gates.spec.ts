@@ -7,9 +7,9 @@ test("basic registration opens independently while paid access remains closed", 
   await expect(page.getByRole("heading", { name: "Create your basic membership." })).toBeVisible();
   await page.getByRole("link", { name: "Register for free" }).first().click();
   await expect(page).toHaveURL(/\/onboarding$/);
-  await expect(page.getByRole("link", { name: "Sign in with your email" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Start your process" })).toBeVisible();
   await expect(page.getByText("Staff approval verifies your registration", { exact: false })).toBeVisible();
-  await page.getByRole("link", { name: "Sign in with your email" }).click();
+  await page.getByRole("link", { name: "Start your process" }).click();
   await expect(page.getByRole("heading", { name: "Create your member account." })).toBeVisible();
   await expect(page.getByText("Use a secure email link for free registration", { exact: false })).toBeVisible();
   await expect(page.getByRole("button", { name: "Continue with Google" })).toBeVisible();

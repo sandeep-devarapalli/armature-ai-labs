@@ -15,8 +15,10 @@ const messages: Record<string, [string, string]> = {
 
 // Version 1 is immutable: retries must retain identical provider payloads.
 export function memberNotificationTemplate(kind: string, version: number) {
-  const message = Object.hasOwn(messages, kind) && messages[kind];
-  if (version !== 1 || !message) return null;
+  const message = version === 2 && kind === "admin_ready"
+    ? ["An Armature application has been submitted", "A member has submitted their application for approval. Received: full name, email, phone number, LinkedIn URL, date of birth, privacy acceptance, a scanned profile photo and a scanned government ID. Guardian permission, where required, must still be reviewed before approval. Open https://armatureailabs.com/admin/members and sign in to see the applicant and submitted details. Review identity documents only inside the protected portal. Do not download or retain copies."]
+    : version === 1 && Object.hasOwn(messages, kind) && messages[kind];
+  if (!message) return null;
   const [subject, text] = message;
   const escaped = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   const html = `<div style="max-width:560px;margin:0 auto;padding:24px;font:16px/1.6 Arial,sans-serif;color:#222"><p>${escaped.replace(/https:\/\/armatureailabs\.com\/[a-z/]+/g, '<a href="$&">$&</a>')}</p><p>Armature AI Labs</p></div>`;
