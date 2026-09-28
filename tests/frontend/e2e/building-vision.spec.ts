@@ -244,3 +244,23 @@ test("S02 electrical and setup plan publishes both floors with schedules and nat
   expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
   expect(errors).toEqual([]);
 });
+
+
+test("undecided analytics consent leaves building controls usable without analytics requests", async ({ page }, testInfo) => {
+  test.skip(process.env.VITE_ANALYTICS_ENABLED !== "true", "Requires the analytics-enabled production fixture.");
+  const analyticsRequests: string[] = [];
+  page.on("request", request => { if (/posthog\.com/.test(new URL(request.url()).hostname)) analyticsRequests.push(request.url()); });
+  await page.route("https://*.posthog.com/**", route => route.abort());
+  await page.goto("/building-vision/");
+  await expect(page.getByRole("region", { name: "Optional website analytics" })).toBeVisible();
+  await page.screenshot({ path: testInfo.outputPath("building-consent-initial.png") });
+  await page.getByRole("button", { name: "First floor model", exact: true }).click();
+  await page.getByLabel("Choose a room").selectOption("FF-02");
+  await expect(page.getByRole("heading", { name: "Enclosure proposal C04 · Blender" })).toBeVisible();
+  await page.getByRole("button", { name: "Ground floor model", exact: true }).click();
+  await expect(page.getByLabel("Choose a room")).toHaveValue("GF-10");
+  expect(await page.evaluate(() => localStorage.getItem("armature-analytics-consent"))).toBeNull();
+  expect(analyticsRequests).toEqual([]);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
+  await page.screenshot({ path: testInfo.outputPath("building-controls-consent-undecided.png") });
+});

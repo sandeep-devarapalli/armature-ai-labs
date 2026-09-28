@@ -7,4 +7,4 @@
 .analytics-consent-dialog { width:min(38rem,calc(100% - 2rem)); max-height:calc(100dvh - 2rem); overflow:auto; }
 .analytics-consent-dialog::backdrop { background:rgb(0 0 0 / .6); }
 .analytics-settings-link { padding:0; border:0; background:none; color:var(--link); font:inherit; cursor:pointer; text-align:left; text-decoration:underline; text-underline-offset:3px; }
-@media(max-width:600px) { .analytics-consent-banner { bottom:.75rem; right:.75rem; width:calc(100% - 1.5rem); padding:1rem; } }
+@media(max-width:600px) { .analytics-consent-banner { position:static; margin:1rem auto; width:calc(100% - 2rem); max-height:none; padding:1rem; box-shadow:none; } }
