@@ -74,3 +74,24 @@ The service-only reservation/settlement ledger is preparation for the future pay
 - `DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:58322/postgres PSQL=/opt/homebrew/opt/postgresql@15/bin/psql sh supabase/tests/concurrent_discounts.sh`: passed; exactly one limited-use reservation succeeds and a transaction begun before expiry cannot capture after expiry.
 - Same local DATABASE_URL with `concurrent_equipment_rental.sh` and `concurrent_workspace_pass.sh`: passed; equipment loser rolls back workspace and monthly/day conflicts remain enforced.
 - Temporary full database logs: `/private/tmp/discount-database-suite/`; migration log: `/private/tmp/discount-migration.log`.
+
+## Reproduction and teardown
+
+The full local suite used `docker exec -i supabase_db_armature-equipment-wishlist-check psql -U postgres -v ON_ERROR_STOP=1 < "$test_file"` for every `supabase/tests/database/*.sql`, retaining separate logs in `/private/tmp/discount-database-suite/`. Each log was inspected for `not ok` and `ERROR:`; only successful TAP plans remained. The final expanded `030_discounts.sql` was rerun after adding repeated-use cases.
+
+Final local read-back: booking mock gate false; equipment mock gate false; synthetic discount users/offers zero; private discount quotes and redemptions zero. SQL tests roll back; concurrency teardown removes its own synthetic fixtures.
+
+## Remote handoff
+
+- Implementation commit: d83810c56b61cb3bdd641843733bde69de3bb01c
+- Draft PR: https://github.com/sandeep-devarapalli/armature-ai-labs/pull/104
+- Initial CI: https://github.com/sandeep-devarapalli/armature-ai-labs/actions/runs/36730307956
+- Initial frontend CI stopped on pre-existing development dependency advisories (brace-expansion and undici via jsdom/miniflare/wrangler). Production dependency audit passed. A targeted non-major dependency repair is being validated separately; no `--force` or payment change.
+
+## CI dependency repair
+
+The initial full audit failure was reproduced locally. Updated only the affected development dependency chain: Wrangler 4.131.0 to the first patched 4.144.0, brace-expansion 2.1.7/5.0.12, fast-uri 3.1.8, and undici 7.29.1/8.11.2 within dependency constraints. Wrangler already used Miniflare 5 alpha; this does not introduce a new major/prerelease line. No force upgrade or runtime product dependency change.
+
+After the update: complete audit reports zero vulnerabilities; production audit clean; all 367 unit tests pass; build and 156-page SEO/artifact checks pass; Cloudflare `check:pages-runtime` passes 22 bounded HTTP probes. A late quote-preview error-handler change required `Promise.resolve` around Supabase's PromiseLike RPC builder; TypeScript/build and the 10 discount tests pass after correction. The initial commit omitted the locally tested new quote-preview component from explicit staging; the follow-up commit includes it before final CI.
+
+Dependency test logs: `/private/tmp/discount-dependency-tests.log`, `/private/tmp/discount-dependency-build.log`, `/private/tmp/discount-dependency-runtime.log`.
