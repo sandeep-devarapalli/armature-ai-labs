@@ -1,3 +1,4 @@
+import { DiscountOffers } from "../components/DiscountOffers";
 import { EquipmentGuide, EquipmentReference } from "../components/EquipmentGuide";
 import { equipmentGuides, plannedEquipment } from "../data/equipmentGuides";
 import { WishlistSidebar } from "../components/WishlistSidebar";
@@ -104,6 +105,7 @@ export function ComponentsPage() {
           </>
         ) : undefined}
       />
+      <DiscountOffers categories={["equipment"]} />
       <div className="wrap" style={{ paddingTop: 24 }}><label className="search-box"><Search aria-hidden="true" /><span className="sr-only">Search equipment and components</span><input value={query} onChange={event=>setQuery(event.target.value)} placeholder="Search equipment and components" /></label></div>
       {!selectedProject && <Section number="01" title="The first equipment collection" lede="A proposed starting kit for physical AI, robotics and prototyping. Quantities are planning targets; purchase and commissioning are pending."><div className="equipment-catalogue-layout"><div className="equipment-plan-grid">{plannedEquipment.filter(item=>item.join(" ").toLowerCase().includes(query.toLowerCase())).map(([quantity,title,detail,slug]) => { const guide=equipmentGuides.find(item=>item.slug===slug); return <article className="equipment-plan-card" key={title}>{guide && <EquipmentReference guide={guide} />}<span className="mono">{quantity} planned · not bookable</span><h3>{title}</h3><p>{detail}</p>{slug ? <Link to={`/components/${slug}`}>Explore equipment <ArrowRight aria-hidden="true" /></Link> : <span className="estimate-note">Exact model and kit to confirm</span>}</article>; })}</div><WishlistSidebar query={query} /></div></Section>}
       <section className="procurement-summary">

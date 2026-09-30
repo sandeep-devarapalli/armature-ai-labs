@@ -26,6 +26,7 @@ export function AccountMenu() {
       {account && ["admin", "super_admin", "membership_reviewer"].includes(account.role) && <Link to="/admin/members">{account.role === "membership_reviewer" ? "Membership reviews" : "Admin → Members"}</Link>}
       {account && ["admin", "super_admin"].includes(account.role) && <Link to="/admin/equipment-wishlist">Admin → Equipment wishlist</Link>}
       {basicOnboardingAvailable && account && ["admin", "super_admin"].includes(account.role) && <Link to="/admin/equipment">Admin → Equipment operations</Link>}
+      {basicOnboardingAvailable && account && ["admin", "super_admin"].includes(account.role) && <Link to="/admin/discounts">Admin → Discounts</Link>}
       {signedIn && <button type="button" onClick={() => void signOut()}>Sign out</button>}
     </div>
   </details>;
