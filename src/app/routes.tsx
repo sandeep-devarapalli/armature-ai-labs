@@ -30,6 +30,7 @@ const ComponentsPage = lazy(() => import("../pages/ComponentsPages").then((modul
 const ComponentDetailPage = lazy(() => import("../pages/ComponentsPages").then((module) => ({ default: module.ComponentDetailPage })));
 const PublicComponentRequestPage = lazy(() => import("../pages/InventoryPages").then((module) => ({ default: module.PublicComponentRequestPage })));
 const EquipmentWishlistPage = lazy(() => import("../pages/EquipmentWishlistPage").then(module => ({ default: module.EquipmentWishlistPage })));
+const AdminDiscountsPage = lazy(() => import("../pages/AdminDiscountsPage").then(module => ({ default: module.AdminDiscountsPage })));
 const AdminEquipmentPage = lazy(() => import("../pages/AdminEquipmentPage").then((module) => ({ default: module.AdminEquipmentPage })));
 const AdminEquipmentWishlistPage = lazy(() => import("../pages/EquipmentWishlistPage").then(module => ({ default: module.AdminEquipmentWishlistPage })));
 const ComponentRequestsPage = lazy(() => import("../pages/InventoryPages").then((module) => ({ default: module.ComponentRequestsPage })));
@@ -119,6 +120,7 @@ export const routes: RouteObject[] = [
       { path: "/components", element: <ComponentsPage /> },
       { path: "/components/wishlist", element: <EquipmentWishlistPage /> },
       { path: "/admin/equipment-wishlist", element: <AdminEquipmentWishlistPage /> },
+      { path: "/admin/discounts", element: <ReleaseGate enabled={basicOnboardingAvailable}><AdminDiscountsPage /></ReleaseGate> },
       { path: "/admin/equipment", element: <ReleaseGate enabled={basicOnboardingAvailable}><AdminEquipmentPage /></ReleaseGate> },
       { path: "/components/request", element: componentRequestFeature(<PublicComponentRequestPage />) },
       { path: "/components/:slug", element: <ComponentDetailPage /> },

@@ -1,0 +1,8 @@
+.discount-offer-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 1.5rem; margin-top: 1.5rem; }
+.discount-offer-list article, .discount-review { border: 1px solid var(--line); padding: 1.5rem; overflow-wrap: anywhere; }
+.discount-form { display: grid; gap: 1.5rem; min-width: 0; }
+.discount-form fieldset { min-width: 0; }
+.discount-check { display: flex; gap: .75rem; align-items: center; margin: .75rem 0; }
+.discount-check input { width: auto; }
+.discount-review { margin: 1.5rem 0; }
+.discount-offer-list h3 { margin-top: 0; }

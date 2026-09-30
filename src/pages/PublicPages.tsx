@@ -1,3 +1,4 @@
+import { DiscountOffers } from "../components/DiscountOffers";
 import { useRegistrationLabel } from "../context/AccountContext";
 import { useState, type FormEvent } from "react";
 import {
@@ -357,6 +358,7 @@ export function JoinPage() {
           : "Armature AI Labs is pre-launch. We are accepting enquiries about the planned lab, membership, and events; applications and bookings are not open yet."}
         actions={actions}
       />
+      <DiscountOffers categories={["coworking", "cabin"]} />
       <Section number="01" title="One membership journey" lede={basicOnly ? "Start with free registration. Paid access will follow separately." : !memberPlatformAvailable ? "The planned process once membership opens." : undefined}>
         <div className="section-motion membership-motion"><FieldOfTouch scene="birds" /></div>
         <div className="process-list">
