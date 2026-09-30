@@ -12,7 +12,7 @@ export function DiscountOffers({ categories, client = supabase as SupabaseClient
   useEffect(() => {
     let active = true;
     if (!client) return;
-    void Promise.all([client.rpc('public_discount_offers'), userId ? client.rpc('my_discount_offers') : Promise.resolve({ data: [], error: null })]).then(results => {
+    void Promise.all([client.rpc('public_discount_offers', undefined, { get: true }), userId ? client.rpc('my_discount_offers', undefined, { get: true }) : Promise.resolve({ data: [], error: null })]).then(results => {
       if (active) setSnapshot({ userId, offers: results.flatMap((result, index) => result.error ? [] : (result.data ?? []).map((offer: DiscountOffer) => ({ ...offer, ...(index === 0 ? { audience: 'public' } : {}) }))) });
     }).catch(() => { if (active) setSnapshot({ userId, offers: [] }); });
     return () => { active = false; };

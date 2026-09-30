@@ -35,7 +35,7 @@ it('never shows cached personal offers after account switching', async () => {
  expect(screen.queryByText('Private reward')).not.toBeInTheDocument();
 });
 it('anonymous visitors request only public offers', async () => {
- mock.role = null; mock.rpc.mockResolvedValue({ data: [offer], error: null }); render(<DiscountOffers categories={['coworking']} />); await screen.findByText('October offer'); expect(mock.rpc).toHaveBeenCalledTimes(1); expect(mock.rpc).toHaveBeenCalledWith('public_discount_offers');
+ mock.role = null; mock.rpc.mockResolvedValue({ data: [offer], error: null }); render(<DiscountOffers categories={['coworking']} />); await screen.findByText('October offer'); expect(mock.rpc).toHaveBeenCalledTimes(1); expect(mock.rpc).toHaveBeenCalledWith('public_discount_offers', undefined, { get: true });
 });
 it('labels safe public projections as general and displays the purchase window', async () => {
  mock.role = null;

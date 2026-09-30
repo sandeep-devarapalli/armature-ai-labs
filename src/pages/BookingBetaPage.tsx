@@ -1,4 +1,3 @@
-import { DiscountOffers } from "../components/DiscountOffers";
 import { useState } from "react";
 import { Field, PageHeader, Section, Status } from "../components/Primitives";
 import { BookingBetaMap, type BetaPlace } from "../components/BookingBetaMap";
@@ -34,7 +33,6 @@ export function BookingBetaPage() {
   }
   return <>
     <PageHeader meta="Beta · explore only" title="Find your place in the lab." description="Explore the building, compare pass dates and preview prices. This beta does not show live availability, reserve a place or collect payment." />
-    <DiscountOffers categories={[product === "cabin" ? "cabin" : "coworking"]} />
     <Section number="01" title="Choose your workspace">
       <div className="booking-beta-controls">
         <Field label="Pass type"><select value={product} onChange={event => changeProduct(event.target.value as BookingBetaProduct)}><option value="day">Day · flexi chair</option><option value="week">Week · flexi chair</option><option value="month">Month · reserved chair</option><option value="cabin">Month · whole six-seat cabin</option></select></Field>
