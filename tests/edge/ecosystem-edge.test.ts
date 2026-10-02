@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { createClient } from '@supabase/supabase-js';
 
 const mocks = vi.hoisted(() => {
   const env: Record<string, string> = { APP_ORIGIN: 'https://example.org', ECOSYSTEM_TRUSTED_IP_HEADER: 'x-real-ip', ECOSYSTEM_IP_HASH_SECRET: 'synthetic-test-secret-at-least-thirty-two-characters', TURNSTILE_SECRET_KEY: 'synthetic-secret' };
@@ -16,6 +17,30 @@ describe('anonymous ecosystem intake', () => {
     mocks.rpc.mockReset().mockResolvedValue({ data: '10000000-0000-4000-8000-000000000099', error: null });
     mocks.env.ECOSYSTEM_TRUSTED_IP_HEADER = 'x-real-ip';
     vi.stubGlobal('fetch', vi.fn().mockImplementation(async () => new Response(JSON.stringify({ success: true, action: 'ecosystem_submit', hostname: 'example.org' }), { status: 200 })));
+  });
+  it('allows the actual Supabase SDK request headers in browser preflight without opening other origins', async () => {
+    let sdkRequest: Request | undefined;
+    const sdk = createClient('https://api.example.org', 'synthetic-public-key', {
+      auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+      global: { fetch: async (input, init) => {
+        sdkRequest = new Request(input, init);
+        return new Response('{}', { headers: { 'content-type': 'application/json' } });
+      } },
+    });
+    await sdk.functions.invoke('submit-ecosystem', { body: draft });
+    const requestedHeaders = [...sdkRequest!.headers.keys()];
+    expect(requestedHeaders).toEqual(expect.arrayContaining(['authorization', 'apikey', 'content-type', 'x-client-info']));
+    const preflight = (origin: string) => new Request(sdkRequest!.url, { method: 'OPTIONS', headers: {
+      origin, 'access-control-request-method': 'POST', 'access-control-request-headers': requestedHeaders.join(','),
+    } });
+    const response = await handleSubmission(preflight('https://armatureailabs.com'));
+    expect(response.status).toBe(204);
+    expect(response.headers.get('access-control-allow-origin')).toBe('https://armatureailabs.com');
+    const allowedHeaders = response.headers.get('access-control-allow-headers')!.split(',').map((value) => value.trim());
+    expect(allowedHeaders).toEqual(expect.arrayContaining(requestedHeaders));
+    expect((await handleSubmission(preflight('https://untrusted.example'))).headers.get('access-control-allow-origin')).not.toBe('https://untrusted.example');
+    expect(mocks.rpc).not.toHaveBeenCalled();
+    expect(fetch).not.toHaveBeenCalled();
   });
   it('returns a saved receipt for a fast genuine request only after persistence', async () => {
     const result = await handleSubmission(request(draft));
