@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "research-20261002-plum-starter-guide-bangalore",
+  "kind": "new",
+  "publicationConsent": true,
+  "data": {
+    "slug": "plum-starter-guide-bangalore",
+    "name": "Plum: Starter Guide to Bangalore",
+    "entityType": "Research & ecosystem",
+    "primaryType": "research-ecosystem",
+    "alsoListedAs": [],
+    "needs": [
+      "learn",
+      "fund"
+    ],
+    "subcategory": "Guide or directory",
+    "sectors": [
+      "Research & ecosystem"
+    ],
+    "summary": "A newcomer guide for founders covering communities, accelerators, investors and people to follow in Bengaluru. Broad, not hardware-specific.",
+    "locality": "Online",
+    "locationPrecision": "City-level",
+    "confidence": "Medium",
+    "locationConfidence": "Medium",
+    "websiteUrl": "https://www.plumhq.com/starter-guides/starter-guide-to-bangalore",
+    "sourceUrl": "https://www.plumhq.com/starter-guides/starter-guide-to-bangalore",
+    "publicPhones": [],
+    "accessNote": "A broad city starter guide, not a hardware-specific directory. Check the dates and current availability of resources mentioned.",
+    "provenance": "User-supplied research candidate; organisation details and current access require admin review."
+  }
+}

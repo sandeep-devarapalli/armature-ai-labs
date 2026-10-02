@@ -5,7 +5,7 @@ import { AnalyticsSettingsButton } from "../components/AnalyticsConsent";
 
 export function PrivacyPage() {
   return <div className="privacy-page">
-    <PageHeader meta="Privacy · Updated 28 September 2026" title="Your information, handled with care." description="How Armature AI Labs handles website visits, enquiries and free membership registration." />
+    <PageHeader meta="Privacy · Updated 2 October 2026" title="Your information, handled with care." description="How Armature AI Labs handles website visits, enquiries, ecosystem contributions and free membership registration." />
     <div className="wrap privacy-content">
       <section aria-labelledby="privacy-operator">
         <h2 id="privacy-operator">Who is responsible</h2>
@@ -53,6 +53,12 @@ export function PrivacyPage() {
         <h2 id="privacy-wishlist">Equipment requests and votes</h2>
         <p>Approved members can suggest equipment and support requests. Administrators review suggestions before publication. Published equipment names, intended uses, product images, procurement updates and vote totals are public; requester email addresses and voter identities are not. Please do not include personal information in your suggestion or upload images you do not have permission to share.</p>
         <p>Optional product images are scanned and stripped of image metadata before private storage. Unpublished images are accessible to their submitter and authorised Admins or Super admins. Publication makes the image public. These images are kept while attached to a request and do not follow the 30-day identity-document rule. Replaced images, images from merged or deleted requests, and unsuccessful upload remnants are queued for monitored deletion. We retain request, vote and moderation records to manage demand and accountability. Contact our privacy address to request removal or review of these records.</p>
+      </section>
+      <section id="privacy-ecosystem" aria-labelledby="privacy-ecosystem-title">
+        <h2 id="privacy-ecosystem-title">Ecosystem contributions</h2>
+        <p>Anyone can suggest a listing or an edit without membership. Suggestions stay private until an Admin or Super admin reviews them. Approved listing details, public contacts you have permission to share, and separately opted-in contributor credit become public. Your optional private name and email are only for review follow-up and are never automatically used for public credit.</p>
+        <p>We use Cloudflare Turnstile to protect submissions from automated abuse. Our submission service does not send your IP address to the verification endpoint. We retain a salted abuse-control hash for up to 24 hours. Private follow-up contact details are deleted 90 days after review closes; pending suggestions retain them for follow-up. Public listing revisions and review decisions are retained for accountability without those private contact fields. Provider logs and backups follow their own retention arrangements.</p>
+        <p>If you allow analytics, we measure only the selected listing-type and need filters, not searches, listing URLs, form contents, phone numbers or email addresses. GitHub contributions are public on GitHub and also require approval before appearing here. Please never put private contact details into a public pull request.</p>
       </section>
       <section aria-labelledby="privacy-retention">
         <h2 id="privacy-retention">Retention, providers and your choices</h2>

@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "research-20261002-stpi-iot-openlab",
+  "kind": "new",
+  "publicationConsent": true,
+  "data": {
+    "slug": "stpi-iot-openlab",
+    "name": "STPI IoT OpenLab",
+    "entityType": "Research & ecosystem",
+    "primaryType": "research-ecosystem",
+    "alsoListedAs": [],
+    "needs": [
+      "test",
+      "build",
+      "fund"
+    ],
+    "subcategory": "Incubator or accelerator",
+    "sectors": [
+      "Research & ecosystem"
+    ],
+    "summary": "STPI and Arrow Electronics centre for IoT and electronic hardware startups, with test and measurement equipment and a component sample bank.",
+    "locality": "Electronics City Phase 1",
+    "locationPrecision": "City-level",
+    "confidence": "Medium",
+    "locationConfidence": "Medium",
+    "websiteUrl": "https://bengaluru.stpi.in/centre-of-entrepreneurship/iot-openlab",
+    "sourceUrl": "https://stpi.in/centre-of-entrepreneurship/iot-openlab",
+    "publicPhones": [],
+    "accessNote": "Confirm current intake, equipment, programme duration, fees and commercial terms directly; historical programme terms are not current offers.",
+    "provenance": "User-supplied research candidate; organisation details and current access require admin review."
+  }
+}

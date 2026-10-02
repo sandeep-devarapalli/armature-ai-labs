@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "research-20261002-founder-institute-bengaluru",
+  "kind": "new",
+  "publicationConsent": true,
+  "data": {
+    "slug": "founder-institute-bengaluru",
+    "name": "Founder Institute Bengaluru",
+    "entityType": "Research & ecosystem",
+    "primaryType": "research-ecosystem",
+    "alsoListedAs": [],
+    "needs": [
+      "fund",
+      "learn"
+    ],
+    "subcategory": "Incubator or accelerator",
+    "sectors": [
+      "Research & ecosystem"
+    ],
+    "summary": "Pre-seed accelerator chapter. Also published a Bangalore Startup Ecosystem Canvas that maps resources by founder stage.",
+    "locality": "Bengaluru",
+    "locationPrecision": "City-level",
+    "confidence": "Medium",
+    "locationConfidence": "Medium",
+    "websiteUrl": "https://fi.co/bengaluru",
+    "sourceUrl": "https://fi.co/bengaluru",
+    "publicPhones": [],
+    "accessNote": "Check the official chapter page for current cohorts, dates, fees and eligibility. Its older ecosystem canvas is a historical reference, not current availability.",
+    "provenance": "User-supplied research candidate; organisation details and current access require admin review."
+  }
+}

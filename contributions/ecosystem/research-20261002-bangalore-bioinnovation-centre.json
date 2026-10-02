@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "research-20261002-bangalore-bioinnovation-centre",
+  "kind": "new",
+  "publicationConsent": true,
+  "data": {
+    "slug": "bangalore-bioinnovation-centre",
+    "name": "Bangalore Bioinnovation Centre",
+    "entityType": "Research & ecosystem",
+    "primaryType": "research-ecosystem",
+    "alsoListedAs": [],
+    "needs": [
+      "build",
+      "test"
+    ],
+    "subcategory": "Incubator or accelerator",
+    "sectors": [
+      "Research & ecosystem"
+    ],
+    "summary": "Government life sciences incubator in Helix Biotech Park with a MedTech facility for device prototyping and electronics tools.",
+    "locality": "Helix Biotech Park, Electronic City",
+    "locationPrecision": "City-level",
+    "confidence": "Medium",
+    "locationConfidence": "Medium",
+    "websiteUrl": "https://www.bioinnovationcentre.com/",
+    "sourceUrl": "https://www.bioinnovationcentre.com/en/reach/bengaluru",
+    "publicPhones": [],
+    "accessNote": "Confirm which facilities are currently operating, equipment availability, eligibility and booking arrangements directly with the centre.",
+    "provenance": "User-supplied research candidate; organisation details and current access require admin review."
+  }
+}

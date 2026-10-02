@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "research-20261002-basecamp-bengaluru",
+  "kind": "new",
+  "publicationConsent": true,
+  "data": {
+    "slug": "basecamp-bengaluru",
+    "name": "Basecamp (Elevation Capital)",
+    "entityType": "Research & ecosystem",
+    "primaryType": "research-ecosystem",
+    "alsoListedAs": [],
+    "needs": [
+      "learn"
+    ],
+    "subcategory": "Event series",
+    "sectors": [
+      "Research & ecosystem"
+    ],
+    "summary": "A free, community-run tech week across Bengaluru: hackathons, supper clubs, show-and-tells and founder sessions hosted by many organizers.",
+    "locality": "Across Bengaluru",
+    "locationPrecision": "City-level",
+    "confidence": "Medium",
+    "locationConfidence": "Medium",
+    "websiteUrl": "",
+    "sourceUrl": "https://luma.com/basecamp-dialogues",
+    "publicPhones": [],
+    "accessNote": "Check the organisers' current event listings and registration requirements. Do not assume an earlier edition's dates or entry conditions apply.",
+    "provenance": "User-supplied research candidate; organisation details and current access require admin review."
+  }
+}

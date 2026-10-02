@@ -23,6 +23,7 @@ jobs:
       - run: npm run audit:all
       - run: npm test
       - run: node --test tests/scripts/onboarding-retention.node.mjs
+      - run: node --test tests/scripts/production-env.node.mjs
       - run: python3 -m unittest discover -s tools/member-notifications -v
       - run: python3 -m pip install -r tools/onboarding-scanner/requirements.txt
       - run: python3 -m unittest discover -s tools/onboarding-scanner -v
@@ -30,6 +31,7 @@ jobs:
       - run: npm run check:pages-runtime
       - run: npx playwright install --only-shell chromium
       - run: npm run test:e2e
+      - run: npm run test:e2e:ecosystem
       - run: npx playwright test --config playwright.basic-registration.config.ts
       - name: Verify membership fixtures against a prebuilt alternate backend
         env:
@@ -58,11 +60,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 22.22.2
+      - run: sudo apt-get update && sudo apt-get install -y postgresql-client
       - uses: supabase/setup-cli@46f7f98c7f948ad727d22c1e67fab04c223a0520 # v3
         with:
           version: 2.114.0
       - run: supabase start
       - run: supabase test db supabase/tests/database
+      - name: Verify ecosystem privacy, approval and pending-edit rules
+        env:
+          PGHOST: 127.0.0.1
+          PGPORT: '54322'
+          PGDATABASE: postgres
+          PGUSER: postgres
+          PGPASSWORD: postgres
+        run: |
+          psql -v ON_ERROR_STOP=1 -f supabase/tests/ecosystem_contributions.sql
+          psql -v ON_ERROR_STOP=1 -f supabase/tests/ecosystem_pending_edit.sql
+          ECOSYSTEM_LOCAL_TEST=true PSQL=psql node supabase/tests/concurrent_ecosystem.mjs
       - run: supabase/tests/concurrent_booking.sh
       - run: DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres sh supabase/tests/concurrent_team_seat.sh
       - run: DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres sh supabase/tests/concurrent_team_transfer.sh
@@ -95,6 +112,7 @@ jobs:
       CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
       VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
       VITE_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.VITE_SUPABASE_PUBLISHABLE_KEY }}
+      VITE_TURNSTILE_SITE_KEY: ${{ vars.VITE_TURNSTILE_SITE_KEY }}
       VITE_SITE_URL: https://armatureailabs.com
       VITE_ANALYTICS_ENABLED: 'true'
       VITE_POSTHOG_KEY: ${{ vars.VITE_POSTHOG_KEY }}

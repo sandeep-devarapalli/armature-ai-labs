@@ -1,0 +1,51 @@
+name: Ecosystem contributions
+
+on:
+  pull_request:
+    paths: ['contributions/ecosystem/**', 'scripts/ecosystem-contributions.mjs', 'supabase/functions/_shared/ecosystem-validation.ts', '.github/workflows/ecosystem-contributions.yml']
+  push:
+    branches: [main]
+    paths: ['contributions/ecosystem/**']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 22.22.2
+      - run: node --experimental-strip-types scripts/ecosystem-contributions.mjs
+      - run: node --experimental-strip-types --test tests/scripts/ecosystem-contributions.node.mjs
+
+  queue:
+    needs: validate
+    if: >-
+      github.event_name != 'pull_request' &&
+      github.ref == 'refs/heads/main' &&
+      vars.ECOSYSTEM_IMPORT_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    environment: ecosystem-import
+    concurrency:
+      group: ecosystem-import
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: 22.22.2
+      - name: Import into private review queue only
+        run: node --experimental-strip-types scripts/ecosystem-contributions.mjs --apply
+        env:
+          ECOSYSTEM_IMPORT_ENABLED: 'true'
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}

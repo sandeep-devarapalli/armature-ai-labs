@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "research-20261002-ikp-eden",
+  "kind": "new",
+  "publicationConsent": true,
+  "data": {
+    "slug": "ikp-eden",
+    "name": "IKP EDEN",
+    "entityType": "Research & ecosystem",
+    "primaryType": "research-ecosystem",
+    "alsoListedAs": [
+      "other"
+    ],
+    "needs": [
+      "build",
+      "manufacture",
+      "fund"
+    ],
+    "subcategory": "Incubator or accelerator",
+    "sectors": [
+      "Research & ecosystem"
+    ],
+    "summary": "Hardware and deep-science incubator with a shared prototyping facility for metal, wood, plastics, 3D printing and electronics.",
+    "locality": "Bengaluru",
+    "locationPrecision": "City-level",
+    "confidence": "Medium",
+    "locationConfidence": "Medium",
+    "websiteUrl": "https://ikpeden.com/",
+    "sourceUrl": "https://ikpeden.com/smart-fab/",
+    "publicPhones": [],
+    "accessNote": "The official Smart Fab page describes prototyping facilities. Confirm current equipment, materials, pricing and access for non-incubated teams before booking.",
+    "provenance": "User-supplied research candidate; organisation details and current access require admin review."
+  }
+}

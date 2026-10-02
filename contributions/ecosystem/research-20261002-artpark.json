@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "research-20261002-artpark",
+  "kind": "edit",
+  "targetSlug": "artpark",
+  "baseRevision": 1,
+  "publicationConsent": true,
+  "data": {
+    "slug": "artpark",
+    "name": "ARTPARK @ IISc",
+    "entityType": "Research & ecosystem",
+    "sectors": [
+      "Research & ecosystem",
+      "Robotics",
+      "Physical AI",
+      "Drones & aerospace"
+    ],
+    "summary": "A Section 8 venture-builder and shared robotics, AI, autonomy, fabrication, and testing ecosystem.",
+    "locality": "ARTGarage, Jalahalli, Bengaluru",
+    "coordinates": [
+      77.546,
+      13.048
+    ],
+    "locationPrecision": "Locality-level",
+    "confidence": "High",
+    "locationConfidence": "High",
+    "websiteUrl": "https://www.artpark.in/",
+    "sourceUrl": "https://www.artpark.in/artgarage-1",
+    "provenance": "Web Research Leads · row 127; official facility source verified 30-07-2026",
+    "verifiedAt": "2026-07-30",
+    "primaryType": "research-ecosystem",
+    "alsoListedAs": [],
+    "needs": [
+      "fund",
+      "build",
+      "test",
+      "learn"
+    ],
+    "publicPhones": [],
+    "accessNote": "Confirm current programme intake, eligibility and facility access directly. Programme descriptions do not confirm that a pilot engagement is available."
+  }
+}

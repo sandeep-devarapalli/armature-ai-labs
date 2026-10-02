@@ -6,6 +6,7 @@ export const analyticsConfigured = import.meta.env.VITE_ANALYTICS_ENABLED === "t
   && Boolean(key?.startsWith("phc_")) && ["https://us.i.posthog.com", "https://eu.i.posthog.com"].includes(host ?? "");
 const publicPaths = new Set(["/", "/about", "/team", "/services", "/projects", "/branding", "/blog", "/blog/model-hardware-standard", "/projects/electrofluidic-fiber-muscles", "/building-vision", "/ecosystem", "/components", "/join", "/booking-beta", "/privacy"]);
 const milestones = ["details_saved", "photo_uploaded", "government_id_uploaded", "application_submitted"] as const;
+const atlasFilters = { type: ["", "startup", "research-ecosystem", "supplier", "vendor", "other"], need: ["", "build", "source", "manufacture", "test", "learn", "fund", "pilot"] };
 export type RegistrationMilestone = typeof milestones[number];
 
 function normalizedPublicPath(value: string): string | null {
@@ -36,6 +37,11 @@ function sanitize(event: CaptureResult | null, epoch: number): CaptureResult | n
   } else if (event.event === "registration_step" && milestones.includes(event.properties.step)
     && window.location.pathname.replace(/\/+$/, "") === "/onboarding") {
     properties.step = event.properties.step;
+  } else if (event.event === "ecosystem_filter" && window.location.pathname.replace(/\/+$/, "") === "/ecosystem"
+    && ["type", "need"].includes(event.properties.filter)
+    && atlasFilters[event.properties.filter as keyof typeof atlasFilters].includes(event.properties.value)) {
+    properties.filter = event.properties.filter;
+    properties.value = event.properties.value;
   } else return null;
   return { uuid: event.uuid, event: event.event, properties };
 }
@@ -107,5 +113,14 @@ export function trackRegistrationMilestone(step: RegistrationMilestone): void {
     if (!instance || !consent || epoch !== generation || countedMilestones.has(step) || window.location.pathname.replace(/\/+$/, "") !== "/onboarding") return;
     countedMilestones.add(step);
     instance.capture("registration_step", { step });
+  });
+}
+
+export function trackEcosystemFilter(filter: "type" | "need", value: string): void {
+  if (!consent || !atlasFilters[filter].includes(value) || window.location.pathname.replace(/\/+$/, "") !== "/ecosystem") return;
+  const epoch = generation;
+  void ready().then(instance => {
+    if (!instance || !consent || epoch !== generation) return;
+    instance.capture("ecosystem_filter", { filter, value });
   });
 }

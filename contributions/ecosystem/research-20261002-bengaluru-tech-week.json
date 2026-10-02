@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "research-20261002-bengaluru-tech-week",
+  "kind": "new",
+  "publicationConsent": true,
+  "data": {
+    "slug": "bengaluru-tech-week",
+    "name": "Bengaluru Tech Week",
+    "entityType": "Research & ecosystem",
+    "primaryType": "research-ecosystem",
+    "alsoListedAs": [],
+    "needs": [
+      "learn"
+    ],
+    "subcategory": "Event series",
+    "sectors": [
+      "Research & ecosystem"
+    ],
+    "summary": "A decentralized builder week of meetups, mixers and sessions across the city for founders, engineers, researchers and investors.",
+    "locality": "Across Bengaluru",
+    "locationPrecision": "City-level",
+    "confidence": "Medium",
+    "locationConfidence": "Medium",
+    "websiteUrl": "",
+    "sourceUrl": "https://www.startupgrantsindia.com/hindi/events/women-in-tech-mixer-bengaluru-tech-week-2026",
+    "publicPhones": [],
+    "accessNote": "This candidate currently links to a third-party event page. Confirm the organiser, official website and current edition before relying on dates.",
+    "provenance": "User-supplied research candidate; organisation details and current access require admin review."
+  }
+}

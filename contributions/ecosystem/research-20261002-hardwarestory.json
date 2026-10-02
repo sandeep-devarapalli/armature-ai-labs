@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "research-20261002-hardwarestory",
+  "kind": "new",
+  "publicationConsent": true,
+  "data": {
+    "slug": "hardwarestory",
+    "name": "HardwareStory: Bengaluru vendor map",
+    "entityType": "Research & ecosystem",
+    "primaryType": "research-ecosystem",
+    "alsoListedAs": [
+      "vendor",
+      "supplier"
+    ],
+    "needs": [
+      "source",
+      "manufacture"
+    ],
+    "subcategory": "Guide or directory",
+    "sectors": [
+      "Research & ecosystem"
+    ],
+    "summary": "Community map of Bengaluru hardware vendors and fabricators: CNC machining, PCB fabrication, 3D printing and more.",
+    "locality": "Online",
+    "locationPrecision": "City-level",
+    "confidence": "Medium",
+    "locationConfidence": "Medium",
+    "websiteUrl": "https://www.thehardwarestory.com/",
+    "sourceUrl": "https://www.thehardwarestory.com/",
+    "publicPhones": [],
+    "accessNote": "Community hardware-vendor discovery resource. Confirm individual capabilities and access directly; link to the directory rather than copying its vendor records.",
+    "provenance": "User-supplied research candidate; organisation details and current access require admin review."
+  }
+}
