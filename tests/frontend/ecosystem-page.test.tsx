@@ -88,8 +88,8 @@ it("does not silently turn an unavailable edit target into a new submission", as
 
 it("preserves the contribution heading focus when the parent reveals the form", async () => {
   setup(); await screen.findByText("2 results · 1 on map");
-  fireEvent.click(screen.getByRole("button", { name: "Submit a startup or place", exact: true }));
-  expect(screen.getByRole("heading", { name: "Submit a startup or place", exact: true })).toHaveFocus();
+  fireEvent.click(screen.getByRole("button", { name: "Submit a startup or place" }));
+  expect(screen.getByRole("heading", { name: "Submit a startup or place" })).toHaveFocus();
 });
 
 it("guards the admin route against membership-review Staff before fetching submissions", async () => {

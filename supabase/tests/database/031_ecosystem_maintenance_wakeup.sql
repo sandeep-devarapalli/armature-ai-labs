@@ -6,6 +6,8 @@ select ok(not has_table_privilege('authenticated', 'vault.decrypted_secrets', 'S
 select ok(not has_function_privilege('anon', 'private.wake_ecosystem_maintenance()', 'EXECUTE'), 'anonymous visitors cannot wake maintenance');
 select ok(not has_function_privilege('authenticated', 'private.wake_ecosystem_maintenance()', 'EXECUTE'), 'authenticated clients cannot wake maintenance');
 select ok(not has_function_privilege('service_role', 'private.wake_ecosystem_maintenance()', 'EXECUTE'), 'the service role cannot directly call the cron-only wakeup');
+select is((select count(*) from cron.job where jobname = 'ecosystem-maintenance-every-five-minutes' and schedule = '*/5 * * * *' and command = 'select private.wake_ecosystem_maintenance()' and active), 1::bigint, 'five-minute maintenance is scheduled exactly once');
+select is((select count(*) from cron.job where jobname = 'ecosystem-private-retention' and schedule = '17 * * * *' and command = 'select public.cleanup_ecosystem_private_data()' and active), 1::bigint, 'hourly retention exists even if migration001 ran before cron was installed');
 
 create temp table ecosystem_http_baseline as select count(*) n from net.http_request_queue;
 delete from vault.secrets where name = 'ecosystem_maintenance_key';
