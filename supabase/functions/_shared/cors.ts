@@ -19,7 +19,7 @@ export function corsHeaders(request: Request): HeadersInit {
   return {
     "access-control-allow-origin": allowedOrigin,
     "access-control-allow-headers":
-      "authorization, apikey, content-type, x-armature-job-secret, x-kiosk-device-id, x-kiosk-nonce, x-kiosk-timestamp, x-kiosk-signature",
+      "authorization, apikey, content-type, x-client-info, x-armature-job-secret, x-kiosk-device-id, x-kiosk-nonce, x-kiosk-timestamp, x-kiosk-signature",
     "access-control-allow-methods": "GET, POST, OPTIONS",
     vary: "Origin",
   };
