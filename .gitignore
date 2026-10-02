@@ -21,3 +21,4 @@ tmp/
 
 # Isolated basic-registration browser build
 dist-basic-registration/
+dist-ecosystem/

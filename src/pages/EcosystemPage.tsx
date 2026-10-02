@@ -1,376 +1,113 @@
-import {
-  ArrowUpRight,
-  Building2,
-  List,
-  Map as MapIcon,
-  MapPin,
-  Pause,
-  Play,
-  Search,
-  X
-} from "lucide-react";
-import {
-  useDeferredValue,
-  useEffect,
-  useMemo,
-  useRef,
-  useState
-} from "react";
+import { ArrowUpRight, Building2, ChevronRight, List, Map as MapIcon, MapPin, Pause, Pencil, Play, PlusCircle, Search, X } from "lucide-react";
+import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { EcosystemMap } from "../components/EcosystemMap";
-import { PageHeader } from "../components/Primitives";
-import {
-  bengaluruEcosystem,
-  ecosystemSectors,
-  filterEcosystemEntities,
-  type EcosystemEntity,
-  type EcosystemSector
-} from "../data/bengaluruEcosystem";
+import { EcosystemContributionForm } from "../components/EcosystemContributionForm";
+import { ecosystemSectors } from "../data/bengaluruEcosystem";
+import { ecosystemNeeds, ecosystemTypes, ecosystemTypeLabels, getEcosystemListings, type EcosystemListing } from "../lib/ecosystem";
+import { trackEcosystemFilter } from "../lib/analytics";
+import "./EcosystemPage.css";
 
-const allSectors = ["All", ...ecosystemSectors] as const;
-type SectorFilter = (typeof allSectors)[number];
-
-const ecosystemContributionUrl =
-  "https://github.com/sandeep-devarapalli/armature-ai-labs";
-const latestRecordReview = bengaluruEcosystem.reduce(
-  (latest, item) => item.verifiedAt > latest ? item.verifiedAt : latest,
-  ""
-);
-const latestRecordReviewLabel = new Date(`${latestRecordReview}T00:00:00Z`)
-  .toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
-
-function publicLocality(entity: EcosystemEntity) {
-  if (
-    entity.locality.includes("exact site not publicly verified")
-    || entity.locality.includes("current operating site needs verification")
-    || entity.locality.includes("operating status and exact site need verification")
-    || entity.locality === "Bengaluru · IISc and ARTPARK ecosystem"
-  ) {
-    return "Bengaluru";
-  }
-  if (entity.locality.startsWith("HSR Layout signal")) {
-    return "Near HSR Layout, Bengaluru";
-  }
-  if (entity.locality === "Bengaluru operating address · Tumakuru registered address") {
-    return "Bengaluru and Tumakuru";
-  }
-  return entity.locality;
-}
-
-function ContributionPrompt({ selected = false }: { selected?: boolean }) {
-  return (
-    <div className="ecosystem-contribution">
-      <strong>{selected ? "Know this organization?" : "Help improve the map."}</strong>
-      <p>
-        Signed-in suggestions with admin review are planned. You can add a company
-        or update its details today through GitHub.
-      </p>
-      <a href={ecosystemContributionUrl} target="_blank" rel="noreferrer">
-        Contribute on GitHub <ArrowUpRight aria-hidden="true" />
-      </a>
-    </div>
-  );
-}
-
-function EntityDetail({
-  entity,
-  onClose
-}: {
-  entity: EcosystemEntity;
-  onClose: () => void;
-}) {
-  return (
-    <article className="ecosystem-detail" aria-live="polite">
-      <button
-        className="ecosystem-detail-close"
-        type="button"
-        onClick={onClose}
-        aria-label="Close organization details"
-      >
-        <X aria-hidden="true" />
-      </button>
-      <div className="eyebrow mono">{entity.entityType}</div>
-      <h2>{entity.name}</h2>
-      <p className="ecosystem-detail-summary">{entity.summary}</p>
-      <div className="ecosystem-detail-facts">
-        <div>
-          <MapPin aria-hidden="true" />
-          <span>
-            <small className="mono">Location</small>
-            {publicLocality(entity)}
-          </span>
-        </div>
-        {entity.founders && (
-          <div>
-            <Building2 aria-hidden="true" />
-            <span>
-              <small className="mono">Founding team</small>
-              {entity.founders}
-            </span>
-          </div>
-        )}
-      </div>
-      <div className="ecosystem-sector-list">
-        {entity.sectors.map((sector) => <span key={sector}>{sector}</span>)}
-      </div>
-      <div className="ecosystem-detail-actions">
-        <a href={entity.websiteUrl} target="_blank" rel="noreferrer">
-          Visit website <ArrowUpRight aria-hidden="true" />
-        </a>
-        {entity.sourceUrl !== entity.websiteUrl && (
-          <a href={entity.sourceUrl} target="_blank" rel="noreferrer">
-            View source <ArrowUpRight aria-hidden="true" />
-          </a>
-        )}
-      </div>
-      <ContributionPrompt selected />
-    </article>
-  );
-}
+const contributionUrl = "https://github.com/sandeep-devarapalli/armature-ai-labs/blob/main/docs/ecosystem-contributions.md";
 
 export function EcosystemPage() {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [query, setQuery] = useState("");
-  const [sector, setSector] = useState<SectorFilter>("All");
+  const [params, setParams] = useSearchParams();
+  const [listings, setListings] = useState<EcosystemListing[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+  const [reload, setReload] = useState(0);
   const [mobileView, setMobileView] = useState<"map" | "list">("map");
   const [tourActive, setTourActive] = useState(false);
-  const deferredQuery = useDeferredValue(query);
-  const sectionRef = useRef<HTMLElement>(null);
-  const focusSlug = searchParams.get("focus");
-  const selected = bengaluruEcosystem.find((item) => item.slug === focusSlug) ?? null;
-
-  const filtered = useMemo(
-    () => filterEcosystemEntities(
-      bengaluruEcosystem,
-      deferredQuery,
-      sector as EcosystemSector | "All"
-    ),
-    [deferredQuery, sector]
-  );
-  const mapped = useMemo(
-    () => filtered.filter((item) => item.coordinates),
-    [filtered]
-  );
-  const totalMapped = useMemo(
-    () => bengaluruEcosystem.filter((item) => item.coordinates).length,
-    []
-  );
-
-  function selectEntity(slug: string | null, keepTour = false) {
-    const next = new URLSearchParams(searchParams);
-    if (slug) next.set("focus", slug);
-    else next.delete("focus");
-    setSearchParams(next, { replace: true });
-    if (!keepTour) setTourActive(false);
-  }
+  const [draftVersion, setDraftVersion] = useState(0);
+  const detailRef = useRef<HTMLElement>(null);
+  const formRef = useRef<HTMLDivElement>(null);
+  const query = params.get("q") ?? "";
+  const deferredQuery = useDeferredValue(query.trim().toLowerCase());
+  const type = params.get("type") ?? "";
+  const need = params.get("need") ?? "";
+  const sector = params.get("sector") ?? "";
+  const focus = params.get("focus");
+  const contribution = params.get("contribute");
+  const selected = listings.find((item) => item.slug === focus);
+  const editTarget = listings.find((item) => item.slug === params.get("edit"));
 
   useEffect(() => {
-    if (!tourActive) return;
-    if (mapped.length === 0) {
-      setTourActive(false);
-      return;
-    }
+    let active = true;
+    setLoading(true); setError("");
+    void getEcosystemListings().then((rows) => { if (active) setListings(rows); })
+      .catch((reason: Error) => { if (active) { setListings([]); setError(reason.message); } })
+      .finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
+  }, [reload]);
 
-    const advance = () => {
-      const currentIndex = mapped.findIndex((item) => item.slug === focusSlug);
-      const next = mapped[(currentIndex + 1) % mapped.length];
-      selectEntity(next.slug, true);
-    };
-    if (!mapped.some((item) => item.slug === focusSlug)) advance();
-    const interval = window.setInterval(advance, 4_800);
-    return () => window.clearInterval(interval);
-  }, [focusSlug, mapped, tourActive]);
+  const filtered = useMemo(() => listings.filter(({ data }) =>
+    (!type || data.primaryType === type || data.alsoListedAs.includes(type as typeof data.primaryType))
+    && (!need || data.needs.includes(need as typeof data.needs[number]))
+    && (!sector || data.sectors.includes(sector as typeof data.sectors[number]))
+    && (!deferredQuery || [data.name, data.summary, data.locality, data.founders, data.subcategory, ...data.sectors, ...data.needs].join(" ").toLowerCase().includes(deferredQuery))
+  ), [listings, type, need, sector, deferredQuery]);
+  const entities = useMemo(() => filtered.map((item) => ({ ...item.data, slug: item.slug })), [filtered]);
+  const mapped = useMemo(() => entities.filter((item) => item.coordinates), [entities]);
 
-  function startTour() {
-    if (tourActive) {
-      setTourActive(false);
-      return;
-    }
-    if (mapped.length === 0) return;
-    setMobileView("map");
-    setTourActive(true);
-    selectEntity(mapped[0].slug, true);
+  function setFilter(key: string, value: string, replace = false) {
+    const next = new URLSearchParams(params);
+    if (value) next.set(key, value); else next.delete(key);
+    setParams(next, { replace }); setTourActive(false);
+    if (key === "type" || key === "need") trackEcosystemFilter(key, value);
   }
-
-  function openExplorer() {
-    sectionRef.current?.scrollIntoView({
-      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
-        ? "auto"
-        : "smooth",
-      block: "start"
-    });
+  function select(slug: string | null) {
+    setFilter("focus", slug ?? "");
+    if (slug) { setMobileView("map"); requestAnimationFrame(() => detailRef.current?.focus({ preventScroll: true })); }
   }
+  function contribute(item?: EcosystemListing) {
+    setDraftVersion((value) => value + 1);
+    const next = new URLSearchParams(params);
+    next.set("contribute", item?.data.primaryType ?? "startup");
+    if (item) next.set("edit", item.slug); else next.delete("edit");
+    setParams(next); setTourActive(false);
+  }
+  function closeContribution() {
+    const next = new URLSearchParams(params);
+    next.delete("contribute"); next.delete("edit"); setParams(next);
+  }
+  useEffect(() => {
+    if (contribution === null) return;
+    formRef.current?.scrollIntoView({ block: "start", behavior: "auto" });
+    if (!formRef.current?.contains(document.activeElement)) formRef.current?.focus({ preventScroll: true });
+  }, [contribution, editTarget?.slug]);
+  useEffect(() => {
+    if (!tourActive || mapped.length === 0) return;
+    const timer = window.setInterval(() => {
+      setParams((current) => {
+        const next = new URLSearchParams(current);
+        const index = mapped.findIndex((item) => item.slug === current.get("focus"));
+        next.set("focus", mapped[(index + 1) % mapped.length].slug);
+        return next;
+      }, { replace: true });
+    }, 4800);
+    return () => window.clearInterval(timer);
+  }, [tourActive, mapped, setParams]);
 
-  return (
-    <div className="ecosystem-page">
-      <PageHeader
-        meta="Bengaluru robotics ecosystem"
-        title="Robotics, mapped."
-        description="Discover Bengaluru's companies, labs, and learning spaces working across robotics, autonomous systems, hardware, drones, and space technology."
-        actions={(
-          <>
-            <button className="button button-primary" type="button" onClick={openExplorer}>
-              Explore the map
-            </button>
-            <button className="button button-quiet" type="button" onClick={startTour}>
-              {tourActive ? <Pause aria-hidden="true" /> : <Play aria-hidden="true" />}
-              {tourActive ? "Stop guided tour" : "Tour mapped teams"}
-            </button>
-          </>
-        )}
-      >
-        <div className="ecosystem-hero-stats mono">
-          <span><strong>{bengaluruEcosystem.length}</strong> organizations</span>
-          <span><strong>{totalMapped}</strong> organizations on the map</span>
-          <span><strong>{ecosystemSectors.length}</strong> sectors</span>
-        </div>
-      </PageHeader>
-
-      <section className="ecosystem-explorer" ref={sectionRef} aria-labelledby="ecosystem-explorer-title">
-        <div className="wrap ecosystem-wrap">
-          <div className="ecosystem-toolbar">
-            <div>
-              <div className="eyebrow mono">Bengaluru discovery map</div>
-              <h2 id="ecosystem-explorer-title">Find a team. Follow the hardware.</h2>
-            </div>
-            <label className="ecosystem-search">
-              <span className="sr-only">Search organizations, founders, sectors, or localities</span>
-              <Search aria-hidden="true" />
-              <input
-                type="search"
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder="Search teams, founders, or places"
-              />
-              {query && (
-                <button type="button" onClick={() => setQuery("")} aria-label="Clear search">
-                  <X aria-hidden="true" />
-                </button>
-              )}
-            </label>
-          </div>
-
-          <div className="ecosystem-sectors" role="group" aria-label="Filter by sector">
-            {allSectors.map((option) => (
-              <button
-                key={option}
-                className={sector === option ? "active" : ""}
-                type="button"
-                aria-pressed={sector === option}
-                onClick={() => setSector(option)}
-              >
-                {option}
-              </button>
-            ))}
-          </div>
-
-          <div className="ecosystem-mobile-switch" role="group" aria-label="Choose map or list view">
-            <button
-              className={mobileView === "map" ? "active" : ""}
-              type="button"
-              aria-pressed={mobileView === "map"}
-              onClick={() => setMobileView("map")}
-            >
-              <MapIcon aria-hidden="true" /> Map
-            </button>
-            <button
-              className={mobileView === "list" ? "active" : ""}
-              type="button"
-              aria-pressed={mobileView === "list"}
-              onClick={() => setMobileView("list")}
-            >
-              <List aria-hidden="true" /> List
-            </button>
-          </div>
-
-          <div
-            className="ecosystem-workbench"
-            data-mobile-view={mobileView}
-            data-has-selection={Boolean(selected)}
-          >
-            <aside className="ecosystem-directory" aria-label="Organization list">
-              <div className="ecosystem-directory-heading">
-                <span className="mono">
-                  {filtered.length} {filtered.length === 1 ? "result" : "results"}
-                </span>
-                <span>{mapped.length} on map</span>
-              </div>
-              <div className="ecosystem-directory-list">
-                {filtered.map((item) => (
-                  <article
-                    key={item.slug}
-                    className={selected?.slug === item.slug ? "active" : ""}
-                  >
-                    <Link
-                      className="ecosystem-entity-link"
-                      to={`?focus=${encodeURIComponent(item.slug)}`}
-                      replace
-                      aria-current={selected?.slug === item.slug ? "true" : undefined}
-                      onClick={() => setTourActive(false)}
-                    >
-                      <span className="ecosystem-entity-marker" data-sector={item.sectors[0]} />
-                      <span>
-                        <strong>{item.name}</strong>
-                        <small>{item.sectors.slice(0, 2).join(" · ")}</small>
-                        <small className="ecosystem-entity-locality">
-                          {publicLocality(item)}
-                        </small>
-                      </span>
-                    </Link>
-                    <p>{item.summary}</p>
-                    <a href={item.sourceUrl} target="_blank" rel="noreferrer" aria-label={`${item.name} public source`}>
-                      Public source <ArrowUpRight aria-hidden="true" />
-                    </a>
-                  </article>
-                ))}
-                {filtered.length === 0 && (
-                  <div className="ecosystem-empty">
-                    <strong>No matching organizations.</strong>
-                    <span>Try a broader term or another sector.</span>
-                  </div>
-                )}
-              </div>
-            </aside>
-
-            <div className="ecosystem-map-pane">
-              <EcosystemMap
-                entities={filtered}
-                selectedSlug={selected?.slug ?? null}
-                onSelect={(slug) => selectEntity(slug)}
-              />
-            </div>
-
-            <aside className="ecosystem-detail-pane" aria-label="Organization details">
-              {selected ? (
-                <EntityDetail entity={selected} onClose={() => selectEntity(null)} />
-              ) : (
-                <div className="ecosystem-method">
-                  <div className="eyebrow mono">About the map</div>
-                  <h2>Built to be useful.</h2>
-                  <p>
-                    Pins mark organizations with a published locality or address.
-                    Teams known only at city level still appear in the list.
-                  </p>
-                  <dl>
-                    <div>
-                      <dt>Organizations on the map</dt>
-                      <dd>{totalMapped}</dd>
-                    </div>
-                    <div>
-                      <dt>Latest record review</dt>
-                      <dd><time dateTime={latestRecordReview}>{latestRecordReviewLabel}</time></dd>
-                    </div>
-                  </dl>
-                  <p className="ecosystem-method-note">
-                    Select an organization to see its summary, founders, website, and public source.
-                  </p>
-                  <ContributionPrompt />
-                </div>
-              )}
-            </aside>
-          </div>
-        </div>
-      </section>
-    </div>
-  );
+  return <div className="ecosystem-page builder-atlas">
+    <header className="atlas-heading"><div><h1>Bengaluru, for builders.</h1><p>Discover robotics and hardware startups, labs, suppliers and places to build.</p></div><div className="atlas-submit"><button className="button atlas-primary" onClick={() => contribute()}><PlusCircle aria-hidden="true" />Submit a startup or place</button><small>No login required · Admin approval before publishing</small></div></header>
+    <section aria-label="Explore the ecosystem" className="atlas-explorer">
+      <div className="atlas-filters">
+        <label className="ecosystem-search"><span className="sr-only">Search startups, places, capabilities or neighbourhoods</span><Search aria-hidden="true" /><input type="search" value={query} onChange={(event) => setFilter("q", event.target.value, true)} placeholder="Search startups, places, capabilities or neighbourhoods" />{query && <button onClick={() => setFilter("q", "")} aria-label="Clear search"><X /></button>}</label>
+        <div className="atlas-types" role="group" aria-label="Listing type"><button aria-pressed={!type} onClick={() => setFilter("type", "")}>All</button>{ecosystemTypes.map((value) => <button key={value} aria-pressed={type === value} onClick={() => setFilter("type", value)}>{ecosystemTypeLabels[value]}</button>)}</div>
+        <div className="atlas-needs" role="group" aria-label="What do you need?"><span>What do you need?</span>{ecosystemNeeds.map((value) => <button key={value} aria-pressed={need === value} onClick={() => setFilter("need", need === value ? "" : value)}>{value}</button>)}<label><span className="sr-only">Sector</span><select value={sector} onChange={(event) => setFilter("sector", event.target.value)}><option value="">All sectors</option>{ecosystemSectors.map((value) => <option key={value}>{value}</option>)}</select></label>{(type || need || sector || query) && <button onClick={() => { const next = new URLSearchParams(params); ["type", "need", "sector", "q"].forEach((key) => next.delete(key)); setParams(next); }}>Clear filters</button>}</div>
+      </div>
+      <div className="atlas-view-controls"><span aria-live="polite">{loading ? "Loading atlas…" : `${filtered.length} results · ${mapped.length} on map`}</span><div className="ecosystem-mobile-switch" role="group" aria-label="Choose map or list view"><button aria-pressed={mobileView === "map"} onClick={() => setMobileView("map")}><MapIcon />Map</button><button aria-pressed={mobileView === "list"} onClick={() => setMobileView("list")}><List />List</button></div><button className="atlas-tour" disabled={!mapped.length} aria-pressed={tourActive} onClick={() => { setMobileView("map"); setTourActive(!tourActive); }}>{tourActive ? <Pause /> : <Play />}{tourActive ? "Stop tour" : "Tour mapped places"}</button></div>
+      {error ? <div className="atlas-load-error" role="alert"><h2>The atlas is temporarily unavailable.</h2><p>{error}</p><button className="button" onClick={() => setReload((value) => value + 1)}>Retry loading</button><p>Previously saved directory data is not shown while it cannot be checked.</p></div> : <div className="atlas-workbench" data-mobile-view={mobileView}>
+        <aside className="atlas-directory" aria-label="Ecosystem listings">{filtered.map((item) => <article key={item.slug} className={selected?.slug === item.slug ? "active" : ""}><button className="atlas-listing" onClick={() => select(item.slug)} aria-current={selected?.slug === item.slug ? "true" : undefined}><Building2 aria-hidden="true" /><span><strong>{item.data.name}</strong><span>{item.data.summary}</span><small>{item.data.locality || "Location not supplied"} · {ecosystemTypeLabels[item.data.primaryType]}</small></span><ChevronRight aria-hidden="true" /></button><button className="atlas-edit-link" onClick={() => contribute(item)} aria-label={`Suggest an edit / Add details for ${item.data.name}`}><Pencil aria-hidden="true" />Suggest an edit / Add details</button></article>)}{!loading && !filtered.length && <div className="ecosystem-empty"><strong>No matching places or organisations.</strong><p>Try a broader search, or help add what’s missing.</p><button className="button" onClick={() => contribute()}>Submit a startup or place</button></div>}</aside>
+        <div className="atlas-map"><EcosystemMap entities={entities} selectedSlug={focus} onSelect={select} />{selected && <article ref={detailRef} tabIndex={-1} className="atlas-detail" aria-label={`${selected.data.name} details`}><button className="ecosystem-detail-close" onClick={() => select(null)} aria-label="Close listing details"><X /></button><h2>{selected.data.name}</h2><p>{selected.data.summary}</p><p className="atlas-location"><MapPin aria-hidden="true" />{selected.data.locality || "Location not supplied"}</p>{selected.data.coordinates && selected.data.locationPrecision === "Locality-level" && <small>Approximate locality pin, not an exact entrance.</small>}{selected.data.accessNote && <p>{selected.data.accessNote}</p>}
+          <div className="atlas-detail-actions">{selected.data.websiteUrl && <a className="button" href={selected.data.websiteUrl} target="_blank" rel="noreferrer">Website<ArrowUpRight /></a>}<button className="button" onClick={() => contribute(selected)}><Pencil />Suggest an edit / Add details</button></div><small>No login required · Changes reviewed by admins</small>
+          <details key={selected.slug}><summary>More details and contact</summary>{selected.data.founders && <p>Founding team: {selected.data.founders}</p>}{selected.data.sectors.length > 0 && <p>{selected.data.sectors.join(" · ")}</p>}{selected.data.publicPhones.map((phone) => <p key={`${phone.label}-${phone.number}`}>{phone.label}: <a href={`tel:${phone.number.replace(/[^+\d]/g, "")}`}>{phone.number}</a></p>)}{selected.data.publicEmail && <p><a href={`mailto:${selected.data.publicEmail}`}>{selected.data.publicEmail}</a></p>}{[selected.data.engageHow, selected.data.salesChannel, selected.data.priceLevel, selected.data.minOrder, selected.data.pricingModel, selected.data.turnaround, selected.data.tips].filter(Boolean).map((value, index) => <p key={index}>{value}</p>)}</details>
+          <div className="atlas-source">{selected.data.sourceUrl && <a href={selected.data.sourceUrl} target="_blank" rel="noreferrer">Public source<ArrowUpRight /></a>}{selected.data.verifiedAt && <small>Source checked <time dateTime={selected.data.verifiedAt}>{selected.data.verifiedAt}</time></small>}{selected.data.credit && <small>Contributed by {selected.data.credit.link ? <a href={selected.data.credit.link} target="_blank" rel="noreferrer">{selected.data.credit.name}</a> : selected.data.credit.name}</small>}</div>
+        </article>}</div>
+      </div>}
+      <footer className="atlas-footer"><p>Locality pins are approximate. Entries without confirmed locations stay in the list. Confirm access before visiting.</p><a href={contributionUrl} target="_blank" rel="noreferrer">Contribute through GitHub<ArrowUpRight /></a></footer>
+    </section>
+    {contribution !== null && <div ref={formRef} id="contribute" className="atlas-form-anchor" tabIndex={-1}>{params.has("edit") && !editTarget ? <div role="alert"><p>{loading ? "Loading the listing…" : "This listing is no longer available. Start a new suggestion instead."}</p><button className="button" onClick={() => contribute()}>New suggestion</button><button className="button" onClick={closeContribution}>Close</button></div> : <EcosystemContributionForm key={`${editTarget?.slug ?? "new"}-${contribution}-${draftVersion}`} initialListing={editTarget ?? null} initialType={contribution} onClose={closeContribution} />}</div>}
+    <p className="atlas-privacy"><Link to="/privacy#privacy-ecosystem">How we handle contributions and contact details</Link></p>
+  </div>;
 }

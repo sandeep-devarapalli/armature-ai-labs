@@ -101,3 +101,9 @@ verify_jwt = false
 
 [functions.equipment-wishlist-image]
 verify_jwt = false
+
+[functions.submit-ecosystem]
+verify_jwt = false
+
+[functions.ecosystem-maintenance]
+verify_jwt = false

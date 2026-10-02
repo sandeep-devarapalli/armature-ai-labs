@@ -1,6 +1,7 @@
 const required = [
   "VITE_SUPABASE_URL",
   "VITE_SUPABASE_PUBLISHABLE_KEY",
+  "VITE_TURNSTILE_SITE_KEY",
   "VITE_SITE_URL",
   "VITE_BASIC_ONBOARDING_ENABLED",
   "VITE_GOOGLE_AUTH_ENABLED",
@@ -15,6 +16,16 @@ if (missing.length > 0) {
 
 if (process.env.VITE_DEMO_MODE === "true") {
   throw new Error("Production builds cannot enable VITE_DEMO_MODE.");
+}
+
+const siteKey = process.env.VITE_TURNSTILE_SITE_KEY.trim();
+if (!/^0x[\w-]{20,}$/.test(siteKey)) {
+  throw new Error("Production requires a real Turnstile site key, not a test or placeholder key.");
+}
+
+const backendUrl = new URL(process.env.VITE_SUPABASE_URL);
+if (backendUrl.protocol !== "https:" || !/^[a-z0-9-]+\.supabase\.(co|in)$/.test(backendUrl.hostname)) {
+  throw new Error("Production requires the hosted Supabase project URL, not a local or fixture backend.");
 }
 
 if (process.env.VITE_SITE_URL !== "https://armatureailabs.com") {

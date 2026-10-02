@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "research-20261002-c-camp",
+  "kind": "new",
+  "publicationConsent": true,
+  "data": {
+    "slug": "c-camp",
+    "name": "C-CAMP",
+    "entityType": "Research & ecosystem",
+    "primaryType": "research-ecosystem",
+    "alsoListedAs": [],
+    "needs": [
+      "build",
+      "test",
+      "fund"
+    ],
+    "subcategory": "Incubator or accelerator",
+    "sectors": [
+      "Research & ecosystem"
+    ],
+    "summary": "DBT-backed life sciences incubator with wet labs and shared instruments, supporting biotech, diagnostics and medtech startups.",
+    "locality": "NCBS campus, Bellary Road",
+    "locationPrecision": "City-level",
+    "confidence": "Medium",
+    "locationConfidence": "Medium",
+    "websiteUrl": "https://www.ccamp.res.in/",
+    "sourceUrl": "https://www.ccamp.res.in/node/171",
+    "publicPhones": [],
+    "accessNote": "Relevant to life sciences, diagnostics and medical-device work. Confirm instrument access, programme eligibility and current application cycles directly.",
+    "provenance": "User-supplied research candidate; organisation details and current access require admin review."
+  }
+}

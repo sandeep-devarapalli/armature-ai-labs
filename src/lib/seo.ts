@@ -66,8 +66,8 @@ const pages: Record<string, PageDefinition> = {
     description: "Explore the ground- and first-floor designs for Armature AI Labs HSR 1490, including Blender views, CAD downloads and labelled planning assumptions."
   },
   "/ecosystem/": {
-    name: "Bengaluru Robotics Ecosystem",
-    description: "Explore a source-linked directory of Bengaluru robotics companies, research labs and learning spaces, with evidence and location notes."
+    name: "Builder Atlas: Bengaluru Robotics & Hardware Ecosystem",
+    description: "Discover Bengaluru robotics and hardware companies, labs, suppliers, services and city resources. Suggest additions or edits without login, with admin review before publication."
   },
   "/components/": {
     name: "Equipment & Components",

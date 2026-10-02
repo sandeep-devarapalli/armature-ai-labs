@@ -65,3 +65,37 @@ it("rejects non-ingestion hosts", async () => {
   invalid.setAnalyticsConsent(true); invalid.trackPublicPageview("/"); await settle(); expect(requests).toHaveLength(0);
   invalid.setAnalyticsConsent(false);
 });
+
+it("does not send ecosystem filter events without consent or after withdrawal", async () => {
+  history.replaceState({}, "", "/ecosystem?private=secret");
+  analytics.trackEcosystemFilter("type", "startup"); analytics.trackEcosystemFilter("need", "build");
+  await settle(); expect(requests).toHaveLength(0);
+  analytics.setAnalyticsConsent(true); analytics.trackEcosystemFilter("need", "source"); analytics.setAnalyticsConsent(false);
+  await settle(); expect(requests).toHaveLength(0);
+});
+
+it("sends only allowlisted ecosystem filter enums and never search or contribution contents", async () => {
+  history.replaceState({}, "", "/ecosystem?q=secret@example.test&contribute=startup&phone=9876543210#private");
+  analytics.setAnalyticsConsent(true);
+  const types = ["", "startup", "research-ecosystem", "supplier", "vendor", "other"];
+  const needs = ["", "build", "source", "manufacture", "test", "learn", "fund", "pilot"];
+  types.forEach(value => analytics.trackEcosystemFilter("type", value));
+  needs.forEach(value => analytics.trackEcosystemFilter("need", value));
+  analytics.trackEcosystemFilter("type", "secret@example.test");
+  analytics.trackEcosystemFilter("need", "https://example.test/private-source");
+  await vi.waitFor(() => expect(events()).toHaveLength(types.length + needs.length));
+  for (const event of events()) {
+    expect(event.event).toBe("ecosystem_filter");
+    expect(event.properties).toEqual({ token: "phc_synthetic_test", distinct_id: expect.any(String), $process_person_profile: false, $geoip_disable: true, filter: expect.stringMatching(/^(type|need)$/), value: expect.any(String) });
+    expect(event.properties.filter === "type" ? types : needs).toContain(event.properties.value);
+  }
+  expect(JSON.stringify(requests)).not.toMatch(/secret|9876543210|private-source|contribute|\$current_url|\$referrer|\$session_id|\$set/);
+});
+
+it("drops queued ecosystem events when navigation leaves the public atlas", async () => {
+  history.replaceState({}, "", "/ecosystem"); analytics.setAnalyticsConsent(true);
+  analytics.trackEcosystemFilter("need", "test");
+  history.replaceState({}, "", "/admin/ecosystem");
+  await settle(); expect(requests).toHaveLength(0);
+  analytics.trackEcosystemFilter("type", "startup"); await settle(); expect(requests).toHaveLength(0);
+});

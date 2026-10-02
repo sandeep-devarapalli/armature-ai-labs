@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "id": "research-20261002-workbench-projects",
+  "kind": "new",
+  "publicationConsent": true,
+  "data": {
+    "slug": "workbench-projects",
+    "name": "Workbench Projects",
+    "entityType": "Research & ecosystem",
+    "primaryType": "other",
+    "alsoListedAs": [
+      "research-ecosystem"
+    ],
+    "needs": [
+      "build",
+      "learn"
+    ],
+    "subcategory": "Place or facility",
+    "sectors": [
+      "Research & ecosystem"
+    ],
+    "summary": "Bengaluru makerspace and hardware-incubation organisation associated with prototyping, fabrication and electronics.",
+    "locality": "Needs checking",
+    "locationPrecision": "City-level",
+    "confidence": "Medium",
+    "locationConfidence": "Medium",
+    "websiteUrl": "https://workbenchprojects.com/",
+    "sourceUrl": "https://fablabs.io/labs/workbenchprojects",
+    "publicPhones": [],
+    "accessNote": "Confirm the current address, hours, machines and walk-in policy before visiting. The 2019 ecosystem directory is a historical reference only.",
+    "provenance": "User-supplied research candidate; organisation details and current access require admin review."
+  }
+}

@@ -24,6 +24,7 @@ const BlogArticlePage = lazy(() => import("../pages/BlogPages").then((module) =>
 const ElectrofluidicMusclesPage = lazy(() => import("../pages/ElectrofluidicMusclesPage").then((module) => ({ default: module.ElectrofluidicMusclesPage })));
 const BuildingVisionPage = lazy(() => import("../pages/BuildingVisionPage").then((module) => ({ default: module.BuildingVisionPage })));
 const EcosystemPage = lazy(() => import("../pages/EcosystemPage").then((module) => ({ default: module.EcosystemPage })));
+const EcosystemAdminPage = lazy(() => import("../pages/EcosystemAdminPage").then((module) => ({ default: module.EcosystemAdminPage })));
 const KioskPage = lazy(() => import("../pages/KioskPage").then((module) => ({ default: module.KioskPage })));
 const FinancialsPage = lazy(() => import("../pages/PlanningPages").then((module) => ({ default: module.FinancialsPage })));
 const ComponentsPage = lazy(() => import("../pages/ComponentsPages").then((module) => ({ default: module.ComponentsPage })));
@@ -146,6 +147,7 @@ export const routes: RouteObject[] = [
       { path: "/toolkits", element: memberFeature(protectedPage(<ToolkitsPage />)) },
       { path: "/admin", element: <ReleaseGate enabled={basicOnboardingAvailable || memberPlatformAvailable}><Navigate to="/admin/members" replace /></ReleaseGate> },
       { path: "/admin/members", element: basicOnboardingAvailable ? <MemberManagementPage /> : memberFeature(staffPage(<AdminMembersPage />)) },
+      { path: "/admin/ecosystem", element: <AdminRoute><EcosystemAdminPage /></AdminRoute> },
       { path: "/admin/resources", element: memberFeature(staffPage(<AdminResourcesPage />)) },
       { path: "/admin/bookings", element: memberFeature(staffPage(<AdminBookingsPage />)) },
       { path: "/admin/attendance", element: memberFeature(staffPage(<AdminAttendancePage />)) },

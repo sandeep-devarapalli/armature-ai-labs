@@ -285,7 +285,7 @@ export function EcosystemMap({
         ref={containerRef}
         className="ecosystem-map"
         role="region"
-        aria-label="Interactive map of the Bengaluru robotics and physical AI ecosystem"
+        aria-label="Interactive map of the Bengaluru robotics, hardware and builder ecosystem"
       />
       {!ready && !loadFailed && (
         <div className="ecosystem-map-state mono" role="status">

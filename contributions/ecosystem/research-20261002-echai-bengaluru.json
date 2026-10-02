@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "id": "research-20261002-echai-bengaluru",
+  "kind": "new",
+  "publicationConsent": true,
+  "data": {
+    "slug": "echai-bengaluru",
+    "name": "eChai Ventures (Bengaluru)",
+    "entityType": "Research & ecosystem",
+    "primaryType": "research-ecosystem",
+    "alsoListedAs": [],
+    "needs": [
+      "learn"
+    ],
+    "subcategory": "Guide or directory",
+    "sectors": [
+      "Research & ecosystem"
+    ],
+    "summary": "Founder community and searchable ecosystem grid of Bengaluru startups, investors, incubators, coworking and events.",
+    "locality": "Bengaluru",
+    "locationPrecision": "City-level",
+    "confidence": "Medium",
+    "locationConfidence": "Medium",
+    "websiteUrl": "https://echai.ventures/",
+    "sourceUrl": "https://echai.ventures/grid/bengaluru/plum-2",
+    "publicPhones": [],
+    "accessNote": "Best used for discovering people and places rather than as a step-by-step guide.",
+    "provenance": "User-supplied research candidate; organisation details and current access require admin review."
+  }
+}

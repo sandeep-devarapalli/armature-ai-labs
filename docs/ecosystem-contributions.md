@@ -1,0 +1,69 @@
+# Builder Atlas contributions
+
+Builder Atlas is a public guide for robotics and hardware companies, facilities, suppliers, services and Bengaluru starter resources. Anyone can suggest additions or corrections without membership. Suggestions are private until an existing Admin or Super admin approves them. Staff who review memberships have no ecosystem moderation rights.
+
+## Website workflow
+
+Use **Submit a startup or place**, or **Suggest an edit / Add details** on a listing. Add a useful description and a public link or contact; startups also need a source. Multiple public phone numbers need descriptive labels and country codes. Permission to publish contacts is separate from optional private follow-up details. Contributor credit is optional and never inferred from private submitter information.
+
+The receipt confirms storage in the review queue, not publication. Approved public information stays unchanged while an edit is reviewed. Admins compare the proposed and current values, check evidence and access caveats, and approve, request information, or reject. Changed underlying records require a fresh comparison before approval. A directory entry is not a promise of current equipment, access, funding or pilot availability.
+
+Each listing accepts only one open edit suggestion. If an update is pending or needs information, visitors trying to edit see **An update is awaiting admin review** instead of the form. Approval or rejection opens editing again; requesting information does not. The public check returns only a yes/no status, never the suggestion or contributor's details. The database enforces this rule for simultaneous website and GitHub submissions. Retrying the same saved submission still returns its original receipt.
+
+Do not submit personal residential coordinates, private phone numbers, attendee lists or scraped profiles. People entries should use public professional information. Housing resources must be publicly advertised and remain unpinned. Where precise facilities are unconfirmed, preserve locality-level context or leave the entry unpinned.
+
+## GitHub alternative
+
+Create one JSON file in `contributions/ecosystem/` and open a pull request. JSON is parsed as data, never executed. All repository contents are public: do not include private submitter contacts, reviewer notes, credentials or correspondence. Use the website if you need private follow-up.
+
+Each file has `schemaVersion: 1`, an immutable unique lowercase `id`, `kind: "new"` or `"edit"`, `publicationConsent: true`, and `data`. An edit also needs the current public `targetSlug` and `baseRevision`; `data` is the complete replacement public listing, not a partial patch. Retain unchanged public fields; remove a field only when deliberately proposing its deletion. Never reuse a contribution ID for changed content, even after rejection. A corrected suggestion needs a new ID and current revision.
+
+New GitHub entries require a nonempty, stable `data.slug` using lowercase letters, numbers and hyphens. Keep it unchanged across retries so an already-approved listing can be matched without blocking subsequent imports. Anonymous website submissions can still receive generated identifiers.
+
+Public listing fields follow `supabase/functions/_shared/ecosystem-validation.ts`. Required values are `name`, `summary`, `primaryType`, and at least one public source, website or contact; `startup` also requires `sourceUrl`. Other supported details include `alsoListedAs`, `needs`, `subcategory`, `sectors`, `locality`, location precision, `publicPhones: [{label, number}]`, `publicEmail`, `accessNote`, `tips`, and explicitly requested `credit: {name, link}`. Use `primaryType: "startup"` for startups and hardware companies. Supplier means selling things; vendor means providing services. Only request `pilot` when evidence establishes an available pilot engagement.
+
+Validate locally with Node 22.22.2:
+
+```sh
+node --experimental-strip-types scripts/ecosystem-contributions.mjs
+node --experimental-strip-types --test tests/scripts/ecosystem-contributions.node.mjs
+```
+
+Validation does not send requests. A merged PR does not publish a listing. When separately enabled, the trusted-main workflow imports validated files into the same private review queue, using stable `github:<id>` keys. An unchanged retry returns the same receipt; changed content under an existing key fails. Review likely name/URL duplicates as edits instead of creating another company. Admin approval remains mandatory after merge.
+
+An edit import also waits for any existing open suggestion on that listing to be approved or rejected. A conflict is an import failure, not a successful receipt; retry after review, checking the listing's current revision before preparing a new contribution ID if its data changed.
+
+## Data transition and research
+
+The seed migration preserves the 51 existing upstream public entries, stable slugs, source dates and location caveats. `ON CONFLICT DO NOTHING` prevents replacement of a subsequently approved or unpublished record. It adds 12 research candidates and one revision-bound ARTPARK suggestion to the private queue; none of those suggestions is automatically public. The source TypeScript data and workbook workflow remain historical migration inputs, not a fallback that can resurrect removed listings.
+
+The research candidates correct the official Plum guide, IKP Smart Fab, C-CAMP and BBC links. Current operating access still needs admin checking. Unverified programme dates, reopening claims and pilot availability were removed; no new source-check dates or coordinates were invented. The ARTPARK suggestion retains its original source date and does not mark pilot access available. Third-party directories are linked, not copied wholesale.
+
+## Release gates and operations
+
+The separate owner-requested Armature AI Labs entry is queued by `202610020003_armature_ecosystem_submission.sql` and has a matching contribution JSON file. Its address-level pin, website and labelled public phone come from the supplied Google Maps listing checked on 2 October 2026. Opening hours, current equipment and visitor access still require confirmation. It follows the same approval gate and does not publish automatically.
+
+The owner authorized the Builder Atlas release on 2 October 2026, superseding the initial local-only implementation hold. Complete the gates below before production promotion. Keep `ECOSYSTEM_IMPORT_ENABLED` unset/false until its protected environment and queue import are configured and checked. Release authorization does not approve pending listings or lift unrelated payment/platform holds. Before enabling:
+
+1. Verify migrations and role/privacy tests in an isolated local or staging database. Check the legacy count and all private research receipts, then exercise new/edit approval and stale-edit rejection with synthetic records. Migration `202610020004_ecosystem_pending_edit.sql` enforces one open edit per listing. If older data contains competing open suggestions, it stops without discarding them; an admin must review and close duplicates before retrying. Run both ecosystem SQL test files and the opt-in, local-only `supabase/tests/concurrent_ecosystem.mjs` race test.
+2. Deploy the public submission function and required abuse-control configuration only after approval. Test actual durable receipts, retry behavior, contact consent, and notification failure isolation. Preserve the project's payment and member-platform holds.
+3. Protect `main` with review and required tests, and create a GitHub `ecosystem-import` environment restricted to protected `main` with required reviewers. Set `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` only as environment secrets, never frontend variables. Repository variable `ECOSYSTEM_IMPORT_ENABLED=true` enables queue imports. Pull-request validation receives no secrets; do not replace it with `pull_request_target`.
+4. Enable the approved frontend only against the migrated authoritative database. Verify desktop/mobile, themes, keyboard navigation, deep links, private queue permissions and public approved-only responses. Do not substitute old static entries on backend failure.
+5. Verify the migration-installed hourly `ecosystem-private-retention` job where `pg_cron` is available. Otherwise schedule the maintenance worker described below. Abuse-control hashes expire after 24 hours; private follow-up information and reviewer notes are cleared 90 days after review closes. Public changes and review actions retain their audit history. Confirm the scheduled task executes, rather than relying only on cleanup during subsequent submissions.
+
+The import workflow is deliberately disabled until configured. It posts only to `import_ecosystem_submission`, never directly to public listings and never to the approval RPC. Failed requests stop with an error; rerun unchanged files after fixing the cause. Audit queue receipts and approval outcomes before reporting success. Disable the import variable to stop future GitHub imports without changing existing approved data.
+
+### Required configuration and remaining verification
+
+- Frontend: `VITE_TURNSTILE_SITE_KEY` is the public site key; leave it blank until configured. The Edge Function uses `TURNSTILE_SECRET_KEY`, `APP_ORIGIN`, `ECOSYSTEM_TRUSTED_IP_HEADER` and a private `ECOSYSTEM_IP_HASH_SECRET` of at least 32 characters, plus existing server-side `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`. No server secret belongs in a `VITE_*` variable.
+- Token-only Turnstile verification sends the challenge token, secret and idempotency key, not submitter IP or form contents. Before deployment, prove the ingress overwrites the configured `cf-connecting-ip` or `x-real-ip` header and blocks direct spoofed-header access. Selecting a header name does not establish that trust. Validate the widget hostname and `ecosystem_submit` action end to end in the deployed environment.
+- Migration `202610020005_ecosystem_maintenance_wakeup.sql` installs `pg_cron` and schedules `ecosystem-maintenance-every-five-minutes`, also ensuring the hourly retention job exists if migration001 ran before the extension was installed. The private wakeup signs an empty request with a dedicated 32–256-character random key, stored as Vault secret `ecosystem_maintenance_key` and Edge secret `ECOSYSTEM_MAINTENANCE_KEY`. Set both from the same securely generated value; never place it in a migration, shell history, repository file, or log. A parameterized administrative connection can call `vault.create_secret($1, 'ecosystem_maintenance_key')`; configure the Edge secret through a protected process or the dashboard without printing it. Do not rotate `ARMATURE_JOB_SECRET` or the member-notification signing key. Only a timestamp and purpose-bound signature enter `pg_net`; the Edge Function rejects signatures older than 30 seconds or more than five seconds in the future. An existing authenticated external worker may still use `x-armature-job-secret`, but do not put that reusable credential into `pg_net` or `cron.job`.
+- Maintenance performs retention cleanup even while notifications are disabled. `ECOSYSTEM_NOTIFICATIONS_ENABLED` defaults off; enabling it requires `ECOSYSTEM_NOTIFICATION_FROM_EMAIL`, `ECOSYSTEM_NOTIFICATION_ADMIN_EMAIL`, `APP_ORIGIN`, and either existing `RESEND_API_KEY` or the existing scoped `MEMBER_NOTIFICATIONS_RESEND_KEY`. The established sender is `Armature AI Labs <no-reply@mail.armatureailabs.com>`; the admin-review recipient is `hello@armatureailabs.com`. Check domain/sender authorization and actual delivery before claiming notifications work. Each run claims at most ten receipts, with no changes to unrelated member workers.
+- Missing scheduler keys fail visibly. After configuration, inspect `cron.job_run_details` for the five-minute job and the corresponding `net._http_response` status; a cron SQL success alone proves only that HTTP was queued. Check the maintenance HTTP response and retention results as separate gates. If the host lacks `pg_cron`, migration005 must be resolved on a supported Supabase database before release rather than silently omitting maintenance.
+- Notification emails contain only the queue receipt and private admin-review URL, not submitted details. The durable queue retries up to five attempts with five-minute leases and provider idempotency. Review failed deliveries operationally; a successful submission receipt does not prove email delivery.
+- Local PostgreSQL checks use a minimal authentication fixture, not a complete Supabase stack. Full Supabase/Deno execution, trusted-ingress verification, live challenge-provider verification and notification inbox delivery remain release gates. No production migration, deployment, notification or publication is performed by these local checks.
+- GitHub Action pins match the existing repository CI exactly: checkout `3d3c42e5aac5ba805825da76410c181273ba90b1` and setup-node `820762786026740c76f36085b0efc47a31fe5020`. This establishes repository consistency, not a completed hosted workflow run.
+
+### Local edit-lock verification (2 October 2026)
+
+The full Vitest suite passed 418 tests; desktop/360px browser coverage passed 12 cases, and the importer passed eight tests. PostgreSQL passed 48 assertions plus a real two-connection race using different request keys and rate-limit hashes: exactly one proposal was saved, the loser received `P0409`, and retrying the winner returned its original receipt. A separate duplicate-data migration check stopped safely and preserved both proposals. The production-mode local build and release-artifact checks passed. Browser inspection against the isolated database confirmed that both the listing button and direct edit URL focus the pending-review alert without exposing the form. These are local checks, not production deployment or live Turnstile verification.

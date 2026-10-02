@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "research-20261002-fsid-iisc",
+  "kind": "new",
+  "publicationConsent": true,
+  "data": {
+    "slug": "fsid-iisc",
+    "name": "FSID, IISc (STEM incubator)",
+    "entityType": "Research & ecosystem",
+    "primaryType": "research-ecosystem",
+    "alsoListedAs": [],
+    "needs": [
+      "fund",
+      "learn"
+    ],
+    "subcategory": "Incubator or accelerator",
+    "sectors": [
+      "Research & ecosystem"
+    ],
+    "summary": "IISc's Foundation for Science Innovation and Development. Its STEM division incubates deep-science startups with research connections and mentoring.",
+    "locality": "IISc campus",
+    "locationPrecision": "City-level",
+    "confidence": "Medium",
+    "locationConfidence": "Medium",
+    "websiteUrl": "https://fsid.iisc.ac.in",
+    "sourceUrl": "https://fsid.iisc.ac.in",
+    "publicPhones": [],
+    "accessNote": "Confirm current programme eligibility, selection and lab-access arrangements directly. A directory entry does not imply walk-in access.",
+    "provenance": "User-supplied research candidate; organisation details and current access require admin review."
+  }
+}
