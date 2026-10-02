@@ -36,6 +36,7 @@
 .atlas-review-detail textarea { display: block; width: 100%; min-height: 90px; box-sizing: border-box; margin: .5rem 0 1rem; }
 .atlas-review-warning { border-left: 3px solid var(--ink); padding-left: 1rem; margin: 1rem 0; }
 @media (max-width: 760px) {
+  .atlas-contribution-form input:not([type=checkbox]), .atlas-contribution-form select, .atlas-contribution-form textarea { font-size: 16px; }
   .atlas-contribution-layout, .atlas-review-layout { grid-template-columns: 1fr; gap: 1.5rem; }
   .atlas-contribution-next { border-left: 0; border-top: 1px solid var(--hair); padding: 1.5rem 0 0; }
   .atlas-field-grid, .atlas-phone-row, .atlas-review-values { grid-template-columns: 1fr; gap: .2rem; }

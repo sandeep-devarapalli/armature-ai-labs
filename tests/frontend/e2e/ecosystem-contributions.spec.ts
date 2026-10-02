@@ -12,16 +12,60 @@ test.beforeEach(({ page }) => { const values: string[] = []; errors.set(page, va
 test.afterEach(({ page }) => { expect(errors.get(page)).toEqual([]); });
 const fixture = { slug: "synthetic-workshop", revision: 2, data: { slug: "synthetic-workshop", name: "Synthetic Workshop", summary: "A synthetic hardware workshop fixture for UI verification only.", entityType: "Research & ecosystem", primaryType: "research-ecosystem", alsoListedAs: [], needs: ["build", "learn"], sectors: ["Hardware & sensing"], subcategory: "Makerspace", locality: "Bengaluru", locationPrecision: "City-level", confidence: "Medium", locationConfidence: "Medium", websiteUrl: "https://example.test/workshop", sourceUrl: "https://example.test/source", provenance: "Synthetic test fixture", verifiedAt: "2026-10-02", publicPhones: [{ label: "Reception", number: "+91 9876543210" }], publicEmail: "", accessNote: "Synthetic access note", tips: "", engageHow: "", salesChannel: "", priceLevel: "", minOrder: "", pricingModel: "", turnaround: "", credit: null } };
 
-async function fixtures(page: Page) {
+async function fixtures(page: Page, listings = [fixture]) {
   await page.addInitScript(() => {
     localStorage.setItem("armature-theme", "light");
     Object.assign(window, { turnstile: { render(element: HTMLElement, options: { callback: (token: string) => void }) { element.textContent = "Synthetic verification fixture"; options.callback("synthetic-test-token"); return "synthetic-widget"; }, remove() {} } });
   });
   await page.route("https://challenges.cloudflare.com/turnstile/**", (route) => route.fulfill({ contentType: "application/javascript", body: "/* UI test challenge fixture, not a real verification. */" }));
-  await page.route("https://tiles.openfreemap.org/styles/liberty", (route) => route.fulfill({ json: { version: 8, sources: {}, layers: [{ id: "synthetic-background", type: "background", paint: { "background-color": "#eeeeec" } }] } }));
-  await page.route("**/rest/v1/ecosystem_listings?*", (route) => route.fulfill({ json: [fixture] }));
+  await page.route("https://tiles.openfreemap.org/styles/liberty", (route) => route.fulfill({ json: { version: 8, sources: { "synthetic-attribution": { type: "geojson", data: { type: "FeatureCollection", features: [] }, attribution: '<a href="https://www.openstreetmap.org/copyright">© OpenStreetMap</a>' } }, layers: [{ id: "synthetic-background", type: "background", paint: { "background-color": "#eeeeec" } }, { id: "synthetic-attribution", type: "circle", source: "synthetic-attribution" }] } }));
+  await page.route("**/rest/v1/ecosystem_listings?*", (route) => route.fulfill({ json: listings }));
   await page.route("**/rest/v1/rpc/ecosystem_edit_pending", (route) => route.fulfill({ json: false }));
 }
+
+test("database-backed map filters, selects and restores a listing on reload", async ({ page }) => {
+  const mappedFixture = { ...fixture, data: { ...fixture.data, coordinates: [77.6, 12.97], locationPrecision: "Locality-level" } };
+  await fixtures(page, [mappedFixture, { ...fixture, slug: "synthetic-drone", data: { ...fixture.data, slug: "synthetic-drone", name: "Synthetic Drone", primaryType: "startup", sectors: ["Drones & aerospace"], needs: ["build"] } }]);
+  await page.goto("/ecosystem");
+  await expect(page.getByText("2 results · 1 on map")).toBeVisible();
+  await expect(page.locator(".ecosystem-map-shell")).toHaveAttribute("data-map-state", "ready", { timeout: 15_000 });
+  await expect(page.getByRole("link", { name: "© OpenStreetMap", includeHidden: true })).toHaveAttribute("href", "https://www.openstreetmap.org/copyright");
+  await expect(page.getByRole("link", { name: "Contribute through GitHub" })).toHaveAttribute("href", "https://github.com/sandeep-devarapalli/armature-ai-labs/blob/main/docs/ecosystem-contributions.md");
+  await page.getByRole("button", { name: "learn", exact: true }).click();
+  await expect(page.getByText("1 results · 1 on map")).toBeVisible();
+  await page.getByRole("button", { name: "learn", exact: true }).click();
+  await page.getByRole("button", { name: "Research & ecosystem", exact: true }).click();
+  await expect(page.getByText("1 results · 1 on map")).toBeVisible();
+  await page.getByRole("button", { name: "All", exact: true }).click();
+  await page.getByRole("combobox", { name: "Sector", exact: true }).selectOption("Hardware & sensing");
+  await expect(page.getByText("1 results · 1 on map")).toBeVisible();
+  await page.getByRole("combobox", { name: "Sector", exact: true }).selectOption("");
+  await page.getByRole("searchbox").fill("Synthetic Workshop");
+  const list = page.getByRole("button", { name: "List", exact: true });
+  if (await list.isVisible()) await list.click();
+  await expect(page.locator(".atlas-listing")).toHaveCount(1);
+  await page.locator(".atlas-listing").click();
+  await expect(page).toHaveURL(/focus=synthetic-workshop/);
+  const details = page.getByRole("article", { name: "Synthetic Workshop details" });
+  await expect(details).toContainText("Bengaluru");
+  await expect(details.getByRole("link", { name: "Public source", exact: true })).toHaveAttribute("href", fixture.data.sourceUrl);
+  await expect(page.getByText(/Record confidence|Workbook trail|Robotics lead workbook|directory record/i)).toHaveCount(0);
+  await page.reload();
+  await expect(page.getByRole("heading", { name: "Synthetic Workshop", exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Close listing details" }).click();
+  await expect(page).not.toHaveURL(/focus=/);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+});
+
+test("mobile atlas filters and contribution fields avoid automatic input zoom", async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 800 });
+  await fixtures(page);
+  await page.goto("/ecosystem?contribute=research-ecosystem&edit=synthetic-workshop");
+  await expect(page.getByLabel("Phone 1", { exact: true })).toBeVisible();
+  const sizes = await page.locator('.builder-atlas input:not([type="checkbox"]), .builder-atlas select, .builder-atlas textarea').evaluateAll(controls => controls.map(control => ({ label: control.getAttribute("aria-label") || control.closest("label")?.textContent, size: parseFloat(getComputedStyle(control).fontSize) })));
+  expect(sizes.filter(control => control.size < 16)).toEqual([]);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+});
 
 test("edit availability fails closed, shows a pending review, and unlocks only after checking again", async ({ page }, testInfo) => {
   await fixtures(page);

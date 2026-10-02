@@ -293,51 +293,18 @@ test("project discovery recovers from conflicting and invalid filters and sorts 
   await expectNoHorizontalOverflow(page);
 });
 
-test("ecosystem map filters and preserves a selected organization", async ({ page }) => {
+test("ecosystem has no stale directory fallback when the demo backend is unavailable", async ({ page }) => {
   await page.goto("/ecosystem");
-  await expect(page.getByRole("heading", { name: "Robotics, mapped." })).toBeVisible();
-  await expect(page.getByText("51 organizations")).toBeVisible();
-  await expect(page.locator(".ecosystem-method h2")).toHaveText("Built to be useful.");
-  await expect(page.locator(".ecosystem-method").getByText("Contribute on GitHub")).toHaveAttribute(
+  await expect(page.getByRole("heading", { name: "Bengaluru, for builders." })).toBeVisible();
+  await expect(page.getByRole("alert")).toContainText("The ecosystem service is not configured");
+  await expect(page.getByRole("button", { name: "Retry loading" })).toBeVisible();
+  await expect(page.getByRole("complementary", { name: "Ecosystem listings" })).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "Contribute through GitHub" })).toHaveAttribute(
     "href",
-    "https://github.com/sandeep-devarapalli/armature-ai-labs"
+    "https://github.com/sandeep-devarapalli/armature-ai-labs/blob/main/docs/ecosystem-contributions.md"
   );
   await expect(page.getByText("Robotics lead workbook")).toHaveCount(0);
   await expect(page.getByText("directory record")).toHaveCount(0);
-  const resultCount = page.locator(".ecosystem-directory-heading > .mono");
-  await expect(page.locator(".ecosystem-map-shell")).toHaveAttribute(
-    "data-map-state",
-    "ready",
-    { timeout: 15_000 }
-  );
-
-  const directorySwitch = page.getByRole("button", { name: "List", exact: true });
-  await page.getByRole("button", { name: "Learning & training", exact: true }).click();
-  if (await directorySwitch.isVisible()) await directorySwitch.click();
-  await expect(resultCount).toHaveText("1 result");
-  await expect(page.locator(".ecosystem-entity-link").filter({ hasText: "LSCL Robotics" })).toBeVisible();
-  await page.getByRole("button", { name: "All", exact: true }).click();
-
-  await page.getByPlaceholder("Search teams, founders, or places").fill("Bellatrix");
-  if (await directorySwitch.isVisible()) await directorySwitch.click();
-  await expect(resultCount).toHaveText("1 result");
-  await page.locator(".ecosystem-entity-link").filter({ hasText: "Bellatrix Aerospace" }).click();
-  await expect(page).toHaveURL(/focus=bellatrix-aerospace/);
-  await expect(page.getByRole("heading", { name: "Bellatrix Aerospace" })).toBeVisible();
-  const organizationDetails = page.getByRole("complementary", { name: "Organization details" });
-  await expect(organizationDetails.getByText("Sankey Road, Bengaluru")).toBeVisible();
-  await expect(organizationDetails.getByRole("link", { name: "View source" })).toBeVisible();
-  await expect(organizationDetails.getByText("Record confidence")).toHaveCount(0);
-  await expect(organizationDetails.getByText("Workbook trail")).toHaveCount(0);
-
-  await page.reload();
-  await expect(page.getByRole("heading", { name: "Bellatrix Aerospace" })).toBeVisible();
-  await page.getByRole("button", { name: "Close organization details" }).click();
-  await expect(page).not.toHaveURL(/focus=/);
-
-  await page.getByRole("button", { name: "Drones & aerospace", exact: true }).click();
-  if (await directorySwitch.isVisible()) await directorySwitch.click();
-  await expect(page.getByText(/results?/).first()).toBeVisible();
   await expectNoHorizontalOverflow(page);
 });
 

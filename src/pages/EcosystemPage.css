@@ -61,6 +61,7 @@ body:has(.builder-atlas) .editorial-rail { display:none; }
 @media (max-width:700px) {
  .atlas-heading { padding:24px 16px; } .atlas-submit { width:100%; } .atlas-submit small { font-size:10px; }
  .atlas-filters { padding:0 16px; } .atlas-types { gap:18px; }
+ .atlas-filters .ecosystem-search input,.atlas-needs select { font-size:16px; }
  .atlas-needs { position:relative; gap:5px; flex-wrap:nowrap; overflow-x:auto; }
  .atlas-needs > span,.atlas-needs > button,.atlas-needs > label { flex-shrink:0; }
  .atlas-workbench { display:block; height:620px; } .atlas-directory { height:100%; border-right:0; }
