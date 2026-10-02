@@ -65,7 +65,7 @@ it("requires permission and persists one receipt after a failed retry without lo
   await screen.findByRole("heading", { name: "Submitted for admin review" });
   expect(vi.mocked(submitEcosystemContribution).mock.calls[0][0].idempotencyKey).toBe(vi.mocked(submitEcosystemContribution).mock.calls[1][0].idempotencyKey);
   expect(screen.getByText("synthetic-receipt")).toBeInTheDocument();
-  expect(screen.getByRole("heading", { name: "Submitted for admin review" })).toHaveFocus();
+  await waitFor(() => expect(screen.getByRole("heading", { name: "Submitted for admin review" })).toHaveFocus());
 });
 
 it("submits repeatable labelled phones and separate explicitly opted-in credit", async () => {
