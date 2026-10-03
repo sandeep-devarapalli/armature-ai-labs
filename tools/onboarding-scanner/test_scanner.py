@@ -122,6 +122,9 @@ class HttpTests(unittest.TestCase):
     def test_unavailable_and_infected(self):
         self.clamd.ready.side_effect = Unavailable()
         self.assertEqual(self.request(fixture(), self.headers())[0], 503)
+        self.assertTrue(self.server.scan_slots.acquire(timeout=3),
+                        'Unavailable request did not release its scan slot')
+        self.server.scan_slots.release()
         self.clamd.ready.side_effect = None
         self.clamd.scan.side_effect = Rejected()
         self.assertEqual(self.request(fixture(), self.headers())[0], 422)
