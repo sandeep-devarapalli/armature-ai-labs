@@ -295,10 +295,11 @@ test("project discovery recovers from conflicting and invalid filters and sorts 
 
 test("ecosystem has no stale directory fallback when the demo backend is unavailable", async ({ page }) => {
   await page.goto("/ecosystem");
-  await expect(page.getByRole("heading", { name: "Bengaluru, for builders." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Bangalore starter guide" })).toBeVisible();
   await expect(page.getByRole("alert")).toContainText("The ecosystem service is not configured");
   await expect(page.getByRole("button", { name: "Retry loading" })).toBeVisible();
-  await expect(page.getByRole("complementary", { name: "Ecosystem listings" })).toHaveCount(0);
+  await expect(page.getByRole("complementary", { name: "Ecosystem listings" }).locator(".atlas-card")).toHaveCount(0);
+  await expect(page.locator(".ecosystem-selected-marker")).toHaveCount(0);
   await expect(page.getByRole("link", { name: "Contribute through GitHub" })).toHaveAttribute(
     "href",
     "https://github.com/sandeep-devarapalli/armature-ai-labs/blob/main/docs/ecosystem-contributions.md"
