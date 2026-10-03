@@ -120,6 +120,51 @@ it("reviews an unchanged revision through the atomic approval RPC", async () => 
   await screen.findByText(/Approved and published/);
 });
 
+it.each(["Reject", "Needs information"])("explains and focuses missing review notes for %s without sending a decision", async (action) => {
+  render(<EcosystemAdminPage />);
+  fireEvent.click(await screen.findByRole("button", { name: /Synthetic Workshop/ }));
+  const button = await screen.findByRole("button", { name: action });
+  await waitFor(() => expect(screen.getByRole("heading", { name: "Synthetic Workshop" })).toHaveFocus());
+  expect(screen.getByLabelText("Private review notes")).toHaveAccessibleDescription(/A note is required for Reject or Needs information/);
+  fireEvent.click(button);
+  const notes = screen.getByLabelText("Private review notes");
+  expect(notes).toHaveFocus(); expect(notes).toHaveAttribute("aria-invalid", "true");
+  expect(notes).toHaveAccessibleDescription(/Add a review note explaining/);
+  expect(reviewEcosystemSubmission).not.toHaveBeenCalled();
+  button.focus(); fireEvent.click(button);
+  expect(notes).toHaveFocus();
+});
+
+it.each([2, 3])("rejects an existing-listing edit with a note even when the public revision is %s", async (revision) => {
+  vi.mocked(getEcosystemListing).mockResolvedValue({ ...listing, revision });
+  render(<EcosystemAdminPage />);
+  fireEvent.click(await screen.findByRole("button", { name: /Synthetic Workshop/ }));
+  fireEvent.click(await screen.findByRole("button", { name: "Reject" }));
+  fireEvent.change(screen.getByLabelText("Private review notes"), { target: { value: "Synthetic reason: source does not support this change." } });
+  expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "Reject" }));
+  await waitFor(() => expect(reviewEcosystemSubmission).toHaveBeenCalledWith("test-receipt", "rejected", revision, "Synthetic reason: source does not support this change.", 1));
+  await screen.findByText("Rejected. No public information changed.");
+  expect(rebaseEcosystemSubmission).not.toHaveBeenCalled();
+});
+
+it("focuses a failed rejection beside the action and preserves the review note for retry", async () => {
+  vi.mocked(reviewEcosystemSubmission).mockRejectedValueOnce(new Error("Synthetic review failure"));
+  render(<EcosystemAdminPage />);
+  fireEvent.click(await screen.findByRole("button", { name: /Synthetic Workshop/ }));
+  const notes = await screen.findByLabelText("Private review notes");
+  await waitFor(() => expect(screen.getByRole("heading", { name: "Synthetic Workshop" })).toHaveFocus());
+  fireEvent.change(notes, { target: { value: "Synthetic rejection reason" } });
+  fireEvent.click(screen.getByRole("button", { name: "Reject" }));
+  const error = await screen.findByRole("alert");
+  await waitFor(() => expect(error).toHaveFocus());
+  expect(error.closest("article")).toContainElement(notes);
+  expect(notes).toHaveValue("Synthetic rejection reason");
+  expect(screen.queryByText("Rejected. No public information changed.")).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "Reject" }));
+  await screen.findByText("Rejected. No public information changed.");
+});
+
 it("blocks approval when public contacts lack recorded publication permission", async () => {
   vi.mocked(getEcosystemSubmissions).mockResolvedValue([{ ...submission, contacts_permission: false }]);
   render(<EcosystemAdminPage />);

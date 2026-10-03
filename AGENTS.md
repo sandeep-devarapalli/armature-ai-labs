@@ -6,6 +6,8 @@
 
 # AGENTS.md
 
+- Ecosystem rejection feedback correction, 3 October 2026: make the required review note explicit beside the notes field. Reject and Needs information must focus visible, actionable validation when a note is missing; review failures must remain beside the action and preserve the selected proposal and notes. Test existing-listing rejection as well as new submissions without moderating real records for demonstrations.
+
 - Builder Atlas release authorized, 2 October 2026: the owner requested taking the approved public contribution and admin-review experience live. This supersedes its earlier local-only hold, subject to production configuration, migration, privacy, bot-protection, CI and live verification checks. It does not authorize unrelated deployments, payment activation, or automatically approving pending research/contribution records.
 
 - Builder Atlas edit lock, 2 October 2026: each published listing accepts only one open edit suggestion. Pending and needs-information suggestions block further edits until an Admin/Super admin approves or rejects them. Show an accessible awaiting-review alert when visitors try editing, including direct edit links, and enforce the same rule atomically for website and GitHub submissions. Exact retries retain their original receipt; public status reveals only whether an edit is awaiting review, never private submission details.
