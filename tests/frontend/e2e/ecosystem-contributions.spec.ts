@@ -137,7 +137,7 @@ test("admin queue includes reviews beyond 1,000 and fails visibly on an incomple
       expect(url.searchParams.get("limit")).toBe("500");
       const cursor = url.searchParams.get("or");
       cursors.push(cursor);
-      if (cursor && failLaterPage) return route.fulfill({ status: 503, headers: { "Retry-After": "0" }, json: { message: "Synthetic private provider detail" } });
+      if (cursor && failLaterPage) return route.fulfill({ status: 503, headers: { "Retry-After": "0", "Access-Control-Expose-Headers": "Retry-After" }, json: { message: "Synthetic private provider detail" } });
       const lastId = cursor?.match(/id\.lt\.([0-9a-f-]+)/)?.[1];
       return route.fulfill({ json: rows.filter(row => !lastId || row.id < lastId).slice(0, 500) });
     }
