@@ -6,14 +6,21 @@ export const ecosystemTypes = ["startup", "research-ecosystem", "supplier", "ven
 export type EcosystemPrimaryType = typeof ecosystemTypes[number];
 export const ecosystemNeeds = ["build", "source", "manufacture", "test", "learn", "fund", "pilot"] as const;
 export type EcosystemNeed = typeof ecosystemNeeds[number];
+export const ecosystemCities = ["bangalore"] as const;
+export type EcosystemCity = typeof ecosystemCities[number];
+export const ecosystemGuideCategories = ["workspaces", "communities", "cafes", "build-source", "living"] as const;
+export type EcosystemGuideCategory = typeof ecosystemGuideCategories[number];
 export const ecosystemTypeLabels: Record<EcosystemPrimaryType, string> = {
-  startup: "Startups & companies", "research-ecosystem": "Research & ecosystem", supplier: "Suppliers", vendor: "Services", other: "City starter guide"
+  startup: "Startups & companies", "research-ecosystem": "Research & ecosystem", supplier: "Suppliers", vendor: "Services", other: "Other resources"
 };
 export interface EcosystemListingData extends EcosystemEntity {
   primaryType: EcosystemPrimaryType;
   alsoListedAs: EcosystemPrimaryType[];
   needs: EcosystemNeed[];
   subcategory: string;
+  city?: EcosystemCity;
+  guideCategories?: EcosystemGuideCategory[];
+  googleMapsUrl?: string;
   publicPhones: { label: string; number: string }[];
   publicEmail: string;
   accessNote: string;
@@ -73,9 +80,14 @@ export async function ecosystemEditPending(slug: string): Promise<boolean> {
 }
 
 export async function getEcosystemListings(): Promise<EcosystemListing[]> {
-  const { data, error } = await client().from("ecosystem_listings").select("slug, revision, data").eq("published", true).order("slug");
-  if (error) throw new Error("The atlas could not be loaded. Please try again.");
-  return (data ?? []).map(hydrateEcosystemListing);
+  const listings: EcosystemListing[] = [];
+  const pageSize = 500;
+  for (let start = 0; ; start += pageSize) {
+    const { data, error } = await client().from("ecosystem_listings").select("slug, revision, data").eq("published", true).order("slug").range(start, start + pageSize - 1);
+    if (error) throw new Error("The atlas could not be loaded. Please try again.");
+    listings.push(...(data ?? []).map(hydrateEcosystemListing));
+    if (!data || data.length < pageSize) return listings;
+  }
 }
 
 export async function submitEcosystemContribution(input: EcosystemContribution): Promise<string> {
@@ -96,7 +108,10 @@ export async function submitEcosystemContribution(input: EcosystemContribution):
 export async function getEcosystemSubmissions(): Promise<EcosystemSubmission[]> {
   const { data, error } = await client().from("ecosystem_submissions").select("id, kind, target_slug, base_revision, proposal_revision, base_data, proposed, submitter_name, submitter_email, contacts_permission, status, reviewer_notes, created_at").order("created_at", { ascending: false });
   if (error) throw new Error("The review queue could not be loaded.");
-  return data ?? [];
+  return (data ?? []).map((submission: EcosystemSubmission) => ({ ...submission,
+    proposed: { ...emptyEcosystemListing(submission.proposed.primaryType), ...submission.proposed },
+    base_data: submission.base_data ? { ...emptyEcosystemListing(submission.base_data.primaryType), ...submission.base_data } : null,
+  }));
 }
 
 export async function getEcosystemListing(slug: string, publishedOnly = false): Promise<EcosystemListing | null> {
@@ -121,7 +136,7 @@ export async function rebaseEcosystemSubmission(id: string, revision: number, pr
 }
 
 export function emptyEcosystemListing(primaryType: EcosystemPrimaryType = "startup"): EcosystemListingData {
-  return { slug: "", name: "", summary: "", primaryType, entityType: primaryType === "startup" ? "Startup" : "Research & ecosystem", sectors: [], locality: "", websiteUrl: "", sourceUrl: "", locationPrecision: "City-level", confidence: "Medium", locationConfidence: "Medium", provenance: "", verifiedAt: "", alsoListedAs: [], needs: [], subcategory: "", publicPhones: [], publicEmail: "", accessNote: "", tips: "", engageHow: "", salesChannel: "", priceLevel: "", minOrder: "", pricingModel: "", turnaround: "", credit: null };
+  return { slug: "", name: "", summary: "", primaryType, entityType: primaryType === "startup" ? "Startup" : "Research & ecosystem", sectors: [], locality: "", websiteUrl: "", sourceUrl: "", locationPrecision: "City-level", confidence: "Medium", locationConfidence: "Medium", provenance: "", verifiedAt: "", alsoListedAs: [], needs: [], subcategory: "", city: "bangalore", guideCategories: [], googleMapsUrl: "", publicPhones: [], publicEmail: "", accessNote: "", tips: "", engageHow: "", salesChannel: "", priceLevel: "", minOrder: "", pricingModel: "", turnaround: "", credit: null };
 }
 
 export function changeEcosystemType(data: EcosystemListingData, primaryType: EcosystemPrimaryType): EcosystemListingData {

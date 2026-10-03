@@ -12,6 +12,14 @@
 .atlas-field-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem 1rem; }
 .atlas-wide { grid-column: 1 / -1; }
 .atlas-help { color: var(--fg-2); font-size: .8rem; line-height: 1.7; }
+.atlas-matches { border: 1px solid var(--hair-strong); padding: 1rem; margin: .75rem 0; scroll-margin-top: 8rem; overflow-wrap: anywhere; }
+.atlas-matches:focus-visible { outline: 2px solid var(--ink); outline-offset: .25rem; }
+.atlas-matches h3 { margin: 0; }
+.atlas-matches p, .atlas-matches li > span { font-size: .8rem; color: var(--fg-2); }
+.atlas-matches ul { list-style: none; padding: 0; }
+.atlas-matches li { display: grid; gap: .4rem; padding: .8rem 0; border-top: 1px solid var(--hair); }
+.atlas-matches .button-row { flex-wrap: wrap; align-items: center; }
+.atlas-match-switch { border-top: 1px solid var(--hair-strong); padding-top: .75rem; }
 .atlas-phone-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; gap: .75rem; align-items: end; margin-bottom: .75rem; }
 .atlas-phone-row .button { margin-bottom: .6rem; }
 .atlas-contribution-form .atlas-check, .atlas-check-grid label { display: flex; gap: .6rem; align-items: flex-start; line-height: 1.6; }

@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "owner-20261003-big-bean-hsr",
+  "kind": "new",
+  "publicationConsent": true,
+  "data": {
+    "slug": "big-bean-cafe-hsr",
+    "name": "Big Bean Café — HSR Layout",
+    "primaryType": "other",
+    "subcategory": "Work café",
+    "city": "bangalore",
+    "guideCategories": ["cafes"],
+    "summary": "An HSR Layout café recommended by the Armature owner for work and conversations. The café’s own story page identifies its HSR outlet and describes work meetings there.",
+    "locality": "HSR Layout, Bengaluru",
+    "locationPrecision": "Locality-level",
+    "confidence": "Medium",
+    "locationConfidence": "Medium",
+    "websiteUrl": "https://www.bigbeancafe.in/",
+    "sourceUrl": "https://www.bigbeancafe.in/our-story",
+    "publicPhones": [],
+    "accessNote": "Check the HSR outlet’s current hours, laptop policy, sockets, seating and meeting suitability directly before visiting. No workspace access or equipment is promised.",
+    "provenance": "Owner-requested recommendation; the official Our Story page was reviewed on 3 October 2026 and identifies an HSR Layout outlet. No exact street address or coordinates were verified, so this candidate remains unpinned. Awaiting duplicate check and Admin/Super admin review."
+  }
+}

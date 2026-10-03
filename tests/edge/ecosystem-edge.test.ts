@@ -56,6 +56,15 @@ describe('anonymous ecosystem intake', () => {
     expect(challenge.toString()).not.toContain('127.0.0.1');
     expect(challenge.toString()).not.toContain('private');
   });
+  it('queues valid guide metadata privately and rejects unsafe Maps URLs before persistence', async () => {
+    const proposed = { ...draft.proposed, city: 'bangalore', guideCategories: ['cafes'], googleMapsUrl: 'https://maps.app.goo.gl/syntheticPlace' };
+    expect((await handleSubmission(request({ ...draft, proposed }))).status).toBe(201);
+    expect(mocks.rpc).toHaveBeenCalledWith('receive_ecosystem_submission', expect.objectContaining({ p_proposed: expect.objectContaining(proposed) }));
+    expect(mocks.from).not.toHaveBeenCalled();
+    mocks.rpc.mockClear();
+    expect((await handleSubmission(request({ ...draft, proposed: { ...proposed, googleMapsUrl: 'https://maps.google.com.evil.test/' } }))).status).toBe(400);
+    expect(mocks.rpc).not.toHaveBeenCalled();
+  });
   it('does not claim success for a honeypot or rejected database write', async () => {
     const trapped = await handleSubmission(request({ ...draft, companyFax: 'bot' }));
     expect(trapped.status).toBe(400);
