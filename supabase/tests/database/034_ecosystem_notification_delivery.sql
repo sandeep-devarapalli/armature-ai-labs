@@ -107,6 +107,10 @@ update public.member_notification_events set received_at=now()-interval '31 days
 update private.ecosystem_notifications set completed_at=now()-interval '31 days' where submission_id='a7100000-0000-4000-8000-000000000014';
 select public.maintain_member_notifications(false);
 select ok(exists(select 1 from public.member_notification_events where event_id='atlas-unresolved-old'),'unconfirmed Atlas receipt remains available after 30 days');
+update private.ecosystem_notifications set state='pending',lease=null where submission_id='a7100000-0000-4000-8000-000000000019';
+update public.ecosystem_submissions set status='approved' where id='a7100000-0000-4000-8000-000000000019';
+select public.claim_ecosystem_notifications('atlas@example.test');
+select is((select state from private.ecosystem_notifications where submission_id='a7100000-0000-4000-8000-000000000019'),'pending','suppression does not create failure alerts for already reviewed queued notices');
 insert into auth.users(id,aud,role,email,email_confirmed_at) values('a7900000-0000-4000-8000-000000000001','authenticated','authenticated','batch@example.test',now());
 insert into public.member_notifications(user_id,recipient_id,recipient_email,event_key,kind,expected_status,application_revision,state,completed_at)
 values('a7900000-0000-4000-8000-000000000001','a7900000-0000-4000-8000-000000000001','batch@example.test','atlas-batch-budget','approved','approved',1,'failed',now()-interval '31 days');

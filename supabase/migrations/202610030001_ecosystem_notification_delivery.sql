@@ -52,7 +52,8 @@ begin
  update private.ecosystem_notifications set state='unknown',lease=null where state='sending' and retry_at<=now();
  if exists(select 1 from public.member_notification_suppressions s where s.recipient_email=p_recipient_email
  or s.recipient_email='sha256:'||encode(extensions.digest(p_recipient_email,'sha256'),'hex')) then
-  update private.ecosystem_notifications set state='suppressed',recipient_email=p_recipient_email,recipient_hash=encode(extensions.digest(p_recipient_email,'sha256'),'hex'),completed_at=now(),lease=null where state='pending';
+  update private.ecosystem_notifications n set state='suppressed',recipient_email=p_recipient_email,recipient_hash=encode(extensions.digest(p_recipient_email,'sha256'),'hex'),completed_at=now(),lease=null
+  where n.state='pending' and exists(select 1 from public.ecosystem_submissions s where s.id=n.submission_id and s.status in ('pending','needs_info'));
   return;
  end if;
  return query with ready as (
