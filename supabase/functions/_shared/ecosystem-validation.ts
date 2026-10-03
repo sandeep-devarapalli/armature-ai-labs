@@ -1,26 +1,31 @@
 export const ecosystemPrimaryTypes = ['startup', 'research-ecosystem', 'supplier', 'vendor', 'other'] as const;
 export const ecosystemNeeds = ['build', 'source', 'manufacture', 'test', 'learn', 'fund', 'pilot'] as const;
+export const ecosystemGuideCategories = ['workspaces', 'communities', 'cafes', 'build-source', 'living'] as const;
 const textFields: Record<string, number> = {
   slug: 100, name: 160, summary: 2000, locality: 300, subcategory: 100,
-  websiteUrl: 1000, sourceUrl: 1000, founders: 500, provenance: 2000,
+  websiteUrl: 1000, sourceUrl: 1000, googleMapsUrl: 1000, founders: 500, provenance: 2000,
   verifiedAt: 10, publicEmail: 254, accessNote: 2000, tips: 2000,
   engageHow: 1000, salesChannel: 500, priceLevel: 300, minOrder: 300,
   pricingModel: 500, turnaround: 300,
 };
 const enums: Record<string, readonly string[]> = {
   primaryType: ecosystemPrimaryTypes,
+  city: ['bangalore'],
   entityType: ['Startup', 'Company', 'Research & ecosystem'],
   locationPrecision: ['Address-level', 'Locality-level', 'City-level', 'Metro presence'],
   confidence: ['High', 'Medium'], locationConfidence: ['High', 'Medium'],
 };
 const arrayFields: Record<string, readonly string[]> = {
-  alsoListedAs: ecosystemPrimaryTypes, needs: ecosystemNeeds,
+  alsoListedAs: ecosystemPrimaryTypes, needs: ecosystemNeeds, guideCategories: ecosystemGuideCategories,
   sectors: ['Robotics', 'Physical AI', 'Drones & aerospace', 'Space hardware', 'Industrial automation', 'Hardware & sensing', 'Edge & embedded systems', 'Learning & training', 'Research & ecosystem'],
 };
 export const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/u;
 export function publicUrl(value: string) {
   try { const url = new URL(value); return ['https:', 'http:'].includes(url.protocol) && !url.username && !url.password; }
   catch { return false; }
+}
+export function isGoogleMapsUrl(value: string) {
+  return !/[\u0000-\u001f\u007f]/u.test(value) && /^https:\/\/(?:maps\.app\.goo\.gl\/[^\s\\/?#]+(?:[/?#][^\s\\]*)?|(?:www\.)?google\.com\/maps(?:[/?#][^\s\\]*)?|maps\.google\.com(?:\/[^\s\\]*|[?#][^\s\\]*)?)$/u.test(value);
 }
 export function validateEcosystemData(input: unknown): Record<string, unknown> {
   if (!input || typeof input !== 'object' || Array.isArray(input)) throw new Error('Listing details must be an object.');
@@ -29,6 +34,7 @@ export function validateEcosystemData(input: unknown): Record<string, unknown> {
     if (value === undefined) continue;
     if (Object.hasOwn(textFields, key)) {
       if (typeof value !== 'string' || value.length > textFields[key]) throw new Error(`Invalid ${key}.`);
+      if (key === 'googleMapsUrl' && /[\u0000-\u001f\u007f]/u.test(value)) throw new Error('Google Maps links must not contain control characters.');
       data[key] = value.trim();
     } else if (Object.hasOwn(enums, key)) {
       if (typeof value !== 'string' || !enums[key].includes(value)) throw new Error(`Invalid ${key}.`);
@@ -57,11 +63,12 @@ export function validateEcosystemData(input: unknown): Record<string, unknown> {
   if (typeof data.name !== 'string' || data.name.length < 2 || typeof data.summary !== 'string' || data.summary.length < 10 || !data.primaryType) throw new Error('Type, name and a useful summary are required.');
   if (data.slug && !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(String(data.slug))) throw new Error('Invalid listing identifier.');
   for (const key of ['websiteUrl', 'sourceUrl']) if (data[key] && !publicUrl(String(data[key]))) throw new Error('Public links must use HTTP or HTTPS.');
+  if (data.googleMapsUrl && !isGoogleMapsUrl(String(data.googleMapsUrl))) throw new Error('Use a HTTPS Google Maps place or share link.');
   if (data.publicEmail && !emailPattern.test(String(data.publicEmail))) throw new Error('Invalid public email.');
   if (!data.websiteUrl && !data.sourceUrl && !data.publicEmail && !(data.publicPhones as unknown[] | undefined)?.length) throw new Error('Add at least one public link or contact.');
   if (data.primaryType === 'startup' && !data.sourceUrl) throw new Error('Startups need a source link.');
   if (data.verifiedAt && !/^\d{4}-\d{2}-\d{2}$/.test(String(data.verifiedAt))) throw new Error('Invalid source-check date.');
-  if (data.primaryType === 'other' && /people|person|housing/i.test(String(data.subcategory || '')) && data.coordinates) throw new Error('People and housing resources must not contain private map coordinates.');
+  if (data.primaryType === 'other' && /people|person|housing/i.test(String(data.subcategory || '')) && (data.coordinates || data.googleMapsUrl)) throw new Error('People and housing resources must not contain private map locations.');
   if (data.coordinates && !['Address-level', 'Locality-level'].includes(String(data.locationPrecision))) throw new Error('Unconfirmed locations must remain unpinned.');
   return data;
 }

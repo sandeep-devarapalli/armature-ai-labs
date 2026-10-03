@@ -22,7 +22,11 @@ New GitHub entries require a nonempty, stable `data.slug` using lowercase letter
 
 Public listing fields follow `supabase/functions/_shared/ecosystem-validation.ts`. Required values are `name`, `summary`, `primaryType`, and at least one public source, website or contact; `startup` also requires `sourceUrl`. Other supported details include `alsoListedAs`, `needs`, `subcategory`, `sectors`, `locality`, location precision, `publicPhones: [{label, number}]`, `publicEmail`, `accessNote`, `tips`, and explicitly requested `credit: {name, link}`. Use `primaryType: "startup"` for startups and hardware companies. Supplier means selling things; vendor means providing services. Only request `pilot` when evidence establishes an available pilot engagement.
 
+Optional city-guide fields are `city: "bangalore"`, `guideCategories` (any of `workspaces`, `communities`, `cafes`, `build-source`, `living`), and `googleMapsUrl`. Maps links must be an actual supplied HTTPS Google Maps link on `maps.app.goo.gl`, `maps.google.com`, or `google.com/maps` (including `www.google.com/maps`), without credentials or custom ports. Leave the link blank when unknown; never manufacture one from a name or infer coordinates from it. People and housing entries cannot include private Maps links. A Maps link does not replace the required source/contact or establish an approved pin. Older stored entries remain valid; the client uses the existing Bangalore catalogue context, no guide chapters, and no Maps link by default. These fields follow the same admin review, contact permission and pending-edit rules as every other public change; migration `202610030002_ecosystem_city_guide.sql` validates them without changing existing records.
+
 Validate locally with Node 22.22.2:
+
+The guide can group legacy approved categories (for example, Makerspace under Workspaces and Build & source) without changing their stored records. An already approved Google Maps source/website link may also supply the external Directions action; private people/housing entries do not gain this action. Explicit reviewed guide categories take precedence. Deploy the additive migration and the updated `submit-ecosystem` validator before promoting the new frontend, which sends these optional fields.
 
 ```sh
 node --experimental-strip-types scripts/ecosystem-contributions.mjs

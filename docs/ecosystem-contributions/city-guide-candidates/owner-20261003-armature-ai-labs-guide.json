@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "owner-20261003-armature-ai-labs-guide",
+  "kind": "edit",
+  "targetSlug": "armature-ai-labs",
+  "baseRevision": 1,
+  "publicationConsent": true,
+  "data": {
+    "name": "Armature AI Labs",
+    "slug": "armature-ai-labs",
+    "needs": ["build", "learn"],
+    "credit": null,
+    "sectors": [
+      "Robotics",
+      "Physical AI",
+      "Hardware & sensing",
+      "Learning & training",
+      "Research & ecosystem"
+    ],
+    "summary": "A makers’ lab for physical AI, robotics and hardware builders in HSR Layout, bringing together practical learning, prototyping and a builder community.",
+    "locality": "HSR 1490 · 1490, 11th Cross, 20th Main Road, 1st Sector, HSR Layout, Bengaluru, Karnataka 560034",
+    "engageHow": "Contact the lab about hardware and robotics projects, hands-on learning and collaboration.",
+    "sourceUrl": "https://maps.app.goo.gl/XeNziZfx3V8S8jza7",
+    "accessNote": "Contact the lab before visiting to confirm opening hours, current access, equipment availability and workshop arrangements. Planned facilities are not a statement of commissioned inventory.",
+    "confidence": "High",
+    "entityType": "Research & ecosystem",
+    "provenance": "Owner-requested addition. Address, place coordinates, website and public phone checked against the supplied Google Maps listing, Armature AI Labs - HSR 1490. Description follows the approved lab positioning; operating access was not independently verified.",
+    "verifiedAt": "2026-10-02",
+    "websiteUrl": "https://armatureailabs.com/",
+    "coordinates": [77.6454331, 12.9179704],
+    "primaryType": "research-ecosystem",
+    "publicEmail": "",
+    "subcategory": "Coworking · Incubation & accelerator · Makerspace",
+    "alsoListedAs": [],
+    "publicPhones": [{ "label": "Lab enquiries", "number": "+91 97484 85583" }],
+    "locationPrecision": "Address-level",
+    "locationConfidence": "High",
+    "city": "bangalore",
+    "guideCategories": ["workspaces", "build-source"],
+    "googleMapsUrl": "https://maps.app.goo.gl/XeNziZfx3V8S8jza7"
+  }
+}

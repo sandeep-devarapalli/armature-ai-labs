@@ -1,9 +1,9 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { EcosystemContributionForm } from "../../src/components/EcosystemContributionForm";
 import { EcosystemAdminPage, mergeEcosystemProposal } from "../../src/pages/EcosystemAdminPage";
-import { changeEcosystemType, ecosystemEditPending, ecosystemEditPendingMessage, EcosystemEditPendingError, emptyEcosystemListing, getEcosystemListing, getEcosystemSubmissions, rebaseEcosystemSubmission, reviewEcosystemSubmission, submitEcosystemContribution, type EcosystemListing, type EcosystemSubmission } from "../../src/lib/ecosystem";
+import { changeEcosystemType, ecosystemEditPending, ecosystemEditPendingMessage, EcosystemEditPendingError, emptyEcosystemListing, getEcosystemListing, getEcosystemListings, getEcosystemSubmissions, rebaseEcosystemSubmission, reviewEcosystemSubmission, submitEcosystemContribution, type EcosystemListing, type EcosystemSubmission } from "../../src/lib/ecosystem";
 
-vi.mock("../../src/lib/ecosystem", async (original) => ({ ...await original<typeof import("../../src/lib/ecosystem")>(), ecosystemEditPending: vi.fn(), getEcosystemSubmissions: vi.fn(), getEcosystemListing: vi.fn(), reviewEcosystemSubmission: vi.fn(), rebaseEcosystemSubmission: vi.fn(), submitEcosystemContribution: vi.fn() }));
+vi.mock("../../src/lib/ecosystem", async (original) => ({ ...await original<typeof import("../../src/lib/ecosystem")>(), ecosystemEditPending: vi.fn(), getEcosystemListings: vi.fn(), getEcosystemSubmissions: vi.fn(), getEcosystemListing: vi.fn(), reviewEcosystemSubmission: vi.fn(), rebaseEcosystemSubmission: vi.fn(), submitEcosystemContribution: vi.fn() }));
 const auth = vi.hoisted(() => ({ isAdmin: true }));
 vi.mock("../../src/context/AppContext", () => ({ useApp: () => auth }));
 const listing: EcosystemListing = { slug: "synthetic-workshop", revision: 2, data: { ...emptyEcosystemListing("research-ecosystem"), slug: "synthetic-workshop", name: "Synthetic Workshop", summary: "A synthetic workshop used only for testing.", websiteUrl: "https://example.test", sourceUrl: "https://example.test/about", publicPhones: [{ label: "Reception", number: "+91 9876543210" }], accessNote: "Appointment required", tips: "Bring your project brief" } };
@@ -17,6 +17,7 @@ beforeEach(() => {
   vi.mocked(submitEcosystemContribution).mockResolvedValue("synthetic-receipt");
   vi.mocked(getEcosystemSubmissions).mockResolvedValue([submission]);
   vi.mocked(getEcosystemListing).mockResolvedValue(listing);
+  vi.mocked(getEcosystemListings).mockResolvedValue([listing]);
   vi.mocked(ecosystemEditPending).mockResolvedValue(false);
 });
 afterEach(() => { vi.unstubAllEnvs(); });
@@ -85,15 +86,23 @@ it("submits repeatable labelled phones and separate explicitly opted-in credit",
   expect(body.submitterName).toBe("Private Person"); expect(body.proposed.credit?.name).toBe("Public Alias");
 });
 
-it.each(["People", "Housing"])("removes a hidden old pin when switching a pinned listing to %s", async (category) => {
-  await openEdit({ ...listing, data: { ...listing.data, coordinates: [77.58, 12.96], locationPrecision: "Locality-level" } });
+it.each(["People", "Housing"])("removes a hidden old pin and Maps link when switching a pinned listing to %s", async (category) => {
+  await openEdit({ ...listing, data: { ...listing.data, coordinates: [77.58, 12.96], locationPrecision: "Locality-level", googleMapsUrl: "https://maps.google.com/?q=Synthetic" } });
   fireEvent.change(screen.getByLabelText("Type *"), { target: { value: "other" } });
   fireEvent.change(screen.getByLabelText("Category"), { target: { value: category } });
+  expect(screen.queryByLabelText("Public Google Maps place link (optional)")).not.toBeInTheDocument();
   fireEvent.click(screen.getByLabelText(/I have permission/));
   fireEvent.submit(screen.getByRole("button", { name: "Submit for admin review" }).closest("form")!);
   await screen.findByText("synthetic-receipt");
   const proposed = vi.mocked(submitEcosystemContribution).mock.calls[0][0].proposed;
   expect(proposed.coordinates).toBeUndefined(); expect(proposed.locationPrecision).toBe("City-level");
+  expect(proposed.googleMapsUrl).toBe("");
+});
+
+it("hides Maps input for an existing Person category without changing generic sources", async () => {
+  await openEdit({ ...listing, data: { ...listing.data, primaryType: "other", subcategory: "Person" } });
+  expect(screen.queryByLabelText("Public Google Maps place link (optional)")).not.toBeInTheDocument();
+  expect(screen.getByLabelText("Source link for review")).toHaveValue(listing.data.sourceUrl);
 });
 
 it.each([true, false])("retains a pin only when the locality is unchanged (changed=%s)", async (changed) => {
@@ -118,6 +127,15 @@ it("reviews an unchanged revision through the atomic approval RPC", async () => 
   fireEvent.click(await screen.findByRole("button", { name: "Approve and publish" }));
   await waitFor(() => expect(reviewEcosystemSubmission).toHaveBeenCalledWith("test-receipt", "approved", 2, "", 1));
   await screen.findByText(/Approved and published/);
+});
+
+it("focuses the admin detail heading after each explicit selection, including the same proposal", async () => {
+  render(<EcosystemAdminPage />);
+  const select = await screen.findByRole("button", { name: /Synthetic Workshop/ });
+  for (let attempt = 0; attempt < 2; attempt++) {
+    select.focus(); fireEvent.click(select);
+    await waitFor(() => expect(screen.getByRole("heading", { name: "Synthetic Workshop" })).toHaveFocus());
+  }
 });
 
 it.each(["Reject", "Needs information"])("explains and focuses missing review notes for %s without sending a decision", async (action) => {
@@ -198,7 +216,8 @@ it("does not show an edit form while checking or while any open review is pendin
   expect(screen.queryByLabelText("Organisation, place or resource name *")).not.toBeInTheDocument();
   resolve(true);
   const alert = await screen.findByRole("alert");
-  expect(alert).toHaveTextContent(ecosystemEditPendingMessage); expect(alert).toHaveFocus();
+  expect(alert).toHaveTextContent(ecosystemEditPendingMessage);
+  await waitFor(() => expect(alert).toHaveFocus());
   expect(screen.queryByLabelText("Your email")).not.toBeInTheDocument();
   expect(getEcosystemListing).not.toHaveBeenCalled();
 });
@@ -258,4 +277,121 @@ it("preserves a racing edit draft and its receipt key until a pending review is 
   const calls = vi.mocked(submitEcosystemContribution).mock.calls;
   expect(calls[1][0].idempotencyKey).toBe(calls[0][0].idempotencyKey);
   expect(calls[1][0].baseRevision).toBe(2);
+});
+
+function fillNewListing(name = listing.data.name) {
+  fireEvent.change(screen.getByLabelText("Organisation, place or resource name *"), { target: { value: name } });
+  fireEvent.change(screen.getByLabelText("What does it build or offer? *"), { target: { value: "A distinct new synthetic organisation for testing." } });
+  fireEvent.change(screen.getByLabelText("Website or public profile"), { target: { value: "https://different.example.test" } });
+  fireEvent.change(screen.getByLabelText("Source link for review *"), { target: { value: "https://different.example.test/about" } });
+  fireEvent.click(screen.getByLabelText(/I have permission/));
+}
+
+it("shows only supplied published matches and allows distinct organisations after acknowledgement", async () => {
+  render(<EcosystemContributionForm listings={[listing]} onClose={vi.fn()} />);
+  fillNewListing();
+  expect(screen.getByRole("link", { name: /View listing/ })).toHaveAttribute("href", `/ecosystem?focus=${listing.slug}`);
+  expect(getEcosystemSubmissions).not.toHaveBeenCalled();
+  const submit = () => fireEvent.submit(screen.getByRole("button", { name: "Submit for admin review" }).closest("form")!);
+  submit();
+  await screen.findByRole("alert");
+  expect(submitEcosystemContribution).not.toHaveBeenCalled();
+  fireEvent.click(screen.getByLabelText("This is a different organisation"));
+  submit();
+  await screen.findByText("synthetic-receipt");
+  expect(vi.mocked(submitEcosystemContribution).mock.calls[0][0].kind).toBe("new");
+});
+
+it("warns before replacing a new draft with a fresh, prefilled edit and resets consent", async () => {
+  render(<EcosystemContributionForm listings={[listing]} onClose={vi.fn()} />);
+  fillNewListing();
+  fireEvent.change(screen.getByLabelText("Your name"), { target: { value: "Private draft name" } });
+  fireEvent.click(screen.getByRole("button", { name: /Suggest an edit to Synthetic/ }));
+  expect(screen.getByRole("alert")).toHaveTextContent("will be discarded");
+  fireEvent.click(screen.getByRole("button", { name: "Keep my draft" }));
+  expect(screen.getByLabelText("Your name")).toHaveValue("Private draft name");
+  fireEvent.click(screen.getByRole("button", { name: /Suggest an edit to Synthetic/ }));
+  fireEvent.click(screen.getByRole("button", { name: "Discard draft and suggest edit" }));
+  await screen.findByRole("heading", { name: `Suggest an edit to ${listing.data.name}` });
+  expect(ecosystemEditPending).toHaveBeenCalledWith(listing.slug);
+  expect(getEcosystemListing).toHaveBeenCalledWith(listing.slug, true);
+  expect(screen.getByLabelText("Phone 1")).toHaveValue(listing.data.publicPhones[0].number);
+  expect(screen.getByLabelText("Your name")).toHaveValue("");
+  expect(screen.getByLabelText(/I have permission/)).not.toBeChecked();
+});
+
+it("preserves the new draft when a matching listing already has a pending edit", async () => {
+  vi.mocked(ecosystemEditPending).mockResolvedValue(true);
+  render(<EcosystemContributionForm listings={[listing]} onClose={vi.fn()} />);
+  fillNewListing();
+  fireEvent.change(screen.getByLabelText("Your email"), { target: { value: "private@example.test" } });
+  fireEvent.click(screen.getByRole("button", { name: /Suggest an edit to Synthetic/ }));
+  fireEvent.click(screen.getByRole("button", { name: "Discard draft and suggest edit" }));
+  await waitFor(() => expect(screen.getByRole("button", { name: "Discard draft and suggest edit" })).not.toBeDisabled());
+  expect(screen.getAllByText(ecosystemEditPendingMessage).length).toBeGreaterThan(0);
+  expect(screen.getByLabelText("Your email")).toHaveValue("private@example.test");
+  expect(getEcosystemListing).not.toHaveBeenCalled();
+});
+
+it("rechecks newly published matches before submit and revokes stale acknowledgements", async () => {
+  const newlyPublished = { ...listing, slug: "newly-published", revision: 1 };
+  vi.mocked(getEcosystemListings).mockResolvedValue([listing, newlyPublished]);
+  render(<EcosystemContributionForm listings={[listing]} onClose={vi.fn()} />);
+  fillNewListing();
+  fireEvent.click(screen.getByLabelText("This is a different organisation"));
+  fireEvent.submit(screen.getByRole("button", { name: "Submit for admin review" }).closest("form")!);
+  await screen.findByRole("alert");
+  expect(submitEcosystemContribution).not.toHaveBeenCalled();
+  expect(screen.getByLabelText("This is a different organisation")).not.toBeChecked();
+  expect(screen.getAllByRole("link", { name: /View listing/ })).toHaveLength(2);
+});
+
+it("retains a new-submission retry key even if its lost-response listing is now published", async () => {
+  vi.mocked(getEcosystemListings).mockResolvedValue([]);
+  vi.mocked(submitEcosystemContribution).mockRejectedValueOnce(new Error("Synthetic lost response"));
+  render(<EcosystemContributionForm listings={[]} onClose={vi.fn()} />);
+  fillNewListing();
+  const form = screen.getByRole("button", { name: "Submit for admin review" }).closest("form")!;
+  fireEvent.submit(form);
+  await screen.findByText("Synthetic lost response");
+  await waitFor(() => expect((window as unknown as { turnstile: { render: ReturnType<typeof vi.fn> } }).turnstile.render).toHaveBeenCalledTimes(2));
+  vi.mocked(getEcosystemListings).mockResolvedValue([listing]);
+  fireEvent.submit(form);
+  await screen.findByText("synthetic-receipt");
+  expect(getEcosystemListings).toHaveBeenCalledTimes(1);
+  const calls = vi.mocked(submitEcosystemContribution).mock.calls;
+  expect(calls[1][0].idempotencyKey).toBe(calls[0][0].idempotencyKey);
+});
+
+it("submits optional public map links and guide chapters without inventing coordinates", async () => {
+  await openEdit();
+  fireEvent.change(screen.getByLabelText("Public Google Maps place link (optional)"), { target: { value: "https://maps.app.goo.gl/synthetic" } });
+  fireEvent.click(screen.getByLabelText("Workspaces"));
+  fireEvent.click(screen.getByLabelText(/I have permission/));
+  fireEvent.submit(screen.getByRole("button", { name: "Submit for admin review" }).closest("form")!);
+  await screen.findByText("synthetic-receipt");
+  const proposed = vi.mocked(submitEcosystemContribution).mock.calls[0][0].proposed;
+  expect(proposed.googleMapsUrl).toBe("https://maps.app.goo.gl/synthetic");
+  expect(proposed.guideCategories).toEqual(["workspaces"]);
+  expect(proposed.coordinates).toBeUndefined();
+});
+
+it("keeps a new draft and fails closed when the final published-listing check is unavailable", async () => {
+  vi.mocked(getEcosystemListings).mockRejectedValue(new Error("Published listings temporarily unavailable"));
+  render(<EcosystemContributionForm listings={[]} onClose={vi.fn()} />);
+  fillNewListing("Distinct Synthetic Organisation");
+  fireEvent.change(screen.getByLabelText("Your email"), { target: { value: "private@example.test" } });
+  fireEvent.submit(screen.getByRole("button", { name: "Submit for admin review" }).closest("form")!);
+  await screen.findByText("Published listings temporarily unavailable");
+  expect(submitEcosystemContribution).not.toHaveBeenCalled();
+  expect(screen.getByLabelText("Organisation, place or resource name *")).toHaveValue("Distinct Synthetic Organisation");
+  expect(screen.getByLabelText("Your email")).toHaveValue("private@example.test");
+});
+
+it("revokes the distinct-organisation acknowledgement when the name changes", () => {
+  render(<EcosystemContributionForm listings={[listing]} onClose={vi.fn()} />);
+  fillNewListing();
+  fireEvent.click(screen.getByLabelText("This is a different organisation"));
+  fireEvent.change(screen.getByLabelText("Organisation, place or resource name *"), { target: { value: "Synthetic Workshop India" } });
+  expect(screen.getByLabelText("This is a different organisation")).not.toBeChecked();
 });

@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "owner-20261003-hsr-founders-club",
+  "kind": "new",
+  "publicationConsent": true,
+  "data": {
+    "slug": "hsr-founders-club",
+    "name": "HSR Founders Club",
+    "entityType": "Research & ecosystem",
+    "primaryType": "other",
+    "alsoListedAs": ["research-ecosystem"],
+    "subcategory": "Community",
+    "city": "bangalore",
+    "guideCategories": ["communities"],
+    "summary": "A founder community with HSR Layout and Bengaluru roots, connecting entrepreneurs through introductions, meetups and shared learning.",
+    "locality": "HSR Layout, Bengaluru",
+    "locationPrecision": "Locality-level",
+    "confidence": "Medium",
+    "locationConfidence": "Medium",
+    "websiteUrl": "https://www.hsrfounders.club/",
+    "sourceUrl": "https://in.linkedin.com/company/hsrfc",
+    "publicPhones": [],
+    "accessNote": "Check each event’s venue, registration and access requirements with the organiser. A community listing does not imply a permanent walk-in venue or automatic membership.",
+    "tips": "Events calendar: https://luma.com/hsr-founders-club-events?k=c",
+    "provenance": "Owner-requested community addition. Official website and LinkedIn page reviewed on 3 October 2026; LinkedIn identifies HSR Layout/Bangalore and links the website. The supplied Luma URL resolves to an HSR Founders Club events calendar, but its extracted content was stale and no upcoming event claim is made. No permanent street-level venue was verified; leave unpinned. Awaiting duplicate check and Admin/Super admin review."
+  }
+}

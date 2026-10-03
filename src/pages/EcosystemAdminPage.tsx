@@ -29,11 +29,18 @@ export function EcosystemAdminPage() {
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState("pending");
   const [refresh, setRefresh] = useState(0);
+  const [detailVersion, setDetailVersion] = useState(0);
   const request = useRef(0);
   const detail = useRef<HTMLHeadingElement>(null);
   const reviewNotes = useRef<HTMLTextAreaElement>(null);
   const errorNotice = useRef<HTMLParagraphElement>(null);
   const selection = useRef(0);
+
+  useEffect(() => {
+    if (!detailVersion) return;
+    detail.current?.scrollIntoView({ block: "start", behavior: "instant" });
+    detail.current?.focus({ preventScroll: true });
+  }, [detailVersion]);
 
   useEffect(() => {
     if (!error) return;
@@ -58,7 +65,7 @@ export function EcosystemAdminPage() {
       const listing = submission.target_slug ? await getEcosystemListing(submission.target_slug) : null;
       if (generation !== selection.current) return;
       setCurrent(listing); setSelected(submission);
-      requestAnimationFrame(() => { detail.current?.scrollIntoView({ block: "start", behavior: "smooth" }); detail.current?.focus({ preventScroll: true }); });
+      setDetailVersion(value => value + 1);
     } catch (failure) { if (generation === selection.current) setError(failure instanceof Error ? failure.message : "Could not open this submission."); }
     finally { if (generation === selection.current) setBusy(false); }
   }

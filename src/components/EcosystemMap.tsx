@@ -17,8 +17,19 @@ const sourceId = "bengaluru-ecosystem";
 maplibregl.setWorkerUrl(mapWorkerUrl);
 const clusterLayerId = "ecosystem-clusters";
 const clusterCountLayerId = "ecosystem-cluster-count";
-const pointHaloLayerId = "ecosystem-point-halo";
 const pointLayerId = "ecosystem-points";
+
+function localFaviconUrl(website: string | undefined) {
+  if (!website) return null;
+  try {
+    const url = new URL(website);
+    return url.protocol === "https:" && !url.username && !url.password && !url.port
+      && ["armatureailabs.com", "www.armatureailabs.com", "armaturelab.org", "www.armaturelab.org"].includes(url.hostname)
+      ? "/brand/editorial-2026-09/logos/icon-dark-48.svg" : null;
+  } catch {
+    return null;
+  }
+}
 
 const sectorColor = [
   "match",
@@ -38,6 +49,12 @@ function reducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
+function guidePadding(map: maplibregl.Map) {
+  return window.innerWidth <= 700
+    ? { top: 148, right: 28, bottom: Math.round(map.getContainer().clientHeight * 0.48) + 20, left: 28 }
+    : { top: 52, right: 52, bottom: 52, left: Math.min(500, window.innerWidth * 0.4) + 32 };
+}
+
 export function EcosystemMap({
   entities,
   selectedSlug,
@@ -49,10 +66,15 @@ export function EcosystemMap({
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
-  const selectedRef = useRef<string | null>(null);
+  const previousCameraRef = useRef<maplibregl.JumpToOptions | null>(null);
   const onSelectRef = useRef(onSelect);
   const [ready, setReady] = useState(false);
   const [loadFailed, setLoadFailed] = useState(false);
+  const selected = entities.find((item) => item.slug === selectedSlug);
+  const selectedName = selected?.name;
+  const selectedFavicon = localFaviconUrl(selected?.websiteUrl);
+  const longitude = selected?.coordinates?.[0];
+  const latitude = selected?.coordinates?.[1];
 
   useEffect(() => {
     onSelectRef.current = onSelect;
@@ -81,8 +103,8 @@ export function EcosystemMap({
       }
     });
     visibilityObserver.observe(containerRef.current);
-    map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "top-right");
-    map.addControl(new maplibregl.AttributionControl({ compact: true }), "bottom-right");
+    map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "bottom-right");
+    map.addControl(new maplibregl.AttributionControl({ compact: true }), "bottom-left");
 
     let styleReady = false;
     const failTimer = window.setTimeout(() => {
@@ -135,41 +157,13 @@ export function EcosystemMap({
         }
       });
       map.addLayer({
-        id: pointHaloLayerId,
-        type: "circle",
-        source: sourceId,
-        filter: ["!", ["has", "point_count"]],
-        paint: {
-          "circle-color": "#e89a2c",
-          "circle-radius": [
-            "case",
-            ["boolean", ["feature-state", "selected"], false],
-            19,
-            0
-          ],
-          "circle-opacity": [
-            "case",
-            ["boolean", ["feature-state", "selected"], false],
-            0.3,
-            0
-          ],
-          "circle-radius-transition": { duration: 180 },
-          "circle-opacity-transition": { duration: 180 }
-        }
-      });
-      map.addLayer({
         id: pointLayerId,
         type: "circle",
         source: sourceId,
         filter: ["!", ["has", "point_count"]],
         paint: {
           "circle-color": sectorColor,
-          "circle-radius": [
-            "case",
-            ["boolean", ["feature-state", "selected"], false],
-            9,
-            7
-          ],
+          "circle-radius": 7,
           "circle-stroke-color": "#fffefa",
           "circle-stroke-width": 2,
           "circle-radius-transition": { duration: 180 }
@@ -210,12 +204,12 @@ export function EcosystemMap({
         if (typeof slug === "string") onSelectRef.current(slug);
       });
 
-      setReady(true);
       window.requestAnimationFrame(() => {
+        if (mapRef.current !== map) return;
         map.resize();
-        map.jumpTo({ center: [...bengaluruCenter], zoom: 9.6 });
         map.triggerRepaint();
       });
+      setReady(true);
     });
 
     return () => {
@@ -240,29 +234,74 @@ export function EcosystemMap({
     const map = mapRef.current;
     if (!map || !ready) return;
 
-    if (selectedRef.current) {
-      map.removeFeatureState({ source: sourceId, id: selectedRef.current });
-    }
-    if (selectedSlug) {
-      map.setFeatureState({ source: sourceId, id: selectedSlug }, { selected: true });
-    }
-    selectedRef.current = selectedSlug;
+    map.setFilter(pointLayerId, selectedSlug
+      ? ["all", ["!", ["has", "point_count"]], ["!=", ["get", "slug"], selectedSlug]]
+      : ["!", ["has", "point_count"]]);
+  }, [ready, selectedSlug]);
 
-    const selected = entities.find((item) => item.slug === selectedSlug);
-    if (!selected?.coordinates) return;
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !ready || !selectedName || longitude === undefined || latitude === undefined) return;
+    const element = document.createElement("div");
+    element.className = "ecosystem-selected-marker";
+    element.setAttribute("role", "img");
+    element.setAttribute("aria-label", `Selected place: ${selectedName}`);
+    const label = document.createElement("span");
+    label.className = "ecosystem-marker-label";
+    label.textContent = selectedName;
+    const pin = document.createElement("span");
+    pin.className = "ecosystem-favicon-pin";
+    pin.setAttribute("aria-hidden", "true");
+    const fallback = document.createElement("span");
+    fallback.className = "ecosystem-pin-fallback";
+    fallback.textContent = "•";
+    pin.append(fallback);
+    if (selectedFavicon) {
+      const icon = document.createElement("img");
+      icon.alt = "";
+      icon.width = 28;
+      icon.height = 28;
+      icon.hidden = true;
+      icon.onload = () => { icon.hidden = false; fallback.hidden = true; };
+      icon.onerror = () => { icon.remove(); };
+      icon.src = selectedFavicon;
+      pin.append(icon);
+    }
+    element.append(label, pin);
+    const marker = new maplibregl.Marker({ element, anchor: "bottom", offset: [0, 0] })
+      .setLngLat([longitude, latitude]).addTo(map);
+    return () => { marker.remove(); };
+  }, [ready, selectedSlug, selectedName, selectedFavicon, longitude, latitude]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map || !ready) return;
+    if (!selectedSlug) {
+      if (previousCameraRef.current) {
+        const camera = previousCameraRef.current;
+        previousCameraRef.current = null;
+        map.easeTo({ ...camera, duration: reducedMotion() ? 0 : 380 });
+      }
+      return;
+    }
+    if (!previousCameraRef.current) {
+      previousCameraRef.current = {
+        center: map.getCenter().toArray(), zoom: map.getZoom(), bearing: map.getBearing(),
+        pitch: map.getPitch(), padding: { ...map.getPadding() }
+      };
+    }
+    if (longitude === undefined || latitude === undefined) return;
     const camera = {
-      center: [...selected.coordinates] as [number, number],
-      zoom: Math.max(map.getZoom(), 12.6),
-      padding: window.innerWidth < 760
-        ? { top: 80, right: 28, bottom: 210, left: 28 }
-        : { top: 52, right: 280, bottom: 52, left: 52 }
+      center: [longitude, latitude] as [number, number],
+      zoom: Math.max(map.getZoom(), 13.1),
+      padding: guidePadding(map)
     };
     if (reducedMotion()) {
       map.jumpTo(camera);
     } else {
       map.easeTo({ ...camera, duration: 380 });
     }
-  }, [entities, ready, selectedSlug]);
+  }, [ready, selectedSlug, longitude, latitude]);
 
   function resetView() {
     const map = mapRef.current;
@@ -271,7 +310,7 @@ export function EcosystemMap({
       [...bengaluruBounds[0]],
       [...bengaluruBounds[1]]
     ], {
-      padding: 42,
+      padding: guidePadding(map),
       duration: reducedMotion() ? 0 : 420
     });
   }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { validateEcosystemData } from '../../supabase/functions/_shared/ecosystem-validation';
+import { isGoogleMapsUrl, validateEcosystemData } from '../../supabase/functions/_shared/ecosystem-validation';
 
 const fixture = { name: 'Example lab', summary: 'Synthetic public fixture', primaryType: 'supplier', websiteUrl: 'https://example.org' };
 describe('ecosystem public payload validation', () => {
@@ -25,5 +25,33 @@ describe('ecosystem public payload validation', () => {
   it('keeps complete existing source/location fields for edits', () => {
     const existing = { ...fixture, slug: 'example-lab', locality: 'Bengaluru', coordinates: [77.5, 13], locationPrecision: 'Locality-level', provenance: 'Historical source', verifiedAt: '2026-07-30', sectors: ['Hardware & sensing'] };
     expect(validateEcosystemData(existing)).toEqual(existing);
+  });
+  it('accepts optional guide metadata without deriving a map pin', () => {
+    const data = validateEcosystemData({ ...fixture, city: 'bangalore', guideCategories: ['workspaces', 'communities', 'workspaces'], googleMapsUrl: 'https://maps.app.goo.gl/syntheticPlace' });
+    expect(data.guideCategories).toEqual(['workspaces', 'communities']);
+    expect(data.googleMapsUrl).toBe('https://maps.app.goo.gl/syntheticPlace');
+    expect(data).not.toHaveProperty('coordinates');
+    expect(validateEcosystemData(fixture)).toEqual(fixture);
+  });
+  it.each(['https://maps.app.goo.gl/syntheticPlace?g_st=ic', 'https://www.google.com/maps/place/Synthetic', 'https://google.com/maps?cid=123', 'https://maps.google.com/?q=Synthetic'])('accepts actual HTTPS Maps URL syntax: %s', (googleMapsUrl) => {
+    expect(validateEcosystemData({ ...fixture, googleMapsUrl }).googleMapsUrl).toBe(googleMapsUrl);
+  });
+  it.each(['http://maps.google.com/', 'javascript:alert(1)', 'https://google.com/search?q=Synthetic', 'https://google.com/maps-redirect', 'https://maps.app.goo.gl/', 'https://maps.app.goo.gl.evil.test/place', 'https://maps.google.com.evil.test/', 'https://maps.google.com@evil.test/', 'https://user:password@maps.google.com/', 'https://maps.google.com:444/', 'https://maps.google.com\\@evil.test/', 'https://maps.google.com/with space'])('rejects unsafe or non-Maps URL: %s', (googleMapsUrl) => {
+    expect(() => validateEcosystemData({ ...fixture, googleMapsUrl })).toThrow(/Google Maps/);
+  });
+  it('rejects unsupported guide metadata and private Maps links', () => {
+    expect(() => validateEcosystemData({ ...fixture, city: 'mumbai' })).toThrow(/city/);
+    expect(() => validateEcosystemData({ ...fixture, guideCategories: ['invented'] })).toThrow(/guideCategories/);
+    expect(() => validateEcosystemData({ ...fixture, guideCategories: 'cafes' })).toThrow(/guideCategories/);
+    expect(() => validateEcosystemData({ ...fixture, primaryType: 'other', subcategory: 'Housing resource', googleMapsUrl: 'https://maps.google.com/?q=Synthetic' })).toThrow(/private map locations/);
+  });
+  it('rejects every ASCII control and DEL before trimming Maps links', () => {
+    for (const code of [...Array.from({ length: 32 }, (_, i) => i), 127]) {
+      const control = String.fromCharCode(code);
+      for (const googleMapsUrl of [`https://maps.google.com/${control}`, `${control}https://maps.google.com/`]) {
+        expect(isGoogleMapsUrl(googleMapsUrl)).toBe(false);
+        expect(() => validateEcosystemData({ ...fixture, googleMapsUrl })).toThrow(/Google Maps/);
+      }
+    }
   });
 });

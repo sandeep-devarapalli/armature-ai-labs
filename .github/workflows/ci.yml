@@ -79,6 +79,7 @@ jobs:
         run: |
           psql -v ON_ERROR_STOP=1 -f supabase/tests/ecosystem_contributions.sql
           psql -v ON_ERROR_STOP=1 -f supabase/tests/ecosystem_pending_edit.sql
+          psql -v ON_ERROR_STOP=1 -f supabase/tests/ecosystem_city_guide.sql
           ECOSYSTEM_LOCAL_TEST=true PSQL=psql node supabase/tests/concurrent_ecosystem.mjs
       - run: supabase/tests/concurrent_booking.sh
       - run: DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres sh supabase/tests/concurrent_team_seat.sh

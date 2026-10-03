@@ -61,10 +61,14 @@ describe("public source and planning context", () => {
     const directory = screen.getByRole("complementary", { name: "Ecosystem listings" });
     fireEvent.click(within(directory).getByText("Bellatrix Aerospace"));
     expect(screen.getByRole("heading", { name: "Bellatrix Aerospace" })).toBeInTheDocument();
-    expect(within(directory).getByText("Bellatrix Aerospace").closest(".atlas-listing")).toHaveAttribute("aria-current", "true");
+    expect(directory).not.toBeVisible();
+    expect(screen.getByRole("article", { name: "Bellatrix Aerospace details" })).toHaveFocus();
     expect(screen.getByRole("link", { name: "Public source" })).toHaveAttribute("href", bengaluruEcosystem.find((item) => item.slug === "bellatrix-aerospace")?.sourceUrl);
     fireEvent.click(screen.getByRole("button", { name: "Close listing details" }));
     expect(screen.queryByRole("heading", { name: "Bellatrix Aerospace" })).not.toBeInTheDocument();
+    expect(directory).toBeVisible();
+    expect(screen.getByRole("searchbox")).toHaveValue("Bellatrix");
+    expect(within(directory).getByText("Bellatrix Aerospace")).toBeVisible();
   });
 
   it("labels electrical energy and quantities as estimates, not installed equipment", () => {
