@@ -52,3 +52,23 @@ Before provisioning, connect a verified alert destination, configure incident op
 ## Local checks
 
 `npm test` executes maintenance-handler tests using the real job-secret helper and mocked database calls. `python3 -m unittest discover -s tools/member-notifications -v` checks the runner without network access. Migration 011 and SQL test 019 run only against the isolated local database during preparation. `supabase/tests/concurrent_notification_operations.sh` proves cleanup races, and CI includes all three notification concurrency scripts.
+
+## Atlas delivery correlation (3 October 2026)
+
+The shared webhook also correlates Builder Atlas review notifications. The protected
+`notification_delivery_health()` RPC extends the membership snapshot with six
+`atlas_*` counts: overdue queue, expired leases, unknown send outcomes, failed or
+suppressed sends, negative delivery reports, and delivery unconfirmed after 24 hours.
+All are actionable. Matching an Atlas receipt never makes a bounce or complaint healthy.
+
+Deploy the additive migration first, the monitor that accepts both exact response
+shapes second, then the updated maintenance endpoint and Atlas sender. The legacy
+health RPC keeps its exact shape during this transition. The legacy Atlas claim is
+inert; it cannot create another untracked send during rollout. New workers recheck
+suppression and the live lease immediately before each send. Missing or malformed
+provider IDs, timeouts and ambiguous responses become unknown, never blind retries.
+
+Historical reconciliation requires externally verified Resend IDs and exact message
+Receipt references, and records an audit without sending email or deleting reports.
+Unknown new outcomes remain held for evidence-backed operator reconciliation.
+Cleanup stays separately gated; this release does not enable it or release payments.

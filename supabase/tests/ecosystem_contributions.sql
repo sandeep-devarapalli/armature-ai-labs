@@ -29,15 +29,15 @@ select pg_temp.check_true((select count(*)=1 from public.ecosystem_listings wher
 select pg_temp.check_true((select base_data->>'name'='Test facility' from public.ecosystem_submissions where id=:'edit_receipt'),'edit captures baseline');
 update private.ecosystem_notifications set retry_at=now()+interval '1 day' where submission_id<>:'receipt';
 set local role service_role;
-select submission_id,lease from public.claim_ecosystem_notifications() \gset delivery_
+select submission_id,lease from public.claim_ecosystem_notifications('atlas-test@example.test') \gset delivery_
 select pg_temp.check_true(:'delivery_submission_id'=:'receipt','notification claims only durable receipt');
-select public.finish_ecosystem_notification(:'delivery_submission_id',:'delivery_lease',false);
+select public.finish_ecosystem_notification(:'delivery_submission_id',:'delivery_lease','retry'::text,null);
 reset role;
 select pg_temp.check_true((select state='pending' and attempts=1 from private.ecosystem_notifications where submission_id=:'receipt'),'provider failure queues retry');
 update private.ecosystem_notifications set retry_at=now()-interval '1 minute' where submission_id=:'receipt';
 set local role service_role;
-select submission_id,lease from public.claim_ecosystem_notifications() \gset delivery_
-select public.finish_ecosystem_notification(:'delivery_submission_id',:'delivery_lease',true);
+select submission_id,lease from public.claim_ecosystem_notifications('atlas-test@example.test') \gset delivery_
+select public.finish_ecosystem_notification(:'delivery_submission_id',:'delivery_lease','accepted','a7000000-0000-4000-8000-000000000001');
 reset role;
 select pg_temp.check_true((select state='sent' and attempts=2 from private.ecosystem_notifications where submission_id=:'receipt'),'successful acknowledgement closes outbox');
 

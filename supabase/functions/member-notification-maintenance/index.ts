@@ -29,10 +29,10 @@ Deno.serve(async (request: Request) => {
     const client = adminClient();
     const cleanup = await client.rpc("maintain_member_notifications", { p_dry_run: Deno.env.get("MEMBER_NOTIFICATIONS_CLEANUP_APPLY") !== "true", p_limit: 100 }).abortSignal(AbortSignal.timeout(10_000));
     if (cleanup.error) throw new Error("cleanup_failed");
-    const health = await client.rpc("member_notification_health").abortSignal(AbortSignal.timeout(10_000));
+    const health = await client.rpc("notification_delivery_health").abortSignal(AbortSignal.timeout(10_000));
     if (health.error) throw new Error("health_failed");
     const snapshot = health.data;
-    const attention = Boolean(snapshot.cleanup_overdue || snapshot.queue_overdue || snapshot.expired_leases || snapshot.unknown || snapshot.failed || snapshot.delivery_unconfirmed || snapshot.unmatched_receipts || (!cleanup.data.dry_run && cleanup.data.remaining));
+    const attention = Boolean(snapshot.cleanup_overdue || snapshot.queue_overdue || snapshot.expired_leases || snapshot.unknown || snapshot.failed || snapshot.delivery_unconfirmed || snapshot.unmatched_receipts || snapshot.atlas_queue_overdue || snapshot.atlas_expired_leases || snapshot.atlas_unknown || snapshot.atlas_failed || snapshot.atlas_delivery_failed || snapshot.atlas_delivery_unconfirmed || (!cleanup.data.dry_run && cleanup.data.remaining));
     console.log(JSON.stringify({ severity: attention ? "WARNING" : "INFO", event: "member_notification_health", attention, cleanup: cleanup.data, health: snapshot }));
     return reply({ attention, cleanup: cleanup.data, health: snapshot });
   } catch {

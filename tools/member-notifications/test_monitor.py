@@ -28,6 +28,23 @@ class Tests(unittest.TestCase):
     def test_healthy_dry_run(self):
         self.assertFalse(self.run_check(BASE)['attention'])
 
+    def test_exact_legacy_schema_is_accepted_during_rollout(self):
+        data = copy.deepcopy(BASE)
+        for key in monitor.ATLAS_COUNTS:
+            del data['health'][key]
+        self.assertFalse(self.run_check(data)['attention'])
+        data['health']['unmatched_receipts'] = 1
+        data['attention'] = True
+        self.assertTrue(self.run_check(data)['attention'])
+
+    def test_partial_atlas_schema_is_rejected(self):
+        for key in monitor.ATLAS_COUNTS:
+            with self.subTest(key=key):
+                data = copy.deepcopy(BASE)
+                del data['health'][key]
+                with self.assertRaisesRegex(ValueError, 'invalid_health'):
+                    self.run_check(data)
+
     def test_each_actionable_signal(self):
         for key in monitor.COUNTS - {'held', 'history_due'}:
             with self.subTest(key=key):
@@ -44,10 +61,11 @@ class Tests(unittest.TestCase):
 
     def test_bad_schema_counts_and_attention(self):
         cases = []
-        for value in (-1, True, '1'):
-            data = copy.deepcopy(BASE)
-            data['health']['held'] = value
-            cases.append(data)
+        for key in monitor.COUNTS:
+            for value in (-1, True, '1', None, 0.5):
+                data = copy.deepcopy(BASE)
+                data['health'][key] = value
+                cases.append(data)
         data = copy.deepcopy(BASE)
         data['health']['recipient'] = 'do-not-log@example.test'
         cases.append(data)

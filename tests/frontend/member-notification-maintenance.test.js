@@ -4,7 +4,8 @@ import { afterEach, expect, it, vi } from 'vitest';
 const transpile = (path) => ts.transpileModule(readFileSync(path, 'utf8').replace(/^import .*;\n/gm, '').replace(/export /g, ''), { compilerOptions: { target: ts.ScriptTarget.ES2022 } }).outputText;
 const code = transpile('supabase/functions/member-notification-maintenance/index.ts');
 const envCode = transpile('supabase/functions/_shared/env.ts');
-const healthy = { sending_enabled: false, cleanup_enabled: false, last_cleanup_at: null, cleanup_overdue: false, held: 0, queue_overdue: 0, expired_leases: 0, unknown: 0, failed: 0, delivery_unconfirmed: 0, unmatched_receipts: 0, history_due: 0 };
+const atlasCounts = ['atlas_queue_overdue', 'atlas_expired_leases', 'atlas_unknown', 'atlas_failed', 'atlas_delivery_failed', 'atlas_delivery_unconfirmed'];
+const healthy = { sending_enabled: false, cleanup_enabled: false, last_cleanup_at: null, cleanup_overdue: false, held: 0, queue_overdue: 0, expired_leases: 0, unknown: 0, failed: 0, delivery_unconfirmed: 0, unmatched_receipts: 0, history_due: 0, ...Object.fromEntries(atlasCounts.map(key => [key, 0])) };
 function fixture({ enabled='true', apply='', secret='x'.repeat(32), fail='', health={}, remaining=false }={}) {
  const Deno = { env: { get: (name) => ({ MEMBER_NOTIFICATIONS_MAINTENANCE_ENABLED: enabled, MEMBER_NOTIFICATIONS_CLEANUP_APPLY: apply, MEMBER_NOTIFICATIONS_MAINTENANCE_SECRET: secret })[name] }, serve: (fn) => { handler=fn; } };
  let handler;
@@ -20,7 +21,7 @@ afterEach(()=>{ vi.restoreAllMocks(); vi.useRealTimers(); });
 it('defaults to dry-run, bounded batch, and aggregate monitoring',async()=>{
  const f=fixture();const r=await f.handler(f.request());expect(r.status).toBe(200);
  expect(f.rpc).toHaveBeenCalledWith('maintain_member_notifications',{p_dry_run:true,p_limit:100});
- expect(f.rpc).toHaveBeenCalledWith('member_notification_health');
+ expect(f.rpc).toHaveBeenCalledWith('notification_delivery_health');
  expect((await r.json()).attention).toBe(false);
  expect(f.log.mock.calls[0][0]).not.toContain('x'.repeat(32));
 });
@@ -46,7 +47,7 @@ it('only the separate apply environment flag requests mutation',async()=>{
  const f=fixture({apply:'true'});expect((await f.handler(f.request())).status).toBe(200);
  expect(f.rpc).toHaveBeenCalledWith('maintain_member_notifications',{p_dry_run:false,p_limit:100});
 });
-it.each(['queue_overdue','expired_leases','unknown','failed','delivery_unconfirmed','unmatched_receipts','cleanup_overdue'])('reports actionable %s',async(key)=>{
+it.each(['queue_overdue','expired_leases','unknown','failed','delivery_unconfirmed','unmatched_receipts','cleanup_overdue',...atlasCounts])('reports actionable %s',async(key)=>{
  const f=fixture({health:{[key]:key==='cleanup_overdue'?true:1}});expect((await (await f.handler(f.request())).json()).attention).toBe(true);
 });
 it('does not alert solely for held events or dry-run backlog',async()=>{
@@ -55,7 +56,7 @@ it('does not alert solely for held events or dry-run backlog',async()=>{
 it('alerts if applied cleanup leaves backlog',async()=>{
  const f=fixture({apply:'true',remaining:true});expect((await (await f.handler(f.request())).json()).attention).toBe(true);
 });
-it.each(['maintain_member_notifications','member_notification_health'])('fails safely for %s',async(fail)=>{
+it.each(['maintain_member_notifications','notification_delivery_health'])('fails safely for %s',async(fail)=>{
  const f=fixture({fail});const r=await f.handler(f.request());expect(r.status).toBe(503);expect(await r.text()).not.toContain('private error');
  if(fail==='maintain_member_notifications')expect(f.rpc).toHaveBeenCalledTimes(1);
 });
