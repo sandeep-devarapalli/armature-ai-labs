@@ -344,6 +344,7 @@ it("rechecks newly published matches before submit and revokes stale acknowledge
   expect(submitEcosystemContribution).not.toHaveBeenCalled();
   expect(screen.getByLabelText("This is a different organisation")).not.toBeChecked();
   expect(screen.getAllByRole("link", { name: /View listing/ })).toHaveLength(2);
+  await waitFor(() => expect(screen.getByRole("region", { name: "Possible existing listings" })).toHaveFocus());
 });
 
 it("retains a new-submission retry key even if its lost-response listing is now published", async () => {

@@ -88,6 +88,7 @@ function ContributionDraft({ initialListing, initialType, listings, onClose }: {
   const [switchCandidate, setSwitchCandidate] = useState<EcosystemListing | null>(null);
   const [editTarget, setEditTarget] = useState<EcosystemListing | null>(null);
   const matchesRef = useRef<HTMLElement>(null);
+  const [focusMatches, setFocusMatches] = useState(false);
   const idempotencyKey = useRef(crypto.randomUUID());
   const attemptedBody = useRef("");
   const titleRef = useRef<HTMLHeadingElement>(null);
@@ -103,6 +104,12 @@ function ContributionDraft({ initialListing, initialType, listings, onClose }: {
     return () => { active = false; };
   }, [initialListing, listings]);
   useEffect(() => { titleRef.current?.focus(); }, []);
+  useEffect(() => {
+    if (!focusMatches || busy) return;
+    matchesRef.current?.focus({ preventScroll: true });
+    matchesRef.current?.scrollIntoView({ block: "start", behavior: "instant" });
+    setFocusMatches(false);
+  }, [focusMatches, busy]);
   useEffect(() => {
     if (!receipt) return;
     confirmationRef.current?.focus({ preventScroll: true });
@@ -157,7 +164,7 @@ function ContributionDraft({ initialListing, initialType, listings, onClose }: {
         const latestKey = JSON.stringify([draft.name, draft.websiteUrl, latestMatches.map(({ listing }) => `${listing.slug}:${listing.revision}`)]);
         if (latestMatches.length && distinctAcknowledgement !== latestKey) {
           setError("Please review the matching published listings. Suggest an edit, or confirm this is a different organisation.");
-          requestAnimationFrame(() => { matchesRef.current?.focus({ preventScroll: true }); matchesRef.current?.scrollIntoView({ block: "start", behavior: "instant" }); });
+          setFocusMatches(true);
           return;
         }
       }
