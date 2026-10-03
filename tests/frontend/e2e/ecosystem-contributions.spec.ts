@@ -23,6 +23,60 @@ async function fixtures(page: Page, listings = [fixture]) {
   await page.route("**/rest/v1/rpc/ecosystem_edit_pending", (route) => route.fulfill({ json: false }));
 }
 
+test("admin rejection explains missing notes and preserves an update after a failed save", async ({ page }, testInfo) => {
+  await fixtures(page);
+  const userId = "10000000-0000-4000-8000-000000000001";
+  await page.addInitScript((id) => {
+    const expiresAt = Math.floor(Date.now() / 1000) + 3600;
+    localStorage.setItem("sb-ecosystem-fixture-auth-token", JSON.stringify({
+      access_token: `${btoa('{"alg":"HS256","typ":"JWT"}')}.${btoa(JSON.stringify({ sub: id, exp: expiresAt }))}.synthetic`,
+      refresh_token: "synthetic-refresh-token", token_type: "bearer", expires_in: 3600, expires_at: expiresAt,
+      user: { id, aud: "authenticated", email: "admin@example.test", role: "authenticated", app_metadata: {}, user_metadata: {} },
+    }));
+  }, userId);
+  const proposed = { ...fixture.data, summary: "Synthetic unsupported update. ".repeat(20), accessNote: "Synthetic changed access detail. ".repeat(15), tips: "Synthetic unsupported tip. ".repeat(15) };
+  let status = "pending";
+  const attempts: Record<string, unknown>[] = [];
+  await page.route("**/rest/v1/**", async route => {
+    const path = new URL(route.request().url()).pathname;
+    if (path.endsWith("/rpc/review_ecosystem_submission")) {
+      attempts.push(route.request().postDataJSON());
+      if (attempts.length === 1) return route.fulfill({ status: 503, json: { message: "Synthetic service failure" } });
+      status = "rejected";
+      return route.fulfill({ json: null });
+    }
+    if (path.endsWith("/rpc/get_basic_account_summary")) return route.fulfill({ json: { user_id: userId, name: "Synthetic admin", email: "admin@example.test", status: "approved", role: "admin" } });
+    if (path.endsWith("/staff_roles")) return route.fulfill({ json: [{ role: "admin" }] });
+    if (path.endsWith("/ecosystem_submissions")) return route.fulfill({ json: [{ id: "synthetic-update-receipt", kind: "update", target_slug: fixture.slug, base_revision: 2, proposal_revision: 1, base_data: fixture.data, proposed, status, reviewer_notes: null, contacts_permission: true, created_at: "2026-10-02T00:00:00Z" }] });
+    if (path.endsWith("/ecosystem_listings")) return route.fulfill({ json: [{ ...fixture, revision: 3 }] });
+    return route.fulfill({ json: [] });
+  });
+  await page.goto("/admin/ecosystem");
+  await page.getByRole("button", { name: /Synthetic Workshop Suggested edit/ }).click();
+  await expect(page.getByRole("heading", { name: "Synthetic Workshop", exact: true })).toBeFocused();
+  const notes = page.getByLabel("Private review notes");
+  await expect(notes).toHaveAccessibleDescription(/A note is required for Reject or Needs information/);
+  await page.getByRole("button", { name: "Reject", exact: true }).click();
+  await expect(notes).toBeFocused();
+  await expect(notes).toBeInViewport();
+  await expect(page.getByRole("alert")).toBeInViewport();
+  expect(attempts).toHaveLength(0);
+  await page.screenshot({ path: resolve(evidence, `fixture-reject-notes-${testInfo.project.name}.png`) });
+  await notes.fill("Synthetic reason: the supplied source does not support this update.");
+  await page.getByRole("button", { name: "Reject", exact: true }).click();
+  await expect(page.getByRole("alert")).toContainText("The review was not saved");
+  await expect(page.getByRole("alert")).toBeFocused();
+  await expect(page.getByRole("alert")).toBeInViewport();
+  await expect(notes).toHaveValue("Synthetic reason: the supplied source does not support this update.");
+  await page.getByRole("button", { name: "Reject", exact: true }).click();
+  await expect(page.getByRole("status").filter({ hasText: "Rejected. No public information changed." })).toBeVisible();
+  expect(attempts).toHaveLength(2);
+  expect(attempts[1]).toEqual({ p_submission_id: "synthetic-update-receipt", p_decision: "rejected", p_expected_revision: 3, p_expected_proposal_revision: 1, p_reviewer_notes: "Synthetic reason: the supplied source does not support this update." });
+  await page.getByLabel("Review status").selectOption("rejected");
+  await expect(page.getByRole("button", { name: /Synthetic Workshop Suggested edit · rejected/ })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+});
+
 test("database-backed map filters, selects and restores a listing on reload", async ({ page }) => {
   const mappedFixture = { ...fixture, data: { ...fixture.data, coordinates: [77.6, 12.97], locationPrecision: "Locality-level" } };
   await fixtures(page, [mappedFixture, { ...fixture, slug: "synthetic-drone", data: { ...fixture.data, slug: "synthetic-drone", name: "Synthetic Drone", primaryType: "startup", sectors: ["Drones & aerospace"], needs: ["build"] } }]);
