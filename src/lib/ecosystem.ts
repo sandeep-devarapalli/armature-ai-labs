@@ -106,9 +106,19 @@ export async function submitEcosystemContribution(input: EcosystemContribution):
 }
 
 export async function getEcosystemSubmissions(): Promise<EcosystemSubmission[]> {
-  const { data, error } = await client().from("ecosystem_submissions").select("id, kind, target_slug, base_revision, proposal_revision, base_data, proposed, submitter_name, submitter_email, contacts_permission, status, reviewer_notes, created_at").order("created_at", { ascending: false });
-  if (error) throw new Error("The review queue could not be loaded.");
-  return (data ?? []).map((submission: EcosystemSubmission) => ({ ...submission,
+  const submissions: EcosystemSubmission[] = [];
+  const pageSize = 500;
+  let cursor: EcosystemSubmission | undefined;
+  for (;;) {
+    let query = client().from("ecosystem_submissions").select("id, kind, target_slug, base_revision, proposal_revision, base_data, proposed, submitter_name, submitter_email, contacts_permission, status, reviewer_notes, created_at").order("created_at", { ascending: false }).order("id", { ascending: false });
+    if (cursor) query = query.or(`created_at.lt.${cursor.created_at},and(created_at.eq.${cursor.created_at},id.lt.${cursor.id})`);
+    const { data, error } = await query.limit(pageSize);
+    if (error) throw new Error("The review queue could not be loaded.");
+    submissions.push(...(data ?? []));
+    if (!data || data.length < pageSize) break;
+    cursor = data[data.length - 1];
+  }
+  return submissions.map((submission) => ({ ...submission,
     proposed: { ...emptyEcosystemListing(submission.proposed.primaryType), ...submission.proposed },
     base_data: submission.base_data ? { ...emptyEcosystemListing(submission.base_data.primaryType), ...submission.base_data } : null,
   }));

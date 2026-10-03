@@ -6,6 +6,10 @@
 
 # AGENTS.md
 
+- Ecosystem queue pagination, 3 October 2026: load every review beyond Supabase's per-request row limit in stable timestamp/ID batches, preserving all statuses, private-data permissions and whole-load error handling. Test tied timestamps and reviews beyond 1,000. Owner authorized merging and deploying this focused fix after checks pass; no listing approval or publication is authorized.
+
+- Ecosystem bulk-review correction, 3 October 2026: source directories are not substitutes for individual review entries. Reconcile the saved Bengaluru-only HardwareStory scrape and named Plum guide locations into individual private review proposals, with source-backed details, websites and actual Google Maps links where available. Flag missing, conflicting or non-Bangalore locations; never fabricate place links or verification. Preserve existing pending-edit locks and require admin approval before publication. The owner approved omitting individual notification emails for this import batch only and reporting one completion summary; normal contribution notifications remain unchanged.
+
 - Ecosystem city-guide release authorized, 3 October 2026: publish the checked floating guide, public Google Maps links, duplicate suggestions and option-02 selected favicon pin. Apply the compatible city-guide validator migration and submission function before frontend promotion. Preserve admin-only publication of listing proposals, local-only favicon assets, all themes and unrelated platform/payment holds.
 
 - Ecosystem marker selected, 3 October 2026: use option 02, a favicon inside a pointed map pin, for the selected mapped place. Preserve the original logo, geographic tip anchor, name label, clustered overview, and unpinned uncertain entries. Missing or unusable icons must have a readable fallback. This selection does not authorize deployment.
