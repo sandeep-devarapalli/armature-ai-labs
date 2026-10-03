@@ -49,6 +49,46 @@ async function requireEmptyBody(request: Request): Promise<void> {
   }
 }
 
+async function providerResult(response: Response): Promise<{ outcome: string; providerId: string | null }> {
+  const unknown = { outcome: 'unknown', providerId: null };
+  if ([400, 401, 403, 404, 405, 422].includes(response.status)) {
+    void response.body?.cancel().catch(() => undefined);
+    return { outcome: 'failed', providerId: null };
+  }
+  if ((!response.ok && response.status !== 429) || !response.body) {
+    void response.body?.cancel().catch(() => undefined);
+    return unknown;
+  }
+  const reader = response.body.getReader();
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    const body = await Promise.race([
+      (async () => {
+        const decoder = new TextDecoder();
+        let size = 0;
+        let text = '';
+        for (;;) {
+          const { done, value } = await reader.read();
+          if (done) return JSON.parse(text + decoder.decode());
+          size += value.byteLength;
+          if (size > 65_536) throw new Error('Provider response too large');
+          text += decoder.decode(value, { stream: true });
+        }
+      })(),
+      new Promise<never>((_, reject) => { timer = setTimeout(() => reject(new Error('Provider response timed out')), 10_000); }),
+    ]);
+    if (!body || typeof body !== 'object' || Array.isArray(body)) return unknown;
+    if (response.status === 429) return { outcome: ['rate_limit_exceeded', 'daily_quota_exceeded', 'monthly_quota_exceeded'].includes(body.name) ? 'retry' : 'unknown', providerId: null };
+    if (typeof body.id !== 'string' || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(body.id)) return unknown;
+    return { outcome: 'accepted', providerId: body.id.toLowerCase() };
+  } catch {
+    return unknown;
+  } finally {
+    clearTimeout(timer);
+    void reader.cancel().catch(() => undefined);
+  }
+}
+
 export async function handleMaintenance(request: Request): Promise<Response> {
   if (request.method !== 'POST') return json(request, { message: 'Use POST.' }, 405);
   try {
@@ -59,25 +99,28 @@ export async function handleMaintenance(request: Request): Promise<Response> {
     if (cleanup.error) throw new Error('Retention failed');
     if (Deno.env.get('ECOSYSTEM_NOTIFICATIONS_ENABLED') !== 'true') return json(request, { cleaned: true, notifications: 'disabled' });
     const sender = requiredEnv('ECOSYSTEM_NOTIFICATION_FROM_EMAIL');
-    const recipient = requiredEnv('ECOSYSTEM_NOTIFICATION_ADMIN_EMAIL');
+    const recipient = requiredEnv('ECOSYSTEM_NOTIFICATION_ADMIN_EMAIL').trim().toLowerCase();
     const apiKey = Deno.env.get('RESEND_API_KEY') || requiredEnv('MEMBER_NOTIFICATIONS_RESEND_KEY');
     const reviewUrl = new URL('/admin/ecosystem', requiredEnv('APP_ORIGIN')).toString();
-    const { data, error } = await client.rpc('claim_ecosystem_notifications');
+    const { data, error } = await client.rpc('claim_ecosystem_notifications', { p_recipient_email: recipient });
     if (error) throw new Error('Notification claim failed');
     let sent = 0;
     for (const item of data ?? []) {
-      let success = false;
+      const prepared = await client.rpc('prepare_ecosystem_notification', { p_submission_id: item.submission_id, p_lease: item.lease });
+      if (prepared.error || typeof prepared.data !== 'boolean') throw new Error('Notification preparation failed');
+      if (!prepared.data) continue;
+      let result = { outcome: 'unknown', providerId: null as string | null };
       try {
         const response = await fetch('https://api.resend.com/emails', {
-          method: 'POST', signal: AbortSignal.timeout(10000),
+          method: 'POST', redirect: 'error', signal: AbortSignal.timeout(10000),
           headers: { authorization: `Bearer ${apiKey}`, 'content-type': 'application/json', 'idempotency-key': `ecosystem:${item.submission_id}` },
           body: JSON.stringify({ from: sender, to: [recipient], subject: 'Builder Atlas contribution awaiting review', text: `A contribution is awaiting admin review.\nReceipt: ${item.submission_id}\nReview privately: ${reviewUrl}\nNo changes are public until approved.` }),
         });
-        success = response.ok;
-      } catch { /* The durable queue retains failed attempts for retry. */ }
-      const finish = await client.rpc('finish_ecosystem_notification', { p_submission_id: item.submission_id, p_lease: item.lease, p_success: success });
-      if (finish.error) throw new Error('Notification acknowledgement failed');
-      if (success) sent++;
+        result = await providerResult(response);
+      } catch { /* An ambiguous send must be reconciled, never blindly retried. */ }
+      const finish = await client.rpc('finish_ecosystem_notification', { p_submission_id: item.submission_id, p_lease: item.lease, p_outcome: result.outcome, p_provider_id: result.providerId });
+      if (finish.error || finish.data !== true) throw new Error('Notification acknowledgement failed');
+      if (result.outcome === 'accepted') sent++;
     }
     return json(request, { cleaned: true, sent });
   } catch (error) {

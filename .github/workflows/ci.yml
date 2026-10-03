@@ -90,6 +90,7 @@ jobs:
       - run: sh supabase/tests/concurrent_notifications.sh
       - run: sh supabase/tests/concurrent_notification_delivery.sh
       - run: sh supabase/tests/concurrent_notification_operations.sh
+      - run: sh supabase/tests/concurrent_ecosystem_notifications.sh
       - run: DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres sh supabase/tests/concurrent_equipment_wishlist.sh
       - run: DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres sh supabase/tests/concurrent_discounts.sh
       - if: always()
