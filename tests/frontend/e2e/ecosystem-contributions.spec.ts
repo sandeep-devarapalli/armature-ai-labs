@@ -110,6 +110,57 @@ test("admin rejection explains missing notes and preserves an update after a fai
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
 
+test("admin queue includes reviews beyond 1,000 and fails visibly on an incomplete refresh", async ({ page }, testInfo) => {
+  await fixtures(page);
+  const userId = "10000000-0000-4000-8000-000000000001";
+  await page.addInitScript((id) => {
+    const expiresAt = Math.floor(Date.now() / 1000) + 3600;
+    localStorage.setItem("sb-ecosystem-fixture-auth-token", JSON.stringify({
+      access_token: `${btoa('{"alg":"HS256","typ":"JWT"}')}.${btoa(JSON.stringify({ sub: id, exp: expiresAt }))}.synthetic`,
+      refresh_token: "synthetic-refresh-token", token_type: "bearer", expires_in: 3600, expires_at: expiresAt,
+      user: { id, aud: "authenticated", email: "admin@example.test", role: "authenticated", app_metadata: {}, user_metadata: {} },
+    }));
+  }, userId);
+  const rows = Array.from({ length: 1003 }, (_, i) => ({
+    id: `20000000-0000-4000-8000-${String(1003 - i).padStart(12, "0")}`, kind: "new", target_slug: null,
+    base_revision: null, proposal_revision: 1, base_data: null, proposed: { ...fixture.data, name: `Synthetic review ${i}` },
+    status: i === 1002 ? "needs_info" : "pending", reviewer_notes: null, contacts_permission: true, created_at: "2026-10-03T08:00:00.123456+00:00",
+  }));
+  const cursors: (string | null)[] = [];
+  let failLaterPage = false;
+  await page.route("**/rest/v1/**", async route => {
+    const url = new URL(route.request().url());
+    if (url.pathname.endsWith("/rpc/get_basic_account_summary")) return route.fulfill({ json: { user_id: userId, name: "Synthetic admin", email: "admin@example.test", status: "approved", role: "admin" } });
+    if (url.pathname.endsWith("/staff_roles")) return route.fulfill({ json: [{ role: "admin" }] });
+    if (url.pathname.endsWith("/ecosystem_submissions")) {
+      expect(url.searchParams.get("order")).toBe("created_at.desc,id.desc");
+      expect(url.searchParams.get("limit")).toBe("500");
+      const cursor = url.searchParams.get("or");
+      cursors.push(cursor);
+      if (cursor && failLaterPage) return route.fulfill({ status: 503, headers: { "Retry-After": "0" }, json: { message: "Synthetic private provider detail" } });
+      const lastId = cursor?.match(/id\.lt\.([0-9a-f-]+)/)?.[1];
+      return route.fulfill({ json: rows.filter(row => !lastId || row.id < lastId).slice(0, 500) });
+    }
+    return route.fulfill({ json: [] });
+  });
+  await page.goto("/admin/ecosystem");
+  await expect(page.getByRole("heading", { name: "Ecosystem review", exact: true })).toBeVisible();
+  await expect(page.locator(".atlas-review-list button")).toHaveCount(1002);
+  expect(cursors).toHaveLength(3);
+  expect(cursors[1]).toContain("created_at.eq.2026-10-03T08:00:00.123456+00:00");
+  await page.getByLabel("Review status").selectOption("all");
+  await expect(page.locator(".atlas-review-list button")).toHaveCount(1003);
+  await page.getByLabel("Review status").selectOption("needs_info");
+  await page.getByRole("button", { name: /Synthetic review 1002 New listing/ }).click();
+  await expect(page.getByRole("heading", { name: "Synthetic review 1002", exact: true })).toBeFocused();
+  await page.screenshot({ path: resolve(evidence, `queue-over-1000-${testInfo.project.name}.png`) });
+  failLaterPage = true;
+  await page.getByRole("button", { name: "Refresh review queue" }).click();
+  await expect(page.getByRole("alert")).toHaveText("The review queue could not be loaded.");
+  await expect(page.locator(".atlas-review-list button")).toHaveCount(0);
+  await expect(page.getByText("Synthetic private provider detail")).toHaveCount(0);
+});
+
 test("database-backed map filters, selects and restores a listing on reload", async ({ page }) => {
   const mappedFixture = { ...fixture, data: { ...fixture.data, coordinates: [77.6, 12.97], locationPrecision: "Locality-level" } };
   await fixtures(page, [mappedFixture, { ...fixture, slug: "synthetic-drone", data: { ...fixture.data, slug: "synthetic-drone", name: "Synthetic Drone", primaryType: "startup", sectors: ["Drones & aerospace"], needs: ["build"] } }]);
