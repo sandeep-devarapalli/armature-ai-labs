@@ -100,5 +100,21 @@ update private.ecosystem_notifications set recipient_email='clear@example.test',
 select ok(public.prepare_ecosystem_notification('a7100000-0000-4000-8000-000000000018','a7200000-0000-4000-8000-000000000001'),'prepare permits eligible live lease');
 update public.ecosystem_submissions set status='approved' where id='a7100000-0000-4000-8000-000000000018';
 select ok(not public.prepare_ecosystem_notification('a7100000-0000-4000-8000-000000000018','a7200000-0000-4000-8000-000000000001'),'prepare rechecks already reviewed submission');
+select is((select state from private.ecosystem_notifications where submission_id='a7100000-0000-4000-8000-000000000018'),'cancelled','ordinary completed review is cancellation, not failed delivery');
+select ok(not exists(select 1 from information_schema.columns where table_schema='private' and table_name='ecosystem_notification_reconciliations' and column_name='recipient_email'),'repair audit stores recipient digest only');
+select public.record_member_notification_event('atlas-unresolved-old','a7300000-0000-4000-8000-000000000014','email.sent','2026-01-01Z');
+update public.member_notification_events set received_at=now()-interval '31 days' where event_id='atlas-unresolved-old';
+update private.ecosystem_notifications set completed_at=now()-interval '31 days' where submission_id='a7100000-0000-4000-8000-000000000014';
+select public.maintain_member_notifications(false);
+select ok(exists(select 1 from public.member_notification_events where event_id='atlas-unresolved-old'),'unconfirmed Atlas receipt remains available after 30 days');
+insert into auth.users(id,aud,role,email,email_confirmed_at) values('a7900000-0000-4000-8000-000000000001','authenticated','authenticated','batch@example.test',now());
+insert into public.member_notifications(user_id,recipient_id,recipient_email,event_key,kind,expected_status,application_revision,state,completed_at)
+values('a7900000-0000-4000-8000-000000000001','a7900000-0000-4000-8000-000000000001','batch@example.test','atlas-batch-budget','approved','approved',1,'failed',now()-interval '31 days');
+insert into public.ecosystem_submissions(id,idempotency_key,payload_hash,kind,proposed)
+select ('a7100000-0000-4000-8000-'||lpad(i::text,12,'0'))::uuid,'atlas-delivery:'||i,repeat('a',64),'new','{}' from generate_series(21,120) i;
+insert into private.ecosystem_notifications(submission_id,state,completed_at,recipient_email,recipient_hash)
+select id,'failed',now()-interval '31 days','batch@example.test',encode(extensions.digest('batch@example.test','sha256'),'hex')
+from public.ecosystem_submissions where idempotency_key like 'atlas-delivery:%' and id::text>='a7100000-0000-4000-8000-000000000021';
+select is((public.maintain_member_notifications(true,100)->>'history')::integer,100,'combined membership and Atlas cleanup retains100-item monitor contract');
 select * from finish();
 rollback;

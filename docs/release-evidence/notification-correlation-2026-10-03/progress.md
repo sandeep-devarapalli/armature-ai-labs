@@ -17,7 +17,7 @@ Owner approved fixing the 28 unmatched delivery reports for 14 Builder Atlas rev
 
 - Node 22.23.2: final `npm test -- --maxWorkers=2` — 461 tests passed across 48 files. An unconstrained run timed out in the unchanged 15-room DOM-render test (5-second limit); reducing worker contention passed without changing assertions or application code.
 - `npm run build` passed, including all model, media, release and SEO artifact checks.
-- Isolated local Postgres: 222 assertions across notification suites 017/018/019/026/027/034; all four notification concurrency scripts passed, plus Atlas contribution and pending-edit SQL. Local clone excludes scheduler-extension bootstrap; hosted CI validates the complete migration chain.
+- Isolated local Postgres: 226 assertions across notification suites 017/018/019/026/027/034; all four notification concurrency scripts passed, plus Atlas contribution and pending-edit SQL. Local clone excludes scheduler-extension bootstrap; hosted CI validates the complete migration chain.
 - Python monitor: 9 tests passed, including strict legacy/expanded schemas and every actionable count.
 - Independent review identified batch suppression and terminal retention safeguards; fixed, rereviewed with no remaining release blockers.
 - Cloud Build `ce2daaba-79e3-43d1-9b14-0f5e0810a38d` built monitor digest `sha256:f7520abf07116c54b1cc3cf677e029673013b7700b56f127ffad793154f0f5e5` using the existing scanner-builder identity and dedicated source bucket. Default-bucket attempts failed before build; no IAM permissions were expanded.
