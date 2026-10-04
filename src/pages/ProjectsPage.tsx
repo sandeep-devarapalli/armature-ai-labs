@@ -63,6 +63,7 @@ const projectMediaCredits: Record<string, readonly [string, string]> = {
   openmantaclaus: ["OpenMantaClaus · Kushagra Javeri", "https://github.com/kushagra77/OpenMantaClaus/blob/main/docs/assets/hero_shot.jpg"],
   "human-like-robot-skin": ["Marc Teyssier et al. · Human-like Robot Skin", "https://marcteyssier.com/thumbs/projects/humanlike-skin/dscf0391_crop2-800x400.jpg"],
   "skin-on-interfaces": ["Marc Teyssier et al. · Skin-On Interfaces", "https://marcteyssier.com/thumbs/projects/skin-on/pinchphone3-800x400.jpg"],
+  eflesh: ["eFlesh / NYU · CC BY-SA 4.0", "https://e-flesh.com/"],
   flexitac: ["FlexiTac · Huang & Li", "https://flexitac.github.io/"],
   "9dtact": ["9DTact · Lin et al.", "https://linchangyi1.github.io/9DTact/"],
   "orca-hand": ["ORCA Dexterity", "https://www.orcahand.com/models"],

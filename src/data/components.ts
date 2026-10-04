@@ -11,6 +11,57 @@ export const OFFER_STALE_AFTER_DAYS = 30;
 
 export const components: CatalogComponent[] = [
   {
+    slug: "eflesh-printed-sensor-kit",
+    name: "eFlesh TPU and magnet fabrication kit",
+    category: "Tactile sensing",
+    description: "TPU 95A filament and N52 neodymium magnets for a customizable printed tactile skin. Access to a TPU-capable FDM printer and the published convex OBJ/STL conversion tools is required.",
+    inventoryClass: "consumable",
+    availability: "unavailable",
+    validationState: "source_required",
+    quantityTarget: 6,
+    quantityUnit: "prototype sets",
+    tags: ["eFlesh", "TPU 95A", "N52 magnets", "cut-cell microstructures"],
+    validationNotes: [
+      "Planning target: five shared-station prototypes plus one spare; print and validate one sensor before scaling. Printer time, electronics and calibration are additional costs: the project's low-cost headline covers magnets alone, not a complete sensor.",
+      "The published cuboidal build uses magnets 3/8 inch in diameter and 1/8 inch thick; fingertips use 3/16 inch diameter and 1/16 inch thickness. Match magnet count, polarity, pouch dimensions and print-pause position to the chosen STL; do not mix the two sizes.",
+      "Generate the cut-cell STL, slice for TPU, pause at the magnet pouches, insert magnets, resume printing and fit the readout PCB. Upstream used a Bambu X1 Carbon; the linked lab printer is a candidate, not a verified equivalent. Keep loose magnets secured and check retention before robot use."
+    ]
+  },
+  {
+    slug: "eflesh-magnetometer-board",
+    name: "eFlesh five-magnetometer board",
+    category: "Tactile sensing",
+    description: "Rigid ReSkin/AnySkin-style magnetic readout PCB for eFlesh, with five MLX90393 sensors. The official project links a WowRobo assembled-board listing and ReSkin fabrication files.",
+    inventoryClass: "serialized_asset",
+    availability: "unavailable",
+    validationState: "validate_before_po",
+    quantityTarget: 6,
+    quantityUnit: "boards",
+    tags: ["eFlesh", "MLX90393", "ReSkin", "AnySkin", "I2C"],
+    validationNotes: [
+      "Five shared-station boards plus one spare is a proposed target, not current stock. Confirm the board revision, five-sensor layout, connector, I2C addresses and fit to the selected printed skin before ordering.",
+      "The firmware at eFlesh commit 4237e90 expects five MLX90393 channels. A generic IMU or single magnetometer breakout is not a drop-in replacement. Confirm all five sensors stream correctly before collecting data.",
+      "Use the original repository's circuit references and fabrication instructions; obtain a GST-inclusive INR landed quote and confirm India delivery before PO."
+    ]
+  },
+  {
+    slug: "eflesh-readout-kit",
+    name: "eFlesh QT Py readout and wiring kit",
+    category: "Controllers",
+    description: "QT Py controller, matched I2C wiring and USB data cable for the published five-sensor Arduino firmware, plus access to a host computer for visualization, calibration and learning experiments.",
+    inventoryClass: "reusable_tray",
+    availability: "unavailable",
+    validationState: "source_required",
+    quantityTarget: 6,
+    quantityUnit: "shared readout kits",
+    tags: ["eFlesh", "QT Py", "Arduino", "USB", "calibration"],
+    validationNotes: [
+      "Plan five shared readout kits plus one spare and reuse suitable host computers. The README names QT Py but does not specify the exact variant; verify board support, logic voltage, pinout and USB serial compatibility before PO.",
+      "Start with a single sensor on the bench, verify unloaded magnetic baselines, then collect controlled contact and force data before trying slip detection or robot policies. Changes to geometry, magnets or printing require validation rather than assuming pretrained results transfer.",
+      "The paper reports 0.5 mm contact-localization RMSE, 0.27 N normal-force RMSE, 0.12 N shear-force RMSE, 95% held-out slip accuracy and 91% average task success, with a reported 40% improvement over vision-only policies. These are author-reported experimental results, not Armature measurements or safety ratings."
+    ]
+  },
+  {
     slug: "qdd-8110-motor-materials",
     name: "QDD 8110 custom motor materials",
     category: "Motion",
@@ -2161,6 +2212,18 @@ export const components: CatalogComponent[] = [
 
 export const componentOffers: ComponentOffer[] = [
   {
+    id: "wowrobo-eflesh-single-board",
+    componentSlug: "eflesh-magnetometer-board",
+    vendor: "WowRobo Robotics",
+    variant: "Package 1: Single Piece",
+    directUrl: "https://shop.wowrobo.com/products/eflesh-magnetometer-board",
+    checkedAt: "2026-10-04",
+    taxNote: "INR landed quote required (vendor reference: USD 25 for one board). India shipping, import duties and GST are not established by that reference price.",
+    stockState: "unknown",
+    warrantyNote: "Confirm warranty, returns and India delivery before ordering.",
+    validationNotes: ["Official eFlesh project-linked supplier. The listing exposes both sold-out and add-to-cart text; confirm availability and the single-board package directly. Readout controller, printed skin and magnets are separate."]
+  },
+  {
     id: "getset-so101-74v",
     componentSlug: "so101-pair",
     vendor: "GetSet Robotics",
@@ -3035,6 +3098,12 @@ export const projectComponentLinks: ProjectComponentLink[] = [
   ["skin-on-interfaces", "artificial-skin-capacitive-kit", "required"],
   ["skin-on-interfaces", "electronics-bench", "required"],
   ["skin-on-interfaces", "3d-printing-stock", "optional"],
+  ["eflesh", "eflesh-printed-sensor-kit", "required"],
+  ["eflesh", "eflesh-magnetometer-board", "required"],
+  ["eflesh", "eflesh-readout-kit", "required"],
+  ["eflesh", "bambu-lab-a1", "optional"],
+  ["eflesh", "electronics-bench", "optional"],
+  ["eflesh", "force-torque-starter", "optional"],
   ["flexitac", "tactile-materials", "required"],
   ["flexitac", "force-torque-starter", "optional"],
   ["flexitac", "arduino-uno-r4-wifi", "required"],
