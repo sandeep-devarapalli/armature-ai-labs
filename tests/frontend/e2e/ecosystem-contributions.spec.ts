@@ -58,6 +58,37 @@ test("page hierarchy and resource library remain usable in every theme", async (
   await expect(library.getByRole("button", { name: "Camera mount", exact: true })).toBeFocused();
 });
 
+test("hardware suppliers preserve tool priority and distinguish website, Maps and directory links", async ({ page }, testInfo) => {
+  await fixtures(page);
+  await page.goto("/ecosystem#builder-resources");
+  const library = page.getByRole("region", { name: "Tools & resources for builders" });
+  await expect(library.getByRole("heading", { level: 3 }).first()).toHaveText("CopperPilot");
+  await library.getByRole("button", { name: "Hardware suppliers", exact: true }).click();
+  await expect(library.getByRole("status")).toHaveText("54 resources found. Showing 4.");
+  for (const theme of ["light", "dark", "sepia"]) {
+    await page.getByRole("button", { name: `${theme} theme`, exact: true }).click();
+    await library.scrollIntoViewIfNeeded();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+    await page.screenshot({ path: resolve(evidence, `hardware-suppliers-${theme}-${testInfo.project.name}.png`) });
+  }
+  const search = library.getByRole("searchbox");
+  await search.fill("Kamla");
+  await expect(library.getByRole("link", { name: "View on Maps: Kamla Hardware Mart" })).toHaveAttribute("href", "https://maps.app.goo.gl/fDXe3T5oWGTpYsA9A");
+  await search.fill("MakerVille");
+  await expect(library.getByRole("heading", { name: "MakerVille hardware vendor directory", exact: true })).toHaveCount(1);
+  await expect(library.getByRole("heading", { name: "Kamla Hardware Mart", exact: true })).toBeVisible();
+  await expect(library.getByRole("link", { name: "View directory: MakerVille hardware vendor directory" })).toBeVisible();
+  await search.fill("PCBKingdom");
+  await expect(library.getByText(/website certificate warning/)).toBeVisible();
+  await search.fill("");
+  for (let i = 0; i < 7; i++) await library.getByRole("button", { name: "Show more resources" }).click();
+  await expect(library.getByRole("heading", { level: 3 })).toHaveCount(54);
+  await expect(library.getByRole("button", { name: "Show more resources" })).toHaveCount(0);
+  await library.getByRole("button", { name: "Clear filters", exact: true }).click();
+  await expect(library.getByRole("heading", { level: 3 }).first()).toHaveText("CopperPilot");
+  expect(new URL(page.url()).searchParams.has("q")).toBe(false);
+});
+
 test("selected favicon pin renders in every theme and survives icon failure", async ({ page }, testInfo) => {
   const mapped = { ...fixture, data: { ...fixture.data, name: "Armature AI Labs", websiteUrl: "https://armatureailabs.com/", coordinates: [77.6, 12.97] } };
   await fixtures(page, [mapped]);
