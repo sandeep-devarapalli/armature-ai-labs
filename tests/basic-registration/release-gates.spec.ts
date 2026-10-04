@@ -7,11 +7,11 @@ test("basic registration opens independently while paid access remains closed", 
   await expect(page.getByRole("heading", { name: "Create your basic membership." })).toBeVisible();
   await page.getByRole("link", { name: "Register for free" }).first().click();
   await expect(page).toHaveURL(/\/onboarding$/);
-  await expect(page.getByRole("link", { name: "Start your process" })).toBeVisible();
-  await expect(page.getByText("Staff approval verifies your registration", { exact: false })).toBeVisible();
-  await page.getByRole("link", { name: "Start your process" }).click();
-  await expect(page.getByRole("heading", { name: "Create your member account." })).toBeVisible();
-  await expect(page.getByText("Use a secure email link for free registration", { exact: false })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Join Armature AI Labs." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Create your free account" })).toBeVisible();
+  await expect(page.getByLabel("Email address", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Email me a secure link" })).toBeVisible();
+  await expect(page.getByText("Complete your profile and identity review", { exact: false })).toBeVisible();
   await expect(page.getByRole("button", { name: "Continue with Google" })).toBeVisible();
   for (const path of ["/book", "/bookings", "/dashboard", "/check-in", "/inventory", "/financials", "/kiosk", "/components/request"]) {
     await page.goto(path);

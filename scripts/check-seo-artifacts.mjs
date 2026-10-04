@@ -6,7 +6,7 @@ import { JSDOM } from "jsdom";
 
 const directory = path.resolve(process.argv[2] ?? "dist");
 const origin = "https://armatureailabs.com";
-const excluded = /^\/(?:admin|auth|dashboard|profile|book|bookings|check-in|financials|kiosk|inventory|lockers|consumables|toolkits|component-requests|members|membership|equipment|procurement)(?:\/|$)|^\/components\/request\//;
+const excluded = /^\/(?:admin|auth|onboarding|dashboard|profile|book|bookings|check-in|financials|kiosk|inventory|lockers|consumables|toolkits|component-requests|members|membership|equipment|procurement)(?:\/|$)|^\/components\/request\//;
 const failures = [];
 const titles = new Set();
 const headings = new Set();

@@ -134,7 +134,7 @@ export default defineConfig(({ mode }) => {
           },
           {
             urlPattern:
-              /\/(?:api|functions|rest|rpc|auth|availability|booking|bookings|check-in|checkin|calendar|components\/request|component-requests?|inventory|checkout|cabinet|lockers|consumables|toolkits|maker-services|dashboard|profile|admin|kiosk)(?:\/|$)/i,
+              /\/(?:api|functions|rest|rpc|auth|onboarding|availability|booking|bookings|check-in|checkin|calendar|components\/request|component-requests?|inventory|checkout|cabinet|lockers|consumables|toolkits|maker-services|dashboard|profile|admin|kiosk)(?:\/|$)/i,
             handler: "NetworkOnly",
             method: "GET"
           },

@@ -146,3 +146,41 @@ describe("sign-in submission guard", () => {
     expect(screen.getByRole("button", { name: "Continue with Google" })).toBeEnabled();
   });
 });
+
+describe("editorial membership sign-up", () => {
+  beforeEach(() => {
+    gate.basic = true;
+    mockRequestOtp.mockReset();
+  });
+
+  it("shows the free registration form without deployment details", () => {
+    render(<MemoryRouter><AuthPage redirectTo="/onboarding" /></MemoryRouter>);
+    expect(screen.getByRole("heading", { name: "Join Armature AI Labs." })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Create your free account" })).toBeInTheDocument();
+    expect(screen.getByLabelText("Email address")).toHaveAttribute("autocomplete", "email");
+    expect(screen.queryByText(/Supabase|supabase mode|Local demo/)).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Privacy notice" })).toHaveAttribute("href", "/privacy");
+  });
+
+  it("confirms an email request and keeps the onboarding return path", async () => {
+    mockRequestOtp.mockResolvedValue(undefined);
+    render(<MemoryRouter><AuthPage redirectTo="/onboarding" /></MemoryRouter>);
+    fireEvent.change(screen.getByLabelText("Email address"), { target: { value: "member@example.com" } });
+    fireEvent.click(screen.getByRole("button", { name: "Email me a secure link" }));
+    expect(await screen.findByRole("status")).toHaveTextContent("Check your inbox for your secure sign-in link.");
+    expect(mockRequestOtp).toHaveBeenCalledExactlyOnceWith("member@example.com", "/onboarding");
+    expect(screen.getByRole("button", { name: "Email me a secure link" })).toBeEnabled();
+  });
+
+  it("shows an email error and sanitizes an explicit unsafe return target", async () => {
+    gate.basic = false;
+    mockRequestOtp.mockRejectedValue(new Error("Please try again later."));
+    render(<MemoryRouter><AuthPage redirectTo="https://evil.example" /></MemoryRouter>);
+    fireEvent.change(screen.getByLabelText("Email address"), { target: { value: "member@example.com" } });
+    fireEvent.click(screen.getByRole("button", { name: "Email me a secure link" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("Please try again later.");
+    expect(mockRequestOtp).toHaveBeenCalledExactlyOnceWith("member@example.com", "/dashboard");
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Email me a secure link" })).toBeEnabled();
+  });
+});

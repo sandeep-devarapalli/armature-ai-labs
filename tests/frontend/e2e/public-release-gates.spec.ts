@@ -49,7 +49,7 @@ test("public-first production gates operational routes", async ({ page }) => {
   const basicEnabled = process.env.VITE_BASIC_ONBOARDING_ENABLED === "true";
   await page.goto("/auth");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
-    basicEnabled ? "Create your member account." : "Operational access is opening soon."
+    basicEnabled ? "Join Armature AI Labs." : "Operational access is opening soon."
   );
 
   await page.goto("/");

@@ -12,6 +12,8 @@
 /components/request/ /app-shell 200
 /financials /app-shell 200
 /financials/ /app-shell 200
+/onboarding /app-shell 200
+/onboarding/ /app-shell 200
 /auth /app-shell 200
 /auth/ /app-shell 200
 /auth/callback /app-shell 200
