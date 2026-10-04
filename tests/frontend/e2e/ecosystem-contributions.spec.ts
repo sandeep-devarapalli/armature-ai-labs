@@ -45,7 +45,7 @@ test("selected favicon pin renders in every theme and survives icon failure", as
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await page.screenshot({ path: resolve(evidence, `favicon-pin-${theme}-${testInfo.project.name}.png`) });
   }
-  await page.getByRole("button", { name: "Close listing details" }).click();
+  await page.getByRole("button", { name: "Back to results" }).click();
   await expect(marker).toHaveCount(0);
   await page.route("**/brand/editorial-2026-09/logos/icon-dark-48.svg", route => route.fulfill({ status: 404, body: "" }));
   await page.goto(`/ecosystem?focus=${fixture.slug}`);
@@ -189,7 +189,7 @@ test("database-backed map filters, selects and restores a listing on reload", as
   await expect(page.getByText(/Record confidence|Workbook trail|Robotics lead workbook|directory record/i)).toHaveCount(0);
   await page.reload();
   await expect(page.getByRole("heading", { name: "Synthetic Workshop", exact: true })).toBeVisible();
-  await page.getByRole("button", { name: "Close listing details" }).click();
+  await page.getByRole("button", { name: "Back to results" }).click();
   await expect(page).not.toHaveURL(/focus=/);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
@@ -299,7 +299,7 @@ test("public source and filtered URL survive browser back and forward", async ({
   await fixtures(page); await page.goto("/ecosystem?focus=synthetic-workshop");
   await expect(page.getByRole("heading", { name: "Synthetic Workshop", exact: true })).toBeVisible();
   await expect(page.getByRole("link", { name: "Public source", exact: true })).toHaveAttribute("href", fixture.data.sourceUrl);
-  await page.getByRole("button", { name: "Close listing details" }).click();
+  await page.getByRole("button", { name: "Back to results" }).click();
   await page.getByText("More filters", { exact: true }).click();
   await page.getByRole("button", { name: "build", exact: true }).click();
   await expect(page).toHaveURL(/need=build/);
@@ -334,7 +334,7 @@ test("submit and edit actions are keyboard reachable and reveal the full form", 
   await tabTo(page, page.getByLabel("Organisation, place or resource name *"));
   await expect(page.getByLabel("Organisation, place or resource name *")).toBeFocused();
   await page.getByRole("button", { name: "Back to the atlas", exact: true }).click();
-  await tabTo(page, page.locator("#chapter-work-meet").getByRole("button", { name: "Suggest an edit / Add details for Synthetic Workshop" }));
+  await tabTo(page, page.locator(".atlas-directory").getByRole("button", { name: "Suggest an edit / Add details for Synthetic Workshop" }));
   await page.keyboard.press("Enter");
   await expect(page.getByRole("heading", { name: "Suggest an edit to Synthetic Workshop" })).toBeInViewport();
   await expect(page.getByLabel("Organisation, place or resource name *")).toHaveValue("Synthetic Workshop");
@@ -404,19 +404,16 @@ test("newly published duplicate requires acknowledgement before a distinct new s
   await page.screenshot({ path: resolve(evidence, `fixture-distinct-confirmation-${testInfo.project.name}.png`) });
 });
 
-test("guide disclosures and scroll position survive details, with public Maps links and theme parity", async ({ page }, testInfo) => {
+test("search, filters and result scroll survive details, with public Maps links and theme parity", async ({ page }, testInfo) => {
   const mapsUrl = "https://maps.app.goo.gl/synthetic-place";
   const mapsFixture = { ...fixture, data: { ...fixture.data, googleMapsUrl: mapsUrl } };
   await fixtures(page, [mapsFixture]);
   await page.goto("/ecosystem");
   const guide = page.getByRole("complementary", { name: "Ecosystem listings" });
-  const reading = guide.locator("#chapter-work-meet .atlas-guide-reading");
   const filters = guide.locator(".atlas-filter-disclosure");
-  await expect(guide.getByRole("heading", { name: "Bangalore starter guide" })).toBeVisible();
+  await expect(page.locator("#bangalore-guide").getByRole("heading", { name: "Bangalore starter guide" })).toBeVisible();
   await filters.locator("summary").click();
-  await reading.locator("summary").click();
   await expect(filters).toHaveAttribute("open", "");
-  await expect(reading).toHaveAttribute("open", "");
   const card = guide.locator(":scope > .atlas-card .atlas-listing");
   await card.scrollIntoViewIfNeeded();
   const savedScroll = await guide.evaluate(element => element.scrollTop);
@@ -424,55 +421,74 @@ test("guide disclosures and scroll position survive details, with public Maps li
   await card.click();
   const detail = page.getByRole("article", { name: "Synthetic Workshop details" });
   await expect(detail).toBeFocused();
-  await expect(page.getByRole("searchbox")).toHaveCount(0);
+  await expect(page.getByRole("searchbox")).toBeVisible();
   await expect(detail.getByRole("link", { name: "Directions", exact: true })).toHaveAttribute("href", mapsUrl);
   await expect(detail.getByRole("link", { name: "Open in Google Maps", exact: true })).toHaveAttribute("href", mapsUrl);
   await expect(detail.getByRole("link", { name: "+91 9876543210", exact: true })).toHaveAttribute("href", "tel:+919876543210");
   await expect(detail).toContainText("No confirmed map pin");
-  await page.getByRole("button", { name: "Close listing details" }).click();
+  await page.getByRole("button", { name: "Back to results" }).click();
   await expect(guide).toBeFocused();
   await expect(filters).toHaveAttribute("open", "");
-  await expect(reading).toHaveAttribute("open", "");
   await expect.poll(async () => Math.abs(await guide.evaluate(element => element.scrollTop) - savedScroll)).toBeLessThan(2);
   await filters.locator("summary").click();
-  await reading.locator("summary").click();
   for (const theme of ["light", "dark", "sepia"]) {
     await page.evaluate(value => { document.documentElement.dataset.theme = value; window.scrollTo({ top: 0, behavior: "instant" }); }, theme);
     await guide.evaluate(element => { element.scrollTop = 0; });
     await expect(page.locator("header").first()).toBeVisible();
     await expect(page.locator(".builder-atlas")).not.toContainText(/Advertising space|Advertise here|Place a bid|Ad enquiry/i);
     await page.screenshot({ path: resolve(evidence, `fixture-guide-overview-${theme}-${testInfo.project.name}.png`) });
-    await guide.locator("#chapter-work-meet .atlas-listing").click();
+    await page.getByRole("button", { name: "Minimize to bar" }).click();
+    await expect(guide).toBeHidden();
+    await expect(page.getByRole("searchbox")).toBeVisible();
+    await page.screenshot({ path: resolve(evidence, `fixture-rollup-${theme}-${testInfo.project.name}.png`) });
+    await page.locator(".atlas-search-toolbar").getByRole("button", { name: "Show results" }).click();
+    await guide.locator(".atlas-listing").click();
     await expect(detail).toBeFocused();
     await expect(detail.getByRole("heading", { name: "Synthetic Workshop" })).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
     await page.screenshot({ path: resolve(evidence, `fixture-guide-detail-${theme}-${testInfo.project.name}.png`) });
-    await page.getByRole("button", { name: "Close listing details" }).click();
+    await page.getByRole("button", { name: "Back to results" }).click();
   }
 });
 
-test("360px guide sheet expands, collapses and restores after showing more map", async ({ page }, testInfo) => {
+test("360px explorer rolls into a usable search bar and guide remains below the map", async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 360, height: 800 });
   await fixtures(page);
   await page.goto("/ecosystem");
   const panel = page.locator(".atlas-panel");
   const guide = page.getByRole("complementary", { name: "Ecosystem listings" });
-  await expect(guide.getByRole("heading", { name: "Bangalore starter guide" })).toBeVisible();
+  await expect(page.getByText("1 results · 0 on map")).toBeVisible();
   const initialHeight = (await panel.boundingBox())!.height;
-  await page.getByRole("button", { name: "Expand details & guide" }).click();
-  await expect(page.getByRole("button", { name: "Show more map" })).toHaveAttribute("aria-expanded", "true");
-  expect((await panel.boundingBox())!.height).toBeGreaterThan(initialHeight);
-  const topics = (await page.getByRole("navigation", { name: "Explore by topic" }).boundingBox())!;
-  expect((await panel.boundingBox())!.y).toBeGreaterThanOrEqual(topics.y + topics.height);
-  await page.screenshot({ path: resolve(evidence, `fixture-sheet-expanded-${testInfo.project.name}.png`) });
-  await page.getByRole("button", { name: "Show more map" }).click();
-  await expect(page.getByRole("button", { name: "Expand details & guide" })).toHaveAttribute("aria-expanded", "false");
-  expect((await panel.boundingBox())!.height).toBeCloseTo(initialHeight, 0);
-  await page.getByRole("button", { name: "Collapse guide" }).click();
-  await expect(panel).toBeHidden();
-  await expect(page.getByRole("button", { name: "Show guide" })).toHaveAttribute("aria-expanded", "false");
-  await page.getByRole("button", { name: "Show guide" }).click();
+  await page.getByRole("button", { name: "Minimize to bar" }).click();
   await expect(panel).toBeVisible();
-  await expect(page.getByRole("button", { name: "Expand map" })).toHaveAttribute("aria-expanded", "true");
+  await expect(guide).toBeHidden();
+  await expect(page.getByRole("searchbox")).toBeVisible();
+  expect((await panel.boundingBox())!.height).toBeLessThan(initialHeight);
+  await page.screenshot({ path: resolve(evidence, `fixture-rollup-${testInfo.project.name}.png`) });
+  await panel.getByRole("button", { name: "Show results" }).click();
+  await expect(guide).toBeVisible();
+  await page.getByRole("button", { name: "Minimize to bar" }).click();
+  await page.getByRole("searchbox").fill("Synthetic");
+  await expect(page).toHaveURL(/q=Synthetic/);
+  await expect(guide).toBeVisible();
+  await expect(page.getByRole("searchbox")).toHaveValue("Synthetic");
+  await guide.locator(".atlas-listing").click();
+  await expect(page.getByRole("searchbox")).toBeVisible();
+  await page.getByRole("button", { name: "Back to results" }).click();
+  await expect(page.getByRole("searchbox")).toHaveValue("Synthetic");
+  const reader = page.locator("#bangalore-guide");
+  expect(await reader.evaluate(element => !element.closest("#ecosystem-map"))).toBe(true);
+  await reader.scrollIntoViewIfNeeded();
+  await expect(reader.getByText(/^Start with the journeys/)).toBeVisible();
+  await reader.getByRole("button", { name: "Build & source" }).click();
+  await expect(reader.getByRole("heading", { name: "Build & source" })).toBeInViewport();
+  await expect(reader.getByText(/^Split the next build/)).toBeVisible();
+  await reader.getByRole("button", { name: "Settle in" }).click();
+  await expect(reader.getByRole("heading", { name: "Settle in" })).toBeInViewport();
+  await expect(reader.getByText(/^Try the actual home-to-work trip/)).toBeVisible();
+  await expect(page.getByText("Read the starter guide")).toHaveCount(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.screenshot({ path: resolve(evidence, `fixture-guide-below-map-${testInfo.project.name}.png`) });
+  await reader.getByRole("button", { name: /Back to map/i }).click();
+  await expect(page.locator("#ecosystem-map")).toBeFocused();
 });

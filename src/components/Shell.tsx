@@ -73,7 +73,11 @@ function ThemeSwitch() {
 
 function ScrollToTop() {
   const { pathname, hash, key } = useLocation();
+  const previousLocation = useRef<{ pathname: string; hash: string } | null>(null);
   useEffect(() => {
+    const previous = previousLocation.current;
+    previousLocation.current = { pathname, hash };
+    if (pathname === "/ecosystem" && previous?.pathname === pathname && previous.hash === hash) return;
     if (hash) {
       const scrollToTarget = () => {
         const target = document.getElementById(hash.slice(1));

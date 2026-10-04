@@ -18,7 +18,7 @@ export function EcosystemPlaceDetails({ listing, onBack, onEdit }: { listing: Ec
   const phone = data.publicPhones[0];
   const mapsUrl = listingGoogleMapsUrl(data);
   return <article ref={ref} tabIndex={-1} className="atlas-detail" aria-label={`${data.name} details`}>
-    <div className="atlas-detail-toolbar"><button onClick={onBack} aria-label="Close listing details"><ArrowLeft />Back to guide</button><button onClick={() => void share()}><Share2 />Share</button></div>
+    <div className="atlas-detail-toolbar"><button onClick={onBack}><ArrowLeft />Back to results</button><button onClick={() => void share()}><Share2 />Share</button></div>
     <div role="status" className="atlas-share-status">{shareMessage}</div>
     {shareUrl && <input aria-label="Listing link" readOnly value={shareUrl} onFocus={event => event.currentTarget.select()} />}
     <h2>{data.name}</h2><p className="atlas-place-category">{data.subcategory || ecosystemTypeLabels[data.primaryType]}</p>

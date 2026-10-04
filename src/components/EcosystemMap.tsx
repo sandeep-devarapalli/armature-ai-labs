@@ -51,7 +51,7 @@ function reducedMotion() {
 
 function guidePadding(map: maplibregl.Map) {
   return window.innerWidth <= 700
-    ? { top: 148, right: 28, bottom: Math.round(map.getContainer().clientHeight * 0.48) + 20, left: 28 }
+    ? { top: 180, right: 28, bottom: Math.round(map.getContainer().clientHeight * 0.48) + 20, left: 28 }
     : { top: 52, right: 52, bottom: 52, left: Math.min(500, window.innerWidth * 0.4) + 32 };
 }
 

@@ -72,7 +72,7 @@ it("clears room for the mobile sheet without animating reduced-motion selections
   vi.stubGlobal("matchMedia", () => ({ matches: true }));
   render(<EcosystemMap entities={[fixture]} selectedSlug="test" onSelect={vi.fn()} />);
   const map = mocks.maps[0]; act(() => map.loaded());
-  expect(map.jumpTo).toHaveBeenCalledWith(expect.objectContaining({ padding: { top: 148, right: 28, bottom: 308, left: 28 } }));
+  expect(map.jumpTo).toHaveBeenCalledWith(expect.objectContaining({ padding: { top: 180, right: 28, bottom: 308, left: 28 } }));
   expect(map.easeTo).not.toHaveBeenCalled();
 });
 

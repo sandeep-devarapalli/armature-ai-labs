@@ -6,6 +6,8 @@
 
 # AGENTS.md
 
+- Ecosystem navigation release, 4 October 2026: implement and publish the selected Bar A + Layout 2. Minimize the floating explorer into a visible city/search/results bar, never an invisible panel. Keep search available in details and preserve filters, list scroll and map camera on Back to results. Present the readable city guide below the map with jump/back links, not a nested Read the starter guide accordion. Preserve global navigation, themes and all submission/review/data permissions; this release does not approve listings.
+
 - Ecosystem queue pagination, 3 October 2026: load every review beyond Supabase's per-request row limit in stable timestamp/ID batches, preserving all statuses, private-data permissions and whole-load error handling. Test tied timestamps and reviews beyond 1,000. Owner authorized merging and deploying this focused fix after checks pass; no listing approval or publication is authorized.
 
 - Ecosystem bulk-review correction, 3 October 2026: source directories are not substitutes for individual review entries. Reconcile the saved Bengaluru-only HardwareStory scrape and named Plum guide locations into individual private review proposals, with source-backed details, websites and actual Google Maps links where available. Flag missing, conflicting or non-Bangalore locations; never fabricate place links or verification. Preserve existing pending-edit locks and require admin approval before publication. The owner approved omitting individual notification emails for this import batch only and reporting one completion summary; normal contribution notifications remain unchanged.
