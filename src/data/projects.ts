@@ -347,6 +347,17 @@ export const projects: Project[] = [
     tags: ["artificial skin", "multitouch", "deformable input", "MuCa", "HCI"]
   },
   {
+    slug: "eflesh",
+    title: "eFlesh Magnetic Tactile Sensor",
+    category: "Tactile Sensing",
+    priority: "P2",
+    status: "Research Track",
+    description: "NYU's open-source touch sensor combines 3D-printed TPU microstructures, embedded magnets and a magnetometer board. A convex OBJ/STL design tool adapts it to fingertips, grippers and robot feet. Researchers report 95% slip-detection accuracy on unseen objects and 91% average success across four precise manipulation tasks; these are research results, not lab-validated guarantees.",
+    image: "/project-images/eflesh-official.webp",
+    sourceUrl: "https://e-flesh.com/",
+    tags: ["magnetic tactile", "TPU 95A", "3D printing", "MLX90393", "slip detection", "open source"]
+  },
+  {
     slug: "flexitac",
     title: "FlexiTac",
     category: "Tactile Sensing",

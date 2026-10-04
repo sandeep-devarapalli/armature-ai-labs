@@ -290,6 +290,35 @@ test("Atlas-inspired gripper links its reported hardware without claiming a rele
   }
 });
 
+test("eFlesh is discoverable as tactile sensing and links its complete provisional build list", async ({ page }) => {
+  await page.goto("/projects?layer=sensing&category=Tactile+Sensing&q=eFlesh");
+  const card = page.locator("#eflesh");
+  await expect(page.locator("#project-grid .project-card")).toHaveCount(1);
+  await expect(card.getByRole("heading", { name: "eFlesh Magnetic Tactile Sensor" })).toBeVisible();
+  await expect(card).toContainText("research results, not lab-validated guarantees");
+  await expect(card).toContainText("3 required");
+  await expect(card).toContainText("3 optional");
+  await expect(card.getByRole("link", { name: "Project source" })).toHaveAttribute("href", "https://e-flesh.com/");
+  await expect(card.getByRole("link", { name: /Image: eFlesh/ })).toHaveAttribute("href", "https://e-flesh.com/");
+  const cover = card.getByRole("img");
+  await cover.scrollIntoViewIfNeeded();
+  await expect.poll(() => cover.evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  await card.getByRole("link", { name: "Build components" }).click();
+  await expect(page.getByRole("heading", { name: "Build list for eFlesh Magnetic Tactile Sensor." })).toBeVisible();
+  for (const name of ["eFlesh TPU and magnet fabrication kit", "eFlesh five-magnetometer board", "eFlesh QT Py readout and wiring kit"]) {
+    await expect(page.getByRole("heading", { name, exact: true })).toBeVisible();
+  }
+  await expect(page.getByRole("heading", { name: /BNO055|PCA9685|OpenTouch/ })).toHaveCount(0);
+  await expectNoHorizontalOverflow(page);
+  await page.goto("/components/eflesh-printed-sensor-kit");
+  await expect(page.getByText(/covers magnets alone, not a complete sensor/)).toBeVisible();
+  await page.goto("/components/eflesh-magnetometer-board");
+  await expect(page.getByText(/obtain a GST-inclusive INR landed quote/)).toBeVisible();
+  await expect(page.getByRole("table")).toContainText("Unconfirmed");
+  await expect(page.locator('a[href="https://shop.wowrobo.com/products/eflesh-magnetometer-board"]')).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+});
+
 test("QDD actuator uses source media and separates its experimental control paths", async ({ page }) => {
   await page.goto("/projects?category=Actuator+Design&q=QDD");
   const card = page.locator("#quasi-direct-drive-actuator");
