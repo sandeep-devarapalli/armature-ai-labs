@@ -90,3 +90,36 @@ test("deep navigation survives an evicted service-worker app shell", async ({ pa
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   }
 });
+
+test("proxy analytics respects consent, private routes and withdrawal", async ({ page }, testInfo) => {
+  test.skip(process.env.VITE_ANALYTICS_ENABLED !== "true", "Requires the analytics-enabled fixture.");
+  // Exercise visitor capture locally; the SDK intentionally ignores automated browsers.
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "webdriver", { get: () => false });
+    Object.defineProperty(navigator, "userAgent", { value: navigator.userAgent.replace("HeadlessChrome", "Chrome") });
+    Object.defineProperty(navigator, "userAgentData", { value: undefined });
+  });
+  const requests: { url: string; body: string | null }[] = [];
+  await page.route(/^https:\/\/(?:[^/]+\.posthog\.com|z\.armatureailabs\.com)\//, async route => {
+    requests.push({ url: route.request().url(), body: route.request().postData() });
+    await route.fulfill({ status: 200, contentType: "application/json", body: "{}" });
+  });
+  await page.goto("/privacy?email=private@example.test#private");
+  await expect(page.getByRole("region", { name: "Optional website analytics" }).filter({ has: page.getByRole("button", { name: "Allow analytics", exact: true }) })).toBeVisible();
+  expect(requests).toEqual([]);
+  await page.getByRole("button", { name: "Allow analytics", exact: true }).click();
+  await expect.poll(() => requests.length).toBe(1);
+  expect(new URL(requests[0].url).origin).toBe("https://z.armatureailabs.com");
+  expect(JSON.stringify(requests)).not.toMatch(/private@example|email=|#private|\$set|\$session_id/);
+  await page.goto("/onboarding");
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await page.getByRole("button", { name: "Analytics settings", exact: true }).click();
+  await expect(page.getByRole("dialog")).toContainText("Analytics is allowed");
+  await page.screenshot({ path: testInfo.outputPath("proxy-consent-settings.png") });
+  expect(requests).toHaveLength(1);
+  await page.getByRole("button", { name: "Withdraw consent", exact: true }).click();
+  await page.goto("/privacy");
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  expect(await page.evaluate(() => localStorage.getItem("armature-analytics-consent"))).toBe("denied");
+  expect(requests).toHaveLength(1);
+});

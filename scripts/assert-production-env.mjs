@@ -44,7 +44,7 @@ for (const key of [
 }
 
 if (process.env.VITE_ANALYTICS_ENABLED === "true" && (
-  !process.env.VITE_POSTHOG_KEY?.startsWith("phc_") || process.env.VITE_POSTHOG_HOST !== "https://us.i.posthog.com"
+  !process.env.VITE_POSTHOG_KEY?.startsWith("phc_") || process.env.VITE_POSTHOG_HOST !== "https://z.armatureailabs.com"
 )) {
-  throw new Error("Enabled production analytics requires the Armature public PostHog token and US ingestion host.");
+  throw new Error("Enabled production analytics requires the Armature public PostHog token and approved managed proxy host.");
 }
