@@ -1,0 +1,105 @@
+.signup-editorial {
+  display: grid;
+  grid-template-columns: 54% 46%;
+  min-height: 720px;
+  border-bottom: 1px solid var(--hair);
+}
+
+.signup-editorial .signup-introduction {
+  padding: clamp(48px, 6vw, 96px) clamp(28px, 4vw, 64px);
+  color: #fff;
+  background: #111110;
+}
+
+.signup-introduction > .mono { font-size: 14px; }
+.signup-editorial .signup-introduction h1 {
+  margin: 32px 0 40px;
+  font-size: clamp(48px, 6.5vw, 104px);
+  line-height: 1;
+  letter-spacing: -.055em;
+}
+
+.signup-editorial .signup-lede {
+  max-width: 620px;
+  margin: 0;
+  color: #eee;
+  font-size: clamp(17px, 1.55vw, 24px);
+  line-height: 1.5;
+}
+
+.signup-next {
+  max-width: 660px;
+  margin-top: 52px;
+  padding-top: 32px;
+  border-top: 1px solid #777;
+  font-size: 17px;
+}
+.signup-next p { margin: 0 0 16px; max-width: 490px; }
+
+.signup-editorial .signup-panel {
+  --link: #995600;
+  --link-hover: #784400;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 64px;
+  min-width: 0;
+  padding: 64px clamp(28px, 4.5vw, 72px) 40px;
+  color: #111110;
+  background: #fff;
+  color-scheme: light;
+}
+
+.signup-form-content { width: 100%; max-width: 580px; margin: auto; }
+.signup-editorial .signup-panel h2 {
+  margin: 0 0 32px;
+  color: #111110;
+  font-size: clamp(28px, 3vw, 46px);
+  line-height: 1.12;
+  letter-spacing: -.035em;
+}
+.signup-editorial .signup-panel .button {
+  width: 100%;
+  min-height: 60px;
+  padding: 14px 16px;
+  border-radius: 4px;
+  font-size: 16px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.signup-editorial .signup-google { color: #111110; background: #fff; border: 1px solid #111110; }
+.signup-editorial .signup-google-mark { width: 20px; height: 20px; flex-shrink: 0; }
+.signup-editorial .signup-google:hover { background: #f4f4f2; }
+.signup-editorial .signup-submit { margin-top: 24px; color: #fff; background: #111110; border: 1px solid #111110; }
+.signup-editorial .signup-submit:hover { color: #fff; background: #30302e; }
+.signup-editorial .signup-panel .button:disabled { opacity: .55; cursor: not-allowed; }
+.signup-divider { display: flex; align-items: center; gap: 22px; margin: 28px 0; }
+.signup-divider::before, .signup-divider::after { content: ""; height: 1px; flex: 1; background: #b7b7b4; }
+.signup-editorial .signup-panel .field { color: #111110; font-size: 16px; font-weight: 400; }
+.signup-editorial .signup-panel input { min-height: 60px; color: #111110; background: #fff; border: 1px solid #a4a4a0; border-radius: 0; padding: 16px 20px; font-size: 16px; }
+.signup-editorial .signup-panel input::placeholder { color: #73736f; }
+.signup-editorial .signup-panel a, .signup-editorial .signup-demo-login { color: #995600; text-decoration: underline; text-underline-offset: 4px; }
+.signup-editorial .signup-panel a:hover, .signup-editorial .signup-demo-login:hover { color: #784400; }
+.signup-editorial .signup-panel :focus-visible { outline: 2px solid #995600; outline-offset: 4px; }
+.signup-password-note { margin: 10px 0 0; color: #62625e; font-size: 13px; }
+.signup-existing { margin: 36px 0 0; font-size: 15px; }
+.signup-fine-print { width: 100%; max-width: 580px; margin: 0 auto; color: #62625e; font-size: 12px; line-height: 1.7; }
+.signup-error, .signup-notice, .signup-demo-note { margin: 16px 0; padding: 12px; font-size: 14px; border: 1px solid currentColor; }
+.signup-error { color: #9e2924; }
+.signup-notice { color: #31542b; }
+.signup-demo-note { color: #62625e; }
+.signup-demo-login { margin-top: 24px; }
+
+@media (max-width: 760px) {
+  .signup-editorial { grid-template-columns: 1fr; min-height: 0; }
+  .signup-editorial .signup-introduction { padding: 36px 24px; }
+  .signup-editorial .signup-introduction h1 { margin: 20px 0 24px; font-size: clamp(42px, 10.5vw, 72px); }
+  .signup-editorial .signup-lede { font-size: 16px; }
+  .signup-next { margin-top: 28px; padding-top: 20px; font-size: 14px; }
+  .signup-next p:last-child { margin-bottom: 0; }
+  .signup-editorial .signup-panel { gap: 40px; padding: 36px 24px; }
+  .signup-editorial .signup-panel h2 { font-size: 30px; margin-bottom: 24px; }
+  .signup-editorial .signup-panel .button { min-height: 52px; font-size: 14px; }
+  .signup-editorial .signup-panel input { min-height: 52px; }
+  .signup-existing { margin-top: 28px; font-size: 14px; }
+}

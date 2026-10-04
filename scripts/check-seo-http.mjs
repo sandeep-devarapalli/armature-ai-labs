@@ -71,7 +71,7 @@ for (const [pathname, destination, search] of [["/membership/", "/join/", ""], [
   });
 }
 
-for (const pathname of ["/auth/", "/admin/members/", "/admin/equipment", "/admin/equipment/", "/book/sample-resource/", "/components/request/", "/members/", "/members/seo-check-no-profile/"]) {
+for (const pathname of ["/onboarding", "/onboarding/", "/auth/", "/admin/members/", "/admin/equipment", "/admin/equipment/", "/book/sample-resource/", "/components/request/", "/members/", "/members/seo-check-no-profile/"]) {
   await probe(pathname, (response, text, document) => {
     assert.equal(response.status, 200, "Known operational/member route should remain reachable");
     noindex(response, document);
@@ -97,7 +97,7 @@ await probe("/sitemap.xml", (response, text) => {
     assert.ok(urls.length >= 13, "Sitemap is missing public content");
     for (const url of urls) {
       assert.equal(url.origin, canonicalOrigin);
-      assert.doesNotMatch(url.pathname, /^\/(?:admin|auth|dashboard|profile|book|bookings|check-in|financials|kiosk|inventory|lockers|consumables|toolkits|component-requests|members|membership|equipment|procurement)(?:\/|$)|^\/components\/request\//);
+      assert.doesNotMatch(url.pathname, /^\/(?:admin|auth|onboarding|dashboard|profile|book|bookings|check-in|financials|kiosk|inventory|lockers|consumables|toolkits|component-requests|members|membership|equipment|procurement)(?:\/|$)|^\/components\/request\//);
     }
   } finally {
     xml.window.close();

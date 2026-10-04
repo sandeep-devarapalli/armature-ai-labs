@@ -1,3 +1,4 @@
+import { authDesignPreviewEnabled } from "../config/authDesignPreview";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type { Database } from "../types/database";
 
@@ -14,7 +15,7 @@ export const isSupabaseConfigured = Boolean(url && publishableKey);
 export const isBackendAvailable = demoModeEnabled || isSupabaseConfigured;
 
 export const supabase: SupabaseClient<Database> | null =
-  !import.meta.env.SSR && url && publishableKey
+  !authDesignPreviewEnabled && !import.meta.env.SSR && url && publishableKey
     ? createClient<Database>(url, publishableKey, {
         auth: {
           persistSession: true,

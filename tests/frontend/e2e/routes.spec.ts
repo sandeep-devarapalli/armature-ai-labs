@@ -973,7 +973,7 @@ test("financials is hidden publicly and available to an admin", async ({ page })
 
   await page.goto("/financials");
   await expect(page).toHaveURL(/\/auth$/);
-  await expect(page.getByRole("heading", { name: "Create your member account." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Join Armature AI Labs." })).toBeVisible();
   await page.getByRole("button", { name: "Open the local member demo" }).click();
 
   await expect(page).toHaveURL(/\/financials$/);
