@@ -6,6 +6,8 @@
 
 # AGENTS.md
 
+- Project reference release approved, 4 October 2026: the owner confirmed the Atlas-inspired gripper and Quasi-Direct-Drive Actuator references are open-source projects and explicitly requested deployment. Publish these two attributed catalog entries and their provisional component lists after normal CI checks; do not impose a further local-preview hold for absent license metadata. Preserve exact source provenance without inventing a specific license, and retain technical build limitations and unverified procurement details. This approval does not change membership or payment gates.
+
 - Resource supplier release authorized, 4 October 2026: the owner approved taking the checked 53 supplier/service entries plus MakerVille directory live in the Resource Library. Merge after CI passes and use the existing production workflow, retaining the five source/access caveats and CopperPilot-first ordering. This does not authorize ecosystem database approvals, map publication or payment/platform changes.
 
 - Resource supplier scope clarification, 4 October 2026: include individual suppliers and fabrication/design services discovered through MakerVille, not only a link to its directory. Deduplicate overlapping businesses and normalize names against official sites. Preserve source/access caveats, distinguish a Maps listing from a website, and do not infer Bangalore premises or live stock from an online catalog. Keep CopperPilot first; supplier research does not authorize deployment or ecosystem database publication.
