@@ -6,6 +6,12 @@
 
 # AGENTS.md
 
+- Resource Library release authorized, 4 October 2026: the owner approved merging and deploying the checked Resource Library, visible page-heading hierarchy and CopperPilot-first ordering. Use the existing production workflow after CI passes and verify the live page. This does not approve or publish ecosystem listings or change platform/payment gates.
+
+- Resource priority correction, 4 October 2026: the owner prioritizes CopperPilot as a partner over copperhead. Show CopperPilot first in the Resource Library default list and Electronics & PCB category; retain copperhead in the searchable catalogue without making it the lead resource. Do not infer sponsorship terms or alter technical capability claims from this ordering preference.
+
+- Ecosystem heading hierarchy and Resource Library, 4 October 2026: keep one visible `Bangalore ecosystem` h1 before the map, outside all collapsible/detail panels. The starter guide and selected Resource Library below it are peer h2 sections, with smaller h3 chapter/resource headings and quiet supporting labels. Use the approved compact 36/28/18–20px desktop scale, preserve existing navigation/themes and map behaviour, and never make a lower section look like a second page title. Resource search is independent of company search. Implementation approval does not authorize deployment or listing publication.
+
 - Ecosystem navigation release, 4 October 2026: implement and publish the selected Bar A + Layout 2. Minimize the floating explorer into a visible city/search/results bar, never an invisible panel. Keep search available in details and preserve filters, list scroll and map camera on Back to results. Present the readable city guide below the map with jump/back links, not a nested Read the starter guide accordion. Preserve global navigation, themes and all submission/review/data permissions; this release does not approve listings.
 
 - Ecosystem queue pagination, 3 October 2026: load every review beyond Supabase's per-request row limit in stable timestamp/ID batches, preserving all statuses, private-data permissions and whole-load error handling. Test tied timestamps and reviews beyond 1,000. Owner authorized merging and deploying this focused fix after checks pass; no listing approval or publication is authorized.

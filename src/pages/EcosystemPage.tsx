@@ -4,6 +4,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { EcosystemMap } from "../components/EcosystemMap";
 import { EcosystemPlaceDetails } from "../components/EcosystemPlaceDetails";
 import { EcosystemContributionForm } from "../components/EcosystemContributionForm";
+import ResourceLibrary from "../components/ecosystem/ResourceLibrary";
 import { ecosystemSectors } from "../data/bengaluruEcosystem";
 import { ecosystemCities, guideChapters } from "../data/ecosystemGuide";
 import { ecosystemNeeds, ecosystemTypes, ecosystemTypeLabels, getEcosystemListings, type EcosystemListing } from "../lib/ecosystem";
@@ -134,6 +135,7 @@ export function EcosystemPage() {
     return <article key={item.slug} className="atlas-card"><button className="atlas-listing" onClick={() => select(item.slug)}><Building2 aria-hidden="true" /><span><strong>{item.data.name}</strong><small>{item.data.subcategory || ecosystemTypeLabels[item.data.primaryType]}</small><span>{item.data.summary}</span></span><ChevronRight aria-hidden="true" /></button><div className="atlas-card-actions"><button onClick={() => select(item.slug)}>View details <ArrowUpRight /></button><button onClick={() => contribute(item)} aria-label={`Suggest an edit / Add details for ${item.data.name}`}><Pencil />Suggest an edit</button></div></article>;
   }
   return <div className="ecosystem-page builder-atlas">
+    <header className="atlas-page-heading"><h1>Bangalore ecosystem</h1></header>
     <section id="ecosystem-map" tabIndex={-1} ref={explorerRef} aria-label="Explore the ecosystem" className="atlas-explorer" data-collapsed={collapsed} data-detail={Boolean(selected)} data-sheet-expanded={sheetExpanded}>
       <div className="atlas-map"><EcosystemMap entities={entities} selectedSlug={focus} onSelect={select} /></div>
       <div className="atlas-submit"><button className="button atlas-primary" onClick={() => contribute()}><PlusCircle aria-hidden="true" />Submit a startup or place</button><small>No login required · Admin approval before publishing</small></div>
@@ -150,7 +152,7 @@ export function EcosystemPage() {
         <button className="atlas-sheet-toggle" aria-expanded={sheetExpanded} onClick={() => setSheetExpanded(!sheetExpanded)}><ChevronDown />{sheetExpanded ? "Show more map" : "Expand results & details"}</button>
         {selected && <EcosystemPlaceDetails listing={selected} onBack={() => select(null)} onEdit={() => contribute(selected)} />}
         <aside hidden={Boolean(selected)} ref={guideRef} tabIndex={-1} className="atlas-directory" aria-label="Ecosystem listings">
-          <h1>Bangalore ecosystem</h1><p className="atlas-intro">{city.intro} For robotics, hardware and the wider startup community.</p>
+          <p className="atlas-intro">{city.intro} For robotics, hardware and the wider startup community.</p>
           {params.get("city") && params.get("city") !== city.id && <p role="status">Bangalore is our first city guide. Other cities are not available yet.</p>}
           <details className="atlas-filter-disclosure"><summary><SlidersHorizontal />More filters{type || need || sector ? " · active" : ""}</summary><div className="atlas-types" role="group" aria-label="Listing type">{ecosystemTypes.map(value => <button key={value} aria-pressed={type === value} onClick={() => setFilter("type", type === value ? "" : value)}>{ecosystemTypeLabels[value]}</button>)}</div><div className="atlas-needs" role="group" aria-label="What do you need?"><span>What do you need?</span>{ecosystemNeeds.map(value => <button key={value} aria-pressed={need === value} onClick={() => setFilter("need", need === value ? "" : value)}>{value}</button>)}<label><span className="sr-only">Sector</span><select value={sector} onChange={event => setFilter("sector", event.target.value)}><option value="">All sectors</option>{ecosystemSectors.map(value => <option key={value}>{value}</option>)}</select></label></div></details>
           {!browsingGuide && <button className="atlas-text-button" onClick={() => { const next = new URLSearchParams(params); ["topic", "type", "need", "sector", "q"].forEach(key => next.delete(key)); setParams(next); }}>Clear filters</button>}
@@ -174,6 +176,7 @@ export function EcosystemPage() {
       <article aria-label={chapter.title}><div><h3>{chapter.title}</h3><p>{chapter.intro}</p>{chapter.paragraphs.map(paragraph => <p key={paragraph}>{paragraph}</p>)}</div><aside aria-label="Useful links"><h3>Explore further</h3><div className="atlas-reading-links">{chapter.sources.map(source => <a key={source.url} href={source.url} target="_blank" rel="noreferrer">{source.label}<ArrowUpRight /></a>)}</div><button className="atlas-text-button" onClick={() => { const next = new URLSearchParams(params); ["q", "type", "need", "sector", "focus"].forEach(key => next.delete(key)); next.set("topic", chapter.id === "work-meet" ? "workspaces" : chapter.id); setParams(next); setCollapsed(false); setTourActive(false); jumpTo("ecosystem-map"); }}>Explore {chapter.id === "work-meet" ? "workspaces" : chapter.title.toLowerCase()} on the map <ArrowUpRight /></button></aside></article>
     </section>
     {contribution !== null && <div ref={formRef} id="contribute" className="atlas-form-anchor" tabIndex={-1}>{params.has("edit") && !editTarget ? <div role="alert"><p>{loading ? "Loading the listing…" : "This listing is no longer available. Start a new suggestion instead."}</p><button className="button" onClick={() => contribute()}>New suggestion</button><button className="button" onClick={closeContribution}>Close</button></div> : <EcosystemContributionForm key={`${editTarget?.slug ?? "new"}-${contribution}-${draftVersion}`} initialListing={editTarget ?? null} initialType={contribution} listings={listings} onClose={closeContribution} />}</div>}
+    <ResourceLibrary />
     <p className="atlas-privacy"><Link to="/privacy#privacy-ecosystem">How we handle contributions and contact details</Link></p>
   </div>;
 }
