@@ -11,6 +11,107 @@ export const OFFER_STALE_AFTER_DAYS = 30;
 
 export const components: CatalogComponent[] = [
   {
+    slug: "qdd-8110-motor-materials",
+    name: "QDD 8110 custom motor materials",
+    category: "Motion",
+    description: "One 8110 stator core, enameled copper wire, 42 N52 12 x 5 x 3 mm magnets and bonding materials per actuator, following Seo Jin Jeong's published 36-slot/42-pole motor design.",
+    inventoryClass: "reusable_tray",
+    availability: "unavailable",
+    validationState: "source_required",
+    quantityTarget: 6,
+    quantityUnit: "motor material sets",
+    tags: ["QDD", "8110 stator", "36N42P", "N52 magnets", "motor winding"],
+    validationNotes: [
+      "Planning target: five paired-station builds plus one spare set, rounding 15% motion-part spares up. Qualify one prototype before scaling; these are not commissioned lab assets.",
+      "The README specifies 0.4 mm wire, six parallel strands and five turns per tooth in a star winding; off-the-shelf-list.md specifies 0.41 mm wire. Resolve wire diameter, insulation, winding and magnet fit before PO.",
+      "The author reports rotor alignment, missing back-iron and copper-fill limitations. Verify rotor retention, air gap, insulation and thermal limits on a guarded fixture; reported peak results are not continuous-duty or human-contact safety ratings."
+    ]
+  },
+  {
+    slug: "qdd-cycloidal-mechanical-set",
+    name: "QDD 10:1 cycloidal mechanical set",
+    category: "Fabrication",
+    description: "Dual cycloidal discs, rotor and shafts using CNC aluminum and printed housings, with bearings, bushings and output pins for the documented actuator prototype. This is not a fully printed gearbox.",
+    inventoryClass: "reusable_tray",
+    availability: "unavailable",
+    validationState: "source_required",
+    quantityTarget: 6,
+    quantityUnit: "mechanical sets",
+    tags: ["QDD", "10:1", "cycloidal reducer", "Aluminum 6061", "PA12-CF"],
+    validationNotes: [
+      "Upstream lists two 40 x 50 x 6 mm, one 20 x 27 x 4 mm and four 10 x 15 x 4 mm bearings; twelve D4 x M2 x L5 bushings; and six M2 x 20 mm shafts per actuator. Confirm tolerances, fasteners and supplier variants before fabrication.",
+      "At reviewed commit 5ca10b6, cad-designs.md contains drawings/assembly images, but no STEP/STL package or repository license was found. Obtain editable geometry, machining drawings and reuse terms before ordering custom parts.",
+      "Six sets allow five paired-station builds plus one motion-part spare. Check shaft rigidity, bearing fits, runout, backlash and guarded low-speed operation before load testing."
+    ]
+  },
+  {
+    slug: "qdd-moteus-control-kit",
+    name: "QDD moteus-c1 control and power kit",
+    category: "Controllers",
+    description: "One mjbots moteus-c1 FOC controller per actuator, with a matched 24 V bench supply, encoder setup, host/CAN-FD interface and protected wiring to be specified for the prototype's control path.",
+    inventoryClass: "reusable_tray",
+    availability: "unavailable",
+    validationState: "source_required",
+    quantityTarget: 6,
+    quantityUnit: "control kits",
+    tags: ["QDD", "moteus-c1", "FOC", "24 V", "CAN-FD"],
+    validationNotes: [
+      "Five shared-station kits plus one spare is a planning target. Verify the exact c1 revision, manufacturer voltage/current limits, encoder-magnet placement, CAN-FD interface and firmware before purchasing; no INR quote or lab stock is confirmed. Controller peak ratings are not actuator continuous-duty ratings; cooling remains to be specified.",
+      "The README and parts list use moteus-c1, but the released Arduino angle example uses SimpleFOC, AS5600 and DRV8302-style ESP32 wiring. These are distinct control paths, not drop-in substitutes or ready-to-flash moteus firmware.",
+      "Size the supply, current limits, fuse, isolation, physical power disconnect and regenerative-energy handling as a reviewed system. Start on a guarded test fixture; do not infer safe human interaction from back-drivability."
+    ]
+  },
+  {
+    slug: "feetech-scs0009-servo",
+    name: "FeeTech SCS0009 serial bus servo",
+    category: "Motion",
+    description: "Micro serial-bus servo reported in Nikodem Bartnik's Atlas-inspired gripper: seven motors per hand. Exact electrical and mechanical specifications require manufacturer confirmation.",
+    inventoryClass: "reusable_tray",
+    availability: "unavailable",
+    validationState: "source_required",
+    quantityTarget: 41,
+    quantityUnit: "servos",
+    tags: ["Atlas-inspired gripper", "SCS0009", "serial bus", "provisional BOM"],
+    validationNotes: [
+      "Hackster identifies seven SCS0009 servos per gripper. Planning target: five paired-station builds x seven motors, plus 15% spares rounded up to six; not an approved purchase.",
+      "Verify voltage, current, bus protocol, connectors, travel and mounting before PO. SG90/MG995 PWM servos and PCA9685 drivers are not verified substitutes.",
+      "The article's torque figure lacks a complete unit; no payload or gripping-force rating is established. CAD/code availability and reuse terms remain unverified."
+    ]
+  },
+  {
+    slug: "atlas-gripper-control-vision-kit",
+    name: "Atlas-inspired gripper control and webcam kit",
+    category: "Controllers",
+    description: "Reported Seeed Studio XIAO Bus Driver Board and webcam-based hand tracking, with a compatible controller, host computer, cabling and matched power supply to be confirmed from the builder's wiring and software.",
+    inventoryClass: "reusable_tray",
+    availability: "unavailable",
+    validationState: "source_required",
+    quantityTarget: 6,
+    quantityUnit: "station kits",
+    tags: ["Atlas-inspired gripper", "XIAO Bus Driver Board", "webcam", "provisional BOM"],
+    validationNotes: [
+      "Five shared stations plus one spare control kit is a planning target. Reuse suitable lab computers and cameras; do not purchase six additional computers without checking inventory.",
+      "Hackster does not specify the XIAO MCU variant, webcam model, supply rating or software dependencies. Confirm these and access to the original code before ordering.",
+      "No force/contact sensing is reported. Bench-test conservative motion limits, tracking-loss behavior and a physical power disconnect with fingers clear of the mechanism."
+    ]
+  },
+  {
+    slug: "atlas-gripper-printed-mechanics",
+    name: "Atlas-inspired gripper printed mechanics",
+    category: "Fabrication",
+    description: "Printed palm and finger mechanisms with assembly fasteners for the independent gripper. Hackster describes an FDM prototype followed by a resin-printed version; the exact geometry and hardware list remain to be obtained.",
+    inventoryClass: "reusable_tray",
+    availability: "unavailable",
+    validationState: "source_required",
+    quantityTarget: 5,
+    quantityUnit: "mechanical sets",
+    tags: ["Atlas-inspired gripper", "FDM", "resin printing", "provisional BOM"],
+    validationNotes: [
+      "Plan one set per paired station only after obtaining usable CAD/STL files, assembly dimensions, fastener sizes and applicable reuse terms. This is not a released Boston Dynamics design.",
+      "Qualify servo fit, joint clearance and pinch hazards on one prototype before scaling. Resin fabrication needs a supervised wash/cure process and material-specific handling controls; do not assume FDM and resin parts are interchangeable."
+    ]
+  },
+  {
     slug: "bambu-lab-p2s",
     name: "Bambu Lab P2S enclosed FDM printer",
     category: "Fabrication",
@@ -2806,6 +2907,11 @@ export const projectComponentLinks: ProjectComponentLink[] = [
   ["openactuator", "electronics-bench", "required"],
   ["openactuator", "openactuator-coil-winder-v12", "optional"],
   ["openactuator", "bambu-lab-a1", "optional"],
+  ["quasi-direct-drive-actuator", "qdd-8110-motor-materials", "required"],
+  ["quasi-direct-drive-actuator", "qdd-cycloidal-mechanical-set", "required"],
+  ["quasi-direct-drive-actuator", "qdd-moteus-control-kit", "required"],
+  ["quasi-direct-drive-actuator", "electronics-bench", "optional"],
+  ["quasi-direct-drive-actuator", "force-torque-starter", "optional"],
   ["electrofluidic-fiber-muscles", "efm-fiber-winding-fixture", "required"],
   ["electrofluidic-fiber-muscles", "efm-fiber-pump-materials", "required"],
   ["electrofluidic-fiber-muscles", "efm-mckibben-materials", "required"],
@@ -2967,6 +3073,10 @@ export const projectComponentLinks: ProjectComponentLink[] = [
   ["amazinghand", "bambu-lab-p1s-combo", "optional"],
   ["amazinghand", "pca9685-servo-driver", "required"],
   ["amazinghand", "sg90-servo", "alternative"],
+  ["atlas-inspired-gripper", "feetech-scs0009-servo", "required"],
+  ["atlas-inspired-gripper", "atlas-gripper-control-vision-kit", "required"],
+  ["atlas-inspired-gripper", "atlas-gripper-printed-mechanics", "required"],
+  ["atlas-inspired-gripper", "electronics-bench", "optional"],
   ["dexhand-v1", "3d-printing-stock", "required"],
   ["dexhand-v1", "bambu-lab-a1", "required"],
   ["dexhand-v1", "bambu-lab-p1s-combo", "optional"],

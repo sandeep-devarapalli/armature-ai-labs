@@ -137,6 +137,17 @@ export const projects: Project[] = [
     tags: ["LinearVCM", "electromagnetics", "FreeCAD", "open hardware"]
   },
   {
+    slug: "quasi-direct-drive-actuator",
+    title: "Quasi-Direct-Drive Actuator",
+    category: "Actuator Design",
+    priority: "P2",
+    status: "Research Track",
+    description: "Seo Jin Jeong's experimental actuator combines a custom 8110 BLDC motor, 10:1 cycloidal reducer, and moteus-c1 FOC control. CNC aluminum and printed mechanics; the author flags rigidity and torque-density limits in this first prototype.",
+    image: "/project-images/quasi-direct-drive-actuator-official.jpg",
+    sourceUrl: "https://github.com/JeongSeoJin/quasi-direct-drive-actuator",
+    tags: ["QDD", "cycloidal reducer", "BLDC", "moteus-c1", "motor winding", "prototype"]
+  },
+  {
     slug: "electrofluidic-fiber-muscles",
     title: "Electrofluidic Fiber Muscles",
     category: "Soft Robotics",
@@ -422,6 +433,17 @@ export const projects: Project[] = [
     image: "/project-images/amazinghand-official.jpg",
     sourceUrl: "https://github.com/pollen-robotics/AmazingHand",
     tags: ["3D printing", "hand"]
+  },
+  {
+    slug: "atlas-inspired-gripper",
+    title: "DIY Atlas-Inspired Gripper",
+    category: "Robotic Hands",
+    priority: "P2",
+    status: "Research Track",
+    description: "Nikodem Bartnik's independent Atlas-inspired gripper: Hackster reports seven SCS0009 servos, printed mechanics, and webcam hand tracking. A grasp-control study with no reported force or contact sensing; downloadable build files remain unverified.",
+    image: "/project-images/atlas-inspired-gripper-official.jpg",
+    sourceUrl: "https://www.hackster.io/news/cheaply-recreating-the-ugly-boston-dynamics-robot-hand-0007997bd99f",
+    tags: ["Nikodem Bartnik", "Boston Dynamics inspiration", "SCS0009", "XIAO", "3D printing", "hand tracking"]
   },
   {
     slug: "dexhand-v1",
