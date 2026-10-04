@@ -6,6 +6,10 @@
 
 # AGENTS.md
 
+- Resource supplier release authorized, 4 October 2026: the owner approved taking the checked 53 supplier/service entries plus MakerVille directory live in the Resource Library. Merge after CI passes and use the existing production workflow, retaining the five source/access caveats and CopperPilot-first ordering. This does not authorize ecosystem database approvals, map publication or payment/platform changes.
+
+- Resource supplier scope clarification, 4 October 2026: include individual suppliers and fabrication/design services discovered through MakerVille, not only a link to its directory. Deduplicate overlapping businesses and normalize names against official sites. Preserve source/access caveats, distinguish a Maps listing from a website, and do not infer Bangalore premises or live stock from an online catalog. Keep CopperPilot first; supplier research does not authorize deployment or ecosystem database publication.
+
 - Resource Library release authorized, 4 October 2026: the owner approved merging and deploying the checked Resource Library, visible page-heading hierarchy and CopperPilot-first ordering. Use the existing production workflow after CI passes and verify the live page. This does not approve or publish ecosystem listings or change platform/payment gates.
 
 - Resource priority correction, 4 October 2026: the owner prioritizes CopperPilot as a partner over copperhead. Show CopperPilot first in the Resource Library default list and Electronics & PCB category; retain copperhead in the searchable catalogue without making it the lead resource. Do not infer sponsorship terms or alter technical capability claims from this ordering preference.
