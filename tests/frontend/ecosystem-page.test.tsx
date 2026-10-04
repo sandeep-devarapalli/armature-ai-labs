@@ -18,6 +18,7 @@ function HistoryControls() {
   return <><output aria-label="Current URL">{location.pathname}{location.search}</output><button onClick={() => navigate(-1)}>History back</button><button onClick={() => navigate(1)}>History forward</button></>;
 }
 function setup(path = "/ecosystem") { return render(<MemoryRouter initialEntries={[path]}><HistoryControls /><EcosystemPage /></MemoryRouter>); }
+const mapSearch = () => screen.getByRole("searchbox", { name: "Search startups, places, capabilities or neighbourhoods" });
 beforeEach(() => { vi.clearAllMocks(); vi.mocked(getEcosystemListings).mockResolvedValue(records); Element.prototype.scrollIntoView = vi.fn(); });
 
 it("fills optional fields for sparse approved data without adding dates, pins or stale records", () => {
@@ -45,10 +46,10 @@ it("applies query, type, need and focus from a shareable URL", async () => {
   setup("/ecosystem?q=parts&type=supplier&need=source&focus=fixture-parts");
   await screen.findByRole("heading", { name: "Fixture Parts" });
   expect(screen.getByRole("article", { name: "Fixture Parts details" })).toHaveFocus();
-  expect(screen.getByRole("searchbox")).toHaveValue("parts");
+  expect(mapSearch()).toHaveValue("parts");
   fireEvent.click(screen.getByRole("button", { name: "Back to results" }));
   fireEvent.click(screen.getByText(/More filters/));
-  expect(screen.getByRole("searchbox")).toHaveValue("parts");
+  expect(mapSearch()).toHaveValue("parts");
   expect(screen.getByRole("button", { name: "Suppliers" })).toHaveAttribute("aria-pressed", "true");
   expect(screen.getByRole("button", { name: "source" })).toHaveAttribute("aria-pressed", "true");
   expect(screen.getByText("1 results · 1 on map")).toBeInTheDocument();
@@ -70,7 +71,7 @@ it("restores filters and selection through browser history", async () => {
   expect(screen.getByRole("button", { name: "Suppliers" })).toHaveAttribute("aria-pressed", "true");
   fireEvent.click(screen.getByRole("button", { name: "History forward" }));
   expect(screen.getByRole("button", { name: "source" })).toHaveAttribute("aria-pressed", "true");
-  fireEvent.change(screen.getByRole("searchbox"), { target: { value: "SP Road" } });
+  fireEvent.change(mapSearch(), { target: { value: "SP Road" } });
   expect(screen.getByLabelText("Current URL")).toHaveTextContent("q=SP+Road");
 });
 
@@ -117,7 +118,7 @@ it("retains filters and result scroll when returning from a listing", async () =
   fireEvent.click(within(guide).getByRole("button", { name: /^Fixture Robotics/ }));
   expect(guide).not.toBeVisible();
   expect(screen.getByRole("article", { name: "Fixture Robotics details" })).toHaveFocus();
-  expect(screen.getByRole("searchbox")).toBeVisible();
+  expect(mapSearch()).toBeVisible();
   fireEvent.click(screen.getByRole("button", { name: "Back to results" }));
   expect(guide).toBeVisible();
   expect(filters.open).toBe(true);
@@ -130,18 +131,18 @@ it("keeps a searchable roll-up bar and restores results without losing filters",
   const results = screen.getByRole("complementary", { name: "Ecosystem listings" });
   fireEvent.click(screen.getByRole("button", { name: "Minimize to bar" }));
   expect(results).not.toBeVisible();
-  expect(screen.getByRole("searchbox")).toBeVisible();
+  expect(mapSearch()).toBeVisible();
   fireEvent.click(within(document.querySelector(".atlas-search-toolbar") as HTMLElement).getByRole("button", { name: "Show results" }));
   expect(results).toBeVisible();
   fireEvent.click(screen.getByRole("button", { name: "Minimize to bar" }));
-  fireEvent.change(screen.getByRole("searchbox"), { target: { value: "parts" } });
+  fireEvent.change(mapSearch(), { target: { value: "parts" } });
   expect(screen.getByLabelText("Current URL")).toHaveTextContent("q=parts");
   expect(screen.getByLabelText("Current URL")).toHaveTextContent("type=supplier");
   expect(screen.getByLabelText("Current URL")).toHaveTextContent("need=source");
   expect(results).toBeVisible();
-  expect(screen.getByRole("searchbox")).toHaveValue("parts");
+  expect(mapSearch()).toHaveValue("parts");
   fireEvent.click(within(results).getByRole("button", { name: /^Fixture Parts/ }));
-  fireEvent.change(screen.getByRole("searchbox"), { target: { value: "SP Road" } });
+  fireEvent.change(mapSearch(), { target: { value: "SP Road" } });
   expect(screen.queryByRole("article", { name: "Fixture Parts details" })).not.toBeInTheDocument();
   expect(results).toBeVisible();
   expect(screen.getByLabelText("Current URL")).not.toHaveTextContent("focus=");
@@ -164,4 +165,37 @@ it("keeps readable guide chapters below the map, without advertising or a city s
   expect(document.getElementById("ecosystem-map")).toHaveFocus();
   expect(screen.queryByText(/Advertising space|Advertise here|Place a bid|Ad enquiry/i)).not.toBeInTheDocument();
   expect(screen.queryByRole("combobox", { name: /city/i })).not.toBeInTheDocument();
+});
+
+it("keeps one visible page title above the map across results, details and minimization", async () => {
+  setup(); await screen.findByText("2 results · 1 on map");
+  const title = screen.getByRole("heading", { level: 1, name: "Bangalore ecosystem" });
+  const assertPageTitle = () => {
+    expect(document.querySelectorAll("h1")).toHaveLength(1);
+    expect(title).toBeVisible();
+    expect(document.getElementById("ecosystem-map")?.contains(title)).toBe(false);
+  };
+  assertPageTitle();
+  fireEvent.click(screen.getByRole("button", { name: "Minimize to bar" }));
+  assertPageTitle();
+  fireEvent.click(within(document.querySelector(".atlas-search-toolbar") as HTMLElement).getByRole("button", { name: "Show results" }));
+  fireEvent.click(within(screen.getByRole("complementary", { name: "Ecosystem listings" })).getByRole("button", { name: /^Fixture Robotics/ }));
+  assertPageTitle();
+  fireEvent.click(screen.getByRole("button", { name: "Back to results" }));
+  assertPageTitle();
+});
+
+it("places guide and resources at the same heading level and keeps resource filters independent", async () => {
+  setup("/ecosystem?q=parts&type=supplier&chapter=build-source"); await screen.findByText("1 results · 1 on map");
+  const guideHeading = screen.getByRole("heading", { level: 2, name: "Bangalore starter guide" });
+  const resourcesHeading = screen.getByRole("heading", { level: 2, name: "Tools & resources for builders" });
+  expect(guideHeading.compareDocumentPosition(resourcesHeading) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  expect(screen.getByRole("heading", { level: 3, name: "Build & source" })).toBeVisible();
+  const url = screen.getByLabelText("Current URL").textContent;
+  fireEvent.change(screen.getByRole("searchbox", { name: "Search tools, workflows and resources" }), { target: { value: "build123d" } });
+  fireEvent.click(screen.getByRole("button", { name: "Mechanical CAD" }));
+  expect(mapSearch()).toHaveValue("parts");
+  expect(screen.getByLabelText("Current URL")).toHaveTextContent(url!);
+  expect(screen.getByText("1 results · 1 on map")).toBeVisible();
+  expect(screen.getByRole("heading", { level: 3, name: "build123d" })).toBeVisible();
 });

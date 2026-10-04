@@ -56,7 +56,7 @@ describe("public source and planning context", () => {
   it("retains filtering, linked organisation selection and the current public source", async () => {
     render(<MemoryRouter initialEntries={["/ecosystem/"]}><EcosystemPage /></MemoryRouter>);
     await screen.findByText(`${bengaluruEcosystem.length} results`, { exact: false });
-    fireEvent.change(screen.getByRole("searchbox"), { target: { value: "Bellatrix" } });
+    fireEvent.change(screen.getByRole("searchbox", { name: "Search startups, places, capabilities or neighbourhoods" }), { target: { value: "Bellatrix" } });
     expect(await screen.findByText(/1 results ·/)).toBeInTheDocument();
     const directory = screen.getByRole("complementary", { name: "Ecosystem listings" });
     fireEvent.click(within(directory).getByText("Bellatrix Aerospace"));
@@ -67,7 +67,7 @@ describe("public source and planning context", () => {
     fireEvent.click(screen.getByRole("button", { name: "Back to results" }));
     expect(screen.queryByRole("heading", { name: "Bellatrix Aerospace" })).not.toBeInTheDocument();
     expect(directory).toBeVisible();
-    expect(screen.getByRole("searchbox")).toHaveValue("Bellatrix");
+    expect(screen.getByRole("searchbox", { name: "Search startups, places, capabilities or neighbourhoods" })).toHaveValue("Bellatrix");
     expect(within(directory).getByText("Bellatrix Aerospace")).toBeVisible();
   });
 
