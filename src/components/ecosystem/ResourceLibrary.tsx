@@ -4,7 +4,7 @@ import { builderProjects, builderResources, resourceCategories, type ResourceCat
 import "./ResourceLibrary.css";
 
 const icons = { all: LayoutGrid, electronics: Cpu, suppliers: Store, cad: Box, simulation: BookOpen, integrations: Link2, projects: Lightbulb };
-const resourceActions = { supplier: "Visit website", directory: "View directory", listing: "View on Maps", tool: "Explore tool" };
+const resourceActions = { supplier: "Visit website", directory: "View directory", listing: "View on Maps", project: "Explore project", tool: "Explore tool" };
 
 export default function ResourceLibrary() {
   const [query, setQuery] = useState("");
@@ -34,7 +34,7 @@ export default function ResourceLibrary() {
         {(query || category !== "all") && <button className="resource-text-button" onClick={clearFilters}>Clear filters</button>}
         {category === "suppliers" && <p className="resource-note">Component suppliers and fabrication services across India, not only Bangalore walk-in stores. Confirm specifications, stock and delivery. Additional leads from <a href="https://wiki.makerville.io/docs/Lists/hardware-vendors/" target="_blank" rel="noreferrer">MakerVille</a>; access caveats are noted.</p>}
         <ul className="resource-list">{resources.slice(0, limit).map(resource => <li key={resource.id}>
-          <h3>{resource.name}</h3><span className="resource-category">{resource.kind === "directory" ? "Vendor directory" : resourceCategories.find(item => item.id === resource.category)?.label}</span>
+          <h3>{resource.name}</h3><span className="resource-category">{resource.kind === "directory" ? (resource.category === "suppliers" ? "Vendor directory" : "Resource directory") : resourceCategories.find(item => item.id === resource.category)?.label}</span>
           <div className="resource-summary"><p>{resource.summary}</p>{resource.caution && <small>{resource.caution}</small>}</div>
           <a href={resource.url} target="_blank" rel="noreferrer" aria-label={`${resourceActions[resource.kind ?? "tool"]}: ${resource.name}`}>{resourceActions[resource.kind ?? "tool"]} <ArrowUpRight aria-hidden="true" /></a>
         </li>)}</ul>

@@ -94,7 +94,7 @@ it("keeps supplier and directory destinations unique and uses safe outbound link
   fireEvent.click(screen.getByRole("button", { name: "Hardware suppliers" }));
   for (let page = 0; page < 7; page += 1) fireEvent.click(screen.getByRole("button", { name: "Show more resources" }));
   const suppliers = builderResources.filter(resource => resource.category === "suppliers");
-  expect(builderResources).toHaveLength(99);
+  expect(builderResources).toHaveLength(104);
   expect(suppliers.filter(resource => resource.kind === "supplier")).toHaveLength(52);
   expect(suppliers.filter(resource => resource.kind === "listing")).toHaveLength(1);
   expect(suppliers.filter(resource => resource.kind === "directory")).toHaveLength(1);
@@ -113,6 +113,36 @@ it("keeps supplier and directory destinations unique and uses safe outbound link
     expect(link).toHaveAttribute("target", "_blank");
     expect(link.getAttribute("rel")).toMatch(/noreferrer|noopener/);
   }
+});
+
+it("shows robotics directories and build projects in the existing project category", () => {
+  render(<ResourceLibrary />);
+  fireEvent.click(screen.getByRole("button", { name: "Projects & inspiration" }));
+  expect(screen.getByText("Resource directory")).toBeVisible();
+  expect(screen.queryByText("Vendor directory")).not.toBeInTheDocument();
+  for (const [name, action, url] of [
+    ["Awesome Robotics Projects", "View directory", "https://github.com/mjyc/awesome-robotics-projects"],
+    ["Linorobot", "Explore project", "https://linorobot.org/"],
+    ["JPL Open Source Rover", "Explore project", "https://github.com/nasa-jpl/open-source-rover"]
+  ]) {
+    expect(screen.getByRole("heading", { level: 3, name })).toBeVisible();
+    const link = screen.getByRole("link", { name: `${action}: ${name}` });
+    expect(link).toHaveAttribute("href", url);
+    expect(link).toHaveAttribute("target", "_blank");
+    expect(link).toHaveAttribute("rel", "noreferrer");
+  }
+});
+
+it.each([
+  ["PythonRobotics", "https://atsushisakai.github.io/PythonRobotics/", /Learning examples; validate assumptions/],
+  ["CHAMP", "https://github.com/chvmp/champ", /documented setup uses older ROS 1/]
+])("finds %s within simulation resources with its compatibility note", (name, url, caution) => {
+  render(<ResourceLibrary />);
+  fireEvent.click(screen.getByRole("button", { name: "Simulation & learning" }));
+  fireEvent.change(screen.getByRole("searchbox", { name: "Search tools, workflows and resources" }), { target: { value: name } });
+  expect(screen.getByRole("status")).toHaveTextContent("1 resources found. Showing 1.");
+  expect(screen.getByRole("link", { name: `Explore tool: ${name}` })).toHaveAttribute("href", url);
+  expect(screen.getByText(caution)).toBeVisible();
 });
 
 it("labels the Maps-only business without inventing a website", () => {
