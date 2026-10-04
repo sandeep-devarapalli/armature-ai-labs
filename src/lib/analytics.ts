@@ -3,7 +3,7 @@ import type { CaptureResult, PostHog } from "posthog-js";
 const key = import.meta.env.VITE_POSTHOG_KEY?.trim();
 const host = import.meta.env.VITE_POSTHOG_HOST?.trim();
 export const analyticsConfigured = import.meta.env.VITE_ANALYTICS_ENABLED === "true"
-  && Boolean(key?.startsWith("phc_")) && ["https://us.i.posthog.com", "https://eu.i.posthog.com"].includes(host ?? "");
+  && Boolean(key?.startsWith("phc_")) && ["https://z.armatureailabs.com", "https://us.i.posthog.com", "https://eu.i.posthog.com"].includes(host ?? "");
 const publicPaths = new Set(["/", "/about", "/team", "/services", "/projects", "/branding", "/blog", "/blog/model-hardware-standard", "/projects/electrofluidic-fiber-muscles", "/building-vision", "/ecosystem", "/components", "/join", "/booking-beta", "/privacy"]);
 const milestones = ["details_saved", "photo_uploaded", "government_id_uploaded", "application_submitted"] as const;
 const atlasFilters = { type: ["", "startup", "research-ecosystem", "supplier", "vendor", "other"], need: ["", "build", "source", "manufacture", "test", "learn", "fund", "pilot"] };
@@ -55,7 +55,7 @@ async function ready(): Promise<PostHog | undefined> {
     if (!consent || generation !== epoch) return;
     const instance = new Client();
     instance.init(key!, {
-      api_host: host!, persistence: "memory", disable_persistence: true,
+      api_host: host!, ui_host: host === "https://eu.i.posthog.com" ? "https://eu.posthog.com" : "https://us.posthog.com", persistence: "memory", disable_persistence: true,
       autocapture: false, capture_pageview: false, capture_pageleave: false,
       capture_exceptions: false, capture_performance: false, capture_heatmaps: false,
       capture_dead_clicks: false, rageclick: false,

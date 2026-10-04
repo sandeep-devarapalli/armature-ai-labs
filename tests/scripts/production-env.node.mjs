@@ -35,3 +35,13 @@ test("preserves demo and site release guards", () => {
   assert.notEqual(check({ VITE_SITE_URL: "http://localhost:4173" }).status, 0);
   assert.notEqual(check({ VITE_MEMBER_PLATFORM_ENABLED: "" }).status, 0);
 });
+
+
+test("requires the exact approved proxy for enabled production analytics", () => {
+  const analytics = { VITE_ANALYTICS_ENABLED: "true", VITE_POSTHOG_KEY: "phc_synthetic_test", VITE_POSTHOG_HOST: "https://z.armatureailabs.com" };
+  assert.equal(check(analytics).status, 0);
+  for (const host of ["https://us.i.posthog.com", "http://z.armatureailabs.com", "https://z.armatureailabs.com.evil.test", ""]) {
+    assert.notEqual(check({ ...analytics, VITE_POSTHOG_HOST: host }).status, 0);
+  }
+  assert.notEqual(check({ ...analytics, VITE_POSTHOG_KEY: "" }).status, 0);
+});

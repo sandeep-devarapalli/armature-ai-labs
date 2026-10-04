@@ -249,8 +249,8 @@ test("S02 electrical and setup plan publishes both floors with schedules and nat
 test("undecided analytics consent leaves building controls usable without analytics requests", async ({ page }, testInfo) => {
   test.skip(process.env.VITE_ANALYTICS_ENABLED !== "true", "Requires the analytics-enabled production fixture.");
   const analyticsRequests: string[] = [];
-  page.on("request", request => { if (/posthog\.com/.test(new URL(request.url()).hostname)) analyticsRequests.push(request.url()); });
-  await page.route("https://*.posthog.com/**", route => route.abort());
+  page.on("request", request => { if (/(^|\.)posthog\.com$|^z\.armatureailabs\.com$/.test(new URL(request.url()).hostname)) analyticsRequests.push(request.url()); });
+  await page.route(/^https:\/\/(?:[^/]+\.posthog\.com|z\.armatureailabs\.com)\//, route => route.abort());
   await page.goto("/building-vision/");
   await expect(page.getByRole("region", { name: "Optional website analytics" })).toBeVisible();
   await page.screenshot({ path: testInfo.outputPath("building-consent-initial.png") });

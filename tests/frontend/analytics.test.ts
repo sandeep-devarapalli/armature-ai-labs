@@ -7,7 +7,7 @@ beforeEach(async () => {
   vi.resetModules(); localStorage.clear(); sessionStorage.clear(); requests.length = 0; status = 200;
   history.replaceState({}, "", "/?email=secret@example.test#token");
   vi.stubEnv("VITE_ANALYTICS_ENABLED", "true"); vi.stubEnv("VITE_POSTHOG_KEY", "phc_synthetic_test");
-  vi.stubEnv("VITE_POSTHOG_HOST", "https://us.i.posthog.com");
+  vi.stubEnv("VITE_POSTHOG_HOST", "https://z.armatureailabs.com");
   vi.stubGlobal("fetch", vi.fn(async (url: string, options?: RequestInit) => {
     requests.push({ url: String(url), body: String(options?.body ?? "") });
     return new Response("{}", { status, headers: { "Content-Type": "application/json" } });
@@ -27,7 +27,8 @@ it("does not load or request analytics without consent, or for excluded routes",
 it("uses the real SDK and sends only the explicit anonymous page fields", async () => {
   analytics.setAnalyticsConsent(true); analytics.trackPublicPageview("/?email=secret@example.test#token");
   await vi.waitFor(() => expect(events()).toHaveLength(1));
-  expect(requests).toHaveLength(1); expect(requests[0].url).toContain("/e/");
+  expect(requests).toHaveLength(1); expect(new URL(requests[0].url).origin).toBe("https://z.armatureailabs.com");
+  expect(requests[0].url).toContain("/e/");
   expect(events()[0].event).toBe("$pageview");
   expect(events()[0].properties).toEqual({ token: "phc_synthetic_test", distinct_id: expect.any(String), $process_person_profile: false, $geoip_disable: true, $pathname: "/", $current_url: "https://armatureailabs.com/" });
   expect(JSON.stringify(requests)).not.toMatch(/secret|email=|\$referrer|\$browser|\$session_id|\$set/);
@@ -59,8 +60,8 @@ it("drops failed-request retries after withdrawal with the pinned real SDK", asy
   await vi.advanceTimersByTimeAsync(12000); expect(requests).toHaveLength(1);
 });
 
-it("rejects non-ingestion hosts", async () => {
-  vi.stubEnv("VITE_POSTHOG_HOST", "https://example.test"); vi.resetModules();
+it.each(["https://example.test", "https://z.armatureailabs.com.evil.test", "http://z.armatureailabs.com"])("rejects unapproved analytics host %s", async host => {
+  vi.stubEnv("VITE_POSTHOG_HOST", host); vi.resetModules();
   const invalid = await import("../../src/lib/analytics"); expect(invalid.analyticsConfigured).toBe(false);
   invalid.setAnalyticsConsent(true); invalid.trackPublicPageview("/"); await settle(); expect(requests).toHaveLength(0);
   invalid.setAnalyticsConsent(false);
