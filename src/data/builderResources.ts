@@ -16,7 +16,7 @@ export interface BuilderResource {
   category: Exclude<ResourceCategoryId, 'all'>
   summary: string
   url: string
-  kind?: 'supplier' | 'directory' | 'listing'
+  kind?: 'supplier' | 'directory' | 'listing' | 'project'
   caution?: string
 }
 
@@ -64,6 +64,11 @@ export const builderResources: BuilderResource[] = [
   { id: 'mujoco-menagerie', name: 'MuJoCo Menagerie', category: 'simulation', summary: 'Robot models for studying joints, collisions and simulation conventions.', url: 'https://github.com/google-deepmind/mujoco_menagerie', caution: 'Confirm model assumptions against the hardware you intend to use.' },
   { id: 'isaac-sim', name: 'Isaac Sim', category: 'simulation', summary: 'Robot simulation and synthetic-data workflows.', url: 'https://developer.nvidia.com/isaac/sim/', caution: 'Check current compute and platform requirements.' },
   { id: 'isaac-lab', name: 'Isaac Lab', category: 'simulation', summary: 'Robot-learning experiments built on Isaac Sim.', url: 'https://developer.nvidia.com/isaac/lab', caution: 'Check compatible Isaac Sim versions and training requirements.' },
+  { id: 'awesome-robotics-projects', name: 'Awesome Robotics Projects', category: 'projects', kind: 'directory', summary: 'Curated robot builds, research projects and robotics tools to explore.', url: 'https://github.com/mjyc/awesome-robotics-projects', caution: 'Follow each original project for its license, hardware requirements and maintenance status.' },
+  { id: 'pythonrobotics', name: 'PythonRobotics', category: 'simulation', summary: 'Python examples for localization, SLAM, path planning and robot control.', url: 'https://atsushisakai.github.io/PythonRobotics/', caution: 'Learning examples; validate assumptions and dependencies before adapting them to a robot.' },
+  { id: 'linorobot', name: 'Linorobot', category: 'projects', kind: 'project', summary: 'Build ROS mobile robots with guides for motor control, odometry, mapping and navigation.', url: 'https://linorobot.org/', caution: 'The linked guide uses ROS 1. Match instructions to your ROS version, drive base and electronics.' },
+  { id: 'jpl-open-source-rover', name: 'JPL Open Source Rover', category: 'projects', kind: 'project', summary: 'Six-wheel rover build with mechanical plans, electronics and assembly documentation.', url: 'https://github.com/nasa-jpl/open-source-rover', caution: 'Check the current parts list, revision and assembly tools before ordering hardware.' },
+  { id: 'champ', name: 'CHAMP', category: 'simulation', summary: 'Quadruped control framework with walking, mapping and navigation demos in simulation.', url: 'https://github.com/chvmp/champ', caution: 'The documented setup uses older ROS 1 distributions; confirm compatibility before setup or hardware tests.' },
   { id: 'arduino-project-hub', name: 'Arduino Project Hub', category: 'projects', summary: 'Browse hardware builds, tutorials and robotics showcases.', url: 'https://projecthub.arduino.cc/' },
   { id: 'hackaday', name: 'Hackaday.io', category: 'projects', summary: 'Community prototypes, experiments and open-hardware build logs.', url: 'https://hackaday.io/projects' },
   { id: 'raspberry-pi-magazine', name: 'Raspberry Pi Official Magazine', category: 'projects', summary: 'Discover maker builds and follow their original creators.', url: 'https://magazine.raspberrypi.com/' },
