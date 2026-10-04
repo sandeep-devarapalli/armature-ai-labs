@@ -37,7 +37,7 @@ body:has(.builder-atlas) .editorial-rail { display:none; }
 .atlas-topics button { display:flex; align-items:center; gap:10px; min-height:40px; padding:9px; color:var(--ink); background:var(--panel); border:1px solid var(--hair); border-radius:5px; text-align:left; font:11px var(--body); cursor:pointer; }
 .atlas-topics svg { width:19px; height:19px; flex-shrink:0; }
 .atlas-topics button[aria-pressed=true] { background:#edb966; color:#111110; border-color:#b86d00; }
-.atlas-expand { position:absolute; z-index:3; right:24px; bottom:130px; font-size:11px; min-height:42px; }
+.atlas-expand { position:absolute; z-index:3; right:194px; bottom:130px; font-size:11px; min-height:42px; }
 .atlas-expand svg { width:18px; }
 .atlas-sheet-toggle { display:none; }
 .atlas-chapter { margin:8px 0; border:1px solid var(--hair); border-radius:6px; }
