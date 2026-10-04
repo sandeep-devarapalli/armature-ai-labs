@@ -263,6 +263,58 @@ test("project discovery combines filters and preserves BRIDGE through reload and
   await expectNoHorizontalOverflow(page);
 });
 
+test("Atlas-inspired gripper links its reported hardware without claiming a released kit", async ({ page }) => {
+  await page.goto("/projects?category=Robotic+Hands&q=Atlas");
+  const card = page.locator("#atlas-inspired-gripper");
+  await expect(page.locator("#project-grid .project-card")).toHaveCount(1);
+  await expect(card.getByRole("heading", { name: "DIY Atlas-Inspired Gripper" })).toBeVisible();
+  await expect(card).toContainText("Research Track");
+  await expect(card).toContainText("downloadable build files remain unverified");
+  await expect(card.getByRole("link", { name: "Project source" })).toHaveAttribute("href", /hackster\.io\/news\/cheaply-recreating/);
+  await expect(card.getByRole("link", { name: /Image: Nikodem Bartnik/ })).toHaveAttribute("href", "https://www.youtube.com/watch?v=WqZnCp0vDfU");
+  const cover = card.getByRole("img");
+  await cover.scrollIntoViewIfNeeded();
+  await expect.poll(() => cover.evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  await card.getByRole("link", { name: "Build components" }).click();
+  await expect(page.getByRole("heading", { name: "Build list for DIY Atlas-Inspired Gripper." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "FeeTech SCS0009 serial bus servo" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Atlas-inspired gripper control and webcam kit" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Atlas-inspired gripper printed mechanics" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /PCA9685|SG90|MG995/ })).toHaveCount(0);
+  await expectNoHorizontalOverflow(page);
+  for (const slug of ["feetech-scs0009-servo", "atlas-gripper-control-vision-kit", "atlas-gripper-printed-mechanics"]) {
+    await page.goto(`/components/${slug}`);
+    await expect(page.getByText("source required", { exact: true })).toBeVisible();
+    await expect(page.getByText("No direct orderable offer was verified in the current audit.")).toBeVisible();
+    await expectNoHorizontalOverflow(page);
+  }
+});
+
+test("QDD actuator uses source media and separates its experimental control paths", async ({ page }) => {
+  await page.goto("/projects?category=Actuator+Design&q=QDD");
+  const card = page.locator("#quasi-direct-drive-actuator");
+  await expect(page.locator("#project-grid .project-card")).toHaveCount(1);
+  await expect(card.getByRole("heading", { name: "Quasi-Direct-Drive Actuator" })).toBeVisible();
+  await expect(card).toContainText("Research Track");
+  await expect(card).toContainText("first prototype");
+  await expect(card.getByRole("link", { name: "Project source" })).toHaveAttribute("href", "https://github.com/JeongSeoJin/quasi-direct-drive-actuator");
+  await expect(card.getByRole("link", { name: /Image: Seo Jin Jeong/ })).toHaveAttribute("href", /5ca10b6.*\/assets\/image_4\.jpg$/);
+  const cover = card.getByRole("img");
+  await cover.scrollIntoViewIfNeeded();
+  await expect.poll(() => cover.evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+  await card.getByRole("link", { name: "Build components" }).click();
+  await expect(page.getByRole("heading", { name: "Build list for Quasi-Direct-Drive Actuator." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "QDD 8110 custom motor materials" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "QDD 10:1 cycloidal mechanical set" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "QDD moteus-c1 control and power kit" })).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+  await page.locator('a[href="/components/qdd-moteus-control-kit"]').click();
+  await expect(page.getByText("source required", { exact: true })).toBeVisible();
+  await expect(page.getByText(/These are distinct control paths/)).toBeVisible();
+  await expect(page.getByText("No direct orderable offer was verified in the current audit.")).toBeVisible();
+  await expectNoHorizontalOverflow(page);
+});
+
 test("project discovery recovers from conflicting and invalid filters and sorts results", async ({ page }) => {
   await page.goto("/projects?layer=unknown&category=missing&sort=invalid");
   const cards = page.locator("#project-grid .project-card");
