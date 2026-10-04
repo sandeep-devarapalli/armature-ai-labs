@@ -45,8 +45,8 @@ it("applies query, type, need and focus from a shareable URL", async () => {
   setup("/ecosystem?q=parts&type=supplier&need=source&focus=fixture-parts");
   await screen.findByRole("heading", { name: "Fixture Parts" });
   expect(screen.getByRole("article", { name: "Fixture Parts details" })).toHaveFocus();
-  expect(screen.queryByRole("searchbox")).not.toBeInTheDocument();
-  fireEvent.click(screen.getByRole("button", { name: "Close listing details" }));
+  expect(screen.getByRole("searchbox")).toHaveValue("parts");
+  fireEvent.click(screen.getByRole("button", { name: "Back to results" }));
   fireEvent.click(screen.getByText(/More filters/));
   expect(screen.getByRole("searchbox")).toHaveValue("parts");
   expect(screen.getByRole("button", { name: "Suppliers" })).toHaveAttribute("aria-pressed", "true");
@@ -107,32 +107,61 @@ it("guards the admin route against membership-review Staff before fetching submi
   expect(getEcosystemSubmissions).not.toHaveBeenCalled();
 });
 
-it("retains native guide disclosures and scroll position when returning from a listing", async () => {
+it("retains filters and result scroll when returning from a listing", async () => {
   setup(); await screen.findByText("2 results · 1 on map");
   const guide = screen.getByRole("complementary", { name: "Ecosystem listings" });
   const filters = guide.querySelector<HTMLDetailsElement>(".atlas-filter-disclosure")!;
-  const reading = guide.querySelector<HTMLDetailsElement>(".atlas-guide-reading")!;
   fireEvent.click(filters.querySelector("summary")!);
-  fireEvent.click(reading.querySelector("summary")!);
-  expect(filters.open).toBe(true); expect(reading.open).toBe(true);
+  expect(filters.open).toBe(true);
   guide.scrollTop = 180;
   fireEvent.click(within(guide).getByRole("button", { name: /^Fixture Robotics/ }));
   expect(guide).not.toBeVisible();
   expect(screen.getByRole("article", { name: "Fixture Robotics details" })).toHaveFocus();
-  fireEvent.click(screen.getByRole("button", { name: "Close listing details" }));
+  expect(screen.getByRole("searchbox")).toBeVisible();
+  fireEvent.click(screen.getByRole("button", { name: "Back to results" }));
   expect(guide).toBeVisible();
-  expect(filters.open).toBe(true); expect(reading.open).toBe(true);
+  expect(filters.open).toBe(true);
   expect(guide.scrollTop).toBe(180);
   await waitFor(() => expect(guide).toHaveFocus());
 });
 
-it("keeps guide chapters integrated, without advertising or a premature city selector", async () => {
+it("keeps a searchable roll-up bar and restores results without losing filters", async () => {
+  setup("/ecosystem?type=supplier&need=source"); await screen.findByText("1 results · 1 on map");
+  const results = screen.getByRole("complementary", { name: "Ecosystem listings" });
+  fireEvent.click(screen.getByRole("button", { name: "Minimize to bar" }));
+  expect(results).not.toBeVisible();
+  expect(screen.getByRole("searchbox")).toBeVisible();
+  fireEvent.click(within(document.querySelector(".atlas-search-toolbar") as HTMLElement).getByRole("button", { name: "Show results" }));
+  expect(results).toBeVisible();
+  fireEvent.click(screen.getByRole("button", { name: "Minimize to bar" }));
+  fireEvent.change(screen.getByRole("searchbox"), { target: { value: "parts" } });
+  expect(screen.getByLabelText("Current URL")).toHaveTextContent("q=parts");
+  expect(screen.getByLabelText("Current URL")).toHaveTextContent("type=supplier");
+  expect(screen.getByLabelText("Current URL")).toHaveTextContent("need=source");
+  expect(results).toBeVisible();
+  expect(screen.getByRole("searchbox")).toHaveValue("parts");
+  fireEvent.click(within(results).getByRole("button", { name: /^Fixture Parts/ }));
+  fireEvent.change(screen.getByRole("searchbox"), { target: { value: "SP Road" } });
+  expect(screen.queryByRole("article", { name: "Fixture Parts details" })).not.toBeInTheDocument();
+  expect(results).toBeVisible();
+  expect(screen.getByLabelText("Current URL")).not.toHaveTextContent("focus=");
+});
+
+it("keeps readable guide chapters below the map, without advertising or a city selector", async () => {
   setup(); await screen.findByText("2 results · 1 on map");
-  const guide = screen.getByRole("complementary", { name: "Ecosystem listings" });
+  const guide = document.getElementById("bangalore-guide")!;
+  expect(guide).not.toBeNull();
+  expect(document.getElementById("ecosystem-map")?.contains(guide)).toBe(false);
   expect(within(guide).getByRole("heading", { name: "Bangalore starter guide" })).toBeInTheDocument();
-  expect(within(guide).getByRole("button", { name: "Work & meet" })).toHaveAttribute("aria-expanded", "true");
-  expect(within(guide).getByRole("button", { name: "Build & source" })).toHaveAttribute("aria-expanded", "false");
-  expect(within(guide).getByRole("button", { name: "Settle in" })).toHaveAttribute("aria-expanded", "false");
+  expect(within(guide).getByRole("button", { name: "Work & meet" })).toHaveAttribute("aria-pressed", "true");
+  expect(within(guide).getByText(/^Start with the journeys/)).toBeVisible();
+  fireEvent.click(within(guide).getByRole("button", { name: "Build & source" }));
+  expect(within(guide).getByText(/^Split the next build/)).toBeVisible();
+  fireEvent.click(within(guide).getByRole("button", { name: "Settle in" }));
+  expect(within(guide).getByText(/^Try the actual home-to-work trip/)).toBeVisible();
+  expect(screen.queryByText("Read the starter guide")).not.toBeInTheDocument();
+  fireEvent.click(within(guide).getByRole("button", { name: /Back to map/i }));
+  expect(document.getElementById("ecosystem-map")).toHaveFocus();
   expect(screen.queryByText(/Advertising space|Advertise here|Place a bid|Ad enquiry/i)).not.toBeInTheDocument();
   expect(screen.queryByRole("combobox", { name: /city/i })).not.toBeInTheDocument();
 });

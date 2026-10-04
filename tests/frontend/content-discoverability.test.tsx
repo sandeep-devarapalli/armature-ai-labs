@@ -64,7 +64,7 @@ describe("public source and planning context", () => {
     expect(directory).not.toBeVisible();
     expect(screen.getByRole("article", { name: "Bellatrix Aerospace details" })).toHaveFocus();
     expect(screen.getByRole("link", { name: "Public source" })).toHaveAttribute("href", bengaluruEcosystem.find((item) => item.slug === "bellatrix-aerospace")?.sourceUrl);
-    fireEvent.click(screen.getByRole("button", { name: "Close listing details" }));
+    fireEvent.click(screen.getByRole("button", { name: "Back to results" }));
     expect(screen.queryByRole("heading", { name: "Bellatrix Aerospace" })).not.toBeInTheDocument();
     expect(directory).toBeVisible();
     expect(screen.getByRole("searchbox")).toHaveValue("Bellatrix");
