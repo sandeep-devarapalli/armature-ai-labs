@@ -5,15 +5,16 @@
 .account-caption { display: grid; gap: 3px; line-height: 1.35; min-width: 0; }
 .account-caption strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .account-role { font-size: 10px; text-transform: uppercase; letter-spacing: .06em; }
-.account-panel { position: absolute; right: 0; top: calc(100% + 8px); width: 250px; max-width: calc(100vw - 32px); padding: 16px; background: var(--paper); color: var(--ink); border: 1px solid var(--hair); box-shadow: 0 8px 24px #0002; z-index: 80; display: grid; gap: 14px; }
+.account-panel { position: absolute; right: 0; top: calc(100% + 8px); width: 250px; max-width: calc(100vw - 32px); padding: 16px; max-height: calc(100dvh - 84px); overflow-y: auto; background: var(--paper); color: var(--ink); border: 1px solid var(--hair); box-shadow: 0 8px 24px #0002; z-index: 80; display: grid; gap: 14px; }
 .account-panel button { text-align: left; background: none; color: inherit; border: 0; cursor: pointer; font: inherit; padding: 0; }
 .account-panel p { line-height: 1.5; margin: 0; }
 .account-loading, .account-signin { font-size: 12px; }
-@media (max-width: 650px) { .account-menu { max-width: 170px; font-size: 10px; } .account-menu summary { gap: 5px; } .account-menu .avatar { width: 28px; height: 28px; flex-shrink: 0; } .account-loading { max-width: 80px; } }
 
-@media (max-width: 650px) {
-  .topbar .topbar-inner.with-basic-account { grid-template-columns: minmax(0, 1fr); gap: 12px; padding-block: 16px; }
-  .with-basic-account .topbar-actions { width: 100%; justify-content: flex-start; gap: 8px; }
-  .with-basic-account .account-menu, .with-basic-account .account-signin, .with-basic-account .account-loading { margin-left: auto; }
-  .with-basic-account .account-menu { max-width: min(220px, 60vw); }
-}
+.account-menu summary { border: 0; padding: 4px; min-height: 40px; }
+.account-menu .avatar { width: 28px; height: 28px; flex-shrink: 0; border-radius: 50%; }
+.account-short-name { max-width: 90px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.account-panel .account-caption { padding-bottom: 12px; border-bottom: 1px solid var(--hair); }
+.account-panel .account-caption strong { white-space: normal; overflow-wrap: anywhere; }
+@media (max-width: 600px) { .account-short-name { display: none; } .account-loading { max-width: 70px; } }
+
+.account-menu .account-placeholder { background: transparent; color: var(--ink); border: 1px solid var(--hair); }
