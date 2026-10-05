@@ -33,8 +33,9 @@ async function mockMembers(page: Page, role: string, incomplete = false) {
   });
   return calls;
 }
-test("signed-in header persists on homepage and admin can manage Staff", async ({ page }, info) => {
-  const calls = await mockMembers(page, "admin");
+test("signed-in compact header preserves account details across themes", async ({ page }, info) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await mockMembers(page, "admin");
   await page.goto("/");
   const accountTrigger = page.getByLabel("Account: Synthetic Reviewer", { exact: true });
   await expect(accountTrigger).toBeVisible();
@@ -58,6 +59,9 @@ test("signed-in header persists on homepage and admin can manage Staff", async (
     await accountTrigger.press("Escape");
     await expect(accountTrigger).toBeFocused();
   }
+});
+test("admin can manage Staff", async ({ page }, info) => {
+  const calls = await mockMembers(page, "admin");
   await page.goto("/admin/members");
   await expect(page.getByRole("cell", { name: "Synthetic Applicant applicant@example.test" })).toBeVisible();
   await page.getByLabel("Search members").fill("Applicant");
