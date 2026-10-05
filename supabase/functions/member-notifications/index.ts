@@ -61,8 +61,19 @@ Deno.serve(async (request: Request) => {
   try {
     const client = adminClient();
     const rpc = (name: string, args: Record<string, unknown>) => client.rpc(name, args).abortSignal(AbortSignal.timeout(8_000));
-    const { data, error } = await rpc("claim_member_notifications", { p_limit: 10 });
-    if (error || !Array.isArray(data) || data.length > 10) throw new Error("claim_failed");
+    let claimed = await rpc("claim_member_notifications", { p_limit: 10 });
+    if (claimed.status === 401 && claimed.error?.code === "PGRST303") {
+      // PostgREST rejected authentication before executing the claim; no send has begun.
+      console.warn(JSON.stringify({ event: "member_notification_claim_auth_retry", status: 401, code: "PGRST303" }));
+      await new Promise((resolve) => setTimeout(resolve, 3_000));
+      claimed = await rpc("claim_member_notifications", { p_limit: 10 });
+      console.info(JSON.stringify({ event: "member_notification_claim_auth_retry_result", status: claimed.status, recovered: !claimed.error && Array.isArray(claimed.data) && claimed.data.length <= 10 }));
+    }
+    const { data, error } = claimed;
+    if (error || !Array.isArray(data) || data.length > 10) {
+      console.error(JSON.stringify({ event: "member_notification_claim_failed", status: claimed.status, code: error?.code === "PGRST303" ? "PGRST303" : "other" }));
+      throw new Error("claim_failed");
+    }
     counts.claimed = data.length;
     for (const notice of data as Notice[]) {
       if (Date.now() > deadline - 8_000) { counts.skipped++; continue; }
