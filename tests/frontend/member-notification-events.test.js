@@ -26,7 +26,7 @@ it('verifies a real HMAC over exact raw bytes and persists only the minimal deli
   const result = await f.handler(f.request({ raw: JSON.stringify(event, null, 2) }));
   expect(result.status).toBe(200);
   expect(await result.json()).toEqual({ received: true });
-  expect(f.rpc).toHaveBeenCalledWith('record_member_notification_event', { p_event_id: 'msg_synthetic_event', p_provider_id: providerId, p_event_type: 'email.delivered', p_occurred_at: event.created_at });
+  expect(f.rpc).toHaveBeenCalledWith('record_classified_notification_event', { p_event_id: 'msg_synthetic_event', p_provider_id: providerId, p_event_type: 'email.delivered', p_occurred_at: event.created_at, p_sender: null, p_subject: null });
   expect(JSON.stringify(f.rpc.mock.calls)).not.toContain('private@example.test');
   expect(f.rpc.mock.results[0].value.abortSignal).toHaveBeenCalledWith(expect.any(AbortSignal));
 });
@@ -75,4 +75,36 @@ it('cancels a stalled request body at five seconds', async () => {
 });
 it.each([{ error: { message: 'private SQL details' } }, { result: null }, { reject: true }])('requests provider retry on persistence failure %j', async (options) => {
   const f = fixture(options); const result = await f.handler(f.request()); expect(result.status).toBe(503); expect(await result.text()).not.toContain('private');
+});
+
+
+it.each(['no-reply@mail.armatureailabs.com', 'Armature AI Labs <no-reply@mail.armatureailabs.com>', '"Armature AI Labs" <no-reply@mail.armatureailabs.com>'])('forwards only verified sign-in metadata for %s', async from => {
+  const f = fixture();
+  const raw = JSON.stringify({ ...event, data: { ...event.data, from, subject: 'Your sign-in link', headers: [{ name: 'X-Pm-Metadata-Project-Ref', value: 'uxfhdfagrmaeyuaipaar' }] } });
+  expect((await f.handler(f.request({ raw }))).status).toBe(200);
+  expect(f.rpc.mock.calls[0][1]).toMatchObject({ p_sender: from, p_subject: 'Your sign-in link' });
+  expect(JSON.stringify(f.rpc.mock.calls)).not.toContain('private@example.test');
+  const tampered = fixture();
+  expect((await tampered.handler(tampered.request({ body: raw }))).status).toBe(401);
+  expect(tampered.admin).not.toHaveBeenCalled();
+});
+
+it.each([
+  { from: 'attacker@example.test', subject: 'Your sign-in link' },
+  { from: 'Armature AI Labs <no-reply@mail.armatureailabs.com>.attacker.test', subject: 'Your sign-in link' },
+  { from: 'no-reply@mail.armatureailabs.com', subject: 'Other private subject' },
+  { from: ['no-reply@mail.armatureailabs.com'], subject: 'Your sign-in link' },
+  { subject: 'Your sign-in link' },
+])('retains unknown email reports without assigning auth scope: %j', async metadata => {
+  const f = fixture();
+  expect((await f.handler(f.request({ raw: JSON.stringify({ ...event, data: { ...event.data, headers: [{ name: 'X-Pm-Metadata-Project-Ref', value: 'uxfhdfagrmaeyuaipaar' }], ...metadata } }) }))).status).toBe(200);
+  expect(f.rpc.mock.calls[0][1]).toMatchObject({ p_sender: null, p_subject: null });
+});
+
+
+it.each([undefined, [], [{ name: 'X-Pm-Metadata-Project-Ref', value: 'another-project' }], { name: 'X-Pm-Metadata-Project-Ref', value: 'uxfhdfagrmaeyuaipaar' }])('keeps matching subjects unclassified without the signed Armature project marker: %j', async headers => {
+  const f = fixture();
+  const raw = JSON.stringify({ ...event, data: { ...event.data, from: 'no-reply@mail.armatureailabs.com', subject: 'Your sign-in link', headers } });
+  expect((await f.handler(f.request({ raw }))).status).toBe(200);
+  expect(f.rpc.mock.calls[0][1]).toMatchObject({ p_sender: null, p_subject: null });
 });

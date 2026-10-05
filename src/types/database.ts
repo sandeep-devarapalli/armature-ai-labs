@@ -3424,6 +3424,17 @@ export type Database = {
           starts_at: string
         }[]
       }
+      record_classified_notification_event: {
+        Args: {
+          p_event_id: string
+          p_event_type: string
+          p_occurred_at: string
+          p_provider_id: string
+          p_sender: string | null
+          p_subject: string | null
+        }
+        Returns: boolean
+      }
       record_cabinet_event: {
         Args: {
           p_access_intent_id?: string
