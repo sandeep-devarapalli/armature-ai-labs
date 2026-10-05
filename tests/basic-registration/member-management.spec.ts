@@ -36,9 +36,13 @@ async function mockMembers(page: Page, role: string, incomplete = false) {
 test("signed-in header persists on homepage and admin can manage Staff", async ({ page }, info) => {
   const calls = await mockMembers(page, "admin");
   await page.goto("/");
+  const accountTrigger = page.getByLabel("Account: Synthetic Reviewer", { exact: true });
+  await expect(accountTrigger).toBeVisible();
+  await expect(page.locator(".account-panel")).not.toBeVisible();
+  await accountTrigger.click();
   await expect(page.locator("header").getByText("Synthetic Reviewer", { exact: true }).first()).toBeVisible();
   await expect(page.locator("header").getByText("Basic · Approved", { exact: false }).first()).toBeVisible();
-  const boxes = await Promise.all([".brand-link", ".account-menu summary", ".theme-switch", ".mobile-menu-link"].map(async (selector) => { const element = page.locator(".topbar").locator(selector); return await element.isVisible() ? element.boundingBox() : null; }));
+  const boxes = await Promise.all([".brand-link", ".account-menu summary", ".theme-switch", ".compact-mobile-nav button"].map(async (selector) => { const element = page.locator(".topbar").locator(selector); return await element.isVisible() ? element.boundingBox() : null; }));
   for (let a = 0; a < boxes.length; a++) for (let b = a + 1; b < boxes.length; b++) {
     const left = boxes[a], right = boxes[b];
     if (left && right) expect(left.x + left.width <= right.x + 1 || right.x + right.width <= left.x + 1 || left.y + left.height <= right.y + 1 || right.y + right.height <= left.y + 1).toBe(true);
@@ -48,7 +52,11 @@ test("signed-in header persists on homepage and admin can manage Staff", async (
   for (const theme of ["light", "sepia", "dark"]) {
     await page.getByRole("button", { name: `${theme} theme`, exact: true }).click();
     await expect(page.getByRole("button", { name: `${theme} theme`, exact: true })).toHaveAttribute("aria-pressed", "true");
+    await expect(page.locator(".account-panel")).not.toBeVisible();
+    await accountTrigger.click();
     await expect(page.locator("header").getByText("Basic · Approved", { exact: false }).first()).toBeVisible();
+    await accountTrigger.press("Escape");
+    await expect(accountTrigger).toBeFocused();
   }
   await page.goto("/admin/members");
   await expect(page.getByRole("cell", { name: "Synthetic Applicant applicant@example.test" })).toBeVisible();

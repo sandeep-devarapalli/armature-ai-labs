@@ -168,7 +168,7 @@ export function Shell({ children }: PropsWithChildren) {
         <nav className="compact-mobile-nav" aria-label="Quick navigation">
           <NavLink to="/" end>The lab</NavLink>
           <a href={coursesUrl}>Courses</a>
-          <button ref={mobileTrigger} type="button" aria-expanded={mobileMenuOpen} aria-controls="mobile-public-menu" onClick={() => setMobileMenuOpen(open => !open)}>Menu <span aria-hidden="true">{mobileMenuOpen ? "−" : "+"}</span></button>
+          <button ref={mobileTrigger} type="button" aria-label={mobileMenuOpen ? "Close navigation" : "Open navigation"} aria-expanded={mobileMenuOpen} aria-controls="mobile-public-menu" onClick={() => setMobileMenuOpen(open => !open)}>Menu <span aria-hidden="true">{mobileMenuOpen ? "−" : "+"}</span></button>
         </nav>
         {mobileMenuOpen && (
           <nav id="mobile-public-menu" className="mobile-public-menu" aria-label="Mobile navigation">

@@ -160,6 +160,9 @@ test("mobile public navigation remains usable with member controls disabled", as
   await page.goto("/");
   await expect(page.getByRole("navigation", { name: "Primary navigation" })).toBeHidden();
 
+  const coursesLink = page.getByRole("navigation", { name: "Quick navigation" }).getByRole("link", { name: "Courses", exact: true });
+  await expect(coursesLink).toBeVisible();
+  await expect(coursesLink).toHaveAttribute("href", "https://courses.armatureailabs.com/");
   const menuButton = page.getByRole("button", { name: "Open navigation" });
   await expect(menuButton).toBeVisible();
   await menuButton.click();
