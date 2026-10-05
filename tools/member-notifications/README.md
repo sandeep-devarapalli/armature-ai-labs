@@ -72,3 +72,12 @@ Historical reconciliation requires externally verified Resend IDs and exact mess
 Receipt references, and records an audit without sending email or deleting reports.
 Unknown new outcomes remain held for evidence-backed operator reconciliation.
 Cleanup stays separately gated; this release does not enable it or release payments.
+
+
+## Sign-in delivery reports (5 October 2026)
+
+The shared Resend webhook also receives Supabase sign-in email reports. After signature verification, the metadata-aware recorder classifies only the exact configured sender, `Your sign-in link` subject and signed `X-Pm-Metadata-Project-Ref` header for the shared Armature Supabase project. Unknown or missing metadata stays unclassified. Classification stores a provider ID and bounded provenance, never recipients, message bodies or login tokens.
+
+A classified sign-in email stops contributing to `unmatched_receipts` only when a delivered report exists and no failed, bounced, complained or suppressed report exists. Missing delivery still alerts after the existing one-hour receipt grace period. Negative reports remain actionable in either callback order. Member and Atlas ownership take precedence and cannot claim a classified Auth provider ID. All existing health fields, schedules, cleanup settings and delivery-failure checks remain unchanged.
+
+Deploy migration `202610050001` before the `member-notification-events` function. The original recorder remains available during rollout. Historical reconciliation requires checking the exact provider ID, sender, subject and delivery state in Resend and retaining an operator evidence record; timing alone is insufficient. Preserve receipts and do not resend emails to clear an alert.
