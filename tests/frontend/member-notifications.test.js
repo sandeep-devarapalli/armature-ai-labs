@@ -20,12 +20,13 @@ function fixture({ enabled = 'true', secret = token, wakeupKey = '', key = 're_s
   } }));
   const admin = vi.fn(() => ({ rpc }));
   const fetch = vi.fn(fetcher);
+  const logger = { warn: vi.fn(), info: vi.fn(), error: vi.fn() };
   let handler;
-  new Function('Deno', 'adminClient', 'memberNotificationTemplate', 'fetch', code)(
-    { env: { get: (name) => env[name] }, serve: (value) => { handler = value; } }, admin, memberNotificationTemplate, fetch,
+  new Function('Deno', 'adminClient', 'memberNotificationTemplate', 'fetch', 'console', code)(
+    { env: { get: (name) => env[name] }, serve: (value) => { handler = value; } }, admin, memberNotificationTemplate, fetch, logger,
   );
   const request = ({ supplied = token, method = 'POST', body } = {}) => new Request('https://example.test/functions/v1/member-notifications', { method, headers: { 'x-armature-job-secret': supplied }, ...(body === undefined ? {} : { body }) });
-  return { handler, request, rpc, admin, fetch };
+  return { handler, request, rpc, admin, fetch, logger };
 }
 afterEach(() => vi.useRealTimers());
 it('disabled worker cannot construct an admin client, claim or fetch', async () => {
@@ -137,4 +138,52 @@ it('accepts fresh scoped wakeup signatures and rejects stale, future and forged 
     expect((await f.handler(req)).status).toBe(status);
   }
   expect(f.rpc).toHaveBeenCalledTimes(1);
+});
+
+const authRejectedClaim = { data: null, status: 401, error: { code: 'PGRST303', message: 'private-auth-diagnostic', details: 'private-token' } };
+it('recovers an authentication-rejected claim once before making exactly one provider send', async () => {
+  vi.useFakeTimers();
+  const f = fixture();
+  f.rpc.mockImplementationOnce(() => ({ abortSignal: () => Promise.resolve(authRejectedClaim) }));
+  const pending = f.handler(f.request());
+  await vi.advanceTimersByTimeAsync(2_999);
+  expect(f.rpc).toHaveBeenCalledTimes(1);
+  expect(f.fetch).not.toHaveBeenCalled();
+  await vi.advanceTimersByTimeAsync(1);
+  const result = await pending;
+  expect(result.status).toBe(200);
+  expect(await result.json()).toMatchObject({ claimed: 1, accepted: 1 });
+  expect(f.rpc.mock.calls.map(([name]) => name)).toEqual(['claim_member_notifications', 'claim_member_notifications', 'prepare_member_notification', 'finish_member_notification']);
+  expect(f.fetch).toHaveBeenCalledTimes(1);
+  expect(f.fetch.mock.calls[0][1].headers['Idempotency-Key']).toBe(`member-${id}-v1`);
+  expect(JSON.parse(f.logger.info.mock.calls[0][0])).toMatchObject({ recovered: true });
+  expect(JSON.stringify([f.logger.warn.mock.calls, f.logger.info.mock.calls])).not.toMatch(/private|synthetic@|token/);
+});
+it('keeps persistent authentication failure actionable without sending or retrying again', async () => {
+  vi.useFakeTimers();
+  const f = fixture();
+  f.rpc.mockImplementation(() => ({ abortSignal: () => Promise.resolve(authRejectedClaim) }));
+  const pending = f.handler(f.request());
+  await vi.advanceTimersByTimeAsync(3_000);
+  const result = await pending;
+  expect(result.status).toBe(503);
+  expect(await result.json()).toMatchObject({ claimed: 0, error: 'notification_run_failed' });
+  expect(f.rpc).toHaveBeenCalledTimes(2);
+  expect(f.fetch).not.toHaveBeenCalled();
+  expect(JSON.parse(f.logger.info.mock.calls[0][0])).toMatchObject({ recovered: false });
+  expect(JSON.stringify(f.logger.error.mock.calls)).not.toMatch(/private|token/);
+});
+it.each([[401, 'PGRST301'], [500, 'PGRST303'], [0, ''], [503, 'PGRST000']])('does not retry other claim failures (%s/%s)', async (status, code) => {
+  const f = fixture();
+  f.rpc.mockImplementation(() => ({ abortSignal: () => Promise.resolve({ data: null, status, error: { code } }) }));
+  expect((await f.handler(f.request())).status).toBe(503);
+  expect(f.rpc).toHaveBeenCalledTimes(1);
+  expect(f.fetch).not.toHaveBeenCalled();
+});
+it('does not replay a claim after an ambiguous transport failure', async () => {
+  const f = fixture();
+  f.rpc.mockImplementation(() => ({ abortSignal: () => Promise.reject(new Error('transport timeout')) }));
+  expect((await f.handler(f.request())).status).toBe(503);
+  expect(f.rpc).toHaveBeenCalledTimes(1);
+  expect(f.fetch).not.toHaveBeenCalled();
 });
