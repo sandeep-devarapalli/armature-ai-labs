@@ -322,3 +322,47 @@ footer .footer-wordmark {
   .editorial-hero-motion .field-of-touch figcaption { text-align: left; justify-content: space-between; padding: 12px 0 0; }
   .editorial-hero-motion h1 { font-size: clamp(42px, 8.8vw, 62px); }
 }
+
+/* Selected compact navigation: keep the course entry visible at every width. */
+.topbar { min-height: 68px; }
+.topbar .topbar-inner { min-height: 68px; grid-template-columns: auto minmax(0, 1fr) auto; gap: 32px; padding: 0 32px; width: 100%; max-width: none; }
+.topbar .brand-link { width: auto; height: auto; }
+.topbar .brand-lockup { font-size: 22px; gap: 8px; }
+.topbar .brand-mark { width: 32px; height: 32px; }
+.topbar .public-nav { display: flex; justify-content: flex-start; gap: 18px; overflow: visible; }
+.primary-nav-item { display: contents; }
+.topbar .public-nav a, .nav-more summary { font-size: 12px; padding: 12px 0; white-space: nowrap; }
+.nav-more { position: relative; }
+.nav-more summary { color: var(--link); cursor: pointer; list-style: none; }
+.nav-more summary::-webkit-details-marker { display: none; }
+.nav-more summary.active { box-shadow: inset 0 -1px 0 var(--ink); }
+.nav-more summary:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+.nav-more-panel { position: absolute; top: calc(100% + 8px); right: 0; width: 246px; padding: 12px 18px; display: grid; gap: 4px; background: var(--paper); border: 1px solid var(--hair); box-shadow: 0 8px 24px #0002; z-index: 80; }
+.topbar .nav-more-panel a { padding: 10px 0; white-space: normal; }
+.topbar .theme-switch { padding: 0; border: 0; }
+.topbar .theme-switch button { width: 30px; height: 40px; border-radius: 50%; }
+.topbar .theme-switch button.active { background: transparent; box-shadow: none; }
+.topbar .theme-switch button.active .theme-swatch { outline: 1px solid var(--link); outline-offset: 4px; }
+.compact-mobile-nav { display: none; }
+.workspace-nav { top: 68px; }
+@media (max-width: 1100px) {
+  .topbar .topbar-inner { grid-template-columns: minmax(0, 1fr) auto; gap: 12px; }
+  .topbar .public-nav { display: none; }
+  .compact-mobile-nav { display: flex; align-items: center; gap: 26px; padding: 0 32px; border-top: 1px solid var(--hair); font-size: 12px; }
+  .compact-mobile-nav a, .compact-mobile-nav button { padding: 12px 0; }
+  .compact-mobile-nav a.active { box-shadow: inset 0 -1px var(--ink); }
+  .compact-mobile-nav button { margin-left: auto; background: none; border: 0; color: var(--link); font: inherit; cursor: pointer; }
+  .topbar .mobile-public-menu { display: block; position: absolute; inset: 100% 0 auto; max-height: calc(100dvh - 116px); overflow-y: auto; background: var(--paper); border-bottom: 1px solid var(--hair); box-shadow: 0 8px 24px #0002; }
+  .mobile-public-menu .wrap { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 20px; padding: 16px 32px; }
+  .mobile-public-menu a { padding: 10px 0; font-size: 12px; text-transform: none; letter-spacing: 0; }
+  .workspace-nav { top: 114px; }
+}
+@media (max-width: 600px) {
+  .topbar .topbar-inner { padding: 0 16px; gap: 8px; min-height: 62px; }
+  .topbar .brand-lockup { font-size: 17px; gap: 6px; }
+  .topbar .brand-mark { width: 27px; height: 27px; }
+  .topbar .theme-switch button { width: 26px; }
+  .compact-mobile-nav { padding-inline: 20px; }
+  .topbar-actions { gap: 2px; }
+}
+@media (max-width: 360px) { .topbar .brand-lockup { font-size: 14px; } .topbar .brand-mark { width: 23px; height: 23px; } }

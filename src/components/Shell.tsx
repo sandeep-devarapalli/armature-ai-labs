@@ -8,7 +8,6 @@ import {
   ClipboardCheck,
   LogIn,
   LogOut,
-  Menu,
   PackageOpen,
   QrCode,
   UserRound,
@@ -28,17 +27,13 @@ import { BrandMark } from "./BrandMark";
 import { AnalyticsConsent, AnalyticsSettingsButton } from "./AnalyticsConsent";
 import { PageMetadata } from "./PageMetadata";
 
-const publicLinks = [
-  ["/", "The lab"],
+const primaryLinks = [["/", "The lab"], ["/join", "Membership"], ["/services", "Services"], ["/ecosystem", "Ecosystem"]] as const;
+const moreLinks = [
   ["/about", "Who we are"],
   ...(equipmentPageAvailable ? [["/equipment", "Equipment"]] : []),
-  ["/join", "Membership"],
-  ["/services", "Services"],
-  ["/projects", "Projects"],
-  ["/blog", "Blog"],
-  ["/ecosystem", "Ecosystem"],
-  ["/components", "Equipment & Components"],
+  ["/projects", "Projects"], ["/blog", "Blog"], ["/components", "Equipment & Components"]
 ] as const;
+const coursesUrl = "https://courses.armatureailabs.com/";
 
 const memberLinks = [
   ["/dashboard", "Dashboard", ClipboardCheck],
@@ -102,14 +97,27 @@ export function Shell({ children }: PropsWithChildren) {
   const { currentMember, isAdmin, isStaff, mode, online, notice, clearNotice, signOut } = useApp();
   const { pathname } = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const moreMenu = useRef<HTMLDetailsElement>(null);
+  const header = useRef<HTMLElement>(null);
+  const mobileTrigger = useRef<HTMLButtonElement>(null);
   const workspaceLinksRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMobileMenuOpen(false);
+    if (moreMenu.current) moreMenu.current.open = false;
     workspaceLinksRef.current
       ?.querySelector<HTMLAnchorElement>("a.active")
       ?.scrollIntoView({ block: "nearest", inline: "center" });
   }, [pathname, currentMember, isAdmin, isStaff]);
+
+  useEffect(() => {
+    const dismiss = (event: PointerEvent) => {
+      if (!moreMenu.current?.contains(event.target as Node) && moreMenu.current) moreMenu.current.open = false;
+      if (!header.current?.contains(event.target as Node)) setMobileMenuOpen(false);
+    };
+    document.addEventListener("pointerdown", dismiss);
+    return () => document.removeEventListener("pointerdown", dismiss);
+  }, []);
 
   return (
     <div className="app-shell">
@@ -120,31 +128,29 @@ export function Shell({ children }: PropsWithChildren) {
       <a className="skip-link" href="#main">
         Skip to content
       </a>
-      <header className="topbar">
+      <header className="topbar" ref={header} onKeyDown={(event) => {
+        if (event.key !== "Escape") return;
+        if (moreMenu.current?.open) { moreMenu.current.open = false; moreMenu.current.querySelector("summary")?.focus(); }
+        if (mobileMenuOpen) { setMobileMenuOpen(false); mobileTrigger.current?.focus(); }
+      }}>
         <div className={`wrap topbar-inner${basicOnboardingAvailable ? " with-basic-account" : ""}`}>
           <Link to="/" className="brand-link">
             <BrandMark />
           </Link>
           <nav className="public-nav" aria-label="Primary navigation">
-            {publicLinks.map(([to, label]) => (
-              <NavLink key={to} to={to} end={to === "/"}>
-                {label}
-              </NavLink>
+            {primaryLinks.map(([to, label], index) => (
+              <span className="primary-nav-item" key={to}>
+                <NavLink to={to} end={to === "/"}>{label}</NavLink>
+                {index === 1 && <a href={coursesUrl}>Courses</a>}
+              </span>
             ))}
+            <details className="nav-more" ref={moreMenu}>
+              <summary className={moreLinks.some(([to]) => pathname === to || pathname.startsWith(`${to}/`)) ? "active" : ""}>More <span aria-hidden="true">⌄</span></summary>
+              <div className="nav-more-panel">{moreLinks.map(([to, label]) => <NavLink key={to} to={to}>{label}</NavLink>)}</div>
+            </details>
           </nav>
           <div className="topbar-actions">
             <ThemeSwitch />
-            <button
-              className="icon-button mobile-menu-link"
-              type="button"
-              aria-expanded={mobileMenuOpen}
-              aria-controls="mobile-public-menu"
-              title="Navigation"
-              onClick={() => setMobileMenuOpen((open) => !open)}
-            >
-              <Menu aria-hidden="true" />
-              <span className="sr-only">{mobileMenuOpen ? "Close navigation" : "Open navigation"}</span>
-            </button>
             {basicOnboardingAvailable && <AccountMenu />}
             {!basicOnboardingAvailable && memberPlatformAvailable && (currentMember ? (
               <button className="icon-button" type="button" onClick={() => void signOut()} title="Sign out">
@@ -159,10 +165,15 @@ export function Shell({ children }: PropsWithChildren) {
             ))}
           </div>
         </div>
+        <nav className="compact-mobile-nav" aria-label="Quick navigation">
+          <NavLink to="/" end>The lab</NavLink>
+          <a href={coursesUrl}>Courses</a>
+          <button ref={mobileTrigger} type="button" aria-expanded={mobileMenuOpen} aria-controls="mobile-public-menu" onClick={() => setMobileMenuOpen(open => !open)}>Menu <span aria-hidden="true">{mobileMenuOpen ? "−" : "+"}</span></button>
+        </nav>
         {mobileMenuOpen && (
           <nav id="mobile-public-menu" className="mobile-public-menu" aria-label="Mobile navigation">
             <div className="wrap">
-              {publicLinks.map(([to, label]) => (
+              {[...primaryLinks.slice(1), ...moreLinks].map(([to, label]) => (
                 <NavLink key={to} to={to} end={to === "/"}>
                   {label}
                 </NavLink>
