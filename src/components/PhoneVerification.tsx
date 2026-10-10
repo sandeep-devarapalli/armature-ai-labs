@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
 interface PhoneStatus {
+  available_channels?: ("whatsapp" | "sms")[];
   enabled: boolean; verified: boolean; masked_phone: string | null;
   channel: "whatsapp" | "sms" | null; expires_at: string | null; resend_available_at: string | null;
 }
@@ -48,22 +49,25 @@ export function PhoneVerification({ client }: { client: SupabaseClient }) {
   }, [status, now]);
   const cooldown = Boolean(status?.resend_available_at && Date.parse(status.resend_available_at) > now);
   const pending = Boolean(status?.expires_at && Date.parse(status.expires_at) > now);
-  const start = (event: FormEvent<HTMLFormElement>) => { event.preventDefault(); void request("start", "whatsapp"); };
+  const channels = status?.enabled ? (status.available_channels ?? ["sms"]) : [];
+  const available = channels.includes("sms") || channels.includes("whatsapp");
+  const start = (event: FormEvent<HTMLFormElement>) => { event.preventDefault(); if (channels.includes("sms")) void request("start", "sms"); };
   return <section id="mobile-verification" className="ol-history" aria-labelledby="mobile-verification-heading">
     <h2 id="mobile-verification-heading">Mobile verification</h2>
     <p>Verify your personal number to complete Verified membership. It is not shown to other members.</p>
     {error && <><p role="alert">{error}</p>{status && <button className="button secondary" disabled={busy} onClick={() => void request("status")}>Refresh mobile verification</button>}</>}
     {busy && <p role="status">Checking verification…</p>}
     {!status && !busy && <button className="button secondary" onClick={() => void request("status")}>Retry mobile verification</button>}
-    {status && !status.enabled && <p>Mobile verification is not available yet. You can continue using your account and free courses.</p>}
+    {status && !available && <p>Mobile verification is not available yet. You can continue using your account and free courses.</p>}
     {status?.enabled && <>
-      {status.verified && <><p className="ol-uploaded" role="status">Mobile verified · {status.masked_phone}</p>{!changing && <button className="button secondary" onClick={() => setChanging(true)}>Change mobile number</button>}</>}
-      {(!status.verified || changing) && <>
+      {status.verified && <><p className="ol-uploaded" role="status">Mobile verified · {status.masked_phone}</p>{available && !changing && <button className="button secondary" onClick={() => setChanging(true)}>Change mobile number</button>}</>}
+      {available && (!status.verified || changing) && <>
         <form className="ol-form" onSubmit={start}>
           <label>Mobile number with country code<input type="tel" autoComplete="tel" value={phone} onChange={event => setPhone(event.target.value)} required pattern="\+[1-9][0-9]{7,14}" placeholder="+91…" disabled={busy} /></label>
           <p>One verified number per personal membership. A replacement must be verified before it can be used.</p>
-          <button className="button" disabled={busy || cooldown}>Send WhatsApp code</button>
-          <button type="button" className="button secondary" disabled={busy || cooldown || !/^\+[1-9]\d{7,14}$/.test(phone.trim())} onClick={() => void request("start", "sms")}>Use SMS instead</button>
+          {channels.includes("sms") && <p>We will send a verification code by SMS.</p>}
+          {channels.includes("sms") && <button className="button" disabled={busy || cooldown}>Send SMS code</button>}
+          {channels.includes("whatsapp") && <button type="button" className="button secondary" disabled={busy || cooldown || !/^\+[1-9]\d{7,14}$/.test(phone.trim())} onClick={() => void request("start", "whatsapp")}>Use WhatsApp instead</button>}
           {cooldown && <p>Another code can be requested after {new Date(status.resend_available_at!).toLocaleTimeString()}.</p>}
         </form>
         {status.expires_at && <form className="ol-form" onSubmit={event => { event.preventDefault(); void request("verify"); }}>

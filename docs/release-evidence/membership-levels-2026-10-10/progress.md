@@ -1,6 +1,12 @@
 # Basic, Verified and Premium — implementation handoff
 
-## State and boundaries
+## SMS-first follow-up, 10 October 2026
+
+Owner selected SMS now and WhatsApp later; both-channel readiness below describes the original plan and is superseded. PRs #126–#128 were squash-merged and the compatible website, courses and backend released with tier/phone gates off; final release proof is in the local `output/membership-levels-2026-10-10/live-release/release.md`. This follow-up makes SMS independent of WhatsApp configuration and adds explicit channel availability. Live phone provider is disabled, no Auth Hooks exist, and names-only Edge secret inspection found no MSG91 or MEMBER_PHONE configuration. Owner completed MSG91 signup in Work Chrome; SMS template/sender lists are empty. Owner confirmed no DLT registration, then asked about test credentials and an existing Twilio account. Provider choice is under review; no Twilio configuration has been changed. No credentials or OTPs belong in this note. Real SMS and tier activation remain unfinished.
+
+SMS-first validation: `npm test` passed 608 tests across 55 files, including 20 phone Edge tests and 7 phone UI tests; `npm run build` passed TypeScript, assets and 165-page SEO checks. Six desktop/mobile tier browser scenarios passed with synthetic responses. Deno checks passed both endpoints and the local Auth harness. The updated real local Auth harness passed initial SMS, SMS replacement, same-account retention and OTP/hook replay protection with WhatsApp disabled and no WhatsApp secrets. Two provider calls were mocked; zero external messages. Restart initially hit an analytics-port conflict with another stack; excluding only logflare/vector resolved it. Original Auth configuration was restored, then only this isolated stack was stopped with volumes preserved. Screenshots and logs: `output/membership-sms-first-2026-10-10/` in the original Downloads folder. No real membership OTP has been sent by this follow-up.
+
+## Original implementation state and boundaries
 
 Prepared 10 October 2026. Production membership rules, MSG91 configuration, recipients, payments, workers and the LLP/Razorpay hold have not been changed. Both the database tier gate and the frontend flag default off. Phone delivery has a separate default-off Edge secret. Real WhatsApp/SMS verification is still required before tier activation.
 
