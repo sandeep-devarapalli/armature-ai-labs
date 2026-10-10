@@ -13,10 +13,23 @@ const messages: Record<string, [string, string]> = {
   reinstated: ["An update about your Armature membership", `Your basic membership has been reinstated. Sign in at ${portal} to view your current status. This restores basic-member privileges only and does not activate paid subscriptions or bookings.`],
 };
 
+const submittedAdminMessage: [string, string] = ["An Armature application has been submitted", "A member has submitted their application for approval. Received: full name, email, phone number, LinkedIn URL, date of birth, privacy acceptance, a scanned profile photo and a scanned government ID. Guardian permission, where required, must still be reviewed before approval. Open https://armatureailabs.com/admin/members and sign in to see the applicant and submitted details. Review identity documents only inside the protected portal. Do not download or retain copies."];
+const identityMessages: Record<string, [string, string]> = {
+  ...messages,
+  admin_ready: submittedAdminMessage,
+  ready: ["Your Armature identity application is ready for review", ready.replace("Basic membership approval does not include paid access.", "Identity approval and mobile verification are both required for Verified membership. Paid services remain separate.")],
+  resubmission_ready: ["Your Armature identity application is ready for review", ready.replace("Basic membership approval does not include paid access.", "Identity approval and mobile verification are both required for Verified membership. Paid services remain separate.")],
+  approved: ["An update about your Armature membership", `Your identity application has been approved. Sign in at ${portal} to check your mobile verification and membership level. Verified membership requires both identity approval and a verified mobile number. Equipment and workspace access remain separately charged and subject to availability; approval does not grant paid access.`],
+  revoked: ["An update about your Armature membership", `Your membership access has been revoked. You can still sign in at ${portal} to view your status and the explanation. Membership levels do not override this restriction. Contact ${help} if you need help.`],
+  reinstated: ["An update about your Armature membership", `Your membership access has been reinstated. Sign in at ${portal} to check your current level. Verified membership requires approved identity and a verified mobile number. Premium requires a qualifying active workspace subscription; reinstatement does not grant paid services.`],
+};
+
 // Version 1 is immutable: retries must retain identical provider payloads.
 export function memberNotificationTemplate(kind: string, version: number) {
-  const message = version === 2 && kind === "admin_ready"
-    ? ["An Armature application has been submitted", "A member has submitted their application for approval. Received: full name, email, phone number, LinkedIn URL, date of birth, privacy acceptance, a scanned profile photo and a scanned government ID. Guardian permission, where required, must still be reviewed before approval. Open https://armatureailabs.com/admin/members and sign in to see the applicant and submitted details. Review identity documents only inside the protected portal. Do not download or retain copies."]
+  const message = version === 3 && Object.hasOwn(identityMessages, kind)
+    ? identityMessages[kind]
+    : version === 2 && kind === "admin_ready"
+    ? submittedAdminMessage
     : version === 1 && Object.hasOwn(messages, kind) && messages[kind];
   if (!message) return null;
   const [subject, text] = message;

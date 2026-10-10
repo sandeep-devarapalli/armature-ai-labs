@@ -36,8 +36,8 @@ Deno.serve(async (request) => {
     const user = await authenticatedUser(request);
     const scoped = createClient(requiredEnv("SUPABASE_URL"), requiredEnv("SUPABASE_ANON_KEY"), { global: { headers: { Authorization: `Bearer ${bearerToken(request)}` } }, auth: { persistSession: false, autoRefreshToken: false } });
     const { data: row } = await scoped.from("my_equipment_wishlist").select("id").eq("id", id).eq("is_published", false).is("merged_into", null).maybeSingle();
-    const { data: membership } = await scoped.from("basic_onboarding_applications").select("status").eq("user_id", user.id).eq("status", "approved").maybeSingle();
-    if (!row || !membership) throw new HttpError(403, "An approved membership and your unpublished request are required.");
+    const { data: membership, error: membershipError } = await scoped.rpc("has_verified_member_access");
+    if (!row || membershipError || membership !== true) throw new HttpError(403, "An approved membership and your unpublished request are required.");
     if (request.headers.get("x-image-rights") !== "confirmed") throw new HttpError(400, "Confirm permission to share this product image.");
     const type = request.headers.get("content-type") || "";
     const extension = ({ "image/png": "png", "image/jpeg": "jpg", "image/webp": "webp" } as Record<string, string>)[type];

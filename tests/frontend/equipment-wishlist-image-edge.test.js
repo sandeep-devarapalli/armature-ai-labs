@@ -17,7 +17,7 @@ function setup({ published=false, owner='owner', role=[], approved=true, changed
   };
   const upload=vi.fn(async()=>({error:null}));
   const download=vi.fn(async()=>({data:new NodeBlob(['clean']),error:null}));
-  const rpc=vi.fn(async()=>({error:changed?new Error('stale'):null}));
+  const rpc=vi.fn(async(name)=>name==='has_verified_member_access'?{data:approved,error:null}:{error:changed?new Error('stale'):null});
   const client={from:query,rpc,storage:{from:()=>({upload,download})}};
   const scan=vi.fn(async bytes=>{if(scanFails)throw new HttpError(503,'Scanner unavailable');return bytes;});
   new Function('Deno','createClient','requiredEnv','corsHeaders','HttpError','json','adminClient','authenticatedUser','bearerToken','scanOnboardingImage',code)(
