@@ -2,7 +2,10 @@ import { createContext, useCallback, useContext, useEffect, useRef, useState, ty
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { supabase } from "../lib/supabase";
 
+export type MembershipLevel = "basic" | "verified" | "premium";
 export interface AccountSummary {
+  membership_level?: MembershipLevel | null; membership_levels_enabled?: boolean;
+  verification?: { email: boolean; mobile: boolean; identity: boolean }; next_status_change_at?: string | null;
   user_id: string; name: string; email: string; status: string;
   application_status: string | null; role: "member" | "membership_reviewer" | "admin" | "super_admin";
   revision: number | null; owner_approval_available: boolean;
@@ -11,6 +14,17 @@ export const membershipLabels: Record<string, string> = {
   incomplete: "Registration incomplete", pending: "Pending review", corrections_requested: "Action required",
   approved: "Basic · Approved", rejected: "Registration rejected", revoked: "Basic · Revoked",
 };
+export const membershipLevelLabels: Record<MembershipLevel, string> = { basic: "Basic", verified: "Verified", premium: "Premium" };
+export function accountMembershipLevelsEnabled(account: Pick<AccountSummary, "membership_levels_enabled"> | null) {
+  return import.meta.env.VITE_MEMBERSHIP_LEVELS_ENABLED === "true" && account?.membership_levels_enabled === true;
+}
+export function accountMembershipLabel(account: AccountSummary) {
+  if (!accountMembershipLevelsEnabled(account)) return membershipLabels[account.status] || "Status unavailable";
+  return account.membership_level ? `${membershipLevelLabels[account.membership_level]} member` : account.verification?.email ? "Membership access restricted" : "Email verification required";
+}
+export function applicationStatusLabel(status: string, levelsEnabled: boolean) {
+  return levelsEnabled && status === "approved" ? "Identity approved" : levelsEnabled && status === "revoked" ? "Membership revoked" : membershipLabels[status] || "Status unavailable";
+}
 export const accountRoleLabels: Record<string, string> = {
   membership_reviewer: "Staff", admin: "Admin", super_admin: "Super admin",
 };
@@ -80,6 +94,13 @@ export function AccountProvider({ children, client = supabase }: PropsWithChildr
       document.removeEventListener("visibilitychange", focus); window.clearInterval(interval);
     };
   }, [client, refresh]);
+  useEffect(() => {
+    if (!accountMembershipLevelsEnabled(account) || !account?.next_status_change_at) return;
+    const delay = Date.parse(account.next_status_change_at) - Date.now();
+    if (!Number.isFinite(delay) || delay <= 0) return;
+    const timer = window.setTimeout(() => void refresh(), Math.min(delay + 100, 2147483647));
+    return () => window.clearTimeout(timer);
+  }, [account, refresh]);
   return <AccountContext.Provider value={{ account, signedIn, loading, error, refresh, signOut }}>{children}</AccountContext.Provider>;
 }
 export const useAccount = () => useContext(AccountContext);

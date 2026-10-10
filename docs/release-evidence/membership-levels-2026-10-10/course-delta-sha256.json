@@ -1,0 +1,22 @@
+{
+  "course-app/CourseAdmin.tsx": {
+    "before_sha256": "55b960d092f3409673a8f0039954c9a0f56fb6a774643cfd301b862a79ca5282",
+    "after_sha256": "f910e9bf7eea470130608bd5a02803adceb0dee78e4a990b99c33530f9469d04"
+  },
+  "course-app/CourseSession.tsx": {
+    "before_sha256": "440d1b60d7241755604bd1fe57581a480b065ba905f2ae15285ff2aaca15b395",
+    "after_sha256": "dae45b670e74c476445e5f7ef75eb55d02394e5479f66345516608bbb86b2b31"
+  },
+  "course-app/MemberApp.tsx": {
+    "before_sha256": "88f6ff7ec31c1ab60ac95d576ff7f70b4e256f70e1cb6b0b3affb3f9b91000d3",
+    "after_sha256": "2bfeb3158cd1bb2a19792406a590ceede7805f177ab4e42335d41c3dc4c67600"
+  },
+  "course-app/member-api.ts": {
+    "before_sha256": "6864da10ccd3880c8dd2b89ac0b75482fae5ed0529a653a914a62e5f4b8f7d35",
+    "after_sha256": "699682ad3c4eb0fbc888f996b1e7e6c5fa1b32e0f96fcba17be76268f7585d08"
+  },
+  "tests/frontend/courses-member.test.tsx": {
+    "before_sha256": "d90e6e0b3e1f0314af43e7d0067a6de01cefc08e99eb8881544a3d7c1936c25d",
+    "after_sha256": "45d63f32f3914eeea593a4ebc2eee398e7d31ebb353c5890c35c2a7026f18db6"
+  }
+}

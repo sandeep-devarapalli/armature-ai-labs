@@ -1,0 +1,218 @@
+--- a/course-app/CourseAdmin.tsx
++++ b/course-app/CourseAdmin.tsx
+@@ -131,7 +131,7 @@
+         <nav className="admin-tabs" aria-label="Administration sections">{(Object.keys(tabNames) as Tab[]).map(value => <button key={value} aria-current={tab === value ? 'page' : undefined} disabled={frozen || (dirty && value !== tab)} onClick={() => { setTab(value); setError(''); setConfirmed(false); }}>{tabNames[value]}</button>)}</nav>
+         <div className="admin-change-note"><label>Change or review note<textarea value={note} disabled={frozen} onChange={event => setNote(event.target.value)} placeholder="Explain the change or record what you reviewed." /></label><p className="meta">Required for each saved action. Recorded with your account in the audit history.</p>{needsReload ? <p role="status">Reload this version before making further changes.</p> : null}{dirty ? <p role="status">Unsaved edits · save this section or discard before navigating.</p> : null}</div>
+         {tab === 'details' ? <section><h2>Course details</h2><fieldset disabled={frozen || !isDraft} className="admin-fields"><label>Course title<input value={form.title} onChange={event => changeCourse('title', event.target.value)} /></label><label>Course description<textarea rows={5} value={form.description} onChange={event => changeCourse('description', event.target.value)} /></label>
+-          <label>Learning access<select value={form.accessTier} onChange={event => changeCourse('accessTier', event.target.value as AdminCourse['accessTier'])}><option value="unassigned">Not assigned</option><option value="free">Free · verified members</option><option value="paid">Paid · verified members with entitlement</option></select></label>
++          <label>Learning access<select value={form.accessTier} onChange={event => changeCourse('accessTier', event.target.value as AdminCourse['accessTier'])}><option value="unassigned">Not assigned</option><option value="free">Free · current membership rules</option><option value="paid">Paid · verified members with entitlement</option></select></label>
+           <label>Final assessment<select value={form.finalAssessmentRoute} onChange={event => changeCourse('finalAssessmentRoute', event.target.value as AdminCourse['finalAssessmentRoute'])}><option value="unassigned">To be confirmed later</option><option value="online_quiz">Online final quiz</option><option value="lab_written_and_practical">Supervised written test and lab practical</option></select></label>
+           <label>Learning labs<select value={form.labPolicyStatus} onChange={event => changeCourse('labPolicyStatus', event.target.value as AdminCourse['labPolicyStatus'])}><option value="unassigned">To be confirmed later</option><option value="none">No separate learning labs</option><option value="configured">Course or module labs required / offered</option></select></label>
+           <p className="meta">Assessment and lab policies may remain to be confirmed while learning content is reviewed and published. This does not mean no labs or no assessment. An online final quiz may still have separate course or module labs. Selecting a policy does not enable payments, lab sign-off, grading or certificates.</p>
+--- a/course-app/CourseSession.tsx
++++ b/course-app/CourseSession.tsx
+@@ -64,7 +64,7 @@
+     } catch { setError('Sign-in failed. Check your details and try again.'); }
+     finally { setBusy(false); }
+   }
+-  return <main className="wrap account-entry" id="main-content"><h1>Learn with Armature.</h1><p>Sign in with your Armature member email. Registration is free; full learning requires identity verification.</p>
++  return <main className="wrap account-entry" id="main-content"><h1>Learn with Armature.</h1><p>Sign in with your Armature member email. Registration is free. Sign in to see your course access and any remaining membership steps.</p>
+     {!localPassword ? <p>Request and open your link in the same browser and profile. If you use Chrome for email, open this courses page in that Chrome profile first. Use the newest link only; each link works once.</p> : null}
+     <form onSubmit={event => void submit(event)}><label>Email<input name="email" type="email" autoComplete="email" required /></label>
+       {localPassword ? <label>Local test password<input name="password" type="password" autoComplete="current-password" required /></label> : null}
+--- a/course-app/MemberApp.tsx
++++ b/course-app/MemberApp.tsx
+@@ -1,7 +1,7 @@
+-import { useEffect, useMemo, useRef, useState } from 'react';
++import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+ import type { Session, SupabaseClient } from '@supabase/supabase-js';
+ import { CourseSignIn, useCourseSession } from './CourseSession';
+-import { courseApi, createCourseClient, type MemberCourse, type Progress, type Syllabus } from './member-api';
++import { courseApi, createCourseClient, courseLevelsEnabled, type CourseMembership, type MemberCourse, type Progress, type Syllabus } from './member-api';
+ import { MemberLesson } from './MemberLesson';
+ import { CourseWorkspace } from './CourseWorkspace';
+ import type { Block } from './types';
+@@ -22,6 +22,10 @@
+   const { session, ready, error } = useCourseSession(client);
+   const [theme, setTheme] = useState<Theme>(initialTheme);
+   const [signOutError, setSignOutError] = useState('');
++  const [membership, setMembership] = useState<{ userId: string; value: CourseMembership } | null>(null);
++  const receiveMembership = useCallback((userId: string, value: CourseMembership) => setMembership({ userId, value }), []);
++  const currentMembership = membership?.userId === session?.user.id ? membership?.value : null;
++  const level = courseLevelsEnabled(currentMembership) ? currentMembership?.membership_level : null;
+   const accountMenu = useRef<HTMLDetailsElement>(null);
+   useEffect(() => {
+     const closeOutside = (event: PointerEvent) => { if (accountMenu.current && event.target instanceof Node && !accountMenu.current.contains(event.target)) accountMenu.current.open = false; };
+@@ -46,17 +50,17 @@
+       <span className="course-site-label">Courses</span>
+       <nav className="course-header-nav" aria-label="Course navigation"><a href="/">All courses</a><a href="https://armatureailabs.com/"><span aria-hidden="true">← </span>Back to home</a></nav>
+       <div className="course-header-actions"><div className="themes" role="group" aria-label="Reading theme">{(['light', 'dark', 'sepia'] as Theme[]).map(value => <button key={value} aria-label={`${value} theme`} aria-pressed={theme === value} title={`${value} theme`} className={`swatch ${value}`} onClick={() => setTheme(value)} />)}</div>
+-      {session ? <details ref={accountMenu} className="course-account" onKeyDown={event => { if (event.key === 'Escape') { event.currentTarget.open = false; event.currentTarget.querySelector('summary')?.focus(); } }}><summary aria-label="Account menu"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5" /><path d="M5 21v-2a7 7 0 0 1 14 0v2" /></svg><span>Account</span><span aria-hidden="true">⌄</span></summary><div className="course-account-panel"><button onClick={() => void signOut()}>Sign out</button></div></details> : null}</div>
++      {session ? <details ref={accountMenu} className="course-account" onKeyDown={event => { if (event.key === 'Escape') { event.currentTarget.open = false; event.currentTarget.querySelector('summary')?.focus(); } }}><summary aria-label="Account menu"><svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5" /><path d="M5 21v-2a7 7 0 0 1 14 0v2" /></svg><span>Account</span><span aria-hidden="true">⌄</span></summary><div className="course-account-panel">{level ? <p>{level.charAt(0).toUpperCase() + level.slice(1)} member</p> : null}{courseLevelsEnabled(currentMembership) && currentMembership?.role && currentMembership.role !== 'member' ? <p>{({ membership_reviewer: 'Staff', admin: 'Admin', super_admin: 'Super admin' })[currentMembership.role]}</p> : null}<a href="https://armatureailabs.com/onboarding">My membership</a><button onClick={() => void signOut()}>Sign out</button></div></details> : null}</div>
+     </header>
+     {error || signOutError ? <p className="error" role="alert">{error || signOutError}</p> : null}
+-    {!ready ? <main className="wrap" id="main-content"><p role="status">Restoring your session…</p></main> : session ? <CourseWorkspace key={session.user.id} client={client} session={session}><MemberLearning client={client} session={session} /></CourseWorkspace> : <CourseSignIn client={client} />}
++    {!ready ? <main className="wrap" id="main-content"><p role="status">Restoring your session…</p></main> : session ? <CourseWorkspace key={session.user.id} client={client} session={session}><MemberLearning client={client} session={session} onMembership={receiveMembership} /></CourseWorkspace> : <CourseSignIn client={client} />}
+     <footer className="site-footer"><span>Armature AI Labs</span><span>HSR Layout, Bengaluru</span><span>Reading progress is separate from lab and assessment results.</span></footer>
+   </>;
+ }
+ 
+-function MemberLearning({ client, session }: { client: SupabaseClient; session: Session }) {
++function MemberLearning({ client, session, onMembership }: { client: SupabaseClient; session: Session; onMembership: (userId: string, value: CourseMembership) => void }) {
+   const api = useMemo(() => courseApi(client), [client]);
+-  const [catalog, setCatalog] = useState<{ token: string; courses: MemberCourse[]; verified: boolean } | null>(null);
++  const [catalog, setCatalog] = useState<{ token: string; courses: MemberCourse[]; verified: boolean; membership: CourseMembership } | null>(null);
+   const [location, setLocation] = useState<CourseLocation>(() => readCourseLocation());
+   const { version, lessonId, myCourses } = location;
+   const [syllabus, setSyllabus] = useState<Syllabus | null>(null);
+@@ -76,6 +80,8 @@
+   const activeLesson = useRef<string | null>(null);
+   activeLesson.current = loaded?.id ?? null;
+   const courses = catalog?.token === token ? catalog.courses : [];
++  const levelsEnabled = courseLevelsEnabled(catalog?.membership);
++  const basic = levelsEnabled ? catalog?.membership.basic === true : catalog?.verified;
+   const course = courses.find(item => item.versionId === version);
+   const lessons = syllabus?.modules.flatMap(module => module.lessons) ?? [];
+   const lesson = lessons.find(item => item.id === lessonId);
+@@ -105,7 +111,8 @@
+       if (abort.signal.aborted) return;
+       if (!lessonAllowed) { setLoaded(null); changeLocation({ ...location, lessonId: null }, true); setError('Lesson access could not be confirmed.'); }
+       checkedToken.current = token;
+-      setCatalog({ token, courses: next, verified: membership.verified });
++      setCatalog({ token, courses: next, verified: membership.verified, membership });
++      onMembership(session.user.id, membership);
+     }).catch(() => { if (!abort.signal.aborted) { setCatalog(null); setLoaded(null); setError('Unable to confirm course access. Refresh or sign in again.'); } }).finally(() => { if (!abort.signal.aborted) setLoading(false); });
+     return () => { abort.abort(); mutation.current?.abort(); };
+   }, [api, token, refresh]);
+@@ -116,6 +123,14 @@
+     const timer = window.setInterval(update, 60000);
+     return () => { clearInterval(timer); window.removeEventListener('focus', update); document.removeEventListener('visibilitychange', update); };
+   }, []);
++
++  useEffect(() => {
++    if (!levelsEnabled || !catalog?.membership.next_status_change_at) return;
++    const delay = Date.parse(catalog.membership.next_status_change_at) - Date.now();
++    if (!Number.isFinite(delay) || delay < 0) return;
++    const timer = window.setTimeout(revalidate, Math.min(delay + 100, 2147483647));
++    return () => clearTimeout(timer);
++  }, [levelsEnabled, catalog?.membership.next_status_change_at]);
+ 
+   useEffect(() => {
+     syllabusVersion.current = null;
+@@ -131,7 +146,7 @@
+   useEffect(() => {
+     setLoaded(null); setLessonLoading(false);
+     if (!lessonId || !syllabus || syllabusVersion.current !== version || loading || !course) return;
+-    if (!lessons.some(item => item.id === lessonId) || !canOpen(lessonId)) { changeLocation({ ...location, lessonId: null }, true); setError('This lesson requires verified membership, enrollment and any applicable course entitlement.'); return; }
++    if (!lessons.some(item => item.id === lessonId) || !canOpen(lessonId)) { changeLocation({ ...location, lessonId: null }, true); setError('This lesson requires eligible membership, enrollment and any applicable course entitlement.'); return; }
+     const abort = new AbortController();
+     setLessonLoading(true); setError('');
+     api.lesson(lessonId, abort.signal).then(blocks => {
+@@ -175,7 +190,7 @@
+     {error ? <div className="error" role="alert">{error}</div> : null}
+     {loading ? <main className="wrap" id="main-content"><p role="status">Checking course access…</p></main> : !version ? <main className="catalog wrap" id="main-content">
+       <div className="catalog-intro"><h1 ref={heading} tabIndex={-1}>{myCourses ? 'My courses' : 'Build your foundations.'}</h1><p>{myCourses ? 'Resume your learning and see your saved reading progress.' : 'Explore computing, mathematics and embedded systems.'}</p></div>
+-      {catalog && !catalog.verified ? <p className="notice">Browse syllabuses and selected samples. <a href="https://armatureailabs.com/join/">Complete free identity verification</a> to enroll.</p> : null}
++      {catalog && !basic ? <p className="notice">Browse syllabuses and selected samples. <a href="https://armatureailabs.com/join/">{levelsEnabled ? 'Confirm your email' : 'Complete free identity verification'}</a> to enroll.</p> : null}
+       <div className="course-list">{displayed.map((item, index) => <article className="course-card" key={item.versionId}><span className="course-index">{String(index + 1).padStart(2, '0')}</span><div><h2>{item.title}</h2><p>{item.description}</p><span className="meta">{item.moduleCount} modules · {item.lessonCount} lessons · {item.accessTier === 'free' ? 'Free course' : 'Course entitlement required'}</span>{item.enrolled ? <p className="meta">{item.readCount} of {item.lessonCount} lessons read{!item.canLearn ? ' · Learning access unavailable' : ''}</p> : null}</div><div className="course-actions"><button className="primary" onClick={() => openCourse(item)}>View course</button>{item.enrolled && item.canLearn && item.resumeLessonId ? <button onClick={() => openCourse(item, true)}>Resume learning</button> : null}</div></article>)}</div>
+       {!displayed.length && !error ? <p>{myCourses ? 'You have not enrolled in a published course yet.' : 'No courses are published yet.'}</p> : null}
+     </main> : !course ? <main className="wrap" id="main-content"><h1 ref={heading} tabIndex={-1}>Course unavailable</h1><p>This course is no longer available for learning. Return to Courses or refresh your access.</p></main> : !lessonId ? <main id="main-content">
+@@ -184,7 +199,7 @@
+         {canLearn && lessons.length ? <button className="primary" onClick={() => navigate(course.resumeLessonId && canOpen(course.resumeLessonId) ? course.resumeLessonId : lessons[0].id)}>{course.resumeLessonId ? 'Resume learning' : 'Start learning'}</button> : null}
+         {!canLearn && lessons.some(item => item.isSample) ? <button onClick={() => navigate(lessons.find(item => item.isSample)!.id)}>Read sample lesson</button> : null}
+       </div></div></section>
+-      <div className="overview wrap"><section><h2>Course syllabus</h2>{curriculum()}{!syllabus ? <p role="status">Loading syllabus…</p> : null}</section><aside className="overview-notes"><section><h3>Your access</h3><p>{canLearn ? 'Enrolled · full lesson access' : course.canLearn ? 'Verified member · enroll to start learning' : !catalog?.verified ? 'Free identity verification is required for full learning.' : 'A valid course entitlement is required. Payments are not available yet.'}</p></section>
++      <div className="overview wrap"><section><h2>Course syllabus</h2>{curriculum()}{!syllabus ? <p role="status">Loading syllabus…</p> : null}</section><aside className="overview-notes"><section><h3>Your access</h3><p>{canLearn ? 'Enrolled · full lesson access' : course.canLearn ? (levelsEnabled && course.accessTier === 'free' ? 'Basic membership · enroll to start learning' : 'Verified member · enroll to start learning') : !basic ? (levelsEnabled ? 'Confirmed email is required for free learning.' : 'Free identity verification is required for full learning.') : 'A valid course entitlement is required. Payments are not available yet.'}</p></section>
+         <section><h3>Assessment & practical labs</h3><p>{course.finalAssessmentRoute === 'online_quiz' ? 'Final assessment: online quiz.' : course.finalAssessmentRoute === 'lab_written_and_practical' ? 'Final assessment: supervised written test and assessed practical at the lab.' : 'Assessment policy: to be confirmed. Learning access does not include an assessment or certificate.'}</p><p>{course.labPolicyStatus === 'unassigned' ? 'Course and module lab policy: to be confirmed. No lab activity is assigned in this version.' : course.labPolicyStatus === 'none' ? 'No separate learning labs are required.' : 'The course or selected modules include practical labs.'}</p>{syllabus?.labRequirements.map(lab => <section key={lab.id}><h4>{lab.title} · {lab.mandatory ? 'Required' : 'Optional'}</h4><p>{lab.moduleId ? syllabus.modules.find(module => module.id === lab.moduleId)?.title : 'Course-level lab'}</p><p>{lab.brief}</p><p>{lab.completionCriteria}</p>{lab.location ? <p>{lab.location}</p> : null}</section>)}<p className="meta">Lab sign-off, final grading and certificates are not available in this release.</p></section>
+       </aside></div>
+     </main> : <main id="main-content" className="workbench"><aside className={`curriculum ${contentsOpen ? 'is-open' : ''}`}><div className="curriculum-title"><span className="eyebrow">Course contents</span><h2>{course.title}</h2><button onClick={() => { changeLocation({ ...location, lessonId: null }); }}>Course overview</button></div><button className="contents-toggle" aria-expanded={contentsOpen} onClick={() => setContentsOpen(!contentsOpen)}>Contents</button><div className="curriculum-list">{curriculum()}</div></aside><div className="member-reader">
+--- a/course-app/member-api.ts
++++ b/course-app/member-api.ts
+@@ -1,5 +1,15 @@
+ import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+ import type { Block } from './types';
++
++export interface CourseMembership {
++  verified: boolean; basic?: boolean; membership_levels_enabled?: boolean;
++  membership_level?: 'basic' | 'verified' | 'premium' | null;
++  role?: 'member' | 'membership_reviewer' | 'admin' | 'super_admin';
++  next_status_change_at?: string | null;
++}
++export function courseLevelsEnabled(membership: CourseMembership | null | undefined) {
++  return import.meta.env.VITE_MEMBERSHIP_LEVELS_ENABLED === 'true' && membership?.membership_levels_enabled === true;
++}
+ 
+ export interface MemberCourse {
+   id: string; versionId: string; title: string; description: string;
+@@ -33,7 +43,7 @@
+   }
+   return {
+     catalog: (signal?: AbortSignal) => rpc<MemberCourse[]>('get_my_course_catalog', {}, signal),
+-    membership: (signal?: AbortSignal) => rpc<{ verified: boolean }>('get_course_membership', {}, signal),
++    membership: (signal?: AbortSignal) => rpc<CourseMembership>('get_course_membership', {}, signal),
+     syllabus: (version: string, signal?: AbortSignal) => rpc<Syllabus>('get_course_syllabus', { p_version_id: version }, signal),
+     progress: (version: string, signal?: AbortSignal) => rpc<Progress[]>('get_my_course_progress', { p_version_id: version }, signal),
+     lesson: (lesson: string, signal?: AbortSignal) => rpc<Block[]>('get_course_lesson', { p_lesson_id: lesson }, signal),
+--- a/tests/frontend/courses-member.test.tsx
++++ b/tests/frontend/courses-member.test.tsx
+@@ -8,7 +8,7 @@
+ const sample = { id: 'sample', title: 'Sample introduction', isSample: true };
+ const protectedLesson = { id: 'protected', title: 'Protected lesson', isSample: false };
+ const blocks = [{ id: 'explanation', type: 'text', content: { html: '<p>Protected explanation</p>' } }, { id: 'diagram', type: 'illustration', content: { svgCode: '<svg viewBox="0 0 100 40"><text x="5" y="20">Protected diagram</text></svg>', caption: 'Inline protected figure' } }];
+-function fixture(verified = true) {
++function fixture(verified = true, membership: Record<string, unknown> = {}) {
+   let user: { id: string; email: string } | null = { id: 'member-a', email: 'a@example.test' };
+   let change: (event: string, value: unknown) => void = () => {};
+   let enrolled = false;
+@@ -17,7 +17,7 @@
+   const handler = vi.fn(async (name: string, args: Record<string, unknown>) => {
+     if (name === 'get_course_admin_access') return { data: { allowed: false } };
+     if (name === 'get_my_course_catalog') return { data: [row()] };
+-    if (name === 'get_course_membership') return { data: { verified } };
++    if (name === 'get_course_membership') return { data: { verified, ...membership } };
+     if (name === 'get_course_syllabus') return { data: { modules: [{ id: 'm1', title: 'Module One', lessons: [sample, protectedLesson] }], labRequirements: [] } };
+     if (name === 'get_my_course_progress') return { data: saved };
+     if (name === 'enroll_in_course') { if (!verified) return { error: { code: '42501' } }; enrolled = true; return { data: {} }; }
+@@ -169,7 +169,7 @@
+ it.each(['protected', 'not-in-syllabus'])('does not fetch a forbidden or unknown deep-linked lesson: %s', async lessonId => {
+   window.history.replaceState(null, '', `/?version=version-a&lesson=${lessonId}`);
+   const context = fixture(false); render(<MemberApp client={context.client} />);
+-  await screen.findByText('This lesson requires verified membership, enrollment and any applicable course entitlement.');
++  await screen.findByText('This lesson requires eligible membership, enrollment and any applicable course entitlement.');
+   expect(context.handler.mock.calls.some(([name]) => name === 'get_course_lesson')).toBe(false);
+   expect(window.location.search).toBe('?version=version-a');
+ });
+@@ -197,3 +197,33 @@
+   fireEvent.click(screen.getByRole('button', { name: 'Sign out', exact: true }));
+   await screen.findByRole('heading', { name: 'Learn with Armature.' });
+ });
++
++
++it('lets confirmed-email Basic members enroll and read full free lessons when both gates are enabled', async () => {
++  vi.stubEnv('VITE_MEMBERSHIP_LEVELS_ENABLED', 'true');
++  try {
++    const context = fixture(true, { verified: false, basic: true, membership_levels_enabled: true, membership_level: 'basic', role: 'admin' });
++    render(<MemberApp client={context.client} />);
++    fireEvent.click(await screen.findByText('View course'));
++    await screen.findByText('Basic membership · enroll to start learning');
++    fireEvent.click(screen.getByText('Enroll in course'));
++    fireEvent.click(await screen.findByRole('button', { name: 'Protected lesson' }));
++    await screen.findByText('Protected explanation');
++    fireEvent.click(screen.getByText('Mark as read'));
++    await screen.findByText('Marked as read');
++    fireEvent.click(screen.getByLabelText('Account menu'));
++    expect(screen.getByText('Basic member')).toBeInTheDocument();
++    expect(screen.getByText('Admin')).toBeInTheDocument();
++  } finally { vi.unstubAllEnvs(); }
++});
++
++it('does not turn a restricted Basic classification into learning access', async () => {
++  vi.stubEnv('VITE_MEMBERSHIP_LEVELS_ENABLED', 'true');
++  try {
++    const context = fixture(false, { verified: false, basic: false, membership_levels_enabled: true, membership_level: null });
++    render(<MemberApp client={context.client} />);
++    fireEvent.click(await screen.findByText('View course'));
++    expect(screen.queryByRole('button', { name: 'Enroll in course' })).not.toBeInTheDocument();
++    expect(screen.queryByText('Basic member')).not.toBeInTheDocument();
++  } finally { vi.unstubAllEnvs(); }
++});
