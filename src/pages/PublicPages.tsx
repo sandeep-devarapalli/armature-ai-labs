@@ -1,6 +1,6 @@
 import { DiscountOffers } from "../components/DiscountOffers";
 import { useRegistrationLabel } from "../context/AccountContext";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import {
   ArrowRight,
   BatteryCharging,
@@ -21,6 +21,8 @@ import { Field, PageHeader, Section, Status } from "../components/Primitives";
 import { FieldOfTouch } from "../components/FieldOfTouch";
 import { basicOnboardingAvailable, memberPlatformAvailable } from "../config/release";
 import { useApp } from "../context/AppContext";
+import { supabase } from "../lib/supabase";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
 const equipmentRows = [
   ["Robot arm cell", "Planned guarded robot arm, controller and safety interlocks", "Power and safety design to be confirmed", "DB-A"],
@@ -299,6 +301,15 @@ export function ServicesPage() {
 }
 
 export function JoinPage() {
+  const [levelsEnabled, setLevelsEnabled] = useState(false);
+  useEffect(() => {
+    if (import.meta.env.VITE_MEMBERSHIP_LEVELS_ENABLED !== "true" || !supabase) return;
+    let active = true;
+    void (supabase as SupabaseClient).rpc("get_membership_levels_release_status").then(({ data, error }) => {
+      if (active) setLevelsEnabled(!error && data?.membership_levels_enabled === true);
+    });
+    return () => { active = false; };
+  }, []);
   const registrationLabel = useRegistrationLabel();
   const registrationFooterLabel = useRegistrationLabel("Open registration");
   const { currentMember, state, submitApplication } = useApp();
@@ -351,7 +362,9 @@ export function JoinPage() {
       <PageHeader
         meta="Membership · booking · HSR Layout"
         title={basicOnly ? "Create your basic membership." : memberPlatformAvailable ? "Join the lab. Book what you need." : "Build with us. Enquire about membership."}
-        description={basicOnly
+        description={levelsEnabled
+          ? "Start with confirmed email for free Basic membership and free courses. Complete identity and mobile verification for Verified membership. Premium follows an active qualifying workspace subscription; paid bookings remain closed."
+          : basicOnly
           ? "Register for free, complete your profile and submit your photo and ID for private staff review. Paid bookings remain closed."
           : memberPlatformAvailable
           ? "Create one member account, tell us what you are building, and complete staff approval. Approved members can reserve commissioned resources from one workspace."
@@ -362,7 +375,11 @@ export function JoinPage() {
       <Section number="01" title="One membership journey" lede={basicOnly ? "Start with free registration. Paid access will follow separately." : !memberPlatformAvailable ? "The planned process once membership opens." : undefined}>
         <div className="section-motion membership-motion"><FieldOfTouch scene="birds" /></div>
         <div className="process-list">
-          {(basicOnly ? [
+          {(levelsEnabled ? [
+            ["01", "Basic", "Confirm your email with Google or email sign-in. Access your account and enrol in published free courses."],
+            ["02", "Verified", "Complete your profile and private photo/ID review, including guardian permission if aged 16–17, and verify your mobile number. Equipment bookings require this level plus workspace access and any required training."],
+            ["03", "Premium", "An active qualifying day, week or monthly workspace subscription adds Premium membership. Verified active team members share their team's Premium level; cabin seats and equipment remain separately allocated. Paid bookings remain closed."]
+          ] : basicOnly ? [
             ["01", "Create an account", "Sign in with Google or a secure email link. Add your name, phone, date of birth and personal LinkedIn profile."],
             ["02", "Complete identity review", "Upload your photo and one accepted government ID through the protected portal. Staff review your registration; applicants aged 16–17 also need guardian permission by email."],
             ["03", "Choose paid access later", "Basic approval does not include a desk, cabin or equipment. Paid bookings remain closed and will open separately."]
@@ -400,7 +417,7 @@ export function JoinPage() {
         {basicOnly ? (
           <>
             <Status tone="good">Free basic registration open</Status>
-            <p className="lede">Complete your registration and follow its review status in the protected portal. Paid bookings remain closed.</p>
+            <p className="lede">{levelsEnabled ? "Confirm your email to start Basic membership. Continue to identity and mobile verification in your registration. Paid bookings remain closed." : "Complete your registration and follow its review status in the protected portal. Paid bookings remain closed."}</p>
             <div className="section-actions"><Link className="button button-primary" to="/onboarding">{registrationFooterLabel} <ArrowRight aria-hidden="true" /></Link></div>
           </>
         ) : !memberPlatformAvailable ? (

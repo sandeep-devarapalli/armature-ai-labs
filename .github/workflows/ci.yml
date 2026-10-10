@@ -122,6 +122,7 @@ jobs:
       VITE_BASIC_ONBOARDING_ENABLED: 'true'
       VITE_GOOGLE_AUTH_ENABLED: 'true'
       VITE_MEMBER_PLATFORM_ENABLED: 'false'
+      VITE_MEMBERSHIP_LEVELS_ENABLED: 'false'
       VITE_COMPONENT_REQUESTS_ENABLED: 'false'
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7

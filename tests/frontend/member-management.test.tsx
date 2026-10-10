@@ -97,3 +97,16 @@ it.each([null, "pending"])("View focuses details repeatedly without background r
   expect(search).toHaveFocus(); expect(scroll).toHaveBeenCalledTimes(2);
  } finally { HTMLElement.prototype.scrollIntoView = previous; }
 });
+
+it("keeps tier and review status separate and filters tiers on the server", async () => {
+ vi.stubEnv("VITE_MEMBERSHIP_LEVELS_ENABLED", "true");
+ const rpc = vi.fn(async (name: string) => ({ data: name === "get_basic_account_summary" ? { role: "admin", membership_levels_enabled: true } : { items: [{ ...member, status: "approved", membership_level: "basic", verification: { email: true, identity: true, mobile: false } }], total: 1, counts: { approved: 1 } }, error: null }));
+ const client = { rpc, auth: { getSession: async () => ({ data: { session: { user: { id: "actor" } } } }), onAuthStateChange: () => ({ data: { subscription: { unsubscribe() {} } } }) } } as unknown as SupabaseClient;
+ const { unmount } = render(<MemoryRouter><MemberManagementPage client={client} /></MemoryRouter>);
+ await screen.findByText("person@example.test");
+ expect(screen.getByText("Basic", { selector: "strong" })).toBeInTheDocument();
+ expect(screen.getByText(/Mobile: not verified/)).toBeInTheDocument();
+ fireEvent.change(screen.getByLabelText("Membership level"), { target: { value: "premium" } });
+ await waitFor(() => expect(rpc).toHaveBeenCalledWith("list_basic_members", expect.objectContaining({ p_membership_level: "premium" })));
+ unmount(); vi.unstubAllEnvs();
+});

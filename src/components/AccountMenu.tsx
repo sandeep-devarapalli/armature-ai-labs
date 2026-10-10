@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { UserRound } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import { useAccount, membershipLabels, accountRoleLabels } from "../context/AccountContext";
+import { useAccount, accountMembershipLabel, accountMembershipLevelsEnabled, applicationStatusLabel, accountRoleLabels } from "../context/AccountContext";
 import { supabase } from "../lib/supabase";
 import { AccountAvatar } from "./AccountAvatar";
 import "./AccountMenu.css";
@@ -27,7 +27,7 @@ export function AccountMenu() {
       <span className="account-short-name">{account?.name?.trim().split(/\s+/)[0] || "Account"}</span><span aria-hidden="true">⌄</span>
     </summary>
     <div className="account-panel">
-      <span className="account-caption"><strong>{account?.name || "Your account"}</strong><span>{account ? membershipLabels[account.status] || "Status unavailable" : "Status unavailable"}</span>{role && <span className="account-role">{role}</span>}</span>
+      <span className="account-caption"><strong>{account?.name || "Your account"}</strong><span>{account ? accountMembershipLabel(account) : "Status unavailable"}</span>{account && accountMembershipLevelsEnabled(account) && <span>{applicationStatusLabel(account.status, true)}</span>}{role && <span className="account-role">{role}</span>}</span>
       {error && <><p role="alert">{error}</p><button type="button" onClick={() => void refresh()}>Retry</button></>}
       <Link to="/onboarding">My registration</Link>
       <Link to="/booking-beta">Explore booking beta</Link>

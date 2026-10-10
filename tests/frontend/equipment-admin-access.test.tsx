@@ -4,7 +4,7 @@ import { MemoryRouter } from "react-router-dom";
 import { beforeEach, expect, it, vi } from "vitest";
 const state = vi.hoisted(() => ({ role: null as string | null, rpc: vi.fn() }));
 vi.mock("../../src/config/release", async importOriginal => ({ ...await importOriginal<object>(), basicOnboardingAvailable: true, memberPlatformAvailable: false }));
-vi.mock("../../src/context/AccountContext", () => ({ useAccount: () => ({ account: state.role ? { user_id: "test", name: "Test account", status: "approved", role: state.role } : null, signedIn: Boolean(state.role), loading: false }), membershipLabels: { approved: "Basic · Approved" }, accountRoleLabels: {} }));
+vi.mock("../../src/context/AccountContext", async importOriginal => ({ ...await importOriginal<object>(), useAccount: () => ({ account: state.role ? { user_id: "test", name: "Test account", status: "approved", role: state.role } : null, signedIn: Boolean(state.role), loading: false }), membershipLabels: { approved: "Basic · Approved" }, accountRoleLabels: {} }));
 vi.mock("../../src/components/AccountAvatar", () => ({ AccountAvatar: () => null }));
 vi.mock("../../src/lib/supabase", async importOriginal => ({ ...await importOriginal<object>(), supabase: { rpc: state.rpc, from: () => ({ select: () => ({ in: async () => ({ data: [], error: null }) }) }) } }));
 import { routes } from "../../src/app/routes";

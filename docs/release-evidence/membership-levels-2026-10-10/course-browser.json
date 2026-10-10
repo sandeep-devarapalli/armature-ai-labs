@@ -1,0 +1,18 @@
+[
+  {
+    "viewport": "desktop",
+    "basicFullLesson": true,
+    "enrolled": true,
+    "progressSurvivesReload": true,
+    "consoleErrors": [],
+    "overflow": false
+  },
+  {
+    "viewport": "mobile",
+    "basicFullLesson": true,
+    "enrolled": true,
+    "progressSurvivesReload": true,
+    "consoleErrors": [],
+    "overflow": false
+  }
+]
