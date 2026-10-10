@@ -33,10 +33,24 @@ export function phoneHookPayload(value: unknown) {
   if (typeof target !== "string" || typeof body.user.new_phone !== "string" || target.replace(/^\+/, "") !== body.user.new_phone.replace(/^\+/, "")) throw new Error("invalid_hook");
   return { userId: body.user.id, phone: phoneNumber(`+${target.replace(/^\+/, "")}`), code: body.sms.otp };
 }
-export type PhoneProviderConfig = { key: string; number?: string; template?: string; namespace?: string; language?: string; smsTemplate?: string; smsVariable?: string };
+export type PhoneProviderConfig = { key: string; provider?: string; region?: string; number?: string; template?: string; namespace?: string; language?: string; smsTemplate?: string; smsVariable?: string };
 export async function sendPhoneCode(channel: PhoneChannel, phone: string, code: string, config: PhoneProviderConfig, fetcher = fetch) {
   phoneNumber(phone);
   if (!/^\d{6}$/.test(code) || !config.key) throw new Error("delivery_unavailable");
+  const provider = config.provider ?? "msg91";
+  if (provider === "bird") {
+    if (channel !== "sms" || !["us1", "eu1"].includes(config.region ?? "") || !config.key.startsWith(`bk_${config.region}_`)) throw new Error("delivery_unavailable");
+    const response = await fetcher(`https://${config.region}.platform.bird.com/v1/sms/messages`, {
+      method: "POST", redirect: "error", signal: AbortSignal.timeout(4000),
+      headers: {"content-type": "application/json", authorization: `Bearer ${config.key}`},
+      body: JSON.stringify({to: phone, template: {slug: "bird_otp_verification", parameters: {code}}}),
+    });
+    const result = await response.json().catch(() => null);
+    if (response.status !== 202 || typeof result?.id !== "string" || !/^sms_[A-Za-z0-9_-]{8,128}$/.test(result.id) || result.status !== "accepted" || result.to !== phone || result.direction !== "outbound" || result.category !== "authentication") throw new Error("delivery_unavailable");
+    // Supabase verifies this code; Bird acceptance alone never verifies a member's phone.
+    return;
+  }
+  if (provider !== "msg91") throw new Error("delivery_unavailable");
   let url: string; let body: object;
   if (channel === "whatsapp") {
     if (![config.number, config.template, config.namespace, config.language].every(Boolean)) throw new Error("delivery_unavailable");

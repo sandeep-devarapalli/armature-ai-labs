@@ -133,3 +133,52 @@ it.each(["MSG91_AUTH_KEY","MSG91_SMS_TEMPLATE","MSG91_SMS_OTP_VARIABLE"])("rejec
  const response=await handlePhoneDelivery(new Request("https://api.example.test/hook",{method:"POST",body:raw,headers:await signed(raw)}));
  expect(response.status).toBe(400); expect(fetch).not.toHaveBeenCalled();
 });
+
+const birdConfig = {provider:"bird",region:"us1",key:"bk_us1_synthetic"};
+const birdAccepted = {id:"sms_01ky7qmwgpfkybj9ecrnwjx714",status:"accepted",direction:"outbound",to:phone,category:"authentication"};
+it("sends the existing Supabase OTP via the regional Bird authentication template",async()=>{
+ const fetcher=vi.fn().mockResolvedValue(new Response(JSON.stringify(birdAccepted),{status:202}));
+ await sendPhoneCode("sms",phone,"123456",birdConfig,fetcher);
+ const [url, init]=fetcher.mock.calls[0];
+ expect(url).toBe("https://us1.platform.bird.com/v1/sms/messages");
+ expect(init.headers).toEqual({"content-type":"application/json",authorization:"Bearer bk_us1_synthetic"});
+ expect(JSON.parse(init.body)).toEqual({to:phone,template:{slug:"bird_otp_verification",parameters:{code:"123456"}}});
+ expect(init.redirect).toBe("error"); expect(init.signal).toBeInstanceOf(AbortSignal);
+ expect(fetcher).toHaveBeenCalledTimes(1);
+});
+it.each([
+ {provider:"other"}, {region:"https://evil.example"}, {region:""}, {region:"eu1"}, {key:"legacy-messagebird-key"},
+])("rejects unknown providers and invalid Bird region/key combinations before sending %j",async overrides=>{
+ const fetcher=vi.fn();
+ await expect(sendPhoneCode("sms",phone,"123456",{...birdConfig,...overrides},fetcher)).rejects.toThrow("delivery_unavailable");
+ expect(fetcher).not.toHaveBeenCalled();
+});
+it("rejects Bird WhatsApp without falling back to another transport",async()=>{
+ const fetcher=vi.fn();
+ await expect(sendPhoneCode("whatsapp",phone,"123456",birdConfig,fetcher)).rejects.toThrow("delivery_unavailable");
+ expect(fetcher).not.toHaveBeenCalled();
+});
+it.each([
+ {status:"sent"}, {id:""}, {id:"not-a-bird-id"}, {to:"+919000000002"}, {direction:"inbound"}, {category:"marketing"},
+])("fails closed on contradictory Bird acceptance %j",async overrides=>{
+ const fetcher=vi.fn().mockResolvedValue(new Response(JSON.stringify({...birdAccepted,...overrides}),{status:202}));
+ await expect(sendPhoneCode("sms",phone,"123456",birdConfig,fetcher)).rejects.toThrow("delivery_unavailable");
+ expect(fetcher).toHaveBeenCalledTimes(1);
+});
+it.each([200,402,422,500])("does not accept Bird HTTP %i or retry the send",async status=>{
+ const fetcher=vi.fn().mockResolvedValue(new Response(JSON.stringify(birdAccepted),{status}));
+ await expect(sendPhoneCode("sms",phone,"123456",birdConfig,fetcher)).rejects.toThrow("delivery_unavailable");
+ expect(fetcher).toHaveBeenCalledTimes(1);
+});
+it.each(["accepted","malformed","timeout"])("keeps the protected hook contract with Bird %s",async outcome=>{
+ Object.assign(mocks.env,{MEMBER_PHONE_VERIFICATION_ENABLED:"true",MEMBER_PHONE_PROVIDER:"bird",BIRD_REGION:"us1",BIRD_API_KEY:"bk_us1_synthetic"});
+ const raw=JSON.stringify({user:{id,email:"member@example.test",email_confirmed_at:"2026-10-10",new_phone:phone},sms:{otp:"123456"}});
+ if(outcome==="timeout") vi.mocked(fetch).mockRejectedValue(new DOMException("Timeout", "TimeoutError"));
+ else vi.mocked(fetch).mockResolvedValue(new Response(outcome==="accepted"?JSON.stringify(birdAccepted):"not json",{status:202}));
+ const response=await handlePhoneDelivery(new Request("https://api.example.test/hook",{method:"POST",body:raw,headers:await signed(raw)}));
+ expect(response.status).toBe(outcome==="accepted"?200:400);
+ expect(mocks.rpc).toHaveBeenCalledTimes(outcome==="accepted"?2:1);
+ if(outcome==="accepted") expect(mocks.rpc).toHaveBeenLastCalledWith("member_phone_operation",expect.objectContaining({p_action:"sent"}));
+ expect(fetch).toHaveBeenCalledTimes(1);
+ expect(await response.text()).not.toMatch(/123456|9000000001|bk_us1/);
+});

@@ -15,13 +15,19 @@ export async function handlePhoneDelivery(request: Request) {
     const {data: intent, error} = await admin.rpc("member_phone_operation", {p_action: "claim_hook", p_user_id: payload.userId, p_phone: payload.phone, p_hook_id: hookId});
     if (error || !intent || intent.error) throw new Error("intent_unavailable");
     if (!phoneChannels(true, Deno.env.get("MEMBER_PHONE_WHATSAPP_ENABLED") === "true").includes(intent.channel)) throw new Error("channel_unavailable");
-    const config = intent.channel === "sms" ? {
+    const provider = Deno.env.get("MEMBER_PHONE_PROVIDER") ?? "msg91";
+    if (!["msg91", "bird"].includes(provider)) throw new Error("provider_unavailable");
+    const config = provider === "bird" ? {
+      provider, key: requiredEnv("BIRD_API_KEY"), region: requiredEnv("BIRD_REGION"),
+    } : intent.channel === "sms" ? {
+      provider, key: requiredEnv("MSG91_AUTH_KEY"),
       smsTemplate: requiredEnv("MSG91_SMS_TEMPLATE"), smsVariable: requiredEnv("MSG91_SMS_OTP_VARIABLE"),
     } : {
+      provider, key: requiredEnv("MSG91_AUTH_KEY"),
       number: requiredEnv("MSG91_WHATSAPP_NUMBER"), template: requiredEnv("MSG91_WHATSAPP_TEMPLATE"),
       namespace: requiredEnv("MSG91_WHATSAPP_NAMESPACE"), language: requiredEnv("MSG91_WHATSAPP_LANGUAGE"),
     };
-    await sendPhoneCode(intent.channel, payload.phone, payload.code, {key: requiredEnv("MSG91_AUTH_KEY"), ...config});
+    await sendPhoneCode(intent.channel, payload.phone, payload.code, config);
     const {data: marked, error: markError} = await admin.rpc("member_phone_operation", {p_action: "sent", p_user_id: payload.userId, p_intent: intent.id, p_hook_id: hookId});
     if (markError || !marked || marked.error) throw new Error("delivery_unresolved");
     return reply(200, {});
