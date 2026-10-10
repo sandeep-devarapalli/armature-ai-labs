@@ -56,6 +56,6 @@
     "vite": "^7.1.7",
     "vite-plugin-pwa": "1.2.0",
     "vitest": "4.1.11",
-    "wrangler": "4.144.0"
+    "wrangler": "4.149.0"
   }
 }

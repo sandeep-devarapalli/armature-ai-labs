@@ -108,7 +108,7 @@ describe('immutable privacy-preserving templates',()=>{
     for (const detail of ['full name', 'email', 'phone number', 'LinkedIn URL', 'date of birth', 'privacy acceptance', 'scanned profile photo', 'scanned government ID']) expect(submitted.text).toContain(detail);
     expect(submitted.text).toContain('Guardian permission, where required, must still be reviewed');
     expect(submitted.html).not.toMatch(/<img|storage\/|signed|token=/i);
-    expect(memberNotificationTemplate('admin_ready', 3)).toBeNull();
+    expect(memberNotificationTemplate('admin_ready', 4)).toBeNull();
   });
   it('rejects unsupported template versions without silently switching payloads',()=>expect(memberNotificationTemplate('approved',2)).toBeNull());
 });
@@ -186,4 +186,14 @@ it('does not replay a claim after an ambiguous transport failure', async () => {
   expect((await f.handler(f.request())).status).toBe(503);
   expect(f.rpc).toHaveBeenCalledTimes(1);
   expect(f.fetch).not.toHaveBeenCalled();
+});
+
+
+it('keeps old approval payloads immutable and uses identity-specific wording for version 3', () => {
+  expect(memberNotificationTemplate('approved', 1).text).toContain('free basic membership has been approved');
+  expect(memberNotificationTemplate('approved', 3).text).toContain('identity application has been approved');
+  expect(memberNotificationTemplate('approved', 3).text).toContain('verified mobile number');
+  expect(memberNotificationTemplate('reinstated', 3).text).toContain('does not grant paid services');
+  expect(memberNotificationTemplate('ready', 3).text).toContain('Identity approval and mobile verification');
+  expect(memberNotificationTemplate('toString', 3)).toBeNull();
 });
