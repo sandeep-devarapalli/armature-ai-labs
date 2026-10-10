@@ -5,7 +5,7 @@ test.skip(process.env.VITE_MEMBERSHIP_LEVELS_ENABLED !== "true", "Requires the s
 async function fixture(page: Page, enabled = true) {
   const user = { id: "10000000-0000-4000-8000-000000000001", aud: "authenticated", role: "authenticated", email: "member@example.test", email_confirmed_at: "2026-01-01T00:00:00Z", app_metadata: {}, user_metadata: {}, created_at: "2026-01-01T00:00:00Z" };
   let level = "basic", mobile = false;
-  let phone = { enabled: true, verified: false, masked_phone: null as string | null, channel: null as string | null, expires_at: null as string | null, resend_available_at: null as string | null };
+  let phone = { enabled: true, available_channels: ["sms"], verified: false, masked_phone: null as string | null, channel: null as string | null, expires_at: null as string | null, resend_available_at: null as string | null };
   const calls: string[] = [];
   await page.addInitScript(({ user, storageKey }) => localStorage.setItem(storageKey, JSON.stringify({ access_token: "synthetic-token", refresh_token: "synthetic-refresh", expires_at: Math.floor(Date.now() / 1000) + 36000, expires_in: 36000, token_type: "bearer", user })), { user, storageKey: authStorageKey });
   await page.route(`${backendOrigin}/**`, async route => {
@@ -34,10 +34,13 @@ test("Basic to Verified and Premium keep identity status distinct on desktop and
   await expect(page.getByRole("heading", { name: "Basic member", exact: true })).toBeVisible();
   await expect(page.getByText("Identity: Approved", { exact: true })).toBeVisible();
   await page.getByLabel("Mobile number with country code").fill("+919999991234");
-  await page.getByRole("button", { name: "Send WhatsApp code", exact: true }).click();
-  await expect(page.getByText(/Code sent by WhatsApp/)).toBeVisible();
-  await expect(page.getByRole("button", { name: "Use SMS instead" })).toBeDisabled();
-  await page.getByRole("region", { name: "Mobile verification", exact: true }).screenshot({ path: info.outputPath("mobile-code-pending.png") });
+  await page.getByRole("button", { name: "Send SMS code", exact: true }).click();
+  await expect(page.getByText(/Code sent by SMS/)).toBeVisible();
+  await expect(page.getByRole("button", { name: "Use WhatsApp instead" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Send SMS code" })).toBeDisabled();
+  await page.getByRole("region", { name: "Mobile verification", exact: true }).screenshot({ path: info.outputPath("mobile-code-pending.png"), animations: "disabled", style: ".topbar, .workspace-nav, .skip-link { visibility: hidden !important; }" });
+  await page.getByLabel("Verification code", { exact: true }).scrollIntoViewIfNeeded();
+  await page.getByRole("region", { name: "Mobile verification", exact: true }).locator("form").last().screenshot({ path: info.outputPath("sms-code-entry.png"), style: ".topbar, .workspace-nav, .skip-link { visibility: hidden !important; }" });
   await page.getByLabel("Verification code", { exact: true }).fill("123456");
   await page.getByRole("button", { name: "Verify mobile number", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Verified member", exact: true })).toBeVisible();

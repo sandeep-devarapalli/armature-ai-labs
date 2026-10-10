@@ -20,7 +20,9 @@ if subprocess.run(['docker','inspect',backup],stdout=subprocess.DEVNULL,stderr=s
 try:
  run(['docker','stop',name],stdout=subprocess.DEVNULL);run(['docker','rename',name,backup]); backup_created=True
  run(['docker','run','-d','--name',name,'--network',network,'--network-alias','auth','--env-file',path,config['Config']['Image'],'auth'],stdout=subprocess.DEVNULL)
- local=os.environ.copy();local.update(SUPABASE_URL='http://127.0.0.1:59421',SUPABASE_ANON_KEY=status['ANON_KEY'],SUPABASE_SERVICE_ROLE_KEY=status['SERVICE_ROLE_KEY'],MEMBER_PHONE_VERIFICATION_ENABLED='true',MEMBER_PHONE_HOOK_SECRET=secret,MSG91_AUTH_KEY='synthetic',MSG91_WHATSAPP_NUMBER='919000000000',MSG91_WHATSAPP_TEMPLATE='synthetic',MSG91_WHATSAPP_NAMESPACE='synthetic',MSG91_WHATSAPP_LANGUAGE='en',MSG91_SMS_TEMPLATE='synthetic',MSG91_SMS_OTP_VARIABLE='OTP')
+ local=os.environ.copy();local.update(SUPABASE_URL='http://127.0.0.1:59421',SUPABASE_ANON_KEY=status['ANON_KEY'],SUPABASE_SERVICE_ROLE_KEY=status['SERVICE_ROLE_KEY'],MEMBER_PHONE_VERIFICATION_ENABLED='true',MEMBER_PHONE_WHATSAPP_ENABLED='false',MEMBER_PHONE_HOOK_SECRET=secret,MSG91_AUTH_KEY='synthetic',MSG91_SMS_TEMPLATE='synthetic',MSG91_SMS_OTP_VARIABLE='OTP')
+ for key in tuple(local):
+  if key.startswith('MSG91_WHATSAPP_'): local.pop(key)
  run([deno,'run','--no-config','--no-lock','--allow-env','--allow-net=127.0.0.1:59421,0.0.0.0:59428','--allow-run=docker',root+'/scripts/test-member-phone-local.ts'],cwd=root,env=local)
 finally:
  if backup_created:

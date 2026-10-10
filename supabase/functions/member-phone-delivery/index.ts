@@ -1,6 +1,6 @@
 import { adminClient } from "../_shared/supabase.ts";
 import { requiredEnv } from "../_shared/env.ts";
-import { phoneHookPayload, sendPhoneCode, verifyPhoneHook } from "../_shared/member-phone.ts";
+import { phoneChannels, phoneHookPayload, sendPhoneCode, verifyPhoneHook } from "../_shared/member-phone.ts";
 
 export async function handlePhoneDelivery(request: Request) {
   const reply = (status: number, value: object) => new Response(JSON.stringify(value), {status, headers: {"content-type": "application/json", "cache-control": "no-store"}});
@@ -14,11 +14,14 @@ export async function handlePhoneDelivery(request: Request) {
     const admin = adminClient();
     const {data: intent, error} = await admin.rpc("member_phone_operation", {p_action: "claim_hook", p_user_id: payload.userId, p_phone: payload.phone, p_hook_id: hookId});
     if (error || !intent || intent.error) throw new Error("intent_unavailable");
-    await sendPhoneCode(intent.channel, payload.phone, payload.code, {
-      key: requiredEnv("MSG91_AUTH_KEY"), number: requiredEnv("MSG91_WHATSAPP_NUMBER"), template: requiredEnv("MSG91_WHATSAPP_TEMPLATE"),
-      namespace: requiredEnv("MSG91_WHATSAPP_NAMESPACE"), language: requiredEnv("MSG91_WHATSAPP_LANGUAGE"),
+    if (!phoneChannels(true, Deno.env.get("MEMBER_PHONE_WHATSAPP_ENABLED") === "true").includes(intent.channel)) throw new Error("channel_unavailable");
+    const config = intent.channel === "sms" ? {
       smsTemplate: requiredEnv("MSG91_SMS_TEMPLATE"), smsVariable: requiredEnv("MSG91_SMS_OTP_VARIABLE"),
-    });
+    } : {
+      number: requiredEnv("MSG91_WHATSAPP_NUMBER"), template: requiredEnv("MSG91_WHATSAPP_TEMPLATE"),
+      namespace: requiredEnv("MSG91_WHATSAPP_NAMESPACE"), language: requiredEnv("MSG91_WHATSAPP_LANGUAGE"),
+    };
+    await sendPhoneCode(intent.channel, payload.phone, payload.code, {key: requiredEnv("MSG91_AUTH_KEY"), ...config});
     const {data: marked, error: markError} = await admin.rpc("member_phone_operation", {p_action: "sent", p_user_id: payload.userId, p_intent: intent.id, p_hook_id: hookId});
     if (markError || !marked || marked.error) throw new Error("delivery_unresolved");
     return reply(200, {});

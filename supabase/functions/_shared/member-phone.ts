@@ -3,9 +3,12 @@ export function phoneNumber(value: unknown): string {
   if (typeof value !== "string" || !/^\+[1-9]\d{7,14}$/.test(value)) throw new Error("invalid_request");
   return value;
 }
-export function phoneStatus(data: Record<string, unknown>, enabled: boolean) {
+export function phoneChannels(enabled: boolean, whatsappEnabled = false): PhoneChannel[] {
+  return enabled ? whatsappEnabled ? ["sms", "whatsapp"] : ["sms"] : [];
+}
+export function phoneStatus(data: Record<string, unknown>, enabled: boolean, whatsappEnabled = false) {
   const phone = typeof data.phone === "string" ? data.phone : null;
-  return { enabled, verified: data.verified === true, masked_phone: phone ? `•••• ${phone.slice(-4)}` : null,
+  return { enabled, available_channels: phoneChannels(enabled, whatsappEnabled), verified: data.verified === true, masked_phone: phone ? `•••• ${phone.slice(-4)}` : null,
     channel: data.channel ?? null, expires_at: data.expires_at ?? null, resend_available_at: data.resend_available_at ?? null };
 }
 export async function verifyPhoneHook(raw: string, headers: Headers, secret: string, now = Date.now()) {
@@ -30,7 +33,7 @@ export function phoneHookPayload(value: unknown) {
   if (typeof target !== "string" || typeof body.user.new_phone !== "string" || target.replace(/^\+/, "") !== body.user.new_phone.replace(/^\+/, "")) throw new Error("invalid_hook");
   return { userId: body.user.id, phone: phoneNumber(`+${target.replace(/^\+/, "")}`), code: body.sms.otp };
 }
-export type PhoneProviderConfig = { key: string; number: string; template: string; namespace: string; language: string; smsTemplate: string; smsVariable: string };
+export type PhoneProviderConfig = { key: string; number?: string; template?: string; namespace?: string; language?: string; smsTemplate?: string; smsVariable?: string };
 export async function sendPhoneCode(channel: PhoneChannel, phone: string, code: string, config: PhoneProviderConfig, fetcher = fetch) {
   phoneNumber(phone);
   if (!/^\d{6}$/.test(code) || !config.key) throw new Error("delivery_unavailable");
@@ -42,10 +45,12 @@ export async function sendPhoneCode(channel: PhoneChannel, phone: string, code: 
       name: config.template, language: {code: config.language, policy: "deterministic"}, namespace: config.namespace,
       to_and_components: [{to: [phone.slice(1)], components: { body_1: {type: "text", value: code}, button_1: {subtype: "url", type: "text", value: code} }}],
     } } };
-  } else {
-    if (!config.smsTemplate || !/^[A-Za-z][A-Za-z0-9_]*$/.test(config.smsVariable) || config.smsVariable === "mobiles") throw new Error("delivery_unavailable");
+  } else if (channel === "sms") {
+    if (!config.smsTemplate || !config.smsVariable || !/^[A-Za-z][A-Za-z0-9_]*$/.test(config.smsVariable) || config.smsVariable === "mobiles") throw new Error("delivery_unavailable");
     url = "https://control.msg91.com/api/v5/flow";
     body = { template_id: config.smsTemplate, short_url: "0", recipients: [{mobiles: phone.slice(1), [config.smsVariable]: code}] };
+  } else {
+    throw new Error("delivery_unavailable");
   }
   const response = await fetcher(url, {method: "POST", redirect: "error", signal: AbortSignal.timeout(4000), headers: {"content-type": "application/json", authkey: config.key}, body: JSON.stringify(body)});
   const result = await response.json().catch(() => null);

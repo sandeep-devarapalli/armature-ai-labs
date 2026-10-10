@@ -19,14 +19,14 @@ beforeEach(() => {
  vi.stubGlobal("crypto",webcrypto); vi.stubGlobal("Deno",{env:{get:(k:string)=>mocks.env[k]}});
  Object.keys(mocks.env).forEach(k=>delete mocks.env[k]);
  Object.assign(mocks.env,{SUPABASE_URL:"https://api.example.test",SUPABASE_ANON_KEY:"synthetic",MEMBER_PHONE_HOOK_SECRET:`v1,whsec_${secret}`});
- mocks.user.mockReset().mockResolvedValue({id}); mocks.rpc.mockReset().mockResolvedValue({data:{id,phone,channel:"whatsapp",verified:false},error:null});
+ mocks.user.mockReset().mockResolvedValue({id}); mocks.rpc.mockReset().mockResolvedValue({data:{id,phone,channel:"sms",verified:false},error:null});
  vi.stubGlobal("fetch",vi.fn());
 });
 afterEach(()=>vi.unstubAllGlobals());
 it("validates E164 and exposes only a masked status",()=>{
  expect(phoneNumber(phone)).toBe(phone);
  for(const invalid of [null,"9000000001","+91abc","+123"]) expect(()=>phoneNumber(invalid)).toThrow();
- expect(phoneStatus({phone,verified:true},false)).toEqual({enabled:false,verified:true,masked_phone:"•••• 0001",channel:null,expires_at:null,resend_available_at:null});
+ expect(phoneStatus({phone,verified:true},false)).toEqual({enabled:false,available_channels:[],verified:true,masked_phone:"•••• 0001",channel:null,expires_at:null,resend_available_at:null});
 });
 it("authenticates raw hook bytes, timestamp, signature and secret",async()=>{
  const raw='{"synthetic":true}', headers=await signed(raw);
@@ -78,4 +78,58 @@ it("rejects a validly signed callback with no matching intent before provider de
  const response=await handlePhoneDelivery(new Request("https://api.example.test/hook",{method:"POST",body:raw,headers:await signed(raw)}));
  expect(response.status).toBe(400); expect(fetch).not.toHaveBeenCalled();
  expect(await response.text()).not.toMatch(/123456|9000000001/);
+});
+
+it("advertises SMS only by default and WhatsApp only with its separate gate",async()=>{
+ expect(await (await handlePhoneVerification(request({action:"status"}))).json()).toMatchObject({enabled:false,available_channels:[]});
+ mocks.env.MEMBER_PHONE_VERIFICATION_ENABLED="true";
+ expect(await (await handlePhoneVerification(request({action:"status"}))).json()).toMatchObject({enabled:true,available_channels:["sms"]});
+ mocks.env.MEMBER_PHONE_WHATSAPP_ENABLED="true";
+ expect(await (await handlePhoneVerification(request({action:"status"}))).json()).toMatchObject({available_channels:["sms","whatsapp"]});
+});
+it("rejects disabled WhatsApp starts before creating an intent or sending",async()=>{
+ mocks.env.MEMBER_PHONE_VERIFICATION_ENABLED="true";
+ const response=await handlePhoneVerification(request({action:"start",phone,channel:"whatsapp"}));
+ expect(response.status).toBe(400);
+ expect(await response.json()).toMatchObject({code:"channel_unavailable"});
+ expect(mocks.rpc).not.toHaveBeenCalled(); expect(fetch).not.toHaveBeenCalled();
+});
+it("does not verify an old WhatsApp intent after its channel is disabled",async()=>{
+ mocks.env.MEMBER_PHONE_VERIFICATION_ENABLED="true";
+ mocks.rpc.mockResolvedValue({data:{id,phone,channel:"whatsapp"},error:null});
+ const response=await handlePhoneVerification(request({action:"verify",code:"123456"}));
+ expect(response.status).toBe(400); expect(fetch).not.toHaveBeenCalled();
+ expect(mocks.rpc).toHaveBeenCalledTimes(1);
+});
+it("starts account-bound SMS without WhatsApp configuration",async()=>{
+ mocks.env.MEMBER_PHONE_VERIFICATION_ENABLED="true";
+ mocks.rpc.mockResolvedValue({data:{id,phone,channel:"sms",delivered:true},error:null});
+ vi.mocked(fetch).mockResolvedValue(new Response(JSON.stringify({id})));
+ const response=await handlePhoneVerification(request({action:"start",phone,channel:"sms"}));
+ expect(response.status).toBe(200);
+ expect(await response.json()).toMatchObject({available_channels:["sms"],channel:"sms"});
+ expect(JSON.parse(vi.mocked(fetch).mock.calls[0][1]!.body as string)).toEqual({phone,channel:"sms"});
+});
+it("delivers signed SMS hooks with only SMS credentials",async()=>{
+ Object.assign(mocks.env,{MEMBER_PHONE_VERIFICATION_ENABLED:"true",MSG91_AUTH_KEY:"synthetic",MSG91_SMS_TEMPLATE:"synthetic_sms",MSG91_SMS_OTP_VARIABLE:"OTP"});
+ const raw=JSON.stringify({user:{id,email:"member@example.test",email_confirmed_at:"2026-10-10",new_phone:phone},sms:{otp:"123456"}});
+ vi.mocked(fetch).mockResolvedValue(new Response('{"type":"success","message":"accepted-request-2"}'));
+ const response=await handlePhoneDelivery(new Request("https://api.example.test/hook",{method:"POST",body:raw,headers:await signed(raw)}));
+ expect(response.status).toBe(200); expect(fetch).toHaveBeenCalledTimes(1);
+ expect(vi.mocked(fetch).mock.calls[0][0]).toBe("https://control.msg91.com/api/v5/flow");
+ expect(mocks.rpc).toHaveBeenLastCalledWith("member_phone_operation",expect.objectContaining({p_action:"sent"}));
+});
+it("rejects a signed WhatsApp hook when WhatsApp is disabled",async()=>{
+ mocks.env.MEMBER_PHONE_VERIFICATION_ENABLED="true";
+ mocks.rpc.mockResolvedValue({data:{id,phone,channel:"whatsapp"},error:null});
+ const raw=JSON.stringify({user:{id,email:"member@example.test",email_confirmed_at:"2026-10-10",new_phone:phone},sms:{otp:"123456"}});
+ const response=await handlePhoneDelivery(new Request("https://api.example.test/hook",{method:"POST",body:raw,headers:await signed(raw)}));
+ expect(response.status).toBe(400); expect(fetch).not.toHaveBeenCalled(); expect(mocks.rpc).toHaveBeenCalledTimes(1);
+});
+it.each(["MSG91_AUTH_KEY","MSG91_SMS_TEMPLATE","MSG91_SMS_OTP_VARIABLE"])("rejects missing SMS configuration %s without sending",async missing=>{
+ Object.assign(mocks.env,{MEMBER_PHONE_VERIFICATION_ENABLED:"true",MSG91_AUTH_KEY:"synthetic",MSG91_SMS_TEMPLATE:"synthetic_sms",MSG91_SMS_OTP_VARIABLE:"OTP"});
+ delete mocks.env[missing];
+ const raw=JSON.stringify({user:{id,email:"member@example.test",email_confirmed_at:"2026-10-10",new_phone:phone},sms:{otp:"123456"}});
+ const response=await handlePhoneDelivery(new Request("https://api.example.test/hook",{method:"POST",body:raw,headers:await signed(raw)}));
+ expect(response.status).toBe(400); expect(fetch).not.toHaveBeenCalled();
 });

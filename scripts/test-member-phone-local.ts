@@ -45,9 +45,13 @@ try {
   const data=await res.json(); return {status:res.status,data};
  };
  const first="+919000001071",second="+919000001072";
- const started=await call({action:"start",phone:first,channel:"whatsapp"});
- assert(started.status===200,`WhatsApp start failed (${started.status}; ${started.data.code??"none"})`);
- assert(codes.has(first)&&Number(deliveryCount)===1,"Mock WhatsApp transport did not receive code");
+ const status=await call({action:"status"});
+ assert(JSON.stringify(status.data.available_channels)===JSON.stringify(["sms"]),"SMS-only channels were not exposed");
+ const disabled=await call({action:"start",phone:first,channel:"whatsapp"});
+ assert(disabled.status===400&&disabled.data.code==="channel_unavailable"&&Number(deliveryCount)===0,"Disabled WhatsApp sent a code");
+ const started=await call({action:"start",phone:first,channel:"sms"});
+ assert(started.status===200,`SMS start failed (${started.status}; ${started.data.code??"none"})`);
+ assert(codes.has(first)&&Number(deliveryCount)===1,"Mock SMS transport did not receive code");
  const captured=lastHook!;
  const malformed=await call({action:"verify",code:"wrong"});assert(malformed.status===400,"Malformed code accepted");
  const verified=await call({action:"verify",code:codes.get(first)});
@@ -62,7 +66,7 @@ try {
  const replaced=await call({action:"verify",code:codes.get(second)});
  assert(replaced.status===200&&replaced.data.verified===true,"Real replacement OTP failed");
  const final=await admin.auth.admin.getUserById(userId);assert(final.data.user?.phone===second.slice(1),"Replacement did not update original account");
- console.log(JSON.stringify({gotrue:"2.195.0",real_auth:true,mocked_msg91:true,whatsapp_verified:true,sms_replacement_verified:true,original_account_retained:true,otp_replay_blocked:true,hook_replay_blocked:true,provider_calls:deliveryCount,external_messages:0}));
+ console.log(JSON.stringify({gotrue:"2.195.0",real_auth:true,mocked_msg91:true,sms_initial_verified:true,whatsapp_disabled:true,sms_replacement_verified:true,original_account_retained:true,otp_replay_blocked:true,hook_replay_blocked:true,provider_calls:deliveryCount,external_messages:0}));
 } finally {
  if(userId){await admin.auth.admin.deleteUser(userId);await sql(`delete from private.member_phone_limits where key='account:${userId}' or key in ('phone:'||encode(extensions.digest('+919000001071','sha256'),'hex'),'phone:'||encode(extensions.digest('+919000001072','sha256'),'hex'));`)}
  await server.shutdown(); codes.clear();

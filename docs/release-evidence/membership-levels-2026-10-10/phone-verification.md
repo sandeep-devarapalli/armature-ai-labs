@@ -1,6 +1,6 @@
 # Mobile verification preparation
 
-Status: implementation and synthetic tests only. No MSG91 credentials, accounts, messages, Supabase Auth settings or production gates changed.
+Status, 10 October 2026: the compatible implementation is deployed with tier and phone gates off. Owner now selected SMS first and WhatsApp later. MSG91 signup is in progress; no real membership SMS delivery or verification has been demonstrated. Supabase dashboard currently shows Phone disabled and no Auth Hooks. No provider configuration or gate was changed during this readiness check.
 
 ## API contract
 
@@ -8,7 +8,7 @@ Authenticated `POST /functions/v1/member-phone-verification`:
 - `{action:"status"}` always reports readiness without sending.
 - `{action:"start",phone:"+<country code><number>",channel:"whatsapp"|"sms"}` creates an account-bound intent before calling Supabase Auth's authenticated `PUT /user` phone change. The delivery hook determines the channel from this protected intent, not Auth user metadata.
 - `{action:"verify",code:"<six digits>"}` consumes the pending phone-change OTP through Supabase Auth. No session tokens from this response are forwarded or logged. The resulting user must equal the original signed-in user. The protected completion checks the authoritative Auth phone and confirmation timestamp, then records the proof and canonicalizes the application phone while preserving its revision/approval.
-- Responses: `enabled`, `verified`, `masked_phone`, `channel`, `expires_at`, `resend_available_at`. Errors have sanitized `error` and `code`. Pending replacement numbers never display as verified from the previous phone's proof.
+- Responses: `enabled`, `available_channels`, `verified`, `masked_phone`, `channel`, `expires_at`, `resend_available_at`. Errors have sanitized `error` and `code`. Pending replacement numbers never display as verified from the previous phone's proof.
 
 One verified phone per personal account; active pending targets are also exclusive. Private intent expiry is five minutes, resend cooldown sixty seconds, five code attempts per intent, five starts per account/destination per hour. Supabase Auth's own rate limits remain necessary because its verification endpoint is publicly reachable. Retain the existing confirmed phone's proof until replacement succeeds; application/auth/proof matching prevents a new number inheriting that proof. No OTPs are persisted in application tables.
 
@@ -16,12 +16,13 @@ Hook signatures cover the exact raw request with Standard Webhooks HMAC-SHA256 a
 
 ## Activation checklist (not executed)
 
-1. Configure an Armature-owned WhatsApp Business sender, approved MSG91 authentication template with the documented code body and copy-code button, and an India-ready SMS sender/DLT template. Confirm account eligibility for WhatsApp authentication templates with MSG91; approval is not implied by this code.
-2. Set private Edge secrets `MSG91_AUTH_KEY`, `MSG91_WHATSAPP_NUMBER`, `MSG91_WHATSAPP_TEMPLATE`, `MSG91_WHATSAPP_NAMESPACE`, `MSG91_WHATSAPP_LANGUAGE`, `MSG91_SMS_TEMPLATE`, `MSG91_SMS_OTP_VARIABLE`, and `MEMBER_PHONE_HOOK_SECRET`. Use the exact approved template's SMS variable name. Do not place these in browser `VITE_` variables or Git.
+1. Complete the Armature MSG91 account and configure an India-ready SMS sender/DLT template. WhatsApp is deferred and is not required to activate SMS or membership tiers.
+2. Set private Edge secrets `MSG91_AUTH_KEY`, `MSG91_SMS_TEMPLATE`, `MSG91_SMS_OTP_VARIABLE`, and `MEMBER_PHONE_HOOK_SECRET`. Leave `MEMBER_PHONE_WHATSAPP_ENABLED` absent or false. WhatsApp secrets are not required for SMS. Use the exact approved template's SMS variable name. Do not place these in browser `VITE_` variables or Git.
 3. Configure the Supabase Send SMS HTTP Hook to the deployed `member-phone-delivery` URL and its signing secret. Enable phone provider for phone changes, disable phone signups and automatic phone confirmation, require six-digit OTPs with 300-second expiry and at least sixty-second send frequency. Do not enable phone sign-in UI or native provider fallback. This hook rejects sends without a protected membership intent. Hook/provider failure must fail closed.
-4. Set `MEMBER_PHONE_VERIFICATION_ENABLED=true` only for the controlled delivery trial after the hook and both channels are configured. The membership-level gate remains off during this trial.
-5. With an owner-designated synthetic/test identity, verify WhatsApp and explicit SMS separately, provider acceptance schemas and actual receipt, replacement, expired code, simultaneous attempts, same-phone account conflicts and ordinary Google/email sign-in. Verify no private details reach analytics or logs. Confirm deployed Auth serializes `new_phone` as documented by the source below.
-6. Only after these checks, coordinate the separate database/UI membership-level gates. Payment gates remain off. On delivery faults, disable the phone Edge gate and leave current email accounts usable; do not erase ID approvals.
+4. Set `MEMBER_PHONE_VERIFICATION_ENABLED=true` only for the controlled delivery trial after the hook and SMS channel are configured. The membership-level gate remains off during this trial.
+5. With an owner-designated synthetic/test identity, verify SMS provider acceptance and actual handset receipt, replacement, expired code, simultaneous attempts, same-phone account conflicts and ordinary Google/email sign-in. Verify no private details reach analytics or logs. Confirm deployed Auth serializes `new_phone` as documented by the source below.
+6. WhatsApp can be enabled later only after its owned sender, approved authentication template, channel-specific secrets and real verification test are ready; set `MEMBER_PHONE_WHATSAPP_ENABLED=true` explicitly at that time.
+7. Only after the SMS checks, coordinate the separate database/UI membership-level gates. Payment gates remain off. On delivery faults, disable the phone Edge gate and leave current email accounts usable; do not erase ID approvals.
 
 MSG91 acceptance is not proof of handset delivery. Current parsing requires WhatsApp `request_id` or SMS `{type:"success",message:<request ID>}`; malformed/ambiguous responses produce a sanitized failure without retry. Real provider fixtures and India delivery have not been tested. No provider-side OTP verification/widget is used: Supabase remains the only OTP authority. Live delivery, templates, billing and operational monitoring need readiness evidence before opening this feature.
 
