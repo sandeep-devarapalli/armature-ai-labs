@@ -6,7 +6,7 @@ Prepared 10 October 2026. Production membership rules, MSG91 configuration, reci
 
 Base: `db3c2e6736d6cdcd50d16323e7295724e77a2a39` from origin/main. Isolated website worktree: `/Users/dev/.codex/worktrees/mhs-blog-cover/Armature Lab`. The original Downloads checkout was preserved.
 
-Focused commits: `29ab09e` (membership rules/access/templates), `a0c3587` (phone delivery and real local Auth harness); the following UI commit contains this note. Review the stacked branches in that order and squash each after review. Do not merge or activate tiers as a substitute for the real-channel acceptance gate.
+Focused commits: `29ab09e` (membership rules/access/templates), `a0c3587` (phone delivery and real local Auth harness); `f8e6528` (UI and course delta; the final handoff commit follows). Draft PRs: [#126](https://github.com/sandeep-devarapalli/armature-ai-labs/pull/126), [#127](https://github.com/sandeep-devarapalli/armature-ai-labs/pull/127), [#128](https://github.com/sandeep-devarapalli/armature-ai-labs/pull/128). GitHub checks were running when opened; local evidence is listed below. Review the stacked branches in that order and squash each after review. Do not merge or activate tiers as a substitute for the real-channel acceptance gate.
 
 ## Implemented behavior
 
