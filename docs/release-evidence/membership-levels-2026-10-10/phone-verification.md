@@ -1,6 +1,6 @@
 # Mobile verification preparation
 
-Status, 10 October 2026: the compatible implementation is deployed with tier and phone gates off. Owner now selected SMS first and WhatsApp later. MSG91 signup is in progress; no real membership SMS delivery or verification has been demonstrated. Supabase dashboard currently shows Phone disabled and no Auth Hooks. No provider configuration or gate was changed during this readiness check.
+Status, 10 October 2026: the compatible implementation is deployed with tier and phone gates off. Owner now selected SMS first and WhatsApp later. Owner completed MSG91 signup; sender/template lists are empty and owner confirmed DLT is not registered. Owner is considering a Twilio trial instead; no real membership SMS delivery or verification has been demonstrated. Supabase dashboard currently shows Phone disabled and no Auth Hooks. No provider configuration or gate was changed during this readiness check.
 
 ## API contract
 
@@ -56,3 +56,5 @@ DENO_BIN=/path/to/deno python3 scripts/run-member-phone-local.py
 ```
 
 The wrapper is restricted to the named local stack; it temporarily enables SMS phone changes with confirmations and the HTTP hook, runs `scripts/test-member-phone-local.ts`, and restores the original Auth container in `finally`. It reads only local CLI credentials without printing them. OTPs remain only in harness memory. The harness permits network traffic only to the fixed local API; exact MSG91 calls are intercepted before networking. This verifies actual Auth payload compatibility, not a real WhatsApp/SMS delivery claim.
+
+SMS-first follow-up: the real local GoTrue harness also passed initial SMS and SMS number replacement with WhatsApp disabled and its secrets absent. Same account, replay rejection and restored original local Auth configuration were verified; two mocked provider calls and zero external messages.
