@@ -107,3 +107,10 @@ verify_jwt = false
 
 [functions.ecosystem-maintenance]
 verify_jwt = false
+
+# Keep phone delivery disabled until the reviewed MSG91 channels are ready.
+[functions.member-phone-verification]
+verify_jwt = false
+
+[functions.member-phone-delivery]
+verify_jwt = false
