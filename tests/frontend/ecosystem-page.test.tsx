@@ -45,7 +45,7 @@ it("renders only database-published sources and retains unpinned listings", asyn
 it("applies query, type, need and focus from a shareable URL", async () => {
   setup("/ecosystem?q=parts&type=supplier&need=source&focus=fixture-parts");
   await screen.findByRole("heading", { name: "Fixture Parts" });
-  expect(screen.getByRole("article", { name: "Fixture Parts details" })).toHaveFocus();
+  await waitFor(() => expect(screen.getByRole("article", { name: "Fixture Parts details" })).toHaveFocus());
   expect(mapSearch()).toHaveValue("parts");
   fireEvent.click(screen.getByRole("button", { name: "Back to results" }));
   fireEvent.click(screen.getByText(/More filters/));
