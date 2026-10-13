@@ -94,7 +94,11 @@ if (import.meta.env.DEV && import.meta.env.VITE_DEMO_MODE === "true") {
   onboardingLocalRoutes.push({ path: "/onboarding-local", element: <OnboardingLocalPage /> });
 }
 
+const TalentDirectory = lazy(() => import("../features/talent/directory").then(module => ({ default: module.TalentDirectory })));
+
 export const routes: RouteObject[] = [
+  { path: "/talent-network",
+    handle: { module: "src/features/talent/directory.tsx" }, element: <><PageMetadata /><TalentDirectory /></>, errorElement: <RouteFailurePage /> },
   {
     element: <Shell />,
     errorElement: (

@@ -1,0 +1,26 @@
+{
+  "checkedAt": "2026-10-13T08:38:43.533Z",
+  "database": "armature_talent_launch_check",
+  "checks": [
+    "owner actual password sign-in",
+    "admin actual password sign-in",
+    "other actual password sign-in",
+    "all 8025 source records accepted",
+    "service import",
+    "anonymous reads published profile",
+    "pending claim grants no owner rights",
+    "pending claimant cannot edit",
+    "direct profile writes denied",
+    "private ownership table not exposed",
+    "other user cannot read claim evidence",
+    "non-admin queue denied",
+    "admin sees claim",
+    "approved claimant owns profile",
+    "owner edits persisted",
+    "stale edit rejected",
+    "other account edit rejected",
+    "removed profile absent publicly",
+    "reimport cannot republish"
+  ],
+  "passed": 19
+}
