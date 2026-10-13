@@ -38,3 +38,6 @@
 .directory-app a{color:inherit}
 .directory-app .button.primary{color:var(--paper)}
 .directory-app svg{width:1em;height:1em}
+.directory-app a[href]{color:inherit}
+.directory-app a.button.primary{color:var(--paper)}
+.directory-app header nav a.active[href]{color:var(--ink)}
