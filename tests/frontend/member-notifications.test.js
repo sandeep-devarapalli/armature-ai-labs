@@ -197,3 +197,32 @@ it('keeps old approval payloads immutable and uses identity-specific wording for
   expect(memberNotificationTemplate('ready', 3).text).toContain('Identity approval and mobile verification');
   expect(memberNotificationTemplate('toString', 3)).toBeNull();
 });
+
+describe('Talent Network notification templates', () => {
+  for (const kind of ['claim', 'correction', 'removal']) {
+    it(`alerts reviewers to a new ${kind} without exposing request evidence`, async () => {
+      const f = fixture({ rows: [{ ...row, kind: `talent_admin_${kind}`, template_version: 4 }] });
+      expect(await (await f.handler(f.request())).json()).toMatchObject({ accepted: 1 });
+      const sent = JSON.parse(f.fetch.mock.calls[0][1].body);
+      expect(sent.subject).toBe(`New Talent Network ${kind} request`);
+      expect(sent.html).toContain('href="https://armatureailabs.com/talent-network/#review"');
+      expect(sent.text).not.toContain('synthetic@example.test');
+      expect(f.fetch.mock.calls[0][1].headers['Idempotency-Key']).toBe(`member-${id}-v4`);
+    });
+    it.each(['approved', 'rejected'])(`${kind} %s sends the decision and private request-history link`, async decision => {
+      const notice = { ...row, kind: `talent_${kind}_${decision}`, template_version: 4 };
+      const f = fixture({ rows: [notice] });
+      for (let i = 0; i < 2; i++) expect(await (await f.handler(f.request())).json()).toMatchObject({ accepted: 1 });
+      expect(f.fetch.mock.calls[0][1].body).toBe(f.fetch.mock.calls[1][1].body);
+      const sent = JSON.parse(f.fetch.mock.calls[0][1].body);
+      expect(sent.subject).toBe(`Your Talent Network ${kind} request was ${decision}`);
+      expect(sent.html).toContain('href="https://armatureailabs.com/talent-network/#requests"');
+      expect(sent.html).not.toMatch(/<img|<script|token=|mailto:/);
+      expect(memberNotificationTemplate(notice.kind, 3)).toBeNull();
+    });
+  }
+  it('does not reinterpret legacy notices as talent notifications', () => {
+    expect(memberNotificationTemplate('approved', 4)).toBeNull();
+    expect(memberNotificationTemplate('toString', 4)).toBeNull();
+  });
+});

@@ -34,6 +34,132 @@ export type Database = {
   }
   public: {
     Tables: {
+      talent_profiles: {
+        Row: {
+          data: Json
+          id: string
+          published: boolean
+          revision: number
+        }
+        Insert: {
+          data: Json
+          id: string
+          published?: boolean
+          revision?: number
+        }
+        Update: {
+          data?: Json
+          id?: string
+          published?: boolean
+          revision?: number
+        }
+        Relationships: []
+      }
+      member_notifications: {
+        Row: {
+          application_revision: number
+          attempts: number
+          available_at: string
+          completed_at: string | null
+          created_at: string
+          delivery_state: string
+          delivery_updated_at: string | null
+          event_key: string
+          expected_status: string
+          first_attempt_at: string | null
+          id: string
+          kind: string
+          lease_token: string | null
+          lease_until: string | null
+          provider_id: string | null
+          recipient_email: string
+          recipient_id: string
+          state: string
+          talent_request_id: string | null
+          template_version: number
+          user_id: string
+        }
+        Insert: {
+          application_revision: number
+          attempts?: number
+          available_at?: string
+          completed_at?: string | null
+          created_at?: string
+          delivery_state?: string
+          delivery_updated_at?: string | null
+          event_key: string
+          expected_status: string
+          first_attempt_at?: string | null
+          id?: string
+          kind: string
+          lease_token?: string | null
+          lease_until?: string | null
+          provider_id?: string | null
+          recipient_email: string
+          recipient_id: string
+          state: string
+          talent_request_id?: string | null
+          template_version?: number
+          user_id: string
+        }
+        Update: {
+          application_revision?: number
+          attempts?: number
+          available_at?: string
+          completed_at?: string | null
+          created_at?: string
+          delivery_state?: string
+          delivery_updated_at?: string | null
+          event_key?: string
+          expected_status?: string
+          first_attempt_at?: string | null
+          id?: string
+          kind?: string
+          lease_token?: string | null
+          lease_until?: string | null
+          provider_id?: string | null
+          recipient_email?: string
+          recipient_id?: string
+          state?: string
+          talent_request_id?: string | null
+          template_version?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      member_notification_settings: {
+        Row: {
+          all_members_enabled: boolean
+          cleanup_enabled: boolean
+          enabled: boolean
+          immediate_enabled: boolean
+          last_cleanup_at: string | null
+          pilot_recipients: string[]
+          singleton: boolean
+          talent_notifications_enabled: boolean
+        }
+        Insert: {
+          all_members_enabled?: boolean
+          cleanup_enabled?: boolean
+          enabled?: boolean
+          immediate_enabled?: boolean
+          last_cleanup_at?: string | null
+          pilot_recipients?: string[]
+          singleton?: boolean
+          talent_notifications_enabled?: boolean
+        }
+        Update: {
+          all_members_enabled?: boolean
+          cleanup_enabled?: boolean
+          enabled?: boolean
+          immediate_enabled?: boolean
+          last_cleanup_at?: string | null
+          pilot_recipients?: string[]
+          singleton?: boolean
+          talent_notifications_enabled?: boolean
+        }
+        Relationships: []
+      }
       access_events: {
         Row: {
           booking_id: string | null
@@ -3212,6 +3338,36 @@ export type Database = {
       }
     }
     Functions: {
+      talent_update_profile: {
+        Args: { expected_revision: number; patch: Json; profile_id: string }
+        Returns: Json
+      }
+      talent_unlist_profile: {
+        Args: { profile_id: string }
+        Returns: undefined
+      }
+      talent_submit_request: {
+        Args: {
+          base_revision: number
+          evidence: string
+          kind: string
+          profile_id: string
+        }
+        Returns: string
+      }
+      talent_review_request: {
+        Args: {
+          corrected_data?: Json
+          decision: string
+          note: string
+          request_id: string
+        }
+        Returns: undefined
+      }
+      talent_review_queue: { Args: never; Returns: Json }
+      talent_my_status: { Args: { profile_id: string }; Returns: Json }
+      talent_my_requests: { Args: never; Returns: Json }
+      talent_import_profiles: { Args: { records: Json }; Returns: Json }
       add_toolkit_rental_item: {
         Args: {
           p_checkout_condition_note?: string

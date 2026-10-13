@@ -41,3 +41,7 @@
 .directory-app a[href]{color:inherit}
 .directory-app a.button.primary{color:var(--paper)}
 .directory-app header nav a.active[href]{color:var(--ink)}
+
+.directory-app .talent-my-requests>h1{margin:24px 0 16px}
+.directory-app .talent-my-requests>p{margin-bottom:24px}
+.directory-app .talent-my-requests .engineer-row{display:grid;gap:12px}
