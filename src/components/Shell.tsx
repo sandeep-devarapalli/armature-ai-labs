@@ -28,7 +28,7 @@ import { AnalyticsConsent, AnalyticsSettingsButton } from "./AnalyticsConsent";
 import { PageMetadata } from "./PageMetadata";
 
 const primaryLinks = [["/", "The lab"], ["/join", "Membership"], ["/services", "Services"], ["/ecosystem", "Ecosystem"]] as const;
-const moreLinks = [
+const moreLinks = [["/talent-network", "Talent network"],
   ["/about", "Who we are"],
   ...(equipmentPageAvailable ? [["/equipment", "Equipment"]] : []),
   ["/projects", "Projects"], ["/blog", "Blog"], ["/components", "Equipment & Components"]

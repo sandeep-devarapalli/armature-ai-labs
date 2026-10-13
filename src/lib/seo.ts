@@ -23,6 +23,7 @@ export type PageSeo = {
 };
 
 const pages: Record<string, PageDefinition> = {
+  "/talent-network/": { name: "Armature Talent Network", description: "Find engineers. Connect with builders. Get things made. Discover engineering talent, view professional profiles and connect through LinkedIn." },
   "/": {
     name: "Physical AI and Robotics Lab in Bengaluru",
     description: "Armature AI Labs is a planned 3,500 sq ft physical AI and robotics lab in HSR Layout, Bengaluru. Explore the designs, projects and lab journal."

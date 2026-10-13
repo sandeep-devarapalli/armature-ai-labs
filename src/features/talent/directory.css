@@ -1,0 +1,40 @@
+.directory-app .research-badge{display:inline-flex;gap:6px;align-items:center;color:var(--muted);background:var(--chip);border:1px solid var(--line);border-radius:4px;padding:4px 8px;font-size:11px;white-space:nowrap}
+.directory-app .engineer-row-heading{align-items:flex-start}.directory-app .engineer-row-heading>div:nth-child(2){min-width:0;flex:1}.directory-app .engineer-row-heading p{overflow-wrap:anywhere}.directory-app .engineer-row-heading>.research-badge{margin-left:auto}
+.directory-app .engineer-row>.fine{margin-top:14px}.directory-app .match-note{margin-top:12px}.directory-app .card-actions{justify-content:flex-start;flex-wrap:wrap}.directory-app .card-actions>button{margin-left:auto}.directory-app .profile-heading h1{overflow-wrap:anywhere}.directory-app .profile-heading>div:nth-child(2){min-width:0}.directory-app .profile-copy{margin-top:16px}
+.directory-app .directory-filters{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:16px;align-items:end;margin:24px 0}.directory-app .directory-filters label,.directory-app .directory-toolbar label{font-size:12px}.directory-app .directory-filters input,.directory-app .directory-filters select{margin-top:7px}.directory-app .search-explainer{font-size:12px;margin:12px 0 24px;max-width:90ch}.directory-app .directory-toolbar{display:flex;align-items:center;gap:16px;margin:26px 0 18px;flex-wrap:wrap}.directory-app .directory-toolbar>p{margin-right:auto;font-size:13px}.directory-app .directory-toolbar label{display:flex;align-items:center;gap:10px}.directory-app .directory-toolbar select{width:auto}.directory-app .pagination{display:flex;align-items:center;justify-content:center;gap:25px;margin-top:30px;font-size:13px}
+.directory-app .directory-facts{display:grid;grid-template-columns:150px minmax(0,1fr);gap:18px;font-size:14px}.directory-app .directory-facts dt{color:var(--muted)}.directory-app .directory-facts dd{margin:0;overflow-wrap:anywhere;line-height:1.65}.directory-app .profile-section>h3{margin-top:22px;margin-bottom:12px}.directory-app .profile-section>p+.button{margin-top:18px}.directory-app .profile-section>p+p{margin-top:14px}
+.directory-app .directory-dialog{max-width:560px;width:calc(100% - 32px);border:1px solid var(--line);border-radius:7px;padding:28px;background:var(--paper);color:var(--ink)}.directory-app .directory-dialog::backdrop{background:#0008}.directory-app .directory-dialog p{margin:18px 0}.directory-app .directory-dialog>button{margin-top:8px}
+@media(max-width:720px){.directory-app .directory-filters{grid-template-columns:1fr}.directory-app .profile-heading{flex-wrap:wrap}.directory-app .profile-heading>.button{margin-left:0}.directory-app .engineer-row-heading>.research-badge{margin-left:0}.directory-app .card-actions>button{margin-left:0}.directory-app .directory-facts{grid-template-columns:1fr;gap:7px}.directory-app .directory-facts dd{margin-bottom:12px}.directory-app .header-inner{flex-wrap:wrap}.directory-app .profile-heading h1{font-size:28px}.directory-app .profile-side{margin-top:25px}}
+
+/* Keep the approved Curated engineering desk layout with real data. */
+.directory-app .directory-filters{display:flex;flex-direction:column;align-items:stretch;gap:20px;margin:0}
+.directory-app .directory-filters label{display:block;min-width:0;font-size:11px}
+.directory-app .directory-filters select,.directory-app .directory-filters input{font-size:11px;padding:10px 8px}
+.directory-app .directory-toolbar{margin:0 0 18px;gap:10px}
+.directory-app .directory-toolbar>p{font-size:11px}
+.directory-app .directory-toolbar button,.directory-app .directory-toolbar select{font-size:11px;padding:7px}
+.directory-app .shortlist-person>div:nth-child(2){min-width:0;overflow-wrap:anywhere}
+.directory-app .engineer-row-heading>.research-badge{font-size:10px}
+.directory-app .engineer-row-heading h2{overflow-wrap:anywhere}
+.directory-app .desk-search{margin-bottom:12px}
+.directory-app .search-explainer{margin-bottom:30px}
+.directory-app .shortlist-panel{max-height:75vh;overflow:auto}
+@media(max-width:720px){.directory-app .directory-filters{display:grid;grid-template-columns:1fr 1fr;gap:14px}.directory-app .directory-filters>.fine{grid-column:1/-1}.directory-app .desk-results{min-width:0}.directory-app .shortlist-panel{max-height:none}.directory-app .directory-toolbar{align-items:flex-start}.directory-app .directory-toolbar>p{flex-basis:100%}.directory-app .card-actions{gap:12px}.directory-app .card-actions .button{padding:8px;font-size:11px}}
+.directory-app .talent-request-form{display:grid;gap:16px;margin:20px 0;max-width:720px}
+.directory-app .talent-request-form label{display:grid;gap:8px;font-size:13px}
+.directory-app .talent-request-form textarea,.directory-app .talent-request-form input,.directory-app .talent-request-form select{width:100%;max-width:100%;box-sizing:border-box;padding:10px;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:4px;font:inherit}
+.directory-app .talent-request-form input[type=checkbox]{width:auto;justify-self:start}
+.directory-app .talent-actions{margin-top:24px}
+.directory-app .talent-actions>button,.directory-app .talent-actions>a{margin:6px 6px 6px 0}
+.directory-app header nav button{border:0;background:transparent;padding:0;font:inherit;color:inherit}
+.directory-app [role=alert]{color:#9b3b2b;overflow-wrap:anywhere}
+.directory-app{min-height:100vh;background:var(--paper);color:var(--ink)}
+.directory-app h1,.directory-app h2,.directory-app h3,.directory-app h4{color:var(--ink)}
+.directory-app .header-inner{max-width:1200px}.directory-app main{max-width:1200px}
+
+.directory-app{--display:Helvetica Neue,Helvetica,Arial,sans-serif}
+.directory-app h1,.directory-app h2{max-width:none}
+.directory-app .button{font-family:inherit;letter-spacing:normal;text-transform:none}
+.directory-app a{color:inherit}
+.directory-app .button.primary{color:var(--paper)}
+.directory-app svg{width:1em;height:1em}

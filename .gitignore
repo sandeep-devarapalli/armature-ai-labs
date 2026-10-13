@@ -22,3 +22,7 @@ tmp/
 # Isolated basic-registration browser build
 dist-basic-registration/
 dist-ecosystem/
+
+# Talent import source and private quality classifications stay local.
+/src/features/talent/directory-data.json
+/docs/talent-directory-import-report.json
