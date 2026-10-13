@@ -24,9 +24,32 @@ const identityMessages: Record<string, [string, string]> = {
   reinstated: ["An update about your Armature membership", `Your membership access has been reinstated. Sign in at ${portal} to check your current level. Verified membership requires approved identity and a verified mobile number. Premium requires a qualifying active workspace subscription; reinstatement does not grant paid services.`],
 };
 
+const talentRequests = "https://armatureailabs.com/talent-network/#requests";
+const talentReview = "https://armatureailabs.com/talent-network/#review";
+const talentMessages: Record<string, [string, string]> = {};
+for (const kind of ["claim", "correction", "removal"]) {
+  talentMessages[`talent_admin_${kind}`] = [
+    `New Talent Network ${kind} request`,
+    `A new ${kind} request is waiting for review. Sign in with your authorised administrator account at ${talentReview}. Review the request and supporting evidence inside the protected portal.`,
+  ];
+  for (const decision of ["approved", "rejected"]) {
+    const next = decision === "rejected"
+      ? "Read the reviewer's explanation and next steps in My requests."
+      : kind === "claim" ? "You can now edit or unlist your profile. Profile ownership does not verify your skills or availability."
+      : kind === "removal" ? "The profile has been removed from public discovery and protected against automatic re-import."
+      : "The reviewed correction has been applied to the profile.";
+    talentMessages[`talent_${kind}_${decision}`] = [
+      `Your Talent Network ${kind} request was ${decision}`,
+      `Your ${kind} request has been ${decision}. ${next} Sign in to view your requests at ${talentRequests}. For help, contact ${help}.`,
+    ];
+  }
+}
+
 // Version 1 is immutable: retries must retain identical provider payloads.
 export function memberNotificationTemplate(kind: string, version: number) {
-  const message = version === 3 && Object.hasOwn(identityMessages, kind)
+  const message = version === 4 && Object.hasOwn(talentMessages, kind)
+    ? talentMessages[kind]
+    : version === 3 && Object.hasOwn(identityMessages, kind)
     ? identityMessages[kind]
     : version === 2 && kind === "admin_ready"
     ? submittedAdminMessage
@@ -34,6 +57,7 @@ export function memberNotificationTemplate(kind: string, version: number) {
   if (!message) return null;
   const [subject, text] = message;
   const escaped = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  const html = `<div style="max-width:560px;margin:0 auto;padding:24px;font:16px/1.6 Arial,sans-serif;color:#222"><p>${escaped.replace(/https:\/\/armatureailabs\.com\/[a-z/]+/g, '<a href="$&">$&</a>')}</p><p>Armature AI Labs</p></div>`;
+  const linkPattern = version === 4 ? /https:\/\/armatureailabs\.com\/talent-network\/#(?:requests|review)/g : /https:\/\/armatureailabs\.com\/[a-z/]+/g;
+  const html = `<div style="max-width:560px;margin:0 auto;padding:24px;font:16px/1.6 Arial,sans-serif;color:#222"><p>${escaped.replace(linkPattern, '<a href="$&">$&</a>')}</p><p>Armature AI Labs</p></div>`;
   return { subject, text, html };
 }

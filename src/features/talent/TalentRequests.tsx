@@ -68,9 +68,41 @@ export function TalentProfileActions({ person, onChange }: { person: DirectoryPe
     {error && <p role="alert">{error}</p>}{notice && <p role="status">{notice}</p>}
     {kind === 'edit' && status?.owner && <EditFields person={person} busy={busy} save={patch => void run(() => talentRpc('talent_update_profile', { profile_id: person.id, expected_revision: person.revision, patch }), 'Profile updated.')}/>}
     {kind === 'unlist' && status?.owner && <div><p>Remove your profile from public search now? This also prevents future research imports from republishing it.</p><button disabled={busy} onClick={() => void run(() => talentRpc('talent_unlist_profile', { profile_id: person.id }), 'Your profile has been removed.')}>Confirm removal</button></div>}
-    {['claim', 'correction', 'removal'].includes(kind) && user && <form className="talent-request-form" onSubmit={event => { event.preventDefault(); const evidence = new FormData(event.currentTarget).get('evidence'); void run(() => talentRpc('talent_submit_request', { profile_id: person.id, kind, evidence, base_revision: person.revision }), 'Request saved for review. Return to this profile to check its status.'); }}><h3>{kind === 'claim' ? 'Claim this profile' : kind === 'correction' ? 'Suggest a correction' : 'Request removal'}</h3><label>{kind === 'claim' ? 'Explain how we can confirm you own this LinkedIn identity. Include a public evidence link or professional affiliation we can verify.' : kind === 'correction' ? 'Describe the exact correction and supporting source.' : 'Explain your relationship to this profile and your removal request.'}<textarea name="evidence" required minLength={20} maxLength={4000} rows={6}/></label><p className="fine">Visible only to you and authorised administrators. Do not upload identity documents, passwords or financial information.</p><button className="primary" disabled={busy || !user.email_confirmed_at}>Submit request</button></form>}
+    {['claim', 'correction', 'removal'].includes(kind) && user && <form className="talent-request-form" onSubmit={event => { event.preventDefault(); const evidence = new FormData(event.currentTarget).get('evidence'); void run(() => talentRpc('talent_submit_request', { profile_id: person.id, kind, evidence, base_revision: person.revision }), 'Request saved for review. We will email you when a decision is made. Your history is available in My requests.'); }}><h3>{kind === 'claim' ? 'Claim this profile' : kind === 'correction' ? 'Suggest a correction' : 'Request removal'}</h3><label>{kind === 'claim' ? 'Explain how we can confirm you own this LinkedIn identity. Include a public evidence link or professional affiliation we can verify.' : kind === 'correction' ? 'Describe the exact correction and supporting source.' : 'Explain your relationship to this profile and your removal request.'}<textarea name="evidence" required minLength={20} maxLength={4000} rows={6}/></label><p className="fine">Visible only to you and authorised administrators. Do not upload identity documents, passwords or financial information.</p><button className="primary" disabled={busy || !user.email_confirmed_at}>Submit request</button></form>}
     {kind && <button disabled={busy} onClick={() => setKind('')}>Cancel</button>}
     {!!status?.requests.length && <section><h3>Your requests</h3>{status.requests.map(request => <p key={request.id}><strong>{request.kind}: {request.status}</strong>{request.review_note && <span> — {request.review_note}</span>}</p>)}</section>}
+  </section>;
+}
+export function TalentMyRequests() {
+  const [requests, setRequests] = useState<TalentRequest[]>([]);
+  const [error, setError] = useState(''); const [loading, setLoading] = useState(true); const [signedIn, setSignedIn] = useState(false);
+  const mounted = useRef(false); const generation = useRef(0);
+  async function load() {
+    if (!mounted.current) return;
+    const current = ++generation.current; const active = () => mounted.current && generation.current === current;
+    setRequests([]); setLoading(true); setError(''); setSignedIn(false);
+    try {
+      const { data, error: authError } = await talentClient().auth.getUser();
+      if (!active()) return;
+      if (authError && authError.name !== 'AuthSessionMissingError') throw authError;
+      if (!data.user) return;
+      setSignedIn(true);
+      const next = await talentRpc<TalentRequest[]>('talent_my_requests');
+      if (active()) setRequests(next);
+    } catch (failure) { if (active()) setError(message(failure)); }
+    finally { if (active()) setLoading(false); }
+  }
+  useEffect(() => {
+    mounted.current = true;
+    const { data } = talentClient().auth.onAuthStateChange(() => {
+      const current = ++generation.current; setRequests([]); setError(''); setSignedIn(false); setLoading(true);
+      window.setTimeout(() => { if (mounted.current && generation.current === current) void load(); }, 0);
+    });
+    void load();
+    return () => { mounted.current = false; ++generation.current; data.subscription.unsubscribe(); };
+  }, []);
+  return <section className="talent-my-requests"><a href="#talent">Back to talent</a><h1 tabIndex={-1}>My requests</h1><p>Your private claim, correction and removal history. We will email you when a decision is made.</p>
+    {loading ? <p role="status">Loading your requests…</p> : error ? <><p role="alert">{error}</p><button onClick={() => void load()}>Retry</button>{!signedIn && <SignIn/>}</> : !signedIn ? <><p>Sign in to see your requests.</p><SignIn/></> : <>{!requests.length && <p>You have not submitted any requests.</p>}{requests.map(request => <article className="engineer-row" key={request.id}><h2>{request.profile_name || 'Talent profile'}</h2><p><strong>{request.kind} · {request.status}</strong></p><p className="fine">Submitted {new Date(request.created_at).toLocaleString()}</p>{request.review_note && <p className="profile-copy">{request.review_note}</p>}{request.published ? <a href={`#profile/${encodeURIComponent(request.profile_id)}`}>View profile</a> : <p className="fine">This profile is no longer publicly listed.</p>}</article>)}</>}
   </section>;
 }
 export function TalentReviewQueue({ onChange }: { onChange: () => Promise<void> }) {

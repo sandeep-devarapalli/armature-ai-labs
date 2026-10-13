@@ -78,6 +78,7 @@ jobs:
           PGPASSWORD: postgres
         run: |
           psql -v ON_ERROR_STOP=1 -f supabase/tests/talent_network.sql
+          psql -v ON_ERROR_STOP=1 -f supabase/tests/talent_notifications.sql
           psql -v ON_ERROR_STOP=1 -f supabase/tests/ecosystem_contributions.sql
           psql -v ON_ERROR_STOP=1 -f supabase/tests/ecosystem_pending_edit.sql
           psql -v ON_ERROR_STOP=1 -f supabase/tests/ecosystem_city_guide.sql
@@ -90,6 +91,7 @@ jobs:
       - run: DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres sh supabase/tests/concurrent_equipment_daily_use.sh
       - run: sh supabase/tests/concurrent_membership.sh
       - run: sh supabase/tests/concurrent_notifications.sh
+      - run: sh supabase/tests/concurrent_talent_notifications.sh
       - run: sh supabase/tests/concurrent_notification_delivery.sh
       - run: sh supabase/tests/concurrent_notification_operations.sh
       - run: sh supabase/tests/concurrent_ecosystem_notifications.sh

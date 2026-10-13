@@ -1,7 +1,7 @@
 import { act, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { beforeEach, expect, it, vi } from 'vitest';
-import { TalentProfileActions, TalentReviewQueue } from '../../src/features/talent/TalentRequests';
+import { TalentMyRequests, TalentProfileActions, TalentReviewQueue } from '../../src/features/talent/TalentRequests';
 import type { DirectoryPerson } from '../../src/features/talent/directorySearch';
 const mock = vi.hoisted(() => ({ rpc: vi.fn(), getUser: vi.fn(), authChange: (() => {}) as () => void, unsubscribe: vi.fn() }));
 vi.mock('../../src/features/talent/liveTalent', () => ({ talentRpc: mock.rpc, talentClient: () => ({ auth: { getUser: mock.getUser, onAuthStateChange: (callback: () => void) => { mock.authChange = callback; return { data: { subscription: { unsubscribe: mock.unsubscribe } } }; } } }) }));
@@ -40,4 +40,39 @@ it('unsubscribes and discards a review response after unmount', async () => {
   const view = render(<MemoryRouter><TalentReviewQueue onChange={onChange}/></MemoryRouter>);
   view.unmount(); await act(async () => { late.resolve([privateRequest]); });
   expect(mock.unsubscribe).toHaveBeenCalledOnce(); expect(onChange).not.toHaveBeenCalled();
+});
+
+it('requires sign-in before fetching request history', async () => {
+  mock.getUser.mockResolvedValue({ data: { user: null } });
+  render(<MemoryRouter><TalentMyRequests/></MemoryRouter>);
+  await screen.findByRole('link', { name: 'Sign in to continue' });
+  expect(mock.rpc).not.toHaveBeenCalled();
+});
+it('shows removal decisions without linking to an unpublished profile', async () => {
+  mock.getUser.mockResolvedValue({ data: { user: { id: 'u1' } } });
+  mock.rpc.mockResolvedValue([{ ...privateRequest, status: 'approved', kind: 'removal', published: false, review_note: 'Your removal was approved.' }]);
+  render(<MemoryRouter><TalentMyRequests/></MemoryRouter>);
+  await screen.findByText('Your removal was approved.');
+  expect(screen.queryByRole('link', { name: 'View profile' })).not.toBeInTheDocument();
+  expect(mock.rpc).toHaveBeenCalledWith('talent_my_requests');
+});
+it('links a published profile from request history and clears history on signout', async () => {
+  mock.getUser.mockResolvedValueOnce({ data: { user: { id: 'u1' } } }).mockResolvedValue({ data: { user: null } });
+  mock.rpc.mockResolvedValue([{ ...privateRequest, published: true, review_note: 'Private decision note' }]);
+  render(<MemoryRouter><TalentMyRequests/></MemoryRouter>);
+  expect(await screen.findByRole('link', { name: 'View profile' })).toHaveAttribute('href', '#profile/p1');
+  act(() => mock.authChange());
+  expect(screen.queryByText('Private decision note')).not.toBeInTheDocument();
+  await screen.findByRole('link', { name: 'Sign in to continue' });
+});
+it('discards late request history after switching accounts', async () => {
+  const late = deferred<unknown>();
+  mock.getUser.mockResolvedValueOnce({ data: { user: { id: 'u1' } } }).mockResolvedValue({ data: { user: { id: 'u2' } } });
+  mock.rpc.mockReturnValueOnce(late.promise).mockResolvedValue([]);
+  render(<MemoryRouter><TalentMyRequests/></MemoryRouter>);
+  await waitFor(() => expect(mock.rpc).toHaveBeenCalled());
+  act(() => mock.authChange());
+  await act(async () => { late.resolve([{ ...privateRequest, review_note: 'Old account private note' }]); });
+  await screen.findByText('You have not submitted any requests.');
+  expect(screen.queryByText('Old account private note')).not.toBeInTheDocument();
 });
