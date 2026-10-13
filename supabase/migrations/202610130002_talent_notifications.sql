@@ -31,6 +31,7 @@ begin
  case when s.enabled and s.talent_notifications_enabled and (s.all_members_enabled or lower(u.email)=any(s.pilot_recipients)) then 'pending' else 'held' end,4,r.id
  from auth.users u cross join public.member_notification_settings s
  where u.id=p_recipient and u.email_confirmed_at is not null and u.deleted_at is null
+ and u.email ~ '^[^[:space:]@]+@[^[:space:]@]+[.][^[:space:]@]+$'
  and (u.banned_until is null or u.banned_until<=now())
  and not exists(select 1 from public.memberships m where m.user_id in (u.id,r.requester_id) and m.status='suspended')
  and not exists(select 1 from public.basic_onboarding_applications a where a.user_id in (u.id,r.requester_id) and a.status='revoked')
@@ -68,6 +69,7 @@ language sql stable security definer set search_path='' as $$
  and t.status=n.expected_status and n.event_key='talent:'||t.id::text||':'||t.status
  and s.enabled and s.talent_notifications_enabled and (s.all_members_enabled or n.recipient_email=any(s.pilot_recipients))
  and r.email_confirmed_at is not null and r.deleted_at is null and lower(r.email)=n.recipient_email
+ and r.email ~ '^[^[:space:]@]+@[^[:space:]@]+[.][^[:space:]@]+$'
  and u.email_confirmed_at is not null and u.deleted_at is null
  and (r.banned_until is null or r.banned_until<=now()) and (u.banned_until is null or u.banned_until<=now())
  and not exists(select 1 from public.memberships m where m.user_id in (r.id,u.id) and m.status='suspended')

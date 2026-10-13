@@ -80,6 +80,20 @@ select event_key,user_id,recipient_id,kind,template_version,'synthetic' from pub
 delete from public.member_notifications where talent_request_id='73000000-0000-4000-8000-000000000012';
 select private.enqueue_talent_notification('73000000-0000-4000-8000-000000000012','73000000-0000-4000-8000-000000000002','talent_admin_removal');
 select pg_temp.check_true(not exists(select 1 from public.member_notifications where talent_request_id='73000000-0000-4000-8000-000000000012'),'retained tombstone prevents archived event replay');
+-- Invalid destination addresses must not abort a valid review transaction.
+insert into auth.users(id,email,email_confirmed_at) values('73000000-0000-4000-8000-000000000004','invalid-fixture@example.test',now());
+do $$ declare address text; request_id uuid; revision integer; begin
+ foreach address in array array[null::text,'','   ','missing-domain@'] loop
+  update auth.users set email=address where id='73000000-0000-4000-8000-000000000004';
+  perform set_config('request.jwt.claim.sub','73000000-0000-4000-8000-000000000004',true);
+  select p.revision into revision from public.talent_profiles p where p.id='notice-test';
+  request_id:=public.talent_submit_request('notice-test','correction','Synthetic correction with unusable notification address',revision);
+  perform set_config('request.jwt.claim.sub','73000000-0000-4000-8000-000000000002',true);
+  perform public.talent_review_request(request_id,'approved','Reviewed synthetic correction despite missing contact','{"title":"Corrected fixture"}');
+  perform pg_temp.check_true((select status='approved' from private.talent_requests where id=request_id),'invalid notification address does not block approval');
+  perform pg_temp.check_true(not exists(select 1 from public.member_notifications where talent_request_id=request_id and kind='talent_correction_approved'),'invalid address produces no requester delivery');
+ end loop;
+end $$;
 update public.talent_profiles set published=false where id='notice-test';
 set local role authenticated;
 select set_config('request.jwt.claim.sub','73000000-0000-4000-8000-000000000001',true);
