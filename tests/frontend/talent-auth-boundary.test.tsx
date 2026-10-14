@@ -1,4 +1,4 @@
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { beforeEach, expect, it, vi } from 'vitest';
 import { TalentMyRequests, TalentProfileActions, TalentReviewQueue } from '../../src/features/talent/TalentRequests';
@@ -77,10 +77,45 @@ it('discards late request history after switching accounts', async () => {
   expect(screen.queryByText('Old account private note')).not.toBeInTheDocument();
 });
 
-it.each([true, false])('shows photo controls only for an approved owner: %s', async owner => {
-  mock.getUser.mockResolvedValue({ data: { user: { id: 'u1', email_confirmed_at: '2026-01-01' } } });
-  mock.rpc.mockResolvedValue({ owner, admin: true, requests: [] });
-  render(<MemoryRouter><TalentProfileActions person={{ ...person, claimed: true }} onChange={vi.fn()}/></MemoryRouter>);
-  await screen.findByRole('button', { name: 'Suggest a correction' });
-  expect(Boolean(screen.queryByRole('button', { name: 'Profile photo' }))).toBe(owner);
+it('allows an authenticated admin to edit through the audited admin RPC', async () => {
+  mock.getUser.mockResolvedValue({ data: { user: { id: 'admin', email_confirmed_at: '2026-01-01' } } });
+  mock.rpc.mockResolvedValue({ owner: false, admin: true, requests: [] });
+  const changed = vi.fn().mockResolvedValue(undefined);
+  render(<MemoryRouter><TalentProfileActions person={person} onChange={changed}/></MemoryRouter>);
+  fireEvent.click(await screen.findByRole('button', { name: 'Edit profile as admin' }));
+  fireEvent.change(screen.getByLabelText('Current title'), { target: { value: 'Updated title' } });
+  fireEvent.change(screen.getByLabelText('Reason for this edit'), { target: { value: 'Verified against owner supplied details.' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Save profile' }));
+  await waitFor(() => expect(mock.rpc).toHaveBeenCalledWith('talent_admin_update_profile', expect.objectContaining({ profile_id: 'p1', expected_revision: 1, note: 'Verified against owner supplied details.', patch: expect.objectContaining({ title: 'Updated title' }) })));
+  await waitFor(() => expect(changed).toHaveBeenCalledOnce());
+});
+it('does not expose direct editing to a non-owner member', async () => {
+  mock.getUser.mockResolvedValue({ data: { user: { id: 'member', email_confirmed_at: '2026-01-01' } } });
+  mock.rpc.mockResolvedValue({ owner: false, admin: false, requests: [] });
+  render(<MemoryRouter><TalentProfileActions person={person} onChange={vi.fn()}/></MemoryRouter>);
+  await screen.findByRole('button', { name: 'Claim this profile' });
+  expect(screen.queryByRole('button', { name: 'Edit profile' })).not.toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: 'Edit profile as admin' })).not.toBeInTheDocument();
+});
+it('requires an explicit signed declaration and submits its version with claim evidence', async () => {
+  mock.getUser.mockResolvedValue({ data: { user: { id: 'member', email_confirmed_at: '2026-01-01' } } });
+  mock.rpc.mockResolvedValue({ owner: false, admin: false, requests: [] });
+  render(<MemoryRouter><TalentProfileActions person={person} onChange={vi.fn().mockResolvedValue(undefined)}/></MemoryRouter>);
+  fireEvent.click(await screen.findByRole('button', { name: 'Claim this profile' }));
+  const signature = screen.getByLabelText('Your full name');
+  const acceptance = screen.getByRole('checkbox', { name: /I have read and agree/ });
+  expect(signature).toBeRequired(); expect(acceptance).toBeRequired(); expect(acceptance).not.toBeChecked();
+  fireEvent.change(signature, { target: { value: 'Sample Member' } });
+  fireEvent.click(acceptance);
+  fireEvent.change(screen.getByLabelText(/Explain how we can confirm/), { target: { value: 'Sample evidence from my professional profile.' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Sign declaration and submit claim' }));
+  await waitFor(() => expect(mock.rpc).toHaveBeenCalledWith('talent_submit_request', expect.objectContaining({ signed_name: 'Sample Member', declaration_version: '2026-10-13-v1', declaration_accepted: true, kind: 'claim' })));
+});
+it('shows pending claims without granting editing access', async () => {
+  mock.getUser.mockResolvedValue({ data: { user: { id: 'member', email_confirmed_at: '2026-01-01' } } });
+  mock.rpc.mockResolvedValue({ owner: false, admin: false, requests: [privateRequest] });
+  render(<MemoryRouter><TalentProfileActions person={person} onChange={vi.fn()}/></MemoryRouter>);
+  await screen.findByText(/Your claim is awaiting manual review/);
+  expect(screen.queryByRole('button', { name: 'Claim this profile' })).not.toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: 'Edit profile' })).not.toBeInTheDocument();
 });

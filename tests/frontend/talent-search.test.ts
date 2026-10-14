@@ -19,6 +19,12 @@ function search(query: string, filters: Partial<DirectoryQuery> = {}) {
 const ids = (query: string, filters: Partial<DirectoryQuery> = {}) => search(query, filters).map(result => result.person.id);
 
 describe('talent directory search with synthetic people', () => {
+  it('finds exact LinkedIn identities across filters using common URL variants', () => {
+    for (const url of ['https://www.linkedin.com/in/synthetic-a', 'linkedin.com/in/synthetic-a/', 'http://in.linkedin.com/in/SYNTHETIC-A?trk=share#about', 'https://www.linkedin.com/in/synthetic-%61']) {
+      expect(ids(url, { category: ['SLAM'], location: 'Chennai', company: 'Other' })).toEqual(['a']);
+    }
+    for (const url of ['https://linkedin.com.evil.example/in/synthetic-a', 'https://linkedin.com/company/synthetic-a', 'https://linkedin.com/in/synthetic', 'https://linkedin.com/in/%XX']) expect(ids(url)).toEqual([]);
+  });
   it('finds names and current or previous companies with explicit evidence', () => {
     expect(ids('sample anya')).toEqual(['a']);
     expect(ids('Sample Circuits')).toEqual(['a', 'b']);
@@ -51,6 +57,14 @@ describe('talent directory search with synthetic people', () => {
     expect(ids('', { category: 'embedded', company: 'sample circuits', location: 'bengaluru' })).toEqual(['a']);
     expect(ids('', { category: 'Embedded', location: 'Pune, Maharashtra, India' })).toEqual(['d']);
     expect(ids('', { company: 'Sample Instruments' })).toEqual([]);
+  });
+  it('unions selected categories without duplicate people and intersects other filters', () => {
+    expect(ids('', { category: ['Embedded', 'SLAM', 'Drones'] })).toEqual(['a', 'b', 'd']);
+    expect(ids('', { category: ['Embedded', 'SLAM'], location: 'bengaluru', company: 'Sample Circuits' })).toEqual(['a', 'b']);
+    expect(ids('flight', { category: ['Embedded', 'SLAM'] })).toEqual(['a']);
+    expect(ids('', { category: [] })).toEqual(['a', 'b', 'c', 'd']);
+    expect(search('', { category: ['Embedded', 'SLAM'] })[0].matches).toContain('Research-derived category: Embedded');
+    expect(search('', { category: ['Embedded', 'SLAM'] })[0].matches).not.toContain('Research-derived category: SLAM');
   });
   it('returns stable name order for an empty query and no matches for absent terms', () => {
     expect(ids('', { sort: 'name' })).toEqual(['a', 'b', 'c', 'd']);

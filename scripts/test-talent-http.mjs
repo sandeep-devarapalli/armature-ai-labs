@@ -28,7 +28,7 @@ const profile={id:`http-talent-${run}`,name:'HTTP Synthetic Engineer',title:'Emb
 check('service import', (await rpc('talent_import_profiles',service,{records:[profile]})).inserted===1);
 const rows=await request(`http://127.0.0.1:60423/talent_profiles?id=eq.${profile.id}&select=*`,anon,undefined,'GET');check('anonymous reads published profile',rows.length===1);
 const owner=accounts.owner.token,admin=accounts.admin.token,other=accounts.other.token;
-const id=await rpc('talent_submit_request',owner,{profile_id:profile.id,kind:'claim',evidence:'Synthetic ownership evidence for HTTP integration test',base_revision:1});
+const id=await rpc('talent_submit_request',owner,{profile_id:profile.id,kind:'claim',evidence:'Synthetic ownership evidence for HTTP integration test',base_revision:1,signed_name:profile.name,declaration_version:'2026-10-13-v1',declaration_accepted:true});
 check('pending claim grants no owner rights',!(await rpc('talent_my_status',owner,{profile_id:profile.id})).owner);
 await rpc('talent_update_profile',owner,{profile_id:profile.id,expected_revision:1,patch:{title:'Not yet'}},403);check('pending claimant cannot edit',true);
 await request(`http://127.0.0.1:60423/talent_profiles?id=eq.${profile.id}`,other,{published:false},'PATCH',403);check('direct profile writes denied',true);

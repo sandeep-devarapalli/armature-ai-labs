@@ -30,7 +30,7 @@
 .directory-app [role=alert]{color:#9b3b2b;overflow-wrap:anywhere}
 .directory-app{min-height:100vh;background:var(--paper);color:var(--ink)}
 .directory-app h1,.directory-app h2,.directory-app h3,.directory-app h4{color:var(--ink)}
-.directory-app .header-inner{max-width:1200px}.directory-app main{max-width:1200px}
+.directory-app .header-inner{max-width:1200px}.directory-app .directory-content{max-width:1200px}
 
 .directory-app{--display:Helvetica Neue,Helvetica,Arial,sans-serif}
 .directory-app h1,.directory-app h2{max-width:none}
@@ -45,3 +45,53 @@
 .directory-app .talent-my-requests>h1{margin:24px 0 16px}
 .directory-app .talent-my-requests>p{margin-bottom:24px}
 .directory-app .talent-my-requests .engineer-row{display:grid;gap:12px}
+
+.directory-app .category-filter{margin:0;padding:0 0 20px;border:0;border-bottom:1px solid var(--line);min-width:0}
+.directory-app .category-filter legend{font-size:16px;font-weight:600;margin-bottom:12px}
+.directory-app .category-filter-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:11px;color:var(--muted)}
+.directory-app .category-filter-heading button{border:0;background:none;color:var(--accent);padding:4px;text-decoration:underline;font-size:11px}
+.directory-app .category-filter>.fine{margin-top:5px}
+.directory-app .category-group h3{font-size:10px;line-height:1.5;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);margin:22px 0 8px}
+.directory-app .directory-filters .category-option{display:flex;align-items:flex-start;gap:9px;padding:9px 4px;border-radius:4px;cursor:pointer;line-height:1.5;font-size:12px}
+.directory-app .category-option:has(input:checked){background:var(--wash);color:var(--accent)}
+.directory-app .directory-filters .category-option input{width:16px;height:16px;min-height:0;color-scheme:light;flex:none;accent-color:var(--accent);margin:1px 0 0;padding:0}
+.directory-app .category-option span{min-width:0;overflow-wrap:anywhere}
+@media(max-width:720px){.directory-app .category-filter{grid-column:1/-1}.directory-app .directory-filters .category-option{font-size:14px;min-height:44px}}
+
+.directory-app[data-talent-theme=dark] .category-option input{color-scheme:dark}
+@media(min-width:1101px){.directory-app .desk-layout{grid-template-columns:230px minmax(0,1fr) 235px}}
+@media(min-width:721px) and (max-width:1100px){.directory-app .desk-layout{grid-template-columns:220px minmax(0,1fr)}}
+
+.directory-app .desk-search{display:block}
+.directory-app .desk-search .search-bar{width:100%}
+
+.directory-app .talent-actions{border:1px solid var(--line);padding:20px;margin:24px 0;background:var(--panel);border-radius:6px}
+.directory-app .talent-actions>p{margin:12px 0}
+.directory-app .talent-edit-form{max-width:none;grid-template-columns:1fr 1fr;border-top:1px solid var(--line);padding-top:22px}
+.directory-app .talent-edit-form>h2,.directory-app .talent-edit-form>.edit-wide,.directory-app .edit-buttons{grid-column:1/-1}
+.directory-app .edit-buttons{display:flex;gap:12px;position:sticky;bottom:0;background:var(--panel);padding:14px 0}
+.directory-app .talent-edit-demo>p,.directory-app .talent-edit-demo>h2{margin:20px 0}
+.directory-app .talent-edit-demo>button{margin:12px 12px 12px 0}
+@media(max-width:720px){.directory-app .talent-edit-form{grid-template-columns:1fr}}
+
+.directory-app .claim-declaration{border:1px solid var(--line);border-radius:6px;padding:20px;min-width:0;background:var(--wash)}
+.directory-app .claim-declaration legend{font-size:17px;font-weight:600;padding:0 6px}
+.directory-app .claim-declaration p{font-size:14px;line-height:1.7;margin:12px 0}
+.directory-app .claim-declaration label{margin-top:18px}
+.directory-app .claim-declaration .claim-accept{display:flex;align-items:flex-start;gap:10px;line-height:1.6}
+.directory-app .claim-accept input{width:18px;height:18px;min-height:0;padding:0;margin:3px 0 0;flex:none;accent-color:var(--accent)}
+.directory-app .talent-claim-demo>p,.directory-app .talent-claim-demo>ol{margin:20px 0;line-height:1.8}
+.directory-app .claim-accept input{color-scheme:light}
+.directory-app[data-talent-theme=dark] .claim-accept input{color-scheme:dark}
+
+.directory-app{min-height:60vh}
+.directory-app .directory-content{max-width:1120px;margin:auto;padding:32px 24px 60px}
+.directory-app .talent-section-nav{max-width:1120px;margin:auto;padding:20px 24px;border-bottom:1px solid var(--hair);display:flex;align-items:center;gap:22px;overflow-x:auto;font-size:12px}
+.directory-app .talent-section-nav>a,.directory-app .talent-section-nav>button{white-space:nowrap;flex:none}
+.directory-app .talent-section-nav>a[aria-current=page]{color:var(--ink);font-weight:700;text-decoration:underline;text-underline-offset:7px}
+.directory-app .talent-section-nav>.button{margin-left:auto}
+.directory-app a[href]{color:var(--link)}
+.directory-app .button.primary,.directory-app button.primary{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.directory-app .talent-local-tools{max-width:1120px;padding:10px 24px;margin:auto;font-size:10px;color:var(--fg-2);border-bottom:1px dashed var(--hair)}
+.directory-app .profile-heading h1{font-family:var(--display)}
+@media(max-width:720px){.directory-app .talent-section-nav{gap:18px;padding:15px 18px}.directory-app .directory-content{padding:28px 18px 45px}}
