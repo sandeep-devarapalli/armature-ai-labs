@@ -3338,6 +3338,10 @@ export type Database = {
       }
     }
     Functions: {
+      skip_reserved_member_notification: {
+        Args: { p_id: string; p_lease_token: string }
+        Returns: boolean
+      }
       talent_update_profile: {
         Args: { expected_revision: number; patch: Json; profile_id: string }
         Returns: Json

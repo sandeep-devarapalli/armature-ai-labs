@@ -78,6 +78,13 @@ Deno.serve(async (request: Request) => {
     for (const notice of data as Notice[]) {
       if (Date.now() > deadline - 8_000) { counts.skipped++; continue; }
       if (!uuid.test(notice.id) || !uuid.test(notice.lease_token)) throw new Error("invalid_claim");
+      const domain = notice.recipient_email.split("@")[1]?.trim().toLowerCase() ?? "";
+      if (/(^|\.)(test|invalid|localhost|example|example\.(com|org|net))\.?$/.test(domain)) {
+        const skipped = await rpc("skip_reserved_member_notification", { p_id: notice.id, p_lease_token: notice.lease_token });
+        if (skipped.error || skipped.data !== true) throw new Error("skip_failed");
+        counts.skipped++;
+        continue;
+      }
       const prepared = await rpc("prepare_member_notification", { p_id: notice.id, p_lease_token: notice.lease_token });
       if (prepared.error) throw new Error("prepare_failed");
       if (prepared.data !== true || Date.now() > deadline - 8_000) { counts.skipped++; continue; }
