@@ -5,9 +5,9 @@ import type { DirectoryPerson } from './directorySearch';
 import { TalentPhotoEditor } from './TalentPhoto';
 import { talentClient, talentRpc, type TalentRequest, type TalentStatus } from './liveTalent';
 const message = (error: unknown) => error instanceof Error ? error.message : 'The request could not be completed. Please try again.';
-const textFields = ['name', 'title', 'company', 'location', 'headline', 'summary'] as const;
+const textFields = ['name', 'title', 'company', 'location', 'headline', 'summary', 'education', 'experience'] as const;
 const listFields = ['skills', 'physicalAiAreas', 'previousCompanies'] as const;
-const labels: Record<string, string> = { name: 'Name', title: 'Current title', company: 'Current company', location: 'Location', headline: 'Headline', summary: 'Professional summary', skills: 'Skills and capabilities', physicalAiAreas: 'Physical AI areas', previousCompanies: 'Previous companies' };
+const labels: Record<string, string> = { name: 'Name', title: 'Current title', company: 'Current company', location: 'Location', headline: 'Headline', summary: 'Professional summary', education: 'Education (self-reported)', experience: 'Experience (self-reported)', skills: 'Skills and capabilities', physicalAiAreas: 'Physical AI areas', previousCompanies: 'Previous companies' };
 export const claimDeclarationVersion = '2026-10-13-v1';
 export const claimDeclarationText = 'I declare that I am the person named in this profile and that the linked LinkedIn profile represents me. The information and evidence I provide are accurate to the best of my knowledge. I am not claiming this profile on behalf of another person. I understand that Armature will manually review my claim before granting editing access, and that a false claim may be rejected or my access revoked.';
 function ClaimDeclaration({ person }: { person: DirectoryPerson }) {
@@ -19,12 +19,13 @@ function EditFields({ person, save, busy, admin = false, cancel }: { person: Dir
     event.preventDefault(); const values = new FormData(event.currentTarget); const patch: Record<string, unknown> = {};
     textFields.forEach(key => { patch[key] = String(values.get(key) || '').trim(); });
     listFields.forEach(key => { patch[key] = String(values.get(key) || '').split('\n').map(value => value.trim()).filter(Boolean); });
-    const years = String(values.get('yearsExperience') || ''); patch.yearsExperience = years === '' ? null : Number(years); if (admin) patch.editNote = String(values.get('editNote') || '').trim(); save(patch);
+    patch.availability = String(values.get('availability') || 'unknown'); const years = String(values.get('yearsExperience') || ''); patch.yearsExperience = years === '' ? null : Number(years); if (admin) patch.editNote = String(values.get('editNote') || '').trim(); save(patch);
   }}>
     <h2>{admin ? 'Edit profile as admin' : 'Edit your profile'}</h2>
-    {textFields.map(key => <label key={key}>{labels[key]}{key === 'summary' || key === 'headline' ? <textarea name={key} defaultValue={person[key]} maxLength={key === 'summary' ? 4000 : 1000} rows={key === 'summary' ? 4 : 2}/> : <input autoFocus={key === 'name'} name={key} defaultValue={person[key]} required={key === 'name'} maxLength={250}/>}</label>)}
+    {textFields.map(key => <label key={key}>{labels[key]}{['summary', 'headline', 'education', 'experience'].includes(key) ? <textarea name={key} defaultValue={person[key]} maxLength={key === 'headline' ? 1000 : 4000} rows={key === 'summary' ? 4 : 2}/> : <input autoFocus={key === 'name'} name={key} defaultValue={person[key]} required={key === 'name'} maxLength={250}/>}</label>)}
     {listFields.map(key => <label key={key}>{labels[key]} (one per line, maximum 50)<textarea name={key} defaultValue={person[key].join('\n')} rows={3}/></label>)}
     <label>Total experience in years (optional)<input name="yearsExperience" type="number" min="0" max="90" step="0.1" defaultValue={person.yearsExperience ?? ''}/></label>
+<label>Availability<select name="availability" defaultValue={person.availability || 'unknown'}><option value="unknown">Unknown</option><option value="available">Open to projects</option><option value="unavailable">Not currently available</option></select></label>
     {admin && <label className="edit-wide">Reason for this edit<textarea name="editNote" required minLength={10} maxLength={4000} rows={2} placeholder="What changed and the source used to verify it"/></label>}
     <p className="fine edit-wide">These details will be public. Do not include private contact information. LinkedIn identity and verification status cannot be changed here.</p><div className="edit-buttons"><button className="primary" disabled={busy}>{busy ? 'Saving…' : 'Save profile'}</button><button type="button" disabled={busy} onClick={cancel}>Cancel</button></div>
   </form>;

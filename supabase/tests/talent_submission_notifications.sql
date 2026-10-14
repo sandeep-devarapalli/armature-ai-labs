@@ -1,0 +1,68 @@
+begin;
+insert into public.member_notification_settings(singleton) values(true) on conflict do nothing;
+update public.member_notification_settings set immediate_enabled=false,enabled=true,all_members_enabled=true,talent_notifications_enabled=true;
+create function pg_temp.check_true(value boolean,message text) returns void language plpgsql as $$ begin if value is distinct from true then raise exception 'Assertion failed: %',message; end if; end $$;
+create function pg_temp.expect_error(query text,code text) returns void language plpgsql as $$ begin begin execute query; exception when others then if sqlstate=code then return; else raise; end if; end; raise exception 'Expected error %',code; end $$;
+insert into auth.users(id,email,email_confirmed_at) values
+ ('74000000-0000-4000-8000-000000000001','submission-notices@example.test',now()),
+ ('74000000-0000-4000-8000-000000000002','hello@armatureailabs.com',now()),
+ ('74000000-0000-4000-8000-000000000003','other-admin@example.test',now());
+insert into public.staff_roles(user_id,role) values('74000000-0000-4000-8000-000000000002','admin'),('74000000-0000-4000-8000-000000000003','admin');
+insert into private.talent_submissions(id,requester_id,data,evidence) values
+ ('74000000-0000-4000-8000-000000000010','74000000-0000-4000-8000-000000000001','{"name":"PRIVATE NAME","linkedinUrl":"https://www.linkedin.com/in/submission-notices"}','PRIVATE EVIDENCE');
+select pg_temp.check_true(not exists(select 1 from public.member_notifications where talent_submission_id='74000000-0000-4000-8000-000000000010'),'draft never emails');
+update private.talent_submissions set status='pending' where id='74000000-0000-4000-8000-000000000010';
+select pg_temp.check_true((select count(*)=2 from public.member_notifications where talent_submission_id='74000000-0000-4000-8000-000000000010'),'submission queues receipt and designated admin');
+select pg_temp.check_true((select bool_and(private.member_notification_eligible(n)) from public.member_notifications n where talent_submission_id='74000000-0000-4000-8000-000000000010'),'new events eligible');
+select pg_temp.check_true(not exists(select 1 from public.member_notifications where recipient_id='74000000-0000-4000-8000-000000000003'),'other admin not a mail destination');
+select pg_temp.check_true((select bool_and(position('PRIVATE' in row_to_json(n)::text)=0) from public.member_notifications n where talent_submission_id='74000000-0000-4000-8000-000000000010'),'queue contains no profile details or evidence');
+update public.member_notification_settings set enabled=false;
+select pg_temp.check_true(not private.member_notification_eligible(n),'global delivery gate preserved') from public.member_notifications n where talent_submission_id='74000000-0000-4000-8000-000000000010';
+update public.member_notification_settings set enabled=true,all_members_enabled=false,pilot_recipients='{}';
+select pg_temp.check_true(not private.member_notification_eligible(n),'pilot allowlist preserved') from public.member_notifications n where talent_submission_id='74000000-0000-4000-8000-000000000010';
+update public.member_notification_settings set all_members_enabled=true;
+update auth.users set banned_until=now()+interval '1 day' where id='74000000-0000-4000-8000-000000000001';
+select pg_temp.check_true(not private.member_notification_eligible(n),'banned applicant blocks all notices') from public.member_notifications n where talent_submission_id='74000000-0000-4000-8000-000000000010';
+update auth.users set banned_until=null where id='74000000-0000-4000-8000-000000000001';
+select private.enqueue_talent_submission_notification('74000000-0000-4000-8000-000000000010','74000000-0000-4000-8000-000000000001','talent_submission_received');
+select pg_temp.check_true((select count(*)=2 from public.member_notifications where talent_submission_id='74000000-0000-4000-8000-000000000010'),'same revision deduplicates');
+select pg_temp.expect_error($q$select private.enqueue_talent_submission_notification('74000000-0000-4000-8000-000000000010','74000000-0000-4000-8000-000000000003','talent_submission_received')$q$,'22023');
+update public.member_notifications set state='leased',lease_token='74000000-0000-4000-8000-000000000099',lease_until=now()+interval '2 minutes' where talent_submission_id='74000000-0000-4000-8000-000000000010' and kind='talent_submission_admin';
+update public.staff_roles set role='membership_reviewer' where user_id='74000000-0000-4000-8000-000000000002';
+select pg_temp.check_true(not public.prepare_member_notification(id,lease_token),'reviewer role rechecked before delivery') from public.member_notifications where talent_submission_id='74000000-0000-4000-8000-000000000010' and kind='talent_submission_admin';
+update public.staff_roles set role='admin' where user_id='74000000-0000-4000-8000-000000000002';
+update private.talent_submissions set status='changes_requested',review_note='PRIVATE REVIEW NOTE' where id='74000000-0000-4000-8000-000000000010';
+select pg_temp.check_true(not private.member_notification_eligible(n),'pending receipt and admin alert become stale') from public.member_notifications n where talent_submission_id='74000000-0000-4000-8000-000000000010' and expected_status='pending';
+select pg_temp.check_true(private.member_notification_eligible(n),'changes requested eligible') from public.member_notifications n where talent_submission_id='74000000-0000-4000-8000-000000000010' and kind='talent_submission_changes_requested';
+update private.talent_submissions set status='draft',revision=2 where id='74000000-0000-4000-8000-000000000010';
+update private.talent_submissions set status='pending' where id='74000000-0000-4000-8000-000000000010';
+select pg_temp.check_true((select count(*)=2 from public.member_notifications where talent_submission_id='74000000-0000-4000-8000-000000000010' and application_revision=2),'resubmission queues distinct revision');
+select pg_temp.check_true(not private.member_notification_eligible(n),'prior revisions never deliver') from public.member_notifications n where talent_submission_id='74000000-0000-4000-8000-000000000010' and application_revision=1;
+update private.talent_submissions set status='rejected' where id='74000000-0000-4000-8000-000000000010';
+update private.talent_submissions set status='draft',revision=3 where id='74000000-0000-4000-8000-000000000010';
+update private.talent_submissions set status='pending' where id='74000000-0000-4000-8000-000000000010';
+update private.talent_submissions set status='approved' where id='74000000-0000-4000-8000-000000000010';
+select pg_temp.check_true((select count(distinct kind)=5 from public.member_notifications where talent_submission_id='74000000-0000-4000-8000-000000000010'),'all five kinds emitted');
+update public.member_notifications set state='leased',lease_token='74000000-0000-4000-8000-000000000099',lease_until=now()+interval '2 minutes' where talent_submission_id='74000000-0000-4000-8000-000000000010' and kind='talent_submission_approved';
+update auth.users set email='changed@example.test' where id='74000000-0000-4000-8000-000000000001';
+select pg_temp.check_true(not public.prepare_member_notification(id,lease_token),'email change cancels delivery') from public.member_notifications where talent_submission_id='74000000-0000-4000-8000-000000000010' and kind='talent_submission_approved';
+update auth.users set email='submission-notices@example.test' where id='74000000-0000-4000-8000-000000000001';
+insert into public.member_notification_suppressions(recipient_email,reason) values('submission-notices@example.test','bounced');
+select pg_temp.check_true(not private.member_notification_eligible(n),'bounce suppression preserved') from public.member_notifications n where talent_submission_id='74000000-0000-4000-8000-000000000010' and kind='talent_submission_approved';
+delete from public.member_notification_suppressions where recipient_email='submission-notices@example.test';
+update public.member_notification_settings set talent_notifications_enabled=false;
+insert into private.talent_submissions(id,requester_id,data) values('74000000-0000-4000-8000-000000000011','74000000-0000-4000-8000-000000000001','{"linkedinUrl":"https://www.linkedin.com/in/submission-held"}');
+update private.talent_submissions set status='pending' where id='74000000-0000-4000-8000-000000000011';
+select pg_temp.check_true((select bool_and(state='held') from public.member_notifications where talent_submission_id='74000000-0000-4000-8000-000000000011'),'delivery disabled holds events');
+update public.member_notification_settings set talent_notifications_enabled=true;
+select private.enqueue_talent_submission_notification('74000000-0000-4000-8000-000000000011','74000000-0000-4000-8000-000000000001','talent_submission_received');
+select pg_temp.check_true((select bool_and(state='held') from public.member_notifications where talent_submission_id='74000000-0000-4000-8000-000000000011'),'no held history replay');
+insert into public.member_notification_tombstones(event_key,user_id,recipient_id,kind,template_version,recipient_hash)
+select event_key,user_id,recipient_id,kind,template_version,'synthetic' from public.member_notifications where talent_submission_id='74000000-0000-4000-8000-000000000011';
+delete from public.member_notifications where talent_submission_id='74000000-0000-4000-8000-000000000011';
+select private.enqueue_talent_submission_notification('74000000-0000-4000-8000-000000000011','74000000-0000-4000-8000-000000000001','talent_submission_received');
+select pg_temp.check_true(not exists(select 1 from public.member_notifications where talent_submission_id='74000000-0000-4000-8000-000000000011'),'tombstone prevents replay');
+set local role authenticated;
+select pg_temp.expect_error($q$select private.enqueue_talent_submission_notification('74000000-0000-4000-8000-000000000011','74000000-0000-4000-8000-000000000001','talent_submission_received')$q$,'42501');
+reset role;
+rollback;
