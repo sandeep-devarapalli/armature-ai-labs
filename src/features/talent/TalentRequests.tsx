@@ -1,3 +1,4 @@
+import { TalentPhotoEditor } from './TalentPhoto';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { User } from '@supabase/supabase-js';
@@ -61,11 +62,12 @@ export function TalentProfileActions({ person, onChange }: { person: DirectoryPe
     <p>For removal without an account, email <a href="mailto:privacy@armatureailabs.com">privacy@armatureailabs.com</a>.</p><p>Claim ownership to edit your public details. Claims are reviewed against evidence; signing in alone does not verify this profile.</p>
     {checking ? <p role="status">Checking your account…</p> : !user ? <SignIn/> : <>
       {!user.email_confirmed_at && <p role="alert">Confirm your account email before submitting requests.</p>}
-      {status?.owner ? <><button onClick={() => setKind(kind === 'edit' ? '' : 'edit')}>Edit profile</button><button onClick={() => setKind('unlist')}>Remove my profile</button></> : !person.claimed && <button onClick={() => setKind('claim')}>Claim this profile</button>}
+      {status?.owner ? <><button onClick={() => setKind(kind === 'edit' ? '' : 'edit')}>Edit profile</button><button onClick={() => setKind('photo')}>Profile photo</button><button onClick={() => setKind('unlist')}>Remove my profile</button></> : !person.claimed && <button onClick={() => setKind('claim')}>Claim this profile</button>}
       <button onClick={() => setKind('correction')}>Suggest a correction</button><button onClick={() => setKind('removal')}>Request removal</button>
       {status?.admin && <a href="#review">Review directory requests</a>}
     </>}
     {error && <p role="alert">{error}</p>}{notice && <p role="status">{notice}</p>}
+    {kind === 'photo' && status?.owner && <TalentPhotoEditor key={`${person.id}:${user?.id}`} person={person} onChange={onChange}/>}
     {kind === 'edit' && status?.owner && <EditFields person={person} busy={busy} save={patch => void run(() => talentRpc('talent_update_profile', { profile_id: person.id, expected_revision: person.revision, patch }), 'Profile updated.')}/>}
     {kind === 'unlist' && status?.owner && <div><p>Remove your profile from public search now? This also prevents future research imports from republishing it.</p><button disabled={busy} onClick={() => void run(() => talentRpc('talent_unlist_profile', { profile_id: person.id }), 'Your profile has been removed.')}>Confirm removal</button></div>}
     {['claim', 'correction', 'removal'].includes(kind) && user && <form className="talent-request-form" onSubmit={event => { event.preventDefault(); const evidence = new FormData(event.currentTarget).get('evidence'); void run(() => talentRpc('talent_submit_request', { profile_id: person.id, kind, evidence, base_revision: person.revision }), 'Request saved for review. We will email you when a decision is made. Your history is available in My requests.'); }}><h3>{kind === 'claim' ? 'Claim this profile' : kind === 'correction' ? 'Suggest a correction' : 'Request removal'}</h3><label>{kind === 'claim' ? 'Explain how we can confirm you own this LinkedIn identity. Include a public evidence link or professional affiliation we can verify.' : kind === 'correction' ? 'Describe the exact correction and supporting source.' : 'Explain your relationship to this profile and your removal request.'}<textarea name="evidence" required minLength={20} maxLength={4000} rows={6}/></label><p className="fine">Visible only to you and authorised administrators. Do not upload identity documents, passwords or financial information.</p><button className="primary" disabled={busy || !user.email_confirmed_at}>Submit request</button></form>}

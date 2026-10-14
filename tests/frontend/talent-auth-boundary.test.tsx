@@ -76,3 +76,11 @@ it('discards late request history after switching accounts', async () => {
   await screen.findByText('You have not submitted any requests.');
   expect(screen.queryByText('Old account private note')).not.toBeInTheDocument();
 });
+
+it.each([true, false])('shows photo controls only for an approved owner: %s', async owner => {
+  mock.getUser.mockResolvedValue({ data: { user: { id: 'u1', email_confirmed_at: '2026-01-01' } } });
+  mock.rpc.mockResolvedValue({ owner, admin: true, requests: [] });
+  render(<MemoryRouter><TalentProfileActions person={{ ...person, claimed: true }} onChange={vi.fn()}/></MemoryRouter>);
+  await screen.findByRole('button', { name: 'Suggest a correction' });
+  expect(Boolean(screen.queryByRole('button', { name: 'Profile photo' }))).toBe(owner);
+});

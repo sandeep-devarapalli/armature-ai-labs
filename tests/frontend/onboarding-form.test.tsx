@@ -31,7 +31,7 @@ it("requires current privacy acceptance before submitting a verified user's regi
   fireEvent.submit(name.closest("form")!);
   await screen.findByText("Details saved. Submit your photo and ID, then submit your application.");
   expect(trackRegistrationMilestone).toHaveBeenCalledExactlyOnceWith("details_saved");
-  expect(rpc).toHaveBeenCalledWith("submit_basic_onboarding", expect.objectContaining({ p_notice_version: "2026-09-26-release-1", p_full_name: "Synthetic Member" }));
+  expect(rpc).toHaveBeenCalledWith("submit_basic_onboarding", { p_notice_version: "2026-09-26-release-1", p_full_name: "Synthetic Member", p_phone: "+919876543210", p_linkedin_url: "https://www.linkedin.com/in/synthetic", p_date_of_birth: "2000-01-01" });
   expect(screen.queryByLabelText("Password")).not.toBeInTheDocument();
 });
 
@@ -132,4 +132,28 @@ it("reuses a reserved document after a failed upload instead of reserving twice"
   await waitFor(() => expect(requestDocument).toHaveBeenCalledTimes(2));
   expect(fixture.rpc).toHaveBeenCalledTimes(1);
   expect(requestDocument).toHaveBeenLastCalledWith("reserved-photo", file);
+});
+
+it("requires explicit ID retention consent before sending document bytes", async () => {
+  const fixture = submissionFixture(false), requestDocument = vi.fn();
+  render(<MemoryRouter><OnboardingForm client={fixture.client} requestDocument={requestDocument} /></MemoryRouter>);
+  const input = await screen.findByLabelText("government ID image");
+  const file = new File(["synthetic"], "id.png", { type: "image/png" });
+  vi.spyOn(FormData.prototype, "get").mockImplementation(key => key === "file" ? file : null);
+  fireEvent.submit(input.closest("form")!);
+  await screen.findAllByText("Accept the government ID retention notice before uploading.");
+  expect(requestDocument).not.toHaveBeenCalled();
+});
+
+it("records ID retention consent before uploading to the security scanner", async () => {
+  const fixture = submissionFixture(false), requestDocument = vi.fn().mockResolvedValue(new Response('{}'));
+  render(<MemoryRouter><OnboardingForm client={fixture.client} requestDocument={requestDocument} /></MemoryRouter>);
+  const input = await screen.findByLabelText("government ID image");
+  const file = new File(["synthetic"], "id.png", { type: "image/png" });
+  vi.spyOn(FormData.prototype, "get").mockImplementation(key => key === "file" ? file : key === "id_retention" ? "accepted" : null);
+  fireEvent.submit(input.closest("form")!);
+  await screen.findByText("Upload checked. Confirm its uploaded status below before submitting your application.");
+  expect(fixture.rpc).toHaveBeenCalledWith("accept_government_id_retention", { p_document_id: "government_id", p_notice_version: "2026-10-14-equipment-id-v1" });
+  expect(requestDocument).toHaveBeenCalledWith("government_id", file);
+  expect(fixture.rpc.mock.invocationCallOrder[0]).toBeLessThan(requestDocument.mock.invocationCallOrder[0]);
 });

@@ -10,13 +10,26 @@ export async function talentRpc<T>(name: string, args: Record<string, unknown> =
   if (error) throw new Error(error.code === 'P0409' ? 'This profile changed. Refresh it before saving or reviewing again.' : error.message);
   return data as T;
 }
+export function normalizeTalentRow(row: TalentRow): DirectoryPerson {
+  const data = row.data;
+  const text = (value: unknown) => typeof value === 'string' ? value : '';
+  const list = (value: unknown) => Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : [];
+  return { ...data, id: row.id, revision: row.revision,
+    name: text(data.name), title: text(data.title), headline: text(data.headline), company: text(data.company),
+    location: text(data.location), summary: text(data.summary), checkedAt: text(data.checkedAt), linkedinUrl: text(data.linkedinUrl),
+    previousCompanies: list(data.previousCompanies), skills: list(data.skills), physicalAiAreas: list(data.physicalAiAreas),
+    yearsExperience: typeof data.yearsExperience === 'number' && Number.isFinite(data.yearsExperience) ? data.yearsExperience : null,
+    claimed: data.claimed === true,
+    photoVersion: typeof data.photoVersion === 'string' && /^[0-9a-f-]{36}$/i.test(data.photoVersion) ? data.photoVersion : undefined,
+  };
+}
 export async function loadTalent(): Promise<DirectoryPerson[]> {
   const people: DirectoryPerson[] = [];
   for (let start = 0; ; start += 500) {
     const { data, error } = await talentClient().from('talent_profiles').select('id,data,revision,published').eq('published', true).order('id').range(start, start + 499);
     if (error) throw new Error(error.message);
     const rows = data as TalentRow[];
-    people.push(...rows.map(row => ({ ...row.data, id: row.id, revision: row.revision })));
+    people.push(...rows.map(normalizeTalentRow));
     if (rows.length < 500) return people;
   }
 }

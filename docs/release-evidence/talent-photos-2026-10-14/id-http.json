@@ -1,0 +1,44 @@
+{
+  "reserve_id": {
+    "status": 200,
+    "passed": true
+  },
+  "id_without_consent": {
+    "status": 403,
+    "passed": true
+  },
+  "accept_retention": {
+    "status": 204,
+    "passed": true
+  },
+  "id_scanned_upload": {
+    "status": 201,
+    "passed": true
+  },
+  "id_retention_infinity": {
+    "passed": true
+  },
+  "owner_read": {
+    "status": 200,
+    "passed": true
+  },
+  "anonymous_denied": {
+    "status": 401,
+    "passed": true
+  },
+  "reserve_photo": {
+    "status": 200,
+    "passed": true
+  },
+  "verification_photo_scanned_upload": {
+    "status": 201,
+    "passed": true
+  },
+  "photo_30_day_expiry": {
+    "passed": true,
+    "remaining_days": 30.0
+  },
+  "synthetic_only": true,
+  "real_documents_read": false,
+  "all_passed": true
+}

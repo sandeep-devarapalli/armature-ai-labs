@@ -4,7 +4,7 @@ for (const theme of ["light", "dark", "sepia"]) test(`documents and final submis
   const user = { id: "10000000-0000-4000-8000-000000000005", aud: "authenticated", role: "authenticated", email: "synthetic@example.test", email_confirmed_at: "2026-09-01T00:00:00Z", app_metadata: { provider: "email" }, user_metadata: {}, created_at: "2026-09-01T00:00:00Z" };
   const app = { user_id: user.id, full_name: "Synthetic Member", email: user.email, phone: "9999999999", linkedin_url: "https://linkedin.com/in/synthetic", date_of_birth: "1990-01-01", status: "pending", revision: 1, submitted_revision: null as number | null, submitted_at: null as string | null };
   const docs: { id: string; kind: string; uploaded_at: string | null; expires_at: string; deleted_at: null }[] = [];
-  let reservations = 0, uploads = 0, submits = 0;
+  let reservations = 0, uploads = 0, submits = 0, idConsents = 0;
   await page.addInitScript(({ user, key, theme }) => { localStorage.setItem(key, JSON.stringify({ access_token: "synthetic-token", refresh_token: "synthetic-refresh", expires_at: Math.floor(Date.now()/1000)+36000, token_type: "bearer", user })); localStorage.setItem("armature-theme", theme); }, { user, key: authStorageKey, theme });
   page.on("pageerror", error => { throw error; });
   await page.route(`${backendOrigin}/**`, async route => {
@@ -19,6 +19,7 @@ for (const theme of ["light", "dark", "sepia"]) test(`documents and final submis
     else if (name === "onboarding_documents") data = docs;
     else if (name === "user") data = user;
     else if (name === "reserve_onboarding_document") { reservations++; const kind = body!().p_kind; const doc = { id: kind, kind, uploaded_at: null, expires_at: "2035-01-01T00:00:00Z", deleted_at: null }; docs.push(doc); data = doc; }
+    else if (name === "accept_government_id_retention") { expect(body!().p_notice_version).toBe("2026-10-14-equipment-id-v1"); idConsents++; data = null; }
     else if (name === "submit_basic_application_for_review") { submits++; expect(body!().p_expected_revision).toBe(1); app.submitted_revision = 1; app.submitted_at = new Date().toISOString(); data = app; }
     else if (name === "member-avatar") { await route.fulfill({ status: 404, contentType: "application/json", body: '{"error":"No avatar"}' }); return; }
     await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(data) });
@@ -34,8 +35,12 @@ for (const theme of ["light", "dark", "sepia"]) test(`documents and final submis
   await page.getByRole("button", { name: "Submit photo", exact: true }).click();
   await expect(page.getByText("Photo Uploaded", { exact: true })).toBeVisible(); expect(reservations).toBe(1);
   await page.getByLabel("government ID image", { exact: true }).setInputFiles(image);
+  const beforeIdUpload = uploads;
   await page.getByRole("button", { name: "Submit government ID", exact: true }).click();
-  await expect(page.getByText("Government ID Uploaded", { exact: true })).toBeVisible(); expect(submits).toBe(0);
+  expect(uploads).toBe(beforeIdUpload); expect(idConsents).toBe(0);
+  await page.getByRole("checkbox", { name: /I agree to retain my government ID privately/ }).check();
+  await page.getByRole("button", { name: "Submit government ID", exact: true }).click();
+  await expect(page.getByText("Government ID Uploaded", { exact: true })).toBeVisible(); expect(idConsents).toBe(1); expect(submits).toBe(0);
   await page.evaluate(() => { (document.activeElement as HTMLElement)?.blur(); window.scrollTo({ top: 0, behavior: "instant" }); });
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
   await page.screenshot({ path: process.env.CI ? info.outputPath(`onboarding-top-${theme}.png`) : `/tmp/onboarding-top-${theme}-${info.project.name}.png` });

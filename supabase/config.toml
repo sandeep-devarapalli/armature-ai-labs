@@ -114,3 +114,6 @@ verify_jwt = false
 
 [functions.member-phone-delivery]
 verify_jwt = false
+
+[functions.talent-profile-photo]
+verify_jwt = false
