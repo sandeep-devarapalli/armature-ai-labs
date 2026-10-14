@@ -10,3 +10,4 @@
 - ID retention is explicit and versioned per document. New consented uploads retain without automatic30day expiry. Two current legacy IDs retain their prior deadline unless the member opts in. Verification photos still expire30days; explicit correction/deletion paths remain effective.
 - Local release suite:685 tests across62 files; TypeScript/build and artifact integrity checks passed. Photo and ID SQL tests passed in isolated database.
 - Google Cloud operator CLI session requires reauthentication; verification exercised actual deployed scanner via Supabase instead. No cloud IAM or scanner service changes made.
+- Hosted synthetic ID flow: unconsented upload403; explicit consent204; scanner/privateStorage upload201 with infinity expiry; ownerGET200; anonymous401. Synthetic verification photo remains30days. Only generated colored-square fixtures used.
