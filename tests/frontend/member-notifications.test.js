@@ -9,13 +9,13 @@ const token = 'synthetic-worker-token-never-a-real-secret';
 const id = 'aaaaaaaa-aaaa-4aaa-aaaa-aaaaaaaaaaaa';
 const lease = 'bbbbbbbb-bbbb-4bbb-bbbb-bbbbbbbbbbbb';
 const providerId = 'cccccccc-cccc-4ccc-cccc-cccccccccccc';
-const row = { id, lease_token: lease, kind: 'approved', recipient_email: 'synthetic@example.test', template_version: 1, first_attempt_at: null };
+const row = { id, lease_token: lease, kind: 'approved', recipient_email: 'synthetic@fixture.internal', template_version: 1, first_attempt_at: null };
 function fixture({ enabled = 'true', secret = token, wakeupKey = '', key = 're_synthetic_dedicated_key', rows = [row], prepare = true, finish = true, rpcError = null, fetcher = async () => Response.json({ id: providerId }) } = {}) {
   const env = { MEMBER_NOTIFICATIONS_WAKEUP_KEY: wakeupKey, MEMBER_NOTIFICATIONS_ENABLED: enabled, MEMBER_NOTIFICATIONS_WORKER_TOKEN: secret, MEMBER_NOTIFICATIONS_RESEND_KEY: key };
   let sending = false;
   const rpc = vi.fn((name) => ({ abortSignal: () => {
     if(name === 'prepare_member_notification') sending = prepare;
-    const data = name === 'claim_member_notifications' ? rows : name === 'prepare_member_notification' ? prepare : sending && finish;
+    const data = name === 'skip_reserved_member_notification' ? finish : name === 'claim_member_notifications' ? rows : name === 'prepare_member_notification' ? prepare : sending && finish;
     return Promise.resolve({error:rpcError === name ? {} : null,data});
   } }));
   const admin = vi.fn(() => ({ rpc }));
@@ -54,7 +54,7 @@ it('revalidates a lease immediately before sending and reuses stable provider id
   expect(f.fetch.mock.calls[0][1].headers['Idempotency-Key']).toBe(`member-${id}-v1`);
   expect(f.fetch.mock.calls[0][1].body).toBe(f.fetch.mock.calls[1][1].body);
   const message = JSON.parse(f.fetch.mock.calls[0][1].body);
-  expect(message).toMatchObject({from:'Armature AI Labs <no-reply@mail.armatureailabs.com>',to:['synthetic@example.test'],reply_to:'hello@armatureailabs.com'});
+  expect(message).toMatchObject({from:'Armature AI Labs <no-reply@mail.armatureailabs.com>',to:['synthetic@fixture.internal'],reply_to:'hello@armatureailabs.com'});
   expect(f.fetch.mock.calls[0][1].redirect).toBe('error');
   expect(f.rpc).toHaveBeenCalledWith('finish_member_notification',{p_id:id,p_lease_token:lease,p_outcome:'accepted',p_provider_id:providerId});
 });
@@ -99,7 +99,7 @@ describe('immutable privacy-preserving templates',()=>{
     expect(links).toEqual([kind==='admin_ready'?'https://armatureailabs.com/admin/members':'https://armatureailabs.com/onboarding']);
     expect(template.html).not.toMatch(/<img|<script|tracking|token=|storage\/|signed/i);
     expect(template.subject).not.toMatch(/approved|rejected|revoked/i);
-    if(kind==='admin_ready') expect(template.text).not.toContain('synthetic@example.test');
+    if(kind==='admin_ready') expect(template.text).not.toContain('synthetic@fixture.internal');
   });
   it('lists submitted details in new admin alerts without changing version-one retries', () => {
     const original = memberNotificationTemplate('admin_ready', 1);
@@ -206,7 +206,7 @@ describe('Talent Network notification templates', () => {
       const sent = JSON.parse(f.fetch.mock.calls[0][1].body);
       expect(sent.subject).toBe(`New Talent Network ${kind} request`);
       expect(sent.html).toContain('href="https://armatureailabs.com/talent-network/#review"');
-      expect(sent.text).not.toContain('synthetic@example.test');
+      expect(sent.text).not.toContain('synthetic@fixture.internal');
       expect(f.fetch.mock.calls[0][1].headers['Idempotency-Key']).toBe(`member-${id}-v4`);
     });
     it.each(['approved', 'rejected'])(`${kind} %s sends the decision and private request-history link`, async decision => {
@@ -243,4 +243,21 @@ describe('new profile notification templates', () => {
     expect(f.fetch.mock.calls[0][1].headers['Idempotency-Key']).toBe(`member-${id}-v5`);
     expect(JSON.parse(f.fetch.mock.calls[0][1].body).text).toBe(template.text);
   });
+});
+
+it.each(['person@example.test','person@sub.example','person@EXAMPLE.COM','person@sub.example.org','person@sub.example.net','person@host.invalid','person@localhost','person@foo.localhost.'])('skips reserved recipient %s without preparing or sending', async(recipient_email)=>{
+ const f=fixture({rows:[{...row,recipient_email}]});
+ expect(await(await f.handler(f.request())).json()).toMatchObject({skipped:1,accepted:0});
+ expect(f.rpc.mock.calls.map(([name])=>name)).toEqual(['claim_member_notifications','skip_reserved_member_notification']);
+ expect(f.fetch).not.toHaveBeenCalled();
+});
+it('fails closed if reserved-recipient suppression is refused',async()=>{
+ const f=fixture({rows:[{...row,recipient_email:'person@example.test'}],finish:false});
+ expect((await f.handler(f.request())).status).toBe(503); expect(f.fetch).not.toHaveBeenCalled();
+});
+
+it.each(['person@myexample.com','person@example.com.other','person@test.engineering'])('does not block legitimate domain labels %s',async(recipient_email)=>{
+ const f=fixture({rows:[{...row,recipient_email}]});
+ expect(await(await f.handler(f.request())).json()).toMatchObject({accepted:1});
+ expect(f.fetch).toHaveBeenCalledTimes(1);
 });
