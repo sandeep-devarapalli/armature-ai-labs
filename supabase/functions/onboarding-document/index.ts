@@ -78,6 +78,10 @@ Deno.serve(async (request) => {
       .select("notice_version").eq("user_id", user.id).eq("revision", application.revision).eq("notice_version", "2026-09-26-release-1").maybeSingle();
     if (acceptanceError) throw new HttpError(503, "Privacy notice acceptance could not be checked. Try again later.");
     if (!acceptance) throw new HttpError(403, "Accept the current privacy notice before uploading.");
+    if (document.kind === "government_id") {
+      const { data: consent, error: consentError } = await client.rpc("has_government_id_retention_consent", { p_document_id: id });
+      if (consentError || consent !== true) throw new HttpError(403, "Accept the government ID retention notice before uploading.");
+    }
     const original = await readImage(request);
     const bytes = await scanOnboardingImage(original, request.headers.get("content-type")!, {
       url: Deno.env.get("ONBOARDING_SCANNER_URL"),

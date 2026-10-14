@@ -14,6 +14,7 @@ export interface DirectoryPerson {
   linkedinUrl: string;
   claimed: boolean;
   revision?: number;
+  photoVersion?: string;
   availability?: string;
 }
 

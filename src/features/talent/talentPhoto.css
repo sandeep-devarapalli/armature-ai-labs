@@ -1,0 +1,25 @@
+.talent-avatar{display:inline-flex;flex-shrink:0;align-items:center;justify-content:center;width:64px;height:64px;border:1px solid var(--hair);border-radius:50%;overflow:hidden;background:var(--panel-2);font:600 22px var(--display);color:var(--ink)}
+.talent-avatar img{display:block;width:100%;height:100%;object-fit:cover}
+.talent-photo-editor{border-top:1px solid var(--hair);margin-top:24px;padding-top:20px}
+.talent-photo-editor h3{display:flex;gap:10px;align-items:center}
+.talent-photo-previews{display:flex;gap:28px;flex-wrap:wrap;margin:24px 0}
+.talent-photo-previews>div{display:flex;flex-direction:column;gap:10px;align-items:flex-start;max-width:240px;font-size:12px;color:var(--fg-2)}
+.talent-photo-previews img,.talent-photo-previews .talent-avatar,.talent-photo-placeholder{width:88px;height:88px;border-radius:50%;object-fit:cover;border:1px solid var(--hair)}
+.talent-photo-placeholder{display:flex;align-items:center;justify-content:center;background:var(--panel-2)}
+.directory-app .talent-photo-consent{display:flex;align-items:flex-start;gap:10px;line-height:1.6;max-width:720px}
+.directory-app .talent-photo-consent input{width:18px;height:18px;flex-shrink:0;margin-top:4px;appearance:auto;accent-color:var(--ink)}
+.talent-photo-buttons{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0}
+.talent-photo-buttons button,.talent-photo-upload{display:inline-flex;gap:8px;align-items:center;min-height:44px}
+.talent-photo-upload{position:relative;padding:10px 14px;border:1px solid var(--hair);border-radius:4px;cursor:pointer}
+.talent-photo-upload.disabled{opacity:.5;cursor:not-allowed}
+.talent-photo-upload input{position:absolute;inset:0;opacity:0;width:100%;cursor:inherit}
+.talent-photo-upload:focus-within{outline:2px solid var(--link);outline-offset:3px}
+.talent-photo-editor [role=alert]{color:var(--ink);border-left:3px solid var(--link);padding-left:12px}
+@media(max-width:600px){.talent-photo-buttons{flex-direction:column;align-items:stretch}.talent-photo-buttons button,.talent-photo-upload{justify-content:center}}
+.directory-app .profile-heading>.talent-avatar{width:70px;height:70px;font-size:28px}
+.directory-app .engineer-row-heading>.talent-avatar{width:42px;height:42px;font-size:16px;background:var(--chip);border:0}
+.directory-app .shortlist-person>.talent-avatar{width:30px;height:30px;font-size:12px;background:var(--chip);border:0}
+.talent-photo-staged{display:flex;gap:18px;align-items:flex-start;padding:16px;border:1px solid var(--hair);margin-bottom:16px}
+.talent-photo-staged img{width:96px;height:96px;object-fit:cover;border-radius:50%;flex-shrink:0}
+.talent-photo-staged button{margin:12px 8px 0 0}
+@media(max-width:600px){.talent-photo-staged{flex-direction:column}}

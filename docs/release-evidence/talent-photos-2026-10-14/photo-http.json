@@ -1,0 +1,54 @@
+[
+  {
+    "check": "consent required",
+    "status": 400
+  },
+  {
+    "check": "real scanner and storage upload",
+    "status": 201
+  },
+  {
+    "check": "public consented photo",
+    "status": 200
+  },
+  {
+    "check": "metadata stripped and no-store",
+    "passed": true
+  },
+  {
+    "check": "private storage denies anonymous",
+    "status": 400
+  },
+  {
+    "check": "malformed rejected",
+    "status": 422
+  },
+  {
+    "check": "antivirus test marker rejected",
+    "status": 422
+  },
+  {
+    "check": "anonymous mutation denied",
+    "status": 401
+  },
+  {
+    "check": "private own membership preview",
+    "status": 200
+  },
+  {
+    "check": "publish previewed membership copy",
+    "status": 201
+  },
+  {
+    "check": "remove public photo",
+    "status": 200
+  },
+  {
+    "check": "removed photo unavailable",
+    "status": 404
+  },
+  {
+    "check": "membership original preserved",
+    "status": 200
+  }
+]

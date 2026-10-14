@@ -43,7 +43,19 @@ Deno.serve(async (request) => {
       if (markError) { failed++; continue; }
       deleted++;
     }
-    return json(request, { examined: used + (equipmentImages?.length ?? 0), deleted, failed }, failed ? 503 : 200);
+    const examined = used + (equipmentImages?.length ?? 0);
+    const { data: talentPhotos, error: talentError } = examined < 100 && Deno.env.get("TALENT_PHOTO_CLEANUP_ENABLED") === "true"
+      ? await client.rpc("claim_talent_photo_cleanup", { p_limit: 100 - examined })
+      : { data: [], error: null };
+    if (talentError) throw new Error("Talent photo cleanup lookup failed");
+    for (const photo of talentPhotos ?? []) {
+      const { error: removeError } = await client.storage.from("talent-profile-photos").remove([photo.object_path]);
+      if (removeError) { failed++; continue; }
+      const { error: markError } = await client.from("talent_photo_cleanup").delete().eq("object_path", photo.object_path);
+      if (markError) { failed++; continue; }
+      deleted++;
+    }
+    return json(request, { examined: examined + (talentPhotos?.length ?? 0), deleted, failed }, failed ? 503 : 200);
   } catch (error) {
     return json(request, { error: error instanceof HttpError ? error.message : "Retention run failed." }, error instanceof HttpError ? error.status : 500);
   }
