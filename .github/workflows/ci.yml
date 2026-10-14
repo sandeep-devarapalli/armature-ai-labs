@@ -81,6 +81,8 @@ jobs:
           psql -v ON_ERROR_STOP=1 -f supabase/tests/talent_profile_photos.sql
           psql -v ON_ERROR_STOP=1 -f supabase/tests/talent_admin_edit.sql
           psql -v ON_ERROR_STOP=1 -f supabase/tests/talent_claim_declaration.sql
+          psql -v ON_ERROR_STOP=1 -f supabase/tests/talent_profile_submissions.sql
+          psql -v ON_ERROR_STOP=1 -f supabase/tests/talent_submission_notifications.sql
           psql -v ON_ERROR_STOP=1 -f supabase/tests/talent_notifications.sql
           psql -v ON_ERROR_STOP=1 -f supabase/tests/ecosystem_contributions.sql
           psql -v ON_ERROR_STOP=1 -f supabase/tests/ecosystem_pending_edit.sql

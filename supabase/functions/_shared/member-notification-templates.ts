@@ -45,9 +45,19 @@ for (const kind of ["claim", "correction", "removal"]) {
   }
 }
 
+const submissionMessages: Record<string, [string, string]> = {
+  talent_submission_admin: ["New Talent Network profile for review", `A member has submitted their own profile for publication. Sign in with your authorised administrator account at ${talentReview}. Review the profile, declaration and supporting evidence inside the protected portal.`],
+  talent_submission_received: ["Your Talent Network profile is awaiting review", `We have received your profile submission. An administrator will review it before publication. Sign in at ${talentRequests} to check its status. Your profile is not public yet.`],
+  talent_submission_approved: ["Your Talent Network profile has been approved", `Your profile has been published. You can now edit or unlist it and choose a profile photo through the profile editor. Profile ownership does not verify your identity, skills or availability. Sign in at ${talentRequests} to open your profile.`],
+  talent_submission_rejected: ["An update about your Talent Network profile", `Your profile submission was not approved. Sign in at ${talentRequests} to read the reviewer's explanation and available next steps. For help, contact ${help}.`],
+  talent_submission_changes_requested: ["Please update your Talent Network profile submission", `Your reviewer has requested changes before publication. Sign in at ${talentRequests} to read the instructions, update your draft and resubmit with a new declaration.`],
+};
+
 // Version 1 is immutable: retries must retain identical provider payloads.
 export function memberNotificationTemplate(kind: string, version: number) {
-  const message = version === 4 && Object.hasOwn(talentMessages, kind)
+  const message = version === 5 && Object.hasOwn(submissionMessages, kind)
+    ? submissionMessages[kind]
+    : version === 4 && Object.hasOwn(talentMessages, kind)
     ? talentMessages[kind]
     : version === 3 && Object.hasOwn(identityMessages, kind)
     ? identityMessages[kind]
@@ -57,7 +67,7 @@ export function memberNotificationTemplate(kind: string, version: number) {
   if (!message) return null;
   const [subject, text] = message;
   const escaped = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-  const linkPattern = version === 4 ? /https:\/\/armatureailabs\.com\/talent-network\/#(?:requests|review)/g : /https:\/\/armatureailabs\.com\/[a-z/]+/g;
+  const linkPattern = version === 4 || version === 5 ? /https:\/\/armatureailabs\.com\/talent-network\/#(?:requests|review)/g : /https:\/\/armatureailabs\.com\/[a-z/]+/g;
   const html = `<div style="max-width:560px;margin:0 auto;padding:24px;font:16px/1.6 Arial,sans-serif;color:#222"><p>${escaped.replace(linkPattern, '<a href="$&">$&</a>')}</p><p>Armature AI Labs</p></div>`;
   return { subject, text, html };
 }

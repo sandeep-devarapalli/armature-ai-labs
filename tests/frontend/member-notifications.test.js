@@ -226,3 +226,21 @@ describe('Talent Network notification templates', () => {
     expect(memberNotificationTemplate('toString', 4)).toBeNull();
   });
 });
+
+
+describe('new profile notification templates', () => {
+  it.each(['admin','received','approved','rejected','changes_requested'])('sends immutable %s messages through the protected sender', async (event) => {
+    const kind = `talent_submission_${event}`;
+    const template = memberNotificationTemplate(kind, 5);
+    expect(template).toBeTruthy();
+    expect([...template.html.matchAll(/href="([^"]+)"/g)].map(match => match[1])).toEqual([
+      `https://armatureailabs.com/talent-network/#${event === 'admin' ? 'review' : 'requests'}`,
+    ]);
+    expect(template.html).not.toMatch(/<img|<script|token=|storage\/|signed|PRIVATE EVIDENCE/i);
+    expect(memberNotificationTemplate(kind, 4)).toBeNull();
+    const f = fixture({ rows: [{ ...row, kind, template_version: 5 }] });
+    expect(await (await f.handler(f.request())).json()).toMatchObject({ accepted: 1 });
+    expect(f.fetch.mock.calls[0][1].headers['Idempotency-Key']).toBe(`member-${id}-v5`);
+    expect(JSON.parse(f.fetch.mock.calls[0][1].body).text).toBe(template.text);
+  });
+});

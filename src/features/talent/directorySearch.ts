@@ -16,6 +16,9 @@ export interface DirectoryPerson {
   revision?: number;
   photoVersion?: string;
   availability?: string;
+  source?: string;
+  education?: string;
+  experience?: string;
 }
 
 export interface DirectoryQuery {
@@ -61,8 +64,8 @@ export function buildDirectoryIndex(people: DirectoryPerson[]) {
     add('Title', person.title, 8);
     add('Headline', person.headline, 5);
     add('Location', person.location, 2);
-    person.skills.forEach(value => add('Research-derived skill category', value, 3));
-    person.physicalAiAreas.forEach(value => add('Research-derived physical-AI category', value, 3));
+    person.skills.forEach(value => add(person.source === 'member' ? 'Member-provided skill' : 'Research-derived skill category', value, 3));
+    person.physicalAiAreas.forEach(value => add(person.source === 'member' ? 'Member-provided physical-AI category' : 'Research-derived physical-AI category', value, 3));
     add('Company', person.company, 4, true);
     person.previousCompanies.forEach(value => add('Previous company', value, 2, true));
     return { person, fields, linkedin: linkedinIdentity(person.linkedinUrl), location: normalize(person.location), locationTokens: new Set(tokens(person.location)), categories: new Set([...person.skills, ...person.physicalAiAreas].map(normalize)), company: normalize(person.company) };
@@ -98,7 +101,7 @@ export function searchDirectory(index: DirectoryIndex, query: DirectoryQuery): {
       fields.forEach(field => matches.add(`${field.label}: ${field.value}`));
     }
     if (!accepted) continue;
-    categories.forEach(category => { if (record.categories.has(category.normalized)) matches.add(`Research-derived category: ${category.value}`); });
+    categories.forEach(category => { if (record.categories.has(category.normalized)) matches.add(`${record.person.source === 'member' ? 'Member-provided' : 'Research-derived'} category: ${category.value}`); });
     if (location) matches.add(`Location: ${record.person.location}`);
     if (company) matches.add(`Company: ${record.person.company}`);
     results.push({ person: record.person, matches: [...matches], score });

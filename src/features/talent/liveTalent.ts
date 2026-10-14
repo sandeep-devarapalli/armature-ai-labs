@@ -20,6 +20,9 @@ export function normalizeTalentRow(row: TalentRow): DirectoryPerson {
     previousCompanies: list(data.previousCompanies), skills: list(data.skills), physicalAiAreas: list(data.physicalAiAreas),
     yearsExperience: typeof data.yearsExperience === 'number' && Number.isFinite(data.yearsExperience) ? data.yearsExperience : null,
     claimed: data.claimed === true,
+    source: data.source === 'member' ? 'member' : undefined,
+    education: text(data.education), experience: text(data.experience),
+    availability: ['available', 'unavailable'].includes(text(data.availability)) ? text(data.availability) : 'unknown',
     photoVersion: typeof data.photoVersion === 'string' && /^[0-9a-f-]{36}$/i.test(data.photoVersion) ? data.photoVersion : undefined,
   };
 }
