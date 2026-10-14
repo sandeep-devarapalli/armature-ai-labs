@@ -19,15 +19,15 @@ select pg_temp.check_true((select count(*)=1 from public.talent_profiles where i
 select pg_temp.expect_error('select * from private.talent_owners','42501');
 select pg_temp.expect_error('select * from private.talent_requests','42501');
 select pg_temp.expect_error($q$update public.talent_profiles set published=false$q$,'42501');
-select pg_temp.expect_error($q$select public.talent_submit_request('talent-test-1','claim','This is my synthetic profile',1)$q$,'42501');
+select pg_temp.expect_error($q$select public.talent_submit_request('talent-test-1','claim','This is my synthetic profile',1,'Synthetic Engineer','2026-10-13-v1',true)$q$,'42501');
 reset role;
 set local role authenticated;
 select set_config('request.jwt.claim.sub','71000000-0000-4000-8000-000000000005',true);
-select pg_temp.expect_error($q$select public.talent_submit_request('talent-test-1','claim','This is my synthetic profile',1)$q$,'42501');
+select pg_temp.expect_error($q$select public.talent_submit_request('talent-test-1','claim','This is my synthetic profile',1,'Synthetic Engineer','2026-10-13-v1',true)$q$,'42501');
 select set_config('request.jwt.claim.sub','71000000-0000-4000-8000-000000000001',true);
-select public.talent_submit_request('talent-test-1','claim','Ownership evidence confirmed via controlled source',1) as claim_id \gset
+select public.talent_submit_request('talent-test-1','claim','Ownership evidence confirmed via controlled source',1,'Synthetic Engineer','2026-10-13-v1',true) as claim_id \gset
 select pg_temp.check_true((public.talent_my_status('talent-test-1')->>'owner')::boolean=false,'request does not grant ownership');
-select pg_temp.expect_error($q$select public.talent_submit_request('talent-test-1','claim','Repeated ownership evidence supplied',1)$q$,'P0409');
+select pg_temp.expect_error($q$select public.talent_submit_request('talent-test-1','claim','Repeated ownership evidence supplied',1,'Synthetic Engineer','2026-10-13-v1',true)$q$,'P0409');
 select pg_temp.expect_error($q$select public.talent_update_profile('talent-test-1',1,'{"title":"Changed"}')$q$,'42501');
 select set_config('request.jwt.claim.sub','71000000-0000-4000-8000-000000000002',true);
 select pg_temp.check_true(jsonb_array_length(public.talent_my_status('talent-test-1')->'requests')=0,'other account cannot see private requests');
@@ -79,7 +79,7 @@ select public.talent_import_profiles('[{"id":"talent-test-3","name":"Request exa
 reset role;
 set local role authenticated;
 select set_config('request.jwt.claim.sub','71000000-0000-4000-8000-000000000003',true);
-select public.talent_submit_request('talent-test-3','claim','Administrator supplied personal ownership evidence',1) as self_id \gset
+select public.talent_submit_request('talent-test-3','claim','Administrator supplied personal ownership evidence',1,'Synthetic Engineer','2026-10-13-v1',true) as self_id \gset
 select pg_temp.expect_error(format('select public.talent_review_request(%L,''approved'',''Evidence checked manually'')',:'self_id'),'42501');
 select set_config('request.jwt.claim.sub','71000000-0000-4000-8000-000000000002',true);
 select public.talent_submit_request('talent-test-3','correction','Dated title correction evidence supplied',1) as stale_id \gset

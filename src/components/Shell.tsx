@@ -73,6 +73,7 @@ function ScrollToTop() {
     const previous = previousLocation.current;
     previousLocation.current = { pathname, hash };
     if (pathname === "/ecosystem" && previous?.pathname === pathname && previous.hash === hash) return;
+    if (pathname.replace(/\/$/, "") === "/talent-network" && hash) return;
     if (hash) {
       const scrollToTarget = () => {
         const target = document.getElementById(hash.slice(1));
@@ -125,7 +126,15 @@ export function Shell({ children }: PropsWithChildren) {
       <div className="editorial-frame" aria-hidden="true" />
       <div className="editorial-rail" aria-hidden="true">Armature AI Labs</div>
       <ScrollToTop />
-      <a className="skip-link" href="#main">
+      <a className="skip-link" href="#main" onClick={(event) => {
+        if (pathname.replace(/\/$/, "") !== "/talent-network") return;
+        event.preventDefault();
+        const content = document.getElementById("main");
+        if (!content) return;
+        content.tabIndex = -1;
+        content.focus({ preventScroll: true });
+        content.scrollIntoView({ block: "start" });
+      }}>
         Skip to content
       </a>
       <header className="topbar" ref={header} onKeyDown={(event) => {

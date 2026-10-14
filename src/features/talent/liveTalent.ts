@@ -3,7 +3,7 @@ import { supabase } from '../../lib/supabase';
 import type { DirectoryPerson } from './directorySearch';
 export const talentClient = () => { if (!supabase) throw new Error('Talent network is temporarily unavailable. Please try again later.'); return supabase as SupabaseClient; };
 export type TalentRow = { id: string; data: DirectoryPerson; revision: number; published: boolean };
-export type TalentRequest = { id: string; profile_id: string; requester_id: string; profile_name: string; kind: string; status: string; evidence: string; review_note: string; created_at: string; base_revision: number; published?: boolean };
+export type TalentRequest = { id: string; profile_id: string; requester_id: string; profile_name: string; kind: string; status: string; evidence: string; review_note: string; created_at: string; base_revision: number; published?: boolean; declaration?: { signed_name: string; text: string; version: string; accepted_at: string; linkedin_url: string; profile_name: string } | null };
 export type TalentStatus = { owner: boolean; admin: boolean; requests: TalentRequest[] };
 export async function talentRpc<T>(name: string, args: Record<string, unknown> = {}): Promise<T> {
   const { data, error } = await talentClient().rpc(name, args);

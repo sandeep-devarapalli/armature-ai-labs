@@ -21,7 +21,7 @@ export interface DirectoryPerson {
 export interface DirectoryQuery {
   query: string;
   location: string;
-  category: string;
+  category: string | string[];
   company: string;
   sort: 'relevance' | 'name';
 }
@@ -42,6 +42,15 @@ function tokens(value: string) {
 }
 const collator = new Intl.Collator('en', { sensitivity: 'base', numeric: true });
 
+export function linkedinIdentity(value: string): string | null {
+  try {
+    const url = new URL(value.trim().replace(/^https?:\/\//i, 'https://').replace(/^(?!https:\/\/)/i, 'https://'));
+    if (!/^(?:www\.|[a-z]{2}\.)?linkedin\.com$/i.test(url.hostname) || url.port || url.username || url.password) return null;
+    const match = url.pathname.match(/^\/in\/([^/]+)\/?$/i);
+    return match ? decodeURIComponent(match[1]).normalize('NFC').toLowerCase() : null;
+  } catch { return null; }
+}
+
 export function buildDirectoryIndex(people: DirectoryPerson[]) {
   return people.map(person => {
     const fields: Field[] = [];
@@ -56,23 +65,27 @@ export function buildDirectoryIndex(people: DirectoryPerson[]) {
     person.physicalAiAreas.forEach(value => add('Research-derived physical-AI category', value, 3));
     add('Company', person.company, 4, true);
     person.previousCompanies.forEach(value => add('Previous company', value, 2, true));
-    return { person, fields, location: normalize(person.location), locationTokens: new Set(tokens(person.location)), categories: new Set([...person.skills, ...person.physicalAiAreas].map(normalize)), company: normalize(person.company) };
+    return { person, fields, linkedin: linkedinIdentity(person.linkedinUrl), location: normalize(person.location), locationTokens: new Set(tokens(person.location)), categories: new Set([...person.skills, ...person.physicalAiAreas].map(normalize)), company: normalize(person.company) };
   });
 }
 
 export function searchDirectory(index: DirectoryIndex, query: DirectoryQuery): { person: DirectoryPerson; matches: string[] }[] {
+  const identity = linkedinIdentity(query.query);
+  if (identity || /^(?:https?:\/\/|(?:www\.|[a-z]{2}\.)?linkedin\.com\/)/i.test(query.query.trim())) {
+    return identity ? index.filter(record => record.linkedin === identity).map(record => ({ person: record.person, matches: [`LinkedIn profile: ${record.person.linkedinUrl}`] })) : [];
+  }
   let terms = [...new Set(tokens(query.query).filter(term => !stopwords.has(term)))];
   if (terms.length > 1) terms = terms.filter(term => term !== 'engineer');
   const normalizedQuery = normalize(query.query).trim();
   const capabilitySearch = terms.some(term => technicalTerms.has(term));
   const location = normalize(query.location);
   const bengaluru = location === 'bengaluru' || location === 'bangalore';
-  const category = normalize(query.category);
+  const categories = (Array.isArray(query.category) ? query.category : [query.category]).filter(Boolean).map(value => ({ value, normalized: normalize(value) }));
   const company = normalize(query.company);
   const results: { person: DirectoryPerson; matches: string[]; score: number }[] = [];
   for (const record of index) {
     if (location && !(bengaluru ? record.locationTokens.has('bengaluru') : record.location === location)) continue;
-    if (category && !record.categories.has(category)) continue;
+    if (categories.length && !categories.some(category => record.categories.has(category.normalized))) continue;
     if (company && record.company !== company) continue;
     const exactIdentityLookup = capabilitySearch && record.fields.some(field => (field.employer || field.label === 'Name') && field.normalized === normalizedQuery);
     const matches = new Set<string>();
@@ -85,7 +98,7 @@ export function searchDirectory(index: DirectoryIndex, query: DirectoryQuery): {
       fields.forEach(field => matches.add(`${field.label}: ${field.value}`));
     }
     if (!accepted) continue;
-    if (category) matches.add(`Research-derived category: ${query.category}`);
+    categories.forEach(category => { if (record.categories.has(category.normalized)) matches.add(`Research-derived category: ${category.value}`); });
     if (location) matches.add(`Location: ${record.person.location}`);
     if (company) matches.add(`Company: ${record.person.company}`);
     results.push({ person: record.person, matches: [...matches], score });

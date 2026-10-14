@@ -97,8 +97,6 @@ if (import.meta.env.DEV && import.meta.env.VITE_DEMO_MODE === "true") {
 const TalentDirectory = lazy(() => import("../features/talent/directory").then(module => ({ default: module.TalentDirectory })));
 
 export const routes: RouteObject[] = [
-  { path: "/talent-network",
-    handle: { module: "src/features/talent/directory.tsx" }, element: <><PageMetadata /><TalentDirectory /></>, errorElement: <RouteFailurePage /> },
   {
     element: <Shell />,
     errorElement: (
@@ -107,6 +105,7 @@ export const routes: RouteObject[] = [
       </Shell>
     ),
     children: [
+      { path: "/talent-network", handle: { module: "src/features/talent/directory.tsx" }, element: <TalentDirectory /> },
       { path: "/", element: <HomePage /> },
       { path: "/privacy", element: <PrivacyPage />, handle: { module: "src/pages/PrivacyPage.tsx" } },
       { path: "/about", element: <AboutPage />, handle: { module: "src/pages/AboutPages.tsx" } },
