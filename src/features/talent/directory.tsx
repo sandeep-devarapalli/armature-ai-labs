@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+import { TalentMemberNavigation, useTalentMember } from './TalentMemberNavigation';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowLeft, ArrowUpRight, Search, UserRound, X, Check } from 'lucide-react';
 import { TalentAddProfile, TalentSubmissionHistory, availabilityLabel } from './TalentAddProfile';
@@ -51,6 +53,11 @@ export function TalentDirectory() {
   const { theme } = useTheme();
   const { isAdmin } = useApp();
   const unread = useMarketplaceUnread();
+  const member = useTalentMember(route);
+  const signedIn = Boolean(member.user) && !member.loading;
+  const myProfileRoute = route === 'my-profile' || route === 'requests';
+  const privateRoute = ['my-profile', 'requests', 'add-profile', 'projects', 'post', 'review', 'market-review'].includes(route) || route.startsWith('messages');
+  const profileLabel = member.profile?.ownerId ? 'My profile' : member.profile?.started ? 'Continue profile setup' : member.profileError || !member.profile && member.user?.email_confirmed_at ? 'My profile' : 'Add my profile';
   const marketplaceRoute = ['work', 'projects', 'post', 'market-test', 'market-review'].includes(route) || route.startsWith('messages') || route.startsWith('project/');
   const resultScroll = useRef(0);
   const previousRoute = useRef(route);
@@ -60,9 +67,10 @@ export function TalentDirectory() {
   const currentPage = Math.min(page, pages);
   const shown = results.slice((currentPage - 1) * 25, currentPage * 25);
   const person = useMemo(() => {
+    if (myProfileRoute) return member.profile?.ownerId ? byId.get(member.profile.ownerId) : undefined;
     if (!route.startsWith('profile/')) return undefined;
     try { return byId.get(decodeURIComponent(route.slice(8))); } catch { return undefined; }
-  }, [route, byId]);
+  }, [route, byId, myProfileRoute, member.profile?.ownerId]);
   useEffect(() => { const change = () => setRoute(location.hash.slice(1)); window.addEventListener('hashchange', change); return () => window.removeEventListener('hashchange', change); }, []);
   useEffect(() => {
     if (previousRoute.current === route) return;
@@ -75,22 +83,13 @@ export function TalentDirectory() {
   function reset() { setQuery(''); setSearch(''); setPlace(''); setCategory([]); setCompany(''); setShortlistOnly(false); setPage(1); }
   const profileLink = (p: DirectoryPerson) => <a href={`#profile/${encodeURIComponent(p.id)}`} onClick={() => { resultScroll.current = window.scrollY; }}>View profile <ArrowUpRight size={14}/></a>;
   return <div className="talent-app directory-app" data-talent-theme={theme}>
-    <nav className="talent-section-nav" aria-label="Talent network navigation">
-      <a href="#talent" aria-current={!marketplaceRoute && !['requests','review','add-profile'].includes(route) ? 'page' : undefined}>Find talent</a>
-      <a href="#work" aria-current={route === 'work' ? 'page' : undefined}>Find work</a>
-      <a href="#messages" aria-current={route.startsWith('messages') ? 'page' : undefined}>Messages{unread > 0 ? ` (${unread})` : ''}</a>
-      <a href="#projects" aria-current={route === 'projects' ? 'page' : undefined}>My projects</a>
-      <a href="#add-profile" aria-current={route === 'add-profile' ? 'page' : undefined}>Add my profile</a>
-      <a href="#requests" aria-current={route === 'requests' ? 'page' : undefined}>My requests</a>
-      {isAdmin && <><a href="#review">Review profiles</a><a href="#market-review">Review work</a></>}
-      <a className="button primary" href="#post">Post a requirement</a>
-    </nav>
+    <TalentMemberNavigation route={route} signedIn={signedIn} isAdmin={isAdmin} unread={unread} profileLabel={profileLabel}/>
     {import.meta.env.DEV && <div className="talent-local-tools">Local build · <a href="#edit-demo">Test profile editing</a> · <a href="#photo-demo">Test profile photos</a> · <a href="#claim-demo">Test claiming</a> · <a href="#market-test">Test marketplace</a></div>}
     <div className="directory-content">
-      {import.meta.env.DEV && route === 'photo-demo' ? <TalentPhotoDemo/> : import.meta.env.DEV && route === 'claim-demo' ? <TalentClaimDemo/> : import.meta.env.DEV && route === 'edit-demo' ? <TalentEditDemo/> : route === 'add-profile' ? <><TalentAddProfile/><p className="talent-community-context">Starting your career? <TalentCommunityLink group="students"/></p></> : route === 'requests' ? <><TalentMyRequests/><TalentSubmissionHistory/></> : marketplaceRoute ? <><TalentMarketplace route={route}/>{route === 'work' && <p className="talent-community-context">Explore the community: <TalentCommunityLink group="jobs"/></p>}{route === 'post' && <p className="talent-community-context">Meet other leaders: <TalentCommunityLink group="leaders"/></p>}</> : loading ? <section><h1>Armature Talent Network</h1><p>Find engineers. Connect with builders. Get things made.</p><p>Discover engineers and builders across hardware, robotics and physical AI. Explore professional experience and research categories, then connect through LinkedIn. Unclaimed profiles are not owner-confirmed; each profile offers claim, correction and removal routes.</p><p role="status">Loading talent profiles…</p></section> : loadError ? <div role="alert"><h1>Unable to load the directory</h1><p>{loadError}</p><button onClick={() => void refresh()}>Try again</button></div> : route === 'review' ? <><TalentReviewQueue onChange={refresh}/><TalentSubmissionHistory review onChange={refresh}/></> : route.startsWith('profile/') ? person ? <>
+      {privateRoute && !signedIn ? <section><h1 tabIndex={-1}>Your Talent Network account</h1>{member.loading ? <p role="status">Checking your account…</p> : <><p>Sign in to manage your profile, projects and conversations.</p><Link className="button primary" to="/auth" state={{ from: window.location.pathname + window.location.hash }}>Sign in / join as a basic member</Link></>}</section> : myProfileRoute && !person ? <section><h1 tabIndex={-1}>My profile</h1>{member.profileError && <p role="alert">{member.profileError}</p>}<p>Your profile and submissions are linked to your signed-in account. Your email stays private.</p>{member.profile?.ownerId && <p>{member.profile.published ? loading ? 'Loading your profile…' : 'Unable to load your profile. Please refresh the directory.' : 'Your profile is not currently publicly listed.'}</p>}{member.profile && !member.profile.ownerId && <a className="button primary" href="#add-profile">{member.profile?.started ? 'Continue profile setup' : 'Add my profile'}</a>}<TalentMyRequests embedded/><TalentSubmissionHistory/></section> : import.meta.env.DEV && route === 'photo-demo' ? <TalentPhotoDemo/> : import.meta.env.DEV && route === 'claim-demo' ? <TalentClaimDemo/> : import.meta.env.DEV && route === 'edit-demo' ? <TalentEditDemo/> : route === 'add-profile' ? <><TalentAddProfile/><p className="talent-community-context">Starting your career? <TalentCommunityLink group="students"/></p></> : marketplaceRoute ? <><TalentMarketplace route={route}/>{route === 'work' && <p className="talent-community-context">Explore the community: <TalentCommunityLink group="jobs"/></p>}{route === 'post' && <p className="talent-community-context">Meet other leaders: <TalentCommunityLink group="leaders"/></p>}</> : loading ? <section><h1>Armature Talent Network</h1><p>Find engineers. Connect with builders. Get things made.</p><p>Discover engineers and builders across hardware, robotics and physical AI. Explore professional experience and research categories, then connect through LinkedIn. Unclaimed profiles are not owner-confirmed; each profile offers claim, correction and removal routes.</p><p role="status">Loading talent profiles…</p></section> : loadError ? <div role="alert"><h1>Unable to load the directory</h1><p>{loadError}</p><button onClick={() => void refresh()}>Try again</button></div> : route === 'review' ? <><TalentReviewQueue onChange={refresh}/><TalentSubmissionHistory review onChange={refresh}/></> : route.startsWith('profile/') || myProfileRoute ? person ? <>
         <a className="back" href="#talent"><ArrowLeft size={15}/> Back to results</a>
         <div className="profile-heading"><TalentAvatar person={person}/><div><Badge claimed={person.claimed}/><h1 tabIndex={-1}>{person.name}</h1><p>{person.title || 'Title not provided'}</p><p>{person.company || 'Company not provided'} · {person.location}</p></div><LinkedIn person={person}/></div>
-        <TalentProfileActions key={person.id} person={person} onChange={refresh}/><TalentChatRequest person={person}/>
+        <TalentProfileActions key={person.id} person={person} onChange={refresh}/><TalentChatRequest person={person}/>{myProfileRoute && <details><summary>Profile updates and review history</summary><TalentMyRequests embedded/><TalentSubmissionHistory/></details>}
         <div className="profile-layout"><section>
           <h2>Professional overview</h2><p className="profile-copy">{person.headline || 'Headline not provided'}</p>
           <section className="profile-section"><h2>Categories</h2><p className="fine">{person.source === 'member' ? 'Member-provided skills and categories. Not independently verified.' : person.claimed ? 'Profile categories may be updated by the owner. Skills have not been independently verified.' : 'Imported classifications, not owner-confirmed or verified skills.'}</p><h3>Skills and capabilities</h3><Tags items={person.skills}/><h3>Physical AI areas</h3><Tags items={person.physicalAiAreas}/></section>
