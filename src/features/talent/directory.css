@@ -102,3 +102,5 @@
 @media(max-width:720px){.directory-app .talent-member-actions{width:100%;margin-left:0;flex-wrap:wrap}.directory-app .talent-member-actions .button{flex:1;white-space:normal;text-align:center}}
 .directory-app .talent-section-nav>a{padding:6px 0}
 @media(max-width:720px){.directory-app .talent-section-nav{gap:8px 16px}.directory-app .talent-member-actions{margin-top:6px}}
+
+.directory-app .search-heading{margin:24px 0 12px;font-size:20px;line-height:1.4;letter-spacing:-.2px}
