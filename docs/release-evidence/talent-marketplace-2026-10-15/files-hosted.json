@@ -1,0 +1,95 @@
+{
+  "checkedAt": "2026-10-15T04:46:41.843Z",
+  "passed": true,
+  "scope": "Approved disposable production accounts and private conversation; no real-user messages or government-ID files.",
+  "smallFileChecks": [
+    {
+      "label": "safe file scanned clean",
+      "status": 200,
+      "verdict": "clean",
+      "bytes": 29,
+      "ms": 3720
+    },
+    {
+      "label": "EICAR rejected",
+      "status": 200,
+      "verdict": "rejected",
+      "bytes": 68,
+      "ms": 3146
+    },
+    {
+      "label": "anonymous denied"
+    },
+    {
+      "label": "outsider denied"
+    },
+    {
+      "label": "rejected download denied"
+    },
+    {
+      "label": "synthetic quarantined object stored"
+    },
+    {
+      "label": "quarantined download denied"
+    }
+  ],
+  "largeFileAndAccessChecks": [
+    {
+      "label": "exact50 MB pipeline clean",
+      "status": 200,
+      "elapsedMs": 41276,
+      "bytes": 50000000,
+      "data": {
+        "id": "9aea950d-ce25-4df6-b8bd-d96b889e5a83",
+        "status": "clean"
+      }
+    },
+    {
+      "label": "oversize plus-one created no attachment",
+      "status": 200
+    },
+    {
+      "label": "participant receives60-second signed link",
+      "status": 200
+    },
+    {
+      "label": "private50 MB object range matches uploaded bytes",
+      "status": 206,
+      "bytes": 16
+    },
+    {
+      "label": "block accepted",
+      "status": 204
+    },
+    {
+      "label": "blocked participant cannot mint download",
+      "status": 403
+    },
+    {
+      "label": "issued link expires after60 seconds",
+      "status": 400
+    },
+    {
+      "label": "exact remaining fixture objects deleted",
+      "objects": 1,
+      "status": 200
+    },
+    {
+      "label": "fixture object prefix empty",
+      "status": 200
+    }
+  ],
+  "oversizeTransport": {
+    "status": 502,
+    "elapsedMs": 70920,
+    "bytes": 50000001,
+    "data": {
+      "body": "<html>\r\n<head><title>502 Bad Gateway</title></head>\r\n<body>\r\n<center><h1>502 Bad Gateway</h1></center>\r\n<hr><center>cloudflare</center>\r\n</body>\r\n</html>\r\n"
+    }
+  },
+  "limitations": [
+    "Raw 50,000,001-byte request was rejected by the gateway with Cloudflare HTTP502 rather than a structured413; no attachment record was created. Client and SQL/handler tests verify the exact limit independently.",
+    "Successful 50MB execution demonstrates this fixture fits runtime limits; peak Edge memory was not measured.",
+    "Existing signed links remain usable until their60-second expiry; blocking denies new links immediately."
+  ]
+}

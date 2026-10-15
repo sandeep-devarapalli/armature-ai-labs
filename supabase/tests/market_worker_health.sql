@@ -5,7 +5,8 @@ select pg_temp.ok(not has_function_privilege('anon','public.market_worker_health
 select set_config('request.jwt.claims','{"role":"authenticated"}',true);
 do $$ begin perform public.market_worker_health(); raise exception 'ordinary member allowed'; exception when insufficient_privilege then null; end $$;
 select set_config('request.jwt.claims','{"role":"service_role"}',true);
-update cron.job set active=true where jobname in(select jobname from private.market_worker_health);
+select cron.alter_job(jobid,active:=true) from cron.job where jobname in(select jobname from private.market_worker_health);
+update private.market_worker_health set created_at=now(),requested_at=null,request_id=null,checked_at=null,response_failed=null,status_code=null;
 select pg_temp.ok((public.market_worker_health()->>'market_worker_stale')::int=0,'initial grace prevents startup alarm');
 update private.market_worker_health set requested_at=now()-interval '27 hours',checked_at=now(),status_code=503,response_failed=true;
 select pg_temp.ok((public.market_worker_health()->>'market_worker_failed')::int=2,'both failures visible');
@@ -15,7 +16,7 @@ select pg_temp.ok((public.market_worker_health()->>'market_worker_failed')::int=
 select pg_temp.ok(public.notification_delivery_health() ? 'atlas_failed' and public.notification_delivery_health() ? 'market_worker_failed','existing and new health preserved');
 update private.market_worker_health set requested_at=now()-interval '6 minutes',checked_at=null;
 select pg_temp.ok((public.market_worker_health()->>'market_worker_failed')::int=2,'missing response detected');
-update cron.job set active=false where jobname in(select jobname from private.market_worker_health);
+select cron.alter_job(jobid,active:=false) from cron.job where jobname in(select jobname from private.market_worker_health);
 select pg_temp.ok((public.market_worker_health()->>'market_worker_failed')::int=0,'disabled schedules not failed');
 create or replace function private.wake_market_message_reminders_untracked() returns bigint language sql as 'select 999999999::bigint';
 update private.market_worker_health set request_id=999999998,requested_at=now()-interval '3 minutes',checked_at=null,response_failed=false where jobname='market-message-reminders-every-five-minutes';
