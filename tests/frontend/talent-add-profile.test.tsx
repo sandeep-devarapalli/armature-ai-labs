@@ -1,4 +1,4 @@
-import { act, fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { beforeEach, expect, it, vi } from 'vitest';
 import { TalentAddProfile, TalentSubmissionHistory, profileDeclarationVersion } from '../../src/features/talent/TalentAddProfile';
@@ -8,7 +8,15 @@ const data = { name: 'Synthetic Person', title: 'Embedded engineer', company: ''
 const row = { id: 's1', revision: 1, status: 'draft', data, evidence: 'My own public portfolio documents my engineering work.', created_at: '2026-10-14' };
 beforeEach(() => { mock.getUser.mockReset().mockResolvedValue({ data: { user: { id: 'u1', email_confirmed_at: '2026-01-01' } } }); mock.rpc.mockReset().mockImplementation(async (name, args) => { if (name === 'talent_my_submissions') return []; if (name === 'talent_check_submission_identity') return { status: 'available', linkedin_url: data.linkedinUrl }; if (name === 'talent_save_submission') return { ...row, revision: (args.expected_revision || 0) + 1, data: args.profile_data, evidence: args.private_evidence }; if (name === 'talent_submit_profile') return { ...row, status: 'pending' }; return []; }); });
 function open() { render(<MemoryRouter><TalentAddProfile/></MemoryRouter>); }
-async function identity() { fireEvent.click(await screen.findByRole('button', { name: 'Continue' })); fireEvent.change(screen.getByLabelText('Your personal LinkedIn URL'), { target: { value: data.linkedinUrl } }); fireEvent.click(screen.getByRole('button', { name: 'Check LinkedIn profile' })); }
+async function identity() {
+  const next = await screen.findByRole('button', { name: 'Continue' });
+  await waitFor(() => expect(next).toBeEnabled());
+  fireEvent.click(next);
+  fireEvent.change(screen.getByLabelText('Your personal LinkedIn URL'), { target: { value: data.linkedinUrl } });
+  const check = await screen.findByRole('button', { name: 'Check LinkedIn profile' });
+  await waitFor(() => expect(check).toBeEnabled());
+  fireEvent.click(check);
+}
 it('requires membership and never queries private drafts while signed out', async () => { mock.getUser.mockResolvedValue({ data: { user: null } }); open(); await screen.findByRole('link', { name: 'Sign in / join as a basic member' }); expect(mock.rpc).not.toHaveBeenCalled(); });
 it('requires confirmed email before collecting details', async () => { mock.getUser.mockResolvedValue({ data: { user: { id: 'u1' } } }); open(); await screen.findByText(/Confirm your account email/); expect(mock.rpc).not.toHaveBeenCalled(); });
 it('routes an existing identity to its profile without saving another person', async () => { mock.rpc.mockImplementation(async name => name === 'talent_my_submissions' ? [] : { status: 'existing', profile_id: 'p1', linkedin_url: data.linkedinUrl }); open(); await identity(); expect(await screen.findByRole('link', { name: 'Open existing profile' })).toHaveAttribute('href', '#profile/p1'); expect(mock.rpc.mock.calls.some(([name]) => name === 'talent_save_submission')).toBe(false); });
@@ -36,4 +44,17 @@ it('preserves unsaved fields through token refresh and same-user sign-in', async
   act(() => mock.change('SIGNED_IN', session));
   expect(screen.getByLabelText('Full name')).toHaveValue('Unsaved name');
   expect(mock.rpc.mock.calls.filter(([name]) => name === 'talent_my_submissions')).toHaveLength(1);
+});
+
+it('waits for initial private drafts before checking a LinkedIn identity', async () => {
+  let resolveDrafts!: (rows: unknown[]) => void;
+  mock.rpc.mockImplementationOnce(() => new Promise(resolve => { resolveDrafts = resolve; }));
+  open();
+  const next = await screen.findByRole('button', { name: 'Continue' });
+  expect(next).toBeDisabled();
+  expect(mock.rpc).not.toHaveBeenCalledWith('talent_check_submission_identity', expect.anything());
+  await act(async () => { resolveDrafts([]); });
+  await identity();
+  await screen.findByLabelText('Full name');
+  expect(mock.rpc).toHaveBeenCalledWith('talent_check_submission_identity', { linkedin_url: data.linkedinUrl });
 });
