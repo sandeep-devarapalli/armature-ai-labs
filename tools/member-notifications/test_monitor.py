@@ -76,6 +76,47 @@ class Tests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 self.run_check(data)
 
+    def market_result(self):
+        data = copy.deepcopy(BASE)
+        data['health'].update({k: 0 for k in monitor.MARKET_COUNTS})
+        data['health']['market_workers'] = [dict(job=job, active=True, requested_at='2026-10-15T07:00:00+00:00', status=200, checked_at=None) for job in sorted(monitor.MARKET_JOBS)]
+        return data
+
+    def test_market_health_and_each_actionable_counter(self):
+        self.assertFalse(self.run_check(self.market_result())['attention'])
+        for key in monitor.MARKET_COUNTS:
+            data = self.market_result()
+            data['health'][key] = 1
+            data['attention'] = True
+            result = self.run_check(data)
+            self.assertTrue(result['attention'])
+            self.assertNotIn('market_workers', result)
+
+    def test_partial_or_malformed_market_schema(self):
+        for key in monitor.MARKET_COUNTS | {'market_workers'}:
+            data = self.market_result()
+            del data['health'][key]
+            with self.assertRaises(ValueError):
+                self.run_check(data)
+        for field, value in [('job', 'unknown'), ('job', []), ('active', 1), ('status', True), ('status', 600), ('requested_at', 'invalid'), ('checked_at', 42)]:
+            data = self.market_result()
+            data['health']['market_workers'][0][field] = value
+            with self.assertRaises(ValueError):
+                self.run_check(data)
+        data = self.market_result()
+        data['health']['market_workers'][1] = data['health']['market_workers'][0]
+        with self.assertRaises(ValueError):
+            self.run_check(data)
+        for value in [-1, True, '1', None]:
+            data = self.market_result()
+            data['health']['market_worker_failed'] = value
+            with self.assertRaises(ValueError):
+                self.run_check(data)
+        data = self.market_result()
+        data['health']['market_worker_failed'] = 1
+        with self.assertRaisesRegex(ValueError, 'invalid_attention'):
+            self.run_check(data)
+
     def test_missing_secret_never_requests(self):
         with patch('monitor.build_opener') as opener:
             with self.assertRaises(ValueError):

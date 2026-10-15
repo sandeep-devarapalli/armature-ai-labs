@@ -81,3 +81,11 @@ The shared Resend webhook also receives Supabase sign-in email reports. After si
 A classified sign-in email stops contributing to `unmatched_receipts` only when a delivered report exists and no failed, bounced, complained or suppressed report exists. Missing delivery still alerts after the existing one-hour receipt grace period. Negative reports remain actionable in either callback order. Member and Atlas ownership take precedence and cannot claim a classified Auth provider ID. All existing health fields, schedules, cleanup settings and delivery-failure checks remain unchanged.
 
 Deploy migration `202610050001` before the `member-notification-events` function. The original recorder remains available during rollout. Historical reconciliation requires checking the exact provider ID, sender, subject and delivery state in Resend and retaining an operator evidence record; timing alone is insufficient. Preserve receipts and do not resend emails to clear an alert.
+
+## Marketplace health compatibility (15 October 2026)
+
+The maintenance endpoint now adds three marketplace counters and bounded worker
+metadata. The monitor accepts that complete schema alongside the earlier two
+schemas. All three marketplace counters remain actionable. Unknown fields,
+partial schemas, malformed counters and inconsistent attention flags still fail
+closed. Only aggregate counts are logged; worker metadata is validated but omitted.
