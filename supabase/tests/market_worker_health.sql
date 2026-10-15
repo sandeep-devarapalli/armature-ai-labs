@@ -21,4 +21,5 @@ create or replace function private.wake_market_message_reminders_untracked() ret
 update private.market_worker_health set request_id=999999998,requested_at=now()-interval '3 minutes',checked_at=null,response_failed=false where jobname='market-message-reminders-every-five-minutes';
 select private.wake_market_message_reminders();
 select pg_temp.ok((select response_failed and request_id=999999999 from private.market_worker_health where jobname='market-message-reminders-every-five-minutes'),'next wake preserves missing prior response failure');
+select pg_temp.ok(jsonb_typeof(public.market_worker_health()->'market_worker_failed')='number' and jsonb_typeof(public.market_worker_health()->'market_worker_stale')='number' and jsonb_typeof(public.market_worker_health()->'market_cleanup_backlog')='number' and jsonb_typeof(public.market_worker_health()->'market_workers')='array','new health fields have explicit types');
 rollback;

@@ -66,7 +66,7 @@ select public.record_member_notification_event('auth-legacy-api','b7300000-0000-
 update public.member_notification_events set received_at=now()-interval '2 hours';
 select is((public.notification_delivery_health()->>'unmatched_receipts')::integer,24,'old RPC remains available and does not classify without metadata');
 select is((select count(*)::integer from jsonb_object_keys(public.member_notification_health())),12,'legacy health shape unchanged');
-select is((select count(*)::integer from jsonb_object_keys(public.notification_delivery_health())),18,'monitor health shape unchanged');
+select ok(public.notification_delivery_health() ?& array['sending_enabled','cleanup_enabled','last_cleanup_at','cleanup_overdue','held','queue_overdue','expired_leases','unknown','failed','delivery_unconfirmed','unmatched_receipts','history_due','atlas_queue_overdue','atlas_expired_leases','atlas_unknown','atlas_failed','atlas_delivery_failed','atlas_delivery_unconfirmed'],'original monitor health fields retained');
 select ok(not (public.notification_delivery_health()->>'cleanup_enabled')::boolean,'cleanup remains disabled');
 -- Auth-first collisions must not turn Auth delivery into successful outbox delivery.
 insert into public.member_notifications(id,user_id,recipient_id,recipient_email,event_key,kind,expected_status,application_revision,state,lease_token,lease_until)

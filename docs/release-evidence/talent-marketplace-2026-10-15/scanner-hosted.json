@@ -1,0 +1,80 @@
+{
+  "passed": true,
+  "transport": "hosted HTTPS HTTP/2",
+  "checks": 11,
+  "evidence": [
+    {
+      "label": "private IAM",
+      "status": 403,
+      "bytes": 0,
+      "ms": 575
+    },
+    {
+      "label": "independent bearer",
+      "status": 401,
+      "bytes": 0,
+      "ms": 73
+    },
+    {
+      "label": "authenticated fresh antivirus",
+      "status": 200,
+      "bytes": 0,
+      "ms": 91
+    },
+    {
+      "label": "valid STEP",
+      "status": 200,
+      "verdict": "clean",
+      "bytes": 31,
+      "ms": 151
+    },
+    {
+      "label": "digest mismatch",
+      "status": 400,
+      "bytes": 9,
+      "ms": 73
+    },
+    {
+      "label": "EICAR test signature",
+      "status": 200,
+      "verdict": "rejected",
+      "bytes": 68,
+      "ms": 85
+    },
+    {
+      "label": "active HTML disguise",
+      "status": 200,
+      "verdict": "rejected",
+      "bytes": 38,
+      "ms": 132
+    },
+    {
+      "label": "image.png",
+      "status": 200,
+      "verdict": "clean",
+      "bytes": 78,
+      "ms": 151
+    },
+    {
+      "label": "document.pdf",
+      "status": 200,
+      "verdict": "clean",
+      "bytes": 431,
+      "ms": 85
+    },
+    {
+      "label": "work.zip",
+      "status": 200,
+      "verdict": "clean",
+      "bytes": 143,
+      "ms": 116
+    },
+    {
+      "label": "50 MiB boundary",
+      "status": 200,
+      "verdict": "clean",
+      "bytes": 52428800,
+      "ms": 19402
+    }
+  ]
+}

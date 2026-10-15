@@ -17,7 +17,7 @@ export const listMarketProjects = async()=> (await talentRpc<Record<string,unkno
 export const getMarketDetail = async(id:string)=>normalizeDetail(await talentRpc<Record<string,unknown>>('market_project_detail',{project_id:id}));
 export const marketAction = async(projectId:string|null,action:string,payload:Record<string,unknown>={}) => normalizeDetail(await talentRpc<Record<string,unknown>>('market_project_action',{project_id:projectId,action,payload}));
 export const money = (value:unknown) => typeof value==='number' ? new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:0}).format(value) : 'To be agreed';
-export const maxAttachmentBytes = 50*1024*1024;
+export const maxAttachmentBytes = 50_000_000;
 export function attachmentError(file:Pick<File,'name'|'size'>):string|null {
  if(file.size>maxAttachmentBytes)return 'Choose a file of 50 MB or less.';
  if(/\.(png|jpe?g|webp)$/i.test(file.name)&&file.size>5*1024*1024)return 'Choose an image of 5 MB or less.';

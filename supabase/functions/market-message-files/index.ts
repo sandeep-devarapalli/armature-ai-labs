@@ -6,7 +6,7 @@ import { adminClient, authenticatedUser, bearerToken } from "../_shared/supabase
 
 import { scannerIdentityToken } from "../_shared/scanner-identity.ts";
 
-const limit = 50 * 1024 * 1024;
+const limit = 50_000_000;
 Deno.serve(async request => {
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: { ...corsHeaders(request), "access-control-allow-headers": "authorization, apikey, content-type, x-client-info, x-conversation-id, x-file-name" } });
   try {

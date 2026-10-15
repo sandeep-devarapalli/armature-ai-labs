@@ -24,8 +24,10 @@ try {
  const migrations=fs.readdirSync(path.join(root,'supabase/migrations')).filter(f=>f.endsWith('.sql')).sort();
  for(const file of migrations){fs.writeSync(log,`\nMIGRATION ${file}\n`);try{fs.writeSync(log,sql(fs.readFileSync(path.join(root,'supabase/migrations',file),'utf8')));}catch(error){throw new Error(`Migration ${file}: ${error.stderr||error.message}`);}}
  console.log(`Replayed ${migrations.length} migrations`);
- const tests=['talent_network','talent_profile_photos','talent_admin_edit','talent_claim_declaration','talent_profile_submissions','talent_submission_notifications','talent_notifications','talent_portfolio','market_projects','market_messages','market_message_delivery','market_operations','market_authorization','market_wakeups','market_worker_health'];
- for(const file of tests){fs.writeSync(log,`\nTEST ${file}\n`);try{fs.writeSync(log,sql(fs.readFileSync(path.join(root,'supabase/tests',file+'.sql'),'utf8')));}catch(error){throw new Error(`Test ${file}: ${error.stderr||error.message}`);}}
+ const tests=['talent_network','talent_profile_photos','talent_admin_edit','talent_claim_declaration','talent_profile_submissions','talent_submission_notifications','talent_notifications','talent_portfolio','market_projects','market_messages','market_message_delivery','market_file_cleanup','market_file_limit','market_operations','market_authorization','market_wakeups','market_worker_health'];
+ sql('create extension if not exists pgtap with schema extensions;');
+ tests.push('database/035_auth_notification_receipts','database/036_synthetic_notification_resolution');
+ for(const file of tests){fs.writeSync(log,`\nTEST ${file}\n`);try{const result=sql('set search_path=public,extensions;\n'+fs.readFileSync(path.join(root,'supabase/tests',file+'.sql'),'utf8'));fs.writeSync(log,result);if(/(?:^|\n)\s*not ok \d+/m.test(result))throw new Error('pgTAP assertion failed');}catch(error){throw new Error(`Test ${file}: ${error.stderr||error.message}`);}}
  fs.writeFileSync(path.join(out,'result.json'),JSON.stringify({container:name,image,network:'none',migrations,tests,status:'passed'},null,2));
  console.log(`Passed ${tests.length} SQL suites. Container retained for inspection; remove only this container with docker rm -fv ${name}`);
 }catch(error){fs.writeFileSync(path.join(out,'failure.txt'),String(error));console.error(String(error));process.exitCode=1;}

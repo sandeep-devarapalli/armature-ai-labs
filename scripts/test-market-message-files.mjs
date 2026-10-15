@@ -13,7 +13,7 @@ const client = {
  rpc:async(name,args) => {
    if(name==='market_thread') return args.conversation_id==='conversation' ? {data:{conversation:{status:'active'}},error:null}:fail;
    if(name==='market_prepare_attachment') {
-     if(!['design.step','image.png','document.pdf'].includes(args.filename)||args.byte_size>52428800||args.byte_size<1||args.conversation_id!=='conversation') return fail;
+     if(!['design.step','image.png','document.pdf'].includes(args.filename)||args.byte_size>50000000||args.byte_size<1||args.conversation_id!=='conversation') return fail;
      state.filename=args.filename;state.contentType=args.content_type;
      return {data:{id:'attachment',object_path:'conversation/attachment',status:'quarantined'},error:null};
    }
@@ -48,7 +48,7 @@ let checks=0;
 try {
  reset();assert.equal((await get('','expired-token')).status,401);checks++;
  assert.equal((await post('bad.html','text/html')).status,400);assert.equal(state.uploads,0);checks++;
- const oversize=await handler(new Request(base,{method:'POST',headers:{authorization:`Bearer ${jwt}`,'x-conversation-id':'conversation','content-length':'52428801'},body:'x'}));assert.equal(oversize.status,413);checks++;
+ const oversize=await handler(new Request(base,{method:'POST',headers:{authorization:`Bearer ${jwt}`,'x-conversation-id':'conversation','content-length':'50000001'},body:'x'}));assert.equal(oversize.status,413);checks++;
  assert.equal((await post()).status,202);assert.equal(state.status,'quarantined');assert.equal((await get()).status,403);checks++;
  reset();scanner();mode='scanner-fail';assert.equal((await post()).status,202);assert.equal((await get()).status,403);checks++;
  reset();scanner();mode='digest-mismatch';assert.equal((await post()).status,202);assert.equal(state.status,'quarantined');checks++;

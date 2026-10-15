@@ -47,7 +47,7 @@ it('only the separate apply environment flag requests mutation',async()=>{
  const f=fixture({apply:'true'});expect((await f.handler(f.request())).status).toBe(200);
  expect(f.rpc).toHaveBeenCalledWith('maintain_member_notifications',{p_dry_run:false,p_limit:100});
 });
-it.each(['queue_overdue','expired_leases','unknown','failed','delivery_unconfirmed','unmatched_receipts','cleanup_overdue',...atlasCounts])('reports actionable %s',async(key)=>{
+it.each(['market_worker_failed','market_worker_stale','market_cleanup_backlog','queue_overdue','expired_leases','unknown','failed','delivery_unconfirmed','unmatched_receipts','cleanup_overdue',...atlasCounts])('reports actionable %s',async(key)=>{
  const f=fixture({health:{[key]:key==='cleanup_overdue'?true:1}});expect((await (await f.handler(f.request())).json()).attention).toBe(true);
 });
 it('does not alert solely for held events or dry-run backlog',async()=>{

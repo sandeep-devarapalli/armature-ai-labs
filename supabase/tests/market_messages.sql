@@ -24,7 +24,8 @@ select pg_temp.denied(format('select public.market_send_message(%L,''Changed'','
 select public.market_mark_read(:'cid',:'mid');
 select pg_temp.check_true((public.market_conversations()->0->>'unread_count')::int=0,'read clears count');
 select pg_temp.denied(format('select public.market_prepare_attachment(%L,''bad.html'',''text/html'',20)',:'cid'));
-select pg_temp.denied(format('select public.market_prepare_attachment(%L,''big.pdf'',''application/pdf'',52428801)',:'cid'));
+select pg_temp.denied(format('select public.market_prepare_attachment(%L,''big.pdf'',''application/pdf'',50000001)',:'cid'));
+select pg_temp.check_true(public.market_prepare_attachment(:'cid','boundary.txt','text/plain',50000000)->>'status'='quarantined','exact decimal50 MB accepted');
 select (public.market_prepare_attachment(:'cid','design.step','application/octet-stream',100)->>'id') as aid \gset
 select pg_temp.denied(format('select public.market_attachment_access(%L)',:'aid'));
 select pg_temp.denied(format('select public.market_attachment_scan_result(%L,true)',:'aid'));

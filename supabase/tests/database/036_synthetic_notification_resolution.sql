@@ -28,6 +28,6 @@ select private.resolve_synthetic_notification('b7300000-0000-4000-8000-000000000
 select is((public.notification_delivery_health()->>'unmatched_receipts')::integer,1,'only exact resolved synthetic provider excluded');
 select is((select count(*)::integer from public.member_notification_events),2,'raw negative receipts preserved');
 select is((public.notification_delivery_health()->>'unknown')::integer,1,'ambiguous earlier send still alerts');
-select is((select count(*)::integer from jsonb_object_keys(public.notification_delivery_health())),18,'monitor schema unchanged');
+select ok(public.notification_delivery_health() ?& array['sending_enabled','cleanup_enabled','last_cleanup_at','cleanup_overdue','held','queue_overdue','expired_leases','unknown','failed','delivery_unconfirmed','unmatched_receipts','history_due','atlas_queue_overdue','atlas_expired_leases','atlas_unknown','atlas_failed','atlas_delivery_failed','atlas_delivery_unconfirmed'],'original monitor health fields retained');
 select * from finish();
 rollback;
