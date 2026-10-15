@@ -1,3 +1,11 @@
+export interface TalentPortfolioProject {
+  title: string;
+  summary: string;
+  contribution: string;
+  skills: string[];
+  evidenceUrl: string;
+}
+
 export interface DirectoryPerson {
   id: string;
   name: string;
@@ -19,6 +27,7 @@ export interface DirectoryPerson {
   source?: string;
   education?: string;
   experience?: string;
+  portfolioProjects?: TalentPortfolioProject[];
 }
 
 export interface DirectoryQuery {
@@ -66,6 +75,13 @@ export function buildDirectoryIndex(people: DirectoryPerson[]) {
     add('Location', person.location, 2);
     person.skills.forEach(value => add(person.source === 'member' ? 'Member-provided skill' : 'Research-derived skill category', value, 3));
     person.physicalAiAreas.forEach(value => add(person.source === 'member' ? 'Member-provided physical-AI category' : 'Research-derived physical-AI category', value, 3));
+    person.portfolioProjects?.forEach((project, index) => {
+      const label = `Project ${index + 1} (self-reported)`;
+      add(`${label} title`, project.title, 4);
+      add(`${label} summary`, project.summary, 3);
+      add(`${label} individual contribution`, project.contribution, 5);
+      project.skills.forEach(value => add(`${label} skill`, value, 3));
+    });
     add('Company', person.company, 4, true);
     person.previousCompanies.forEach(value => add('Previous company', value, 2, true));
     return { person, fields, linkedin: linkedinIdentity(person.linkedinUrl), location: normalize(person.location), locationTokens: new Set(tokens(person.location)), categories: new Set([...person.skills, ...person.physicalAiAreas].map(normalize)), company: normalize(person.company) };

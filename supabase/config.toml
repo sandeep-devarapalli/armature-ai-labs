@@ -27,7 +27,7 @@ port = 54324
 
 [storage]
 enabled = true
-file_size_limit = "25MiB"
+file_size_limit = "50MB"
 
 [auth]
 enabled = true
@@ -116,4 +116,13 @@ verify_jwt = false
 verify_jwt = false
 
 [functions.talent-profile-photo]
+verify_jwt = false
+
+[functions.market-message-files]
+verify_jwt = false
+
+[functions.market-message-reminders]
+verify_jwt = false
+
+[functions.market-message-maintenance]
 verify_jwt = false

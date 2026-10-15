@@ -19,6 +19,9 @@ export function normalizeTalentRow(row: TalentRow): DirectoryPerson {
     location: text(data.location), summary: text(data.summary), checkedAt: text(data.checkedAt), linkedinUrl: text(data.linkedinUrl),
     previousCompanies: list(data.previousCompanies), skills: list(data.skills), physicalAiAreas: list(data.physicalAiAreas),
     yearsExperience: typeof data.yearsExperience === 'number' && Number.isFinite(data.yearsExperience) ? data.yearsExperience : null,
+    portfolioProjects: Array.isArray(data.portfolioProjects) ? data.portfolioProjects.filter(project => project && typeof project === 'object').map(project => ({
+      title: text(project.title), summary: text(project.summary), contribution: text(project.contribution), skills: list(project.skills), evidenceUrl: text(project.evidenceUrl),
+    })) : [],
     claimed: data.claimed === true,
     source: data.source === 'member' ? 'member' : undefined,
     education: text(data.education), experience: text(data.experience),

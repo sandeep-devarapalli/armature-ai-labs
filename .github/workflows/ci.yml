@@ -22,6 +22,7 @@ jobs:
       - run: npm run audit:production
       - run: npm run audit:all
       - run: npm test
+      - run: node scripts/test-market-message-files.mjs && node scripts/test-market-message-reminders.mjs && node scripts/test-market-wakeup.mjs
       - run: node --test tests/scripts/onboarding-retention.node.mjs
       - run: node --test tests/scripts/production-env.node.mjs
       - run: python3 -m unittest discover -s tools/member-notifications -v
@@ -84,6 +85,16 @@ jobs:
           psql -v ON_ERROR_STOP=1 -f supabase/tests/talent_profile_submissions.sql
           psql -v ON_ERROR_STOP=1 -f supabase/tests/talent_submission_notifications.sql
           psql -v ON_ERROR_STOP=1 -f supabase/tests/talent_notifications.sql
+          psql -v ON_ERROR_STOP=1 -f supabase/tests/talent_portfolio.sql
+          psql -v ON_ERROR_STOP=1 -f supabase/tests/market_projects.sql
+          psql -v ON_ERROR_STOP=1 -f supabase/tests/market_messages.sql
+          psql -v ON_ERROR_STOP=1 -f supabase/tests/market_message_delivery.sql
+          psql -v ON_ERROR_STOP=1 -f supabase/tests/market_file_cleanup.sql
+          psql -v ON_ERROR_STOP=1 -f supabase/tests/market_file_limit.sql
+          psql -v ON_ERROR_STOP=1 -f supabase/tests/market_operations.sql
+          psql -v ON_ERROR_STOP=1 -f supabase/tests/market_authorization.sql
+          psql -v ON_ERROR_STOP=1 -f supabase/tests/market_wakeups.sql
+          psql -v ON_ERROR_STOP=1 -f supabase/tests/market_worker_health.sql
           psql -v ON_ERROR_STOP=1 -f supabase/tests/ecosystem_contributions.sql
           psql -v ON_ERROR_STOP=1 -f supabase/tests/ecosystem_pending_edit.sql
           psql -v ON_ERROR_STOP=1 -f supabase/tests/ecosystem_city_guide.sql

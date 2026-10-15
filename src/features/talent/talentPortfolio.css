@@ -1,0 +1,7 @@
+.talent-portfolio-editor { min-width: 0; padding: 16px; border: 1px solid var(--line, #dfe3da); }
+.talent-portfolio-fields { display: grid; gap: 14px; min-width: 0; margin: 16px 0; padding: 16px; border: 1px solid var(--line, #dfe3da); }
+.talent-portfolio-fields input, .talent-portfolio-fields textarea { width: 100%; box-sizing: border-box; }
+.talent-portfolio-fields button { justify-self: start; }
+.talent-portfolio article { padding: 18px 0; border-top: 1px solid var(--line, #dfe3da); overflow-wrap: anywhere; }
+.talent-portfolio h3 { margin: 0 0 12px; }
+.talent-portfolio h4 { margin: 18px 0 8px; }

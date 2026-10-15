@@ -7,6 +7,9 @@ import { buildDirectoryIndex, searchDirectory, linkedinIdentity, type DirectoryP
 import { useApp } from '../../context/AppContext';
 import { useTheme } from '../../context/ThemeContext';
 import { TalentAvatar, TalentPhotoDemo } from './TalentPhoto';
+import { TalentPortfolio } from './TalentPortfolio';
+import { TalentCommunity, TalentCommunityLink } from './TalentCommunity';
+import { TalentMarketplace, TalentChatRequest, useMarketplaceUnread } from './Marketplace';
 import './talent.css';
 import './directory.css';
 
@@ -47,8 +50,8 @@ export function TalentDirectory() {
   const [shortlistOnly, setShortlistOnly] = useState(false);
   const { theme } = useTheme();
   const { isAdmin } = useApp();
-  const [request, setRequest] = useState('');
-  const dialog = useRef<HTMLDialogElement>(null);
+  const unread = useMarketplaceUnread();
+  const marketplaceRoute = ['work', 'projects', 'post', 'market-test', 'market-review'].includes(route) || route.startsWith('messages') || route.startsWith('project/');
   const resultScroll = useRef(0);
   const previousRoute = useRef(route);
   const matches = useMemo(() => searchDirectory(index, { query: search, location: place, category, company, sort }), [index, search, place, category, company, sort]);
@@ -69,27 +72,36 @@ export function TalentDirectory() {
   }, [route]);
 
   function toggle(id: string) { setShortlist(s => s.includes(id) ? s.filter(x => x !== id) : [...s, id]); }
-  function openRequest(kind: string) { setRequest(kind); dialog.current?.showModal(); }
   function reset() { setQuery(''); setSearch(''); setPlace(''); setCategory([]); setCompany(''); setShortlistOnly(false); setPage(1); }
   const profileLink = (p: DirectoryPerson) => <a href={`#profile/${encodeURIComponent(p.id)}`} onClick={() => { resultScroll.current = window.scrollY; }}>View profile <ArrowUpRight size={14}/></a>;
   return <div className="talent-app directory-app" data-talent-theme={theme}>
-    <nav className="talent-section-nav" aria-label="Talent network navigation"><a href="#talent" aria-current={!['requests','review','add-profile'].includes(route) ? 'page' : undefined}>Find talent</a><button onClick={() => openRequest('Find work')}>Find work</button><button onClick={() => openRequest('My projects')}>My projects</button><a href="#add-profile" aria-current={route === 'add-profile' ? 'page' : undefined}>Add my profile</a><a href="#requests" aria-current={route === 'requests' ? 'page' : undefined}>My requests</a>{isAdmin && <a href="#review">Review requests</a>}<button className="button primary" onClick={() => openRequest('Post a requirement')}>Post a requirement</button></nav>
-    {import.meta.env.DEV && <div className="talent-local-tools">Local build · <a href="#edit-demo">Test profile editing</a> · <a href="#photo-demo">Test profile photos</a> · <a href="#claim-demo">Test claiming</a></div>}
+    <nav className="talent-section-nav" aria-label="Talent network navigation">
+      <a href="#talent" aria-current={!marketplaceRoute && !['requests','review','add-profile'].includes(route) ? 'page' : undefined}>Find talent</a>
+      <a href="#work" aria-current={route === 'work' ? 'page' : undefined}>Find work</a>
+      <a href="#messages" aria-current={route.startsWith('messages') ? 'page' : undefined}>Messages{unread > 0 ? ` (${unread})` : ''}</a>
+      <a href="#projects" aria-current={route === 'projects' ? 'page' : undefined}>My projects</a>
+      <a href="#add-profile" aria-current={route === 'add-profile' ? 'page' : undefined}>Add my profile</a>
+      <a href="#requests" aria-current={route === 'requests' ? 'page' : undefined}>My requests</a>
+      {isAdmin && <><a href="#review">Review profiles</a><a href="#market-review">Review work</a></>}
+      <a className="button primary" href="#post">Post a requirement</a>
+    </nav>
+    {import.meta.env.DEV && <div className="talent-local-tools">Local build · <a href="#edit-demo">Test profile editing</a> · <a href="#photo-demo">Test profile photos</a> · <a href="#claim-demo">Test claiming</a> · <a href="#market-test">Test marketplace</a></div>}
     <div className="directory-content">
-      {import.meta.env.DEV && route === 'photo-demo' ? <TalentPhotoDemo/> : import.meta.env.DEV && route === 'claim-demo' ? <TalentClaimDemo/> : import.meta.env.DEV && route === 'edit-demo' ? <TalentEditDemo/> : route === 'add-profile' ? <TalentAddProfile/> : route === 'requests' ? <><TalentMyRequests/><TalentSubmissionHistory/></> : loading ? <section><h1>Armature Talent Network</h1><p>Find engineers. Connect with builders. Get things made.</p><p>Discover engineers and builders across hardware, robotics and physical AI. Explore professional experience and research categories, then connect through LinkedIn. Unclaimed profiles are not owner-confirmed; each profile offers claim, correction and removal routes.</p><p role="status">Loading talent profiles…</p></section> : loadError ? <div role="alert"><h1>Unable to load the directory</h1><p>{loadError}</p><button onClick={() => void refresh()}>Try again</button></div> : route === 'review' ? <><TalentReviewQueue onChange={refresh}/><TalentSubmissionHistory review onChange={refresh}/></> : route.startsWith('profile/') ? person ? <>
+      {import.meta.env.DEV && route === 'photo-demo' ? <TalentPhotoDemo/> : import.meta.env.DEV && route === 'claim-demo' ? <TalentClaimDemo/> : import.meta.env.DEV && route === 'edit-demo' ? <TalentEditDemo/> : route === 'add-profile' ? <><TalentAddProfile/><p className="talent-community-context">Starting your career? <TalentCommunityLink group="students"/></p></> : route === 'requests' ? <><TalentMyRequests/><TalentSubmissionHistory/></> : marketplaceRoute ? <><TalentMarketplace route={route}/>{route === 'work' && <p className="talent-community-context">Explore the community: <TalentCommunityLink group="jobs"/></p>}{route === 'post' && <p className="talent-community-context">Meet other leaders: <TalentCommunityLink group="leaders"/></p>}</> : loading ? <section><h1>Armature Talent Network</h1><p>Find engineers. Connect with builders. Get things made.</p><p>Discover engineers and builders across hardware, robotics and physical AI. Explore professional experience and research categories, then connect through LinkedIn. Unclaimed profiles are not owner-confirmed; each profile offers claim, correction and removal routes.</p><p role="status">Loading talent profiles…</p></section> : loadError ? <div role="alert"><h1>Unable to load the directory</h1><p>{loadError}</p><button onClick={() => void refresh()}>Try again</button></div> : route === 'review' ? <><TalentReviewQueue onChange={refresh}/><TalentSubmissionHistory review onChange={refresh}/></> : route.startsWith('profile/') ? person ? <>
         <a className="back" href="#talent"><ArrowLeft size={15}/> Back to results</a>
         <div className="profile-heading"><TalentAvatar person={person}/><div><Badge claimed={person.claimed}/><h1 tabIndex={-1}>{person.name}</h1><p>{person.title || 'Title not provided'}</p><p>{person.company || 'Company not provided'} · {person.location}</p></div><LinkedIn person={person}/></div>
-        <TalentProfileActions key={person.id} person={person} onChange={refresh}/>
+        <TalentProfileActions key={person.id} person={person} onChange={refresh}/><TalentChatRequest person={person}/>
         <div className="profile-layout"><section>
           <h2>Professional overview</h2><p className="profile-copy">{person.headline || 'Headline not provided'}</p>
           <section className="profile-section"><h2>Categories</h2><p className="fine">{person.source === 'member' ? 'Member-provided skills and categories. Not independently verified.' : person.claimed ? 'Profile categories may be updated by the owner. Skills have not been independently verified.' : 'Imported classifications, not owner-confirmed or verified skills.'}</p><h3>Skills and capabilities</h3><Tags items={person.skills}/><h3>Physical AI areas</h3><Tags items={person.physicalAiAreas}/></section>
           <section className="profile-section"><h2>Experience</h2>{person.experience && <><p className="profile-copy">{person.experience}</p><p className="fine">Member-provided · not independently verified</p></>}<dl className="directory-facts"><dt>Current title</dt><dd>{person.title || 'Not provided'}</dd><dt>Current company</dt><dd>{person.company || 'Not provided'}</dd><dt>Previous companies</dt><dd>{person.previousCompanies.join(' · ') || 'Not provided'}</dd><dt>Total experience</dt><dd>{person.yearsExperience === null ? 'Not provided' : `${person.yearsExperience} years · source-reported`}</dd><dt>Company tenure</dt><dd>Not provided</dd></dl></section>
-          <section className="profile-section"><h2>Education</h2><p className="profile-copy">{person.education || 'Not provided'}</p>{person.education && <p className="fine">Member-provided · not independently verified</p>}<h2>Projects</h2><p>Not provided. No portfolio claims have been verified.</p></section>
-          <section className="profile-section"><h2>Source information</h2><p>{person.source === 'member' ? 'Member-provided data as of ' : 'Research data as of '}{person.checkedAt}{person.claimed && person.source !== 'member' ? '; owners may have updated these details since import' : ''}. Not independently verified by Armature.</p><p className="fine">{person.source === 'member' ? 'Member-provided summary:' : 'Source-reported summary:'} {person.summary || 'Not provided'}</p><LinkedIn person={person}/></section>
-        </section><aside className="profile-side"><h3>Connect with this person</h3><p>Use their LinkedIn profile to introduce yourself and discuss a possible collaboration.</p><LinkedIn person={person}/><h3>Profile status</h3><Badge claimed={person.claimed}/><p>{availabilityLabel(person.availability)}. Inclusion does not imply membership, endorsement or interest in paid work.</p><button onClick={() => toggle(person.id)}>{shortlist.includes(person.id) ? 'Remove from shortlist' : 'Add to shortlist'}</button></aside></div>
+          <section className="profile-section"><h2>Education</h2><p className="profile-copy">{person.education || 'Not provided'}</p>{person.education && <p className="fine">Member-provided · not independently verified</p>}</section>
+          <TalentPortfolio projects={person.portfolioProjects}/><section className="profile-section"><h2>Source information</h2><p>{person.source === 'member' ? 'Member-provided data as of ' : 'Research data as of '}{person.checkedAt}{person.claimed && person.source !== 'member' ? '; owners may have updated these details since import' : ''}. Not independently verified by Armature.</p><p className="fine">{person.source === 'member' ? 'Member-provided summary:' : 'Source-reported summary:'} {person.summary || 'Not provided'}</p><LinkedIn person={person}/></section>
+        </section><aside className="profile-side"><h3>Connect with this person</h3><p>Use their LinkedIn profile to introduce yourself and discuss a possible collaboration.</p><LinkedIn person={person}/><h3>Profile status</h3><Badge claimed={person.claimed}/><p>{availabilityLabel(person.availability)}. {person.availability === 'available' ? 'Availability is self-reported. Confirm scope and timing directly with this person.' : 'Inclusion does not imply membership, endorsement or interest in paid work.'}</p><button onClick={() => toggle(person.id)}>{shortlist.includes(person.id) ? 'Remove from shortlist' : 'Add to shortlist'}</button></aside></div>
       </> : <div className="empty"><h1 tabIndex={-1}>Profile not found</h1><a href="#talent">Return to directory</a></div> : <>
         <div className="page-heading"><div><h1 tabIndex={-1}>Armature Talent Network</h1><p>Find engineers. Connect with builders. Get things made.</p></div></div>
         <p className="directory-intro">Discover engineers and builders identified through research to help the hardware and robotics ecosystem connect. Unclaimed profiles have not been confirmed by their owners. Inclusion does not imply membership, availability or endorsement.</p>
+        <p className="talent-community-context"><TalentCommunityLink group="engineers"/></p>
         <div className="desk-search"><form className="search-bar" onSubmit={e => { e.preventDefault(); setSearch(query.trim()); if (linkedinIdentity(query)) { setPlace(''); setCategory([]); setCompany(''); setShortlistOnly(false); } setPage(1); }}><Search size={19} aria-hidden="true"/><input aria-label="Search talent" placeholder="Name, skills, company or LinkedIn profile URL…" value={query} onChange={e => setQuery(e.target.value)}/><button type="submit">Search</button></form></div>
         <p className="search-explainer">Paste a LinkedIn profile URL to find that person across the directory, or search by keyword and category. Keyword matches must appear in the supplied fields. Company names do not establish technical experience.</p>
         {search && <div className="query-summary"><span>Search:</span><button onClick={() => { setQuery(''); setSearch(''); setPage(1); }}>{search} <X size={13}/></button><span>Edit the query above to refine it.</span></div>}
@@ -102,7 +114,8 @@ export function TalentDirectory() {
         <nav className="pagination" aria-label="Results pages"><button disabled={currentPage === 1} onClick={() => { setPage(currentPage - 1); window.scrollTo(0, 0); }}>Previous</button><span>Page {currentPage} of {pages}</span><button disabled={currentPage === pages} onClick={() => { setPage(currentPage + 1); window.scrollTo(0, 0); }}>Next</button></nav></div>
         <aside className="shortlist-panel" aria-label="Your shortlist"><h2>Your shortlist · {shortlist.length}</h2>{shortlist.length ? shortlist.map(id => byId.get(id)).filter((p): p is DirectoryPerson => Boolean(p)).map(p => <div className="shortlist-person" key={p.id}><TalentAvatar person={p}/><div><strong>{p.name}</strong><p>{p.title || 'Title not provided'}</p></div><button aria-label={`Remove ${p.name} from shortlist panel`} onClick={() => toggle(p.id)}><X size={13}/></button></div>) : <p>Add engineers to compare their skills and relevant work.</p>}<button className="primary" disabled={!shortlist.length} onClick={() => { setShortlistOnly(!shortlistOnly); setPage(1); }}>{shortlistOnly ? 'Show all results' : 'View shortlisted profiles'}</button><p className="fine">A shortlist is a private research aid. It does not invite people or imply their interest.</p></aside></div>
       </>}
+      <TalentCommunity/>
     </div>
-    <dialog ref={dialog} className="directory-dialog" aria-labelledby="request-heading"><h2 id="request-heading">{request}</h2><p>Project commissioning and assisted matching are coming soon. For now, discover engineers and connect through their LinkedIn profiles.</p><button onClick={() => dialog.current?.close()}>Close</button></dialog>
+
   </div>;
 }
