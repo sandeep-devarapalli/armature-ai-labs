@@ -95,3 +95,12 @@
 .directory-app .talent-local-tools{max-width:1120px;padding:10px 24px;margin:auto;font-size:10px;color:var(--fg-2);border-bottom:1px dashed var(--hair)}
 .directory-app .profile-heading h1{font-family:var(--display)}
 @media(max-width:720px){.directory-app .talent-section-nav{gap:18px;padding:15px 18px}.directory-app .directory-content{padding:28px 18px 45px}}
+
+.directory-app .talent-section-nav{flex-wrap:wrap;overflow:visible;gap:16px}
+.directory-app .talent-member-actions{display:flex;align-items:center;gap:12px;margin-left:auto}
+.directory-app .talent-member-actions .button{display:inline-flex;align-items:center;justify-content:center;gap:8px}
+@media(max-width:720px){.directory-app .talent-member-actions{width:100%;margin-left:0;flex-wrap:wrap}.directory-app .talent-member-actions .button{flex:1;white-space:normal;text-align:center}}
+.directory-app .talent-section-nav>a{padding:6px 0}
+@media(max-width:720px){.directory-app .talent-section-nav{gap:8px 16px}.directory-app .talent-member-actions{margin-top:6px}}
+
+.directory-app .search-heading{margin:24px 0 12px;font-size:20px;line-height:1.4;letter-spacing:-.2px}

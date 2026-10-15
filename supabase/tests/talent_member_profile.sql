@@ -1,0 +1,16 @@
+begin;
+insert into auth.users(id,email_confirmed_at) values ('79000000-0000-4000-8000-000000000001',now()),('79000000-0000-4000-8000-000000000002',now());
+insert into public.talent_profiles(id,data,published) values ('navigation-test','{"name":"Synthetic owner","linkedinUrl":"https://linkedin.com/in/navigation-test"}',false);
+insert into private.talent_owners(profile_id,user_id) values ('navigation-test','79000000-0000-4000-8000-000000000001');
+create function pg_temp.check_true(value boolean) returns void language plpgsql as $$ begin if value is distinct from true then raise exception 'Profile authorization assertion failed'; end if; end $$;
+select pg_temp.check_true(not has_function_privilege('anon','public.talent_my_profile()','execute'));
+set local role authenticated;
+select set_config('request.jwt.claim.sub','79000000-0000-4000-8000-000000000002',true);
+select pg_temp.check_true(public.talent_my_profile() is null);
+select set_config('request.jwt.claim.sub','79000000-0000-4000-8000-000000000001',true);
+select pg_temp.check_true(public.talent_my_profile()='{"id":"navigation-test","published":false}'::jsonb);
+reset role;
+update auth.users set banned_until=now()+interval '1 day' where id='79000000-0000-4000-8000-000000000001';
+set local role authenticated;
+do $$ begin perform public.talent_my_profile(); raise exception 'Banned member was accepted'; exception when insufficient_privilege then null; end $$;
+rollback;
