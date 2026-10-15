@@ -128,5 +128,5 @@ it('opens the direct editor only after ownership is confirmed and hides the dupl
   expect(screen.queryByRole('heading', { name: 'Edit your profile' })).not.toBeInTheDocument();
   await act(async () => late.resolve({ owner: true, admin: false, requests: [] }));
   await screen.findByRole('heading', { name: 'Edit your profile' });
-  expect(screen.queryByRole('button', { name: 'Edit profile', exact: true })).not.toBeInTheDocument();
+  expect(screen.queryByRole('button', { name: 'Edit profile' })).not.toBeInTheDocument();
 });

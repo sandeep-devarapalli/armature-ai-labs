@@ -12,4 +12,4 @@ Validation: 752 frontend tests passed with repository-default membership/onboard
 
 Rendered desktop/mobile checks used localhost:4215 and synthetic accounts: signed-in Add button and email association; sign-out immediately hides member actions and gates the form; Find work hides saved/proposal/post controls; synthetic provider My profile opens owned profile with edit/photo/removal controls and embedded history. Shared header/footer retained. Existing local maker-desk inventory permission errors were observed; no navigation rendering error.
 
-Release requires deploying only migration 202610150004_talent_member_profile.sql, then the checked frontend; do not deploy local .env.local output. Real payments and unrelated activation gates remain unchanged.
+Release requires deploying only migration 202610150009_talent_member_profile.sql, then the checked frontend; do not deploy local .env.local output. Real payments and unrelated activation gates remain unchanged.
