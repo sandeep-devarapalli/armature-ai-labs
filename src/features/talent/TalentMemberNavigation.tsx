@@ -36,7 +36,7 @@ export function TalentMemberNavigation({ route, signedIn, isAdmin, unread, profi
       <a href="#projects" aria-current={route === 'projects' ? 'page' : undefined}>My projects</a>
       {isAdmin && <><a href="#review">Review profiles</a><a href="#market-review">Review work</a></>}
       <div className="talent-member-actions">
-        <a className="button primary" href={profileLabel === 'Add my profile' ? '#add-profile' : '#my-profile'}><UserRound size={16} aria-hidden="true"/>{profileLabel}</a>
+        <a className="button primary" href={profileLabel === 'Add my profile' ? '#add-profile' : profileLabel === 'Edit my profile' ? '#edit-profile' : '#my-profile'}><UserRound size={16} aria-hidden="true"/>{profileLabel}</a>
         <a className="button" href="#post">Post a requirement</a>
       </div>
     </>}

@@ -36,3 +36,9 @@ it('discards ownership responses from a previous account', async () => {
   expect(screen.queryByText('private-profile')).not.toBeInTheDocument();
 });
 it('never reads private profile history for anonymous visitors', () => { render(<State/>); expect(mock.rpc).not.toHaveBeenCalled(); });
+
+it('opens the editor directly from the same member profile action', () => {
+  render(<TalentMemberNavigation route="talent" signedIn isAdmin={false} unread={0} profileLabel="Edit my profile"/>);
+  expect(screen.getByRole('link', { name: 'Edit my profile' })).toHaveAttribute('href', '#edit-profile');
+  expect(screen.queryByRole('link', { name: 'Add my profile' })).not.toBeInTheDocument();
+});

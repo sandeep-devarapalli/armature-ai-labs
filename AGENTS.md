@@ -250,3 +250,5 @@ Use the narrowest checks that match the edit:
 - Talent navigation correction, 15 October 2026: signed-out visitors see only Find talent and Find work in the section navigation. Signed-in members get member actions and a prominent Add my profile / My profile button. Keep private request history within the profile area, preserve old request links, and link new submissions to the authenticated account without publishing its email or auto-claiming by email.
 
 - Talent search clarity correction, 15 October 2026: explain searchable fields visibly above the search input (name, LinkedIn profile, role, skill and company), with concise examples below. Do not rely on placeholder text or technical matching caveats to explain how to search.
+
+- Talent profile action correction, 15 October 2026: the prominent Add my profile button becomes Edit my profile after ownership approval and opens the existing editor directly. Avoid a duplicate owner Edit button; pending submissions retain setup/review status and manual approval remains required.

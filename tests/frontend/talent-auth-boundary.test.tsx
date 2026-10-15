@@ -119,3 +119,14 @@ it('shows pending claims without granting editing access', async () => {
   expect(screen.queryByRole('button', { name: 'Claim this profile' })).not.toBeInTheDocument();
   expect(screen.queryByRole('button', { name: 'Edit profile' })).not.toBeInTheDocument();
 });
+
+it('opens the direct editor only after ownership is confirmed and hides the duplicate edit button', async () => {
+  const late = deferred<unknown>();
+  mock.getUser.mockResolvedValue({ data: { user: { id: 'u1', email_confirmed_at: '2026-01-01' } } });
+  mock.rpc.mockReturnValue(late.promise);
+  render(<MemoryRouter><TalentProfileActions person={person} onChange={vi.fn()} hideOwnerEdit openEditor/></MemoryRouter>);
+  expect(screen.queryByRole('heading', { name: 'Edit your profile' })).not.toBeInTheDocument();
+  await act(async () => late.resolve({ owner: true, admin: false, requests: [] }));
+  await screen.findByRole('heading', { name: 'Edit your profile' });
+  expect(screen.queryByRole('button', { name: 'Edit profile', exact: true })).not.toBeInTheDocument();
+});
