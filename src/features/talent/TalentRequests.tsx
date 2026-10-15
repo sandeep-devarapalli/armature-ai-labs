@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { User } from '@supabase/supabase-js';
+import { PortfolioFields } from './TalentPortfolio';
 import type { DirectoryPerson } from './directorySearch';
 import { TalentPhotoEditor } from './TalentPhoto';
 import { talentClient, talentRpc, type TalentRequest, type TalentStatus } from './liveTalent';
@@ -15,10 +16,12 @@ function ClaimDeclaration({ person }: { person: DirectoryPerson }) {
 }
 function SignIn() { return <Link className="button" to="/auth" state={{ from: typeof window === 'undefined' ? '/talent-network/' : window.location.pathname + window.location.hash }}>Sign in to continue</Link>; }
 function EditFields({ person, save, busy, admin = false, cancel }: { person: DirectoryPerson; save: (patch: Record<string, unknown>) => void; busy: boolean; admin?: boolean; cancel: () => void }) {
+  const [projects, setProjects] = useState(person.portfolioProjects || []);
   return <form className="talent-request-form talent-edit-form" onSubmit={event => {
     event.preventDefault(); const values = new FormData(event.currentTarget); const patch: Record<string, unknown> = {};
     textFields.forEach(key => { patch[key] = String(values.get(key) || '').trim(); });
     listFields.forEach(key => { patch[key] = String(values.get(key) || '').split('\n').map(value => value.trim()).filter(Boolean); });
+    patch.portfolioProjects = projects.map(p => ({ ...p, title: p.title.trim(), summary: p.summary.trim(), contribution: p.contribution.trim(), skills: [...new Set(p.skills.map(s => s.trim()).filter(Boolean))], evidenceUrl: p.evidenceUrl.trim() }));
     patch.availability = String(values.get('availability') || 'unknown'); const years = String(values.get('yearsExperience') || ''); patch.yearsExperience = years === '' ? null : Number(years); if (admin) patch.editNote = String(values.get('editNote') || '').trim(); save(patch);
   }}>
     <h2>{admin ? 'Edit profile as admin' : 'Edit your profile'}</h2>
@@ -26,6 +29,7 @@ function EditFields({ person, save, busy, admin = false, cancel }: { person: Dir
     {listFields.map(key => <label key={key}>{labels[key]} (one per line, maximum 50)<textarea name={key} defaultValue={person[key].join('\n')} rows={3}/></label>)}
     <label>Total experience in years (optional)<input name="yearsExperience" type="number" min="0" max="90" step="0.1" defaultValue={person.yearsExperience ?? ''}/></label>
 <label>Availability<select name="availability" defaultValue={person.availability || 'unknown'}><option value="unknown">Unknown</option><option value="available">Open to projects</option><option value="unavailable">Not currently available</option></select></label>
+    <PortfolioFields projects={projects} onChange={setProjects} disabled={busy}/>
     {admin && <label className="edit-wide">Reason for this edit<textarea name="editNote" required minLength={10} maxLength={4000} rows={2} placeholder="What changed and the source used to verify it"/></label>}
     <p className="fine edit-wide">These details will be public. Do not include private contact information. LinkedIn identity and verification status cannot be changed here.</p><div className="edit-buttons"><button className="primary" disabled={busy}>{busy ? 'Saving…' : 'Save profile'}</button><button type="button" disabled={busy} onClick={cancel}>Cancel</button></div>
   </form>;

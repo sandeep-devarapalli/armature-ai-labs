@@ -85,3 +85,29 @@ describe('talent sign-in return paths', () => {
     expect(onboardingAuthReturnPath('/admin/talent-network/', true)).toBe('/onboarding');
   });
 });
+
+
+describe('portfolio evidence search', () => {
+  const project = { title: 'Board bring-up', summary: 'Real-time sensor acquisition', contribution: 'Wrote embedded drivers and drone telemetry', skills: ['SPI'], evidenceUrl: 'https://example.org/secretkeyword' };
+  const portfolioIndex = buildDirectoryIndex([
+    person('portfolio', { portfolioProjects: [project] }),
+    person('employer-only', { title: 'Embedded Engineer', company: 'Drone Works', portfolioProjects: [{ ...project, contribution: 'Built invoice software' }] }),
+    person('skills', { portfolioProjects: [{ ...project, contribution: 'Implemented a controller', skills: ['Firmware', 'UAV'] }] }),
+  ]);
+  const find = (query: string) => searchDirectory(portfolioIndex, { query, location: '', category: [], company: '', sort: 'relevance' });
+  it('finds supplied individual contributions and project skills with precise evidence', () => {
+    const results = find('embedded drone');
+    expect(results.map(r => r.person.id)).toEqual(['portfolio', 'skills']);
+    expect(results[0].matches).toEqual(['Project 1 (self-reported) individual contribution: Wrote embedded drivers and drone telemetry']);
+    expect(results[1].matches).toEqual(['Project 1 (self-reported) skill: Firmware', 'Project 1 (self-reported) skill: UAV']);
+  });
+  it('finds project title and summary without claiming independent verification', () => {
+    expect(find('bring-up')[0].matches).toContain('Project 1 (self-reported) title: Board bring-up');
+    expect(find('sensor')[0].matches).toContain('Project 1 (self-reported) summary: Real-time sensor acquisition');
+  });
+  it('does not use evidence URLs or an employer as personal domain evidence', () => {
+    expect(find('secretkeyword')).toEqual([]);
+    expect(find('embedded drone').some(r => r.person.id === 'employer-only')).toBe(false);
+    expect(find('Drone Works')[0].matches).toContain('Company: Drone Works');
+  });
+});

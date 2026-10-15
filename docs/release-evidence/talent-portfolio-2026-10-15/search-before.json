@@ -1,0 +1,41 @@
+{
+  "runtime": "v22.22.2",
+  "platform": "darwin arm64 27.2.0",
+  "records": 8025,
+  "inputSha256": "adb76acd0439d58beaa72563f970a06eea212ed7d2a04a5f86a9f0b9445c3268",
+  "concurrency": 1,
+  "warmups": 10,
+  "rounds": 30,
+  "cases": {
+    "original": {
+      "indexMedianMs": 106.12970900000005,
+      "indexMaxMs": 124.11699999999996,
+      "searchMedianMs": 5.331542000000127,
+      "searchP95Ms": 11.520207999999911,
+      "resultCounts": [
+        81,
+        2897,
+        26,
+        2062,
+        0,
+        8025
+      ],
+      "resultIdentityHash": "ab26f78602a63fff8ab1b75695ca28a3713423233278c4f4646c666bc661a676"
+    },
+    "syntheticPortfolioOverlay": {
+      "indexMedianMs": 119.29587500000025,
+      "indexMaxMs": 167.25958300000002,
+      "searchMedianMs": 5.5437080000001515,
+      "searchP95Ms": 11.71374999999989,
+      "resultCounts": [
+        81,
+        2897,
+        26,
+        2062,
+        0,
+        8025
+      ],
+      "resultIdentityHash": "ab26f78602a63fff8ab1b75695ca28a3713423233278c4f4646c666bc661a676"
+    }
+  }
+}

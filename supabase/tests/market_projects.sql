@@ -1,0 +1,60 @@
+begin;
+insert into auth.users(id,email_confirmed_at) values('75000000-0000-4000-8000-000000000001',now()),('75000000-0000-4000-8000-000000000002',now()),('75000000-0000-4000-8000-000000000003',now());
+insert into public.staff_roles(user_id,role) values('75000000-0000-4000-8000-000000000003','admin');
+insert into public.talent_profiles(id,data) values('market-provider','{"name":"Synthetic Provider","linkedinUrl":"https://linkedin.com/in/market-provider"}');
+insert into private.talent_owners values('market-provider','75000000-0000-4000-8000-000000000002',now());
+create function pg_temp.ok(v boolean,m text) returns void language plpgsql as $$begin if v is distinct from true then raise exception '%',m; end if; end$$;
+create function pg_temp.denied(q text) returns void language plpgsql as $$begin begin execute q; exception when others then return; end; raise exception 'Expected rejection: %',q; end$$;
+set local role authenticated;
+select set_config('request.jwt.claim.sub','75000000-0000-4000-8000-000000000001',true);
+select public.market_project_action(null,'create','{"title":"Synthetic PCB","deliverables":"Editable board","acceptance":"DRC passes"}')->'project'->>'id' as project \gset
+select public.market_project_action(:'project','submit_review');
+select pg_temp.denied(format('select public.market_project_action(%L,''publish'')',:'project'));
+select set_config('request.jwt.claim.sub','75000000-0000-4000-8000-000000000003',true);
+select public.market_project_action(:'project','publish');
+select set_config('request.jwt.claim.sub','75000000-0000-4000-8000-000000000002',true);
+select public.market_project_action(:'project','propose','{"approach":"Design with review","schedule":"One week","ipTerms":"Editable source transferred","confidentiality":"Private","revisions":1,"milestones":[{"title":"Board","deliverables":"Sources","acceptance":"DRC","serviceAmount":1000,"materialsAmount":200}]}')->'proposals'->0->>'id' as proposal \gset
+select set_config('request.jwt.claim.sub','75000000-0000-4000-8000-000000000003',true);
+select pg_temp.ok(jsonb_array_length(public.market_project_detail(:'project')->'proposals')=0,'Admin cannot read proposals');
+select set_config('request.jwt.claim.sub','75000000-0000-4000-8000-000000000001',true);
+select public.market_project_action(:'project','select_provider',jsonb_build_object('proposalId',:'proposal'));
+select public.market_project_action(:'project','agree','{"version":1}');
+select set_config('request.jwt.claim.sub','75000000-0000-4000-8000-000000000002',true);
+select public.market_project_action(:'project','agree','{"version":1}')->'milestones'->0->>'id' as milestone \gset
+select pg_temp.denied(format('select public.market_simulate_payment(%L,''fund'')',:'milestone'));
+reset role;
+select pg_temp.denied(format('select public.market_simulate_payment(%L,''fund'')',:'milestone'));
+set local armature.local_market_simulator='on';
+select public.market_simulate_payment(:'milestone','fund');
+select pg_temp.denied(format('select public.market_simulate_payment(%L,''payout'')',:'milestone'));
+set local role authenticated;
+select public.market_project_action(:'project','submit_deliverable',jsonb_build_object('milestoneId',:'milestone','delivery','Board source delivered'));
+select public.market_project_action(:'project','accept_delivery',jsonb_build_object('milestoneId',:'milestone','version',1));
+select set_config('request.jwt.claim.sub','75000000-0000-4000-8000-000000000001',true);
+select pg_temp.denied(format('select public.market_project_action(%L,''accept_delivery'',%L)',:'project',jsonb_build_object('milestoneId',:'milestone','version',0)::text));
+select public.market_project_action(:'project','accept_delivery',jsonb_build_object('milestoneId',:'milestone','version',1));
+reset role;
+-- A new submission invalidates both earlier approvals.
+set local role authenticated;
+select set_config('request.jwt.claim.sub','75000000-0000-4000-8000-000000000002',true);
+select public.market_project_action(:'project','submit_deliverable',jsonb_build_object('milestoneId',:'milestone','delivery','Revised sources'));
+reset role;
+select pg_temp.denied(format('select public.market_simulate_payment(%L,''payout'')',:'milestone'));
+update private.market_milestones set submitted_at=now()-interval '4 days' where id=:'milestone';
+select pg_temp.ok(public.market_process_reminders()=1,'Day 3 reminder');
+select pg_temp.ok(public.market_process_reminders()=0,'Reminder idempotency');
+update private.market_milestones set submitted_at=now()-interval '8 days' where id=:'milestone';
+select pg_temp.ok(public.market_process_reminders()=1,'Day 7 mediation');
+set local role authenticated;
+select public.market_project_action(:'project','accept_delivery',jsonb_build_object('milestoneId',:'milestone','version',2));
+select set_config('request.jwt.claim.sub','75000000-0000-4000-8000-000000000001',true);
+select public.market_project_action(:'project','accept_delivery',jsonb_build_object('milestoneId',:'milestone','version',2));
+select public.market_project_action(:'project','dispute',jsonb_build_object('milestoneId',:'milestone','reason','Synthetic conflict'));
+reset role;
+select pg_temp.denied(format('select public.market_simulate_payment(%L,''payout'')',:'milestone'));
+-- Test-only resolution; operational mediated resolution is not exposed yet.
+update private.market_milestones set disputed=false,mediation=false where id=:'milestone';
+select public.market_simulate_payment(:'milestone','payout');
+select pg_temp.ok((select status='completed' from private.market_projects where id=:'project'),'Completed only after payout');
+select pg_temp.ok((select payload->>'serviceFee'='100.00' from private.market_activity where project_id=:'project' and event='simulated_payout'),'Fee excludes materials');
+rollback;

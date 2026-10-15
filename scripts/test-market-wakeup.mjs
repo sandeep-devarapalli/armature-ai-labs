@@ -1,0 +1,42 @@
+// Synthetic authorization checks only; no database access, email or network requests.
+import assert from 'node:assert/strict';
+import { createHmac } from 'node:crypto';
+import { build } from 'esbuild';
+const key='synthetic-wakeup-key-'.repeat(3),job='synthetic-job-secret-'.repeat(3);
+globalThis.Deno={env:{get:name=>name==='WAKE_KEY'?key:name==='JOB_KEY'?job:undefined}};
+const output=await build({entryPoints:['supabase/functions/_shared/market-wakeup.ts'],write:false,bundle:true,platform:'node',format:'esm'});
+const {authorizeMarketWakeup}=await import('data:text/javascript;base64,'+Buffer.from(output.outputFiles[0].text).toString('base64'));
+const now=Math.floor(Date.now()/1000);
+const sign=(prefix,stamp)=>createHmac('sha256',key).update(`${prefix}:${stamp}`).digest('hex');
+const auth=(headers,body)=>authorizeMarketWakeup(new Request('https://localhost',{method:'POST',headers,body}), 'market-message-reminders','WAKE_KEY','JOB_KEY');
+const signed=(stamp=now,prefix='market-message-reminders')=>({'x-armature-wakeup-time':String(stamp),'x-armature-wakeup-signature':sign(prefix,stamp)});
+let checks=0;
+assert.equal(await auth(signed(),'{}'),true);checks++;
+assert.equal(await auth(signed()),true);checks++;
+assert.equal(await auth(signed(now-31),'{}'),false);checks++;
+assert.equal(await auth(signed(now+31),'{}'),false);checks++;
+assert.equal(await auth(signed(now,'market-message-maintenance'),'{}'),false);checks++;
+assert.equal(await auth({...signed(),'x-armature-wakeup-signature':'f'.repeat(64)},'{}'),false);checks++;
+assert.equal(await auth({...signed(),'x-armature-wakeup-time':'1e10'},'{}'),false);checks++;
+assert.equal(await auth({'x-armature-job-secret':job},'{}'),true);checks++;
+assert.equal(await auth({'x-armature-job-secret':'bad'},'{}'),false);checks++;
+assert.equal(await auth(signed(),'x'.repeat(65)),false);checks++;
+assert.equal(await auth(signed(),'{"operation":"other"}'),false);checks++;
+assert.equal(await auth({...signed(),'content-length':'1000'},'{}'),false);checks++;
+assert.equal(await auth({...signed(now-31),'x-armature-job-secret':job},'{}'),false);checks++;
+const blocked=new Request('https://localhost',{method:'POST',headers:signed(),body:new ReadableStream({start(){}}),duplex:'half'});
+assert.equal(await authorizeMarketWakeup(blocked,'market-message-reminders','WAKE_KEY','JOB_KEY'),false);checks++;
+let handler;let calls=0;
+const env=new Map([['MARKET_MESSAGE_WAKEUP_KEY',key],['MARKET_FILE_CLEANUP_WAKEUP_KEY',key],['MARKET_MESSAGE_EMAIL_ENABLED','false'],['MARKET_FILE_CLEANUP_ENABLED','true']]);
+globalThis.Deno={env:{get:name=>env.get(name)},serve:fn=>handler=fn};
+globalThis.__wakeupClient={rpc:async name=>{calls++;return {error:null,data:name==='market_attachment_cleanup_candidates'?[]:0};}};
+for(const endpoint of ['market-message-reminders','market-message-maintenance']){
+ const worker=await build({entryPoints:[`supabase/functions/${endpoint}/index.ts`],write:false,bundle:true,platform:'node',format:'esm',plugins:[{name:'local-stub',setup(b){b.onResolve({filter:/_shared\/supabase.ts$/},()=>({path:'stub',namespace:'stub'}));b.onLoad({filter:/.*/,namespace:'stub'},()=>({contents:'export const adminClient=()=>globalThis.__wakeupClient;'}));}}]});
+ await import('data:text/javascript;base64,'+Buffer.from(worker.outputFiles[0].text).toString('base64'));
+ const stamp=Math.floor(Date.now()/1000);
+ assert.equal((await handler(new Request('https://localhost',{method:'POST',headers:signed(stamp,endpoint),body:'{}'}))).status,200);checks++;
+ const before=calls;
+ assert.equal((await handler(new Request('https://localhost',{method:'POST',headers:signed(stamp-31,endpoint),body:'{}'}))).status,401);assert.equal(calls,before);checks++;
+ assert.equal((await handler(new Request('https://localhost',{method:'POST',headers:signed(stamp,'other-purpose'),body:'{}'}))).status,401);assert.equal(calls,before);checks++;
+}
+console.log(JSON.stringify({checks,result:'passed',scope:'synthetic HMAC expiry, purpose, body bounds and legacy authorization'}));

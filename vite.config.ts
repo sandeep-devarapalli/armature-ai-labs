@@ -1,3 +1,4 @@
+import { marketplaceLocal } from "./scripts/vite/marketplaceLocal";
 import { equipmentReferencePreview } from "./scripts/vite/equipmentReferencePreview";
 import { defineConfig } from "vitest/config";
 import react from "@vitejs/plugin-react";
@@ -38,6 +39,7 @@ export default defineConfig(({ mode }) => {
   },
   plugins: [
     equipmentReferencePreview(),
+    marketplaceLocal(env.VITE_SUPABASE_URL),
     react(),
     {
       name: "prerender-public-pages",

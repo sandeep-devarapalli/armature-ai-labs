@@ -1,0 +1,19 @@
+{
+  "checkedAt": "2026-10-15T04:28:30.719Z",
+  "passed": 11,
+  "checks": [
+    "baseline 4 accounts and 8025 profiles",
+    "three real confirmed password sign-ins",
+    "all four WebSocket subscriptions reached SUBSCRIBED",
+    "sender and intended recipient receive real WebSocket events",
+    "unrelated JWT receives no spoofed-recipient or own-filter events",
+    "sender receives positive control after recipient ban",
+    "pre-ban JWT receives no post-ban WebSocket event",
+    "outsider remains excluded after second event",
+    "banned recipient RPC denied",
+    "exact fixture cleanup returns original 4 accounts and 8025 profiles",
+    "no conversations or messages remain"
+  ],
+  "error": null,
+  "scope": "Production WebSocket isolation using disposable synthetic accounts; no public profiles or emails"
+}
