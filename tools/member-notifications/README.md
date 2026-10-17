@@ -89,3 +89,19 @@ metadata. The monitor accepts that complete schema alongside the earlier two
 schemas. All three marketplace counters remain actionable. Unknown fields,
 partial schemas, malformed counters and inconsistent attention flags still fail
 closed. Only aggregate counts are logged; worker metadata is validated but omitted.
+
+## Confirmation classification and recovery (17 October 2026)
+
+Signup confirmation subject `Confirm your email address` is also recognised by the
+signed, project-bound Auth recorder. Unknown subjects remain actionable: additions
+or renames to Auth templates must update and test this allowlist in both the webhook
+and database before release. Do not classify solely by delivery success or sender.
+
+`alert_policy.py` defines the replacement failure condition: at least one failed
+execution OR no successful execution in the same 30-minute window. It fires on
+missing telemetry and cannot recover merely because an old failure expires.
+Recovery requires a newer successful check and a full clean window; Google metric
+and incident evaluation can add delay. The existing 45-minute missing-success
+policy remains an independent safeguard. During policy migration, suppress only
+CLOSED messages on the old rule until the new rule is installed; restore recovery
+notifications after a genuine healthy scheduled execution. Do not disable detection.

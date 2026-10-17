@@ -252,3 +252,5 @@ Use the narrowest checks that match the edit:
 - Talent search clarity correction, 15 October 2026: explain searchable fields visibly above the search input (name, LinkedIn profile, role, skill and company), with concise examples below. Do not rely on placeholder text or technical matching caveats to explain how to search.
 
 - Talent profile action correction, 15 October 2026: the prominent Add my profile button becomes Edit my profile after ownership approval and opens the existing editor directly. Avoid a duplicate owner Edit button; pending submissions retain setup/review status and manual approval remains required.
+
+- Notification recovery correction, 17 October 2026: a failed-execution count aging out is not recovery. Require an observed successful monitor execution before recovery notifications; validate failure, silence and recovery timelines. Authentication template changes must update the protected sender/project/subject classification and regression tests together. Preserve unknown reports and genuine delivery failures; never clear alerts by resending or deleting evidence.
