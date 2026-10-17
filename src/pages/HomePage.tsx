@@ -24,6 +24,9 @@ import {
 import type { LucideIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { FieldOfTouch } from "../components/FieldOfTouch";
+import { PixelPhoto } from "../components/PixelPhoto";
+import { VitruvianSketch } from "../components/VitruvianSketch";
+import "./HomePagePixel.css";
 import { Metric, Section } from "../components/Primitives";
 import { basicOnboardingAvailable, equipmentPageAvailable, memberPlatformAvailable } from "../config/release";
 
@@ -107,7 +110,7 @@ const labRoles = [
 export function HomePage() {
   const registrationLabel = useRegistrationLabel();
   return (
-    <>
+    <div className="landing-pixel">
       <header className="home-hero home-hero-integrated">
         <div className="wrap home-hero-inner">
           <div className="editorial-hero-grid editorial-hero-motion"><div className="editorial-hero-copy">
@@ -164,12 +167,15 @@ export function HomePage() {
               <ExternalLink aria-hidden="true" />
             </a>
           </div>
-          </div><FieldOfTouch scene="scanner" priority /></div>
-          <div className="metrics-strip">
-            <Metric label="Footprint" value="3,500 sq ft" />
-            <Metric label="Floors" value="2" />
-            <Metric label="Planned cabins" value="7" />
-            <Metric label="Balconies + terrace" value="3" />
+          </div><FieldOfTouch scene="scanner" priority look="pixel" /></div>
+          <div className="hero-measure">
+            <div className="metrics-strip">
+              <Metric label="Footprint" value="3,500 sq ft" />
+              <Metric label="Floors" value="2" />
+              <Metric label="Planned cabins" value="7" />
+              <Metric label="Balconies + terrace" value="3" />
+            </div>
+            <VitruvianSketch />
           </div>
         </div>
       </header>
@@ -179,8 +185,27 @@ export function HomePage() {
         title="A working floor, not a club lounge"
         lede="The plan is for every room to hold a real project in progress."
       >
-        <div className="section-motion"><FieldOfTouch scene="interior" />
+        <div className="section-motion"><FieldOfTouch scene="interior" look="pixel" />
           <p className="motion-note">An illustrative laboratory study, not footage of Armature facilities.</p>
+        </div>
+        <div className="space-plates" aria-label="Photographs of the Armature AI Labs building during fit-out">
+          <PixelPhoto
+            src="/media/space/event-space-fit-out.jpg"
+            width={1600}
+            height={728}
+            alt="The event space during fit-out: tall wooden-framed windows, track spotlights and linear lights, with protective board over the floor."
+            label="Tav. I"
+            caption="The event space during fit-out, October 2026."
+          />
+          <PixelPhoto
+            src="/media/space/hall-fit-out.jpg"
+            width={1600}
+            height={728}
+            alt="A long hall with wooden flooring and a staircase at the far end, with tools and materials from the fit-out on the floor."
+            label="Tav. II"
+            caption="Inside HSR 1490 during fit-out, October 2026."
+          />
+          <p className="space-plates-note mono">Photographs of the building in progress, shown with a pixel treatment. Fit-out is not complete.</p>
         </div>
         <div className="role-list">
           {labRoles.map((role) => (
@@ -284,7 +309,7 @@ export function HomePage() {
         title="From idea to working machine"
         lede="The intended workflow: work enters as a sketch and leaves as a machine someone has watched run."
       >
-        <div className="section-motion motion-pair"><FieldOfTouch scene="gripper" /><FieldOfTouch scene="arm" /></div>
+        <div className="section-motion motion-pair"><FieldOfTouch scene="gripper" look="pixel" /><FieldOfTouch scene="arm" look="pixel" /></div>
         <div className="process-line pipeline-line">
           {[
             ["Sketch", "Define the job and the test."],
@@ -363,7 +388,7 @@ export function HomePage() {
           </Link>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
