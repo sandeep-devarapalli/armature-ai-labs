@@ -87,3 +87,57 @@ it('confirms and clears successful reports, while retaining failed report drafts
  fail=false;fireEvent.click(screen.getByRole('button',{name:'Send report'}));
  await screen.findByText('Report submitted. An authorised reviewer will review your concern.');expect(reason).toHaveValue('');
 });
+
+it('shows complete revised terms before either party accepts, including precise prices',async()=>{
+ const project={id:'agreement-project',buyer_id:'recipient',provider_id:'provider',status:'agreement',agreement_version:2,buyer_agreed:1,provider_agreed:null,brief:{title:'Revised sensor board',skills:[]},agreement:{approach:'Build revised board',relevantWork:'https://example.com/portfolio',schedule:'Three weeks',ipTerms:'Editable KiCad sources transferred',confidentiality:'Keep prototype confidential',revisions:2,milestones:[{title:'Revised prototype',deliverables:'PCB and test report',acceptance:'Pass revised noise threshold',serviceAmount:1000.25,materialsAmount:200.50}]}};
+ rpc.mockImplementation(async(name:string,args?:{action?:string})=>{
+  if(name==='market_project_action'&&args?.action==='agree')return {project:{...project,buyer_agreed:2},proposals:[],milestones:[],activity:[]};
+  return {project,proposals:[],milestones:[],activity:[]};
+ });
+ render(<TalentMarketplace route="project/agreement-project"/>);
+ await act(async()=>{await Promise.resolve();});
+ fireEvent.click(await screen.findByRole('button',{name:'Milestones'}));
+ expect(screen.getByText('Three weeks')).toBeTruthy();expect(screen.getByText('Included revision rounds: 2')).toBeTruthy();
+ expect(screen.getByText('Deliverables: PCB and test report')).toBeTruthy();expect(screen.getByText('Acceptance criteria: Pass revised noise threshold')).toBeTruthy();
+ expect(screen.getByText(/Service: ₹1,000.25/)).toBeTruthy();expect(screen.getByText('Total: ₹1,200.75')).toBeTruthy();
+ expect(screen.getByText('Editable KiCad sources transferred')).toBeTruthy();expect(screen.getByText('Keep prototype confidential')).toBeTruthy();
+ expect(screen.getByRole('link',{name:'https://example.com/portfolio'})).toHaveAttribute('href','https://example.com/portfolio');
+ expect(screen.getByText('Buyer: Awaiting acceptance · Provider: Awaiting acceptance')).toBeTruthy();
+ fireEvent.click(screen.getByRole('button',{name:'Accept this agreement version'}));
+ await waitFor(()=>expect(rpc).toHaveBeenCalledWith('market_project_action',{project_id:'agreement-project',action:'agree',payload:{version:2}}));
+ expect(await screen.findByText('Buyer: Accepted this version · Provider: Awaiting acceptance')).toBeTruthy();
+ expect(screen.getByRole('button',{name:'You accepted this version'})).toBeDisabled();
+ expect(screen.queryByRole('button',{name:'Submit deliverable'})).toBeNull();
+ expect(rpc.mock.calls.some(([name])=>name==='market_simulate_payment')).toBe(false);
+});
+
+it('links each buyer proposal to its own project conversation and retains the selected thread',async()=>{
+ const project={id:'project',buyer_id:'recipient',provider_id:'provider-two',status:'agreement',brief:{title:'Private proposal threads',skills:[]}};
+ const chat=(id:string,provider:string,projectId='project')=>({id,kind:'project',project_id:projectId,initiator_id:'recipient',recipient_id:provider});
+ rpc.mockImplementation(async(name:string)=>name==='market_conversations'?[chat('other-project','provider-one','different-project'),chat('first-thread','provider-one'),chat('second-thread','provider-two')]:{project,proposals:[{id:'one',provider_id:'provider-one',offer:{milestones:[]}},{id:'two',provider_id:'provider-two',offer:{milestones:[]}}],milestones:[],activity:[]});
+ render(<TalentMarketplace route="project/project"/>);
+ expect(await screen.findByRole('link',{name:'Project conversation →'})).toHaveAttribute('href','#messages/second-thread');
+ fireEvent.click(screen.getByRole('button',{name:'Proposals'}));
+ await waitFor(()=>expect(screen.getAllByRole('link',{name:'Open private messages'}).map(link=>link.getAttribute('href'))).toEqual(['#messages/first-thread','#messages/second-thread']));
+});
+
+it('does not map a provider to a competing provider conversation or another project',async()=>{
+ const project={id:'project',buyer_id:'buyer',status:'open',brief:{title:'Provider privacy',skills:[]}};
+ rpc.mockImplementation(async(name:string)=>name==='market_conversations'?[{id:'competitor',kind:'project',project_id:'project',initiator_id:'buyer',recipient_id:'competitor'},{id:'other-project',kind:'project',project_id:'another-project',initiator_id:'buyer',recipient_id:'recipient'}]:{project,proposals:[{id:'own',provider_id:'recipient',offer:{milestones:[]}}],milestones:[],activity:[]});
+ render(<TalentMarketplace route="project/project"/>);
+ await act(async()=>{await Promise.resolve();});
+ fireEvent.click(await screen.findByRole('button',{name:'Proposals'}));
+ expect(screen.queryByRole('link',{name:'Open private messages'})).toBeNull();
+ expect(screen.queryByRole('link',{name:'Project conversation →'})).toBeNull();
+ expect(document.querySelector('a[href="#messages/competitor"]')).toBeNull();
+});
+
+it('only offers saving on open project cards, not selected-provider agreements',async()=>{
+ rpc.mockImplementation(async(name:string)=>name==='market_list_projects'?[
+  {id:'open-project',buyer_id:'buyer',status:'open',brief:{title:'Open brief',skills:[]}},
+  {id:'agreed-project',buyer_id:'buyer',provider_id:'recipient',status:'agreement',brief:{title:'Agreed brief',skills:[]}}
+ ]:[]);
+ render(<TalentMarketplace route="work"/>);
+ await waitFor(()=>expect(screen.getAllByRole('button',{name:'Save'})).toHaveLength(1));
+ expect(screen.getByRole('link',{name:'Agreed brief'}).closest('article')?.querySelector('button')).toBeNull();
+});

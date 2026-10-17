@@ -79,6 +79,7 @@ jobs:
           PGPASSWORD: postgres
         run: |
           psql -v ON_ERROR_STOP=1 -f supabase/tests/talent_network.sql
+          psql -v ON_ERROR_STOP=1 -f supabase/tests/talent_member_profile.sql
           psql -v ON_ERROR_STOP=1 -f supabase/tests/talent_profile_photos.sql
           psql -v ON_ERROR_STOP=1 -f supabase/tests/talent_admin_edit.sql
           psql -v ON_ERROR_STOP=1 -f supabase/tests/talent_claim_declaration.sql
@@ -92,6 +93,7 @@ jobs:
           psql -v ON_ERROR_STOP=1 -f supabase/tests/market_file_cleanup.sql
           psql -v ON_ERROR_STOP=1 -f supabase/tests/market_file_limit.sql
           psql -v ON_ERROR_STOP=1 -f supabase/tests/market_operations.sql
+          psql -v ON_ERROR_STOP=1 -f supabase/tests/market_brief_revision.sql
           psql -v ON_ERROR_STOP=1 -f supabase/tests/market_authorization.sql
           psql -v ON_ERROR_STOP=1 -f supabase/tests/market_wakeups.sql
           psql -v ON_ERROR_STOP=1 -f supabase/tests/market_worker_health.sql
