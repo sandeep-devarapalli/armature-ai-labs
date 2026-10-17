@@ -4,7 +4,7 @@ import json
 import os
 import signal
 import sys
-from urllib.error import HTTPError
+from urllib.error import HTTPError, URLError
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 ENDPOINT = 'https://uxfhdfagrmaeyuaipaar.supabase.co/functions/v1/member-notification-maintenance'
@@ -14,6 +14,7 @@ COUNTS = LEGACY_COUNTS | ATLAS_COUNTS
 MARKET_COUNTS = {'market_worker_failed', 'market_worker_stale', 'market_cleanup_backlog'}
 MARKET_JOBS = {'market-message-reminders-every-five-minutes', 'market-private-file-cleanup-daily'}
 HEALTH_FIELDS = {'sending_enabled', 'cleanup_enabled', 'last_cleanup_at', 'cleanup_overdue'}
+ERROR_CODES = {'invalid_configuration', 'unexpected_response', 'response_too_large', 'request_failed', 'invalid_response', 'invalid_cleanup', 'invalid_health', 'invalid_attention'}
 
 
 class NoRedirect(HTTPRedirectHandler):
@@ -77,7 +78,15 @@ def check(secret):
     attention = bool(health['cleanup_overdue'] or any(health[k] for k in counts - {'held', 'history_due'}) or (not cleanup['dry_run'] and cleanup['remaining']))
     if type(result['attention']) is not bool or result['attention'] != attention:
         raise ValueError('invalid_attention')
-    return {'attention': attention, 'dry_run': cleanup['dry_run'], 'history': cleanup['history'], 'receipts': cleanup['receipts'], **{k: health[k] for k in sorted(counts)}, 'cleanup_overdue': health['cleanup_overdue']}
+    issues = sorted(k for k in counts - {'held', 'history_due'} if health[k])
+    if health['cleanup_overdue']:
+        issues.append('cleanup_overdue')
+    if not cleanup['dry_run'] and cleanup['remaining']:
+        issues.append('cleanup_backlog')
+    result = {'attention': attention, 'issue_codes': issues, 'dry_run': cleanup['dry_run'], 'history': cleanup['history'], 'receipts': cleanup['receipts'], **{k: health[k] for k in sorted(counts)}, 'cleanup_overdue': health['cleanup_overdue']}
+    if 'market_workers' in health:
+        result['market_workers'] = health['market_workers']
+    return result
 
 
 def deadline_expired(signum, frame):
@@ -91,8 +100,9 @@ def main():
         result = check(os.environ.get('MEMBER_NOTIFICATIONS_MAINTENANCE_SECRET', ''))
         print(json.dumps({'severity': 'WARNING' if result['attention'] else 'INFO', 'event': 'member_notifications_checked', **result}), flush=True)
         return 1 if result['attention'] else 0
-    except Exception:
-        print(json.dumps({'severity': 'ERROR', 'event': 'member_notifications_monitor_failed'}), flush=True)
+    except Exception as error:
+        code = 'monitor_timeout' if isinstance(error, TimeoutError) else 'network_error' if isinstance(error, URLError) else str(error) if type(error) is ValueError and str(error) in ERROR_CODES else 'unexpected_error'
+        print(json.dumps({'severity': 'ERROR', 'event': 'member_notifications_monitor_failed', 'error_code': code}), flush=True)
         return 1
     finally:
         signal.setitimer(signal.ITIMER_REAL, 0)

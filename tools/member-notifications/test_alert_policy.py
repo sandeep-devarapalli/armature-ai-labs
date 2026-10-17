@@ -1,5 +1,5 @@
 import unittest
-from alert_policy import CONDITION, QUERY, WINDOW_MINUTES
+from alert_policy import CONDITION, DOCUMENTATION, DISPLAY_NAME, QUERY, WINDOW_MINUTES
 
 
 def firing(events, now):
@@ -25,6 +25,15 @@ class RecoveryTests(unittest.TestCase):
         self.assertFalse(firing([(0, 'succeeded'), (15, 'succeeded')], 29))
         self.assertTrue(firing([(0, 'failed'), (0, 'succeeded')], 10))
         self.assertTrue(firing([(0, 'failed'), (0, 'succeeded')], 30))
+
+    def test_alert_subject_identifies_service_without_missing_resource_labels(self):
+        self.assertIn('Armature background jobs', DISPLAY_NAME)
+        self.assertIn('Armature background jobs', DOCUMENTATION['subject'])
+        self.assertNotIn('${', DOCUMENTATION['subject'])
+        self.assertLessEqual(len(DOCUMENTATION['subject'].encode()), 255)
+        for detail in ('market_worker_failed', 'market_workers', 'issue_codes',
+                       'member_notifications_monitor_failed', '30-minute window'):
+            self.assertIn(detail, DOCUMENTATION['content'])
 
     def test_query_contract(self):
         self.assertEqual(QUERY.count('[30m]'), 2)

@@ -29,7 +29,7 @@ assert.equal(await authorizeMarketWakeup(blocked,'market-message-reminders','WAK
 let handler;let calls=0;
 const env=new Map([['MARKET_MESSAGE_WAKEUP_KEY',key],['MARKET_FILE_CLEANUP_WAKEUP_KEY',key],['MARKET_MESSAGE_EMAIL_ENABLED','false'],['MARKET_FILE_CLEANUP_ENABLED','true']]);
 globalThis.Deno={env:{get:name=>env.get(name)},serve:fn=>handler=fn};
-globalThis.__wakeupClient={rpc:async name=>{calls++;return {error:null,data:name==='market_attachment_cleanup_candidates'?[]:0};}};
+globalThis.__wakeupClient={rpc:name=>{calls++;const result={status:200,error:null,data:name==='market_attachment_cleanup_candidates'?[]:0};return Object.assign(Promise.resolve(result),{abortSignal:()=>Promise.resolve(result)});}};
 for(const endpoint of ['market-message-reminders','market-message-maintenance']){
  const worker=await build({entryPoints:[`supabase/functions/${endpoint}/index.ts`],write:false,bundle:true,platform:'node',format:'esm',plugins:[{name:'local-stub',setup(b){b.onResolve({filter:/_shared\/supabase.ts$/},()=>({path:'stub',namespace:'stub'}));b.onLoad({filter:/.*/,namespace:'stub'},()=>({contents:'export const adminClient=()=>globalThis.__wakeupClient;'}));}}]});
  await import('data:text/javascript;base64,'+Buffer.from(worker.outputFiles[0].text).toString('base64'));
