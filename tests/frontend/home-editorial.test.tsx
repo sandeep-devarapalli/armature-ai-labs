@@ -19,9 +19,8 @@ describe("Full editorial landing page", () => {
       "Monitored, end to end", "From idea to working machine",
       "The maker desk keeps small friction small", "Book, build, and leave a clean trail"
     ]) expect(screen.getByRole("heading", { name, level: 2 })).toBeInTheDocument();
-    expect(screen.getByText(/9 rooms · 1,550 sq ft carpet/)).toBeInTheDocument();
-    expect(screen.getByText(/6 rooms · 1,475 sq ft carpet/)).toBeInTheDocument();
-    expect(screen.getByText("Glass-enclosed workshop proposal · curved balcony retained")).toBeInTheDocument();
+    // The per-room programme was removed from the landing page on 17 October 2026 (owner request).
+    expect(screen.queryByText(/sq ft carpet/)).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Join Discord" })).toHaveAttribute("href", "https://discord.gg/qGNXGmF8z");
     expect(screen.getByRole("link", { name: "Membership enquiries" })).toHaveAttribute("href", "/join");
     expect(screen.queryByText(/sixteen builder pods/i)).not.toBeInTheDocument();

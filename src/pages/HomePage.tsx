@@ -1,27 +1,16 @@
 import { useRegistrationLabel } from "../context/AccountContext";
 import {
   ArrowRight,
-  Armchair,
   CalendarDays,
   Cctv,
   CheckCircle2,
-  Coffee,
-  Droplets,
   ExternalLink,
-  Layers,
   LockKeyhole,
   PackageOpen,
-  Presentation,
   ScanLine,
   ShieldCheck,
-  ShoppingBasket,
-  Store,
-  Sun,
-  Users,
-  UtensilsCrossed,
-  Wrench
+  ShoppingBasket
 } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { FieldOfTouch } from "../components/FieldOfTouch";
 import { PixelPhoto } from "../components/PixelPhoto";
@@ -30,59 +19,6 @@ import "./HomePagePixel.css";
 import { Metric, Section } from "../components/Primitives";
 import { basicOnboardingAvailable, equipmentPageAvailable, memberPlatformAvailable } from "../config/release";
 
-
-type RoomUse = "work" | "shared" | "outdoor" | "support";
-
-type Room = {
-  id: string;
-  name: string;
-  /** Carpet area in square feet, measured from the published building CAD. */
-  areaSqFt: number;
-  use: RoomUse;
-  note: string;
-  icon: LucideIcon;
-};
-
-/**
- * Measured room programme. Areas are carpet areas taken from the R03 ground-floor
- * and R04 first-floor CAD (room boundary polygons and floor slabs), rounded to the
- * nearest 5 sq ft. The GF-05 patio is excluded by decision; walls, the stair and
- * the first-floor void are not counted, which is why the rooms sum below the
- * roughly 3,500 sq ft gross built-up footprint.
- */
-const roomProgramme: { floor: string; rooms: Room[] }[] = [
-  {
-    floor: "Ground floor",
-    rooms: [
-      { id: "GF-10", name: "Coworking commons", areaSqFt: 385, use: "work", note: "Long tables, window counter · 38 modelled positions", icon: Users },
-      { id: "GF-09", name: "Lounge and presentation hall", areaSqFt: 300, use: "shared", note: "Talks, demos, the spiral stair", icon: Presentation },
-      { id: "GF-01", name: "Four-person cabin", areaSqFt: 235, use: "work", note: "Opposed desks, retained storage", icon: Users },
-      { id: "GF-08", name: "Balcony café", areaSqFt: 205, use: "outdoor", note: "Railed balcony, café tables, wall bar", icon: Coffee },
-      { id: "GF-04", name: "Kitchen", areaSqFt: 190, use: "shared", note: "Existing kitchen, marble retained", icon: UtensilsCrossed },
-      { id: "GF-02", name: "Reception and goodies store", areaSqFt: 90, use: "shared", note: "Visitor check-in, merchandise racks", icon: Store },
-      { id: "GF-07", name: "Enclosed booth", areaSqFt: 45, use: "work", note: "Glass-fronted bench booth", icon: Armchair },
-      { id: "GF-03 · GF-06", name: "Washrooms", areaSqFt: 100, use: "support", note: "Two retained sanitary spaces", icon: Droplets }
-    ]
-  },
-  {
-    floor: "First floor",
-    rooms: [
-      { id: "FF-04", name: "Stair landing and gallery", areaSqFt: 410, use: "work", note: "Twin cabins around the open void", icon: Layers },
-      { id: "FF-06", name: "Office twin cabins", areaSqFt: 350, use: "work", note: "Two four-table cabins, cupboard retained", icon: Users },
-      { id: "FF-02", name: "Workshop terrace", areaSqFt: 260, use: "outdoor", note: "Glass-enclosed workshop proposal · curved balcony retained", icon: Wrench },
-      { id: "FF-03", name: "Two- and four-person cabins", areaSqFt: 230, use: "work", note: "Six modelled seats, sliding entrance", icon: Users },
-      { id: "FF-06 B", name: "Balcony", areaSqFt: 100, use: "outdoor", note: "Dedicated lower-cabin balcony", icon: Sun },
-      { id: "FF-01 · FF-05", name: "Washrooms", areaSqFt: 125, use: "support", note: "Retained support and bathroom", icon: Droplets }
-    ]
-  }
-];
-
-const roomUseLabels: Record<RoomUse, string> = {
-  work: "Cabins and desks",
-  shared: "Shared and visitor-facing",
-  outdoor: "Balconies and terrace",
-  support: "Support"
-};
 
 const labRoles = [
   {
@@ -239,45 +175,6 @@ export function HomePage() {
         dark
       >
         <LabModelShowcase />
-        <div className="room-programme" aria-label="Armature AI Labs room programme by floor">
-          {roomProgramme.map((level) => {
-            const floorTotal = level.rooms.reduce((sum, room) => sum + room.areaSqFt, 0);
-            return (
-              <section className="room-floor" key={level.floor} aria-label={level.floor}>
-                <header className="room-floor-header">
-                  <h3>{level.floor}</h3>
-                  <span className="mono">{level.floor === "Ground floor" ? 9 : 6} rooms · {floorTotal.toLocaleString("en-IN")} sq ft carpet</span>
-                </header>
-                <div className="room-grid">
-                  {level.rooms.map((room) => {
-                    const Icon = room.icon;
-                    return (
-                      <article className={`room-tile room-${room.use}`} key={room.id} data-room-tile>
-                        <Icon aria-hidden="true" />
-                        <span className="mono room-id">{room.id}</span>
-                        <strong>{room.name}</strong>
-                        <span className="mono room-area">{room.areaSqFt} sq ft</span>
-                        <p>{room.note}</p>
-                      </article>
-                    );
-                  })}
-                </div>
-              </section>
-            );
-          })}
-        </div>
-        <div className="legend-row mono">
-          <span><i className="legend-moss" /> {roomUseLabels.work}</span>
-          <span><i className="legend-saffron" /> {roomUseLabels.shared}</span>
-          <span><i className="legend-sky" /> {roomUseLabels.outdoor}</span>
-          <span><i className="legend-neutral" /> {roomUseLabels.support}</span>
-        </div>
-        <p className="room-programme-note">
-          Carpet areas measured from the published building CAD; walls, the stair and the
-          first-floor void are not counted, and the ground-floor patio is excluded. Modelled
-          seats are planning positions, not certified capacity.{" "}
-          <Link to="/building-vision">Open the models and room CAD <ArrowRight aria-hidden="true" /></Link>
-        </p>
       </Section>
 
       <Section
