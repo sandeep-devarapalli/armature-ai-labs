@@ -112,3 +112,25 @@ it.each(['Your sign-in link', 'Confirm your email address'].flatMap(subject =>
   expect((await f.handler(f.request({ raw }))).status).toBe(200);
   expect(f.rpc.mock.calls[0][1]).toMatchObject({ p_sender: null, p_subject: null });
 });
+
+
+it.each(['x-pm-metadata-project-ref', 'X-pM-MeTaDaTa-PrOjEcT-ReF'])('accepts one signed project marker with header casing %s', async name => {
+  const f = fixture();
+  const raw = JSON.stringify({ ...event, data: { ...event.data, from: 'no-reply@mail.armatureailabs.com', subject: 'Confirm your email address', headers: [{ name, value: 'uxfhdfagrmaeyuaipaar' }] } });
+  expect((await f.handler(f.request({ raw }))).status).toBe(200);
+  expect(f.rpc.mock.calls[0][1]).toMatchObject({ p_sender: 'no-reply@mail.armatureailabs.com', p_subject: 'Confirm your email address' });
+});
+
+it.each([
+  [{ name: 'x-pm-metadata-project-ref', value: 'another-project' }],
+  [{ name: 'x-pm-metadata-project-ref', value: ['uxfhdfagrmaeyuaipaar'] }],
+  [{ name: ['x-pm-metadata-project-ref'], value: 'uxfhdfagrmaeyuaipaar' }, null],
+  [{ name: 'x-pm-metadata-project-ref', value: 'uxfhdfagrmaeyuaipaar' }, { name: 'X-Pm-Metadata-Project-Ref', value: 'another-project' }],
+  [{ name: 'X-Pm-Metadata-Project-Ref', value: 'another-project' }, { name: 'x-pm-metadata-project-ref', value: 'uxfhdfagrmaeyuaipaar' }],
+  [{ name: 'x-pm-metadata-project-ref', value: 'uxfhdfagrmaeyuaipaar' }, { name: 'X-Pm-Metadata-Project-Ref', value: 'uxfhdfagrmaeyuaipaar' }],
+].map(headers => ({ headers })))('retains reports without Auth classification for invalid or ambiguous project markers: %j', async ({ headers }) => {
+  const f = fixture();
+  const raw = JSON.stringify({ ...event, data: { ...event.data, from: 'no-reply@mail.armatureailabs.com', subject: 'Confirm your email address', headers } });
+  expect((await f.handler(f.request({ raw }))).status).toBe(200);
+  expect(f.rpc.mock.calls[0][1]).toMatchObject({ p_sender: null, p_subject: null });
+});

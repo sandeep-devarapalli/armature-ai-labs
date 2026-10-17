@@ -7,10 +7,10 @@ No production database access, emails, provider resends or delivery-report delet
 
 - Node 22.22.2: `/private/tmp/node-v22.22.2-darwin-arm64/bin/node`.
 - Command: `PATH=/private/tmp/node-v22.22.2-darwin-arm64/bin:$PATH npm test -- tests/frontend/member-notification-events.test.js --maxWorkers=2`.
-- Result: **58 tests passed**, 1 file, 1.23 seconds.
-- Both exact Auth subjects are exercised across all three allowed sender formats. Tests verify actual synthetic HMAC signatures, reject tampering, require the signed Armature project marker, keep unknown sender/subject reports unclassified and propagate persistence failures for provider retry.
+- Result: **66 tests passed**, 1 file, 1.03 seconds, after case-insensitive project-header handling.
+- Both exact Auth subjects are exercised across all three allowed sender formats. Tests verify actual synthetic HMAC signatures, reject tampering, require exactly one signed Armature project marker (header name case-insensitive, value exact; duplicate/conflicting markers remain unclassified), keep unknown sender/subject reports unclassified and propagate persistence failures for provider retry.
 - Root full-suite command: `npm test -- --maxWorkers=2`, run via Node 22.23.3/npm 10.
-- Full-suite result: **775 tests passed across 68 files**, 37.30 seconds. Raw output: `/private/tmp/armature-auth-alert-tests.log`.
+- Full-suite result before the final header-casing hardening: **775 tests passed across 68 files**, 37.30 seconds. Raw output: `/private/tmp/armature-auth-alert-tests.log`.
 
 ## Database checks
 
@@ -60,3 +60,5 @@ Baseline output: `/private/tmp/armature-network-replay-1792212882899/baseline-fa
 ## Remaining release verification
 
 Apply the compatible migration before deploying the webhook. Historical reconciliation must use exact verified provider metadata with `operator_verified` evidence; it must not fabricate signed-webhook evidence. Confirm live unknown-receipt counts and genuine negative-outcome handling, then verify a real scheduled successful monitor execution and the revised recovery policy. Local tests alone do not establish production recovery.
+
+Final header hardening:66 webhook tests pass; header names are case-insensitive, values remain exact, duplicate/conflicting project headers fail closed. Resend SMTP metadata inspection confirmed the expected project marker without retaining body or token.

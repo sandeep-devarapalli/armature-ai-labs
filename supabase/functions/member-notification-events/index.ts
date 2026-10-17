@@ -52,8 +52,9 @@ Deno.serve(async (request: Request) => {
   if (!event || typeof event !== "object" || typeof event.type !== "string") return response({ error: "invalid_payload" }, 400);
   if (!eventTypes.has(event.type)) return response({ ignored: true });
   if (typeof event.data?.email_id !== "string" || !uuid.test(event.data.email_id) || typeof event.created_at !== "string" || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?Z$/.test(event.created_at) || !Number.isFinite(Date.parse(event.created_at))) return response({ error: "invalid_payload" }, 400);
-  const authProject = Array.isArray(event.data.headers) && event.data.headers.some(header =>
-    header && header.name === "X-Pm-Metadata-Project-Ref" && header.value === "uxfhdfagrmaeyuaipaar");
+  const projectHeaders = Array.isArray(event.data.headers) ? event.data.headers.filter(header =>
+    header && typeof header.name === "string" && header.name.toLowerCase() === "x-pm-metadata-project-ref") : [];
+  const authProject = projectHeaders.length === 1 && projectHeaders[0].value === "uxfhdfagrmaeyuaipaar";
   const authEmail = authProject && typeof event.data.from === "string" && typeof event.data.subject === "string" && ["Your sign-in link", "Confirm your email address"].includes(event.data.subject) &&
     ["no-reply@mail.armatureailabs.com", "Armature AI Labs <no-reply@mail.armatureailabs.com>", '"Armature AI Labs" <no-reply@mail.armatureailabs.com>'].includes(event.data.from);
   try {
