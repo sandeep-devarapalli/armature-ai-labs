@@ -26,7 +26,9 @@ class Tests(unittest.TestCase):
             return value
 
     def test_healthy_dry_run(self):
-        self.assertFalse(self.run_check(BASE)['attention'])
+        result = self.run_check(BASE)
+        self.assertFalse(result['attention'])
+        self.assertEqual(result['issue_codes'], [])
 
     def test_exact_legacy_schema_is_accepted_during_rollout(self):
         data = copy.deepcopy(BASE)
@@ -90,7 +92,30 @@ class Tests(unittest.TestCase):
             data['attention'] = True
             result = self.run_check(data)
             self.assertTrue(result['attention'])
-            self.assertNotIn('market_workers', result)
+            self.assertEqual(result['market_workers'], data['health']['market_workers'])
+            self.assertEqual(result['issue_codes'], [key])
+
+    def test_worker_failure_identifies_exact_job_without_extra_fields(self):
+        data = self.market_result()
+        data['health']['market_workers'][0]['status'] = 401
+        data['health']['market_worker_failed'] = 1
+        data['attention'] = True
+        result = self.run_check(data)
+        self.assertEqual(result['issue_codes'], ['market_worker_failed'])
+        self.assertEqual(result['market_workers'][0]['status'], 401)
+        self.assertEqual(result['market_workers'][0]['job'], sorted(monitor.MARKET_JOBS)[0])
+        data['health']['market_workers'][0]['body'] = 'secret recipient'
+        with self.assertRaisesRegex(ValueError, 'invalid_health'):
+            self.run_check(data)
+
+    def test_cleanup_issue_codes_respect_dry_run(self):
+        data = copy.deepcopy(BASE)
+        data['cleanup']['remaining'] = True
+        self.assertEqual(self.run_check(data)['issue_codes'], [])
+        data['cleanup']['dry_run'] = False
+        data['health']['cleanup_overdue'] = True
+        data['attention'] = True
+        self.assertEqual(self.run_check(data)['issue_codes'], ['cleanup_overdue', 'cleanup_backlog'])
 
     def test_partial_or_malformed_market_schema(self):
         for key in monitor.MARKET_COUNTS | {'market_workers'}:
@@ -128,6 +153,18 @@ class Tests(unittest.TestCase):
             self.assertEqual(monitor.main(), 1)
             self.assertNotIn('secret', output.getvalue())
             self.assertNotIn('recipient', output.getvalue())
+
+    def test_failure_log_codes_are_bounded(self):
+        for error, code in [(ValueError('invalid_health'), 'invalid_health'),
+                            (ValueError('secret recipient'), 'unexpected_error'),
+                            (TimeoutError('secret recipient'), 'monitor_timeout'),
+                            (monitor.URLError('secret recipient'), 'network_error')]:
+            with self.subTest(code=code), patch('monitor.check', side_effect=error), patch('sys.stdout', new_callable=io.StringIO) as output:
+                self.assertEqual(monitor.main(), 1)
+                record = json.loads(output.getvalue())
+                self.assertEqual(record['error_code'], code)
+                self.assertNotIn('secret', output.getvalue())
+                self.assertNotIn('recipient', output.getvalue())
 
     def test_no_redirect(self):
         self.assertIsNone(monitor.NoRedirect().redirect_request(None, None, 302, '', {}, 'https://elsewhere.test'))

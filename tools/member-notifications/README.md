@@ -88,7 +88,9 @@ The maintenance endpoint now adds three marketplace counters and bounded worker
 metadata. The monitor accepts that complete schema alongside the earlier two
 schemas. All three marketplace counters remain actionable. Unknown fields,
 partial schemas, malformed counters and inconsistent attention flags still fail
-closed. Only aggregate counts are logged; worker metadata is validated but omitted.
+closed. Logs include aggregate counts, explicit `issue_codes`, and the strictly
+validated marketplace job names, HTTP statuses and timestamps. Arbitrary response
+fields, addresses, message bodies and credentials are never logged.
 
 ## Confirmation classification and recovery (17 October 2026)
 
@@ -105,3 +107,20 @@ and incident evaluation can add delay. The existing 45-minute missing-success
 policy remains an independent safeguard. During policy migration, suppress only
 CLOSED messages on the old rule until the new rule is installed; restore recovery
 notifications after a genuine healthy scheduled execution. Do not disable detection.
+
+## Background-job incident diagnostics (17 October 2026)
+
+The shared monitor covers marketplace reminders and private-file cleanup as well
+as membership and Atlas notifications. A warning logs `issue_codes` and validated
+`market_workers`, so responders can distinguish an HTTP failure in a specific job
+from missing/stale checks or a delivery problem. Monitor exceptions expose only
+allowlisted error codes; raw exception messages and HTTP response bodies stay out
+of logs. Logging changes do not change the endpoint response schema or thresholds.
+
+`alert_policy.py` also defines the policy display name and documentation, including
+a static subject identifying Armature background jobs. Google Monitoring's
+[Documentation API](https://docs.cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.alertPolicies#Documentation)
+supports `subject`; it avoids the missing resource-name placeholder produced by
+an aggregated PromQL series. The subject is neutral for opening and recovery
+notifications; incident state remains in the alert body. Apply these metadata
+fields without replacing conditions, channels, notification prompts or the query.
