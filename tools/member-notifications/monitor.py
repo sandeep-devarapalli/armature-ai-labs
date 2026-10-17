@@ -1,4 +1,5 @@
 """Prepared notification monitor; no job is provisioned by this script."""
+from datetime import datetime
 import json
 import os
 import signal
@@ -10,6 +11,8 @@ ENDPOINT = 'https://uxfhdfagrmaeyuaipaar.supabase.co/functions/v1/member-notific
 LEGACY_COUNTS = {'held', 'queue_overdue', 'expired_leases', 'unknown', 'failed', 'delivery_unconfirmed', 'unmatched_receipts', 'history_due'}
 ATLAS_COUNTS = {'atlas_queue_overdue', 'atlas_expired_leases', 'atlas_unknown', 'atlas_failed', 'atlas_delivery_failed', 'atlas_delivery_unconfirmed'}
 COUNTS = LEGACY_COUNTS | ATLAS_COUNTS
+MARKET_COUNTS = {'market_worker_failed', 'market_worker_stale', 'market_cleanup_backlog'}
+MARKET_JOBS = {'market-message-reminders-every-five-minutes', 'market-private-file-cleanup-daily'}
 HEALTH_FIELDS = {'sending_enabled', 'cleanup_enabled', 'last_cleanup_at', 'cleanup_overdue'}
 
 
@@ -40,9 +43,33 @@ def check(secret):
         raise ValueError('invalid_cleanup')
     if any(type(cleanup[k]) is not int or not 0 <= cleanup[k] <= 100 for k in ('history', 'receipts')) or any(type(cleanup[k]) is not bool for k in ('dry_run', 'remaining')):
         raise ValueError('invalid_cleanup')
-    if not isinstance(health, dict) or set(health) not in (LEGACY_COUNTS | HEALTH_FIELDS, COUNTS | HEALTH_FIELDS):
+    if not isinstance(health, dict) or set(health) not in (LEGACY_COUNTS | HEALTH_FIELDS, COUNTS | HEALTH_FIELDS, COUNTS | MARKET_COUNTS | HEALTH_FIELDS | {'market_workers'}):
         raise ValueError('invalid_health')
-    counts = COUNTS if set(health) == COUNTS | HEALTH_FIELDS else LEGACY_COUNTS
+    counts = COUNTS | MARKET_COUNTS if 'market_workers' in health else COUNTS if set(health) == COUNTS | HEALTH_FIELDS else LEGACY_COUNTS
+    if 'market_workers' in health:
+        workers = health['market_workers']
+        if not isinstance(workers, list) or len(workers) != len(MARKET_JOBS):
+            raise ValueError('invalid_health')
+        seen = set()
+        for worker in workers:
+            if not isinstance(worker, dict) or set(worker) != {'job', 'active', 'requested_at', 'status', 'checked_at'}:
+                raise ValueError('invalid_health')
+            job = worker['job']
+            if not isinstance(job, str) or job not in MARKET_JOBS or job in seen or type(worker['active']) is not bool:
+                raise ValueError('invalid_health')
+            seen.add(job)
+            if worker['status'] is not None and (type(worker['status']) is not int or not 100 <= worker['status'] <= 599):
+                raise ValueError('invalid_health')
+            for field in ('requested_at', 'checked_at'):
+                value = worker[field]
+                if value is not None:
+                    if not isinstance(value, str) or len(value) > 40:
+                        raise ValueError('invalid_health')
+                    try:
+                        if datetime.fromisoformat(value.replace('Z', '+00:00')).tzinfo is None:
+                            raise ValueError('invalid_health')
+                    except ValueError:
+                        raise ValueError('invalid_health') from None
     if any(type(health[k]) is not int or health[k] < 0 for k in counts) or any(type(health[k]) is not bool for k in ('sending_enabled', 'cleanup_enabled', 'cleanup_overdue')):
         raise ValueError('invalid_health')
     if health['last_cleanup_at'] is not None and not isinstance(health['last_cleanup_at'], str):
