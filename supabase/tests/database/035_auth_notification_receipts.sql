@@ -87,5 +87,36 @@ select ok(not has_function_privilege('service_role','private.finish_member_notif
 select ok(not has_function_privilege('service_role','private.finish_ecosystem_notification_before_auth_sources(uuid,uuid,text,text)','EXECUTE'),'service cannot bypass Atlas collision guard');
 select ok(not has_function_privilege('service_role','private.reconcile_ecosystem_notification_before_auth_sources(uuid,text,text,text,text)','EXECUTE'),'service cannot bypass repair collision guard');
 select throws_ok($$insert into private.auth_notification_sources(provider_id,sender,subject,source,source_event_id,source_occurred_at,evidence) values('b7300000-0000-4000-8000-000000000040','no-reply@mail.armatureailabs.com','Your sign-in link','signed_webhook',null,now(),'Synthetic required event evidence')$$,'23514',null,'signed classification requires its source event ID');
+-- Signup confirmations use the same protected classification and failure rules.
+select public.record_classified_notification_event('confirm-delivered','b7300000-0000-4000-8000-000000000050','email.delivered','2026-01-02Z','no-reply@mail.armatureailabs.com','Confirm your email address');
+select public.record_classified_notification_event('confirm-sent','b7300000-0000-4000-8000-000000000050','email.sent','2026-01-01Z','Armature AI Labs <no-reply@mail.armatureailabs.com>','Confirm your email address');
+select ok(not public.record_classified_notification_event('confirm-delivered','b7300000-0000-4000-8000-000000000050','email.delivered','2026-01-02Z','no-reply@mail.armatureailabs.com','Confirm your email address'),'confirmation duplicate callback is idempotent');
+select is((select subject from private.auth_notification_sources where provider_id='b7300000-0000-4000-8000-000000000050'),'Confirm your email address','exact confirmation subject recorded');
+select is((select source_event_id from private.auth_notification_sources where provider_id='b7300000-0000-4000-8000-000000000050'),'confirm-delivered','delivered-first confirmation preserves first signed evidence');
+select public.record_classified_notification_event('confirm-sent-first','b7300000-0000-4000-8000-000000000051','email.sent','2026-01-01Z','"Armature AI Labs" <no-reply@mail.armatureailabs.com>','Confirm your email address');
+select public.record_classified_notification_event('confirm-delivered-last','b7300000-0000-4000-8000-000000000051','email.delivered','2026-01-02Z',null,null);
+update public.member_notification_events set received_at=now()-interval '2 hours';
+select is((public.notification_delivery_health()->>'unmatched_receipts')::integer,24,'both confirmation callback orders resolve without hiding other unknown reports');
+select is((select count(*)::integer from public.member_notification_events where provider_id in ('b7300000-0000-4000-8000-000000000050','b7300000-0000-4000-8000-000000000051')),4,'all confirmation receipts retained exactly once');
+select public.record_classified_notification_event('confirm-untrusted-'||n,('b7300000-0000-4000-8000-'||lpad(n::text,12,'0'))::text,'email.delivered','2026-01-01Z',sender,subject)
+from (values (52,'other@mail.armatureailabs.com','Confirm your email address'),(53,'no-reply@mail.armatureailabs.com','Confirm your email address extra'),(54,'Wrong Name <no-reply@mail.armatureailabs.com>','Confirm your email address')) x(n,sender,subject);
+update public.member_notification_events set received_at=now()-interval '2 hours';
+select is((public.notification_delivery_health()->>'unmatched_receipts')::integer,27,'wrong confirmation sender and unknown subject remain actionable');
+select ok(not exists(select 1 from private.auth_notification_sources where provider_id between 'b7300000-0000-4000-8000-000000000052' and 'b7300000-0000-4000-8000-000000000054'),'untrusted confirmation metadata cannot create evidence');
+select throws_ok($$select public.record_classified_notification_event('confirm-delivered','b7300000-0000-4000-8000-000000000055','email.delivered','2026-01-02Z','no-reply@mail.armatureailabs.com','Confirm your email address')$$,'22023','Conflicting notification event','conflicting confirmation event rejected');
+select ok(not exists(select 1 from private.auth_notification_sources where provider_id='b7300000-0000-4000-8000-000000000055'),'conflicting confirmation cannot classify another provider');
+select public.record_classified_notification_event('confirm-failure-first-'||n,('b7300000-0000-4000-8000-'||lpad(n::text,12,'0'))::text,event_type,'2026-01-01Z','no-reply@mail.armatureailabs.com','Confirm your email address')
+from (values(56,'email.failed'),(57,'email.bounced'),(58,'email.complained'),(59,'email.suppressed')) x(n,event_type);
+select public.record_classified_notification_event('confirm-delivery-after-failure-'||n,('b7300000-0000-4000-8000-'||lpad(n::text,12,'0'))::text,'email.delivered','2026-01-02Z','no-reply@mail.armatureailabs.com','Confirm your email address') from generate_series(56,59)n;
+update public.member_notification_events set received_at=now()-interval '2 hours';
+select is((public.notification_delivery_health()->>'unmatched_receipts')::integer,35,'confirmation negative outcomes survive later delivery');
+select public.record_classified_notification_event('confirm-late-bounce','b7300000-0000-4000-8000-000000000050','email.bounced','2026-01-01Z','no-reply@mail.armatureailabs.com','Confirm your email address');
+select public.record_classified_notification_event('confirm-late-failure','b7300000-0000-4000-8000-000000000051','email.failed','2026-01-01Z','no-reply@mail.armatureailabs.com','Confirm your email address');
+update public.member_notification_events set received_at=now()-interval '2 hours';
+select is((public.notification_delivery_health()->>'unmatched_receipts')::integer,41,'late confirmation failure/bounce restores attention despite older timestamps');
+select public.record_classified_notification_event('confirm-awaiting-delivery','b7300000-0000-4000-8000-000000000060','email.sent','2026-01-01Z','no-reply@mail.armatureailabs.com','Confirm your email address');
+update public.member_notification_events set received_at=now()-interval '2 hours';
+select is((public.notification_delivery_health()->>'unmatched_receipts')::integer,42,'confirmation sent without delivery remains actionable');
+select throws_ok($$insert into private.auth_notification_sources(provider_id,sender,subject,source,source_occurred_at,evidence) values('b7300000-0000-4000-8000-000000000061','no-reply@mail.armatureailabs.com','Unknown Auth subject','operator_verified',now(),'Synthetic unapproved subject test')$$,'23514',null,'table constraint rejects unsupported Auth subjects');
 select * from finish();
 rollback;

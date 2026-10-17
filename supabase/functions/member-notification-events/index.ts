@@ -54,12 +54,12 @@ Deno.serve(async (request: Request) => {
   if (typeof event.data?.email_id !== "string" || !uuid.test(event.data.email_id) || typeof event.created_at !== "string" || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?Z$/.test(event.created_at) || !Number.isFinite(Date.parse(event.created_at))) return response({ error: "invalid_payload" }, 400);
   const authProject = Array.isArray(event.data.headers) && event.data.headers.some(header =>
     header && header.name === "X-Pm-Metadata-Project-Ref" && header.value === "uxfhdfagrmaeyuaipaar");
-  const signInEmail = authProject && typeof event.data.from === "string" && event.data.subject === "Your sign-in link" &&
+  const authEmail = authProject && typeof event.data.from === "string" && typeof event.data.subject === "string" && ["Your sign-in link", "Confirm your email address"].includes(event.data.subject) &&
     ["no-reply@mail.armatureailabs.com", "Armature AI Labs <no-reply@mail.armatureailabs.com>", '"Armature AI Labs" <no-reply@mail.armatureailabs.com>'].includes(event.data.from);
   try {
     const { data, error } = await adminClient().rpc("record_classified_notification_event", {
       p_event_id: eventId, p_provider_id: event.data.email_id, p_event_type: event.type, p_occurred_at: event.created_at,
-      p_sender: signInEmail ? event.data.from : null, p_subject: signInEmail ? event.data.subject : null,
+      p_sender: authEmail ? event.data.from : null, p_subject: authEmail ? event.data.subject : null,
     }).abortSignal(AbortSignal.timeout(5_000));
     if (error || typeof data !== "boolean") throw new Error("persistence_failed");
     return response({ received: true });

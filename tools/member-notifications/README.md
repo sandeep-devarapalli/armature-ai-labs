@@ -81,3 +81,19 @@ The shared Resend webhook also receives Supabase sign-in email reports. After si
 A classified sign-in email stops contributing to `unmatched_receipts` only when a delivered report exists and no failed, bounced, complained or suppressed report exists. Missing delivery still alerts after the existing one-hour receipt grace period. Negative reports remain actionable in either callback order. Member and Atlas ownership take precedence and cannot claim a classified Auth provider ID. All existing health fields, schedules, cleanup settings and delivery-failure checks remain unchanged.
 
 Deploy migration `202610050001` before the `member-notification-events` function. The original recorder remains available during rollout. Historical reconciliation requires checking the exact provider ID, sender, subject and delivery state in Resend and retaining an operator evidence record; timing alone is insufficient. Preserve receipts and do not resend emails to clear an alert.
+
+## Confirmation classification and recovery (17 October 2026)
+
+Signup confirmation subject `Confirm your email address` is also recognised by the
+signed, project-bound Auth recorder. Unknown subjects remain actionable: additions
+or renames to Auth templates must update and test this allowlist in both the webhook
+and database before release. Do not classify solely by delivery success or sender.
+
+`alert_policy.py` defines the replacement failure condition: at least one failed
+execution OR no successful execution in the same 30-minute window. It fires on
+missing telemetry and cannot recover merely because an old failure expires.
+Recovery requires a newer successful check and a full clean window; Google metric
+and incident evaluation can add delay. The existing 45-minute missing-success
+policy remains an independent safeguard. During policy migration, suppress only
+CLOSED messages on the old rule until the new rule is installed; restore recovery
+notifications after a genuine healthy scheduled execution. Do not disable detection.

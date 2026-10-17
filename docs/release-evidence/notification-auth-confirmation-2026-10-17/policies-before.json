@@ -1,0 +1,82 @@
+[
+  {
+    "name": "projects/armature-booking-integration/alertPolicies/13576312601504838289",
+    "displayName": "Member notification monitor missing success",
+    "combiner": "OR",
+    "creationRecord": {
+      "mutateTime": "2026-09-27T06:40:06.924410121Z",
+      "mutatedBy": "hello@armatureailabs.com"
+    },
+    "mutationRecord": {
+      "mutateTime": "2026-09-27T17:14:21.486545737Z",
+      "mutatedBy": "hello@armatureailabs.com"
+    },
+    "conditions": [
+      {
+        "displayName": "No success for 45 minutes",
+        "name": "projects/armature-booking-integration/alertPolicies/13576312601504838289/conditions/13576312601504840594",
+        "conditionPrometheusQueryLanguage": {
+          "query": "(sum(sum_over_time({\"run.googleapis.com/job/completed_execution_count\",monitored_resource=\"cloud_run_job\",project_id=\"armature-booking-integration\",location=\"asia-south1\",job_name=\"member-notification-monitor\",result=\"succeeded\"}[45m])) or vector(0)) < 1",
+          "duration": "0s",
+          "evaluationInterval": "60s"
+        }
+      }
+    ],
+    "notificationChannels": [
+      "projects/armature-booking-integration/notificationChannels/9791196239003809786"
+    ],
+    "enabled": true,
+    "alertStrategy": {
+      "notificationPrompts": [
+        "OPENED",
+        "CLOSED"
+      ],
+      "autoClose": "1800s"
+    }
+  },
+  {
+    "name": "projects/armature-booking-integration/alertPolicies/320545443855129345",
+    "displayName": "Member notification monitor failed",
+    "combiner": "OR",
+    "creationRecord": {
+      "mutateTime": "2026-09-27T06:40:04.934672606Z",
+      "mutatedBy": "hello@armatureailabs.com"
+    },
+    "mutationRecord": {
+      "mutateTime": "2026-09-27T17:14:22.513492540Z",
+      "mutatedBy": "hello@armatureailabs.com"
+    },
+    "conditions": [
+      {
+        "conditionThreshold": {
+          "filter": "metric.type=\"run.googleapis.com/job/completed_execution_count\" AND metric.labels.result=\"failed\" AND resource.type=\"cloud_run_job\" AND resource.labels.project_id=\"armature-booking-integration\" AND resource.labels.location=\"asia-south1\" AND resource.labels.job_name=\"member-notification-monitor\"",
+          "comparison": "COMPARISON_GT",
+          "duration": "0s",
+          "trigger": {
+            "count": 1
+          },
+          "aggregations": [
+            {
+              "alignmentPeriod": "300s",
+              "perSeriesAligner": "ALIGN_SUM",
+              "crossSeriesReducer": "REDUCE_SUM"
+            }
+          ]
+        },
+        "displayName": "Failed execution",
+        "name": "projects/armature-booking-integration/alertPolicies/320545443855129345/conditions/320545443855128030"
+      }
+    ],
+    "notificationChannels": [
+      "projects/armature-booking-integration/notificationChannels/9791196239003809786"
+    ],
+    "enabled": true,
+    "alertStrategy": {
+      "notificationPrompts": [
+        "OPENED",
+        "CLOSED"
+      ],
+      "autoClose": "1800s"
+    }
+  }
+]
