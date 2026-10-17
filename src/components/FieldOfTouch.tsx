@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { MOTION_SCALES } from '../lib/motion/pixel-bands';
 import { onThemeChange, readPixelColors } from '../lib/motion/pixel-colors';
 import './field-of-touch.css';
 
@@ -130,7 +131,7 @@ export function FieldOfTouch({ scene, priority = false, look = 'field' }: { scen
       ? import('../lib/motion/pixel-renderer.js').then(({ PixelRenderer }) => (target: HTMLCanvasElement, source: HTMLVideoElement): MotionRenderer => {
         const pixel = new PixelRenderer({
           canvas: target, video: source, poster,
-          settings: { cellSize: 6, pixelSize: 3, levels: study.pixelLevels, colors: figure.current ? readPixelColors(figure.current) : undefined },
+          settings: { cellSize: 6, pixelSize: 2, scales: MOTION_SCALES, sharpen: 0.8, tones: 3, levels: study.pixelLevels, colors: figure.current ? readPixelColors(figure.current) : undefined },
           onStatus,
         });
         stopThemeWatch = onThemeChange(() => { if (figure.current) pixel.setColors(readPixelColors(figure.current)); });

@@ -3,6 +3,8 @@
 // two neighbouring block sizes so no partial cells (thin slivers) appear at seams.
 // Whole-number multiples of one base block keep every seam aligned.
 export const PIXEL_SCALES = [1, 1, 1, 1, 2, 2, 3, 4];
+// Motion keeps fine blocks across most of the frame so the footage stays readable.
+export const MOTION_SCALES = [1, 1, 1, 1, 1, 1, 2, 3];
 
 const gcd = (a, b) => (b ? gcd(b, a % b) : a);
 const lcm = (a, b) => (a * b) / gcd(a, b);
