@@ -9,8 +9,8 @@ No production database access, emails, provider resends or delivery-report delet
 - Command: `PATH=/private/tmp/node-v22.22.2-darwin-arm64/bin:$PATH npm test -- tests/frontend/member-notification-events.test.js --maxWorkers=2`.
 - Result: **66 tests passed**, 1 file, 1.03 seconds, after case-insensitive project-header handling.
 - Both exact Auth subjects are exercised across all three allowed sender formats. Tests verify actual synthetic HMAC signatures, reject tampering, require exactly one signed Armature project marker (header name case-insensitive, value exact; duplicate/conflicting markers remain unclassified), keep unknown sender/subject reports unclassified and propagate persistence failures for provider retry.
-- Root full-suite command: `npm test -- --maxWorkers=2`, run via Node 22.23.3/npm 10.
-- Full-suite result before the final header-casing hardening: **775 tests passed across 68 files**, 37.30 seconds. Raw output: `/private/tmp/armature-auth-alert-tests.log`.
+- Root full-suite command: `npm test -- --maxWorkers=2`, run via Node 22.22.2.
+- Final full-suite result: **783 tests passed across 68 files**, 36.52 seconds. Raw output: `/private/tmp/armature-auth-alert-final-tests.log`.
 
 ## Database checks
 

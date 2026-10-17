@@ -82,6 +82,14 @@ A classified sign-in email stops contributing to `unmatched_receipts` only when 
 
 Deploy migration `202610050001` before the `member-notification-events` function. The original recorder remains available during rollout. Historical reconciliation requires checking the exact provider ID, sender, subject and delivery state in Resend and retaining an operator evidence record; timing alone is insufficient. Preserve receipts and do not resend emails to clear an alert.
 
+## Marketplace health compatibility (15 October 2026)
+
+The maintenance endpoint now adds three marketplace counters and bounded worker
+metadata. The monitor accepts that complete schema alongside the earlier two
+schemas. All three marketplace counters remain actionable. Unknown fields,
+partial schemas, malformed counters and inconsistent attention flags still fail
+closed. Only aggregate counts are logged; worker metadata is validated but omitted.
+
 ## Confirmation classification and recovery (17 October 2026)
 
 Signup confirmation subject `Confirm your email address` is also recognised by the
