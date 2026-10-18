@@ -14,7 +14,7 @@ test("brand resources are discoverable, usable and downloadable", async ({ page,
   await expect(page.getByText(manifest.copy.paragraph)).toBeVisible();
   await expect(page.getByRole("heading", { name: "Logo system" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Usage and permissions" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Helvetica Neue + Space Mono" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Instrument Serif + Space Mono" })).toBeVisible();
   await expect(page.locator(".branding-permissions").getByRole("link", { name: "hello@armatureailabs.com" })).toHaveAttribute("href", "mailto:hello@armatureailabs.com");
 
   const squares = page.locator("#square-logos");

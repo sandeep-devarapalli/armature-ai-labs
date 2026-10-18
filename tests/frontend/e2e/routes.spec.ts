@@ -830,7 +830,7 @@ test("home hero keeps the circular identity and editorial typography", async ({ 
   await expect(page.locator(".topbar .brand-lockup")).toHaveAttribute("aria-label", "Armature AI Labs");
   await expect(page.locator(".topbar .brand-lockup > span")).toHaveText("Armature AI Labs");
   await expect(page.locator(".home-hero h1")).toHaveText(/A place to build\s*physical intelligence\./);
-  await expect(page.locator(".home-hero h1")).toHaveCSS("font-family", /Helvetica Neue.*Helvetica.*Arial/);
+  await expect(page.locator(".home-hero h1")).toHaveCSS("font-family", /Instrument Serif/);
   await expect(page.locator("body")).toHaveCSS("font-family", /Space Mono/);
 });
 
