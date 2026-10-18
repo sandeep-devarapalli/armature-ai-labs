@@ -15,7 +15,7 @@ const scenes = {
     ],
   },
   analyzer: {
-    pixelLevels: [0.04, 0.8, 1, 0.9] as const,
+    pixelLevels: [0.1, 0.82, 1.1, 0.818] as const,
     title: 'Sample automation', author: 'Кайрат Сатдиков',
     source: 'https://www.pexels.com/video/close-up-on-devices-in-laboratory-11218535/',
     description: 'A laboratory probe moves over a sample carousel in muted turquoise and white points.',
@@ -43,21 +43,21 @@ const scenes = {
     contactEvents: [],
   },
   birds: {
-    pixelLevels: [0.04, 0.85, 1, 0.9] as const,
+    pixelLevels: [0.19, 0.71, 1, 0.73] as const,
     title: 'Birds over water', author: 'Barış İpekçi',
     source: 'https://www.pexels.com/video/birds-flying-at-sunset-over-water-and-bridge-32755709/',
     description: 'A flock flies over sunset water beneath a bridge, rendered in muted copper points.',
     contactEvents: [],
   },
   waves: {
-    pixelLevels: [0.04, 0.9, 1.2, 0.95] as const,
+    pixelLevels: [0.4, 0.97, 1.1, 0.985] as const,
     title: 'Waves meeting shore', author: 'ArtHouse Studio',
     source: 'https://www.pexels.com/video/aerial-view-of-ocean-waves-4631571/',
     description: 'Ocean foam gathers and dissolves along a shoreline in a muted point field.',
     contactEvents: [],
   },
   rain: {
-    pixelLevels: [0.04, 0.8, 1, 0.9] as const,
+    pixelLevels: [0.13, 0.8, 1, 0.83] as const,
     title: 'Rain on water', author: 'Damir K',
     source: 'https://www.pexels.com/video/raindrops-creating-circular-ripples-on-autumn-pond-34714998/',
     description: 'Raindrop rings overlap around floating leaves, rendered in a muted point field.',
@@ -67,10 +67,10 @@ const scenes = {
 
 type MotionRenderer = { setPaused(paused: boolean): void; destroy(): void; setColors?: (colors: ReturnType<typeof readPixelColors>) => void };
 
-/** `field` is the approved point field; `pixel` is the ordered-dither treatment used on the landing page. */
+/** `pixel` (default since the October 2026 launch) is the ordered-dither treatment; `field` is the earlier point field. */
 export type MotionLook = 'field' | 'pixel';
 
-export function FieldOfTouch({ scene, priority = false, look = 'field' }: { scene: keyof typeof scenes; priority?: boolean; look?: MotionLook }) {
+export function FieldOfTouch({ scene, priority = false, look = 'pixel' }: { scene: keyof typeof scenes; priority?: boolean; look?: MotionLook }) {
   const study = scenes[scene];
   const figure = useRef<HTMLElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);

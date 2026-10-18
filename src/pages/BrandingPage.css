@@ -60,6 +60,10 @@
 .branding-type { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 40px; padding: 34px 0; }
 .branding-type h3 { font-size: 28px; }
 .branding-type p { color: var(--fg-3); font-size: 13px; line-height: 1.8; }
+.branding-type .branding-type-specimen { margin-bottom: 16px; color: var(--fg-1, currentColor); font-family: var(--serif); font-style: italic; font-size: clamp(30px, 3.4vw, 46px); line-height: 1.05; letter-spacing: -.015em; }
+.branding-pixel { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 40px; align-items: start; padding-top: 40px; margin-top: 34px; border-top: 1px solid var(--hair); }
+.branding-pixel h3 { font-size: 28px; margin-bottom: 16px; }
+.branding-pixel li { color: var(--fg-3); font-size: 13px; line-height: 1.8; }
 .branding-color-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
 .branding-color-grid article { min-width: 0; }
 .branding-color-swatch { display: block; width: 100%; height: 75px; margin-bottom: 16px; border: 1px solid var(--hair-strong); }
@@ -78,6 +82,7 @@
   .branding-copy-block header { max-width: 460px; }
   .branding-social-grid, .branding-logo-row { gap: 28px; }
   .branding-color-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; }
+  .branding-pixel { grid-template-columns: minmax(0, 1fr); gap: 24px; }
 }
 @media (max-width: 760px) {
   .branding-logo-detail select { font-size: 16px; }

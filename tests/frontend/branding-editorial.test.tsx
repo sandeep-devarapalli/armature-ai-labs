@@ -48,7 +48,8 @@ describe("editorial brand resources", () => {
 
   it("uses corrected casing and monochrome typography guidance", () => {
     render(<BrandingPage />);
-    expect(screen.getByRole("heading", { name: "Helvetica Neue + Space Mono" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Instrument Serif + Space Mono" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Pixel imagery" })).toBeInTheDocument();
     expect(screen.getByText("Retain the exact capitals: Armature AI Labs.")).toBeInTheDocument();
     expect(screen.queryByText(/lowercase wordmark/)).not.toBeInTheDocument();
     for (const platform of ["LinkedIn", "X / Twitter", "Instagram", "GitHub", "YouTube", "Discord", "WhatsApp Business"]) {

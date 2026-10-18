@@ -20,7 +20,7 @@ Style reference: `../lambda-style-web-preview-2026-09-13/concepts/home.png`, `bl
 Preserve hero body copy, the public contact details, social destinations, 3,500 sq ft / two-floor / seven-cabin / three-balcony-and-terrace metrics, and these sections in order:
 
 - A working floor, not a club lounge — four lab roles and community context.
-- Two floors at a glance — complete room programme, areas, exclusions and capacity qualification.
+- Two floors at a glance — heading, lede and labelled model renders. The per-room programme was removed at the owner's request on 17 October 2026; room areas remain on Building Vision.
 - Monitored, end to end — three operating principles.
 - From idea to working machine — all five stages.
 - The maker desk keeps small friction small — storage, stock and toolkits.

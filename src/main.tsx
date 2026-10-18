@@ -5,6 +5,7 @@ import { Providers } from "./app/Providers";
 import { installChunkRecovery, removeLegacyPwaCaches } from "./lib/pwaMigration";
 import "./styles.css";
 import "./editorial.css";
+import "./pixel-system.css";
 
 installChunkRecovery();
 void removeLegacyPwaCaches();

@@ -1,5 +1,6 @@
 import { Check, Copy, Download, FileArchive, FileText } from "lucide-react";
 import { useState } from "react";
+import { PixelPhoto } from "../components/PixelPhoto";
 import { Section } from "../components/Primitives";
 import manifest from "../../public/brand/editorial-2026-09/manifest.json";
 import "./BrandingPage.css";
@@ -38,7 +39,18 @@ const brandColors = [
   { name: "Ink", hex: manifest.palettes.light.ink, use: "Light-surface lettering and marks" },
   { name: "White", hex: manifest.palettes.light.background, use: "Light surfaces and reversed artwork" },
   { name: "Secondary · light", hex: manifest.palettes.light.muted, use: "Supporting text on white" },
-  { name: "Secondary · dark", hex: manifest.palettes.dark.muted, use: "Supporting text on near-black" }
+  { name: "Secondary · dark", hex: manifest.palettes.dark.muted, use: "Supporting text on near-black" },
+  { name: "Bone", hex: "#EDE6D6", use: "Light pixels and poster type on near-black" },
+  { name: "Signal orange", hex: "#E0703A", use: "Kickers, numbers and the brightest pixel highlights on dark" },
+  { name: "Signal orange · light", hex: "#B4501F", use: "The same accent on white, for readable contrast" },
+  { name: "Pixel mid-tone", hex: "#6D6A63", use: "The third tone in pixel imagery, between ink and bone" }
+];
+
+const pixelRules = [
+  "Ordered dither in three tones: ink, mid-tone and bone.",
+  "Orange marks only the brightest highlights, such as light fittings. Never fill large areas with it.",
+  "Pixels stay fine across most of the frame and coarsen toward one edge.",
+  "Use real photographs of the space where possible, captioned with what and when. Credit stock footage."
 ];
 
 function downloadName(path: string) {
@@ -144,7 +156,7 @@ export function BrandingPage() {
               </a>
               <a className="button button-quiet" href="#square-logos">Browse individual files</a>
             </div>
-            <p className="branding-version mono">September 2026 · Brand resources</p>
+            <p className="branding-version mono">October 2026 · Launch edition</p>
           </div>
           <figure className="branding-hero-preview branding-surface-light">
             <img src={BRAND_BASE + "/logos/lockup-light-transparent-570.svg"} width="570" height="100" alt="Armature AI Labs horizontal lockup" />
@@ -262,8 +274,11 @@ export function BrandingPage() {
           </article>
         </div>
         <div className="branding-type">
-          <h3>Helvetica Neue + Space Mono</h3>
-          <p>Helvetica Neue Bold sets the wordmark and headings. Space Mono carries supporting copy and labels. Primary SVGs have outlined lettering; editable SVGs require a locally licensed Helvetica Neue. Helvetica font files are not redistributed. Space Mono and its OFL are included.</p>
+          <h3>Instrument Serif + Space Mono</h3>
+          <div>
+            <p className="branding-type-specimen">A place to build physical intelligence.</p>
+            <p>Instrument Serif Italic sets display headlines on the site, posters and social artwork. Space Mono carries body copy, labels and kickers. Helvetica Neue Bold is kept for the outlined wordmark only. Primary SVGs have outlined lettering; editable SVGs require a locally licensed Helvetica Neue, which is not redistributed. Instrument Serif and Space Mono are open fonts under the SIL Open Font License.</p>
+          </div>
         </div>
         <div className="branding-color-grid" aria-label="Armature AI Labs brand colours">
           {brandColors.map((color) => (
@@ -272,6 +287,20 @@ export function BrandingPage() {
               <div><h3>{color.name}</h3><code>{color.hex}</code><p>{color.use}</p></div>
             </article>
           ))}
+        </div>
+        <div className="branding-pixel">
+          <div>
+            <h3>Pixel imagery</h3>
+            <ul>{pixelRules.map((rule) => <li key={rule}>{rule}</li>)}</ul>
+          </div>
+          <PixelPhoto
+            src="/media/space/event-space-fit-out.jpg"
+            width={1600}
+            height={728}
+            alt="The Armature event space during fit-out, shown in the pixel treatment."
+            label="Example"
+            caption="The event space during fit-out, October 2026."
+          />
         </div>
       </Section>
 

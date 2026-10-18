@@ -1,35 +1,4 @@
-/* Landing-page "pixel" direction (October 2026 poster system). Scoped to .landing-pixel
-   so other routes keep the approved editorial styles until they are reviewed. */
-@font-face {
-  font-family: "Instrument Serif";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/fonts/instrument-serif/instrument-serif-latin-400-normal.woff2") format("woff2");
-}
-@font-face {
-  font-family: "Instrument Serif";
-  font-style: italic;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/fonts/instrument-serif/instrument-serif-latin-400-italic.woff2") format("woff2");
-}
-
-.landing-pixel {
-  --serif: "Instrument Serif", Georgia, "Times New Roman", serif;
-  --kicker: #b4501f;
-  --pixel-lo: #111110;
-  --pixel-hi: #f4efe6;
-  --pixel-accent: #d9652b;
-  --vitruvian-accent: #e0703a;
-}
-:root[data-theme="dark"] .landing-pixel { --kicker: #e0703a; --pixel-hi: #ede6d6; --pixel-accent: #e0703a; }
-:root[data-theme="sepia"] .landing-pixel { --kicker: #9a4318; --pixel-lo: #241a12; --pixel-hi: #efe2c8; --pixel-accent: #c8642e; }
-/* The hero and ink feature sections stay dark in every theme. */
-.landing-pixel .home-hero-integrated,
-.landing-pixel .ink-surface { --kicker: #e0703a; --pixel-lo: #111110; --pixel-hi: #ede6d6; --pixel-accent: #e0703a; }
-
-/* Display type: Instrument Serif italic for headlines; the wordmark keeps Helvetica. */
+/* Landing-page specifics. Shared type, colour tokens and pixel imagery live in src/pixel-system.css. */
 .landing-pixel .editorial-hero-motion h1 {
   font-family: var(--serif);
   font-style: italic;
@@ -38,53 +7,23 @@
   line-height: .95;
   letter-spacing: -.02em;
 }
-.landing-pixel .section-heading h2 {
-  font-family: var(--serif);
-  font-style: italic;
-  font-weight: 400;
-  font-size: clamp(40px, 4.4vw, 64px);
-  line-height: 1;
-  letter-spacing: -.015em;
-}
-.landing-pixel .section-number { color: var(--kicker); font-weight: 700; letter-spacing: .08em; }
 .landing-pixel .metric strong { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: clamp(34px, 3.2vw, 46px); line-height: 1; letter-spacing: -.01em; }
-.landing-pixel .quote-band p { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: clamp(32px, 3.6vw, 52px); line-height: 1.08; letter-spacing: -.01em; }
-.landing-pixel .quote-band strong { font-weight: 400; }
+.landing-pixel .quote-band p { font-size: clamp(32px, 3.6vw, 52px); line-height: 1.08; }
 .landing-pixel .process-step > .mono,
 .landing-pixel .role-row > .mono { color: var(--kicker); font-weight: 700; }
-
-/* Motion studies: ordered-dither pixel field instead of the point field. */
-.landing-pixel .field-of-touch[data-look="pixel"] .field-of-touch-frame { background: var(--pixel-lo); }
-.landing-pixel .field-of-touch[data-look="pixel"] img { filter: grayscale(1) contrast(1.15) brightness(.75); }
-.landing-pixel .field-of-touch[data-look="pixel"] canvas { image-rendering: pixelated; }
 
 /* Hero measure row: metrics beside the Vitruvian robot study. */
 .landing-pixel .hero-measure { display: grid; grid-template-columns: minmax(0, 1fr) minmax(200px, 260px); align-items: end; gap: 40px; }
 .landing-pixel .hero-measure .metrics-strip { align-self: end; }
-.vitruvian-sketch { margin: 0 0 18px; color: #ede6d6; }
-.vitruvian-sketch svg { overflow: visible; }
-.vitruvian-sketch .vitruvian-label text { fill: var(--vitruvian-accent); stroke: none; font-family: "Instrument Serif", Georgia, serif; font-style: italic; }
+.landing-pixel .hero-measure .vitruvian-sketch { margin-bottom: 18px; }
 
-/* Real photographs of the building, dithered. */
+/* Photographs of the building during fit-out. */
 .space-plates { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin: 28px 0 36px; }
 .space-plates-note { grid-column: 1 / -1; margin: 0; font-size: 11px; line-height: 1.6; color: var(--fg-3); }
-.pixel-photo { margin: 0; min-width: 0; }
-.pixel-photo-frame { position: relative; aspect-ratio: 16 / 10; overflow: hidden; border: 1px solid var(--hair); background: var(--pixel-lo); }
-.pixel-photo-frame img, .pixel-photo-frame canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.pixel-photo-frame img { object-fit: cover; filter: grayscale(1) contrast(1.15) brightness(.75); }
-.pixel-photo-frame canvas { opacity: 0; image-rendering: pixelated; }
-.pixel-photo[data-state="ready"] canvas { opacity: 1; }
-.pixel-photo figcaption { padding-top: 10px; font-size: 12px; line-height: 1.6; }
-.pixel-photo-label { font-family: var(--serif, Georgia, serif); font-style: italic; font-size: 18px; color: var(--kicker); margin-right: 6px; }
 
 @media (max-width: 760px) {
   .landing-pixel .hero-measure { grid-template-columns: minmax(0, 1fr); gap: 8px; }
   .landing-pixel .hero-measure .vitruvian-sketch { order: -1; width: min(260px, 70%); margin: 8px auto 0; }
-  .space-plates { grid-template-columns: minmax(0, 1fr); gap: 20px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .pixel-photo-frame canvas { transition: none; }
-}
-@media (max-width: 760px) {
   .landing-pixel .metrics-strip .metric strong { font-size: 32px; }
+  .space-plates { grid-template-columns: minmax(0, 1fr); gap: 20px; }
 }
