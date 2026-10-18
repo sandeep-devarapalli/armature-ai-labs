@@ -830,7 +830,7 @@ test("home hero keeps the circular identity and editorial typography", async ({ 
   await expect(page.locator(".topbar .brand-lockup")).toHaveAttribute("aria-label", "Armature AI Labs");
   await expect(page.locator(".topbar .brand-lockup > span")).toHaveText("Armature AI Labs");
   await expect(page.locator(".home-hero h1")).toHaveText(/A place to build\s*physical intelligence\./);
-  await expect(page.locator(".home-hero h1")).toHaveCSS("font-family", /Helvetica Neue.*Helvetica.*Arial/);
+  await expect(page.locator(".home-hero h1")).toHaveCSS("font-family", /Instrument Serif/);
   await expect(page.locator("body")).toHaveCSS("font-family", /Space Mono/);
 });
 
@@ -880,12 +880,10 @@ test("public routes preserve the useful legacy lab sections", async ({ page }) =
   await page.goto("/");
   await expect(page.getByText(/a planned 3,500 sq ft lab across two floors/)).toBeVisible();
   await expect(page.getByRole("heading", { name: "Two floors at a glance" })).toBeVisible();
-  await expect(page.locator("[data-room-tile]")).toHaveCount(14);
-  await expect(page.locator("[data-room-tile]").getByText("Coworking commons", { exact: true })).toBeVisible();
-  await expect(page.getByText("Workshop terrace", { exact: true })).toBeVisible();
+  await expect(page.locator("[data-room-tile]")).toHaveCount(0);
   await expect(page.getByText("Builder pods")).toHaveCount(0);
   await expect(page.getByText(/nine cameras/i)).toHaveCount(0);
-  await expect(page.getByRole("link", { name: /Open the models and room CAD/ })).toHaveAttribute("href", "/building-vision");
+  await expect(page.getByRole("link", { name: "Explore First floor models" })).toHaveAttribute("href", "/building-vision/#first-floor-overview");
   await expect(page.getByRole("heading", { name: "Monitored, end to end" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "From idea to working machine" })).toBeVisible();
   await expectNoHorizontalOverflow(page);
