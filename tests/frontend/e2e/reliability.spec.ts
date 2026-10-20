@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
-import { readdir } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
+import { createServer } from "node:http";
 
 async function listBuiltCode(directory: string, prefix = ""): Promise<string[]> {
   const entries = await readdir(directory, { withFileTypes: true });
@@ -88,6 +89,70 @@ test("deep navigation survives an evicted service-worker app shell", async ({ pa
     const response = await page.goto(route);
     expect(response?.status()).toBe(200);
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  }
+});
+
+
+test("a waiting deployment updates only on request and preserves account storage", async ({ browser }, testInfo) => {
+  test.skip(testInfo.project.name !== "chromium", "One browser exercises two real service-worker versions.");
+  let version = "old";
+  const root = path.resolve("dist");
+  const server = createServer(async (request, response) => {
+    const pathname = new URL(request.url!, "http://localhost").pathname;
+    const relative = pathname === "/app-shell" ? "app-shell.html" : pathname.slice(1);
+    const filename = path.resolve(root, relative || "index.html");
+    if (!filename.startsWith(`${root}/`)) { response.writeHead(403).end(); return; }
+    let body: Buffer;
+    let extension = path.extname(filename);
+    try { body = await readFile(filename); }
+    catch {
+      if (extension) { response.writeHead(404).end(); return; }
+      body = await readFile(path.join(root, "index.html"));
+      extension = ".html";
+    }
+    if (pathname === "/sw.js") {
+      body = Buffer.from(body.toString().replace(/(url:"(?:index\.html|app-shell)",revision:")[^"]+/g, `$1fixture-${version}`));
+    } else if (extension === ".html") {
+      body = Buffer.from(body.toString().replace("<body", `<body data-deployment="${version}"`));
+    }
+    const types: Record<string, string> = { ".js": "application/javascript", ".html": "text/html", ".css": "text/css", ".json": "application/json", ".svg": "image/svg+xml", ".png": "image/png", ".woff2": "font/woff2" };
+    response.writeHead(200, { "Content-Type": types[extension] || "application/octet-stream", "Cache-Control": "no-store" });
+    response.end(body);
+  });
+  await new Promise<void>(resolve => server.listen(0, "127.0.0.1", resolve));
+  const address = server.address() as { port: number };
+  const context = await browser.newContext({ serviceWorkers: "allow" });
+  try {
+    const page = await context.newPage();
+    await page.goto(`http://127.0.0.1:${address.port}/components`);
+    await page.evaluate(() => navigator.serviceWorker.ready);
+    await page.reload();
+    await expect(page.locator("body")).toHaveAttribute("data-deployment", "old");
+    await page.getByRole("textbox").first().fill("unfinished equipment search");
+    await page.evaluate(() => {
+      localStorage.setItem("pwa-test-account", "synthetic-account");
+      sessionStorage.setItem("pwa-test-session", "synthetic-session");
+    });
+    let navigations = 0;
+    page.on("framenavigated", frame => { if (frame === page.mainFrame()) navigations += 1; });
+    version = "new";
+    // Run a real browser update, including install/precache and the waiting-worker lifecycle.
+    await page.evaluate(async () => (await navigator.serviceWorker.ready).update());
+    await expect(page.getByRole("button", { name: "Update now", exact: true })).toBeVisible();
+    expect(await page.evaluate(async () => (await navigator.serviceWorker.ready).waiting?.state)).toBe("installed");
+    await expect(page.locator("body")).toHaveAttribute("data-deployment", "old");
+    await expect(page.getByRole("textbox").first()).toHaveValue("unfinished equipment search");
+    expect(navigations).toBe(0);
+    await page.screenshot({ path: testInfo.outputPath("deployment-waiting.png") });
+    await page.getByRole("button", { name: "Update now", exact: true }).click();
+    await expect(page.locator("body")).toHaveAttribute("data-deployment", "new");
+    expect(navigations).toBe(1);
+    expect(await page.evaluate(() => [localStorage.getItem("pwa-test-account"), sessionStorage.getItem("pwa-test-session")])).toEqual(["synthetic-account", "synthetic-session"]);
+    await expect(page.getByRole("button", { name: "Update now", exact: true })).toHaveCount(0);
+    await page.screenshot({ path: testInfo.outputPath("deployment-updated.png") });
+  } finally {
+    await context.close();
+    await new Promise<void>((resolve, reject) => server.close(error => error ? reject(error) : resolve()));
   }
 });
 
