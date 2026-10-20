@@ -504,10 +504,8 @@ h3 {
 }
 
 .pwa-update {
-  position: fixed;
-  z-index: 60;
-  right: 20px;
-  bottom: max(20px, env(safe-area-inset-bottom));
+  position: relative;
+  margin: 1rem auto;
   display: grid;
   width: min(430px, calc(100vw - 40px));
   grid-template-columns: minmax(0, 1fr) auto auto;
@@ -519,12 +517,6 @@ h3 {
   border: 1px solid var(--hair-strong);
   border-radius: 7px;
   box-shadow: 0 12px 35px rgb(10 18 32 / 16%);
-}
-
-body:has(.analytics-consent-banner) .pwa-update {
-  top: 5rem;
-  bottom: auto;
-  z-index: 130;
 }
 
 .pwa-update strong,
