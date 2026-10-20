@@ -1,10 +1,18 @@
 import { trackRegistrationMilestone } from "../../src/lib/analytics";
 vi.mock("../../src/lib/analytics", () => ({ trackRegistrationMilestone: vi.fn() }));
-beforeEach(() => vi.mocked(trackRegistrationMilestone).mockClear());
-import { fireEvent, render, screen } from "@testing-library/react";
+beforeEach(() => {
+  vi.mocked(trackRegistrationMilestone).mockClear();
+  HTMLElement.prototype.scrollIntoView = vi.fn();
+});
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { OnboardingForm } from "../../src/pages/OnboardingForm";
+
+async function goToStep(label: string) {
+  const navigation = await screen.findByRole("navigation", { name: "Registration steps" });
+  fireEvent.click(within(navigation).getByRole("button", { name: new RegExp(label) }));
+}
 
 it("requires current privacy acceptance before submitting a verified user's registration", async () => {
   const rpc = vi.fn().mockResolvedValue({ error: null });
@@ -18,6 +26,7 @@ it("requires current privacy acceptance before submitting a verified user's regi
     onAuthStateChange: () => ({ data: { subscription: { unsubscribe() {} } } }),
   } } as unknown as SupabaseClient;
   render(<MemoryRouter><OnboardingForm client={client} requestDocument={vi.fn()} /></MemoryRouter>);
+  await goToStep("Your details");
   const name = await screen.findByLabelText("Full name");
   fireEvent.change(name, { target: { value: "Synthetic Member" } });
   fireEvent.change(screen.getByLabelText("Phone number"), { target: { value: "+919876543210" } });
@@ -76,9 +85,11 @@ function submissionFixture(uploaded = true) {
 it("does not mark reserved documents uploaded or submit when files are merely selected", async () => {
   const fixture = submissionFixture(false), requestDocument = vi.fn();
   render(<MemoryRouter><OnboardingForm client={fixture.client} requestDocument={requestDocument} /></MemoryRouter>);
+  await goToStep("Private documents");
   const photo = await screen.findByLabelText("photo image");
   fireEvent.change(photo, { target: { files: [new File(["synthetic"], "photo.png", { type: "image/png" })] } });
   expect(screen.getByRole("button", { name: "Submit photo" })).toBeEnabled();
+  await goToStep("Review & submit");
   expect(screen.getByRole("button", { name: "Submit application" })).toBeDisabled();
   expect(screen.queryByText("Photo Uploaded")).not.toBeInTheDocument();
   expect(trackRegistrationMilestone).not.toHaveBeenCalled();
@@ -88,18 +99,22 @@ it("explicitly submits the current revision and shows received confirmation only
   const fixture = submissionFixture();
   Object.defineProperty(HTMLDialogElement.prototype, "showModal", { configurable: true, value: function(this: HTMLDialogElement) { this.setAttribute("open", ""); } });
   render(<MemoryRouter><OnboardingForm client={fixture.client} requestDocument={vi.fn()} /></MemoryRouter>);
+  await goToStep("Private documents");
   await screen.findByText("Photo Uploaded"); expect(screen.getByText("Government ID Uploaded")).toBeVisible();
+  await goToStep("Review & submit");
   expect(fixture.rpc).not.toHaveBeenCalled();
   fireEvent.click(screen.getByRole("button", { name: "Submit application" }));
   expect(await screen.findByRole("dialog", { name: "Your details have been received" })).toBeVisible();
   expect(fixture.rpc).toHaveBeenCalledWith("submit_basic_application_for_review", { p_expected_revision: 3 });
-  expect(screen.getByRole("button", { name: "Application submitted" })).toBeDisabled();
+  expect(screen.getByRole("heading", { name: "Your application is in review." })).toBeVisible();
+  expect(screen.queryByRole("button", { name: "Submit application" })).not.toBeInTheDocument();
   expect(trackRegistrationMilestone).toHaveBeenCalledExactlyOnceWith("application_submitted");
   delete (HTMLDialogElement.prototype as unknown as Record<string, unknown>).showModal;
 });
 it("keeps the application unsubmitted and shows a server validation failure", async () => {
   const fixture = submissionFixture(); fixture.rpc.mockResolvedValue({ data: null, error: { message: "Documents expired; upload again." } } as never);
   render(<MemoryRouter><OnboardingForm client={fixture.client} requestDocument={vi.fn()} /></MemoryRouter>);
+  await goToStep("Review & submit");
   fireEvent.click(await screen.findByRole("button", { name: "Submit application" }));
   expect(await screen.findByRole("alert")).toHaveTextContent("Documents expired; upload again.");
   expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
@@ -108,6 +123,7 @@ it("keeps the application unsubmitted and shows a server validation failure", as
 it("keeps upload failures visible without marking an image uploaded", async () => {
   const fixture = submissionFixture(false), requestDocument = vi.fn().mockRejectedValue(new Error("Security scan unavailable. Please retry."));
   render(<MemoryRouter><OnboardingForm client={fixture.client} requestDocument={requestDocument} /></MemoryRouter>);
+  await goToStep("Private documents");
   const photo = await screen.findByLabelText("photo image");
   const file = new File(["synthetic"], "photo.png", { type: "image/png" });
   fireEvent.change(photo, { target: { files: [file] } });
@@ -115,6 +131,7 @@ it("keeps upload failures visible without marking an image uploaded", async () =
   fireEvent.submit(photo.closest("form")!);
   expect((await screen.findAllByRole("alert")).every(alert => alert.textContent?.includes("Security scan unavailable. Please retry."))).toBe(true);
   expect(screen.queryByText("Photo Uploaded")).not.toBeInTheDocument();
+  await goToStep("Review & submit");
   expect(screen.getByRole("button", { name: "Submit application" })).toBeDisabled();
 });
 it("reuses a reserved document after a failed upload instead of reserving twice", async () => {
@@ -122,6 +139,7 @@ it("reuses a reserved document after a failed upload instead of reserving twice"
   fixture.rpc.mockImplementation(async name => ({ data: name === "reserve_onboarding_document" ? { id: "reserved-photo", kind: "photo", uploaded_at: null, expires_at: new Date(Date.now() + 86_400_000).toISOString(), deleted_at: null } : null, error: null }) as never);
   const requestDocument = vi.fn().mockRejectedValue(new Error("Upload interrupted"));
   render(<MemoryRouter><OnboardingForm client={fixture.client} requestDocument={requestDocument} /></MemoryRouter>);
+  await goToStep("Private documents");
   const photo = await screen.findByLabelText("photo image"), file = new File(["synthetic"], "photo.png", { type: "image/png" });
   fireEvent.change(photo, { target: { files: [file] } });
   vi.spyOn(FormData.prototype, "get").mockImplementation(key => key === "file" ? file : null);
@@ -137,6 +155,7 @@ it("reuses a reserved document after a failed upload instead of reserving twice"
 it("requires explicit ID retention consent before sending document bytes", async () => {
   const fixture = submissionFixture(false), requestDocument = vi.fn();
   render(<MemoryRouter><OnboardingForm client={fixture.client} requestDocument={requestDocument} /></MemoryRouter>);
+  await goToStep("Private documents");
   const input = await screen.findByLabelText("government ID image");
   const file = new File(["synthetic"], "id.png", { type: "image/png" });
   vi.spyOn(FormData.prototype, "get").mockImplementation(key => key === "file" ? file : null);
@@ -148,6 +167,7 @@ it("requires explicit ID retention consent before sending document bytes", async
 it("records ID retention consent before uploading to the security scanner", async () => {
   const fixture = submissionFixture(false), requestDocument = vi.fn().mockResolvedValue(new Response('{}'));
   render(<MemoryRouter><OnboardingForm client={fixture.client} requestDocument={requestDocument} /></MemoryRouter>);
+  await goToStep("Private documents");
   const input = await screen.findByLabelText("government ID image");
   const file = new File(["synthetic"], "id.png", { type: "image/png" });
   vi.spyOn(FormData.prototype, "get").mockImplementation(key => key === "file" ? file : key === "id_retention" ? "accepted" : null);
@@ -156,4 +176,70 @@ it("records ID retention consent before uploading to the security scanner", asyn
   expect(fixture.rpc).toHaveBeenCalledWith("accept_government_id_retention", { p_document_id: "government_id", p_notice_version: "2026-10-14-equipment-id-v1" });
   expect(requestDocument).toHaveBeenCalledWith("government_id", file);
   expect(fixture.rpc.mock.invocationCallOrder[0]).toBeLessThan(requestDocument.mock.invocationCallOrder[0]);
+});
+
+
+it("keeps one step visible and permits identity review before mobile verification", async () => {
+  const fixture = submissionFixture();
+  render(<MemoryRouter><OnboardingForm client={fixture.client} requestDocument={vi.fn()} /></MemoryRouter>);
+  await screen.findByRole("navigation", { name: "Registration steps" });
+  expect(screen.getByRole("heading", { name: "Basic" })).toBeVisible();
+  expect(screen.queryByRole("button", { name: "Submit application" })).not.toBeInTheDocument();
+  await goToStep("Mobile number");
+  expect(screen.getByText("You can submit your identity application before verifying your mobile. Both are needed for Verified membership.")).toBeVisible();
+  fireEvent.click(screen.getByRole("button", { name: "Continue with identity review" }));
+  expect(screen.getByText("Photo Uploaded")).toBeVisible();
+  expect(screen.queryByRole("heading", { name: "Basic" })).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "Review application" }));
+  expect(screen.getByRole("button", { name: "Submit application" })).toBeEnabled();
+  expect(fixture.rpc).not.toHaveBeenCalled();
+});
+
+it("preserves approved identity after document expiry without asking for a new submission", async () => {
+  const fixture = submissionFixture();
+  fixture.app.status = "approved";
+  fixture.docs.forEach(document => { document.expires_at = "2000-01-01T00:00:00Z"; });
+  render(<MemoryRouter><OnboardingForm client={fixture.client} requestDocument={vi.fn()} /></MemoryRouter>);
+  expect(await screen.findByRole("heading", { name: "Your identity is approved." })).toBeVisible();
+  expect(screen.getByText(/You do not need to upload your ID again/)).toBeVisible();
+  expect(screen.queryByRole("button", { name: "Submit application" })).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "Manage my registration" }));
+  await goToStep("Private documents");
+  expect(screen.queryByLabelText("photo image")).not.toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Review application" })).toBeEnabled();
+  await goToStep("Review & submit");
+  expect(screen.getByText(/No new submission is needed unless/)).toBeVisible();
+  expect(fixture.rpc).not.toHaveBeenCalled();
+});
+
+
+it("does not show received confirmation while final submission is still pending", async () => {
+  const fixture = submissionFixture();
+  let complete!: (value: { data: null; error: null }) => void;
+  fixture.rpc.mockImplementation(() => new Promise(resolve => { complete = resolve; }));
+  Object.defineProperty(HTMLDialogElement.prototype, "showModal", { configurable: true, value: function(this: HTMLDialogElement) { this.setAttribute("open", ""); } });
+  render(<MemoryRouter><OnboardingForm client={fixture.client} requestDocument={vi.fn()} /></MemoryRouter>);
+  await goToStep("Review & submit");
+  fireEvent.click(screen.getByRole("button", { name: "Submit application" }));
+  expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Submit application" })).toBeDisabled();
+  expect(trackRegistrationMilestone).not.toHaveBeenCalled();
+  const { act } = await import("@testing-library/react");
+  await act(async () => { complete({ data: null, error: null }); });
+  expect(await screen.findByRole("dialog", { name: "Your details have been received" })).toBeVisible();
+  delete (HTMLDialogElement.prototype as unknown as Record<string, unknown>).showModal;
+});
+
+
+it("shows revocation rather than pending review for a previously submitted application", async () => {
+  const fixture = submissionFixture();
+  fixture.app.status = "revoked";
+  fixture.app.submitted_revision = fixture.app.revision;
+  fixture.app.submitted_at = new Date().toISOString();
+  render(<MemoryRouter><OnboardingForm client={fixture.client} requestDocument={vi.fn()} /></MemoryRouter>);
+  await screen.findByRole("region", { name: "Your application status" });
+  expect(screen.queryByRole("heading", { name: "Your application is in review." })).not.toBeInTheDocument();
+  expect(screen.getByText(/Signing in does not restore revoked membership/)).toBeVisible();
+  expect(screen.queryByRole("button", { name: "Submit application" })).not.toBeInTheDocument();
+  expect(fixture.rpc).not.toHaveBeenCalled();
 });
