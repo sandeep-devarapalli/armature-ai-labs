@@ -126,3 +126,6 @@ verify_jwt = false
 
 [functions.market-message-maintenance]
 verify_jwt = false
+
+[functions.member-directory-avatar]
+verify_jwt = false

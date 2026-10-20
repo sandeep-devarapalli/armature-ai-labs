@@ -5,7 +5,7 @@ import { AnalyticsSettingsButton } from "../components/AnalyticsConsent";
 
 export function PrivacyPage() {
   return <div className="privacy-page">
-    <PageHeader meta="Privacy · Updated 14 October 2026" title="Your information, handled with care." description="How Armature AI Labs handles website visits, enquiries, ecosystem contributions and free membership registration." />
+    <PageHeader meta="Privacy · Updated 20 October 2026" title="Your information, handled with care." description="How Armature AI Labs handles website visits, enquiries, ecosystem contributions and free membership registration." />
     <div className="wrap privacy-content">
       <section aria-labelledby="privacy-operator">
         <h2 id="privacy-operator">Who is responsible</h2>
@@ -34,6 +34,12 @@ export function PrivacyPage() {
         <p>Measurement uses a temporary anonymous identifier rather than a persistent member profile. Session recording and automatic interaction capture are disabled. Your analytics preference is saved in this browser so we can honour it on later visits. PostHog receives connection information needed to deliver the analytics request; anonymous events should not be treated as a promise of complete anonymity from the service provider.</p>
         <p>You can decline without affecting registration or website access. Withdraw consent through Analytics settings to stop future measurement in this browser. Withdrawal does not automatically delete events already received; contact privacy@armatureailabs.com about privacy requests.</p>
         <AnalyticsSettingsButton />
+      </section>
+      <section aria-labelledby="privacy-directory">
+        <h2 id="privacy-directory">Optional public member directory</h2>
+        <p>You can choose to publish a display name, short bio and skills in the public member directory. These details can be read by anyone. Publishing is optional and does not change your membership or learning access.</p>
+        <p>Your retained, security-scanned avatar appears publicly only if you separately agree to share it. Verification photos and government IDs are never used directly in the directory. Phone numbers, email addresses, dates of birth, approval records and bookings are not included.</p>
+        <p>Use My public profile in your account menu to edit or hide your listing or withdraw public-photo permission. Hiding removes it from future directory responses; people may have saved information previously made public. Public sharing is separate from consent to retain an avatar for member-only use.</p>
       </section>
       <section aria-labelledby="privacy-membership">
         <h2 id="privacy-membership">Basic membership and identity review</h2>

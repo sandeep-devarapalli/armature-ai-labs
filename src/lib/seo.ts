@@ -126,7 +126,7 @@ const operationalNames: Record<string, string> = {
   team: "Meet the Team",
   lockers: "Lockers", consumables: "Small Parts", toolkits: "Toolkits",
   admin: "Administration", kiosk: "Check-In Kiosk", financials: "Financial Planning",
-  members: "Member Directory"
+  members: "Member Directory", "directory-profile": "My Public Profile"
 };
 
 export function getPageSeo(pathname: string): PageSeo {
