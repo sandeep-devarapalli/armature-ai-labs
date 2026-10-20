@@ -85,7 +85,7 @@ describe("public source and planning context", () => {
     render(<MemoryRouter><JoinPage /></MemoryRouter>);
     expect(screen.getByRole("heading", { name: "Build with us. Enquire about membership." })).toBeInTheDocument();
     expect(screen.getByText("Pre-launch · enquiries only")).toBeInTheDocument();
-    expect(screen.getByText(/current layout proposes seven cabins/)).toBeInTheDocument();
+    expect(screen.getByText(/planned layout has a shared pool of 25 desks and four six-seat cabins/)).toBeInTheDocument();
     expect(screen.queryByText(/sixteen|50-person/)).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Email the lab" })).toHaveAttribute("href", "mailto:hello@armatureailabs.com");
     expect(screen.queryByRole("link", { name: "Create member account" })).not.toBeInTheDocument();

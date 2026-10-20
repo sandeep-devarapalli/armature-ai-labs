@@ -30,13 +30,22 @@ it("requires current privacy acceptance before submitting a verified user's regi
   const name = await screen.findByLabelText("Full name");
   fireEvent.change(name, { target: { value: "Synthetic Member" } });
   fireEvent.change(screen.getByLabelText("Phone number"), { target: { value: "+919876543210" } });
-  fireEvent.change(screen.getByLabelText("Your LinkedIn profile"), { target: { value: "https://www.linkedin.com/in/synthetic" } });
+  fireEvent.change(screen.getByLabelText("Your LinkedIn profile (required)"), { target: { value: "https://www.linkedin.com/in/synthetic" } });
   fireEvent.change(screen.getByLabelText("Date of birth"), { target: { value: "2000-01-01" } });
   fireEvent.submit(name.closest("form")!);
   expect(await screen.findByRole("alert")).toHaveTextContent("Accept the privacy notice");
   expect(rpc).not.toHaveBeenCalled();
   expect(trackRegistrationMilestone).not.toHaveBeenCalled();
   fireEvent.click(screen.getByRole("checkbox", { name: /I accept the privacy notice/ }));
+  const linkedin = screen.getByLabelText("Your LinkedIn profile (required)");
+  expect(linkedin).toBeRequired();
+  for (const value of ["", "https://linkedin.com/company/armature", "https://linkedin.com.evil.test/in/profile"]) {
+    fireEvent.change(linkedin, { target: { value } });
+    fireEvent.submit(name.closest("form")!);
+    expect(await screen.findByRole("alert")).toHaveTextContent("Enter your personal LinkedIn profile URL");
+    expect(rpc).not.toHaveBeenCalled();
+  }
+  fireEvent.change(linkedin, { target: { value: "https://www.linkedin.com/in/synthetic" } });
   fireEvent.submit(name.closest("form")!);
   await screen.findByText("Details saved. Submit your photo and ID, then submit your application.");
   expect(trackRegistrationMilestone).toHaveBeenCalledExactlyOnceWith("details_saved");
@@ -241,5 +250,17 @@ it("shows revocation rather than pending review for a previously submitted appli
   expect(screen.queryByRole("heading", { name: "Your application is in review." })).not.toBeInTheDocument();
   expect(screen.getByText(/Signing in does not restore revoked membership/)).toBeVisible();
   expect(screen.queryByRole("button", { name: "Submit application" })).not.toBeInTheDocument();
+  expect(fixture.rpc).not.toHaveBeenCalled();
+});
+
+it("offers Basic, free verification and plan exploration without changing membership", async () => {
+  const fixture = submissionFixture(false);
+  render(<MemoryRouter><OnboardingForm client={fixture.client} requestDocument={vi.fn()} /></MemoryRouter>);
+  await goToStep("Your membership");
+  expect(screen.getByRole("link", { name: "Stay Basic · browse free courses" })).toHaveAttribute("href", "https://courses.armatureailabs.com/");
+  expect(screen.getByRole("link", { name: "Explore Premium plans" })).toHaveAttribute("href", "/join#premium-plans");
+  expect(screen.getByText(/You can stay Verified without a paid plan/)).toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "Become Verified" }));
+  expect(screen.getByRole("heading", { name: "Your details" })).toBeInTheDocument();
   expect(fixture.rpc).not.toHaveBeenCalled();
 });

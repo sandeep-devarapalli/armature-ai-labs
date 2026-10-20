@@ -17,4 +17,15 @@ Five steps with existing Supabase operations: membership explanation, details, m
 
 ## Release boundary
 
-Implementation only: no schema, production database, SMS/email or payment configuration was changed. Local browser proof uses synthetic responses, not a live registration submission. Current live deployment is unchanged pending release of this focused PR.
+Implementation only: no schema, production database, SMS/email or payment configuration was changed. Local browser proof uses synthetic responses, not a live registration submission. Owner subsequently authorized squash merge and production release on 20 October 2026. Release verification is recorded below.
+
+
+## Release revision — membership choice
+
+- Explicit Stay Basic, Become Verified and Explore Premium choices; server-Verified members also see Stay Verified. These navigate without mutating membership or buying anything.
+- Premium overview links to `/join#premium-plans`: day/week flexi, monthly reserved desk and whole six-seat team cabin. Corrected old seven-cabin copy to the approved four cabins and 25 shared desks.
+- Personal LinkedIn profile is visibly required, trimmed and checked before submission against the existing database rule. Database submit/resubmit already reject absent or invalid profiles; no migration is needed. Staying email-confirmed Basic does not require identity application details.
+- PR CI identified six old browser tests which assumed documents were always visible. Updated their navigation to Documents and Review steps while preserving scan failure, focus, retry, consent and final revision assertions. Also updated the gated membership-level browser tests for summary/manage navigation.
+- One full local test run timed out in the unrelated resource-library test while browser builds ran concurrently. Bounded-worker regression run follows; no timeout or assertions were weakened.
+
+Final local verification: 788/788 unit tests across 68 files passed with two workers; `npm run build` passed. Registration browser suite: 26 passed with 6 tier-gated skips; membership-level-enabled suite: all 34 passed. Empty and company LinkedIn URLs are rejected before any submit RPC. A previously latent talent-draft test race now waits for its mocked asynchronous request to start before resolving it; production talent code is unchanged. Rendered final evidence includes `membership-choices.png` and `tested-submit-{chromium,mobile}.png`.

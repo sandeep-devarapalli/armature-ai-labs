@@ -53,6 +53,7 @@ it('waits for initial private drafts before checking a LinkedIn identity', async
   const next = await screen.findByRole('button', { name: 'Continue' });
   expect(next).toBeDisabled();
   expect(mock.rpc).not.toHaveBeenCalledWith('talent_check_submission_identity', expect.anything());
+  await waitFor(() => expect(resolveDrafts).toBeTypeOf('function'));
   await act(async () => { resolveDrafts([]); });
   await identity();
   await screen.findByLabelText('Full name');

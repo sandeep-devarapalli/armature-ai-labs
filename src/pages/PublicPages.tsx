@@ -392,12 +392,18 @@ export function JoinPage() {
           ))}
         </div>
       </Section>
+      {levelsEnabled && <section className="section" id="premium-plans"><div className="wrap"><h2>Explore Premium plans</h2><p>You can stay Basic or Verified for free. When paid bookings open, choose workspace access that suits your visit. An active qualifying subscription gives Verified members Premium status for its term.</p><div className="process-list">{[
+        ["Day pass", "A flexi desk for your selected day, 9 am–5 pm."],
+        ["Week pass", "Flexi desk access for seven consecutive days, during pass hours."],
+        ["Monthly reserved desk", "Your reserved desk from the first to the last day of the calendar month."],
+        ["Monthly team cabin", "An entire six-seat cabin for your team; all six seats are included in the booking."]
+       ].map(([name, detail], index) => <div className="process-row" key={name}><span className="mono">0{index + 1}</span><h3>{name}</h3><p>{detail}</p></div>)}</div><p>Payment collection is not open yet. Equipment is charged separately and requires verification, matching workspace access and any required training. Choosing a plan to explore does not purchase it.</p></div></section>}
       <Section number="02" title={memberPlatformAvailable ? "What members can reserve" : "Planned member spaces"} lede="Resources will become bookable after commissioning, with confirmed availability, operating rules, and any required safety induction." dark>
         <div className="service-grid">
           <article className="service-card">
             <Users aria-hidden="true" />
             <h3>Cabins and shared desks</h3>
-            <p>The current layout proposes seven cabins across the ground and first floors, alongside coworking commons. Final capacity and booking options remain to be confirmed.</p>
+            <p>The planned layout has a shared pool of 25 desks and four six-seat cabins across the ground and first floors. Teams reserve an entire cabin; individual cabin seats are not sold separately.</p>
           </article>
           <article className="service-card">
             <Cpu aria-hidden="true" />
