@@ -33,7 +33,7 @@ jobs:
       - run: npx playwright install --only-shell chromium
       - run: npm run test:e2e
       - run: npm run test:e2e:ecosystem
-      - run: npx playwright test --config playwright.basic-registration.config.ts
+      - run: VITE_MEMBERSHIP_LEVELS_ENABLED=true npx playwright test --config playwright.basic-registration.config.ts
       - name: Verify membership fixtures against a prebuilt alternate backend
         env:
           VITE_DEMO_MODE: 'false'
@@ -42,6 +42,7 @@ jobs:
           VITE_MEMBER_PLATFORM_ENABLED: 'false'
           VITE_COMPONENT_REQUESTS_ENABLED: 'false'
           VITE_ANALYTICS_ENABLED: 'true'
+          VITE_MEMBERSHIP_LEVELS_ENABLED: 'true'
           VITE_POSTHOG_KEY: phc_synthetic_ci_fixture
           VITE_POSTHOG_HOST: https://z.armatureailabs.com
           VITE_SUPABASE_URL: https://production-fixture.invalid
