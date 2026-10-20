@@ -521,6 +521,12 @@ h3 {
   box-shadow: 0 12px 35px rgb(10 18 32 / 16%);
 }
 
+body:has(.analytics-consent-banner) .pwa-update {
+  top: 5rem;
+  bottom: auto;
+  z-index: 130;
+}
+
 .pwa-update strong,
 .pwa-update span {
   display: block;

@@ -139,6 +139,9 @@ test("a waiting deployment updates only on request and preserves account storage
     // Run a real browser update, including install/precache and the waiting-worker lifecycle.
     await page.evaluate(async () => (await navigator.serviceWorker.ready).update());
     await expect(page.getByRole("button", { name: "Update now", exact: true })).toBeVisible();
+    if (process.env.VITE_ANALYTICS_ENABLED === "true") {
+      await expect(page.getByRole("region", { name: "Optional website analytics" })).toBeVisible();
+    }
     expect(await page.evaluate(async () => (await navigator.serviceWorker.ready).waiting?.state)).toBe("installed");
     await expect(page.locator("body")).toHaveAttribute("data-deployment", "old");
     await expect(page.getByRole("textbox").first()).toHaveValue("unfinished equipment search");
