@@ -1,4 +1,4 @@
-export type Theme = "light" | "dark" | "sepia";
+export type Theme = "light" | "dark";
 export type MembershipState =
   | "pending"
   | "active"

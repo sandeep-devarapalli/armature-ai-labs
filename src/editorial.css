@@ -77,16 +77,6 @@
   --moss: #a7c88e;
   --shadow: none;
 }
-:root[data-theme="sepia"] {
-  --saffron: #251a0c;
-  --saffron-soft: #dfcda8;
-  --saffron-deep: #584a37;
-  --link: #784400;
-  --link-hover: #603600;
-  --link-on-panel-hover: #603600;
-  --grid-line: transparent;
-  --shadow: none;
-}
 html { scroll-padding-top: 115px; }
 body { font-size: 14px; line-height: 1.8; -webkit-font-smoothing: antialiased; }
 h1, h2, h3 { font-weight: 700; letter-spacing: -.035em; }

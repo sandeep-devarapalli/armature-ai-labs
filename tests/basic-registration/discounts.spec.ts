@@ -18,7 +18,7 @@ async function fixture(page: Page, role = 'admin') {
   await route.fulfill({ contentType: 'application/json', body: JSON.stringify(data) });
  }); return calls;
 }
-for (const theme of ['light', 'dark', 'sepia']) test(`personal discount review in ${theme}`, async ({ page }, info) => {
+for (const theme of ['light', 'dark']) test(`personal discount review in ${theme}`, async ({ page }, info) => {
  const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
  const calls = await fixture(page); await page.goto('/admin/discounts');
  await page.getByRole('button', { name: `${theme} theme`, exact: true }).click();

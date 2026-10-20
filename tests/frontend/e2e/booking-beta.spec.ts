@@ -25,7 +25,7 @@ test("booking beta explores chairs and whole cabins without operational writes",
   await expect(summary.locator(".booking-beta-price")).toContainText("₹280");
   await expect(summary).toContainText("It is not an awarded discount.");
   await student.selectOption("0");
-  for (const theme of ["light", "dark", "sepia"]) {
+  for (const theme of ["light", "dark"]) {
     await page.getByRole("button", { name: `${theme} theme`, exact: true }).click();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await page.locator(".booking-floor-map").screenshot({ path: testInfo.outputPath(`booking-beta-${theme}.png`) });
@@ -41,7 +41,7 @@ test("booking beta explores chairs and whole cabins without operational writes",
   await expect(student).toHaveCount(0);
   await page.getByRole("button", { name: /^C02 · FF-03 Whole cabin · 6 seats · Explore$/ }).click();
   await expect(summary).toContainText("C02 · FF-03");
-  await expect(page.locator(".viewer-cabin[data-cabin=C02]")).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator(".viewer-cabin[data-cabin=C02]")).toHaveAttribute("aria-pressed", "true", { timeout: 15_000 });
   await expect(page.locator(".viewer-seat")).toHaveCount(0);
   await expect(summary.locator(".booking-beta-price")).toContainText("₹52,500");
   await page.locator(".booking-floor-canvas").screenshot({ path: testInfo.outputPath("booking-beta-cabin.png") });

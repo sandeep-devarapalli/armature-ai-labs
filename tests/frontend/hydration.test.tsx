@@ -35,7 +35,7 @@ it("hydrates an anonymous snapshot before restoring local preferences and demo s
   window.localStorage.setItem("armature-demo-state-v1", JSON.stringify(savedState));
   window.localStorage.setItem(INVENTORY_STORAGE_KEY, JSON.stringify(initialInventoryState));
   window.localStorage.setItem(MAKER_SERVICES_STORAGE_KEY, JSON.stringify(makerServicesDemoState));
-  window.localStorage.setItem("armature-theme", "sepia");
+  window.localStorage.setItem("armature-theme", "light");
   const storageWrites = vi.spyOn(window.localStorage, "setItem");
   const online = vi.spyOn(navigator, "onLine", "get").mockReturnValue(false);
   const app = <StrictMode><Providers hydrate><Snapshot /></Providers></StrictMode>;
@@ -55,14 +55,14 @@ it("hydrates an anonymous snapshot before restoring local preferences and demo s
     expect(text("bookings")).toBe(String(savedState.bookings.length));
     expect(text("requests")).toBe(String(initialInventoryState.requests.length));
     expect(text("orders")).toBe(String(makerServicesDemoState.consumableOrders.length));
-    expect(text("theme")).toBe("sepia");
+    expect(text("theme")).toBe("light");
     expect(text("online")).toBe("false");
     expect(errors).toEqual([]);
     expect(storageWrites.mock.calls.filter(([key]) => key === "armature-demo-state-v1")
       .every(([, value]) => JSON.parse(value).currentUserId === "member-demo")).toBe(true);
     expect(window.localStorage.getItem(INVENTORY_STORAGE_KEY)).toBe(JSON.stringify(initialInventoryState));
     expect(window.localStorage.getItem(MAKER_SERVICES_STORAGE_KEY)).toBe(JSON.stringify(makerServicesDemoState));
-    expect(window.localStorage.getItem("armature-theme")).toBe("sepia");
+    expect(window.localStorage.getItem("armature-theme")).toBe("light");
   } finally {
     await act(async () => root?.unmount());
     container.remove();

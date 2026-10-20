@@ -11,8 +11,6 @@
 .about-hero-figure img { display: block; width: 112%; max-width: none; height: auto; margin-left: -8%; }
 .about-hero-figure figcaption, .about-ambition figcaption { color: var(--fg-3); font-size: 10px; line-height: 1.5; }
 .about-hero-figure figcaption { margin: -8px 0 0 8%; }
-:root[data-theme="sepia"] .about-hero-figure img,
-:root[data-theme="sepia"] .about-ambition img { mix-blend-mode: multiply; }
 
 .about-process { background: #111110; color: #f6f6f2; padding: 48px 0 70px; }
 .about-process-art { display: block; width: 100%; height: auto; }

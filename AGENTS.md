@@ -271,3 +271,5 @@ Use the narrowest checks that match the edit:
 - People gallery contacts, 20 October 2026: members may optionally publish a separate public email or their confirmed sign-in email, and a LinkedIn profile URL. Require explicit contact sharing; never auto-publish existing private registration details. Resolve sign-in email on the server, preserve opt-out/hide and membership eligibility, and do not change real profiles for demonstrations.
 
 - Nonmodal notice layout correction, 20 October 2026: analytics consent and PWA update notices must occupy normal document flow rather than cover registration, review or other page controls. Keep both notices actionable without forcing a consent decision or dismissing notices to use the page. Test onboarding submission and explicit update activation with analytics enabled.
+
+- Theme simplification, 20 October 2026: the owner removed Sepia from the main website. Offer Light and Dark only; migrate previously saved Sepia preferences to Light before rendering and in React state. Preserve default Dark for new visitors and keep the courses website outside this change.

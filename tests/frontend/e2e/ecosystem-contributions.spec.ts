@@ -33,7 +33,7 @@ test("page hierarchy and resource library remain usable in every theme", async (
   await expect(title).toBeVisible();
   const library = page.getByRole("region", { name: "Tools & resources for builders" });
   const search = library.getByRole("searchbox");
-  for (const theme of ["light", "dark", "sepia"]) {
+  for (const theme of ["light", "dark"]) {
     await page.getByRole("button", { name: `${theme} theme`, exact: true }).click();
     await library.scrollIntoViewIfNeeded();
     const sizes = await page.locator(".atlas-page-heading h1,.atlas-city-guide h2,.resource-library h2,.resource-library h3").evaluateAll(nodes => nodes.map(node => ({ tag: node.tagName, size: parseFloat(getComputedStyle(node).fontSize) })));
@@ -65,7 +65,7 @@ test("hardware suppliers preserve tool priority and distinguish website, Maps an
   await expect(library.getByRole("heading", { level: 3 }).first()).toHaveText("CopperPilot");
   await library.getByRole("button", { name: "Hardware suppliers", exact: true }).click();
   await expect(library.getByRole("status")).toHaveText("54 resources found. Showing 4.");
-  for (const theme of ["light", "dark", "sepia"]) {
+  for (const theme of ["light", "dark"]) {
     await page.getByRole("button", { name: `${theme} theme`, exact: true }).click();
     await library.scrollIntoViewIfNeeded();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
@@ -98,7 +98,7 @@ test("selected favicon pin renders in every theme and survives icon failure", as
   const icon = marker.locator("img");
   await expect(icon).toBeVisible();
   expect(await icon.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
-  for (const theme of ["light", "dark", "sepia"]) {
+  for (const theme of ["light", "dark"]) {
     await page.evaluate(value => { document.documentElement.dataset.theme = value; }, theme);
     await expect(marker).toBeInViewport();
     const label = (await marker.locator(".ecosystem-marker-label").boundingBox())!;
@@ -332,7 +332,7 @@ test("anonymous edit has complete prefill and a saved-receipt confirmation on de
   await page.getByLabel("Phone 2", { exact: true }).fill("+91 9876543211");
   await page.getByLabel("Phone 2 label", { exact: true }).fill("Workshop");
   await page.getByLabel(/I have permission/).check();
-  for (const theme of ["light", "dark", "sepia"]) {
+  for (const theme of ["light", "dark"]) {
     await page.evaluate((value) => { document.documentElement.dataset.theme = value; window.scrollTo({ top: 0, behavior: "instant" }); }, theme);
     await page.screenshot({ path: resolve(evidence, `fixture-form-${theme}-${testInfo.project.name}.png`), fullPage: true });
   }
@@ -373,7 +373,7 @@ test("public source and filtered URL survive browser back and forward", async ({
   await expect(page).toHaveURL(/type=research-ecosystem/);
   await page.goBack(); await expect(page.getByRole("button", { name: "Research & ecosystem", exact: true })).toHaveAttribute("aria-pressed", "false");
   await page.goForward(); await expect(page.getByRole("button", { name: "Research & ecosystem", exact: true })).toHaveAttribute("aria-pressed", "true");
-  for (const theme of ["light", "dark", "sepia"]) {
+  for (const theme of ["light", "dark"]) {
     await page.evaluate((value) => { document.documentElement.dataset.theme = value; window.scrollTo({ top: 0, behavior: "instant" }); }, theme);
     await page.locator(".atlas-directory").evaluate(element => { element.scrollTop = 0; });
     await expect(page.getByRole("heading", { name: "Bangalore starter guide" })).toBeVisible();
@@ -424,7 +424,7 @@ test("duplicate suggestions preserve a draft, gate pending edits and prefill an 
   await page.getByRole("button", { name: "Discard draft and suggest edit" }).click();
   await expect(matches.getByRole("alert")).toContainText("An update is awaiting admin review");
   await expect(page.getByLabel("Your name", { exact: true })).toHaveValue("Private synthetic draft");
-  for (const theme of ["light", "dark", "sepia"]) {
+  for (const theme of ["light", "dark"]) {
     await page.evaluate(value => { document.documentElement.dataset.theme = value; }, theme);
     await matches.scrollIntoViewIfNeeded();
     await page.screenshot({ path: resolve(evidence, `fixture-duplicates-${theme}-${testInfo.project.name}.png`) });
@@ -497,7 +497,7 @@ test("search, filters and result scroll survive details, with public Maps links 
   await expect(filters).toHaveAttribute("open", "");
   await expect.poll(async () => Math.abs(await guide.evaluate(element => element.scrollTop) - savedScroll)).toBeLessThan(2);
   await filters.locator("summary").click();
-  for (const theme of ["light", "dark", "sepia"]) {
+  for (const theme of ["light", "dark"]) {
     await page.evaluate(value => { document.documentElement.dataset.theme = value; window.scrollTo({ top: 0, behavior: "instant" }); }, theme);
     await guide.evaluate(element => { element.scrollTop = 0; });
     await expect(page.locator("header").first()).toBeVisible();

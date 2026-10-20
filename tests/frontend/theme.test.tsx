@@ -30,7 +30,7 @@ it.each([null, "invalid"])("defaults to dark with preference %s, even on a light
   expect(document.querySelector('meta[name="theme-color"]')).toHaveAttribute("content", "#111110");
 });
 
-it.each(["light", "dark", "sepia"])("retains a saved %s preference", (saved) => {
+it.each(["light", "dark"])("retains a saved %s preference", (saved) => {
   window.localStorage.setItem("armature-theme", saved);
   render(<ThemeProvider><ThemeHarness /></ThemeProvider>);
   expect(screen.getByRole("status")).toHaveTextContent(saved);
@@ -59,4 +59,14 @@ it("survives an unavailable localStorage property", () => {
   } finally {
     Object.defineProperty(window, "localStorage", descriptor);
   }
+});
+
+
+it.each([false, true])("migrates saved sepia to light with hydration=%s", (hydrate) => {
+  window.localStorage.setItem("armature-theme", "sepia");
+  render(<ThemeProvider hydrate={hydrate}><ThemeHarness /></ThemeProvider>);
+  expect(screen.getByRole("status")).toHaveTextContent("light");
+  expect(document.documentElement).toHaveAttribute("data-theme", "light");
+  expect(document.querySelector('meta[name="theme-color"]')).toHaveAttribute("content", "#ffffff");
+  expect(window.localStorage.getItem("armature-theme")).toBe("light");
 });

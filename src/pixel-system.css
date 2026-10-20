@@ -26,7 +26,6 @@
   --vitruvian-accent: #e0703a;
 }
 :root[data-theme="dark"] { --kicker: #e0703a; --pixel-hi: #ede6d6; --pixel-accent: #e0703a; }
-:root[data-theme="sepia"] { --kicker: #9a4318; --pixel-lo: #241a12; --pixel-hi: #efe2c8; --pixel-accent: #c8642e; }
 /* Hero bands and ink feature sections stay dark in every theme. */
 .home-hero-integrated,
 .ink-surface { --kicker: #e0703a; --pixel-lo: #111110; --pixel-hi: #ede6d6; --pixel-accent: #e0703a; }

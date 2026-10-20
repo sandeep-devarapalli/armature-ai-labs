@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { backendOrigin, authStorageKey } from "./backend-fixture";
-for (const theme of ["light", "dark", "sepia"]) test(`people gallery and voluntary publishing in ${theme}`, async ({ page }, info) => {
+for (const theme of ["light", "dark"]) test(`people gallery and voluntary publishing in ${theme}`, async ({ page }, info) => {
   const user = { id: "10000000-0000-4000-8000-000000000005", aud: "authenticated", role: "authenticated", email: "synthetic@example.test", email_confirmed_at: "2026-09-01T00:00:00Z", app_metadata: { provider: "email" }, user_metadata: {}, created_at: "2026-09-01T00:00:00Z" };
   const person = { id: "20000000-0000-4000-8000-000000000001", display_name: "Synthetic Builder", bio: "Building open robot hands and learning embedded systems.", skills: ["Robotics", "Embedded systems"], has_avatar: false, public_email: "contact@example.test", linkedin_url: "https://www.linkedin.com/in/synthetic-builder" };
   let own = { ...person, published: false, share_avatar: false, avatar_available: true, avatar_revision: "synthetic-revision", email_source: "none", public_email: null as string | null, linkedin_url: null as string | null, contact_consent: false };

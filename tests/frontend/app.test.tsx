@@ -19,7 +19,7 @@ function ThemeHarness() {
   return (
     <>
       <output>{theme}</output>
-      <button type="button" onClick={() => setTheme("sepia")}>Sepia</button>
+      <button type="button" onClick={() => setTheme("light")}>Light</button>
     </>
   );
 }
@@ -170,10 +170,10 @@ describe("frontend foundation", () => {
     const user = userEvent.setup();
     render(<ThemeProvider><ThemeHarness /></ThemeProvider>);
     expect(screen.getByText("dark")).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: "Sepia" }));
-    expect(screen.getByText("sepia")).toBeInTheDocument();
-    expect(window.localStorage.getItem("armature-theme")).toBe("sepia");
-    expect(document.documentElement.dataset.theme).toBe("sepia");
+    await user.click(screen.getByRole("button", { name: "Light" }));
+    expect(screen.getByText("light")).toBeInTheDocument();
+    expect(window.localStorage.getItem("armature-theme")).toBe("light");
+    expect(document.documentElement.dataset.theme).toBe("light");
   });
 
   it("runs a local member sign-in and conflict-checked booking", async () => {

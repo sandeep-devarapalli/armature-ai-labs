@@ -31,10 +31,10 @@ test("hydration preserves themes and route changes update search metadata", asyn
   await page.locator('main a[href="/blog/model-hardware-standard/"]').first().click();
   await expect(page.locator('meta[property="og:type"]')).toHaveAttribute("content", "article");
   await expect(page.locator('head link[rel="canonical"]')).toHaveCount(1);
-  await page.getByRole("button", { name: "sepia theme", exact: true }).click();
-  await expect(page.locator("html")).toHaveAttribute("data-theme", "sepia");
+  await page.getByRole("button", { name: "light theme", exact: true }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
   await page.reload();
-  await expect(page.locator("html")).toHaveAttribute("data-theme", "sepia");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await page.locator('footer a[href="/about"]').click();
   await expect(page).toHaveTitle("Who We Are | Armature AI Labs");

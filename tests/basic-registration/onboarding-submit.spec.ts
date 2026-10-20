@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { backendOrigin, authStorageKey } from "./backend-fixture";
-for (const theme of ["light", "dark", "sepia"]) test(`documents and final submission in ${theme}`, async ({ page }, info) => {
+for (const theme of ["light", "dark"]) test(`documents and final submission in ${theme}`, async ({ page }, info) => {
   const user = { id: "10000000-0000-4000-8000-000000000005", aud: "authenticated", role: "authenticated", email: "synthetic@example.test", email_confirmed_at: "2026-09-01T00:00:00Z", app_metadata: { provider: "email" }, user_metadata: {}, created_at: "2026-09-01T00:00:00Z" };
   const app = { user_id: user.id, full_name: "Synthetic Member", email: user.email, phone: "9999999999", linkedin_url: "https://linkedin.com/in/synthetic", date_of_birth: "1990-01-01", status: "pending", revision: 1, submitted_revision: null as number | null, submitted_at: null as string | null };
   const docs: { id: string; kind: string; uploaded_at: string | null; expires_at: string; deleted_at: null }[] = [];

@@ -50,7 +50,7 @@ test("signed-in compact header preserves account details across themes", async (
   }
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   await page.screenshot({ path: process.env.CI ? info.outputPath("member-home.png") : `/private/tmp/member-home-${info.project.name}.png` });
-  for (const theme of ["light", "sepia", "dark"]) {
+  for (const theme of ["light", "dark"]) {
     await page.getByRole("button", { name: `${theme} theme`, exact: true }).click();
     await expect(page.getByRole("button", { name: `${theme} theme`, exact: true })).toHaveAttribute("aria-pressed", "true");
     await expect(page.locator(".account-panel")).not.toBeVisible();

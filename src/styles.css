@@ -66,29 +66,6 @@
   --shadow: 0 18px 52px rgba(0, 0, 0, 0.3);
 }
 
-:root[data-theme="sepia"] {
-  color-scheme: light;
-  --ink: #251a0c;
-  --ink-2: #3b2a14;
-  --ink-3: #59401e;
-  --paper: #f0e4c9;
-  --panel: #f7ecd4;
-  --panel-2: #e8d7b3;
-  --fg-2: #584a37;
-  --fg-3: #75654d;
-  --fg-4: #95856c;
-  --hair: rgba(55, 37, 16, 0.18);
-  --hair-strong: rgba(55, 37, 16, 0.34);
-  --grid-line: rgba(55, 37, 16, 0.065);
-  --kernel-grid: rgba(55, 37, 16, 0.08);
-  --feature-bg: #1b160c;
-  --feature-panel: #292113;
-  --feature-text: #f2e6cc;
-  --feature-muted: #d6bf92;
-  --feature-hair: rgba(242, 230, 204, 0.17);
-  --band: #dfcda8;
-  --shadow: 0 18px 42px rgba(52, 36, 16, 0.12);
-}
 
 * {
   box-sizing: border-box;
@@ -397,9 +374,6 @@ h3 {
   background: #090d13;
 }
 
-.theme-swatch.sepia {
-  background: #dfcda8;
-}
 
 .workspace-nav {
   position: sticky;
