@@ -51,8 +51,9 @@ const JoinPage = lazy(() => import("../pages/PublicPages").then((module) => ({ d
 const NotFoundPage = lazy(() => import("../pages/PublicPages").then((module) => ({ default: module.NotFoundPage })));
 const AuthPage = lazy(() => import("../pages/AuthPages").then((module) => ({ default: module.AuthPage })));
 const AuthCallbackPage = lazy(() => import("../pages/AuthPages").then((module) => ({ default: module.AuthCallbackPage })));
-const MembersPage = lazy(() => import("../pages/AuthPages").then((module) => ({ default: module.MembersPage })));
-const PublicMemberPage = lazy(() => import("../pages/AuthPages").then((module) => ({ default: module.PublicMemberPage })));
+const MembersPage = lazy(() => import("../pages/PeopleGalleryPage").then((module) => ({ default: module.MembersDirectoryPage })));
+const PublicMemberPage = lazy(() => import("../pages/PeopleGalleryPage").then((module) => ({ default: module.PublicDirectoryProfilePage })));
+const DirectoryProfileSettingsPage = lazy(() => import("../pages/PeopleGalleryPage").then(module => ({ default: module.DirectoryProfileSettingsPage })));
 const DashboardPage = lazy(() => import("../pages/MemberPages").then((module) => ({ default: module.DashboardPage })));
 const ProfilePage = lazy(() => import("../pages/MemberPages").then((module) => ({ default: module.ProfilePage })));
 const BookPage = lazy(() => import("../pages/MemberPages").then((module) => ({ default: module.BookPage })));
@@ -131,7 +132,8 @@ export const routes: RouteObject[] = [
       { path: "/maker-desk", element: <MakerDeskPage /> },
       { path: "/join", element: <JoinPage /> },
       { path: "/booking-beta", element: <BookingBetaPage />, handle: { module: "src/pages/BookingBetaPage.tsx" } },
-      { path: "/members", element: <MembersPage /> },
+      { path: "/members", element: <MembersPage />, handle: { module: "src/pages/PeopleGalleryPage.tsx" } },
+      { path: "/directory-profile", element: <DirectoryProfileSettingsPage /> },
       { path: "/members/:handle", element: <PublicMemberPage /> },
       { path: "/onboarding", element: <ReleaseGate enabled={basicOnboardingAvailable}><OnboardingPage /></ReleaseGate> },
       { path: "/auth", element: <ReleaseGate enabled={memberPlatformAvailable || basicOnboardingAvailable}><AuthPage /></ReleaseGate> },

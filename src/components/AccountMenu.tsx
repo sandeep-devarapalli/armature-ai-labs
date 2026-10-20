@@ -30,6 +30,7 @@ export function AccountMenu() {
       <span className="account-caption"><strong>{account?.name || "Your account"}</strong><span>{account ? accountMembershipLabel(account) : "Status unavailable"}</span>{account && accountMembershipLevelsEnabled(account) && <span>{applicationStatusLabel(account.status, true)}</span>}{role && <span className="account-role">{role}</span>}</span>
       {error && <><p role="alert">{error}</p><button type="button" onClick={() => void refresh()}>Retry</button></>}
       <Link to="/onboarding">My registration</Link>
+      <Link to="/directory-profile">My public profile</Link>
       <Link to="/booking-beta">Explore booking beta</Link>
       {account && ["admin", "super_admin", "membership_reviewer"].includes(account.role) && <Link to="/admin/members">{account.role === "membership_reviewer" ? "Membership reviews" : "Admin → Members"}</Link>}
       {account && ["admin", "super_admin"].includes(account.role) && <Link to="/admin/equipment-wishlist">Admin → Equipment wishlist</Link>}

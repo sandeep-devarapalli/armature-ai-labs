@@ -42,7 +42,7 @@ describe("search metadata", () => {
     "/admin", "/admin/members", "/financials", "/auth", "/auth/callback", "/dashboard", "/profile",
     "/book", "/book/some-resource", "/bookings/123", "/check-in", "/inventory", "/kiosk",
     "/lockers", "/consumables", "/toolkits", "/component-requests", "/components/request",
-    "/members", "/members/someone", "/team", "/procurement", "/missing-page", "/components/not-a-component"
+    "/members", "/members/someone", "/directory-profile", "/team", "/procurement", "/missing-page", "/components/not-a-component"
   ])("keeps %s out of the public index and schema", (path) => {
     const page = getPageSeo(path);
     expect(page.indexable).toBe(false);

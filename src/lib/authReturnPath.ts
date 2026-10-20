@@ -15,5 +15,5 @@ export function safeAuthReturnPath(value: unknown) {
 
 export function onboardingAuthReturnPath(value: unknown, basicOnly: boolean) {
   const safe = safeAuthReturnPath(value);
-  return basicOnly && !new Set(["/components/wishlist", "/talent-network", "/talent-network/"]).has(safe.split(/[?#]/)[0]) ? "/onboarding" : safe;
+  return basicOnly && !new Set(["/components/wishlist", "/talent-network", "/talent-network/", "/directory-profile", "/directory-profile/"]).has(safe.split(/[?#]/)[0]) ? "/onboarding" : safe;
 }
