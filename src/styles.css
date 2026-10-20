@@ -504,10 +504,8 @@ h3 {
 }
 
 .pwa-update {
-  position: fixed;
-  z-index: 60;
-  right: 20px;
-  bottom: max(20px, env(safe-area-inset-bottom));
+  position: relative;
+  margin: 1rem auto;
   display: grid;
   width: min(430px, calc(100vw - 40px));
   grid-template-columns: minmax(0, 1fr) auto auto;

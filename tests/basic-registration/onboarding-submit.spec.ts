@@ -46,6 +46,10 @@ for (const theme of ["light", "dark", "sepia"]) test(`documents and final submis
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
   await page.screenshot({ path: process.env.CI ? info.outputPath(`onboarding-top-${theme}.png`) : `/tmp/onboarding-top-${theme}-${info.project.name}.png` });
   await page.screenshot({ path: process.env.CI ? info.outputPath(`onboarding-documents-${theme}.png`) : `/tmp/onboarding-documents-${theme}-${info.project.name}.png`, fullPage: true });
+  for (const notice of await page.locator(".analytics-consent-banner, .pwa-update").all()) {
+    await expect(notice).not.toHaveCSS("position", "fixed");
+    await expect(notice).not.toHaveCSS("position", "absolute");
+  }
   await page.getByRole("button", { name: "Review application", exact: true }).click();
   await page.getByRole("button", { name: "Submit application", exact: true }).click();
   await expect(page.getByRole("dialog", { name: "Your details have been received" })).toBeVisible();
