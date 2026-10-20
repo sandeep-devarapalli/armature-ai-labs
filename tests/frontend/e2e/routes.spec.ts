@@ -1061,9 +1061,10 @@ test("staff manages certifications, hours, and booking state", async ({ page }) 
   await expect(page.getByText("Booking state updated and audited.")).toBeVisible();
 });
 
-test("approved public profile excludes private contact data", async ({ page }) => {
+test("legacy non-opted-in profile remains unpublished and excludes private contact data", async ({ page }) => {
   await page.goto("/members/anika-builds");
-  await expect(page.getByRole("heading", { name: "Anika Rao" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Profile not available" })).toBeVisible();
+  await expect(page.getByRole("link", { name: /Back to members/ })).toBeVisible();
   await expect(page.getByText("anika@example.com")).toHaveCount(0);
   await expect(page.getByText("+91 90000 00000")).toHaveCount(0);
 });

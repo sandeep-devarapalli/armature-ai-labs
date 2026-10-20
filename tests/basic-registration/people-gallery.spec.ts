@@ -36,6 +36,9 @@ for (const theme of ["light", "dark", "sepia"]) test(`people gallery and volunta
   await page.getByRole("button", { name: "Clear search" }).click();
   await page.getByRole("link", { name: /View profile/ }).click();
   await expect(page.getByRole("heading", { name: person.display_name })).toBeVisible();
+  await expect(page.getByText(user.email, { exact: true })).toHaveCount(0);
+  await expect(page.getByText("+91 90000 00000")).toHaveCount(0);
+  await expect(page.locator("main")).toHaveCount(1);
   await page.getByRole("link", { name: /Back to members/ }).click();
   await page.getByRole("link", { name: /Manage my public profile/ }).click();
   await expect(page.getByLabel("Public name", { exact: true })).toHaveValue(person.display_name);

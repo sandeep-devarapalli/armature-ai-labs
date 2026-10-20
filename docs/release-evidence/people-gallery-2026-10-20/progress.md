@@ -27,3 +27,8 @@ Selected option 01 People gallery. Owner authorised implementation and publicati
 - Database: gallery suite expanded to 28 passing assertions; all 37 suites passed. Real concurrent local avatar replacement waited on consent transaction, then remained private; /private/tmp/gallery-concurrency.py.
 - Independent final review found no remaining release-blocking privacy issues. Account switches invalidate stale saves; same-user refresh preserves drafts.
 - Production prerequisites checked read-only through Supabase CLI: existing Basic eligibility and member_avatars ready; directory absent. Apply only new migration, not historical pending/held migrations.
+
+## Production backend and release gate
+- PR #149, initial commit 66d6c62. Production migration 202610200001 applied transactionally with migration ledger entry; only this additive migration was applied.
+- Deployed member-directory-avatar to armature-lab (uxfhdfagrmaeyuaipaar). Anonymous directory query returns zero published profiles; unavailable avatar returns HTTP 404. No real member was published or edited.
+- GitHub run 39386129738: database passed; frontend browser suite caught nested main landmarks and a stale legacy profile fixture. Release paused for corrections and regression checks; no frontend deployment claimed.

@@ -41,7 +41,7 @@ export function MembersDirectoryPage({ client = supabase }: { client?: SupabaseC
     return () => { active = false; };
   }, [client, query, page, retry]);
   function findPeople(event: FormEvent) { event.preventDefault(); setQuery(search.trim()); setPage(1); }
-  return <main className="people-page">
+  return <div className="people-page">
     <section className="people-intro"><div><p className="eyebrow">The Armature community</p><h1>Meet the people.<br />Find your people.</h1></div><div><p>Different disciplines. A shared instinct to make things. Discover the builders, learners and researchers at Armature AI Labs.</p><Link to="/directory-profile">Manage my public profile →</Link></div></section>
     <form className="people-search" onSubmit={findPeople}><label htmlFor="people-search">Find a member</label><div><input id="people-search" type="search" value={search} maxLength={100} onChange={event => setSearch(event.target.value)} placeholder="Search names, skills or interests…" /><button type="submit">Search</button></div></form>
     <div className="people-interests" aria-label="Browse by interest">{["All", "Robotics", "Embedded systems", "AI & vision", "Fabrication"].map(interest => <button key={interest} aria-pressed={query === (interest === "All" ? "" : interest)} onClick={() => { const term = interest === "All" ? "" : interest; setSearch(term); setQuery(term); setPage(1); }}>{interest}</button>)}</div>
@@ -49,7 +49,7 @@ export function MembersDirectoryPage({ client = supabase }: { client?: SupabaseC
     {error ? <div role="alert" className="people-empty"><p>{error}</p><button onClick={() => setRetry(value => value + 1)}>Try again</button></div> : !loading && items.length === 0 ? <div className="people-empty"><h2>{query ? "No matching members yet." : "A community, taking shape."}</h2><p>{query ? "Try another name or skill, or clear your search." : "Members can choose to share their profiles here. Be one of the first to introduce yourself."}</p>{query ? <button onClick={() => { setSearch(""); setQuery(""); setPage(1); }}>Clear search</button> : <Link to="/directory-profile">Create my public profile →</Link>}</div> : <section className="people-grid" aria-label="Member profiles" aria-busy={loading}>{items.map(person => <article className="people-card" key={person.id}><Portrait person={person} /><div className="people-card-body"><h2>{person.display_name}</h2><p className="people-bio">{person.bio || "An Armature community member."}</p><Skills skills={person.skills} /><Link className="people-profile-link" to={`/members/${person.id}`}>View profile <span aria-hidden="true">↗</span></Link></div></article>)}</section>}
     {!error && !loading && total > pageSize && <nav className="people-pagination" aria-label="Directory pages"><button disabled={page === 1} onClick={() => setPage(value => value - 1)}>Previous</button><span>Page {page} of {Math.ceil(total / pageSize)}</span><button disabled={page * pageSize >= total} onClick={() => setPage(value => value + 1)}>Next</button></nav>}
     <footer className="people-note"><p><strong>A community, on your terms.</strong><br />Public profiles are optional. Members choose their name, bio, skills and whether to share a photo. Private contact details and verification documents stay private.</p><p>Armature AI Labs<br />HSR Layout · Bengaluru</p></footer>
-  </main>;
+  </div>;
 }
 export function PublicDirectoryProfilePage({ client = supabase }: { client?: SupabaseClient | null }) {
   const { handle } = useParams();
@@ -62,7 +62,7 @@ export function PublicDirectoryProfilePage({ client = supabase }: { client?: Sup
     void Promise.resolve(client.rpc("get_public_member_profile", { p_id: handle })).then(({ data, error: failure }) => { if (!active) return; if (failure) throw failure; setPerson(data); }).catch(() => { if (active) setError(true); }).finally(() => { if (active) setLoading(false); });
     return () => { active = false; };
   }, [client, handle]);
-  return <main className="people-page"><Link to="/members">← Back to members</Link>{loading ? <p role="status">Loading profile…</p> : error ? <p role="alert">We couldn’t load this profile. Please try again later.</p> : person ? <article className="people-detail"><Portrait person={person} /><div><p className="eyebrow">Armature community</p><h1>{person.display_name}</h1><p className="people-detail-bio">{person.bio}</p><Skills skills={person.skills} /></div></article> : <section className="people-empty"><h1>Profile not available</h1><p>This member may have chosen to keep their profile private.</p></section>}</main>;
+  return <div className="people-page"><Link to="/members">← Back to members</Link>{loading ? <p role="status">Loading profile…</p> : error ? <p role="alert">We couldn’t load this profile. Please try again later.</p> : person ? <article className="people-detail"><Portrait person={person} /><div><p className="eyebrow">Armature community</p><h1>{person.display_name}</h1><p className="people-detail-bio">{person.bio}</p><Skills skills={person.skills} /></div></article> : <section className="people-empty"><h1>Profile not available</h1><p>This member may have chosen to keep their profile private.</p></section>}</div>;
 }
 export function DirectoryProfileSettingsPage({ client = supabase }: { client?: SupabaseClient | null }) {
   const [profile, setProfile] = useState<OwnProfile>(emptyProfile);
@@ -114,7 +114,7 @@ export function DirectoryProfileSettingsPage({ client = supabase }: { client?: S
     } catch { if (current === generation.current) setError("Your profile could not be saved. Check your details and account eligibility, then try again."); }
     finally { if (current === generation.current) setBusy(false); }
   }
-  return <main className="people-page people-settings"><Link to="/members">← Members directory</Link><h1>Your public profile</h1><p>You can stay Basic and choose whether to appear in the gallery. Sharing a profile is optional and does not change your membership.</p>{loading ? <p role="status">Loading your settings…</p> : !userId ? <p><Link to="/onboarding">Sign in to manage your public profile →</Link></p> : !loaded ? <p role="alert">{error || "Your settings could not be loaded. Reload this page to try again."}</p> : <form onSubmit={save}>
+  return <div className="people-page people-settings"><Link to="/members">← Members directory</Link><h1>Your public profile</h1><p>You can stay Basic and choose whether to appear in the gallery. Sharing a profile is optional and does not change your membership.</p>{loading ? <p role="status">Loading your settings…</p> : !userId ? <p><Link to="/onboarding">Sign in to manage your public profile →</Link></p> : !loaded ? <p role="alert">{error || "Your settings could not be loaded. Reload this page to try again."}</p> : <form onSubmit={save}>
     <label>Public name<input required maxLength={100} value={profile.display_name} onChange={event => setProfile({ ...profile, display_name: event.target.value })} /></label>
     <label>Short bio<textarea maxLength={600} rows={4} value={profile.bio} onChange={event => setProfile({ ...profile, bio: event.target.value })} /></label>
     <label>Skills and interests<input maxLength={500} value={skills} onChange={event => setSkills(event.target.value)} placeholder="Robotics, embedded systems, design" /></label><p className="people-help">Separate skills with commas. Up to 12 skills, 40 characters each. Don’t include private contact details in your bio.</p>
@@ -124,5 +124,5 @@ export function DirectoryProfileSettingsPage({ client = supabase }: { client?: S
     <div className="people-actions"><button disabled={busy} type="submit">{busy ? "Saving…" : "Save profile choices"}</button>{profile.id && <button disabled={busy} type="button" onClick={event => void save(event, true)}>Hide my public profile</button>}</div>
     {notice && <p role="status">{notice}</p>}{error && <p role="alert">{error}</p>}
     <p className="people-help">You can hide your profile at any time. Phone numbers, email addresses, membership reviews and identity documents are never included by this directory. <Link to="/privacy">Privacy notice</Link></p>
-  </form>}</main>;
+  </form>}</div>;
 }
