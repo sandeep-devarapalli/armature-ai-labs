@@ -38,8 +38,8 @@ export function PrivacyPage() {
       <section aria-labelledby="privacy-directory">
         <h2 id="privacy-directory">Optional public member directory</h2>
         <p>You can choose to publish a display name, short bio and skills in the public member directory. These details can be read by anyone. Publishing is optional and does not change your membership or learning access.</p>
-        <p>Your retained, security-scanned avatar appears publicly only if you separately agree to share it. Verification photos and government IDs are never used directly in the directory. Phone numbers, email addresses, dates of birth, approval records and bookings are not included.</p>
-        <p>Use My public profile in your account menu to edit or hide your listing or withdraw public-photo permission. Hiding removes it from future directory responses; people may have saved information previously made public. Public sharing is separate from consent to retain an avatar for member-only use.</p>
+        <p>Your retained, security-scanned avatar appears publicly only if you separately agree to share it. Verification photos and government IDs are never used directly in the directory. You may separately opt in to show a public contact email (your confirmed sign-in email or a different address) and your LinkedIn profile URL. These contact choices are private by default. Phone numbers, dates of birth, approval records and bookings are not included.</p>
+        <p>Use My public profile in your account menu to edit or hide your listing or withdraw public-photo or contact-sharing permission. Hiding removes it from future directory responses; people may have saved information previously made public. Public sharing is separate from consent to retain an avatar for member-only use.</p>
       </section>
       <section aria-labelledby="privacy-membership">
         <h2 id="privacy-membership">Basic membership and identity review</h2>
