@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { MemberManagementPage } from "../../src/pages/MemberManagementPage";
+import { MemberManagementPage, memberTierLabel, identityProgress } from "../../src/pages/MemberManagementPage";
 vi.mock("../../src/pages/OnboardingForm", () => ({ OnboardingForm: () => <p>Protected application details</p> }));
 const member = { user_id: "other", name: "Synthetic Person", email: "person@example.test", registered_at: "2026-09-01", status: "incomplete", application_status: null, role: "member", revision: null, photo_available: false, id_available: false, reviewed_at: null };
 function setup(role: string, targetRole = "member", applicationStatus: string | null = null) {
@@ -104,9 +104,21 @@ it("keeps tier and review status separate and filters tiers on the server", asyn
  const client = { rpc, auth: { getSession: async () => ({ data: { session: { user: { id: "actor" } } } }), onAuthStateChange: () => ({ data: { subscription: { unsubscribe() {} } } }) } } as unknown as SupabaseClient;
  const { unmount } = render(<MemoryRouter><MemberManagementPage client={client} /></MemoryRouter>);
  await screen.findByText("person@example.test");
- expect(screen.getByText("Basic", { selector: "strong" })).toBeInTheDocument();
+ expect(screen.getByText("Basic · Active", { selector: "strong" })).toBeInTheDocument();
  expect(screen.getByText(/Mobile: not verified/)).toBeInTheDocument();
  fireEvent.change(screen.getByLabelText("Membership level"), { target: { value: "premium" } });
  await waitFor(() => expect(rpc).toHaveBeenCalledWith("list_basic_members", expect.objectContaining({ p_membership_level: "premium" })));
  unmount(); vi.unstubAllEnvs();
+});
+
+it("keeps current tier independent of verification upgrades and retained originals", () => {
+ expect(memberTierLabel({ membership_level: "basic", status: "incomplete", verification: { email: true, mobile: false, identity: false } })).toBe("Basic · Active");
+ expect(identityProgress({ application_status: null, status: "incomplete" })).toBe("Verification not started");
+ expect(identityProgress({ application_status: "pending", status: "incomplete" })).toBe("Verification in progress");
+ expect(identityProgress({ application_status: "pending", status: "pending" })).toBe("Awaiting review");
+ expect(identityProgress({ application_status: "approved", status: "approved", verification: { email: true, mobile: false, identity: true } })).toBe("Identity approved");
+ expect(memberTierLabel({ membership_level: "verified", status: "approved" })).toBe("Verified · Active");
+ expect(memberTierLabel({ membership_level: "premium", status: "approved" })).toBe("Premium · Active");
+ expect(memberTierLabel({ membership_level: null, status: "approved", verification: { email: true, mobile: true, identity: true } })).toBe("Access restricted");
+ expect(memberTierLabel({ membership_level: null, status: "revoked" })).toBe("Access revoked");
 });

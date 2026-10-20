@@ -36,3 +36,20 @@
 @media (max-width: 600px) { .member-management table { display: block; min-width: 0; } }
 
 .member-notification-history > div > p { margin-block: 1rem; }
+
+.member-management > .page-hero .wrap { padding-block: 1rem; }
+:root body .member-management > .page-hero h1 { margin-block: .4rem; font-size: clamp(2rem,4vw,3rem); }
+.member-management > .page-hero .lede { margin-block: .5rem; font-size: .85rem; line-height: 1.6; }
+.member-management > .section { padding-top: 1rem; }
+.member-tier { display: inline-block; border: 1px solid var(--hair-strong); padding: .25rem .5rem; font-size: .8rem; }
+.member-role { display: block; color: var(--fg-2); margin-top: .5rem; font-size: .75rem; }
+.member-progress { display: flex; gap: .4rem; flex-wrap: wrap; max-width: 23rem; }
+.member-progress span { border: 1px solid var(--hair); padding: .25rem .45rem; font-size: .7rem; line-height: 1.5; }
+.member-progress span[data-complete=true] { border-color: var(--hair-strong); font-weight: 700; }
+.member-document-note { font-size: .8rem; line-height: 1.7; color: var(--fg-2); }
+.member-management td, .member-management th { padding-block: .75rem; }
+.member-management td:first-child .avatar { width: 2rem; height: 2rem; }
+
+.member-counts-note { margin-top: -.5rem; font-size: .7rem; color: var(--fg-2); }
+
+.member-tier { white-space: nowrap; }
