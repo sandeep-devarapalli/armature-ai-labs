@@ -25,7 +25,8 @@ for (const theme of ["light", "dark", "sepia"]) test(`documents and final submis
     await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(data) });
   });
   await page.goto("/onboarding");
-  await expect(page.getByRole("heading", { name: "Start your process", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Complete your membership.", exact: true })).toBeVisible();
+  await page.getByRole("navigation", { name: "Registration steps" }).getByRole("button", { name: /Private documents/ }).click();
   const photo = page.getByLabel("photo image", { exact: true });
   const image = { name: "synthetic.png", mimeType: "image/png", buffer: Buffer.from("synthetic image fixture") };
   await photo.setInputFiles(image); expect(uploads).toBe(0);
@@ -45,11 +46,13 @@ for (const theme of ["light", "dark", "sepia"]) test(`documents and final submis
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
   await page.screenshot({ path: process.env.CI ? info.outputPath(`onboarding-top-${theme}.png`) : `/tmp/onboarding-top-${theme}-${info.project.name}.png` });
   await page.screenshot({ path: process.env.CI ? info.outputPath(`onboarding-documents-${theme}.png`) : `/tmp/onboarding-documents-${theme}-${info.project.name}.png`, fullPage: true });
+  await page.getByRole("button", { name: "Review application", exact: true }).click();
   await page.getByRole("button", { name: "Submit application", exact: true }).click();
   await expect(page.getByRole("dialog", { name: "Your details have been received" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Done", exact: true })).toBeFocused(); expect(submits).toBe(1);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.screenshot({ path: process.env.CI ? info.outputPath(`onboarding-${theme}.png`) : `/tmp/onboarding-${theme}-${info.project.name}.png` });
   await page.getByRole("button", { name: "Done", exact: true }).click();
-  await expect(page.getByRole("button", { name: "Application submitted", exact: true })).toBeDisabled();
+  await expect(page.getByRole("heading", { name: "Your application is in review.", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Submit application", exact: true })).toHaveCount(0);
 });

@@ -31,8 +31,9 @@ test("Basic to Verified and Premium keep identity status distinct on desktop and
   const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
   const state = await fixture(page);
   await page.goto("/onboarding");
-  await expect(page.getByRole("heading", { name: "Basic member", exact: true })).toBeVisible();
+  await expect(page.getByText("Current membership: Basic member", { exact: true })).toBeVisible();
   await expect(page.getByText("Identity: Approved", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Manage my registration", exact: true }).click();
   await page.getByLabel("Mobile number with country code").fill("+919999991234");
   await page.getByRole("button", { name: "Send SMS code", exact: true }).click();
   await expect(page.getByText(/Code sent by SMS/)).toBeVisible();
@@ -43,13 +44,15 @@ test("Basic to Verified and Premium keep identity status distinct on desktop and
   await page.getByRole("region", { name: "Mobile verification", exact: true }).locator("form").last().screenshot({ path: info.outputPath("sms-code-entry.png"), style: ".topbar, .workspace-nav, .skip-link { visibility: hidden !important; }" });
   await page.getByLabel("Verification code", { exact: true }).fill("123456");
   await page.getByRole("button", { name: "Verify mobile number", exact: true }).click();
-  await expect(page.getByRole("heading", { name: "Verified member", exact: true })).toBeVisible();
   await expect(page.getByText(/Mobile verified ·/)).toBeVisible();
-  await page.getByRole("heading", { name: "Verified member", exact: true }).scrollIntoViewIfNeeded();
-  await page.getByRole("region", { name: "Membership verification", exact: true }).screenshot({ path: info.outputPath("verified-membership.png") });
+  await page.getByRole("button", { name: "Back to status", exact: true }).click();
+  await expect(page.getByText("Current membership: Verified member", { exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Stay Verified · browse free courses" })).toHaveAttribute("href", "https://courses.armatureailabs.com/");
+  await expect(page.getByRole("link", { name: "Explore Premium plans" })).toHaveAttribute("href", "/join#premium-plans");
+  await page.getByRole("region", { name: "Your application status", exact: true }).screenshot({ path: info.outputPath("verified-membership.png") });
   state.premium();
   await page.evaluate(() => window.dispatchEvent(new Event("armature:account-changed")));
-  await expect(page.getByRole("heading", { name: "Premium member", exact: true })).toBeVisible();
+  await expect(page.getByText("Current membership: Premium member", { exact: true })).toBeVisible();
   await page.getByLabel("Account: Synthetic Member", { exact: true }).click();
   await expect(page.locator(".account-panel").getByText("Premium member", { exact: true }).first()).toBeVisible();
   await expect(page.locator(".account-panel").getByText("Identity approved", { exact: true }).first()).toBeVisible();
@@ -60,7 +63,7 @@ test("Basic to Verified and Premium keep identity status distinct on desktop and
 test("server hold retains original registration and avoids OTP calls", async ({ page }) => {
   const { calls } = await fixture(page, false);
   await page.goto("/onboarding");
-  await expect(page.getByRole("heading", { name: "Your basic membership" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Your membership status" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Mobile verification" })).toHaveCount(0);
   expect(calls).not.toContain("member-phone-verification");
   await page.goto("/join");
@@ -74,6 +77,28 @@ test("public membership journey explains all three levels without promising rent
   for (const label of ["Basic", "Verified", "Premium"]) await expect(page.getByRole("heading", { name: label, exact: true })).toBeVisible();
   await expect(page.getByText(/Premium membership/)).toContainText("Paid bookings remain closed");
   await page.getByRole("heading", { name: "One membership journey" }).scrollIntoViewIfNeeded();
-  await page.locator(".process-list").screenshot({ path: info.outputPath("membership-levels-join.png"), style: ".topbar, .skip-link { visibility: hidden !important; }" });
+  await page.locator(".process-list").filter({ has: page.getByRole("heading", { name: "Basic", exact: true }) }).screenshot({ path: info.outputPath("membership-levels-join.png"), style: ".topbar, .skip-link { visibility: hidden !important; }" });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+});
+
+test("membership is optional and identity details require a personal LinkedIn URL", async ({ page }) => {
+  const { calls } = await fixture(page);
+  await page.route(`${backendOrigin}/rest/v1/basic_onboarding_applications*`, route => route.fulfill({ contentType: "application/json", body: "[]" }));
+  await page.goto("/onboarding");
+  await expect(page.getByRole("link", { name: "Stay Basic · browse free courses" })).toHaveAttribute("href", "https://courses.armatureailabs.com/");
+  await expect(page.getByRole("link", { name: "Explore Premium plans" })).toHaveAttribute("href", "/join#premium-plans");
+  await page.getByRole("button", { name: "Become Verified", exact: true }).click();
+  const linkedin = page.getByLabel("Your LinkedIn profile (required)");
+  await expect(linkedin).toHaveAttribute("required", "");
+  await page.getByLabel("Full name", { exact: true }).fill("Synthetic Member");
+  await page.getByLabel("Phone number", { exact: true }).fill("+919999991234");
+  await page.getByLabel("Date of birth", { exact: true }).fill("1990-01-01");
+  await page.getByRole("checkbox", { name: /I accept the privacy notice/ }).check();
+  await page.getByRole("button", { name: "Save details and continue" }).click();
+  await expect(linkedin).toBeFocused();
+  expect(calls).not.toContain("submit_basic_onboarding");
+  await linkedin.fill("https://www.linkedin.com/company/synthetic");
+  await page.getByRole("button", { name: "Save details and continue" }).click();
+  await expect(page.getByRole("alert")).toContainText(/LinkedIn/);
+  expect(calls).not.toContain("submit_basic_onboarding");
 });
