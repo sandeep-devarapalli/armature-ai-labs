@@ -21,7 +21,7 @@ set local role anon;
 select is(public.list_public_member_profiles('robotics')->>'total','1','anonymous search includes opted-in skills');
 select is(public.list_public_member_profiles('no-match')->>'total','0','search filters results');
 select is(public.list_public_member_profiles('',0,999)->>'page_size','48','public pagination is bounded');
-select is((select array_agg(k order by k)::text from jsonb_object_keys(public.list_public_member_profiles()->'items'->0) k),'{bio,display_name,has_avatar,id,skills}','public output excludes all private fields and auth IDs');
+select is((select array_agg(k order by k)::text from jsonb_object_keys(public.list_public_member_profiles()->'items'->0) k),'{bio,display_name,has_avatar,id,linkedin_url,public_email,skills}','public output excludes all private fields and auth IDs');
 select throws_ok($$select public.get_my_directory_profile()$$,'42501',null,'anonymous cannot read private settings');
 reset role;
 insert into public.member_avatars(user_id,object_path,content_type,consent_version) values('60000000-0000-4000-8000-000000000001','synthetic/avatar-one.png','image/png','2026-09-27-avatar-1');

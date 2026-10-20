@@ -6,6 +6,9 @@ const key='synthetic-wakeup-key-'.repeat(3),job='synthetic-job-secret-'.repeat(3
 globalThis.Deno={env:{get:name=>name==='WAKE_KEY'?key:name==='JOB_KEY'?job:undefined}};
 const output=await build({entryPoints:['supabase/functions/_shared/market-wakeup.ts'],write:false,bundle:true,platform:'node',format:'esm'});
 const {authorizeMarketWakeup}=await import('data:text/javascript;base64,'+Buffer.from(output.outputFiles[0].text).toString('base64'));
+const originalNow=Date.now;
+Date.now=()=>1_800_000_000_000;
+try {
 const now=Math.floor(Date.now()/1000);
 const sign=(prefix,stamp)=>createHmac('sha256',key).update(`${prefix}:${stamp}`).digest('hex');
 const auth=(headers,body)=>authorizeMarketWakeup(new Request('https://localhost',{method:'POST',headers,body}), 'market-message-reminders','WAKE_KEY','JOB_KEY');
@@ -13,6 +16,8 @@ const signed=(stamp=now,prefix='market-message-reminders')=>({'x-armature-wakeup
 let checks=0;
 assert.equal(await auth(signed(),'{}'),true);checks++;
 assert.equal(await auth(signed()),true);checks++;
+assert.equal(await auth(signed(now-30),'{}'),true);checks++;
+assert.equal(await auth(signed(now+30),'{}'),true);checks++;
 assert.equal(await auth(signed(now-31),'{}'),false);checks++;
 assert.equal(await auth(signed(now+31),'{}'),false);checks++;
 assert.equal(await auth(signed(now,'market-message-maintenance'),'{}'),false);checks++;
@@ -40,3 +45,7 @@ for(const endpoint of ['market-message-reminders','market-message-maintenance'])
  assert.equal((await handler(new Request('https://localhost',{method:'POST',headers:signed(stamp,'other-purpose'),body:'{}'}))).status,401);assert.equal(calls,before);checks++;
 }
 console.log(JSON.stringify({checks,result:'passed',scope:'synthetic HMAC expiry, purpose, body bounds and legacy authorization'}));
+
+} finally {
+ Date.now=originalNow;
+}

@@ -7,3 +7,6 @@
 @media(max-width:600px){.people-page{padding:2rem 1rem}.people-intro,.people-detail{grid-template-columns:1fr;gap:1rem}.people-grid{grid-template-columns:1fr}.people-note{flex-direction:column;gap:0}.people-intro h1{font-size:3rem}.people-detail .people-portrait{height:280px}.people-pagination{font-size:.75rem;gap:.5rem}}
 
 .people-interests{display:flex;gap:.5rem;flex-wrap:wrap;padding-top:1rem}.people-interests button{background:var(--panel);color:var(--ink);border:1px solid var(--hair);font-size:.75rem}.people-interests button[aria-pressed=true]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+
+.people-contact-links{display:flex;gap:1rem;flex-wrap:wrap;margin-block:.75rem}.people-contact-links a{font-size:.85rem;text-decoration:underline;text-underline-offset:3px}.people-contact-settings{border:1px solid var(--hair);padding:1.25rem;margin-block:1.5rem}.people-contact-settings legend{padding-inline:.5rem}.people-contact-settings select{width:100%;padding:.75rem;font:inherit;background:var(--panel);color:inherit;border:1px solid var(--hair)}
+.people-contact-settings{display:grid;gap:1rem;min-width:0}.people-contact-settings>label:not(.people-consent){display:grid;gap:.6rem}.people-contact-settings p{margin:0;line-height:1.7}

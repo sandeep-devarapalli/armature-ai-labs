@@ -90,7 +90,7 @@ test("brand resources are discoverable, usable and downloadable", async ({ page,
   await page.getByRole("combobox", { name: "App, profile and browser icons export size" }).selectOption("32-solid");
   await expect(page.getByRole("link", { name: "App, profile and browser icons dark 32 px · PNG" })).toHaveAttribute("href", "/brand/editorial-2026-09/logos/icon-dark-32.png");
 
-  for (const theme of ["dark", "sepia", "light"] as const) {
+  for (const theme of ["dark", "light"] as const) {
     await page.getByRole("button", { name: `${theme} theme` }).click();
     await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
     await expect(page.getByRole("heading", { level: 1, name: "Brand resources" })).toBeVisible();

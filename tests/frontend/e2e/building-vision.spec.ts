@@ -34,7 +34,7 @@ test("R06 shows the FF02 glass enclosure with coordinated CAD while retaining ea
   const enclosurePreview = page.getByRole("link", { name: "Open FF-02 enclosure Blender render", exact: true }).locator("img");
   await enclosurePreview.scrollIntoViewIfNeeded();
   await expect.poll(() => enclosurePreview.evaluate((image) => (image as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
-  for (const theme of ["light", "dark", "sepia"]) {
+  for (const theme of ["light", "dark"]) {
     await page.getByRole("button", { name: `${theme} theme`, exact: true }).click();
     await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
     await page.getByRole("heading", { name: "Enclosure proposal C04 · Blender" }).scrollIntoViewIfNeeded();

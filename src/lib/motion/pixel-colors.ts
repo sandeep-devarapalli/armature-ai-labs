@@ -21,7 +21,7 @@ export function readPixelColors(element: Element): Partial<PixelColors> {
   return colors;
 }
 
-/** Calls back whenever the visitor switches light, dark or sepia mode. */
+/** Calls back whenever the visitor switches light or dark mode. */
 export function onThemeChange(callback: () => void): () => void {
   const observer = new MutationObserver(callback);
   observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'class'] });

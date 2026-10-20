@@ -49,7 +49,7 @@ test("members submit and withdraw votes while admins publish and merge duplicate
     for (const name of names) { await article(name).getByRole("button", { name: "Support request" }).click(); await expect(article(name).getByText("1 vote", { exact: true })).toBeVisible(); }
     await article(names[0]).getByRole("button", { name: "Withdraw vote" }).click(); await expect(article(names[0]).getByText("0 votes", { exact: true })).toBeVisible();
     await article(names[0]).getByRole("button", { name: "Support request" }).click(); await expect(article(names[0]).getByText("1 vote", { exact: true })).toBeVisible();
-    for (const theme of ["light", "dark", "sepia"]) { await page.getByRole("button", { name: `${theme} theme`, exact: true }).click(); expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true); await article(names[0]).screenshot({ path: info.outputPath(`wishlist-${theme}.png`) }); }
+    for (const theme of ["light", "dark"]) { await page.getByRole("button", { name: `${theme} theme`, exact: true }).click(); expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true); await article(names[0]).screenshot({ path: info.outputPath(`wishlist-${theme}.png`) }); }
     await show(1, "/admin/equipment-wishlist");
     await page.getByRole("searchbox", { name: /Find a published merge target/ }).fill(names[0]);
     await article(names[1]).getByText("Merge duplicate", { exact: true }).click();

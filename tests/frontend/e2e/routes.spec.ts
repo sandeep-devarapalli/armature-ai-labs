@@ -72,7 +72,7 @@ test("home metrics keep equal inset spacing", async ({ page, isMobile }) => {
   await expectNoHorizontalOverflow(page);
 });
 
-test("public projects and three themes remain usable", async ({ page }) => {
+test("public projects and both themes remain usable", async ({ page }) => {
   await page.goto("/projects");
   await expect(page.getByRole("heading", { name: "Projects", exact: true })).toBeVisible();
   await expect(page.getByText("LeRobot + SO-ARM101").first()).toBeVisible();
@@ -80,8 +80,6 @@ test("public projects and three themes remain usable", async ({ page }) => {
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
   await page.reload();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
-  await page.getByRole("button", { name: "sepia theme" }).click();
-  await expect(page.locator("html")).toHaveAttribute("data-theme", "sepia");
   await page.getByRole("button", { name: "light theme" }).click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
 });
@@ -142,7 +140,6 @@ test("MHS cover is static in the journal and controllable on the article", async
 for (const palette of [
   { theme: "light", link: "rgb(153, 86, 0)", hover: "rgb(120, 68, 0)", ink: "rgb(17, 17, 16)", paper: "rgb(255, 255, 255)", panel: "rgb(245, 245, 243)" },
   { theme: "dark", link: "rgb(217, 154, 80)", hover: "rgb(234, 183, 121)", ink: "rgb(246, 246, 242)", paper: "rgb(17, 17, 16)", panel: "rgb(34, 34, 32)" },
-  { theme: "sepia", link: "rgb(120, 68, 0)", hover: "rgb(96, 54, 0)", ink: "rgb(37, 26, 12)", paper: "rgb(240, 228, 201)", panel: "rgb(232, 215, 179)" }
 ]) {
   test(`Copper hyperlinks remain readable in the ${palette.theme} theme`, async ({ page, isMobile }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
@@ -660,8 +657,8 @@ test("electrofluidic muscles link official media to a staged, safety-gated resea
 
   await page.getByRole("button", { name: "dark theme" }).click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
-  await page.getByRole("button", { name: "sepia theme" }).click();
-  await expect(page.locator("html")).toHaveAttribute("data-theme", "sepia");
+  await page.getByRole("button", { name: "light theme" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
 });
 
 test("Solo 12 represents ODRI with its official robot and concrete hardware hierarchy", async ({ page }) => {

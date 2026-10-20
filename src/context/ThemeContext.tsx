@@ -1,5 +1,6 @@
 import {
   createContext,
+  startTransition,
   useContext,
   useEffect,
   useMemo,
@@ -20,7 +21,8 @@ const ThemeContext = createContext<ThemeContextValue | null>(null);
 function resolveTheme(): Theme {
   try {
     const stored = window.localStorage.getItem(STORAGE_KEY);
-    if (stored === "light" || stored === "dark" || stored === "sepia") return stored;
+    if (stored === "sepia") return "light";
+    if (stored === "light" || stored === "dark") return stored;
   } catch {
     // Storage can be unavailable in privacy-restricted browsers.
   }
@@ -33,14 +35,16 @@ export function ThemeProvider({ children, hydrate = false }: PropsWithChildren<{
 
   useEffect(() => {
     if (!hydrate) return;
-    setTheme(resolveTheme());
-    setRestored(true);
+    startTransition(() => {
+      setTheme(resolveTheme());
+      setRestored(true);
+    });
   }, [hydrate]);
 
   useEffect(() => {
     if (!restored) return;
     document.documentElement.dataset.theme = theme;
-    const color = theme === "dark" ? "#111110" : theme === "sepia" ? "#F0E4C9" : "#ffffff";
+    const color = theme === "dark" ? "#111110" : "#ffffff";
     document.querySelector('meta[name="theme-color"]')?.setAttribute("content", color);
     try {
       window.localStorage.setItem(STORAGE_KEY, theme);

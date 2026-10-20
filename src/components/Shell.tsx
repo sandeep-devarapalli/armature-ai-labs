@@ -49,7 +49,7 @@ function ThemeSwitch() {
   const { theme, setTheme } = useTheme();
   return (
     <div className="theme-switch" role="group" aria-label="Color theme">
-      {(["light", "dark", "sepia"] as Theme[]).map((option) => (
+      {(["light", "dark"] as Theme[]).map((option) => (
         <button
           key={option}
           type="button"

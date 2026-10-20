@@ -79,7 +79,7 @@ for (const ageGroup of ['adult', 'minor']) test(`${ageGroup}: authenticated corr
     await expect(page.locator('.ol-status')).toContainText('approved');
     const expired = (await service.from('onboarding_documents').select('expires_at').in('id', oldDocs.map(d => d.id))).data!;
     expect(expired.every(d => Date.parse(d.expires_at) <= Date.now())).toBe(true);
-    for (const theme of ['light', 'dark', 'sepia']) {
+    for (const theme of ['light', 'dark']) {
       await page.getByRole('button', { name: `${theme} theme`, exact: true }).click();
       expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
     }

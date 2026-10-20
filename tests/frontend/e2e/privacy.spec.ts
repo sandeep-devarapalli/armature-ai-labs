@@ -12,7 +12,7 @@ test("privacy is discoverable, readable in every theme and explains registration
   await expect(page.locator("main")).toContainText("not covered by the 30-day upload cleanup");
   await expect(page.locator('main a[href="mailto:privacy@armatureailabs.com"]').first()).toBeVisible();
   await expect(page.locator('main input[type="file"]')).toHaveCount(0);
-  for (const theme of ["light", "dark", "sepia"]) {
+  for (const theme of ["light", "dark"]) {
     await page.getByRole("button", { name: `${theme} theme`, exact: true }).click();
     await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();

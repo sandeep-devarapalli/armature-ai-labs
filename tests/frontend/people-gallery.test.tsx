@@ -44,7 +44,7 @@ it("keeps publication and photo consent separate and can hide a profile", async 
   expect(publish).not.toBeChecked(); expect(photo).not.toBeChecked();
   fireEvent.click(publish); fireEvent.click(screen.getByRole("button", { name: "Save profile choices" }));
   expect(await screen.findByRole("status")).toHaveTextContent("now visible");
-  expect(rpc).toHaveBeenLastCalledWith("save_my_directory_profile", expect.objectContaining({ p_published: true, p_share_avatar: false, p_avatar_revision: "old-avatar-revision", p_consent_version: "2026-10-20-public-directory-v1" }));
+  expect(rpc).toHaveBeenLastCalledWith("save_my_directory_profile_with_contacts", expect.objectContaining({ p_published: true, p_share_avatar: false, p_avatar_revision: "old-avatar-revision", p_consent_version: "2026-10-20-public-directory-v1" }));
   fireEvent.change(screen.getByLabelText("Public name"), { target: { value: "" } });
   fireEvent.click(screen.getByRole("button", { name: "Hide my public profile" }));
   expect(await screen.findByRole("status")).toHaveTextContent("profile is private");
@@ -69,6 +69,34 @@ it("preserves edits on token refresh and blocks an old form during account switc
     fixture.authEvent({ event: "SIGNED_IN", session: { user: { id: "another-user" } } });
     fireEvent.submit(name.closest("form")!);
   });
-  expect(fixture.rpc.mock.calls.slice(callsBeforeSwitch).some(([rpc]) => rpc === "save_my_directory_profile")).toBe(false);
+  expect(fixture.rpc.mock.calls.slice(callsBeforeSwitch).some(([rpc]) => rpc === "save_my_directory_profile_with_contacts")).toBe(false);
   await act(async () => { await new Promise(resolve => setTimeout(resolve, 10)); });
+});
+
+it("renders only opted-in public contact links", async () => {
+ const rpc = vi.fn().mockResolvedValue({data:{items:[{...person,public_email:"contact@example.test",linkedin_url:"https://www.linkedin.com/in/builder"}],total:1},error:null});
+ wrap(<MembersDirectoryPage client={{rpc} as unknown as SupabaseClient}/>);
+ expect(await screen.findByRole("link",{name:"Email"})).toHaveAttribute("href","mailto:contact%40example.test");
+ expect(screen.getByRole("link",{name:/LinkedIn/})).toHaveAttribute("rel","noopener noreferrer");
+});
+it("defaults contacts to private and requires a fresh sharing choice after edits", async () => {
+ const {client,rpc}=settingsFixture(); wrap(<DirectoryProfileSettingsPage client={client}/>);
+ const source=await screen.findByLabelText("Public email"); expect(source).toHaveValue("none");
+ const consent=screen.getByRole("checkbox",{name:/I allow the email/}); expect(consent).not.toBeChecked();
+ fireEvent.change(source,{target:{value:"custom"}});
+ fireEvent.change(screen.getByLabelText("Public contact email"),{target:{value:"contact@example.test"}});
+ fireEvent.click(consent);
+ fireEvent.change(screen.getByLabelText("Public LinkedIn profile URL (optional)"),{target:{value:"https://linkedin.com/in/builder"}});
+ expect(consent).not.toBeChecked(); fireEvent.click(consent);
+ fireEvent.click(screen.getByRole("button",{name:"Save profile choices"}));
+ await waitFor(()=>expect(rpc).toHaveBeenLastCalledWith("save_my_directory_profile_with_contacts",expect.objectContaining({p_email_source:"custom",p_public_email:"contact@example.test",p_contact_consent:true})));
+});
+
+it("saves unchecked contact permission without discarding the private choices", async () => {
+ const {client,rpc}=settingsFixture(); wrap(<DirectoryProfileSettingsPage client={client}/>);
+ await screen.findByLabelText("Public name");
+ fireEvent.change(screen.getByLabelText("Public email"),{target:{value:"custom"}});
+ fireEvent.change(screen.getByLabelText("Public contact email"),{target:{value:"private@example.test"}});
+ fireEvent.click(screen.getByRole("button",{name:"Save profile choices"}));
+ await waitFor(()=>expect(rpc).toHaveBeenLastCalledWith("save_my_directory_profile_with_contacts",expect.objectContaining({p_email_source:"custom",p_public_email:"private@example.test",p_contact_consent:false})));
 });
