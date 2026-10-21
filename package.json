@@ -53,7 +53,7 @@
     "jsdom": "^30.0.1",
     "svix": "2.5.0",
     "typescript": "~5.9.2",
-    "vite": "^7.1.7",
+    "vite": "^7.3.7",
     "vite-plugin-pwa": "1.2.0",
     "vitest": "4.1.11",
     "wrangler": "4.149.0"
