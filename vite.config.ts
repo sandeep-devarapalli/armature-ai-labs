@@ -116,6 +116,7 @@ export default defineConfig(({ mode }) => {
       },
       workbox: {
         navigateFallback: "/app-shell",
+        navigateFallbackDenylist: [/^\/auth\/course-session(?:\.html)?(?:\?|$)/],
         manifestTransforms: [async (entries) => ({
           manifest: entries.map(entry => entry.url === "app-shell.html" ? { ...entry, url: "app-shell" } : entry),
           warnings: [],

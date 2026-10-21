@@ -66,6 +66,25 @@ test("the service worker precaches every built JavaScript and CSS asset", async 
 });
 
 
+test("the installed worker loads the course bridge instead of the app shell", async ({ page }) => {
+  await page.goto("/");
+  await page.evaluate(() => navigator.serviceWorker.ready);
+  await page.reload();
+  expect(await page.evaluate(() => Boolean(navigator.serviceWorker.controller))).toBe(true);
+  for (const route of ["/auth/course-session", "/auth/course-session.html?handoff=1"]) {
+    await page.evaluate(src => {
+      document.querySelector("#course-bridge-test")?.remove();
+      const frame = document.createElement("iframe");
+      frame.id = "course-bridge-test";
+      frame.src = src;
+      document.body.append(frame);
+    }, route);
+    await expect.poll(() => page.frames().find(frame => frame !== page.mainFrame() && frame.url().includes("/auth/course-session"))?.title()).toBe("Armature session handoff");
+    await expect(page.frameLocator("#course-bridge-test").locator("#root")).toHaveCount(0);
+  }
+});
+
+
 test("deep navigation survives an evicted service-worker app shell", async ({ page }) => {
   await page.goto("/");
   await page.evaluate(() => navigator.serviceWorker.ready);
@@ -99,7 +118,8 @@ test("a waiting deployment updates only on request and preserves account storage
   const root = path.resolve("dist");
   const server = createServer(async (request, response) => {
     const pathname = new URL(request.url!, "http://localhost").pathname;
-    const relative = pathname === "/app-shell" ? "app-shell.html" : pathname.slice(1);
+    const relative = pathname === "/app-shell" ? "app-shell.html"
+      : pathname === "/auth/course-session" ? "auth/course-session.html" : pathname.slice(1);
     const filename = path.resolve(root, relative || "index.html");
     if (!filename.startsWith(`${root}/`)) { response.writeHead(403).end(); return; }
     let body: Buffer;
@@ -111,6 +131,7 @@ test("a waiting deployment updates only on request and preserves account storage
       extension = ".html";
     }
     if (pathname === "/sw.js") {
+      if (version === "old") body = Buffer.from(body.toString().replace(/,\{denylist:\[[^\]]*\]\}/, ""));
       body = Buffer.from(body.toString().replace(/(url:"(?:index\.html|app-shell)",revision:")[^"]+/g, `$1fixture-${version}`));
     } else if (extension === ".html") {
       body = Buffer.from(body.toString().replace("<body", `<body data-deployment="${version}"`));
@@ -133,6 +154,10 @@ test("a waiting deployment updates only on request and preserves account storage
       localStorage.setItem("pwa-test-account", "synthetic-account");
       sessionStorage.setItem("pwa-test-session", "synthetic-session");
     });
+    const bridge = await context.newPage();
+    await bridge.goto(`http://127.0.0.1:${address.port}/auth/course-session`);
+    await expect(bridge).not.toHaveTitle("Armature session handoff");
+    await bridge.close();
     let navigations = 0;
     page.on("framenavigated", frame => { if (frame === page.mainFrame()) navigations += 1; });
     version = "new";
@@ -153,6 +178,8 @@ test("a waiting deployment updates only on request and preserves account storage
     expect(await page.evaluate(() => [localStorage.getItem("pwa-test-account"), sessionStorage.getItem("pwa-test-session")])).toEqual(["synthetic-account", "synthetic-session"]);
     await expect(page.getByRole("button", { name: "Update now", exact: true })).toHaveCount(0);
     await page.screenshot({ path: testInfo.outputPath("deployment-updated.png") });
+    await page.goto(`http://127.0.0.1:${address.port}/auth/course-session`);
+    await expect(page).toHaveTitle("Armature session handoff");
   } finally {
     await context.close();
     await new Promise<void>((resolve, reject) => server.close(error => error ? reject(error) : resolve()));
