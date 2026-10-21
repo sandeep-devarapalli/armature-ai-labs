@@ -20,3 +20,9 @@ Test harness caveats: isolated copies needed missing fixture paths restored and 
 ## Rollback
 
 Withdraw the Courses handoff first by restoring prior course deployment `db1be2e9.armature-courses.pages.dev`; then main deployment `d057b2e9.armature-lab.pages.dev`. The service-only RPC and authenticated endpoint can safely remain unused, or be removed after frontend rollback. Keep the endpoint inaccessible to anonymous callers. The schema migration has no learner-data mutation.
+
+## Publication verification
+
+Website deployment: https://1bffc2bc.armature-lab.pages.dev. Courses deployment: https://118308c5.armature-courses.pages.dev. The canonical live domains passed the same synthetic browser flow, actual lesson restrictions, independent refresh/signout, and lab-form checks. All 76 served course files and the bridge entry/scripts matched the checked build bytes. Live framing restrictions and Courses HSTS passed. Both disposable production users and their test enrollment/progress records were removed; the final Auth count for those identities is zero.
+
+CI discovered a high-severity advisory in the existing Vite 7.3.6 development dependency. The minimal Vite 7.3.7 patch was applied; npm audit reports zero vulnerabilities, all 860 main tests pass again with an independent npm ci install, and the production build/artifact checks pass.
