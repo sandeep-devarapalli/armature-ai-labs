@@ -129,3 +129,6 @@ verify_jwt = false
 
 [functions.member-directory-avatar]
 verify_jwt = false
+
+[functions.course-session-handoff]
+verify_jwt = false

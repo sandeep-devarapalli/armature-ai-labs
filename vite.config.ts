@@ -26,6 +26,7 @@ export default defineConfig(({ mode }) => {
   build: {
     manifest: true,
     rollupOptions: {
+      input: ["index.html", "auth/course-session.html"],
       output: {
         manualChunks: {
           react: ["react", "react-dom", "react-router-dom"],
