@@ -1,0 +1,26 @@
+.resource-feedback { padding-top: 28px; padding-bottom: 48px; max-width: 1000px; }
+.resource-feedback h1 { font-size: clamp(30px, 5vw, 46px); }
+.resource-feedback h2 { font-size: 24px; margin: 24px 0 14px; }
+.resource-feedback section { border-top: 1px solid var(--hair); margin-top: 28px; padding-top: 12px; }
+.feedback-document-tabs, .feedback-actions, .feedback-pagination { display: flex; align-items: center; flex-wrap: wrap; gap: 16px; margin: 20px 0; }
+.feedback-document-tabs a { padding: 10px 0; }
+.feedback-document-tabs [aria-current] { border-bottom: 2px solid currentColor; }
+.feedback-version { display: block; font-size: 11px; margin-top: 8px; }
+.feedback-card { border: 1px solid var(--hair); padding: 22px; margin: 16px 0; overflow-wrap: anywhere; }
+.feedback-card header { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: 12px; }
+.feedback-card header span, .feedback-reference { font-size: 11px; }
+.feedback-body, .feedback-response p, .feedback-review-note { white-space: pre-wrap; }
+.feedback-response { padding: 16px; border-left: 2px solid var(--hair); background: var(--panel); }
+.feedback-form { display: grid; gap: 18px; margin-top: 20px; }
+.feedback-form fieldset { border: 0; padding: 0; margin: 0; min-width: 0; display: grid; gap: 18px; }
+.feedback-form label { display: grid; gap: 8px; }
+.feedback-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.feedback-form input:not([type=checkbox]), .feedback-form select, .feedback-form textarea { width: 100%; min-width: 0; font: inherit; padding: 12px; border: 1px solid var(--hair); background: var(--panel); color: var(--ink); }
+.feedback-form textarea { resize: vertical; }
+.feedback-form .feedback-consent { display: flex; align-items: flex-start; gap: 12px; font-size: 12px; }
+.feedback-consent input { margin-top: 5px; flex: 0 0 auto; }
+.resource-feedback button { cursor: pointer; font: inherit; padding: 10px 14px; border: 1px solid var(--hair); background: var(--panel); color: var(--ink); }
+.resource-feedback button:disabled { opacity: .5; cursor: default; }
+.resource-feedback button:focus-visible, .resource-feedback input:focus-visible, .resource-feedback textarea:focus-visible, .resource-feedback select:focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
+.feedback-notice { padding: 16px; border: 1px solid var(--hair); }
+@media(max-width:600px) { .feedback-fields { grid-template-columns: 1fr; } .feedback-card { padding: 16px; } .feedback-form input:not([type=checkbox]), .feedback-form select, .feedback-form textarea { font-size: 16px; } }

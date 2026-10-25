@@ -1,4 +1,7 @@
 .actuator-publication { padding-bottom: 36px; }
+.publication-hero { --link: #d99a50; --link-hover: #eab779; }
+.publication-actions .publication-button { --link: #995600; --link-hover: #784400; }
+.publication-hero .publication-note { font-size: 12px; margin-bottom: 0; }
 .publication-crumb { display: flex; flex-wrap: wrap; gap: 10px; padding: 25px 0; font-size: 11px; }
 .publication-hero { display: grid; grid-template-columns: minmax(0,1fr) 270px; gap: 55px; padding: 45px 50px; background: #111110; color: #f5f5ef; align-items: center; }
 .publication-hero h1 { font: 700 54px/1.12 Helvetica Neue,Helvetica,Arial,sans-serif; letter-spacing: -.035em; margin: 0; color: inherit; }
