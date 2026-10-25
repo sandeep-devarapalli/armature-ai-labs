@@ -1,0 +1,39 @@
+.member-photo-settings { padding: 26px; }
+.member-photo-settings .button { background: var(--ink); color: var(--paper); border: 1px solid var(--ink); font-size: 12px; }
+.member-photo-settings .button.secondary { background: transparent; color: var(--ink); border-color: var(--hair-strong); }
+.member-photo-settings .member-photo-title { display: flex; align-items: baseline; flex-wrap: wrap; gap: 14px; margin-bottom: 24px; }
+.member-photo-settings .member-photo-title h2 { margin: 0; font: italic 400 38px/1.15 var(--serif, Georgia, serif); }
+.member-photo-title > span, .member-photo-help { color: var(--fg-2); font-size: 11px; }
+.member-photo-current { display: flex; align-items: center; gap: 20px; margin-bottom: 20px; }
+.member-photo-image { width: 96px; height: 112px; flex: 0 0 auto; border: 1px solid var(--hair); background: var(--panel); display: grid; place-items: center; overflow: hidden; }
+.member-photo-image img { width: 100%; height: 100%; object-fit: cover; }
+.member-photo-image > span { font-size: 26px; color: var(--fg-2); }
+.member-photo-current h3 { margin: 0 0 5px; font-size: 16px; }
+.member-photo-settings .member-photo-status { font-size: 12px; margin: 0 0 6px; }
+.member-photo-settings .member-photo-visibility { color: var(--fg-2); font-size: 12px; margin-bottom: 22px; }
+.member-photo-settings .member-photo-link { padding: 0; border: 0; background: none; color: var(--link); text-decoration: underline; text-underline-offset: 4px; font: inherit; font-size: 12px; cursor: pointer; }
+.member-photo-settings .member-photo-link:disabled { opacity: .5; cursor: default; }
+.member-photo-settings .member-photo-remove { margin: 18px 0 0; }
+.member-photo-workspace { margin-top: 26px; padding-top: 24px; border-top: 1px solid var(--hair); }
+.member-photo-workspace h3 { scroll-margin-top: 1rem; margin: 0 0 8px; font-size: 16px; }
+.member-photo-workspace > p, .member-photo-draft p { color: var(--fg-2); font-size: 12px; overflow-wrap: anywhere; }
+.member-photo-sources { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin: 18px 0; }
+.member-photo-settings .member-photo-source { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; border: 1px solid var(--hair); padding: 18px; background: var(--panel); color: var(--ink); text-align: left; min-height: 112px; cursor: pointer; }
+.member-photo-source strong { font: inherit; font-size: 13px; }
+.member-photo-source span { font-size: 11px; color: var(--fg-2); }
+.member-photo-source:hover { border-color: var(--link); }
+.member-photo-source:disabled { opacity: .5; cursor: default; }
+.member-photo-draft { display: grid; grid-template-columns: 140px minmax(0, 1fr); gap: 22px; align-items: start; margin: 20px 0; }
+.member-photo-draft .member-photo-image { width: 140px; height: 164px; }
+.member-photo-settings .member-photo-consent { display: flex; align-items: flex-start; gap: 11px; border: 1px solid var(--hair); background: var(--panel); padding: 16px; font-size: 12px; }
+.member-photo-settings .member-photo-consent input { width: 18px; height: 18px; flex: 0 0 auto; margin: 3px 0 0; accent-color: var(--link); }
+.member-photo-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+.member-photo-notice, .member-photo-error { padding: 12px 14px; border-left: 2px solid var(--link); background: var(--panel); font-size: 12px; }
+.member-photo-error { border-color: var(--kicker, var(--link)); }
+.member-photo-confirm { padding: 20px; border: 1px solid var(--hair); background: var(--panel); }
+.member-photo-sharing { border-top: 1px solid var(--hair); padding-top: 20px; margin-top: 26px; font-size: 12px; }
+.member-photo-sharing summary { cursor: pointer; color: var(--link); text-decoration: underline; text-underline-offset: 4px; }
+.member-photo-sharing p { color: var(--fg-2); margin: 12px 0 0; }
+.member-photo-settings .member-photo-help { margin-top: 10px; }
+.member-photo-settings :is(button, input, summary):focus-visible { outline: 2px solid var(--link); outline-offset: 4px; }
+@media (max-width: 520px) { .member-photo-settings { padding: 20px 18px; } .member-photo-settings .member-photo-title h2 { font-size: 32px; } .member-photo-current { gap: 14px; } .member-photo-current .member-photo-image { width: 76px; height: 90px; } .member-photo-sources { grid-template-columns: minmax(0, 1fr); } .member-photo-draft { grid-template-columns: minmax(0, 1fr); gap: 12px; } .member-photo-consent { padding: 12px; } .member-photo-actions .button { flex: 1 1 auto; } }
