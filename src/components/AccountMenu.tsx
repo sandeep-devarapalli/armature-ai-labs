@@ -37,6 +37,7 @@ export function AccountMenu() {
       {basicOnboardingAvailable && account && ["admin", "super_admin"].includes(account.role) && <Link to="/admin/equipment">Admin → Equipment operations</Link>}
       {basicOnboardingAvailable && account && ["admin", "super_admin"].includes(account.role) && <Link to="/admin/discounts">Admin → Discounts</Link>}
       {account && ["admin", "super_admin"].includes(account.role) && <Link to="/admin/ecosystem">Admin → Ecosystem review</Link>}
+      {account && ["admin", "super_admin"].includes(account.role) && <Link to="/admin/resource-feedback">Admin → Resource feedback</Link>}
       {signedIn && <button type="button" onClick={() => void signOut()}>Sign out</button>}
     </div>
   </details>;

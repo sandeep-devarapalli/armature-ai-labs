@@ -24,6 +24,7 @@ export function WhitePaperPage() {
         <p className="publication-lede">Technology, innovation and manufacturing in India. A research paper on what robots use today, what limits performance, and how to build a competitive Indian joint.</p>
         <div className="publication-actions"><a className="publication-button" href={`${base}/white-paper.html`}>Read white paper <span aria-hidden="true">↗</span></a><a href={`${base}/robotic-actuators-india-white-paper.pdf`} download>Download PDF</a></div>
         <div className="publication-facts"><span>69 pages</span><span>104 references</span><span>Engineering + business</span></div>
+        <p className="publication-note"><Link to={`${base}/feedback?document=robotic-actuators-white-paper`}>Comment or suggest a correction</Link></p>
       </div>
       <figure className="publication-cover">
         <img className="publication-art" src={`${base}/inside-the-joint.png`} width="1086" height="1448" alt="Inside the joint: an editorial illustration of an exploded robotic actuator" />
@@ -32,7 +33,7 @@ export function WhitePaperPage() {
     </section>
     <section className="publication-companion">
       <div><p className="publication-label">Companion reference</p><div className="publication-fields"><span>Mass</span><span>Torque</span><span>Thermal</span><span>Origin</span></div></div>
-      <div><h2>Actuator specifications</h2><p>Compare 24 Indian and Chinese actuator entries. Inspect weight, torque, speed, sensing, temperature limits and sourcing evidence in a separate specification table.</p></div>
+      <div><h2>Actuator specifications</h2><p>Compare 24 Indian and Chinese actuator entries. Inspect weight, torque, speed, sensing, temperature limits and sourcing evidence in a separate specification table.</p><p><Link to={`${base}/feedback?document=actuator-specifications`}>Comment or suggest a correction</Link></p></div>
       <a className="publication-button" href={`${base}/actuator-specifications.html`}>Compare actuators <span aria-hidden="true">↗</span></a>
     </section>
     <section className="publication-context"><h2>Read with the evidence</h2><div><p>The paper explains technologies, limitations, innovation opportunities and the Indian supply chain. The specifications reference supports component comparison. Both distinguish published claims, calculations, proposed targets and unknowns.</p><p className="publication-note">Cover artwork is an AI-generated editorial illustration, not a tested actuator design.</p><Link to="/ecosystem#builder-resources">Tools &amp; resources for builders</Link></div></section>

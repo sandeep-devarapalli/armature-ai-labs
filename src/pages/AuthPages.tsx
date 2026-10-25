@@ -22,7 +22,7 @@ export function AuthPage({ redirectTo }: { redirectTo?: string } = {}) {
   const [error, setError] = useState("");
   const [working, setWorking] = useState(false);
   const [notice, setNotice] = useState("");
-  const from = onboardingAuthReturnPath(redirectTo ?? (location.state as { from?: string } | null)?.from, basicOnboardingAvailable && !memberPlatformAvailable);
+  const from = onboardingAuthReturnPath(redirectTo ?? (location.state as { from?: string } | null)?.from ?? new URLSearchParams(location.search).get("next"), basicOnboardingAvailable && !memberPlatformAvailable);
 
   useEffect(() => {
     if (currentMember) navigate(from, { replace: true });

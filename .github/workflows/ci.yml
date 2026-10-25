@@ -34,6 +34,7 @@ jobs:
       - run: npm run test:e2e
       - run: npm run test:e2e:ecosystem
       - run: VITE_MEMBERSHIP_LEVELS_ENABLED=true npx playwright test --config playwright.basic-registration.config.ts
+      - run: npx playwright test --config playwright.resource-feedback.config.ts
       - name: Verify membership fixtures against a prebuilt alternate backend
         env:
           VITE_DEMO_MODE: 'false'
