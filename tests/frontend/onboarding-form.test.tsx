@@ -83,12 +83,12 @@ it("discards a delayed admin response after the account changes", async () => {
 function submissionFixture(uploaded = true) {
   const app = { user_id: "synthetic", full_name: "Synthetic Member", email: "test@example.test", phone: "9999999999", linkedin_url: "https://linkedin.com/in/synthetic", date_of_birth: "2000-01-01", status: "pending", revision: 3, submitted_revision: null as number | null, submitted_at: null as string | null };
   const docs = ["photo", "government_id"].map(kind => ({ id: kind, kind, uploaded_at: uploaded ? new Date().toISOString() : null, expires_at: new Date(Date.now() + 86_400_000).toISOString(), deleted_at: null }));
-  const rpc = vi.fn(async (name: string) => {
+  const rpc = vi.fn(async (name: string, _args?: unknown) => {
     if (name === "submit_basic_application_for_review") { app.submitted_revision = 3; app.submitted_at = new Date().toISOString(); }
     return { data: null, error: null };
   });
   const from = (table: string) => { const result = { data: table === "basic_onboarding_applications" ? [app] : table === "onboarding_documents" ? docs : [], error: null }; const chain = { select: () => chain, eq: () => chain, order: async () => result, then: (resolve: (v: typeof result) => void) => Promise.resolve(result).then(resolve) }; return chain; };
-  const client = { rpc, from, auth: { getSession: async () => ({ data: { session: { user: { id: "synthetic", email: app.email } } }, error: null }), onAuthStateChange: () => ({ data: { subscription: { unsubscribe() {} } } }) } } as unknown as SupabaseClient;
+  const client = { rpc: (name: string, args: unknown) => name === "get_onboarding_update" ? { setHeader: () => Promise.resolve({ data: null, error: null }) } : rpc(name, args), from, auth: { getSession: async () => ({ data: { session: { user: { id: "synthetic", email: app.email }, access_token: "synthetic-token" } }, error: null }), onAuthStateChange: () => ({ data: { subscription: { unsubscribe() {} } } }) } } as unknown as SupabaseClient;
   return { app, docs, rpc, client };
 }
 it("does not mark reserved documents uploaded or submit when files are merely selected", async () => {
@@ -217,7 +217,7 @@ it("preserves approved identity after document expiry without asking for a new s
   expect(screen.queryByLabelText("photo image")).not.toBeInTheDocument();
   expect(screen.getByRole("button", { name: "Review application" })).toBeEnabled();
   await goToStep("Review & submit");
-  expect(screen.getByText(/No new submission is needed unless/)).toBeVisible();
+  expect(screen.getByText(/Your existing identity approval remains active/)).toBeVisible();
   expect(fixture.rpc).not.toHaveBeenCalled();
 });
 

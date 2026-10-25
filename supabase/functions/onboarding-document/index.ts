@@ -72,12 +72,8 @@ Deno.serve(async (request) => {
         "cache-control": "private, no-store, max-age=0", "x-content-type-options": "nosniff",
       } });
     }
-    const { data: application, error: appError } = await client.from("basic_onboarding_applications").select("status,revision").eq("user_id", user.id).single();
-    if (appError || application?.status !== "pending") throw new HttpError(409, "Application is not awaiting documents.");
-    const { data: acceptance, error: acceptanceError } = await scopedClient.from("onboarding_notice_acceptances")
-      .select("notice_version").eq("user_id", user.id).eq("revision", application.revision).eq("notice_version", "2026-09-26-release-1").maybeSingle();
-    if (acceptanceError) throw new HttpError(503, "Privacy notice acceptance could not be checked. Try again later.");
-    if (!acceptance) throw new HttpError(403, "Accept the current privacy notice before uploading.");
+    const { data: uploadAllowed, error: uploadCheckError } = await scopedClient.rpc("onboarding_document_upload_allowed");
+    if (uploadCheckError || uploadAllowed !== true) throw new HttpError(409, "A current application or identity update with privacy consent is required before uploading.");
     if (document.kind === "government_id") {
       const { data: consent, error: consentError } = await client.rpc("has_government_id_retention_consent", { p_document_id: id });
       if (consentError || consent !== true) throw new HttpError(403, "Accept the government ID retention notice before uploading.");

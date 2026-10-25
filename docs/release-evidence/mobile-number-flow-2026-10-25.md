@@ -20,4 +20,4 @@ Local visual review: `/Users/dev/Downloads/Armature Lab/output/mobile-number-flo
 
 Library reference: [official libphonenumber-js documentation](https://github.com/catamphetamine/libphonenumber-js).
 
-Publication is pending review; no production deployment is included in this evidence record.
+This initial evidence record was prepared for review. The later combined release authorization and procedure are recorded in [membership-updates-2026-10-25.md](membership-updates-2026-10-25.md).

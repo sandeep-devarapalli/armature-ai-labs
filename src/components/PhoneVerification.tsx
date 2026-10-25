@@ -13,12 +13,13 @@ interface PhoneVerificationProps {
   initialPhone?: string;
   userId?: string;
   showHeading?: boolean;
+  onBusyChange?: (busy: boolean) => void;
   onVerified?: () => Promise<void> | void;
 }
 export function PhoneVerification(props: PhoneVerificationProps) {
   return <AccountPhoneVerification key={props.userId || "current-account"} {...props} />;
 }
-function AccountPhoneVerification({ client, initialPhone = "", userId, showHeading = true, onVerified }: PhoneVerificationProps) {
+function AccountPhoneVerification({ client, initialPhone = "", userId, showHeading = true, onBusyChange, onVerified }: PhoneVerificationProps) {
   const initialCanonical = canonicalPhone(phoneDraft(initialPhone));
   const [status, setStatus] = useState<PhoneStatus | null>(null);
   const [phone, setPhone] = useState<string | null>(initialCanonical);
@@ -32,6 +33,7 @@ function AccountPhoneVerification({ client, initialPhone = "", userId, showHeadi
   const [changing, setChanging] = useState(false);
   const [now, setNow] = useState(Date.now());
   const generation = useRef(0), pristine = useRef(true);
+  useEffect(() => () => { onBusyChange?.(false); }, [onBusyChange]);
   useEffect(() => {
     if (!pristine.current) return;
     setPhone(initialCanonical); setEditorValue(initialPhone); setEditing(!initialCanonical);
@@ -40,7 +42,7 @@ function AccountPhoneVerification({ client, initialPhone = "", userId, showHeadi
     const target = editing ? phone : requestedPhone || (!status?.expires_at ? phone : null);
     if (action === "start" && !target) return;
     const current = ++generation.current;
-    setBusy(true); setError("");
+    setBusy(true); onBusyChange?.(true); setError("");
     try {
       let headers: Record<string, string> | undefined;
       if (userId) {
@@ -90,7 +92,7 @@ function AccountPhoneVerification({ client, initialPhone = "", userId, showHeadi
         try { await onVerified?.(); } catch { /* Verification remains confirmed if the parent refresh fails. */ }
       }
     } catch (failure) { if (current === generation.current) setError((failure as Error).message); }
-    finally { if (current === generation.current) setBusy(false); }
+    finally { if (current === generation.current) { setBusy(false); onBusyChange?.(false); } }
   }
   useEffect(() => { void request("status"); return () => { generation.current++; }; }, [client]);
   useEffect(() => {

@@ -3,7 +3,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { PhoneVerification } from "../../src/components/PhoneVerification";
 const empty = { available_channels: ["sms"], enabled: true, verified: false, masked_phone: null, channel: null, expires_at: null, resend_available_at: null };
 const pending = { ...empty, masked_phone: "+91••••••1234", channel: "sms", expires_at: new Date(Date.now() + 300000).toISOString(), resend_available_at: new Date(Date.now() + 60000).toISOString() };
-function setup(responses: unknown[] = [empty], props: { initialPhone?: string; userId?: string; onVerified?: () => void } = {}) {
+function setup(responses: unknown[] = [empty], props: { initialPhone?: string; userId?: string; onVerified?: () => void; onBusyChange?: (value: boolean) => void } = {}) {
   const invoke = vi.fn(); responses.forEach(data => invoke.mockResolvedValueOnce({ data, error: null }));
   const result = render(<PhoneVerification client={{ functions: { invoke } } as unknown as SupabaseClient} {...props} />);
   return { invoke, ...result };
@@ -199,4 +199,30 @@ it("discards the old resend destination when a status refresh returns a differen
   expect(screen.getByRole("button", { name: "Send SMS code" })).toBeDisabled();
   expect(screen.getByText("To send another code, confirm the mobile number first.")).toBeInTheDocument();
   expect(invoke.mock.calls.filter(([, options]) => options.body.action === "start")).toHaveLength(1);
+});
+
+
+it("holds parent navigation busy until SMS, verification and the confirmed-details refresh finish", async () => {
+  let finishStart!: (value: unknown) => void, finishVerify!: (value: unknown) => void, finishRefresh!: () => void;
+  const onBusyChange = vi.fn(), onVerified = vi.fn(() => new Promise<void>(resolve => { finishRefresh = resolve; }));
+  const f = setup([empty], { initialPhone: "9999991234", onBusyChange, onVerified });
+  await screen.findByText("Mobile number from your details");
+  await waitFor(() => expect(onBusyChange).toHaveBeenLastCalledWith(false));
+  f.invoke.mockImplementationOnce(() => new Promise(resolve => { finishStart = resolve; }));
+  fireEvent.click(screen.getByRole("button", { name: "Send SMS code" }));
+  expect(onBusyChange).toHaveBeenLastCalledWith(true);
+  expect(screen.getByRole("button", { name: "Edit number" })).toBeDisabled();
+  await act(async () => finishStart({ data: pending, error: null }));
+  await waitFor(() => expect(onBusyChange).toHaveBeenLastCalledWith(false));
+  fireEvent.change(screen.getByLabelText("Verification code"), { target: { value: "123456" } });
+  f.invoke.mockImplementationOnce(() => new Promise(resolve => { finishVerify = resolve; }));
+  fireEvent.click(screen.getByRole("button", { name: "Verify mobile number" }));
+  expect(onBusyChange).toHaveBeenLastCalledWith(true);
+  await act(async () => finishVerify({ data: { ...empty, verified: true, masked_phone: pending.masked_phone }, error: null }));
+  await waitFor(() => expect(finishRefresh).toBeDefined());
+  expect(onBusyChange).toHaveBeenLastCalledWith(true);
+  expect(screen.getByRole("button", { name: "Change mobile number" })).toBeDisabled();
+  await act(async () => finishRefresh());
+  await waitFor(() => expect(onBusyChange).toHaveBeenLastCalledWith(false));
+  expect(screen.getByText(/Mobile verified/)).toBeVisible();
 });
