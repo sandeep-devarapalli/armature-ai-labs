@@ -27,7 +27,7 @@
     "check:building-models": "node scripts/check-building-models.mjs && node scripts/check-electrical-plan.mjs"
   },
   "overrides": {
-    "miniflare": { "undici": "7.30.1" }
+    "undici@7.29.1": "7.30.1"
   },
   "dependencies": {
     "@google/model-viewer": "^4.3.1",
