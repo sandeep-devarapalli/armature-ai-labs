@@ -23,7 +23,6 @@ export function PwaUpdatePrompt() {
     lastCheck.current = Date.now();
     try {
       await registration.update();
-      if (registration.waiting) setNeedRefresh(true);
       setUpdateError(false);
     } catch {
       setUpdateError(true);
@@ -34,7 +33,6 @@ export function PwaUpdatePrompt() {
 
   useEffect(() => {
     if (!registration) return;
-    if (registration.waiting) setNeedRefresh(true);
     const check = () => { void checkForUpdate(); };
     check();
     window.addEventListener("focus", check);
