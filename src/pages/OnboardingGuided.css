@@ -6,7 +6,7 @@
 .onboarding-guided .og-journey { display: grid; grid-template-columns: 15rem minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 4rem); margin-top: 2rem; align-items: start; }
 .onboarding-guided [hidden] { display: none !important; }
 .og-sidebar ol { list-style: none; padding: 0; margin: 0; }
-.og-sidebar nav button { width: 100%; display: flex; gap: .8rem; align-items: center; padding: 1rem .75rem; text-align: left; color: var(--ink); background: transparent; border: 0; border-bottom: 1px solid var(--hair-strong); font: inherit; font-size: .82rem; }
+.og-sidebar nav button { position: relative; width: 100%; display: flex; gap: .8rem; align-items: center; padding: 1rem .75rem; text-align: left; color: var(--ink); background: transparent; border: 0; border-bottom: 1px solid var(--hair-strong); font: inherit; font-size: .82rem; }
 .og-sidebar nav button[aria-current=step] { background: var(--panel-2); font-weight: bold; }
 .og-sidebar nav button > span:first-child { display: grid; place-items: center; flex: 0 0 1.7rem; height: 1.7rem; border: 1px solid var(--hair-strong); border-radius: 50%; }
 .og-sidebar nav button[aria-current=step] > span:first-child { background: var(--ink); color: var(--panel); }
