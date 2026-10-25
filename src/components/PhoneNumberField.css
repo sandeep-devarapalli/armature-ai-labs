@@ -1,0 +1,8 @@
+.phone-number-field { min-width: 0; width: 100%; border: 0; padding: 0; margin: 0; }
+.phone-number-fields { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr); align-items: start; gap: 12px; }
+.phone-number-fields label { display: grid; gap: 8px; min-width: 0; }
+.phone-number-fields :is(select, input) { width: 100%; min-width: 0; max-width: 100%; font: inherit; padding: 12px; border: 1px solid var(--hair-strong); background: var(--panel); color: var(--ink); border-radius: 0; }
+.phone-number-fields :is(select, input):focus-visible { outline: 2px solid var(--link); outline-offset: 3px; }
+.phone-number-field .phone-number-help { color: var(--fg-2); font-size: 11px; margin: 8px 0 0; }
+.phone-number-field .phone-number-error { color: var(--kicker, var(--link)); font-size: 12px; margin: 8px 0 0; }
+@media (max-width: 520px) { .phone-number-fields { grid-template-columns: minmax(0, 1fr); } .phone-number-fields :is(select, input) { font-size: 16px; } }
