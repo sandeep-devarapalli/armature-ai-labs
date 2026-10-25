@@ -26,6 +26,9 @@
     "prepare:building-models": "node scripts/building-vision/release-manifest.mjs",
     "check:building-models": "node scripts/check-building-models.mjs && node scripts/check-electrical-plan.mjs"
   },
+  "overrides": {
+    "miniflare": { "undici": "7.30.1" }
+  },
   "dependencies": {
     "@google/model-viewer": "^4.3.1",
     "@supabase/supabase-js": "^2.57.4",

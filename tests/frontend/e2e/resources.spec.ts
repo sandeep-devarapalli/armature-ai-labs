@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { readFile } from "node:fs/promises";
 
 test("Resources opens the selected cover and two independent documents with an installed worker", async ({ page }, testInfo) => {
   await page.goto("/");
@@ -22,6 +23,7 @@ test("Resources opens the selected cover and two independent documents with an i
   const download = await downloadReady;
   expect(download.suggestedFilename()).toBe("robotic-actuators-india-white-paper.pdf");
   expect(await download.failure()).toBeNull();
+  expect((await readFile((await download.path())!)).subarray(0, 5).toString()).toBe("%PDF-");
   const read = page.locator(".publication-actions a").first();
   const compare = page.locator(".publication-companion > a");
   const paperUrl = await read.getAttribute("href");
