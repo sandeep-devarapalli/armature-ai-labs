@@ -103,6 +103,7 @@ for (const incomplete of [true, false]) test(`View brings ${incomplete ? "incomp
   for (let attempt = 0; attempt < 2; attempt++) {
     await view.click();
     await expect(heading).toBeFocused(); await expect(heading).toBeInViewport();
+    await expect(page.getByRole("region", { name: "Pending application updates", exact: true })).toHaveCount(1);
     await expect(view).toHaveAttribute("aria-expanded", "true");
   }
   if (incomplete) await expect(page.getByText("This account has not submitted an application yet.")).toBeVisible();

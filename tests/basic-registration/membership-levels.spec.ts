@@ -34,7 +34,7 @@ test("Basic to Verified and Premium keep identity status distinct on desktop and
   await expect(page.getByText("Current membership: Basic member", { exact: true })).toBeVisible();
   await expect(page.getByText("Identity: Approved", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "Manage my registration", exact: true }).click();
-  await page.getByLabel("Mobile number with country code").fill("+919999991234");
+  await expect(page.getByText(/Mobile number from your details/)).toBeVisible();
   await page.getByRole("button", { name: "Send SMS code", exact: true }).click();
   await expect(page.getByText(/Code sent by SMS/)).toBeVisible();
   await expect(page.getByRole("button", { name: "Use WhatsApp instead" })).toHaveCount(0);
