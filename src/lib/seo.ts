@@ -23,6 +23,9 @@ export type PageSeo = {
 };
 
 const pages: Record<string, PageDefinition> = {
+  "/resources/": { name: "Resources", description: "Research and engineering references from Armature AI Labs." },
+  "/resources/white-paper/": { name: "White Paper", description: "Research papers on robotic actuators, innovation and manufacturing in India.", parent: "/resources/" },
+  "/resources/white-paper/robotic-actuators/": { name: "Robotic Actuators", description: "Read the robotic actuators white paper and compare 24 actuator entries with specifications, weights and sourcing evidence.", parent: "/resources/white-paper/" },
   "/talent-network/": { name: "Armature Talent Network", description: "Find engineers. Connect with builders. Get things made. Discover engineering talent, view professional profiles and connect through LinkedIn." },
   "/": {
     name: "Physical AI and Robotics Lab in Bengaluru",
