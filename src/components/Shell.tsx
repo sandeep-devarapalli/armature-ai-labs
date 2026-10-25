@@ -99,6 +99,7 @@ export function Shell({ children }: PropsWithChildren) {
   const { pathname } = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const moreMenu = useRef<HTMLDetailsElement>(null);
+  const resourcesMenu = useRef<HTMLDetailsElement>(null);
   const header = useRef<HTMLElement>(null);
   const mobileTrigger = useRef<HTMLButtonElement>(null);
   const workspaceLinksRef = useRef<HTMLDivElement>(null);
@@ -106,6 +107,7 @@ export function Shell({ children }: PropsWithChildren) {
   useEffect(() => {
     setMobileMenuOpen(false);
     if (moreMenu.current) moreMenu.current.open = false;
+    if (resourcesMenu.current) resourcesMenu.current.open = false;
     workspaceLinksRef.current
       ?.querySelector<HTMLAnchorElement>("a.active")
       ?.scrollIntoView({ block: "nearest", inline: "center" });
@@ -113,6 +115,7 @@ export function Shell({ children }: PropsWithChildren) {
 
   useEffect(() => {
     const dismiss = (event: PointerEvent) => {
+      if (!resourcesMenu.current?.contains(event.target as Node) && resourcesMenu.current) resourcesMenu.current.open = false;
       if (!moreMenu.current?.contains(event.target as Node) && moreMenu.current) moreMenu.current.open = false;
       if (!header.current?.contains(event.target as Node)) setMobileMenuOpen(false);
     };
@@ -139,6 +142,7 @@ export function Shell({ children }: PropsWithChildren) {
       </a>
       <header className="topbar" ref={header} onKeyDown={(event) => {
         if (event.key !== "Escape") return;
+        if (resourcesMenu.current?.open) { resourcesMenu.current.open = false; resourcesMenu.current.querySelector("summary")?.focus(); }
         if (moreMenu.current?.open) { moreMenu.current.open = false; moreMenu.current.querySelector("summary")?.focus(); }
         if (mobileMenuOpen) { setMobileMenuOpen(false); mobileTrigger.current?.focus(); }
       }}>
@@ -153,6 +157,16 @@ export function Shell({ children }: PropsWithChildren) {
                 {index === 1 && <a href={coursesUrl}>Courses</a>}
               </span>
             ))}
+            <details className="nav-more" ref={resourcesMenu}>
+              <summary className={pathname.startsWith("/resources") ? "active" : ""}>Resources <span aria-hidden="true">⌄</span></summary>
+              <div className="nav-more-panel">
+                <NavLink to="/resources/white-paper">White Paper</NavLink>
+                <NavLink to="/resources/white-paper/robotic-actuators">Robotic actuators</NavLink>
+                <a href="/resources/white-paper/robotic-actuators/white-paper.html">Read white paper</a>
+                <a href="/resources/white-paper/robotic-actuators/actuator-specifications.html">Actuator specifications</a>
+                <NavLink to="/ecosystem#builder-resources">Tools &amp; resources for builders</NavLink>
+              </div>
+            </details>
             <details className="nav-more" ref={moreMenu}>
               <summary className={moreLinks.some(([to]) => pathname === to || pathname.startsWith(`${to}/`)) ? "active" : ""}>More <span aria-hidden="true">⌄</span></summary>
               <div className="nav-more-panel">{moreLinks.map(([to, label]) => <NavLink key={to} to={to}>{label}</NavLink>)}</div>
@@ -187,6 +201,10 @@ export function Shell({ children }: PropsWithChildren) {
                   {label}
                 </NavLink>
               ))}
+              <NavLink to="/resources/white-paper">Resources / White Paper</NavLink>
+              <NavLink to="/resources/white-paper/robotic-actuators">Robotic actuators</NavLink>
+              <a href="/resources/white-paper/robotic-actuators/white-paper.html">Read white paper</a>
+              <a href="/resources/white-paper/robotic-actuators/actuator-specifications.html">Actuator specifications</a>
               {memberPlatformAvailable && <Link to={currentMember ? "/dashboard" : "/auth"}>
                 {currentMember ? "Member workspace" : "Member sign in"}
               </Link>}

@@ -12,6 +12,8 @@ import {
   memberPlatformAvailable
 } from "../config/release";
 
+const WhitePaperPage = lazy(() => import("../pages/WhitePaperPage").then(module => ({ default: module.WhitePaperPage })));
+
 const BookingBetaPage = lazy(() => import("../pages/BookingBetaPage").then((module) => ({ default: module.BookingBetaPage })));
 const OnboardingPage = lazy(() => import("../pages/OnboardingPage").then((module) => ({ default: module.OnboardingPage })));
 const ProjectsPage = lazy(() => import("../pages/ProjectsPage").then((module) => ({ default: module.ProjectsPage })));
@@ -116,6 +118,9 @@ export const routes: RouteObject[] = [
       { path: "/services", element: <ServicesPage /> },
       { path: "/projects", element: <ProjectsPage /> },
       { path: "/branding", element: <BrandingPage />, handle: { module: "src/pages/BrandingPage.tsx" } },
+      { path: "/resources", element: <WhitePaperPage />, handle: { module: "src/pages/WhitePaperPage.tsx" } },
+      { path: "/resources/white-paper", element: <WhitePaperPage />, handle: { module: "src/pages/WhitePaperPage.tsx" } },
+      { path: "/resources/white-paper/robotic-actuators", element: <WhitePaperPage />, handle: { module: "src/pages/WhitePaperPage.tsx" } },
       { path: "/blog", element: <BlogIndexPage />, handle: { module: "src/pages/BlogPages.tsx" } },
       { path: "/blog/model-hardware-standard", element: <BlogArticlePage />, handle: { module: "src/pages/BlogPages.tsx" } },
       { path: "/projects/electrofluidic-fiber-muscles", element: <ElectrofluidicMusclesPage /> },
