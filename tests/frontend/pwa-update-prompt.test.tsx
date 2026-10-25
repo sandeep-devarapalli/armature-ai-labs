@@ -2,11 +2,13 @@ import { act, fireEvent, render, screen, waitFor } from "@testing-library/react"
 import { useState } from "react";
 import { PwaUpdatePrompt } from "../../src/components/PwaUpdatePrompt";
 
-const fixture = vi.hoisted(() => ({ options: {} as any, activate: vi.fn().mockResolvedValue(undefined) }));
+const fixture = vi.hoisted(() => ({ options: {} as any, activate: vi.fn().mockResolvedValue(undefined), notifyWaiting: () => {} }));
 vi.mock("virtual:pwa-register/react", () => ({
   useRegisterSW: (options: unknown) => {
     fixture.options = options;
-    return { needRefresh: useState(false), offlineReady: useState(false), updateServiceWorker: fixture.activate };
+    const needRefresh = useState(false);
+    fixture.notifyWaiting = () => needRefresh[1](true);
+    return { needRefresh, offlineReady: useState(false), updateServiceWorker: fixture.activate };
   }
 }));
 
@@ -16,10 +18,15 @@ beforeEach(() => {
   Object.defineProperty(document, "visibilityState", { configurable: true, value: "visible" });
 });
 
-it("offers an already waiting update without activating until requested", async () => {
-  const update = vi.fn().mockResolvedValue(undefined);
+it.each(["already waiting", "found during checking"])("waits for the lifecycle-ready notification when %s", async (scenario) => {
+  const registration = { waiting: scenario === "already waiting" ? {} : null as object | null, update: vi.fn(async () => { registration.waiting = {}; }) };
+  const update = registration.update;
   render(<PwaUpdatePrompt />);
-  act(() => fixture.options.onRegisteredSW("/sw.js", { waiting: {}, update }));
+  act(() => fixture.options.onRegisteredSW("/sw.js", registration));
+  await waitFor(() => expect(update).toHaveBeenCalledOnce());
+  expect(screen.queryByRole("button", { name: "Update now" })).not.toBeInTheDocument();
+  expect(fixture.activate).not.toHaveBeenCalled();
+  act(() => fixture.notifyWaiting());
   expect(await screen.findByText("New version ready")).toBeVisible();
   expect(fixture.activate).not.toHaveBeenCalled();
   fireEvent.click(screen.getByRole("button", { name: "Update now" }));
