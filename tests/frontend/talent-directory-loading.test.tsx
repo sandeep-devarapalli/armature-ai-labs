@@ -52,6 +52,22 @@ it('shows usable search controls and loading placeholders before profile request
   expect(await screen.findByRole('heading', { name: 'Synthetic Ada' })).toBeInTheDocument();
 });
 
+it('stops loading after failure and replaces the retry placeholder as soon as results resolve', async () => {
+  const retry = deferred<TalentPage>();
+  mock.loadPage.mockRejectedValueOnce(new Error('Synthetic directory failure')).mockReturnValueOnce(retry.promise);
+  const view = open();
+  await screen.findByText('Synthetic directory failure');
+  expect(screen.getByText('Talent profiles unavailable')).toBeInTheDocument();
+  expect(screen.queryByText('Loading talent profiles…')).not.toBeInTheDocument();
+  expect(view.container.querySelector('.talent-loading')).toBeNull();
+  fireEvent.click(screen.getByRole('button', { name: 'Try again' }));
+  expect(screen.getByText('Loading talent profiles…')).toBeInTheDocument();
+  expect(view.container.querySelector('.talent-loading')).toBeInTheDocument();
+  await act(async () => retry.resolve(page('Recovered person')));
+  expect(screen.getByRole('heading', { name: 'Recovered person' })).toBeInTheDocument();
+  expect(view.container.querySelector('.talent-loading')).toBeNull();
+});
+
 it('keeps existing results while updating and ignores an older search response', async () => {
   const old = deferred<TalentPage>(); const latest = deferred<TalentPage>();
   mock.loadPage.mockImplementation((query: TalentPageQuery) => query.query === 'old' ? old.promise : query.query === 'latest' ? latest.promise : Promise.resolve(page('Initial result')));
