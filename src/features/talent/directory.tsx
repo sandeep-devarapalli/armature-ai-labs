@@ -46,6 +46,7 @@ export function TalentDirectory() {
   const [facetsError, setFacetsError] = useState('');
   const [person, setPerson] = useState<DirectoryPerson | null>(null);
   const [profileLoading, setProfileLoading] = useState(false);
+  const [resolvedProfileId, setResolvedProfileId] = useState<string>();
   const [profileError, setProfileError] = useState('');
   const [refreshEpoch, setRefreshEpoch] = useState(0);
   const [shortlistPeople, setShortlistPeople] = useState<Map<string, DirectoryPerson>>(() => new Map());
@@ -89,6 +90,7 @@ export function TalentDirectory() {
   const byId = useMemo(() => new Map([...shortlistPeople, ...shown.map(({ person: p }) => [p.id, p] as const), ...(person ? [[person.id, person] as const] : [])]), [shortlistPeople, shown, person]);
   let profileId: string | undefined;
   try { profileId = myProfileRoute ? member.profile?.ownerId : route.startsWith('profile/') ? decodeURIComponent(route.slice(8)) : undefined; } catch { /* Invalid profile links show the missing state. */ }
+  const checkingProfile = Boolean(profileId && (profileLoading || resolvedProfileId !== profileId));
 
   useEffect(() => {
     const timer = window.setTimeout(() => setCompanyFilter(company), 200);
@@ -147,12 +149,12 @@ export function TalentDirectory() {
 
   useEffect(() => {
     setPerson(null); setProfileError('');
-    if (!profileId) { setProfileLoading(false); return; }
+    if (!profileId) { setProfileLoading(false); setResolvedProfileId(undefined); return; }
     let alive = true;
     setProfileLoading(true);
     void loadTalentProfile(profileId).then(value => { if (alive) setPerson(value); })
       .catch(error => { if (alive) setProfileError(error instanceof Error ? error.message : 'Unable to load this profile.'); })
-      .finally(() => { if (alive) setProfileLoading(false); });
+      .finally(() => { if (alive) { setProfileLoading(false); setResolvedProfileId(profileId); } });
     return () => { alive = false; };
   }, [profileId, refreshEpoch]);
   useEffect(() => { const change = () => { setRoute(location.hash.slice(1)); setRouteReady(true); }; change(); window.addEventListener('hashchange', change); return () => window.removeEventListener('hashchange', change); }, []);
@@ -166,7 +168,7 @@ export function TalentDirectory() {
   function toggle(id: string) { setShortlist(s => s.includes(id) ? s.filter(x => x !== id) : [...s, id]); setShortlistPeople(current => { const next = new Map(current); const found = byId.get(id); if (shortlist.includes(id)) next.delete(id); else if (found) next.set(id, found); return next; }); }
   function reset() { setQuery(''); setSearch(''); setPlace(''); setCategory([]); setCompany(''); setShortlistOnly(false); setPage(1); }
   const profileLink = (p: DirectoryPerson) => <a href={`#profile/${encodeURIComponent(p.id)}`} onClick={() => { resultScroll.current = window.scrollY; }}>View profile <ArrowUpRight size={14}/></a>;
-  const content = privateRoute && !signedIn ? <section><h1 tabIndex={-1}>Your Talent Network account</h1>{member.loading ? <p role="status">Checking your account…</p> : <><p>Sign in to manage your profile, projects and conversations.</p><Link className="button primary" to="/auth" state={{ from: window.location.pathname + window.location.hash }}>Sign in / join as a basic member</Link></>}</section> : myProfileRoute && !person ? <section><h1 tabIndex={-1}>My profile</h1>{member.profileError && <p role="alert">{member.profileError}</p>}<p>Your profile and submissions are linked to your signed-in account. Your email stays private.</p>{member.profile?.ownerId && <p>{member.profile.published ? profileLoading ? 'Loading your profile…' : 'Unable to load your profile. Please refresh the directory.' : 'Your profile is not currently publicly listed.'}</p>}{member.profile && !member.profile.ownerId && <a className="button primary" href="#add-profile">{member.profile?.started ? 'Continue profile setup' : 'Add my profile'}</a>}<TalentMyRequests embedded/><TalentSubmissionHistory/></section> : import.meta.env.DEV && route === 'photo-demo' ? <TalentPhotoDemo/> : import.meta.env.DEV && route === 'claim-demo' ? <TalentClaimDemo/> : import.meta.env.DEV && route === 'edit-demo' ? <TalentEditDemo/> : route === 'add-profile' ? <><TalentAddProfile/><p className="talent-community-context">Starting your career? <TalentCommunityLink group="students"/></p></> : marketplaceRoute ? <><TalentMarketplace route={route}/>{route === 'work' && <p className="talent-community-context">Explore the community: <TalentCommunityLink group="jobs"/></p>}{route === 'post' && <p className="talent-community-context">Meet other leaders: <TalentCommunityLink group="leaders"/></p>}</> : route === 'review' ? <><TalentReviewQueue onChange={refresh}/><TalentSubmissionHistory review onChange={refresh}/></> : route.startsWith('profile/') || myProfileRoute ? profileLoading ? <section><h1>Talent profile</h1><p role="status">Loading profile…</p></section> : profileError ? <div role="alert"><p>{profileError}</p><button onClick={refresh}>Try again</button></div> : person ? <>
+  const content = privateRoute && !signedIn ? <section><h1 tabIndex={-1}>Your Talent Network account</h1>{member.loading ? <p role="status">Checking your account…</p> : <><p>Sign in to manage your profile, projects and conversations.</p><Link className="button primary" to="/auth" state={{ from: window.location.pathname + window.location.hash }}>Sign in / join as a basic member</Link></>}</section> : myProfileRoute && !person ? <section><h1 tabIndex={-1}>My profile</h1>{member.profileError && <p role="alert">{member.profileError}</p>}<p>Your profile and submissions are linked to your signed-in account. Your email stays private.</p>{member.profile?.ownerId && <p>{member.profile.published ? checkingProfile ? 'Loading your profile…' : 'Unable to load your profile. Please refresh the directory.' : 'Your profile is not currently publicly listed.'}</p>}{member.profile && !member.profile.ownerId && <a className="button primary" href="#add-profile">{member.profile?.started ? 'Continue profile setup' : 'Add my profile'}</a>}<TalentMyRequests embedded/><TalentSubmissionHistory/></section> : import.meta.env.DEV && route === 'photo-demo' ? <TalentPhotoDemo/> : import.meta.env.DEV && route === 'claim-demo' ? <TalentClaimDemo/> : import.meta.env.DEV && route === 'edit-demo' ? <TalentEditDemo/> : route === 'add-profile' ? <><TalentAddProfile/><p className="talent-community-context">Starting your career? <TalentCommunityLink group="students"/></p></> : marketplaceRoute ? <><TalentMarketplace route={route}/>{route === 'work' && <p className="talent-community-context">Explore the community: <TalentCommunityLink group="jobs"/></p>}{route === 'post' && <p className="talent-community-context">Meet other leaders: <TalentCommunityLink group="leaders"/></p>}</> : route === 'review' ? <><TalentReviewQueue onChange={refresh}/><TalentSubmissionHistory review onChange={refresh}/></> : route.startsWith('profile/') || myProfileRoute ? checkingProfile ? <section><h1>Talent profile</h1><p role="status">Loading profile…</p></section> : profileError ? <div role="alert"><p>{profileError}</p><button onClick={refresh}>Try again</button></div> : person ? <>
         <a className="back" href="#talent"><ArrowLeft size={15}/> Back to results</a>
         <div className="profile-heading"><TalentAvatar person={person}/><div><Badge claimed={person.claimed}/><h1 tabIndex={-1}>{person.name}</h1><p>{person.title || 'Title not provided'}</p><p>{person.company || 'Company not provided'} · {person.location}</p></div><LinkedIn person={person}/></div>
         <TalentProfileActions key={person.id} person={person} onChange={refresh} hideOwnerEdit openEditor={route === 'edit-profile'}/><TalentChatRequest person={person}/>{myProfileRoute && <details><summary>Profile updates and review history</summary><TalentMyRequests embedded/><TalentSubmissionHistory/></details>}
