@@ -122,3 +122,24 @@ it('hydrates the loading shell before restoring browser-cached results and reval
     expect(recoverable).not.toHaveBeenCalled();
   } finally { if (root) await act(async () => root.unmount()); container.remove(); }
 });
+
+it.each([
+  ['#profile/synthetic-ada', 'Synthetic Ada'],
+  ['#work', 'Work projects'],
+])('hydrates a direct %s entry without loading the default directory', async (hash, heading) => {
+  window.history.replaceState(null, '', `/talent-network/${hash}`);
+  mock.loadProfile.mockResolvedValue(person('Synthetic Ada'));
+  const tree = <MemoryRouter><TalentDirectory/></MemoryRouter>;
+  const html = renderToString(tree);
+  expect(html).toContain('Loading talent profiles');
+  const container = document.createElement('div'); container.innerHTML = html; document.body.append(container);
+  const recoverable = vi.fn(); let root!: Root;
+  try {
+    await act(async () => { root = hydrateRoot(container, tree, { onRecoverableError: recoverable }); });
+    expect(await screen.findByRole('heading', { name: heading, level: 1 })).toBeInTheDocument();
+    expect(recoverable).not.toHaveBeenCalled();
+    expect(mock.loadPage).not.toHaveBeenCalled(); expect(mock.loadFacets).not.toHaveBeenCalled(); expect(mock.bulk).not.toHaveBeenCalled();
+    if (hash.startsWith('#profile/')) expect(mock.loadProfile).toHaveBeenCalledWith('synthetic-ada');
+    else expect(mock.loadProfile).not.toHaveBeenCalled();
+  } finally { if (root) await act(async () => root.unmount()); container.remove(); }
+});

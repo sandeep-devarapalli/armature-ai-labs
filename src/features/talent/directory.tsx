@@ -54,7 +54,8 @@ export function TalentDirectory() {
   const locations = facets?.locations ?? [];
   const categories = facets?.categories ?? [];
   const companies = facets?.companies ?? [];
-  const [route, setRoute] = useState(typeof window === 'undefined' ? '' : window.location.hash.slice(1));
+  const [route, setRoute] = useState('');
+  const [routeReady, setRouteReady] = useState(false);
   const [query, setQuery] = useState('');
   const [search, setSearch] = useState('');
   const [place, setPlace] = useState('');
@@ -95,7 +96,7 @@ export function TalentDirectory() {
   }, [company]);
 
   useEffect(() => {
-    if (!directoryView) return;
+    if (!routeReady || !directoryView) return;
     let alive = true;
     const cached = cachedTalentPage(pageQuery);
     if (cached) setResultPage(cached);
@@ -107,24 +108,24 @@ export function TalentDirectory() {
     }).catch(error => { if (alive) setLoadError(error instanceof Error ? error.message : 'Unable to load profiles.'); })
       .finally(() => { if (alive) setLoading(false); });
     return () => { alive = false; };
-  }, [queryKey, directoryView, refreshEpoch]);
+  }, [queryKey, directoryView, routeReady, refreshEpoch]);
 
   useEffect(() => {
-    if (!directoryView) return;
+    if (!routeReady || !directoryView) return;
     let alive = true;
     const cached = cachedTalentFacets();
     if (cached) setFacets(cached);
     void loadTalentFacets().then(value => { if (alive) { setFacets(value); setFacetsError(''); } }).catch(() => { if (alive) setFacetsError('Filters could not be loaded.'); });
     return () => { alive = false; };
-  }, [directoryView, refreshEpoch]);
+  }, [directoryView, routeReady, refreshEpoch]);
 
   useEffect(() => {
-    if (!directoryView) return;
+    if (!routeReady || !directoryView) return;
     const update = () => { if (document.visibilityState === 'visible') setRefreshEpoch(value => value + 1); };
     const timer = window.setInterval(update, 60_000);
     window.addEventListener('focus', update);
     return () => { window.clearInterval(timer); window.removeEventListener('focus', update); };
-  }, [directoryView]);
+  }, [directoryView, routeReady]);
 
   useEffect(() => {
     if (!shortlist.length) return;
@@ -139,10 +140,10 @@ export function TalentDirectory() {
   }, [shortlist, refreshEpoch]);
 
   useEffect(() => {
-    if (!directoryView || loading || !resultPage || currentPage >= pages || loadError) return;
+    if (!routeReady || !directoryView || loading || !resultPage || currentPage >= pages || loadError) return;
     const timer = window.setTimeout(() => { void loadTalentPage({ ...pageQuery, page: currentPage + 1 }).catch(() => {}); }, 700);
     return () => window.clearTimeout(timer);
-  }, [queryKey, directoryView, loading, resultPage, currentPage, pages, loadError]);
+  }, [queryKey, directoryView, routeReady, loading, resultPage, currentPage, pages, loadError]);
 
   useEffect(() => {
     setPerson(null); setProfileError('');
@@ -154,7 +155,7 @@ export function TalentDirectory() {
       .finally(() => { if (alive) setProfileLoading(false); });
     return () => { alive = false; };
   }, [profileId, refreshEpoch]);
-  useEffect(() => { const change = () => setRoute(location.hash.slice(1)); window.addEventListener('hashchange', change); return () => window.removeEventListener('hashchange', change); }, []);
+  useEffect(() => { const change = () => { setRoute(location.hash.slice(1)); setRouteReady(true); }; change(); window.addEventListener('hashchange', change); return () => window.removeEventListener('hashchange', change); }, []);
   useEffect(() => {
     if (previousRoute.current === route) return;
     previousRoute.current = route;
