@@ -8,6 +8,7 @@ export type TalentStatus = { owner: boolean; admin: boolean; requests: TalentReq
 export async function talentRpc<T>(name: string, args: Record<string, unknown> = {}): Promise<T> {
   const { data, error } = await talentClient().rpc(name, args);
   if (error) throw new Error(error.code === 'P0409' ? 'This profile changed. Refresh it before saving or reviewing again.' : error.message);
+    if (['talent_update_profile', 'talent_admin_update_profile', 'talent_unlist_profile', 'talent_review_request', 'talent_review_submission'].includes(name) && typeof window !== 'undefined') window.dispatchEvent(new Event('talent-directory-invalidated'));
   return data as T;
 }
 export function normalizeTalentRow(row: TalentRow): DirectoryPerson {

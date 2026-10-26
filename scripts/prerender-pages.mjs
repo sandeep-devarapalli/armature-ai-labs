@@ -37,7 +37,10 @@ try {
     const visit = (id) => {
       if (visited.has(id)) return;
       visited.add(id);
-      const entry = manifest[id];
+      const sharedEntries = Object.values(manifest).filter((entry) =>
+        entry.isDynamicEntry && entry.name === path.basename(id, path.extname(id))
+      );
+      const entry = manifest[id] ?? (sharedEntries.length === 1 ? sharedEntries[0] : undefined);
       if (!entry) throw new Error(`Client module missing from build manifest: ${id}`);
       for (const css of entry.css ?? []) styles.add(css);
       for (const dependency of entry.imports ?? []) visit(dependency);

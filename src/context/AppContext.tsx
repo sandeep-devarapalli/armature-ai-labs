@@ -286,7 +286,8 @@ export function AppProvider({ children, hydrate: hydrating = false }: PropsWithC
       }
       void hydrate(data.session);
     });
-    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "INITIAL_SESSION") return;
       window.setTimeout(() => {
         if (active) void hydrate(session);
       }, 0);

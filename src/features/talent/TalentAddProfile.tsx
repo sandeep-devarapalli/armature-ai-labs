@@ -2,7 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import type { User } from '@supabase/supabase-js';
 import { Check, UserRound } from 'lucide-react';
-import { talentClient, talentRpc } from './liveTalent';
+import { talentRpc } from './liveTalent';
+import { availabilityLabel, useSubmissionAccount } from './talentAccount';
+export { availabilityLabel, useSubmissionAccount } from './talentAccount';
 import { linkedinIdentity, type DirectoryPerson } from './directorySearch';
 import './talentAddProfile.css';
 
@@ -13,34 +15,7 @@ export type ProfileSubmission = { id: string; revision: number; status: string; 
 const empty: ProfileData = { name: '', title: '', company: '', location: '', headline: '', summary: '', linkedinUrl: '', skills: [], physicalAiAreas: [], previousCompanies: [], yearsExperience: null, education: '', experience: '', availability: 'unknown' };
 const errorText = (error: unknown) => error instanceof Error ? error.message : 'Unable to save. Please try again.';
 const editable = (status: string) => ['draft', 'changes_requested', 'rejected'].includes(status);
-export function availabilityLabel(value?: string) { return value === 'available' ? 'Open to projects' : value === 'unavailable' ? 'Not currently available' : 'Availability unknown'; }
 function SignIn() { return <Link className="button primary" to="/auth" state={{ from: '/talent-network/#add-profile' }}>Sign in / join as a basic member</Link>; }
-export function useSubmissionAccount() {
-  const [user, setUser] = useState<User | null>(null); const [loading, setLoading] = useState(true); const [error, setError] = useState(''); const [epoch, setEpoch] = useState(0);
-  useEffect(() => {
-    let alive = true; let generation = 0; let identity: string | null | undefined;
-    const check = async () => {
-      const current = ++generation;
-      try {
-        const { data, error: failure } = await talentClient().auth.getUser();
-        if (failure && failure.name !== 'AuthSessionMissingError') throw failure;
-        if (alive && current === generation) { identity = data.user?.id ?? null; setUser(data.user); setError(''); }
-      } catch (failure) { if (alive && current === generation) setError(errorText(failure)); }
-      finally { if (alive && current === generation) setLoading(false); }
-    };
-    const { data } = talentClient().auth.onAuthStateChange((_event, session) => {
-      if (!alive) return;
-      const nextIdentity = session?.user.id ?? null;
-      if (identity === nextIdentity) { setUser(session?.user ?? null); return; }
-      identity = nextIdentity; ++generation; setLoading(true); setUser(null); setError(''); setEpoch(value => value + 1);
-      // Leave the auth callback before making another auth request.
-      queueMicrotask(() => { if (alive) void check(); });
-    });
-    void check();
-    return () => { alive = false; ++generation; data.subscription.unsubscribe(); };
-  }, []);
-  return { user, loading, error, epoch };
-}
 export function TalentAddProfile() {
   const account = useSubmissionAccount();
   return <section className="talent-add"><a href="#talent">Back to talent</a><h1 tabIndex={-1}>Add your profile</h1><p>One profile, owned by you. Add your details for manual review before publication.</p>{account.loading ? <p role="status">Checking membership…</p> : account.error ? <p role="alert">{account.error}</p> : <ProfileWizard key={`${account.user?.id}:${account.epoch}`} user={account.user}/>}</section>;

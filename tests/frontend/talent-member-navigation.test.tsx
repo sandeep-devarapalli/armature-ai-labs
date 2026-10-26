@@ -3,7 +3,7 @@ import { beforeEach, expect, it, vi } from 'vitest';
 import { TalentMemberNavigation, useTalentMember } from '../../src/features/talent/TalentMemberNavigation';
 const mock = vi.hoisted(() => ({ rpc: vi.fn(), account: { user: null as null | { id: string; email_confirmed_at: string }, loading: false, error: '', epoch: 0 } }));
 vi.mock('../../src/features/talent/liveTalent', () => ({ talentRpc: mock.rpc }));
-vi.mock('../../src/features/talent/TalentAddProfile', () => ({ useSubmissionAccount: () => mock.account }));
+vi.mock('../../src/features/talent/talentAccount', () => ({ useSubmissionAccount: () => mock.account }));
 beforeEach(() => { mock.rpc.mockReset(); mock.account.user = null; });
 it('shows only the two public destinations while signed out, even with stale admin state', () => {
   render(<TalentMemberNavigation route="talent" signedIn={false} isAdmin unread={5} profileLabel="Add my profile"/>);

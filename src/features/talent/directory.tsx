@@ -1,20 +1,29 @@
 import { Link } from 'react-router-dom';
 import { TalentMemberNavigation, useTalentMember } from './TalentMemberNavigation';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowLeft, ArrowUpRight, Search, UserRound, X, Check } from 'lucide-react';
-import { TalentAddProfile, TalentSubmissionHistory, availabilityLabel } from './TalentAddProfile';
-import { loadTalent } from './liveTalent';
-import { TalentMyRequests, TalentProfileActions, TalentReviewQueue, TalentEditDemo, TalentClaimDemo } from './TalentRequests';
-import { buildDirectoryIndex, searchDirectory, linkedinIdentity, type DirectoryPerson } from './directorySearch';
+import { availabilityLabel } from './talentAccount';
+import { cachedTalentPage, cachedTalentFacets, clearTalentDirectoryCache, loadTalentPage, loadTalentFacets, loadTalentProfile, loadShortlistedProfiles, talentPageKey, type TalentPageQuery, type TalentPage, type TalentFacets } from './directoryData';
+import { linkedinIdentity, type DirectoryPerson } from './directorySearch';
 import { useApp } from '../../context/AppContext';
 import { useTheme } from '../../context/ThemeContext';
 import { TalentAvatar, TalentPhotoDemo } from './TalentPhoto';
 import { TalentPortfolio } from './TalentPortfolio';
 import { TalentCommunity, TalentCommunityLink } from './TalentCommunity';
-import { TalentMarketplace, TalentChatRequest, useMarketplaceUnread } from './Marketplace';
+import { useMarketplaceUnread } from './marketUnread';
 import './talent.css';
 import './directory.css';
 
+
+const TalentAddProfile = lazy(() => import('./TalentAddProfile').then(m => ({ default: m.TalentAddProfile })));
+const TalentSubmissionHistory = lazy(() => import('./TalentAddProfile').then(m => ({ default: m.TalentSubmissionHistory })));
+const TalentMyRequests = lazy(() => import('./TalentRequests').then(m => ({ default: m.TalentMyRequests })));
+const TalentProfileActions = lazy(() => import('./TalentRequests').then(m => ({ default: m.TalentProfileActions })));
+const TalentReviewQueue = lazy(() => import('./TalentRequests').then(m => ({ default: m.TalentReviewQueue })));
+const TalentEditDemo = lazy(() => import('./TalentRequests').then(m => ({ default: m.TalentEditDemo })));
+const TalentClaimDemo = lazy(() => import('./TalentRequests').then(m => ({ default: m.TalentClaimDemo })));
+const TalentMarketplace = lazy(() => import('./Marketplace').then(m => ({ default: m.TalentMarketplace })));
+const TalentChatRequest = lazy(() => import('./Marketplace').then(m => ({ default: m.TalentChatRequest })));
 
 const categoryGroups = [
   { label: 'Perception & spatial understanding', items: ['Perception', 'SLAM', 'VLMs / Multimodal Perception', 'World Models / 3D Scene Learning'] },
@@ -30,22 +39,28 @@ function Badge({ claimed = false }: { claimed?: boolean }) { return <span classN
 function Tags({ items }: { items: string[] }) { return items.length ? <div className="tags">{items.map(t => <span key={t}>{t}</span>)}</div> : <p className="fine">Not provided</p>; }
 
 export function TalentDirectory() {
-  const [people, setPeople] = useState<DirectoryPerson[]>([]);
+  const [resultPage, setResultPage] = useState<TalentPage>();
+  const [facets, setFacets] = useState<TalentFacets>();
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
-  async function refresh() { if (!people.length) setLoading(true); setLoadError(''); try { setPeople(await loadTalent()); } catch (error) { setLoadError(error instanceof Error ? error.message : 'Unable to load profiles.'); } finally { setLoading(false); } }
-  useEffect(() => { void refresh(); }, []);
-  const index = useMemo(() => buildDirectoryIndex(people), [people]);
-  const byId = useMemo(() => new Map(people.map(p => [p.id, p])), [people]);
-  const locations = useMemo(() => [...new Set(people.map(p => p.location))].sort(), [people]);
-  const categories = useMemo(() => [...new Set(people.flatMap(p => [...p.skills, ...p.physicalAiAreas]))].sort(), [people]);
-  const companies = useMemo(() => [...new Set(people.map(p => p.company).filter(Boolean))].sort(), [people]);
+  const [facetsError, setFacetsError] = useState('');
+  const [person, setPerson] = useState<DirectoryPerson | null>(null);
+  const [profileLoading, setProfileLoading] = useState(false);
+  const [profileError, setProfileError] = useState('');
+  const [refreshEpoch, setRefreshEpoch] = useState(0);
+  const [shortlistPeople, setShortlistPeople] = useState<Map<string, DirectoryPerson>>(() => new Map());
+  const [shortlistError, setShortlistError] = useState('');
+  async function refresh() { clearTalentDirectoryCache(); setRefreshEpoch(value => value + 1); }
+  const locations = facets?.locations ?? [];
+  const categories = facets?.categories ?? [];
+  const companies = facets?.companies ?? [];
   const [route, setRoute] = useState(typeof window === 'undefined' ? '' : window.location.hash.slice(1));
   const [query, setQuery] = useState('');
   const [search, setSearch] = useState('');
   const [place, setPlace] = useState('');
   const [category, setCategory] = useState<string[]>([]);
   const [company, setCompany] = useState('');
+  const [companyFilter, setCompanyFilter] = useState('');
   const [sort, setSort] = useState<'relevance' | 'name'>('relevance');
   const [page, setPage] = useState(1);
   const [shortlist, setShortlist] = useState<string[]>([]);
@@ -61,16 +76,84 @@ export function TalentDirectory() {
   const marketplaceRoute = ['work', 'projects', 'post', 'market-test', 'market-review'].includes(route) || route.startsWith('messages') || route.startsWith('project/');
   const resultScroll = useRef(0);
   const previousRoute = useRef(route);
-  const matches = useMemo(() => searchDirectory(index, { query: search, location: place, category, company, sort }), [index, search, place, category, company, sort]);
-  const results = shortlistOnly ? matches.filter(m => shortlist.includes(m.person.id)) : matches;
-  const pages = Math.max(1, Math.ceil(results.length / 25));
-  const currentPage = Math.min(page, pages);
-  const shown = results.slice((currentPage - 1) * 25, currentPage * 25);
-  const person = useMemo(() => {
-    if (myProfileRoute) return member.profile?.ownerId ? byId.get(member.profile.ownerId) : undefined;
-    if (!route.startsWith('profile/')) return undefined;
-    try { return byId.get(decodeURIComponent(route.slice(8))); } catch { return undefined; }
-  }, [route, byId, myProfileRoute, member.profile?.ownerId]);
+  const directoryView = !privateRoute && !marketplaceRoute && !route.startsWith('profile/');
+  const pageQuery = useMemo<TalentPageQuery>(() => ({ query: search, location: place, category, company: companyFilter, sort, page, ids: shortlistOnly ? shortlist : null }), [search, place, category, companyFilter, sort, page, shortlistOnly, shortlist]);
+  const queryKey = talentPageKey(pageQuery);
+  const lastRequest = useRef({ key: '', epoch: -1 });
+  const results = resultPage?.results ?? [];
+  const total = resultPage?.total ?? 0;
+  const pages = Math.max(1, Math.ceil(total / 25));
+  const currentPage = resultPage?.page ?? page;
+  const shown = results;
+  const byId = useMemo(() => new Map([...shortlistPeople, ...shown.map(({ person: p }) => [p.id, p] as const), ...(person ? [[person.id, person] as const] : [])]), [shortlistPeople, shown, person]);
+  let profileId: string | undefined;
+  try { profileId = myProfileRoute ? member.profile?.ownerId : route.startsWith('profile/') ? decodeURIComponent(route.slice(8)) : undefined; } catch { /* Invalid profile links show the missing state. */ }
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setCompanyFilter(company), 200);
+    return () => window.clearTimeout(timer);
+  }, [company]);
+
+  useEffect(() => {
+    if (!directoryView) return;
+    let alive = true;
+    const cached = cachedTalentPage(pageQuery);
+    if (cached) setResultPage(cached);
+    setLoading(true); setLoadError('');
+    const revalidate = lastRequest.current.key === queryKey || lastRequest.current.epoch !== refreshEpoch;
+    lastRequest.current = { key: queryKey, epoch: refreshEpoch };
+    void loadTalentPage(pageQuery, Boolean(cached) && revalidate).then(value => {
+      if (alive) setResultPage(value);
+    }).catch(error => { if (alive) setLoadError(error instanceof Error ? error.message : 'Unable to load profiles.'); })
+      .finally(() => { if (alive) setLoading(false); });
+    return () => { alive = false; };
+  }, [queryKey, directoryView, refreshEpoch]);
+
+  useEffect(() => {
+    if (!directoryView) return;
+    let alive = true;
+    const cached = cachedTalentFacets();
+    if (cached) setFacets(cached);
+    void loadTalentFacets().then(value => { if (alive) { setFacets(value); setFacetsError(''); } }).catch(() => { if (alive) setFacetsError('Filters could not be loaded.'); });
+    return () => { alive = false; };
+  }, [directoryView, refreshEpoch]);
+
+  useEffect(() => {
+    if (!directoryView) return;
+    const update = () => { if (document.visibilityState === 'visible') setRefreshEpoch(value => value + 1); };
+    const timer = window.setInterval(update, 60_000);
+    window.addEventListener('focus', update);
+    return () => { window.clearInterval(timer); window.removeEventListener('focus', update); };
+  }, [directoryView]);
+
+  useEffect(() => {
+    if (!shortlist.length) return;
+    let alive = true;
+    void loadShortlistedProfiles(shortlist).then(people => {
+      if (!alive) return;
+      const valid = new Map(people.map(p => [p.id, p]));
+      setShortlistPeople(valid); setShortlistError('');
+      setShortlist(current => current.some(id => !valid.has(id)) ? current.filter(id => valid.has(id)) : current);
+    }).catch(() => { if (alive) { setShortlistPeople(new Map()); setShortlistError('Unable to refresh your shortlisted profiles.'); } });
+    return () => { alive = false; };
+  }, [shortlist, refreshEpoch]);
+
+  useEffect(() => {
+    if (!directoryView || loading || !resultPage || currentPage >= pages || loadError) return;
+    const timer = window.setTimeout(() => { void loadTalentPage({ ...pageQuery, page: currentPage + 1 }).catch(() => {}); }, 700);
+    return () => window.clearTimeout(timer);
+  }, [queryKey, directoryView, loading, resultPage, currentPage, pages, loadError]);
+
+  useEffect(() => {
+    setPerson(null); setProfileError('');
+    if (!profileId) { setProfileLoading(false); return; }
+    let alive = true;
+    setProfileLoading(true);
+    void loadTalentProfile(profileId).then(value => { if (alive) setPerson(value); })
+      .catch(error => { if (alive) setProfileError(error instanceof Error ? error.message : 'Unable to load this profile.'); })
+      .finally(() => { if (alive) setProfileLoading(false); });
+    return () => { alive = false; };
+  }, [profileId, refreshEpoch]);
   useEffect(() => { const change = () => setRoute(location.hash.slice(1)); window.addEventListener('hashchange', change); return () => window.removeEventListener('hashchange', change); }, []);
   useEffect(() => {
     if (previousRoute.current === route) return;
@@ -79,14 +162,10 @@ export function TalentDirectory() {
     window.scrollTo(0, route === 'talent' ? resultScroll.current : 0);
   }, [route]);
 
-  function toggle(id: string) { setShortlist(s => s.includes(id) ? s.filter(x => x !== id) : [...s, id]); }
+  function toggle(id: string) { setShortlist(s => s.includes(id) ? s.filter(x => x !== id) : [...s, id]); setShortlistPeople(current => { const next = new Map(current); const found = byId.get(id); if (shortlist.includes(id)) next.delete(id); else if (found) next.set(id, found); return next; }); }
   function reset() { setQuery(''); setSearch(''); setPlace(''); setCategory([]); setCompany(''); setShortlistOnly(false); setPage(1); }
   const profileLink = (p: DirectoryPerson) => <a href={`#profile/${encodeURIComponent(p.id)}`} onClick={() => { resultScroll.current = window.scrollY; }}>View profile <ArrowUpRight size={14}/></a>;
-  return <div className="talent-app directory-app" data-talent-theme={theme}>
-    <TalentMemberNavigation route={route} signedIn={signedIn} isAdmin={isAdmin} unread={unread} profileLabel={profileLabel}/>
-    {import.meta.env.DEV && <div className="talent-local-tools">Local build · <a href="#edit-demo">Test profile editing</a> · <a href="#photo-demo">Test profile photos</a> · <a href="#claim-demo">Test claiming</a> · <a href="#market-test">Test marketplace</a></div>}
-    <div className="directory-content">
-      {privateRoute && !signedIn ? <section><h1 tabIndex={-1}>Your Talent Network account</h1>{member.loading ? <p role="status">Checking your account…</p> : <><p>Sign in to manage your profile, projects and conversations.</p><Link className="button primary" to="/auth" state={{ from: window.location.pathname + window.location.hash }}>Sign in / join as a basic member</Link></>}</section> : myProfileRoute && !person ? <section><h1 tabIndex={-1}>My profile</h1>{member.profileError && <p role="alert">{member.profileError}</p>}<p>Your profile and submissions are linked to your signed-in account. Your email stays private.</p>{member.profile?.ownerId && <p>{member.profile.published ? loading ? 'Loading your profile…' : 'Unable to load your profile. Please refresh the directory.' : 'Your profile is not currently publicly listed.'}</p>}{member.profile && !member.profile.ownerId && <a className="button primary" href="#add-profile">{member.profile?.started ? 'Continue profile setup' : 'Add my profile'}</a>}<TalentMyRequests embedded/><TalentSubmissionHistory/></section> : import.meta.env.DEV && route === 'photo-demo' ? <TalentPhotoDemo/> : import.meta.env.DEV && route === 'claim-demo' ? <TalentClaimDemo/> : import.meta.env.DEV && route === 'edit-demo' ? <TalentEditDemo/> : route === 'add-profile' ? <><TalentAddProfile/><p className="talent-community-context">Starting your career? <TalentCommunityLink group="students"/></p></> : marketplaceRoute ? <><TalentMarketplace route={route}/>{route === 'work' && <p className="talent-community-context">Explore the community: <TalentCommunityLink group="jobs"/></p>}{route === 'post' && <p className="talent-community-context">Meet other leaders: <TalentCommunityLink group="leaders"/></p>}</> : loading ? <section><h1>Armature Talent Network</h1><p>Find engineers. Connect with builders. Get things made.</p><p>Discover engineers and builders across hardware, robotics and physical AI. Explore professional experience and research categories, then connect through LinkedIn. Unclaimed profiles are not owner-confirmed; each profile offers claim, correction and removal routes.</p><p role="status">Loading talent profiles…</p></section> : loadError ? <div role="alert"><h1>Unable to load the directory</h1><p>{loadError}</p><button onClick={() => void refresh()}>Try again</button></div> : route === 'review' ? <><TalentReviewQueue onChange={refresh}/><TalentSubmissionHistory review onChange={refresh}/></> : route.startsWith('profile/') || myProfileRoute ? person ? <>
+  const content = privateRoute && !signedIn ? <section><h1 tabIndex={-1}>Your Talent Network account</h1>{member.loading ? <p role="status">Checking your account…</p> : <><p>Sign in to manage your profile, projects and conversations.</p><Link className="button primary" to="/auth" state={{ from: window.location.pathname + window.location.hash }}>Sign in / join as a basic member</Link></>}</section> : myProfileRoute && !person ? <section><h1 tabIndex={-1}>My profile</h1>{member.profileError && <p role="alert">{member.profileError}</p>}<p>Your profile and submissions are linked to your signed-in account. Your email stays private.</p>{member.profile?.ownerId && <p>{member.profile.published ? profileLoading ? 'Loading your profile…' : 'Unable to load your profile. Please refresh the directory.' : 'Your profile is not currently publicly listed.'}</p>}{member.profile && !member.profile.ownerId && <a className="button primary" href="#add-profile">{member.profile?.started ? 'Continue profile setup' : 'Add my profile'}</a>}<TalentMyRequests embedded/><TalentSubmissionHistory/></section> : import.meta.env.DEV && route === 'photo-demo' ? <TalentPhotoDemo/> : import.meta.env.DEV && route === 'claim-demo' ? <TalentClaimDemo/> : import.meta.env.DEV && route === 'edit-demo' ? <TalentEditDemo/> : route === 'add-profile' ? <><TalentAddProfile/><p className="talent-community-context">Starting your career? <TalentCommunityLink group="students"/></p></> : marketplaceRoute ? <><TalentMarketplace route={route}/>{route === 'work' && <p className="talent-community-context">Explore the community: <TalentCommunityLink group="jobs"/></p>}{route === 'post' && <p className="talent-community-context">Meet other leaders: <TalentCommunityLink group="leaders"/></p>}</> : route === 'review' ? <><TalentReviewQueue onChange={refresh}/><TalentSubmissionHistory review onChange={refresh}/></> : route.startsWith('profile/') || myProfileRoute ? profileLoading ? <section><h1>Talent profile</h1><p role="status">Loading profile…</p></section> : profileError ? <div role="alert"><p>{profileError}</p><button onClick={refresh}>Try again</button></div> : person ? <>
         <a className="back" href="#talent"><ArrowLeft size={15}/> Back to results</a>
         <div className="profile-heading"><TalentAvatar person={person}/><div><Badge claimed={person.claimed}/><h1 tabIndex={-1}>{person.name}</h1><p>{person.title || 'Title not provided'}</p><p>{person.company || 'Company not provided'} · {person.location}</p></div><LinkedIn person={person}/></div>
         <TalentProfileActions key={person.id} person={person} onChange={refresh} hideOwnerEdit openEditor={route === 'edit-profile'}/><TalentChatRequest person={person}/>{myProfileRoute && <details><summary>Profile updates and review history</summary><TalentMyRequests embedded/><TalentSubmissionHistory/></details>}
@@ -106,14 +185,21 @@ export function TalentDirectory() {
         <p id="talent-search-examples" className="search-explainer">Try a person’s name, “firmware engineer”, “computer vision”, a company name, or paste their linkedin.com/in/… URL. Use Category and Location below to narrow your results.</p>
         {search && <div className="query-summary"><span>Search:</span><button onClick={() => { setQuery(''); setSearch(''); setPage(1); }}>{search} <X size={13}/></button><span>Edit the query above to refine it.</span></div>}
         <div className="desk-layout">
-        <aside className="specialty-sidebar directory-filters"><h2>Specialty</h2><div className="specialty-options">{['', 'Embedded', 'Perception', 'SLAM', 'Simulation', 'Motion Planning'].map(c => <button key={c} aria-pressed={c ? category.length === 1 && category[0] === c : category.length === 0} onClick={() => { setCategory(c ? [c] : []); setPage(1); }}><span>{c || 'All specialties'}</span><span>{count(c ? people.filter(p => p.skills.includes(c) || p.physicalAiAreas.includes(c)).length : people.length)}</span></button>)}</div><fieldset className="category-filter"><legend>Category</legend><div className="category-filter-heading"><span aria-live="polite">{category.length ? `${category.length} selected` : 'All categories'}</span><button type="button" onClick={() => { setCategory([]); setPage(1); }}>Clear</button></div><p className="fine">Match any selected category</p>{[...categoryGroups, { label: 'Other categories', items: categories.filter(c => !groupedCategories.has(c)) }].map(group => { const items = group.items.filter(c => categories.includes(c)); return items.length > 0 && <div className="category-group" key={group.label}><h3>{group.label}</h3>{items.map(c => <label className="category-option" key={c}><input type="checkbox" checked={category.includes(c)} onChange={e => { setCategory(current => e.target.checked ? [...current, c] : current.filter(value => value !== c)); setPage(1); }}/><span>{c}</span></label>)}</div>; })}</fieldset><label>Location<select value={place} onChange={e => { setPlace(e.target.value); setPage(1); }}><option value="">All locations</option><option value="bengaluru">Bengaluru area (all variants)</option>{locations.map(l => <option key={l}>{l}</option>)}</select></label><label>Company<input list="directory-companies" value={company} placeholder="All companies" onChange={e => { setCompany(e.target.value); setPage(1); }}/><datalist id="directory-companies">{companies.map(c => <option key={c} value={c}/>)}</datalist></label><button onClick={reset}>Clear filters</button><p className="fine">Categories may be research-derived or member-provided. Neither is independently verified.</p></aside>
-        <div className="desk-results">
-        <div className="directory-toolbar"><p role="status">{count(results.length)} {results.length === 1 ? 'profile' : 'profiles'}{results.length > 0 && ` · showing ${count((currentPage - 1) * 25 + 1)}–${count(Math.min(currentPage * 25, results.length))}`}</p><button aria-pressed={shortlistOnly} onClick={() => { setShortlistOnly(!shortlistOnly); setPage(1); }}>Shortlist ({shortlist.length})</button><label>Sort<select value={sort} onChange={e => { setSort(e.target.value as 'relevance' | 'name'); setPage(1); }}><option value="relevance">Relevance</option><option value="name">Name</option></select></label></div>
-        <section aria-label="Talent results">{shown.map(({person: p,matches: reasons}) => <article className="engineer-row" key={p.id}><div className="engineer-row-heading"><TalentAvatar person={p}/><div><h2>{p.name}</h2><p>{p.title || 'Title not provided'}</p><p>{p.company || 'Company not provided'} · {p.location}</p></div><Badge claimed={p.claimed}/></div><p className="engineer-summary">{p.headline || 'Headline not provided'}</p><Tags items={[...new Set([...p.skills, ...p.physicalAiAreas])].slice(0, 6)}/><p className="fine">{p.source === 'member' ? 'Member-provided · not independently verified' : p.claimed ? 'Profile categories · not independently verified' : 'Research-derived categories'} · {availabilityLabel(p.availability)} · {p.source === 'member' ? 'updated' : 'research data as of'} {p.checkedAt}</p>{reasons.length > 0 && <p className="match-note">Matched supplied fields: {reasons.join(' · ')}</p>}<div className="card-actions">{profileLink(p)}<LinkedIn person={p}/><button onClick={() => toggle(p.id)} aria-pressed={shortlist.includes(p.id)}>{shortlist.includes(p.id) ? <><Check size={14}/> Shortlisted</> : 'Add to shortlist'}</button></div></article>)}</section>
-        {!results.length && <div className="empty"><h2>No matching profiles</h2><p>Try fewer terms or clear filters. Missing details are not evidence that someone lacks a skill.</p><button onClick={reset}>Clear filters</button></div>}
-        <nav className="pagination" aria-label="Results pages"><button disabled={currentPage === 1} onClick={() => { setPage(currentPage - 1); window.scrollTo(0, 0); }}>Previous</button><span>Page {currentPage} of {pages}</span><button disabled={currentPage === pages} onClick={() => { setPage(currentPage + 1); window.scrollTo(0, 0); }}>Next</button></nav></div>
-        <aside className="shortlist-panel" aria-label="Your shortlist"><h2>Your shortlist · {shortlist.length}</h2>{shortlist.length ? shortlist.map(id => byId.get(id)).filter((p): p is DirectoryPerson => Boolean(p)).map(p => <div className="shortlist-person" key={p.id}><TalentAvatar person={p}/><div><strong>{p.name}</strong><p>{p.title || 'Title not provided'}</p></div><button aria-label={`Remove ${p.name} from shortlist panel`} onClick={() => toggle(p.id)}><X size={13}/></button></div>) : <p>Add engineers to compare their skills and relevant work.</p>}<button className="primary" disabled={!shortlist.length} onClick={() => { setShortlistOnly(!shortlistOnly); setPage(1); }}>{shortlistOnly ? 'Show all results' : 'View shortlisted profiles'}</button><p className="fine">A shortlist is a private research aid. It does not invite people or imply their interest.</p></aside></div>
-      </>}
+        <aside className="specialty-sidebar directory-filters"><h2>Specialty</h2><div className="specialty-options">{['', 'Embedded', 'Perception', 'SLAM', 'Simulation', 'Motion Planning'].map(c => <button key={c} aria-pressed={c ? category.length === 1 && category[0] === c : category.length === 0} onClick={() => { setCategory(c ? [c] : []); setPage(1); }}><span>{c || 'All specialties'}</span><span>{facets ? count(c ? facets.specialties[c] ?? 0 : facets.total) : '…'}</span></button>)}</div><fieldset className="category-filter"><legend>Category</legend><div className="category-filter-heading"><span aria-live="polite">{category.length ? `${category.length} selected` : 'All categories'}</span><button type="button" onClick={() => { setCategory([]); setPage(1); }}>Clear</button></div><p className="fine">Match any selected category</p>{[...categoryGroups, { label: 'Other categories', items: categories.filter(c => !groupedCategories.has(c)) }].map(group => { const items = group.items.filter(c => categories.includes(c)); return items.length > 0 && <div className="category-group" key={group.label}><h3>{group.label}</h3>{items.map(c => <label className="category-option" key={c}><input type="checkbox" checked={category.includes(c)} onChange={e => { setCategory(current => e.target.checked ? [...current, c] : current.filter(value => value !== c)); setPage(1); }}/><span>{c}</span></label>)}</div>; })}</fieldset><label>Location<select value={place} onChange={e => { setPlace(e.target.value); setPage(1); }}><option value="">All locations</option><option value="bengaluru">Bengaluru area (all variants)</option>{locations.map(l => <option key={l}>{l}</option>)}</select></label><label>Company<input list="directory-companies" value={company} placeholder="All companies" onChange={e => { setCompany(e.target.value); setPage(1); }}/><datalist id="directory-companies">{companies.map(c => <option key={c} value={c}/>)}</datalist></label><button onClick={reset}>Clear filters</button><p className="fine">Categories may be research-derived or member-provided. Neither is independently verified.</p></aside>
+        <div className="desk-results" aria-busy={loading}>
+        {loadError && <div role="alert"><p>{loadError}</p><button onClick={refresh}>Try again</button></div>}
+        {facetsError && <p role="alert">{facetsError} <button onClick={refresh}>Retry filters</button></p>}
+        <div className="directory-toolbar"><p role="status">{!resultPage ? 'Loading talent profiles…' : `${count(total)} ${total === 1 ? 'profile' : 'profiles'}${total > 0 ? ` · showing ${count((currentPage - 1) * 25 + 1)}–${count(Math.min(currentPage * 25, total))}` : ''}${loading ? ' · Updating…' : ''}`}</p><button aria-pressed={shortlistOnly} onClick={() => { setShortlistOnly(!shortlistOnly); setPage(1); }}>Shortlist ({shortlist.length})</button><label>Sort<select value={sort} onChange={e => { setSort(e.target.value as 'relevance' | 'name'); setPage(1); }}><option value="relevance">Relevance</option><option value="name">Name</option></select></label></div>
+        <section aria-label="Talent results">{!resultPage && loading && <div className="talent-skeletons" aria-hidden="true">{[0, 1, 2].map(i => <div className="engineer-row talent-skeleton" key={i}><span/><span/><span/><span/></div>)}</div>}{shown.map(({person: p,matches: reasons}) => <article className="engineer-row" key={p.id}><div className="engineer-row-heading"><TalentAvatar person={p}/><div><h2>{p.name}</h2><p>{p.title || 'Title not provided'}</p><p>{p.company || 'Company not provided'} · {p.location}</p></div><Badge claimed={p.claimed}/></div><p className="engineer-summary">{p.headline || 'Headline not provided'}</p><Tags items={[...new Set([...p.skills, ...p.physicalAiAreas])].slice(0, 6)}/><p className="fine">{p.source === 'member' ? 'Member-provided · not independently verified' : p.claimed ? 'Profile categories · not independently verified' : 'Research-derived categories'} · {availabilityLabel(p.availability)} · {p.source === 'member' ? 'updated' : 'research data as of'} {p.checkedAt}</p>{reasons.length > 0 && <p className="match-note">Matched supplied fields: {reasons.join(' · ')}</p>}<div className="card-actions">{profileLink(p)}<LinkedIn person={p}/><button onClick={() => toggle(p.id)} aria-pressed={shortlist.includes(p.id)}>{shortlist.includes(p.id) ? <><Check size={14}/> Shortlisted</> : 'Add to shortlist'}</button></div></article>)}</section>
+        {!loading && !loadError && !total && <div className="empty"><h2>No matching profiles</h2><p>Try fewer terms or clear filters. Missing details are not evidence that someone lacks a skill.</p><button onClick={reset}>Clear filters</button></div>}
+        <nav className="pagination" aria-label="Results pages"><button disabled={loading || currentPage === 1} onClick={() => { setPage(currentPage - 1); window.scrollTo(0, 0); }}>Previous</button><span>Page {currentPage} of {pages}</span><button disabled={loading || currentPage >= pages} onClick={() => { setPage(currentPage + 1); window.scrollTo(0, 0); }}>Next</button></nav></div>
+        <aside className="shortlist-panel" aria-label="Your shortlist"><h2>Your shortlist · {shortlist.length}</h2>{shortlistError && <p role="alert">{shortlistError}</p>}{shortlist.length ? shortlist.map(id => byId.get(id)).filter((p): p is DirectoryPerson => Boolean(p)).map(p => <div className="shortlist-person" key={p.id}><TalentAvatar person={p}/><div><strong>{p.name}</strong><p>{p.title || 'Title not provided'}</p></div><button aria-label={`Remove ${p.name} from shortlist panel`} onClick={() => toggle(p.id)}><X size={13}/></button></div>) : <p>Add engineers to compare their skills and relevant work.</p>}<button className="primary" disabled={!shortlist.length} onClick={() => { setShortlistOnly(!shortlistOnly); setPage(1); }}>{shortlistOnly ? 'Show all results' : 'View shortlisted profiles'}</button><p className="fine">A shortlist is a private research aid. It does not invite people or imply their interest.</p></aside></div>
+      </>;
+  return <div className="talent-app directory-app" data-talent-theme={theme}>
+    <TalentMemberNavigation route={route} signedIn={signedIn} isAdmin={isAdmin} unread={unread} profileLabel={profileLabel}/>
+    {import.meta.env.DEV && <div className="talent-local-tools">Local build · <a href="#edit-demo">Test profile editing</a> · <a href="#photo-demo">Test profile photos</a> · <a href="#claim-demo">Test claiming</a> · <a href="#market-test">Test marketplace</a></div>}
+    <div className="directory-content">
+      {directoryView ? content : <Suspense fallback={<p role="status">Loading this view…</p>}>{content}</Suspense>}
       <TalentCommunity/>
     </div>
 

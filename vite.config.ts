@@ -30,6 +30,7 @@ export default defineConfig(({ mode }) => {
       output: {
         manualChunks: {
           react: ["react", "react-dom", "react-router-dom"],
+          icons: ["lucide-react"],
           supabase: ["@supabase/supabase-js"],
           maplibre: ["maplibre-gl"],
           qrcode: ["qrcode"],

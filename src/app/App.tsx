@@ -8,7 +8,7 @@ export const router = createBrowserRouter(routes);
 export function App() {
   return (
     <>
-      <Suspense fallback={<div className="route-loading mono">Loading floor plan…</div>}>
+      <Suspense fallback={<div className="route-loading mono">Loading…</div>}>
         <RouterProvider router={router} />
       </Suspense>
       <PwaUpdatePrompt />
