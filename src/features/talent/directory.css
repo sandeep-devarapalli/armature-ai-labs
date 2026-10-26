@@ -64,6 +64,11 @@
 
 .directory-app .desk-search{display:block}
 .directory-app .desk-search .search-bar{width:100%}
+.directory-app .talent-skeleton{min-height:240px;display:flex;flex-direction:column;gap:20px}
+.directory-app .talent-skeleton span{height:16px;width:80%;background:var(--line);border-radius:3px}
+.directory-app .talent-skeleton span:first-child{height:28px;width:55%}
+.directory-app .talent-skeleton span:last-child{width:40%}
+.directory-app .desk-results[aria-busy=true] section[aria-label="Talent results"]{opacity:.65}
 
 .directory-app .talent-actions{border:1px solid var(--line);padding:20px;margin:24px 0;background:var(--panel);border-radius:6px}
 .directory-app .talent-actions>p{margin:12px 0}

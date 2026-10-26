@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { UserRound } from 'lucide-react';
 import { talentRpc, type TalentRequest } from './liveTalent';
-import { type ProfileSubmission, useSubmissionAccount } from './TalentAddProfile';
+import type { ProfileSubmission } from './TalentAddProfile';
+import { useSubmissionAccount } from './talentAccount';
 
 export function useTalentMember(route: string) {
   const account = useSubmissionAccount();
