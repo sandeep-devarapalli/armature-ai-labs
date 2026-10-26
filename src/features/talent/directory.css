@@ -64,11 +64,31 @@
 
 .directory-app .desk-search{display:block}
 .directory-app .desk-search .search-bar{width:100%}
-.directory-app .talent-skeleton{min-height:240px;display:flex;flex-direction:column;gap:20px}
-.directory-app .talent-skeleton span{height:16px;width:80%;background:var(--line);border-radius:3px}
-.directory-app .talent-skeleton span:first-child{height:28px;width:55%}
-.directory-app .talent-skeleton span:last-child{width:40%}
-.directory-app .desk-results[aria-busy=true] section[aria-label="Talent results"]{opacity:.65}
+.directory-app .talent-skeleton{min-height:240px;display:flex;flex-direction:column;gap:20px;position:relative;overflow:hidden;background:var(--panel)}
+.directory-app .talent-skeleton-heading{display:flex;align-items:center;gap:15px}
+.directory-app .talent-skeleton-heading>div{flex:1;min-width:0}
+.directory-app .talent-skeleton-avatar{width:36px;height:36px;flex:none;border-radius:50%;background:var(--line)}
+.directory-app .talent-skeleton-line{display:block;height:7px;border-radius:4px;background:var(--line);opacity:.7}
+.directory-app .talent-skeleton-name{width:60%;height:10px;margin-bottom:12px}
+.directory-app .talent-skeleton-role{width:76%}
+.directory-app .talent-skeleton-summary{width:89%}
+.directory-app .talent-skeleton-footer{width:40%}
+.directory-app .talent-skeleton-tags{display:flex;gap:9px;flex-wrap:wrap}
+.directory-app .talent-skeleton-tags span{height:20px;width:72px;border:1px solid var(--line);border-radius:4px;background:var(--chip)}
+.directory-app .talent-skeleton-tags span:nth-child(2){width:98px}
+.directory-app .talent-skeleton:nth-child(2) .talent-skeleton-name{width:73%}
+.directory-app .talent-skeleton:nth-child(3) .talent-skeleton-name{width:66%}
+.directory-app .talent-skeleton:after{content:'';position:absolute;inset:-25% -50%;pointer-events:none;background:linear-gradient(105deg,transparent 34%,color-mix(in srgb,var(--link) 14%,transparent) 49%,transparent 64%);transform:translate3d(-80%,0,0) rotate(-12deg);animation:talent-signal-sweep 2.5s cubic-bezier(.35,0,.25,1) infinite;animation-delay:calc(var(--talent-row)*.14s)}
+.directory-app .talent-skeleton:before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--link);opacity:0;animation:talent-signal-edge 2.5s ease-in-out infinite;animation-delay:calc(var(--talent-row)*.14s)}
+.directory-app .talent-motion-toggle{display:block;margin:12px 0 0 auto;border:0;padding:6px;background:transparent;color:var(--muted);font-size:10px;text-decoration:underline;text-underline-offset:3px}
+.directory-app .talent-loading[data-motion-paused=true] .talent-skeleton:before,.directory-app .talent-loading[data-motion-paused=true] .talent-skeleton:after,.directory-app .talent-loading[data-motion-hidden=true] .talent-skeleton:before,.directory-app .talent-loading[data-motion-hidden=true] .talent-skeleton:after{animation-play-state:paused}
+.directory-app .desk-results[aria-busy=true] article.engineer-row{opacity:.65}
+.directory-app .talent-result{animation:talent-result-arrive .18s ease-out backwards}
+@keyframes talent-signal-sweep{0%,12%{transform:translate3d(-80%,0,0) rotate(-12deg)}80%,100%{transform:translate3d(80%,0,0) rotate(-12deg)}}
+@keyframes talent-signal-edge{0%,15%,85%,100%{opacity:0}40%,60%{opacity:.35}}
+@keyframes talent-result-arrive{from{opacity:.35;transform:translateY(3px)}to{opacity:1;transform:none}}
+@media(max-width:720px){.directory-app .talent-motion-toggle{min-height:44px}}
+@media(prefers-reduced-motion:reduce){.directory-app .talent-skeleton:before,.directory-app .talent-skeleton:after,.directory-app .talent-result{animation:none!important}.directory-app .talent-skeleton:after{display:none}.directory-app .talent-motion-toggle{display:none}}
 
 .directory-app .talent-actions{border:1px solid var(--line);padding:20px;margin:24px 0;background:var(--panel);border-radius:6px}
 .directory-app .talent-actions>p{margin:12px 0}
