@@ -7,12 +7,12 @@ import { TalentDirectory } from '../../src/features/talent/directory';
 import type { DirectoryPerson } from '../../src/features/talent/directorySearch';
 import type { TalentPage, TalentPageQuery } from '../../src/features/talent/directoryData';
 
-const mock = vi.hoisted(() => ({ cachedPage: vi.fn(), cachedFacets: vi.fn(), loadPage: vi.fn(), loadFacets: vi.fn(), loadProfile: vi.fn(), loadShortlist: vi.fn(), clear: vi.fn(), bulk: vi.fn(), profileCommits: [] as { missing: boolean; loading: boolean }[] }));
-vi.mock('../../src/features/talent/directoryData', () => ({ cachedTalentPage: mock.cachedPage, cachedTalentFacets: mock.cachedFacets, clearTalentDirectoryCache: mock.clear, loadTalentPage: mock.loadPage, loadTalentFacets: mock.loadFacets, loadTalentProfile: mock.loadProfile, loadShortlistedProfiles: mock.loadShortlist, talentPageKey: (query: unknown) => JSON.stringify(query) }));
+const mock = vi.hoisted(() => ({ user: null as { id: string; email_confirmed_at?: string } | null, cachedPage: vi.fn(), cachedFacets: vi.fn(), loadPage: vi.fn(), loadFacets: vi.fn(), loadProfile: vi.fn(), loadShortlist: vi.fn(), clear: vi.fn(), bulk: vi.fn(), profileCommits: [] as { missing: boolean; loading: boolean }[] }));
+vi.mock('../../src/features/talent/directoryData', () => ({ cachedTalentPage: mock.cachedPage, cachedTalentFacets: mock.cachedFacets, clearTalentDirectoryCache: mock.clear, loadTalentPage: mock.loadPage, loadTalentFacets: mock.loadFacets, loadTalentProfile: mock.loadProfile, loadShortlistedProfiles: mock.loadShortlist, talentResultsPerPage: 10, talentPageKey: (query: unknown) => JSON.stringify(query) }));
 vi.mock('../../src/features/talent/liveTalent', () => ({ loadTalent: mock.bulk }));
 vi.mock('../../src/context/AppContext', () => ({ useApp: () => ({ isAdmin: false }) }));
 vi.mock('../../src/context/ThemeContext', () => ({ useTheme: () => ({ theme: 'dark' }) }));
-vi.mock('../../src/features/talent/TalentMemberNavigation', () => ({ TalentMemberNavigation: () => <nav>Talent navigation</nav>, useTalentMember: () => ({ user: null, loading: false, profile: null, profileError: '' }) }));
+vi.mock('../../src/features/talent/TalentMemberNavigation', () => ({ TalentMemberNavigation: () => <nav>Talent navigation</nav>, useTalentMember: () => ({ user: mock.user, loading: false, profile: null, profileError: '' }) }));
 vi.mock('../../src/features/talent/marketUnread', () => ({ useMarketplaceUnread: () => 0 }));
 vi.mock('../../src/features/talent/TalentPhoto', () => ({ TalentAvatar: () => null, TalentPhotoDemo: () => null }));
 vi.mock('../../src/features/talent/TalentCommunity', async () => {
@@ -22,17 +22,18 @@ vi.mock('../../src/features/talent/TalentCommunity', async () => {
     return null;
   }, TalentCommunityLink: () => null };
 });
-vi.mock('../../src/features/talent/TalentRequests', () => ({ TalentProfileActions: () => null, TalentMyRequests: () => null, TalentReviewQueue: () => null, TalentEditDemo: () => null, TalentClaimDemo: () => null }));
+vi.mock('../../src/features/talent/TalentRequests', () => ({ TalentProfileActions: ({ person, openClaim }: { person: DirectoryPerson; openClaim?: boolean }) => <section aria-label="Profile actions" data-profile={person.id} data-open-claim={openClaim}/>, TalentMyRequests: () => null, TalentReviewQueue: () => null, TalentEditDemo: () => null, TalentClaimDemo: () => null }));
 vi.mock('../../src/features/talent/Marketplace', () => ({ TalentMarketplace: () => <h1>Work projects</h1>, TalentChatRequest: () => null }));
 
 const person = (name: string): DirectoryPerson => ({ id: name.toLowerCase(), name, title: 'Synthetic engineer', headline: '', company: '', location: 'Bengaluru', previousCompanies: [], yearsExperience: null, skills: [], physicalAiAreas: [], summary: '', checkedAt: '', linkedinUrl: '', claimed: false });
-const page = (name: string, pageNumber = 1, total = 1): TalentPage => ({ results: [{ person: person(name), matches: [] }], total, page: pageNumber, pageSize: 25 });
+const page = (name: string, pageNumber = 1, total = 1): TalentPage => ({ results: [{ person: person(name), matches: [] }], total, page: pageNumber, pageSize: 10 });
 function deferred<T>() { let resolve!: (value: T) => void; const promise = new Promise<T>(done => { resolve = done; }); return { promise, resolve }; }
 function open() { return render(<MemoryRouter><TalentDirectory/></MemoryRouter>); }
 function search(value: string) { fireEvent.change(screen.getByRole('textbox', { name: 'Search by name, LinkedIn profile, role, skill or company' }), { target: { value } }); fireEvent.click(screen.getByRole('button', { name: 'Search' })); }
 function navigate(hash: string) { act(() => { window.history.replaceState(null, '', `/talent-network/${hash}`); window.dispatchEvent(new HashChangeEvent('hashchange')); }); }
 
 beforeEach(() => {
+  mock.user = null;
   window.history.replaceState(null, '', '/talent-network/#talent');
   mock.loadPage.mockReset(); mock.loadFacets.mockReset(); mock.loadProfile.mockReset(); mock.bulk.mockReset(); mock.clear.mockReset();
   mock.cachedPage.mockReset(); mock.cachedFacets.mockReset();
@@ -89,12 +90,13 @@ it('preserves the active query and page when opening a profile and returning', a
   search('firmware'); await screen.findByRole('heading', { name: 'Filtered person' });
   await waitFor(() => expect(screen.getByRole('button', { name: 'Next' })).toBeEnabled());
   fireEvent.click(screen.getByRole('button', { name: 'Next' }));
-  await screen.findByText('Page 2 of 3');
+  await screen.findByText('Page 2 of 8');
+  expect(screen.getByRole('status')).toHaveFocus();
   fireEvent.click(screen.getByRole('link', { name: 'View profile' })); navigate('#profile/filtered%20person');
   expect(await screen.findByRole('heading', { name: 'Filtered person', level: 1 })).toBeInTheDocument();
   fireEvent.click(screen.getByRole('link', { name: 'Back to results' })); navigate('#talent');
   expect(screen.getByRole('textbox', { name: 'Search by name, LinkedIn profile, role, skill or company' })).toHaveValue('firmware');
-  await screen.findByText('Page 2 of 3');
+  await screen.findByText('Page 2 of 8');
   expect(mock.loadPage).toHaveBeenLastCalledWith(expect.objectContaining({ query: 'firmware', page: 2 }), expect.any(Boolean));
   expect(mock.loadProfile).toHaveBeenCalledWith('filtered person');
 });
@@ -110,7 +112,7 @@ it('removes a shortlisted profile after the server reports it unlisted on focus'
   mock.loadPage.mockResolvedValue(page('Synthetic Ada'));
   mock.loadShortlist.mockResolvedValueOnce([person('Synthetic Ada')]).mockResolvedValue([]);
   open(); await screen.findByRole('heading', { name: 'Synthetic Ada' });
-  fireEvent.click(screen.getByRole('button', { name: 'Add to shortlist' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Shortlist Synthetic Ada' }));
   const shortlist = within(screen.getByRole('complementary', { name: 'Your shortlist' }));
   expect(shortlist.getByText('Synthetic Ada')).toBeInTheDocument();
   await waitFor(() => expect(mock.loadShortlist).toHaveBeenCalledWith(['synthetic ada']));
@@ -193,4 +195,48 @@ it('keeps the next profile pending instead of showing the prior person or a miss
   expect(mock.loadProfile).toHaveBeenLastCalledWith('second-person');
   await act(async () => pending.resolve(null));
   expect(await screen.findByRole('heading', { name: 'Profile not found' })).toBeInTheDocument();
+});
+
+
+it('opens the selected claim from a signed-in card and retains results state on return', async () => {
+  mock.user = { id: 'synthetic-member', email_confirmed_at: '2026-01-01' };
+  mock.loadPage.mockImplementation((query: TalentPageQuery) => Promise.resolve(page('Filtered person', query.page, 75)));
+  mock.loadProfile.mockResolvedValue(person('Filtered person'));
+  open(); await screen.findByRole('heading', { name: 'Filtered person' });
+  search('firmware');
+  await waitFor(() => expect(mock.loadPage).toHaveBeenLastCalledWith(expect.objectContaining({ query: 'firmware' }), expect.any(Boolean)));
+  fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+  await screen.findByText('Page 2 of 8');
+  const claim = screen.getByRole('link', { name: 'Unclaimed. Claim profile for Filtered person' });
+  expect(claim).toHaveAttribute('href', '#claim/filtered%20person');
+  fireEvent.click(claim); navigate('#claim/filtered%20person');
+  await screen.findByRole('heading', { name: 'Filtered person', level: 1 });
+  expect(screen.getByRole('region', { name: 'Profile actions' })).toHaveAttribute('data-open-claim', 'true');
+  expect(mock.loadProfile).toHaveBeenCalledWith('filtered person');
+  fireEvent.click(screen.getByRole('link', { name: 'Back to results' })); navigate('#talent');
+  await screen.findByText('Page 2 of 8');
+  expect(screen.getByRole('textbox', { name: 'Search by name, LinkedIn profile, role, skill or company' })).toHaveValue('firmware');
+});
+
+it('keeps signed-out and claimed badges as noninteractive status labels', async () => {
+  mock.loadPage.mockResolvedValue(page('Unclaimed person'));
+  const view = open(); await screen.findByRole('heading', { name: 'Unclaimed person' });
+  expect(screen.getByText('Unclaimed')).toBeInTheDocument();
+  expect(screen.queryByRole('link', { name: /Claim profile for/ })).not.toBeInTheDocument();
+  view.unmount();
+  mock.user = { id: 'synthetic-member', email_confirmed_at: '2026-01-01' };
+  mock.loadPage.mockResolvedValue({ ...page('Claimed person'), results: [{ person: { ...person('Claimed person'), claimed: true }, matches: [] }] });
+  open(); await screen.findByRole('heading', { name: 'Claimed person' });
+  expect(screen.getByText('Claimed')).toBeInTheDocument();
+  expect(screen.queryByRole('link', { name: /Claim profile for/ })).not.toBeInTheDocument();
+});
+
+it('requires sign-in for a direct claim URL', async () => {
+  window.history.replaceState(null, '', '/talent-network/#claim/synthetic-person');
+  mock.loadProfile.mockResolvedValue(person('Synthetic person'));
+  open();
+  await screen.findByRole('heading', { name: 'Your Talent Network account' });
+  expect(screen.getByRole('link', { name: 'Sign in / join as a basic member' })).toHaveAttribute('href', '/auth');
+  expect(screen.queryByRole('region', { name: 'Profile actions' })).not.toBeInTheDocument();
+  expect(mock.loadPage).not.toHaveBeenCalled();
 });

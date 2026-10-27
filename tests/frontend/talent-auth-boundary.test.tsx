@@ -130,3 +130,69 @@ it('opens the direct editor only after ownership is confirmed and hides the dupl
   await screen.findByRole('heading', { name: 'Edit your profile' });
   expect(screen.queryByRole('button', { name: 'Edit profile' })).not.toBeInTheDocument();
 });
+
+it('opens and focuses a direct claim only after the account and profile status are checked', async () => {
+  const account = deferred<unknown>(); const status = deferred<unknown>();
+  mock.getUser.mockReturnValue(account.promise); mock.rpc.mockReturnValue(status.promise);
+  render(<MemoryRouter><TalentProfileActions person={person} onChange={vi.fn()} openClaim/></MemoryRouter>);
+  expect(screen.queryByRole('heading', { name: "Claim Test's profile" })).not.toBeInTheDocument();
+  await act(async () => account.resolve({ data: { user: { id: 'member', email_confirmed_at: '2026-01-01' } } }));
+  await waitFor(() => expect(mock.rpc).toHaveBeenCalledWith('talent_my_status', { profile_id: person.id }));
+  expect(screen.queryByRole('heading', { name: "Claim Test's profile" })).not.toBeInTheDocument();
+  await act(async () => status.resolve({ owner: false, admin: false, requests: [] }));
+  const heading = await screen.findByRole('heading', { name: "Claim Test's profile" });
+  await waitFor(() => expect(heading).toHaveFocus());
+  expect(screen.getByLabelText('Your full name')).toBeRequired();
+  expect(screen.getByRole('checkbox', { name: /I have read and agree/ })).not.toBeChecked();
+  expect(mock.rpc).toHaveBeenCalledTimes(1);
+});
+
+it.each(['pending', 'unconfirmed', 'claimed', 'owner', 'failed status'])('does not open a direct claim for a %s state', async state => {
+  mock.getUser.mockResolvedValue({ data: { user: { id: 'member', email_confirmed_at: state === 'unconfirmed' ? undefined : '2026-01-01' } } });
+  if (state === 'failed status') mock.rpc.mockRejectedValue(new Error('Unable to check profile status'));
+  else mock.rpc.mockResolvedValue({ owner: state === 'owner', admin: false, requests: state === 'pending' ? [privateRequest] : [] });
+  render(<MemoryRouter><TalentProfileActions person={{ ...person, claimed: state === 'claimed' }} onChange={vi.fn()} openClaim/></MemoryRouter>);
+  await waitFor(() => expect(screen.queryByText('Checking your account…')).not.toBeInTheDocument());
+  if (state === 'pending') expect(screen.getByText(/Your claim is awaiting manual review/)).toBeInTheDocument();
+  if (state === 'unconfirmed') expect(screen.getByRole('alert')).toHaveTextContent('Confirm your account email');
+  if (state === 'owner') expect(screen.getByRole('button', { name: 'Edit profile' })).toBeInTheDocument();
+  if (state === 'failed status') expect(screen.getByRole('alert')).toHaveTextContent('Unable to check profile status');
+  expect(screen.queryByRole('heading', { name: "Claim Test's profile" })).not.toBeInTheDocument();
+  expect(screen.queryByLabelText('Your full name')).not.toBeInTheDocument();
+});
+
+it('lets a member cancel a direct claim without reopening it on rerender', async () => {
+  mock.getUser.mockResolvedValue({ data: { user: { id: 'member', email_confirmed_at: '2026-01-01' } } });
+  mock.rpc.mockResolvedValue({ owner: false, admin: false, requests: [] });
+  const view = render(<MemoryRouter><TalentProfileActions person={person} onChange={vi.fn()} openClaim/></MemoryRouter>);
+  await screen.findByRole('heading', { name: "Claim Test's profile" });
+  fireEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+  expect(window.location.hash).toBe('#profile/p1');
+  view.rerender(<MemoryRouter><TalentProfileActions person={person} onChange={vi.fn()} openClaim/></MemoryRouter>);
+  expect(screen.queryByRole('heading', { name: "Claim Test's profile" })).not.toBeInTheDocument();
+  expect(mock.rpc).toHaveBeenCalledTimes(1);
+});
+
+it('removes a direct claim form immediately when the member signs out', async () => {
+  mock.getUser.mockResolvedValueOnce({ data: { user: { id: 'member', email_confirmed_at: '2026-01-01' } } }).mockResolvedValue({ data: { user: null } });
+  mock.rpc.mockResolvedValue({ owner: false, admin: false, requests: [] });
+  render(<MemoryRouter><TalentProfileActions person={person} onChange={vi.fn()} openClaim/></MemoryRouter>);
+  await screen.findByRole('heading', { name: "Claim Test's profile" });
+  fireEvent.change(screen.getByLabelText('Your full name'), { target: { value: 'Private draft name' } });
+  act(() => mock.authChange());
+  expect(screen.queryByLabelText('Your full name')).not.toBeInTheDocument();
+  await screen.findByRole('link', { name: 'Sign in to continue' });
+  expect(screen.queryByRole('heading', { name: "Claim Test's profile" })).not.toBeInTheDocument();
+});
+
+it('does not open a direct claim from a status response that arrives after signout', async () => {
+  const late = deferred<unknown>();
+  mock.getUser.mockResolvedValueOnce({ data: { user: { id: 'member', email_confirmed_at: '2026-01-01' } } }).mockResolvedValue({ data: { user: null } });
+  mock.rpc.mockReturnValue(late.promise);
+  render(<MemoryRouter><TalentProfileActions person={person} onChange={vi.fn()} openClaim/></MemoryRouter>);
+  await waitFor(() => expect(mock.rpc).toHaveBeenCalledWith('talent_my_status', { profile_id: person.id }));
+  act(() => mock.authChange());
+  await act(async () => late.resolve({ owner: false, admin: false, requests: [] }));
+  await screen.findByRole('link', { name: 'Sign in to continue' });
+  expect(screen.queryByRole('heading', { name: "Claim Test's profile" })).not.toBeInTheDocument();
+});

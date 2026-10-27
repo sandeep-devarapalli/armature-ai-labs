@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { UserRound } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { useAccount, accountMembershipLabel, accountMembershipLevelsEnabled, applicationStatusLabel, accountRoleLabels } from "../context/AccountContext";
@@ -10,6 +10,8 @@ import { basicOnboardingAvailable } from "../config/release";
 export function AccountMenu() {
   const { account, signedIn, loading, error, refresh, signOut } = useAccount();
   const menu = useRef<HTMLDetailsElement>(null);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const { pathname } = useLocation();
   useEffect(() => { if (menu.current) menu.current.open = false; }, [pathname, signedIn]);
   useEffect(() => {
@@ -17,7 +19,7 @@ export function AccountMenu() {
     document.addEventListener("pointerdown", dismiss);
     return () => document.removeEventListener("pointerdown", dismiss);
   }, []);
-  if (loading && !signedIn) return <span className="account-loading" role="status">Loading account…</span>;
+  if (!mounted || loading && !signedIn) return <span className="account-loading" role="status">Loading account…</span>;
   if (!signedIn && !error) return <Link className="account-signin" to="/onboarding">Sign in</Link>;
   const role = account && accountRoleLabels[account.role];
   return <details className="account-menu" ref={menu} onKeyDown={(event) => { if (event.key === "Escape" && menu.current) { event.stopPropagation(); menu.current.open = false; menu.current.querySelector("summary")?.focus(); } }}>
