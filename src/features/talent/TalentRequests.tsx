@@ -34,10 +34,14 @@ function EditFields({ person, save, busy, admin = false, cancel }: { person: Dir
     <p className="fine edit-wide">These details will be public. Do not include private contact information. LinkedIn identity and verification status cannot be changed here.</p><div className="edit-buttons"><button className="primary" disabled={busy}>{busy ? 'Saving…' : 'Save profile'}</button><button type="button" disabled={busy} onClick={cancel}>Cancel</button></div>
   </form>;
 }
-export function TalentProfileActions({ person, onChange, hideOwnerEdit = false, openEditor = false }: { person: DirectoryPerson; onChange: () => Promise<void>; hideOwnerEdit?: boolean; openEditor?: boolean }) {
+export function TalentProfileActions({ person, onChange, hideOwnerEdit = false, openEditor = false, openClaim = false }: { person: DirectoryPerson; onChange: () => Promise<void>; hideOwnerEdit?: boolean; openEditor?: boolean; openClaim?: boolean }) {
   const [user, setUser] = useState<User | null>(null); const [status, setStatus] = useState<TalentStatus | null>(null);
   const [kind, setKind] = useState(''); const [error, setError] = useState(''); const [notice, setNotice] = useState(''); const [busy, setBusy] = useState(false); const [checking, setChecking] = useState(true);
   const mounted = useRef(false); const generation = useRef(0); const checkSequence = useRef(0);
+  const claimHeading = useRef<HTMLHeadingElement>(null); const actionsHeading = useRef<HTMLHeadingElement>(null);
+  const pendingClaim = Boolean(status?.requests.some(request => request.kind === 'claim' && request.status === 'pending'));
+  const canClaim = Boolean(user?.email_confirmed_at && status && !status.owner && !person.claimed && !pendingClaim);
+  const directClaim = openClaim && kind === 'claim';
   async function check() {
     if (!mounted.current) return;
     const current = generation.current; const sequence = ++checkSequence.current;
@@ -64,7 +68,14 @@ export function TalentProfileActions({ person, onChange, hideOwnerEdit = false, 
     return () => { mounted.current = false; ++generation.current; ++checkSequence.current; data.subscription.unsubscribe(); };
   }, [person.id]);
   useEffect(() => { if (openEditor && status?.owner && !checking) setKind('edit'); }, [openEditor, status?.owner, checking]);
+  useEffect(() => { if (openClaim && !checking && canClaim) setKind('claim'); }, [openClaim, checking, canClaim]);
+  useEffect(() => {
+    if (!openClaim || checking) return;
+    const heading = kind === 'claim' ? claimHeading.current : actionsHeading.current;
+    heading?.focus({ preventScroll: true }); heading?.scrollIntoView?.({ behavior: 'instant', block: 'start' });
+  }, [openClaim, checking, kind]);
   function finishEditing() { setKind(''); if (openEditor) window.location.hash = 'my-profile'; }
+  function cancelRequest() { setKind(''); if (openClaim) window.location.hash = `profile/${encodeURIComponent(person.id)}`; }
   async function run(action: () => Promise<unknown>, success: string) {
     const current = generation.current; const active = () => mounted.current && generation.current === current;
     setBusy(true); setError(''); setNotice('');
@@ -72,21 +83,21 @@ export function TalentProfileActions({ person, onChange, hideOwnerEdit = false, 
     catch (failure) { if (active()) setError(message(failure)); }
     finally { if (active()) setBusy(false); }
   }
-  return <section className="talent-actions"><h3>{status?.admin ? 'Manage this profile' : status?.owner ? 'Manage your profile' : 'Is this your profile?'}</h3>
-    {!status?.owner && !status?.admin && <p>Claim this profile to edit your public details. Ownership is reviewed before editing is enabled.</p>}<p className="fine">For removal without an account, email <a href="mailto:privacy@armatureailabs.com">privacy@armatureailabs.com</a>.</p>
+  return <section className="talent-actions">{!directClaim && <><h3 ref={actionsHeading} tabIndex={openClaim ? -1 : undefined}>{status?.admin ? 'Manage this profile' : status?.owner ? 'Manage your profile' : 'Is this your profile?'}</h3>
+    {!status?.owner && !status?.admin && <p>Claim this profile to edit your public details. Ownership is reviewed before editing is enabled.</p>}<p className="fine">For removal without an account, email <a href="mailto:privacy@armatureailabs.com">privacy@armatureailabs.com</a>.</p></>}
     {checking ? <p role="status">Checking your account…</p> : !user ? <><p>First sign up as a basic member and confirm your email, then return here to claim your profile.</p><SignIn/><Link className="button" to="/auth" state={{ from: window.location.pathname + window.location.hash }}>Sign up as a basic member</Link></> : <>
       {!user.email_confirmed_at && <p role="alert">Confirm your account email before submitting requests.</p>}
-      {status?.owner ? <>{!hideOwnerEdit && <button className="primary" onClick={() => setKind('edit')}>Edit profile</button>}<button onClick={() => setKind('photo')}>Profile photo</button><button onClick={() => setKind('unlist')}>Remove my profile</button></> : !person.claimed && (status?.requests.some(r => r.kind === 'claim' && r.status === 'pending') ? <p role="status">Your claim is awaiting manual review. Editing becomes available after approval.</p> : <button disabled={!user.email_confirmed_at} onClick={() => setKind('claim')}>Claim this profile</button>)}
+      {!directClaim && <>{status?.owner ? <>{!hideOwnerEdit && <button className="primary" onClick={() => setKind('edit')}>Edit profile</button>}<button onClick={() => setKind('photo')}>Profile photo</button><button onClick={() => setKind('unlist')}>Remove my profile</button></> : !person.claimed && (pendingClaim ? <p role="status">Your claim is awaiting manual review. Editing becomes available after approval.</p> : <button disabled={!user.email_confirmed_at} onClick={() => setKind('claim')}>Claim this profile</button>)}
       <button onClick={() => setKind('correction')}>Suggest a correction</button><button onClick={() => setKind('removal')}>Request removal</button>
-      {status?.admin && <><button className="primary" onClick={() => setKind('admin-edit')}>Edit profile as admin</button><a href="#review">Review directory requests</a></>}
+      {status?.admin && <><button className="primary" onClick={() => setKind('admin-edit')}>Edit profile as admin</button><a href="#review">Review directory requests</a></>}</>}
     </>}
     {error && <p role="alert">{error}</p>}{notice && <p role="status">{notice}</p>}
     {kind === 'photo' && status?.owner && <TalentPhotoEditor key={`${person.id}:${user?.id}`} person={person} onChange={onChange}/>}
     {kind === 'edit' && status?.owner && <EditFields person={person} busy={busy} cancel={finishEditing} save={patch => void run(() => talentRpc('talent_update_profile', { profile_id: person.id, expected_revision: person.revision, patch }), 'Profile updated.')}/>}
     {kind === 'admin-edit' && status?.admin && <EditFields person={person} busy={busy} admin cancel={() => setKind('')} save={values => { const { editNote, ...patch } = values; void run(() => talentRpc('talent_admin_update_profile', { profile_id: person.id, expected_revision: person.revision, patch, note: editNote }), 'Profile updated. Admin edit recorded.'); }}/>}
     {kind === 'unlist' && status?.owner && <div><p>Remove your profile from public search now? This also prevents future research imports from republishing it.</p><button disabled={busy} onClick={() => void run(() => talentRpc('talent_unlist_profile', { profile_id: person.id }), 'Your profile has been removed.')}>Confirm removal</button></div>}
-    {['claim', 'correction', 'removal'].includes(kind) && user && <form className="talent-request-form" onSubmit={event => { event.preventDefault(); const fields = new FormData(event.currentTarget); const evidence = fields.get('evidence'); const declaration = kind === 'claim' ? { signed_name: fields.get('signed_name'), declaration_version: claimDeclarationVersion, declaration_accepted: fields.get('declaration_accepted') === 'on' } : {}; void run(() => talentRpc('talent_submit_request', { profile_id: person.id, kind, evidence, base_revision: person.revision, ...declaration }), 'Request saved for review. We will email you when a decision is made. Your updates are available in My profile.'); }}><h3>{kind === 'claim' ? 'Claim this profile' : kind === 'correction' ? 'Suggest a correction' : 'Request removal'}</h3><label>{kind === 'claim' ? 'Explain how we can confirm you own this LinkedIn identity. Include a public evidence link or professional affiliation we can verify.' : kind === 'correction' ? 'Describe the exact correction and supporting source.' : 'Explain your relationship to this profile and your removal request.'}<textarea name="evidence" required minLength={20} maxLength={4000} rows={6}/></label>{kind === 'claim' && <ClaimDeclaration person={person}/>}<p className="fine">Visible only to you and authorised administrators. Do not upload identity documents, passwords or financial information.</p><button className="primary" disabled={busy || !user.email_confirmed_at}>{kind === 'claim' ? 'Sign declaration and submit claim' : 'Submit request'}</button></form>}
-    {kind && !['edit', 'admin-edit'].includes(kind) && <button disabled={busy} onClick={() => setKind('')}>Cancel</button>}
+    {['claim', 'correction', 'removal'].includes(kind) && user && <form className="talent-request-form" onSubmit={event => { event.preventDefault(); const fields = new FormData(event.currentTarget); const evidence = fields.get('evidence'); const declaration = kind === 'claim' ? { signed_name: fields.get('signed_name'), declaration_version: claimDeclarationVersion, declaration_accepted: fields.get('declaration_accepted') === 'on' } : {}; void run(() => talentRpc('talent_submit_request', { profile_id: person.id, kind, evidence, base_revision: person.revision, ...declaration }), 'Request saved for review. We will email you when a decision is made. Your updates are available in My profile.'); }}><h3 ref={kind === 'claim' ? claimHeading : undefined} tabIndex={kind === 'claim' && openClaim ? -1 : undefined}>{kind === 'claim' ? openClaim ? `Claim ${person.name}'s profile` : 'Claim this profile' : kind === 'correction' ? 'Suggest a correction' : 'Request removal'}</h3><label>{kind === 'claim' ? 'Explain how we can confirm you own this LinkedIn identity. Include a public evidence link or professional affiliation we can verify.' : kind === 'correction' ? 'Describe the exact correction and supporting source.' : 'Explain your relationship to this profile and your removal request.'}<textarea name="evidence" required minLength={20} maxLength={4000} rows={6}/></label>{kind === 'claim' && <ClaimDeclaration person={person}/>}<p className="fine">Visible only to you and authorised administrators. Do not upload identity documents, passwords or financial information.</p><button className="primary" disabled={busy || !user.email_confirmed_at}>{kind === 'claim' ? 'Sign declaration and submit claim' : 'Submit request'}</button></form>}
+    {kind && !['edit', 'admin-edit'].includes(kind) && <button disabled={busy} onClick={cancelRequest}>Cancel</button>}
     {!!status?.requests.length && <section><h3>Your requests</h3>{status.requests.map(request => <p key={request.id}><strong>{request.kind}: {request.status}</strong>{request.review_note && <span> — {request.review_note}</span>}</p>)}</section>}
   </section>;
 }

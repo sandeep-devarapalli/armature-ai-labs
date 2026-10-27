@@ -30,7 +30,7 @@ export function useTalentMember(route: string) {
 
 export function TalentMemberNavigation({ route, signedIn, isAdmin, unread, profileLabel }: { route: string; signedIn: boolean; isAdmin: boolean; unread: number; profileLabel: string }) {
   return <nav className="talent-section-nav" aria-label="Talent network navigation">
-    <a href="#talent" aria-current={route === 'talent' || !route || route.startsWith('profile/') ? 'page' : undefined}>Find talent</a>
+    <a href="#talent" aria-current={route === 'talent' || !route || route.startsWith('profile/') || route.startsWith('claim/') ? 'page' : undefined}>Find talent</a>
     <a href="#work" aria-current={route === 'work' ? 'page' : undefined}>Find work</a>
     {signedIn && <>
       <a href="#messages" aria-current={route.startsWith('messages') ? 'page' : undefined}>Messages{unread > 0 ? ` (${unread})` : ''}</a>

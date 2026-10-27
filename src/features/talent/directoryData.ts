@@ -1,6 +1,9 @@
 import { normalizeTalentRow, talentClient, talentRpc, type TalentRow } from './liveTalent';
 import type { DirectoryPerson, DirectoryQuery } from './directorySearch';
 
+export const talentResultsPerPage = 10;
+const talentBatchSize = 25;
+
 export type TalentPageQuery = DirectoryQuery & { page: number; ids: string[] | null };
 export type TalentPage = { results: { person: DirectoryPerson; matches: string[] }[]; total: number; page: number; pageSize: number };
 export type TalentFacets = { total: number; locations: string[]; categories: string[]; companies: string[]; specialties: Record<string, number> };
@@ -60,10 +63,32 @@ async function request<T>(key: string, load: () => Promise<T>, force: boolean): 
 export function talentPageKey(query: TalentPageQuery) {
   return JSON.stringify({ ...query, category: [...(Array.isArray(query.category) ? query.category : [query.category])].sort(), ids: query.ids ? [...query.ids].sort() : null });
 }
-export function cachedTalentPage(query: TalentPageQuery) { return cached<TalentPage>(talentPageKey(query)); }
+function batchQuery(query: TalentPageQuery, page = Math.floor((Math.max(1, query.page) - 1) * talentResultsPerPage / talentBatchSize) + 1): TalentPageQuery {
+  return { ...query, page };
+}
+function pageRange(total: number, requested: number) {
+  const page = Math.min(Math.max(1, requested), Math.max(1, Math.ceil(total / talentResultsPerPage)));
+  const start = (page - 1) * talentResultsPerPage;
+  const end = Math.min(start + talentResultsPerPage, total);
+  const first = Math.floor(start / talentBatchSize) + 1;
+  const last = Math.max(first, Math.ceil(end / talentBatchSize));
+  return { page, start, end, batches: Array.from({ length: last - first + 1 }, (_, index) => first + index) };
+}
+function visiblePage(batches: TalentPage[], requested: number): TalentPage {
+  const first = batches[0];
+  const range = pageRange(first.total, requested);
+  const results = batches.flatMap(batch => batch.results.slice(Math.max(0, range.start - (batch.page - 1) * talentBatchSize), Math.max(0, range.end - (batch.page - 1) * talentBatchSize)));
+  return { total: first.total, results, page: range.page, pageSize: talentResultsPerPage };
+}
+export function cachedTalentPage(query: TalentPageQuery) {
+  const first = cached<TalentPage>(talentPageKey(batchQuery(query)));
+  if (!first) return undefined;
+  const batches = pageRange(first.total, query.page).batches.map(page => first.page === page ? first : cached<TalentPage>(talentPageKey(batchQuery(query, page))));
+  return batches.every((batch): batch is TalentPage => batch !== undefined && batch.total === first.total) ? visiblePage(batches, query.page) : undefined;
+}
 export function cachedTalentFacets() { return cached<TalentFacets>('facets'); }
 
-export function loadTalentPage(query: TalentPageQuery, force = false) {
+function loadTalentBatch(query: TalentPageQuery, force: boolean) {
   return request(talentPageKey(query), async () => {
     const page = await talentRpc<TalentPage>('search_talent_directory', {
       p_query: query.query, p_location: query.location, p_categories: Array.isArray(query.category) ? query.category : [query.category].filter(Boolean),
@@ -71,6 +96,19 @@ export function loadTalentPage(query: TalentPageQuery, force = false) {
     });
     return { ...page, results: page.results.map(result => ({ ...result, person: normalizeTalentRow({ id: result.person.id, revision: result.person.revision ?? 1, published: true, data: result.person }) })) };
   }, force);
+}
+export async function loadTalentPage(query: TalentPageQuery, force = false) {
+  const started = generation;
+  const first = await loadTalentBatch(batchQuery(query), force);
+  const batches = await Promise.all(pageRange(first.total, query.page).batches.map(page => {
+    if (first.page === page) return first;
+    if (started !== generation) throw new Error('The directory changed while loading. Please try again.');
+    const next = batchQuery(query, page);
+    const existing = cached<TalentPage>(talentPageKey(next));
+    return loadTalentBatch(next, force || Boolean(existing && existing.total !== first.total));
+  }));
+  if (batches.some(batch => batch.total !== first.total)) throw new Error('The directory changed while loading. Please try again.');
+  return visiblePage(batches, query.page);
 }
 
 export function loadTalentFacets(force = false) {
