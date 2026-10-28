@@ -53,6 +53,22 @@ class RetentionTests(unittest.TestCase):
                     runner.request_batch(SECRET)
                 self.assertNotIn(sensitive, str(caught.exception))
 
+    def test_http_status_is_logged_without_retrying_or_disclosing_response(self):
+        for status in (401, 403, 500, 502, 503, 504):
+            sensitive = 'private-object-path-and-secret'
+            error = HTTPError(runner.ENDPOINT, status, sensitive, {}, io.BytesIO(sensitive.encode()))
+            output = io.StringIO()
+            with self.subTest(status=status), patch.dict(runner.os.environ, {'ONBOARDING_RETENTION_JOB_SECRET': SECRET}), \
+                    patch.object(runner, 'build_opener') as factory, contextlib.redirect_stdout(output):
+                factory.return_value.open.side_effect = error
+                self.assertEqual(runner.main(), 1)
+                factory.return_value.open.assert_called_once()
+            self.assertEqual(json.loads(output.getvalue()), {'severity': 'ERROR',
+                             'event': 'onboarding_retention_failed', 'reason': 'http_error', 'http_status': status})
+            self.assertNotIn(sensitive, output.getvalue())
+            self.assertNotIn(SECRET, output.getvalue())
+            self.assertTrue(error.fp.closed)
+
     def test_invalid_body_and_counts(self):
         values = [None, [], {}, {**EMPTY, 'extra': 'sensitive'}, {**EMPTY, 'examined': True},
                   {**EMPTY, 'examined': 1.0}, {**EMPTY, 'deleted': -1},

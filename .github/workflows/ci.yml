@@ -25,6 +25,7 @@ jobs:
       - run: node scripts/test-market-message-files.mjs && node scripts/test-market-message-reminders.mjs && node scripts/test-market-wakeup.mjs
       - run: node --test tests/scripts/onboarding-retention.node.mjs
       - run: node --test tests/scripts/production-env.node.mjs
+      - run: python3 -W error::ResourceWarning -m unittest discover -s tools/onboarding-retention -v
       - run: python3 -m unittest discover -s tools/member-notifications -v
       - run: python3 -m pip install -r tools/onboarding-scanner/requirements.txt
       - run: python3 -m unittest discover -s tools/onboarding-scanner -v
