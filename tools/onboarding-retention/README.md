@@ -38,7 +38,20 @@ separate procedures. Do not describe object deletion as erasure of all copies.
 Tests: python3 -W error::ResourceWarning -m unittest discover -s tools/onboarding-retention
 
 HTTP failure logs include the numeric status code, but never response bodies,
-headers, URLs or exception messages. Do not retry ambiguous gateway failures
-inside an execution: the function may already have claimed documents whose
-five-minute leases hide them from an immediate retry. Confirm recovery using
-natural scheduled successes and aggregate overdue-document/cleanup-queue counts.
+URLs or exception messages. The sole retryable error is HTTP503 with the exact
+`sb-error-code: SUPABASE_EDGE_RUNTIME_SERVICE_DEGRADED` header: Supabase rejected
+the request before function execution. Allow at most two retries across the whole
+run with 2s/4s backoff inside the existing 180s deadline. Log only that recognized
+constant, HTTP status and retry number. Exhaustion remains a failed execution.
+
+Do not retry generic gateway/network errors or application/deletion failures:
+the function may already have claimed documents whose five-minute leases hide
+them from an immediate retry. Confirm recovery using natural scheduled successes
+and aggregate overdue-document/cleanup-queue counts.
+
+The 28 October 2026 alert was a 503 platform rejection in 11ms, with no function,
+execution or deployment IDs. Its recorded `sb_error_code` matches this recovery
+path. Supabase documents the code as its runtime health check rejecting incoming
+connections: https://status.supabase.com/incidents/f258dnpx3ss2 . This handles the
+identified provider failure; it does not repair the provider infrastructure or
+establish the cause of separately recorded network failures.

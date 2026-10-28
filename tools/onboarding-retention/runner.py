@@ -2,6 +2,7 @@ import json
 import os
 import signal
 import sys
+import time
 from urllib.error import HTTPError, URLError
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
@@ -9,12 +10,15 @@ ENDPOINT = 'https://uxfhdfagrmaeyuaipaar.supabase.co/functions/v1/onboarding-ret
 MAX_BATCHES = 10
 BATCH_SIZE = 100
 MAX_BODY = 4096
+DEGRADED_CODE = 'SUPABASE_EDGE_RUNTIME_SERVICE_DEGRADED'
+MAX_PLATFORM_RETRIES = 2
 
 
 class RetentionError(Exception):
-    def __init__(self, reason, http_status=None):
+    def __init__(self, reason, http_status=None, platform_degraded=False):
         super().__init__(reason)
         self.http_status = http_status
+        self.platform_degraded = platform_degraded
 
 
 class NoRedirect(HTTPRedirectHandler):
@@ -35,8 +39,9 @@ def request_batch(secret):
                 raise RetentionError('response_too_large')
             result = json.loads(body)
     except HTTPError as error:
+        degraded = error.code == 503 and error.headers is not None and error.headers.get('sb-error-code') == DEGRADED_CODE
         error.close()
-        raise RetentionError('http_error', error.code) from None
+        raise RetentionError('http_error', error.code, degraded) from None
     except (URLError, TimeoutError, OSError, ValueError, UnicodeError):
         raise RetentionError('request_failed') from None
     if (not isinstance(result, dict) or set(result) != {'examined', 'deleted', 'failed'}
@@ -50,8 +55,19 @@ def drain(secret):
     if not isinstance(secret, str) or len(secret) < 32 or len(secret) > 4096 or any(c.isspace() for c in secret):
         raise RetentionError('invalid_secret')
     totals = {'batches': 0, 'examined': 0, 'deleted': 0, 'failed': 0}
+    retries = 0
     for _ in range(MAX_BATCHES):
-        batch = request_batch(secret)
+        while True:
+            try:
+                batch = request_batch(secret)
+                break
+            except RetentionError as error:
+                if not error.platform_degraded or retries >= MAX_PLATFORM_RETRIES:
+                    raise
+                retries += 1
+                print(json.dumps({'severity': 'WARNING', 'event': 'onboarding_retention_platform_retry',
+                                  'http_status': 503, 'platform_error_code': DEGRADED_CODE, 'retry': retries}), flush=True)
+                time.sleep(2 ** retries)
         totals['batches'] += 1
         for name in batch:
             totals[name] += batch[name]
@@ -76,6 +92,8 @@ def main():
     except Exception as error:
         reason = str(error) if isinstance(error, RetentionError) else 'unexpected_failure'
         details = {'http_status': error.http_status} if isinstance(error, RetentionError) and error.http_status is not None else {}
+        if isinstance(error, RetentionError) and error.platform_degraded:
+            details['platform_error_code'] = DEGRADED_CODE
         print(json.dumps({'severity': 'ERROR', 'event': 'onboarding_retention_failed', 'reason': reason, **details}), flush=True)
         return 1
     finally:

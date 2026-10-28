@@ -1,8 +1,9 @@
 import contextlib
+from email.message import Message
 import io
 import json
 import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock, call, patch
 from urllib.error import HTTPError, URLError
 
 import runner
@@ -68,6 +69,92 @@ class RetentionTests(unittest.TestCase):
             self.assertNotIn(sensitive, output.getvalue())
             self.assertNotIn(SECRET, output.getvalue())
             self.assertTrue(error.fp.closed)
+
+    def platform_error(self, status=503, code=runner.DEGRADED_CODE):
+        headers = Message()
+        if code is not None:
+            headers['Sb-Error-Code'] = code
+        return HTTPError(runner.ENDPOINT, status, 'private-message', headers, io.BytesIO(b'private-body'))
+
+    def test_identified_platform_rejection_recovers_after_bounded_backoff(self):
+        output = io.StringIO()
+        errors = [self.platform_error(), self.platform_error()]
+        with patch.dict(runner.os.environ, {'ONBOARDING_RETENTION_JOB_SECRET': SECRET}), \
+                patch.object(runner, 'build_opener') as factory, patch.object(runner.time, 'sleep') as sleep, \
+                contextlib.redirect_stdout(output):
+            factory.return_value.open.side_effect = [*errors, self.response(json.dumps(EMPTY).encode())]
+            self.assertEqual(runner.main(), 0)
+            self.assertEqual(factory.return_value.open.call_count, 3)
+            self.assertEqual(sleep.call_args_list, [call(2), call(4)])
+        logs = [json.loads(line) for line in output.getvalue().splitlines()]
+        self.assertEqual([entry['retry'] for entry in logs[:-1]], [1, 2])
+        self.assertTrue(all(entry['platform_error_code'] == runner.DEGRADED_CODE for entry in logs[:-1]))
+        self.assertEqual(logs[-1], {'severity': 'INFO', 'event': 'onboarding_retention_verified', 'batches': 1, **EMPTY})
+        self.assertNotIn('private', output.getvalue())
+        self.assertNotIn(SECRET, output.getvalue())
+        self.assertTrue(all(error.fp.closed for error in errors))
+
+    def test_persistent_platform_rejection_still_fails_and_alerts(self):
+        output = io.StringIO()
+        with patch.dict(runner.os.environ, {'ONBOARDING_RETENTION_JOB_SECRET': SECRET}), \
+                patch.object(runner, 'build_opener') as factory, patch.object(runner.time, 'sleep') as sleep, \
+                contextlib.redirect_stdout(output):
+            factory.return_value.open.side_effect = [self.platform_error() for _ in range(3)]
+            self.assertEqual(runner.main(), 1)
+            self.assertEqual(factory.return_value.open.call_count, 3)
+            self.assertEqual(sleep.call_count, 2)
+        final = json.loads(output.getvalue().splitlines()[-1])
+        self.assertEqual(final, {'severity': 'ERROR', 'event': 'onboarding_retention_failed',
+                                'reason': 'http_error', 'http_status': 503, 'platform_error_code': runner.DEGRADED_CODE})
+
+    def test_retry_budget_is_shared_across_batches(self):
+        output = io.StringIO()
+        with patch.object(runner, 'build_opener') as factory, patch.object(runner.time, 'sleep') as sleep, \
+                contextlib.redirect_stdout(output):
+            factory.return_value.open.side_effect = [self.platform_error(), self.response(json.dumps(FULL).encode()),
+                  self.platform_error(), self.response(json.dumps(FULL).encode()), self.platform_error()]
+            with self.assertRaises(runner.RetentionError):
+                runner.drain(SECRET)
+            self.assertEqual(factory.return_value.open.call_count, 5)
+            self.assertEqual(sleep.call_count, 2)
+
+    def test_unknown_or_misleading_platform_errors_never_retry(self):
+        errors = [self.platform_error(code=code) for code in
+                  (None, '', runner.DEGRADED_CODE + '-extra', 'EDGE_FUNCTION_ERROR', 'LOAD_FUNCTION_ERROR', 'private-header')]
+        errors += [self.platform_error(status=status) for status in (401, 403, 429, 500, 502, 504)]
+        errors += [self.platform_error(code=None), URLError('private-error')]
+        for error in errors:
+            with self.subTest(status=getattr(error, 'code', None)), patch.object(runner, 'build_opener') as factory, \
+                    patch.object(runner.time, 'sleep') as sleep:
+                factory.return_value.open.side_effect = error
+                with self.assertRaises(runner.RetentionError):
+                    runner.drain(SECRET)
+                factory.return_value.open.assert_called_once()
+                sleep.assert_not_called()
+
+    def test_application_failure_after_rejection_is_not_hidden(self):
+        for failure in [self.platform_error(code=None),
+                        self.response(json.dumps({'examined': 1, 'deleted': 0, 'failed': 1}).encode()),
+                        self.response(b'{}')]:
+            output = io.StringIO()
+            with patch.object(runner, 'build_opener') as factory, patch.object(runner.time, 'sleep') as sleep, \
+                    contextlib.redirect_stdout(output):
+                factory.return_value.open.side_effect = [self.platform_error(), failure]
+                with self.assertRaises(runner.RetentionError):
+                    runner.drain(SECRET)
+                self.assertEqual(factory.return_value.open.call_count, 2)
+                sleep.assert_called_once_with(2)
+
+    def test_execution_deadline_remains_fatal_during_backoff(self):
+        output = io.StringIO()
+        with patch.dict(runner.os.environ, {'ONBOARDING_RETENTION_JOB_SECRET': SECRET}), \
+                patch.object(runner, 'build_opener') as factory, \
+                patch.object(runner.time, 'sleep', side_effect=runner.RetentionError('execution_timeout')), \
+                contextlib.redirect_stdout(output):
+            factory.return_value.open.side_effect = self.platform_error()
+            self.assertEqual(runner.main(), 1)
+            factory.return_value.open.assert_called_once()
+        self.assertEqual(json.loads(output.getvalue().splitlines()[-1])['reason'], 'execution_timeout')
 
     def test_invalid_body_and_counts(self):
         values = [None, [], {}, {**EMPTY, 'extra': 'sensitive'}, {**EMPTY, 'examined': True},
