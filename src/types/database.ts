@@ -3556,6 +3556,7 @@ export type Database = {
         Args: { p_order_id: string; p_staff_notes?: string }
         Returns: string
       }
+      get_public_course_catalog: { Args: never; Returns: Json }
       has_staff_role: {
         Args: { p_roles?: Database["public"]["Enums"]["staff_role"][] }
         Returns: boolean

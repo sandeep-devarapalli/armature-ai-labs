@@ -1,0 +1,98 @@
+begin;
+select no_plan();
+insert into auth.users(id,aud,role,email,email_confirmed_at)
+select ('78000000-0000-4000-8000-'||lpad(n::text,12,'0'))::uuid,'authenticated','authenticated','course-'||n||'@example.test',now() from generate_series(1,6)n;
+insert into public.basic_onboarding_applications(user_id,full_name,email,phone,linkedin_url,date_of_birth,status)
+select id,'Course Test',email,'+919999999999','https://linkedin.com/in/test','1990-01-01',case right(id::text,1) when '2' then 'approved' when '3' then 'approved' when '6' then 'rejected' else 'pending' end
+from auth.users where id::text like '78000000%';
+insert into public.staff_roles(user_id,role) values('78000000-0000-4000-8000-000000000004','admin'),('78000000-0000-4000-8000-000000000005','membership_reviewer');
+insert into public.courses(id,slug) values('78100000-0000-4000-8000-000000000001','course-fixture');
+insert into public.course_versions(id,course_id,version,title,source_reference,source_sha256,status,access_tier)
+select ('78200000-0000-4000-8000-'||lpad(n::text,12,'0'))::uuid,'78100000-0000-4000-8000-000000000001',n,'Fixture '||n,'synthetic',repeat('a',64),case when n=3 then 'draft' else 'published' end,case when n=2 then 'paid' else 'free' end from generate_series(1,3)n;
+insert into public.course_modules(id,course_version_id,source_id,title,position)
+select ('78300000-0000-4000-8000-'||lpad(n::text,12,'0'))::uuid,('78200000-0000-4000-8000-'||lpad(n::text,12,'0'))::uuid,'module-1','Module',0 from generate_series(1,3)n;
+insert into public.course_lessons(id,course_version_id,module_id,source_id,title,position,is_sample)
+select ('78400000-0000-4000-8000-'||lpad(n::text,12,'0'))::uuid,('78200000-0000-4000-8000-'||lpad(least(n,3)::text,12,'0'))::uuid,('78300000-0000-4000-8000-'||lpad(least(n,3)::text,12,'0'))::uuid,'lesson-'||n,'Lesson',n,n=1 from generate_series(1,4)n;
+-- Additional protected lesson in the free course.
+insert into public.course_lessons values('78400000-0000-4000-8000-000000000005','78200000-0000-4000-8000-000000000001','78300000-0000-4000-8000-000000000001','lesson-5','Protected',5,false);
+insert into private.course_lesson_content select id,'[{"type":"paragraph","content":"Synthetic lesson"}]'::jsonb from public.course_lessons where id::text like '78400000%';
+insert into private.course_assessment_material values('78200000-0000-4000-8000-000000000001','{"answer":"private"}');
+insert into public.course_lab_requirements(course_version_id,module_id,title,brief,completion_criteria,mandatory)
+values('78200000-0000-4000-8000-000000000001','78300000-0000-4000-8000-000000000001','Synthetic module lab','Synthetic only','Assessor approval',true);
+select is((select final_assessment_route from public.course_versions limit 1),'unassigned','no inferred final route');
+select is((select lab_policy_status from public.course_versions limit 1),'unassigned','lab policy remains independent and unassigned');
+set local role anon;
+select throws_ok($$select * from public.course_versions$$,'42501',null,'anonymous catalog access denied');
+select throws_ok($$select public.get_course_lesson('78400000-0000-4000-8000-000000000001')$$,'42501',null,'anonymous samples denied');
+set local role authenticated;
+select set_config('request.jwt.claims','{"sub":"78000000-0000-4000-8000-000000000001","role":"authenticated"}',true);
+select is((select count(*)::integer from public.course_versions where id::text like '78200000%'),2,'pending member sees published catalog only');
+select is((select count(*)::integer from public.course_lessons where id::text like '78400000%'),3,'syllabus excludes drafts');
+select lives_ok($$select public.get_course_lesson('78400000-0000-4000-8000-000000000001')$$,'registered member may read selected sample');
+select throws_ok($$select public.get_course_lesson('78400000-0000-4000-8000-000000000005')$$,'42501','Course access denied','sample cannot unlock full lesson');
+select throws_ok($$select public.enroll_in_course('78200000-0000-4000-8000-000000000001')$$,'42501','Course access denied','pending identity cannot enroll');
+select throws_ok($$select * from private.course_lesson_content$$,'42501',null,'raw body inaccessible');
+select throws_ok($$select * from private.course_assessment_material$$,'42501',null,'raw answer material inaccessible');
+select throws_ok($$update public.course_lessons set is_sample=true$$,'42501',null,'learner cannot promote samples');
+select throws_ok($$insert into public.course_enrollments values(auth.uid(),'78200000-0000-4000-8000-000000000001',now())$$,'42501',null,'direct enrollment write denied');
+select set_config('request.jwt.claims','{"sub":"78000000-0000-4000-8000-000000000002","role":"authenticated"}',true);
+select throws_ok($$select public.get_course_lesson('78400000-0000-4000-8000-000000000005')$$,'42501','Course access denied','verified learner enrolls before protected content');
+select lives_ok($$select public.enroll_in_course('78200000-0000-4000-8000-000000000001')$$,'verified free enrollment');
+select lives_ok($$select public.enroll_in_course('78200000-0000-4000-8000-000000000001')$$,'enrollment retry succeeds');
+select is((select count(*)::integer from public.course_enrollments),1,'retry creates no duplicate');
+select lives_ok($$select public.get_course_lesson('78400000-0000-4000-8000-000000000005')$$,'verified enrolled member reads full lesson');
+select lives_ok($$select public.save_course_lesson_progress('78400000-0000-4000-8000-000000000005',0,true)$$,'save reading progress');
+select throws_ok($$select public.save_course_lesson_progress('78400000-0000-4000-8000-000000000005',20,true)$$,'22023','Invalid lesson position','invalid position rejected');
+select throws_ok($$update public.course_lesson_progress set user_id='78000000-0000-4000-8000-000000000003'$$,'42501',null,'direct progress mutation denied');
+select throws_ok($$select public.enroll_in_course('78200000-0000-4000-8000-000000000002')$$,'42501','Course access denied','paid course needs entitlement');
+select throws_ok($$select public.enroll_in_course('78200000-0000-4000-8000-000000000003')$$,'42501','Course access denied','draft cannot be enrolled');
+select set_config('request.jwt.claims','{"sub":"78000000-0000-4000-8000-000000000003","role":"authenticated"}',true);
+select is((select count(*)::integer from public.course_lesson_progress),0,'other learner cannot read progress');
+select is((select count(*)::integer from public.course_enrollments),0,'other learner cannot read enrollment');
+select set_config('request.jwt.claims','{"sub":"78000000-0000-4000-8000-000000000004","role":"authenticated"}',true);
+select is((select count(*)::integer from public.course_versions where id::text like '78200000%'),3,'admin sees drafts');
+select throws_ok($$select public.get_course_lesson('78400000-0000-4000-8000-000000000003')$$,'42501','Course access denied','admin draft preview requires administrative endpoint');
+select throws_ok($$select public.enroll_in_course('78200000-0000-4000-8000-000000000001')$$,'42501','Course access denied','admin role does not bypass learner identity');
+select throws_ok($$select public.get_course_lesson('78400000-0000-4000-8000-000000000005')$$,'42501','Course access denied','admin role does not bypass published learner access');
+select set_config('request.jwt.claims','{"sub":"78000000-0000-4000-8000-000000000005","role":"authenticated"}',true);
+select is((select count(*)::integer from public.course_versions where id::text like '78200000%'),2,'review Staff cannot see drafts');
+select throws_ok($$select public.get_course_lesson('78400000-0000-4000-8000-000000000003')$$,'42501','Course access denied','review Staff cannot preview drafts');
+select throws_ok($$update public.course_versions set status='published'$$,'42501',null,'review Staff cannot publish');
+reset role;
+insert into public.course_entitlements(user_id,course_id,starts_at,ends_at,source_reference) values('78000000-0000-4000-8000-000000000002','78100000-0000-4000-8000-000000000001',now()-interval '1 day',now()+interval '1 day','synthetic entitlement');
+set local role authenticated;
+select set_config('request.jwt.claims','{"sub":"78000000-0000-4000-8000-000000000002","role":"authenticated"}',true);
+select lives_ok($$select public.enroll_in_course('78200000-0000-4000-8000-000000000002')$$,'valid course entitlement permits paid enrollment');
+select lives_ok($$select public.get_course_lesson('78400000-0000-4000-8000-000000000002')$$,'paid entitled lesson access');
+select throws_ok($$update public.course_entitlements set ends_at=now()+interval '10 years'$$,'42501',null,'cannot extend own entitlement');
+reset role;
+update public.course_entitlements set revoked_at=now() where user_id='78000000-0000-4000-8000-000000000002';
+set local role authenticated;
+select throws_ok($$select public.get_course_lesson('78400000-0000-4000-8000-000000000002')$$,'42501','Course access denied','revocation checked on each lesson read');
+reset role;
+update public.course_entitlements set revoked_at=null,ends_at=now()-interval '1 hour' where user_id='78000000-0000-4000-8000-000000000002';
+set local role authenticated;
+select throws_ok($$select public.get_course_lesson('78400000-0000-4000-8000-000000000002')$$,'42501','Course access denied','expired entitlement loses paid access');
+reset role;
+update auth.users set banned_until=now()+interval '1 day' where id='78000000-0000-4000-8000-000000000002';
+set local role authenticated;
+select throws_ok($$select public.get_course_lesson('78400000-0000-4000-8000-000000000005')$$,'42501','Course access denied','banned identity cannot use existing enrollment');
+reset role;
+update auth.users set banned_until=null where id='78000000-0000-4000-8000-000000000002';
+update public.memberships set status='suspended' where user_id='78000000-0000-4000-8000-000000000002';
+select is((select count(*)::integer from public.memberships where user_id='78000000-0000-4000-8000-000000000002' and status='suspended'),1,'suspension fixture exists');
+set local role authenticated;
+select throws_ok($$select public.get_course_lesson('78400000-0000-4000-8000-000000000005')$$,'42501','Course access denied','suspended membership cannot use existing enrollment');
+reset role;
+update public.memberships set status='pending' where user_id='78000000-0000-4000-8000-000000000002';
+reset role;
+update public.basic_onboarding_applications set status='revoked' where user_id='78000000-0000-4000-8000-000000000002';
+set local role authenticated;
+select throws_ok($$select public.get_course_lesson('78400000-0000-4000-8000-000000000005')$$,'42501','Course access denied','revoked member loses free lesson access');
+select throws_ok($$select public.save_course_lesson_progress('78400000-0000-4000-8000-000000000005',0,true)$$,'42501','Course access denied','revoked member cannot update progress');
+select is((select count(*)::integer from public.course_lesson_progress),1,'retained own history survives access revocation');
+reset role;
+select is((select count(*)::integer from public.course_lab_requirements where course_version_id::text like '78200000%'),1,'reading completion leaves lab requirement untouched');
+select is(to_regprocedure('public.issue_course_certificate(uuid)'),null::regprocedure,'certificate issuance is not enabled');
+select * from finish();
+rollback;

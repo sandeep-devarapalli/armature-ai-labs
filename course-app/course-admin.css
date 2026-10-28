@@ -1,0 +1,45 @@
+.course-admin { padding: 32px 0 64px; }
+.admin-intro h1 { font-size: 36px; letter-spacing: -1px; }
+.course-admin h2 { font-size: 25px; margin: 20px 0; }
+.course-admin h3 { font-size: 20px; }
+.course-admin p { font-size: 13px; }
+.course-admin label { display: grid; gap: 8px; font-size: 13px; }
+.course-admin input:not([type=checkbox]):not([type=radio]), .course-admin textarea, .course-admin select { width: 100%; min-width: 0; padding: 10px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); border-radius: 4px; }
+.course-admin textarea { min-height: 90px; resize: vertical; }
+.course-admin fieldset { min-width: 0; }
+.admin-version-picker, .admin-fields { display: grid; gap: 20px; }
+.admin-version-picker { padding: 24px 0; border-bottom: 1px solid var(--line); }
+.admin-version-picker > button { justify-self: start; }
+.admin-course-summary { padding: 14px 0; }
+.admin-tabs { display: flex; flex-wrap: wrap; gap: 8px; border-bottom: 1px solid var(--line); padding-bottom: 18px; }
+.admin-tabs [aria-current=page] { border-color: var(--accent); background: var(--selection); }
+.admin-change-note { padding: 24px 0; }
+.admin-fields { border: 0; padding: 0; margin: 0 0 24px; }
+.course-admin .admin-inline { display: flex; align-items: start; gap: 10px; }
+.admin-inline input { flex: none; margin-top: 3px; }
+.admin-actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 20px 0; }
+.admin-lesson-layout { display: grid; grid-template-columns: minmax(220px, .8fr) minmax(0, 2fr); gap: 32px; }
+.admin-lesson-layout > * { min-width: 0; }
+.admin-lesson-layout > aside { max-height: 75vh; overflow: auto; border-right: 1px solid var(--line); padding-right: 18px; }
+.admin-lesson-layout details { border-bottom: 1px solid var(--line); padding: 15px 0; }
+.admin-lesson-layout summary { cursor: pointer; font-size: 13px; line-height: 1.6; }
+.admin-lesson-layout ol { padding-left: 18px; }
+.admin-lesson-layout li { margin: 9px 0; }
+.admin-lesson-layout li button { width: 100%; text-align: left; font-size: 12px; }
+.admin-lesson-layout li [aria-current=page] { border-color: var(--accent); background: var(--selection); }
+.admin-lesson-preview { display: block; padding: 16px 0; }
+.admin-lab { display: grid; gap: 18px; padding: 22px; border: 1px solid var(--line); }
+.admin-review li { margin: 12px 0; font-size: 13px; }
+.admin-audit { padding-left: 20px; }
+.admin-audit li { padding: 14px 0; border-bottom: 1px solid var(--line); }
+.course-block-editor { display: grid; gap: 14px; }
+.course-block-review { border: 1px solid var(--line); padding: 18px !important; }
+.course-block-fields { display: grid; gap: 18px; padding-top: 18px; }
+.course-block-fields fieldset { display: grid; gap: 14px; border: 1px solid var(--line); padding: 14px; }
+.course-block-preview { padding-top: 20px; overflow-wrap: anywhere; }
+@media (max-width: 850px) {
+ .admin-lesson-layout { grid-template-columns: minmax(0, 1fr); }
+ .admin-lesson-layout > aside { max-height: 300px; border-right: 0; border-bottom: 1px solid var(--line); padding: 0; }
+ .admin-intro h1 { font-size: 30px; }
+ .admin-tabs button { font-size: 12px; }
+}

@@ -1,0 +1,5 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": { "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.courses.tsbuildinfo", "types": ["vite/client", "node"] },
+  "include": ["course-app", "course-generated/diagrams", "vite.courses.config.ts"]
+}

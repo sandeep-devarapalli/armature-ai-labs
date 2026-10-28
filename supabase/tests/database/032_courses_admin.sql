@@ -1,0 +1,107 @@
+begin;
+select no_plan();
+insert into auth.users(id,aud,role,email,email_confirmed_at)
+ select ('89500000-0000-4000-8000-'||lpad(n::text,12,'0'))::uuid,'authenticated','authenticated','course-admin-test-'||n||'@example.test',now() from generate_series(1,8)n;
+insert into public.staff_roles(user_id,role) values
+ ('89500000-0000-4000-8000-000000000001','admin'),('89500000-0000-4000-8000-000000000002','super_admin'),
+ ('89500000-0000-4000-8000-000000000003','membership_reviewer'),('89500000-0000-4000-8000-000000000005','admin'),
+ ('89500000-0000-4000-8000-000000000006','admin'),('89500000-0000-4000-8000-000000000007','admin'),('89500000-0000-4000-8000-000000000008','admin');
+update auth.users set banned_until=now()+interval '1 day' where id='89500000-0000-4000-8000-000000000005';
+update auth.users set deleted_at=now() where id='89500000-0000-4000-8000-000000000006';
+update auth.users set email_confirmed_at=null where id='89500000-0000-4000-8000-000000000007';
+update public.memberships set status='suspended' where user_id='89500000-0000-4000-8000-000000000008';
+insert into public.courses(id,slug) values('89600000-0000-4000-8000-000000000001','course-admin-test');
+insert into public.course_versions(id,course_id,version,title,source_reference,source_sha256)
+ values('89700000-0000-4000-8000-000000000001','89600000-0000-4000-8000-000000000001',1,'Original course','synthetic',repeat('c',64));
+insert into public.course_modules(id,course_version_id,source_id,title,position)
+ values('89800000-0000-4000-8000-000000000001','89700000-0000-4000-8000-000000000001','m1','Module 1',0);
+insert into public.course_lessons(id,course_version_id,module_id,source_id,title,position)
+ values('89900000-0000-4000-8000-000000000001','89700000-0000-4000-8000-000000000001','89800000-0000-4000-8000-000000000001','l1','Lesson 1',0);
+insert into private.course_lesson_content values('89900000-0000-4000-8000-000000000001','[{"id":"t","type":"text","content":{"html":"<p>Original</p>"}}]');
+insert into private.course_assessment_material values('89700000-0000-4000-8000-000000000001','{"secretFinal":"retained"}');
+-- Online quiz route requires an attached final quiz at publication (migration 202610200001); seeded directly so revisions below are unchanged.
+insert into private.course_final_quizzes(course_version_id,source_key,questions,pass_percent,time_limit_minutes,retake_hours)
+ values('89700000-0000-4000-8000-000000000001','questionBank','[{"id":"q1","question":"Synthetic?","options":[{"id":"A","text":"yes"},{"id":"B","text":"no"}],"correctAnswerId":"A"}]',70,30,24);
+set local role anon;
+select throws_ok($$select public.admin_list_course_versions()$$,'42501',null,'anonymous cannot list administration');
+set local role authenticated;
+select set_config('request.jwt.claims','{"sub":"89500000-0000-4000-8000-000000000003","role":"authenticated"}',true);
+select is(public.get_course_admin_access()->>'allowed','false','membership-review Staff are not course admins');
+select throws_ok($$select public.admin_list_course_versions()$$,'42501','Course administration denied','Staff cannot list drafts');
+select throws_ok($$select public.admin_get_course_lesson('89900000-0000-4000-8000-000000000001')$$,'42501','Course administration denied','Staff cannot preview');
+select throws_ok($$select public.admin_review_course_version('89700000-0000-4000-8000-000000000001',1,'review')$$,'42501','Course administration denied','Staff cannot review');
+select set_config('request.jwt.claims','{"sub":"89500000-0000-4000-8000-000000000004","role":"authenticated"}',true);
+select throws_ok($$select public.admin_clone_course_version('89700000-0000-4000-8000-000000000001',1,'clone')$$,'42501','Course administration denied','learner cannot clone');
+select set_config('request.jwt.claims','{"sub":"89500000-0000-4000-8000-000000000005","role":"authenticated"}',true);
+select is(public.get_course_admin_access()->>'allowed','false','banned admin denied');
+select throws_ok($$select public.admin_list_course_versions()$$,'42501','Course administration denied','banned admin read denied');
+select set_config('request.jwt.claims','{"sub":"89500000-0000-4000-8000-000000000006","role":"authenticated"}',true);
+select is(public.get_course_admin_access()->>'allowed','false','deleted admin denied');
+select set_config('request.jwt.claims','{"sub":"89500000-0000-4000-8000-000000000007","role":"authenticated"}',true);
+select is(public.get_course_admin_access()->>'allowed','false','unconfirmed admin denied');
+select set_config('request.jwt.claims','{"sub":"89500000-0000-4000-8000-000000000008","role":"authenticated"}',true);
+select is(public.get_course_admin_access()->>'allowed','false','suspended admin denied');
+select set_config('request.jwt.claims','{"sub":"89500000-0000-4000-8000-000000000002","role":"authenticated"}',true);
+select is(public.get_course_admin_access()->>'allowed','true','Super admin allowed');
+select lives_ok($$select public.admin_get_course_version('89700000-0000-4000-8000-000000000001')$$,'Super admin preview allowed');
+select set_config('request.jwt.claims','{"sub":"89500000-0000-4000-8000-000000000001","role":"authenticated"}',true);
+select is(public.get_course_admin_access()->>'allowed','true','Admin allowed independently of learner verification');
+select is(public.admin_get_course_version('89700000-0000-4000-8000-000000000001')->'course'->>'revision','1','initial revision');
+select is(public.admin_get_course_version('89700000-0000-4000-8000-000000000001')->'modules'->0->'lessons'->0->>'title','Lesson 1','syllabus returned');
+select ok(public.admin_get_course_version('89700000-0000-4000-8000-000000000001')::text not like '%secretFinal%','admin metadata never exposes final material');
+select is(public.admin_get_course_lesson('89900000-0000-4000-8000-000000000001')->0->'content'->>'html','<p>Original</p>','dedicated draft preview');
+select throws_ok($$select public.get_course_lesson('89900000-0000-4000-8000-000000000001')$$,'42501','Course access denied','learner endpoint denies admin draft');
+select throws_ok($$update public.course_versions set title='bypass' where id='89700000-0000-4000-8000-000000000001'$$,'42501',null,'direct version write denied');
+select throws_ok($$select * from private.course_admin_audit$$,'42501',null,'direct audit read denied');
+select throws_ok($$delete from private.course_admin_audit$$,'42501',null,'audit deletion denied');
+select throws_ok($$select public.admin_review_course_version('89700000-0000-4000-8000-000000000001',1,'  ')$$,'22023',null,'audit note required');
+select throws_ok($$select public.admin_update_course_version('89700000-0000-4000-8000-000000000001',0,'Changed','','free','online_quiz','none','edit')$$,'PT409',null,'stale mutation rejected');
+select throws_ok($$select public.admin_publish_course_version('89700000-0000-4000-8000-000000000001',1,'publish')$$,'22023','Review the current revision before publication','unreviewed publication denied');
+select lives_ok($$select public.admin_review_course_version('89700000-0000-4000-8000-000000000001',1,'review')$$,'review recorded');
+select throws_ok($$select public.admin_publish_course_version('89700000-0000-4000-8000-000000000001',1,'publish')$$,'22023','Assign learning access before publication','unassigned learning access blocks publication');
+select lives_ok($$select public.admin_update_course_version('89700000-0000-4000-8000-000000000001',1,'Changed course','Description','free','online_quiz','none','approved policy test')$$,'draft metadata editable');
+select is(public.admin_get_course_version('89700000-0000-4000-8000-000000000001')->'course'->>'revision','2','edit increments revision');
+select is(public.admin_get_course_version('89700000-0000-4000-8000-000000000001')->'course'->>'reviewedRevision',null,'edit invalidates review');
+select throws_ok($$select public.admin_update_course_lesson('89900000-0000-4000-8000-000000000001',2,'Lesson 1',true,'[{"id":"x","type":"video","content":{}}]','bad')$$,'22023','Unsupported lesson block type','unknown blocks rejected');
+select throws_ok($$select public.admin_update_course_lesson('89900000-0000-4000-8000-000000000001',2,'Lesson 1',true,'[{"id":"x","type":"table","content":{"headers":[],"rows":["bad"]}}]','bad')$$,'22023','Each table row must be an array','malformed table rejected');
+select throws_ok($$select public.admin_update_course_lesson('89900000-0000-4000-8000-000000000001',2,'Lesson 1',true,'[{"id":"x","type":"text","content":{"html":"ok","examAnswers":[]}}]','bad')$$,'22023','Unsupported content field: examAnswers','assessment container injection rejected');
+select throws_ok($$select public.admin_update_course_lesson('89900000-0000-4000-8000-000000000001',2,'Lesson 1',true,'[]','bad')$$,'22023','A lesson requires 1 to 500 blocks','empty lesson rejected');
+select lives_ok($$select public.admin_update_course_lesson('89900000-0000-4000-8000-000000000001',2,'Lesson 1',true,'[{"id":"t","type":"text","content":{"html":"<p>Edited</p>"}},{"id":"d","type":"illustration","content":{"svgCode":"<svg></svg>","caption":"Diagram"}}]','sample and lesson edit')$$,'lesson edit preserves inline diagram and sample');
+select is(public.admin_get_course_version('89700000-0000-4000-8000-000000000001')->'modules'->0->'lessons'->0->>'isSample','true','sample set only through admin');
+select lives_ok($$select public.admin_replace_course_labs('89700000-0000-4000-8000-000000000001',3,'[{"moduleId":"89800000-0000-4000-8000-000000000001","title":"Module lab","brief":"Build circuit","completionCriteria":"Instructor checks","mandatory":true,"location":null},{"moduleId":null,"title":"Course lab","brief":"Practice","completionCriteria":"Check","mandatory":false,"location":"Armature lab"}]','course and module requirements')$$,'independent course and module labs saved');
+select is(jsonb_array_length(public.admin_get_course_version('89700000-0000-4000-8000-000000000001')->'labRequirements'),2,'both lab levels retained');
+select throws_ok($$select public.admin_replace_course_labs('89700000-0000-4000-8000-000000000001',4,'[{"moduleId":"89800000-0000-4000-8000-000000000099","title":"Bad","brief":"Bad","completionCriteria":"Bad","mandatory":true}]','wrong module')$$,'22023','Lab module must belong to this version','cross-version module rejected');
+select is(jsonb_array_length(public.admin_get_course_version('89700000-0000-4000-8000-000000000001')->'labRequirements'),2,'failed replace keeps existing labs');
+select lives_ok($$select public.admin_review_course_version('89700000-0000-4000-8000-000000000001',4,'review')$$,'review labs');
+select throws_ok($$select public.admin_publish_course_version('89700000-0000-4000-8000-000000000001',4,'publish')$$,'22023','Lab policy and requirements disagree','none policy cannot hide labs');
+select lives_ok($$select public.admin_update_course_version('89700000-0000-4000-8000-000000000001',4,'Changed course','Description','free','online_quiz','configured','configured learning labs')$$,'online final route supports configured learning labs');
+select lives_ok($$select public.admin_review_course_version('89700000-0000-4000-8000-000000000001',5,'final review')$$,'review before publication');
+select lives_ok($$select public.admin_publish_course_version('89700000-0000-4000-8000-000000000001',5,'publish synthetic')$$,'reviewed configured version publishes');
+select is(public.admin_get_course_version('89700000-0000-4000-8000-000000000001')->'course'->>'status','published','published state');
+select is(public.admin_get_course_version('89700000-0000-4000-8000-000000000001')->'course'->>'revision','6','publication revision incremented');
+select throws_ok($$select public.admin_update_course_version('89700000-0000-4000-8000-000000000001',6,'Overwrite','','paid','online_quiz','none','edit')$$,'22023','Only draft versions can be edited; create a new draft','published metadata immutable');
+select lives_ok($$select public.admin_get_course_lesson('89900000-0000-4000-8000-000000000001')$$,'admin can review published content without learning entitlement');
+select throws_ok($$select public.admin_replace_course_labs('89700000-0000-4000-8000-000000000001',6,'[]','remove')$$,'22023','Only draft versions can be edited; create a new draft','published lab requirements immutable');
+select throws_ok($$select public.admin_clone_course_version('89700000-0000-4000-8000-000000000001',5,'stale clone')$$,'PT409',null,'stale clone rejected');
+select set_config('test.clone_id',public.admin_clone_course_version('89700000-0000-4000-8000-000000000001',6,'new edition')::text,true);
+select is(public.admin_get_course_version(current_setting('test.clone_id')::uuid)->'course'->>'status','draft','clone is draft');
+select is(public.admin_get_course_version(current_setting('test.clone_id')::uuid)->'course'->>'version','2','clone increments course version');
+select is(public.admin_get_course_version(current_setting('test.clone_id')::uuid)->'course'->>'clonedFromVersionId','89700000-0000-4000-8000-000000000001','clone tracks immediate source version');
+select is(public.admin_get_course_version(current_setting('test.clone_id')::uuid)->'course'->>'reviewedRevision',null,'clone requires its own review');
+select isnt(public.admin_get_course_version(current_setting('test.clone_id')::uuid)->'modules'->0->>'id','89800000-0000-4000-8000-000000000001','clone uses new module ids');
+select is(jsonb_array_length(public.admin_get_course_version(current_setting('test.clone_id')::uuid)->'labRequirements'),2,'clone retains labs');
+select lives_ok($$select public.admin_withdraw_course_version('89700000-0000-4000-8000-000000000001',6,'withdraw synthetic')$$,'published version withdrawn');
+select is(public.admin_get_course_version('89700000-0000-4000-8000-000000000001')->'course'->>'status','withdrawn','withdrawal retained version');
+select throws_ok($$select public.admin_publish_course_version('89700000-0000-4000-8000-000000000001',7,'republish')$$,'22023','Only draft versions can be edited; create a new draft','withdrawn cannot republish');
+select is(jsonb_array_length(public.admin_get_course_version('89700000-0000-4000-8000-000000000001')->'audit'),9,'all successful source mutations have audit records');
+select lives_ok(format('select public.admin_replace_course_labs(%L,1,%L,%L)',current_setting('test.clone_id'),'[]','clear draft labs'),'draft lab replacement can be empty');
+select lives_ok(format('select public.admin_review_course_version(%L,2,%L)',current_setting('test.clone_id'),'review'),'clone reviewed separately');
+select throws_ok(format('select public.admin_publish_course_version(%L,2,%L)',current_setting('test.clone_id'),'publish'),'22023','Lab policy and requirements disagree','configured policy requires lab rows');
+reset role;
+select is((select material->>'secretFinal' from private.course_assessment_material where course_version_id=current_setting('test.clone_id')::uuid),'retained','clone retains private final material');
+select is((select blocks->0->'content'->>'html' from private.course_lesson_content c join public.course_lessons l on l.id=c.lesson_id where l.course_version_id=current_setting('test.clone_id')::uuid),'<p>Edited</p>','clone retains private body');
+select is((select count(*)::integer from public.course_enrollments where course_version_id=current_setting('test.clone_id')::uuid),0,'clone has no enrollments');
+select is((select source_sha256 from public.course_versions where id=current_setting('test.clone_id')::uuid),repeat('c',64),'source digest preserved');
+select is((select count(*)::integer from private.course_admin_audit where course_version_id='89700000-0000-4000-8000-000000000001' and actor_id<>'89500000-0000-4000-8000-000000000001'),0,'audit actor derived from authenticated session');
+select * from finish();
+rollback;
