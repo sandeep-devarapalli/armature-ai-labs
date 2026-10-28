@@ -36,3 +36,9 @@ unexpired objects survive. Provider backups and staff-downloaded copies require
 separate procedures. Do not describe object deletion as erasure of all copies.
 
 Tests: python3 -W error::ResourceWarning -m unittest discover -s tools/onboarding-retention
+
+HTTP failure logs include the numeric status code, but never response bodies,
+headers, URLs or exception messages. Do not retry ambiguous gateway failures
+inside an execution: the function may already have claimed documents whose
+five-minute leases hide them from an immediate retry. Confirm recovery using
+natural scheduled successes and aggregate overdue-document/cleanup-queue counts.

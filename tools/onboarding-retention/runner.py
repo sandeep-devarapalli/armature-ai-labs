@@ -12,7 +12,9 @@ MAX_BODY = 4096
 
 
 class RetentionError(Exception):
-    pass
+    def __init__(self, reason, http_status=None):
+        super().__init__(reason)
+        self.http_status = http_status
 
 
 class NoRedirect(HTTPRedirectHandler):
@@ -34,7 +36,7 @@ def request_batch(secret):
             result = json.loads(body)
     except HTTPError as error:
         error.close()
-        raise RetentionError('http_error') from None
+        raise RetentionError('http_error', error.code) from None
     except (URLError, TimeoutError, OSError, ValueError, UnicodeError):
         raise RetentionError('request_failed') from None
     if (not isinstance(result, dict) or set(result) != {'examined', 'deleted', 'failed'}
@@ -73,7 +75,8 @@ def main():
         return 0
     except Exception as error:
         reason = str(error) if isinstance(error, RetentionError) else 'unexpected_failure'
-        print(json.dumps({'severity': 'ERROR', 'event': 'onboarding_retention_failed', 'reason': reason}), flush=True)
+        details = {'http_status': error.http_status} if isinstance(error, RetentionError) and error.http_status is not None else {}
+        print(json.dumps({'severity': 'ERROR', 'event': 'onboarding_retention_failed', 'reason': reason, **details}), flush=True)
         return 1
     finally:
         signal.setitimer(signal.ITIMER_REAL, 0)
