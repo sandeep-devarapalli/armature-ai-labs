@@ -1,0 +1,14 @@
+.interactive-diagram { margin: 1.5rem 0; padding: 1rem; border: 1px solid currentColor; border-radius: 8px; }
+.interactive-diagram h3 { margin-top: 0; }
+.interactive-live { padding-top: 1rem; }
+.interactive-live > svg, .interactive-static svg { width: 100%; height: auto; display: block; }
+.interactive-live > svg { color: inherit; fill: currentColor; font: 16px Arial, sans-serif; }
+.interactive-canvas { width: 100%; min-height: 340px; }
+.interactive-canvas canvas { width: 100%; height: 340px; display: block; }
+.interactive-live label { display: block; margin-top: 1rem; }
+.interactive-live input[type=range] { display: block; width: 100%; min-height: 44px; }
+.interactive-actions { display: flex; gap: .5rem; flex-wrap: wrap; }
+.interactive-actions button { min-height: 44px; }
+.interactive-reading { font-weight: 700; font-variant-numeric: tabular-nums; }
+.interactive-static { margin-top: 1rem; background: white; color: #111110; }
+@media (max-width: 480px) { .interactive-diagram { padding: .65rem; } }

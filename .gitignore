@@ -26,3 +26,17 @@ dist-ecosystem/
 # Talent import source and private quality classifications stay local.
 /src/features/talent/directory-data.json
 /docs/talent-directory-import-report.json
+
+# Courses platform: generated private content, local builds and Vite caches
+/course-generated/
+/dist-courses/
+/dist-courses-member/
+/.cache/
+/course-app/.cache/
+/output/courses-private-import.sql
+/output/courses-private-import-v*.sql
+/output/courses-private-diagrams.json
+/output/courses-history/
+/output/courses-selected*/
+/output/courses-corrected*/
+/output/courses-corrections*/

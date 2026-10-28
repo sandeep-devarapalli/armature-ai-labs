@@ -1,0 +1,41 @@
+import assert from 'node:assert/strict';
+import { createHash, randomBytes } from 'node:crypto';
+import { readFileSync, writeFileSync } from 'node:fs';
+
+const directory = '/private/tmp/armature-courses-member-http';
+const config = JSON.parse(readFileSync(`${directory}/private.json`, 'utf8'));
+const account = JSON.parse(readFileSync(`${directory}/accounts.json`, 'utf8')).pending;
+assert.equal(config.url, 'http://127.0.0.1:58421');
+const callback = 'http://localhost:4191/';
+const mailbox = 'http://127.0.0.1:58324';
+const search = () => fetch(`${mailbox}/api/v1/search?query=${encodeURIComponent('to:' + account.email)}`).then(response => response.json());
+const prior = new Set((await search()).messages.map(message => message.ID));
+const verifier = randomBytes(48).toString('base64url');
+const challenge = createHash('sha256').update(verifier).digest('base64url');
+const headers = { apikey: config.anonKey, authorization: `Bearer ${config.anonKey}`, 'content-type': 'application/json' };
+const otp = await fetch(`${config.url}/auth/v1/otp?redirect_to=${encodeURIComponent(callback)}`, { method: 'POST', headers, body: JSON.stringify({ email: account.email, create_user: false, code_challenge: challenge, code_challenge_method: 's256' }) });
+assert.equal(otp.status, 200, 'Local OTP request accepted; wait for local email cooldown before rerunning');
+let message;
+for (let attempt = 0; attempt < 20; attempt++) {
+  message = (await search()).messages.find(item => !prior.has(item.ID));
+  if (message) break;
+  await new Promise(resolve => setTimeout(resolve, 250));
+}
+assert.ok(message, 'Only the new synthetic local email is used');
+const email = await fetch(`${mailbox}/api/v1/message/${message.ID}`).then(response => response.json());
+const link = [...email.HTML.matchAll(/href="([^"]+)"/g)].map(match => match[1].replaceAll('&amp;', '&')).find(value => new URL(value).origin === config.url);
+assert.ok(link, 'Captured email points only to local Auth gateway');
+const verification = await fetch(link, { redirect: 'manual' });
+assert.equal(verification.status, 303);
+const redirect = new URL(verification.headers.get('location'));
+assert.equal(redirect.origin + redirect.pathname, callback);
+assert.ok(redirect.searchParams.get('code'));
+const exchange = await fetch(`${config.url}/auth/v1/token?grant_type=pkce`, { method: 'POST', headers, body: JSON.stringify({ auth_code: redirect.searchParams.get('code'), code_verifier: verifier }) });
+assert.equal(exchange.status, 200);
+const session = await exchange.json();
+const api = await fetch(`${config.url}/rest/v1/rpc/get_course_membership`, { method: 'POST', headers: { ...headers, authorization: `Bearer ${session.access_token}` }, body: '{}' });
+assert.equal(api.status, 200);
+assert.equal((await api.json()).verified, false);
+const checks = ['Local email OTP accepted', 'Email verification redirects with a PKCE code', 'Code exchanges for a real Auth session', 'Session authenticates course membership RPC'].map(name => ({ name, passed: true }));
+writeFileSync(`${directory}/pkce-checks.json`, JSON.stringify({ checkedAt: new Date().toISOString(), callback, checks }, null, 2));
+console.log(`4 email PKCE checks passed. Evidence: ${directory}/pkce-checks.json. Email captured locally; no external message sent.`);

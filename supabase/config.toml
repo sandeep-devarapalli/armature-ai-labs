@@ -33,6 +33,7 @@ file_size_limit = "50MB"
 enabled = true
 site_url = "https://armatureailabs.com"
 additional_redirect_urls = [
+  "https://courses.armatureailabs.com/",
   "http://localhost:5173/auth/callback",
   "http://localhost:5173/auth/callback?next=%2Fonboarding",
   "http://localhost:4173/auth/callback",
