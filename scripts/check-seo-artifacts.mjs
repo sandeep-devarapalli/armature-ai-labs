@@ -3,6 +3,7 @@ import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { JSDOM } from "jsdom";
+import ts from "typescript";
 
 const directory = path.resolve(process.argv[2] ?? "dist");
 const origin = "https://armatureailabs.com";
@@ -114,10 +115,32 @@ try {
 
 try {
   const serviceWorker = await readFile(path.join(directory, "sw.js"), "utf8");
+  const source = ts.createSourceFile("sw.js", serviceWorker, ts.ScriptTarget.Latest, true, ts.ScriptKind.JS);
+  assert.equal(source.parseDiagnostics.length, 0, "Invalid service-worker JavaScript");
+  const entries = [];
+  function visit(node) {
+    if (ts.isCallExpression(node) && ts.isPropertyAccessExpression(node.expression) && node.expression.name.text === "precacheAndRoute") {
+      const manifest = node.arguments[0];
+      assert.ok(manifest && ts.isArrayLiteralExpression(manifest), "Expected a literal precache manifest");
+      for (const entry of manifest.elements) {
+        assert.ok(ts.isObjectLiteralExpression(entry), "Expected a literal precache entry");
+        const fields = {};
+        for (const property of entry.properties) {
+          assert.ok(ts.isPropertyAssignment(property) && (ts.isIdentifier(property.name) || ts.isStringLiteral(property.name)), "Expected static precache properties");
+          fields[property.name.text] = ts.isStringLiteral(property.initializer) ? property.initializer.text : undefined;
+        }
+        entries.push(fields);
+      }
+    }
+    ts.forEachChild(node, visit);
+  }
+  visit(source);
   for (const filename of ["index.html", "app-shell.html"]) {
     const revision = createHash("md5").update(await readFile(path.join(directory, filename))).digest("hex");
     const precacheUrl = filename === "app-shell.html" ? "app-shell" : filename;
-    assert.ok(serviceWorker.includes(`url:"${precacheUrl}",revision:"${revision}"`), `${filename} precache revision does not match the final HTML`);
+    const matches = entries.filter((entry) => entry.url === precacheUrl);
+    assert.equal(matches.length, 1, `Expected exactly one ${filename} precache entry`);
+    assert.equal(matches[0].revision, revision, `${filename} precache revision does not match the final HTML`);
   }
   assert.ok(serviceWorker.includes('createHandlerBoundToURL("/app-shell")'), "SPA navigation must not display home-page HTML on other routes");
 } catch (error) {
