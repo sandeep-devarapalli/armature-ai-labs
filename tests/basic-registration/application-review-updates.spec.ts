@@ -14,7 +14,7 @@ async function fixture(page: Page, status: string, theme = "dark", pendingIdenti
   await page.route(`${backendOrigin}/**`, async route => {
     const request = route.request(), name = new URL(request.url()).pathname.split("/").at(-1)!;
     let data: unknown = [];
-    if (name === "get_basic_account_summary") data = { user_id: user.id, name: application.full_name, email: user.email, status, application_status: status, role: "member", revision: 4, membership_level: "basic", membership_levels_enabled: true, verification: { email: true, identity: status === "approved", mobile: false }, owner_approval_available: false };
+    if (name === "get_basic_account_summary") data = { user_id: user.id, name: application.full_name, email: user.email, status, application_status: status, role: "member", revision: 4, membership_level: status === "revoked" ? null : "basic", membership_levels_enabled: true, verification: { email: true, identity: status === "approved", mobile: false }, owner_approval_available: false };
     else if (name === "get_membership_levels_release_status") data = { membership_levels_enabled: true };
     else if (name === "basic_onboarding_applications") data = [application];
     else if (name === "onboarding_documents") data = ["photo", "government_id"].map(kind => ({ id: `${kind}-fixture`, user_id: user.id, kind, uploaded_at: "2026-09-01T00:00:00Z", expires_at: "2020-01-01T00:00:00Z", deleted_at: null }));
@@ -40,7 +40,7 @@ async function fixture(page: Page, status: string, theme = "dark", pendingIdenti
 
 async function openReview(page: Page) {
   await page.goto("/onboarding");
-  await page.getByRole("button", { name: "Manage my registration", exact: true }).click();
+  await page.getByRole("button", { name: /^(Manage my registration|View review status|Verify mobile number)$/ }).click();
   await page.getByRole("navigation", { name: "Registration steps" }).getByRole("button", { name: /Private documents/ }).click();
   const review = page.getByRole("button", { name: "Review application", exact: true });
   await expect(review).toBeEnabled();
@@ -55,7 +55,7 @@ for (const status of ["pending", "approved", "rejected", "revoked"]) test(`${sta
   await expect(review.getByRole("button", { name: "Edit application details", exact: true })).toBeEnabled();
   await expect(review.getByText("Private copy expired", { exact: true })).toHaveCount(2);
   await expect(review.getByText("Synthetic reviewer history", { exact: true })).toBeVisible();
-  if (status === "pending") await expect(review.getByRole("button", { name: "Application submitted", exact: true })).toBeDisabled();
+  if (status === "pending") await expect(review.getByRole("button", { name: "Identity application submitted", exact: true })).toBeDisabled();
   await expect(review.getByText("Current Member Name", { exact: true })).toBeVisible();
   await expect(review.getByText(user.email, { exact: true })).toBeVisible();
   await expect(review.getByText("+919999991234", { exact: true })).toBeVisible();
@@ -96,8 +96,8 @@ for (const theme of ["light", "dark"]) test(`approved edits are proposed separat
   expect(state.application.status).toBe("approved");
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(page.viewportSize()!.width);
   await updates.screenshot({ path: `/tmp/application-updates-${theme}-${info.project.name}.png`, style: ".topbar, .workspace-nav, .skip-link { visibility: hidden !important; }" });
-  await page.getByRole("button", { name: "Back to status", exact: true }).click();
-  await expect(page.getByText("Identity: Approved", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Back to your membership", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "Your identity is approved.", exact: true })).toBeVisible();
   expect(state.errors).toEqual([]);
 });
 
@@ -105,7 +105,7 @@ for (const theme of ["light", "dark"]) test(`approved edits are proposed separat
 for (const identityChanged of [false, true]) test(`approved upload controls require a pending identity change: ${identityChanged}`, async ({ page }) => {
   const state = await fixture(page, "approved", "dark", identityChanged);
   await page.goto("/onboarding");
-  await page.getByRole("button", { name: "Manage my registration", exact: true }).click();
+  await page.getByRole("button", { name: /^(Manage my registration|View review status|Verify mobile number)$/ }).click();
   await page.getByRole("navigation", { name: "Registration steps" }).getByRole("button", { name: /Private documents/ }).click();
   await expect(page.getByRole("button", { name: "Review application", exact: true })).toBeEnabled();
   if (identityChanged) {
@@ -129,13 +129,13 @@ test("a pending SMS request locks registration exits until the response arrives"
     await route.fulfill({ json: { enabled: true, available_channels: ["sms"], verified: false, masked_phone: "+91••••••1234", channel: "sms", expires_at: new Date(Date.now() + 300000).toISOString(), resend_available_at: new Date(Date.now() + 60000).toISOString() } });
   });
   await page.goto("/onboarding");
-  await page.getByRole("button", { name: "Manage my registration", exact: true }).click();
+  await page.getByRole("button", { name: /^(Manage my registration|View review status|Verify mobile number)$/ }).click();
   await page.getByRole("button", { name: "Send SMS code", exact: true }).click();
   await expect.poll(() => requested).toBe(true);
   for (const step of await page.getByRole("navigation", { name: "Registration steps" }).getByRole("button").all()) await expect(step).toBeDisabled();
-  for (const name of ["Back to status", "Back", "Continue with identity review", "Refresh status", "Sign out"]) await expect(page.getByRole("button", { name, exact: true })).toBeDisabled();
+  for (const name of ["Back to your membership", "Back", "Continue with identity review", "Refresh status", "Sign out"]) await expect(page.getByRole("button", { name, exact: true })).toBeDisabled();
   release();
   await expect(page.getByText(/Code sent by SMS/)).toBeVisible();
-  await expect(page.getByRole("button", { name: "Back to status", exact: true })).toBeEnabled();
+  await expect(page.getByRole("button", { name: "Back to your membership", exact: true })).toBeEnabled();
   expect(state.errors).toEqual([]);
 });

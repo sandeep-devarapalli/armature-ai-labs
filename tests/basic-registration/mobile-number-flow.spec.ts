@@ -39,8 +39,8 @@ for (const theme of ["light", "dark"]) test(`saved mobile number, explicit SMS a
   const state = await fixture(page, theme);
   await page.goto("/onboarding");
   await expect(page).toHaveURL(/\/onboarding/);
-  await expect(page.getByRole("heading", { name: "Your membership status" })).toBeVisible();
-  await page.getByRole("button", { name: "Manage my registration", exact: true }).click();
+  await expect(page.getByRole("heading", { name: "You're already a Basic member.", exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Verify mobile number", exact: true }).click();
   const region = page.getByRole("region", { name: "Mobile verification", exact: true });
   await expect(region.getByText(/Mobile number from your details/)).toBeVisible();
   await expect(region.getByText("+91 99999 91234", { exact: true })).toBeVisible();
@@ -85,7 +85,7 @@ for (const theme of ["light", "dark"]) test(`saved mobile number, explicit SMS a
 test("saving initial details reuses the number on the mobile step without duplicate entry", async ({ page }) => {
   const state = await fixture(page, "dark", true);
   await page.goto("/onboarding");
-  await page.getByRole("button", { name: "Become Verified", exact: true }).click();
+  await page.getByRole("button", { name: "Start verification", exact: true }).click();
   await page.getByLabel("Full name", { exact: true }).fill("Synthetic Phone Member");
   await expect(page.getByRole("combobox", { name: "Country code", exact: true })).toHaveValue("IN");
   await page.getByLabel("Phone number", { exact: true }).fill("99999 91234");
