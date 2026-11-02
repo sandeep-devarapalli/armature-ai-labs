@@ -85,3 +85,15 @@ it('does not tell a revoked confirmed-email member to verify email again', () =>
     expect(accountMembershipLabel({ membership_levels_enabled: true, membership_level: null, verification: { email: true, mobile: true, identity: false }, status: 'revoked' } as Parameters<typeof accountMembershipLabel>[0])).toBe('Membership access restricted');
   } finally { vi.unstubAllEnvs(); }
 });
+
+it("keeps an active Basic account separate from its unfinished identity application", async () => {
+  vi.stubEnv("VITE_MEMBERSHIP_LEVELS_ENABLED", "true");
+  try {
+    const { client, rpc } = fixture();
+    rpc.mockResolvedValue({ data: { user_id: "member-a", name: "Member A", status: "incomplete", role: "member", membership_levels_enabled: true, membership_level: "basic" }, error: null });
+    render(<AccountProvider client={client}><Probe /></AccountProvider>);
+    await screen.findByText("Member A: Registration incomplete (member)");
+    expect(screen.getByText("View membership")).toBeInTheDocument();
+    expect(screen.queryByText("Complete registration")).not.toBeInTheDocument();
+  } finally { vi.unstubAllEnvs(); }
+});

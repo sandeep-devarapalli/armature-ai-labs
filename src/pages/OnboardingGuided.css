@@ -35,3 +35,29 @@
   .og-tiers { grid-template-columns: minmax(0, 1fr); }
   .og-tiers article { border-right: 0; border-bottom: 1px solid var(--hair-strong); }
 }
+
+.og-current-membership { position: sticky; top: 68px; z-index: 20; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.25rem; margin-block: 1.5rem; background: var(--panel); border: 1px solid var(--hair-strong); }
+.og-current-membership p { margin: .35rem 0 0; font-size: .75rem; }
+.og-current-membership a { flex-shrink: 0; font-size: .8rem; padding-block: .75rem; }
+.og-membership-home { display: grid; grid-template-columns: 1fr 1fr; border: 1px solid var(--hair-strong); }
+.og-membership-home article { min-width: 0; padding: clamp(1.25rem, 3vw, 2.5rem); }
+.og-basic-panel { border-right: 1px solid var(--hair-strong); background: var(--panel-2); }
+.onboarding-guided .og-membership-home h2 { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: clamp(30px, 3vw, 42px); margin-block: 1rem; }
+.og-membership-home .ol-checklist { margin-block: 2rem; }
+.og-membership-note { font-size: .78rem; margin-top: 1.5rem; }
+.og-requirements { list-style: none; padding: 0; margin-block: 1.5rem; font-size: .8rem; }
+.og-requirements li { display: flex; justify-content: space-between; gap: 1rem; padding-block: .8rem; border-bottom: 1px solid var(--hair-strong); }
+.og-requirements strong { text-align: right; }
+.onboarding-guided .og-step-heading, .onboarding-guided .page-hero h1 { scroll-margin-top: 210px; }
+#identity-submission-help .button { margin: .5rem .5rem .5rem 0; }
+@media (max-width: 1100px) {
+  .og-current-membership { top: 114px; }
+}
+@media (max-width: 760px) {
+  .onboarding-guided .og-step-heading { scroll-margin-top: 280px; }
+  .og-membership-home { grid-template-columns: minmax(0, 1fr); }
+  .og-basic-panel { border-right: 0; border-bottom: 1px solid var(--hair-strong); }
+  .og-current-membership { flex-wrap: wrap; gap: .25rem; padding: .75rem 1rem; }
+  .og-current-membership strong { font-size: .85rem; }
+  .og-current-membership a { padding-block: .6rem; }
+}

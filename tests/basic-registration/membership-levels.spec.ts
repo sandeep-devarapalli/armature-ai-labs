@@ -31,9 +31,9 @@ test("Basic to Verified and Premium keep identity status distinct on desktop and
   const errors: string[] = []; page.on("pageerror", error => errors.push(error.message));
   const state = await fixture(page);
   await page.goto("/onboarding");
-  await expect(page.getByText("Current membership: Basic member", { exact: true })).toBeVisible();
-  await expect(page.getByText("Identity: Approved", { exact: true })).toBeVisible();
-  await page.getByRole("button", { name: "Manage my registration", exact: true }).click();
+  await expect(page.getByRole("region", { name: "Current membership", exact: true })).toContainText("Basic member · active");
+  await expect(page.getByRole("heading", { name: "Your identity is approved.", exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Verify mobile number", exact: true }).click();
   await expect(page.getByText(/Mobile number from your details/)).toBeVisible();
   await page.getByRole("button", { name: "Send SMS code", exact: true }).click();
   await expect(page.getByText(/Code sent by SMS/)).toBeVisible();
@@ -87,7 +87,7 @@ test("membership is optional and identity details require a personal LinkedIn UR
   await page.goto("/onboarding");
   await expect(page.getByRole("link", { name: "Stay Basic · browse free courses" })).toHaveAttribute("href", "https://courses.armatureailabs.com/");
   await expect(page.getByRole("link", { name: "Explore Premium plans" })).toHaveAttribute("href", "/join#premium-plans");
-  await page.getByRole("button", { name: "Become Verified", exact: true }).click();
+  await page.getByRole("button", { name: "Start verification", exact: true }).click();
   const linkedin = page.getByLabel("Your LinkedIn profile (required)");
   await expect(linkedin).toHaveAttribute("required", "");
   await page.getByLabel("Full name", { exact: true }).fill("Synthetic Member");

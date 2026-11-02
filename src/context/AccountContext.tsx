@@ -108,5 +108,6 @@ export function useRegistrationLabel(signedOutLabel = "Register for free") {
   const { account, signedIn, loading } = useAccount();
   if (loading) return "My registration";
   if (!signedIn) return signedOutLabel;
+  if (accountMembershipLevelsEnabled(account) && account?.membership_level) return "View membership";
   return !account || ["incomplete", "corrections_requested"].includes(account.status) ? "Complete registration" : "View membership";
 }
