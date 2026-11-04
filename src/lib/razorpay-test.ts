@@ -7,7 +7,8 @@ export type TestPaymentRequest =
   | { action: "create_order"; quoteId: string; idempotencyKey: string; policyVersion: string; acceptedPolicies: { terms: boolean; privacy: boolean; refund: boolean; shipping: boolean; paymentDataSharing: boolean } }
   | { action: "verify"; orderId: string; razorpayOrderId: string; paymentId: string; signature: string }
   | { action: "status" | "reconcile"; orderId: string }
-  | { action: "refund"; orderId: string; amountPaise: number; idempotencyKey: string };
+  | { action: "refund"; orderId: string; amountPaise: number; idempotencyKey: string }
+  | { action: "retry_refund"; orderId: string; refundId: string };
 
 export function validateTestReply(value: unknown): TestReply {
   const data = value as TestReply | null;
@@ -23,7 +24,17 @@ export function validateTestReply(value: unknown): TestReply {
 export async function requestTestPayment(body: TestPaymentRequest): Promise<TestReply> {
   if (!razorpayTestAvailable || !supabase) throw new Error("The payment test environment is disabled.");
   const { data, error } = await supabase.functions.invoke("razorpay-test", { body });
-  if (error) throw new Error("The test request could not be completed. Check its status before retrying a payment or refund.");
+  if (error) {
+    if (error.context instanceof Response) {
+      let failure = null;
+      try { failure = await error.context.clone().json(); } catch { /* Keep malformed responses generic. */ }
+      if (failure?.mode === "test" && failure.paidAccessGranted === false && failure.error === "provider_request_rejected"
+        && Number.isInteger(failure.providerHttpStatus) && failure.providerHttpStatus >= 400 && failure.providerHttpStatus <= 599) {
+        throw new Error(`Razorpay rejected the test request (HTTP ${failure.providerHttpStatus}). Reconcile its status before retrying the same refund.`);
+      }
+    }
+    throw new Error("The test request could not be completed. Check its status before retrying a payment or refund.");
+  }
   return validateTestReply(data);
 }
 

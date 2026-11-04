@@ -104,3 +104,21 @@ it("reserves a test refund and blocks a second request while it is pending", asy
   expect(mock.request).toHaveBeenLastCalledWith({ action: "refund", orderId: order.id, amountPaise: 100, idempotencyKey: expect.any(String) });
   expect(refund).toBeDisabled();
 });
+
+it("recovers the existing held refund without supplying a new amount or idempotency key", async () => {
+  const held = { ...order, state: "captured", paymentId: "pay_provider", refunds: [{ id: "existing-refund", razorpayRefundId: null, amountPaise: 100, state: "needs_review" }] };
+  mock.request.mockImplementation(async body => {
+    if (body.action === "create_fixture_quote") return reply({ quote });
+    if (body.action === "create_order") return reply({ order });
+    return reply({ order: body.action === "retry_refund" ? { ...held, refunds: [{ ...held.refunds[0], state: "pending" }] } : held });
+  });
+  await createOrder();
+  fireEvent.click(screen.getByRole("button", { name: "Reconcile with Razorpay" }));
+  const recover = await screen.findByRole("button", { name: "Reconcile and retry same test refund" });
+  expect(screen.getByRole("button", { name: "Refund remaining test amount" })).toBeDisabled();
+  fireEvent.click(recover);
+  await screen.findByText(/test refund · pending/);
+  expect(mock.request).toHaveBeenLastCalledWith({ action: "retry_refund", orderId: order.id, refundId: "existing-refund" });
+  expect(screen.queryByRole("button", { name: "Reconcile and retry same test refund" })).not.toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Refund remaining test amount" })).toBeDisabled();
+});

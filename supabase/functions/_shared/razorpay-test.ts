@@ -10,11 +10,11 @@ export interface TestDependencies {
   webhook: (eventId: string, hash: string, event: string, payment: ObjectValue | null, refund: ObjectValue | null) => Promise<unknown>;
   fetcher?: typeof fetch;
   headers?: (request: Request) => HeadersInit;
-  diagnostic?: (safeCode: string, status: number) => void;
+  diagnostic?: (safeCode: string, status: number, providerHttpStatus?: number) => void;
 }
 
 export class TestPaymentError extends Error {
-  constructor(public status: number, public code: string) { super(code); }
+  constructor(public status: number, public code: string, public providerHttpStatus?: number) { super(code); }
 }
 
 export function testConfig(env: (name: string) => string | undefined): TestConfig {
@@ -92,9 +92,10 @@ function failure(deps: TestDependencies, request: Request, error: unknown): Resp
     "provider_response_unknown", "provider_request_rejected", "invalid_provider_response", "payment_mismatch", "refund_mismatch",
     "client_price_forbidden", "explicit_policy_acceptance_required", "invalid_signature", "order_mismatch", "reconciliation_scan_limit",
     "reconciliation_time_unknown", "admin_authentication_required", "test_ledger_request_rejected", "test_webhook_not_recorded",
-    "local_ledger_rejected", "synthetic_admin_inactive", "synthetic_authentication_required"]);
-  try { deps.diagnostic?.(known.has(safe.code) ? safe.code : "test_operation_unavailable", safe.status); } catch { /* Diagnostics cannot change payment state or response. */ }
-  return response(deps, request, { mode: "test", paidAccessGranted: false, error: safe.code }, safe.status);
+    "local_ledger_rejected", "synthetic_admin_inactive", "synthetic_authentication_required", "refund_reconciliation_required"]);
+  const providerHttpStatus = Number.isInteger(safe.providerHttpStatus) && safe.providerHttpStatus! >= 400 && safe.providerHttpStatus! <= 599 ? safe.providerHttpStatus : undefined;
+  try { deps.diagnostic?.(known.has(safe.code) ? safe.code : "test_operation_unavailable", safe.status, providerHttpStatus); } catch { /* Diagnostics cannot change payment state or response. */ }
+  return response(deps, request, { mode: "test", paidAccessGranted: false, error: safe.code, ...(providerHttpStatus ? { providerHttpStatus } : {}) }, safe.status);
 }
 function sanitizeOrder(value: unknown): TestOrder {
   const order = object(value);
@@ -130,7 +131,7 @@ function api(config: TestConfig, fetcher: typeof fetch) {
         body: input ? JSON.stringify(input) : undefined,
       });
     } catch { throw new TestPaymentError(502, "provider_response_unknown"); }
-    if (!result.ok) throw new TestPaymentError(502, "provider_request_rejected");
+    if (!result.ok) { void result.body?.cancel(); throw new TestPaymentError(502, "provider_request_rejected", result.status); }
     try { return object(JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(await bodyBytes(new Request("http://provider-response.invalid", { method: "POST", body: result.body, duplex: "half" } as RequestInit), 262144)))); }
     catch { throw new TestPaymentError(502, "invalid_provider_response"); }
   };
@@ -176,7 +177,7 @@ export function createTestHandler(deps: TestDependencies): (request: Request) =>
       if (request.method !== "POST") throw new TestPaymentError(405, "method_not_allowed");
       const config = deps.config(), actor = await deps.authenticate(request), call = api(config, deps.fetcher ?? fetch);
       const input = object(JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(await bodyBytes(request))));
-      const action = text(input.action, /^(?:create_fixture_quote|create_order|verify|status|refund|reconcile)$/);
+      const action = text(input.action, /^(?:create_fixture_quote|create_order|verify|status|refund|retry_refund|reconcile)$/);
       const op = (name: string, data: ObjectValue) => deps.operation(actor, name, data);
       if (action === "create_fixture_quote") {
         if (Object.keys(input).some(key => key !== "action")) throw new TestPaymentError(400, "client_price_forbidden");
@@ -196,6 +197,7 @@ export function createTestHandler(deps: TestDependencies): (request: Request) =>
         } catch (error) { await op("needs_review", { orderId: order.id }); throw error; }
       }
       const orderId = text(input.orderId, uuid);
+      if (action === "retry_refund" && Object.keys(input).some(key => !["action", "orderId", "refundId"].includes(key))) throw new TestPaymentError(400, "invalid_payload");
       let result = await op("status", { orderId }), order = object(result.order);
       if (action === "status") return reply(deps, request, result);
       if (action === "verify") {
@@ -207,8 +209,7 @@ export function createTestHandler(deps: TestDependencies): (request: Request) =>
         matchPayment(fact, order);
         return reply(deps, request, await op("record_payment", { orderId, ...fact }));
       }
-      if (action === "refund") {
-        const reserved = await op("reserve_refund", { orderId, amountPaise: amount(input.amountPaise), idempotencyKey: text(input.idempotencyKey, /^[A-Za-z0-9_-]{8,100}$/) });
+      const submitRefund = async (reserved: ObjectValue) => {
         if (reserved.shouldRefund !== true) return reply(deps, request, reserved);
         const refund = object(reserved.refund);
         try {
@@ -216,6 +217,31 @@ export function createTestHandler(deps: TestDependencies): (request: Request) =>
           if (fact.paymentId !== order.paymentId || fact.amountPaise !== refund.amountPaise || fact.receipt !== refund.receipt) throw new TestPaymentError(409, "refund_mismatch");
           return reply(deps, request, await op("attach_refund", { orderId, refundId: refund.id, ...fact }));
         } catch (error) { await op("needs_review", { orderId, refundId: refund.id }); throw error; }
+      };
+      if (action === "refund") {
+        const amountPaise = amount(input.amountPaise);
+        if (amountPaise < 100) throw new TestPaymentError(400, "invalid_amount");
+        return await submitRefund(await op("reserve_refund", { orderId, amountPaise, idempotencyKey: text(input.idempotencyKey, /^[A-Za-z0-9_-]{8,100}$/) }));
+      }
+      if (action === "retry_refund") {
+        const refundId = text(input.refundId, uuid);
+        const localRefunds = (Array.isArray(order.refunds) ? order.refunds : []).map(object);
+        const local = localRefunds.find(refund => refund.id === refundId);
+        if (!local) throw new TestPaymentError(400, "invalid_payload");
+        if (local.state !== "needs_review") return reply(deps, request, result);
+        const paymentId = provider(order.paymentId, "pay");
+        const remotePayment = await call("/payments/" + paymentId);
+        const fact = paymentFact(remotePayment);
+        matchPayment(fact, order);
+        if (fact.paymentId !== paymentId || fact.status !== "captured") throw new TestPaymentError(409, "payment_mismatch");
+        const refunds = (await pages(call, "/payments/" + paymentId + "/refunds")).map(refundFact);
+        const matches = refunds.filter(refund => refund.receipt === local.receipt || refund.razorpayRefundId === local.razorpayRefundId);
+        if (matches.length === 1) return reply(deps, request, await op("attach_refund", { orderId, refundId, ...matches[0] }));
+        if (matches.length > 1 || remotePayment.amount_refunded !== order.refundedAmountPaise
+          || refunds.some(refund => !localRefunds.some(existing => refund.receipt === existing.receipt || refund.razorpayRefundId === existing.razorpayRefundId))) {
+          throw new TestPaymentError(409, "refund_reconciliation_required");
+        }
+        return await submitRefund(await op("reserve_refund_retry", { orderId, refundId, expectedUpdatedAt: local.updatedAt }));
       }
       if (!order.razorpayOrderId) {
         let candidates: ObjectValue[];

@@ -26,7 +26,7 @@ insert into public.staff_roles(user_id,role) values
 do $$
 declare actor uuid:='a4050000-0000-4000-8000-000000000001'; super_actor uuid:='a4050000-0000-4000-8000-000000000004';
  q jsonb; q2 jsonb; input jsonb; result jsonb; o jsonb; refund jsonb; payment jsonb; refund_data jsonb;
- early_order jsonb; early_payment jsonb; early_refund jsonb;
+ early_order jsonb; early_payment jsonb; early_refund jsonb; retry_token timestamptz;
  bookings bigint; access_terms bigint; membership_terms bigint; service_periods bigint;
 begin
  select count(*) into bookings from public.bookings;
@@ -64,7 +64,7 @@ begin
  payment:=jsonb_build_object('orderId',o->>'id','razorpayOrderId','order_SyntheticOne','paymentId','pay_SyntheticOne','amountPaise',100,'currency','INR','status','authorized');
  result:=public.razorpay_test_operation(actor,'record_payment',payment);
  perform pg_temp.check_test(result->'order'->>'state'='authorized' and result->'order'->'paymentId'='null'::jsonb,'authorization grants no capture');
- perform pg_temp.expect_error(format('select public.razorpay_test_operation(%L,%L,%L)',actor,'reserve_refund',jsonb_build_object('orderId',o->>'id','amountPaise',10,'idempotencyKey','before-capture-0001')),'22023');
+ perform pg_temp.expect_error(format('select public.razorpay_test_operation(%L,%L,%L)',actor,'reserve_refund',jsonb_build_object('orderId',o->>'id','amountPaise',100,'idempotencyKey','before-capture-0001')),'22023');
  result:=public.razorpay_test_operation(actor,'record_payment',payment||'{"status":"failed"}');
  perform pg_temp.check_test(result->'order'->>'state'='authorized','failed attempt is not terminal order failure');
  perform pg_temp.expect_error(format('select public.razorpay_test_operation(%L,%L,%L)',actor,'record_payment',payment||'{"amountPaise":99,"status":"captured"}'),'22023');
@@ -94,25 +94,48 @@ begin
  perform pg_temp.check_test(result->'order'->>'state'='needs_review','late capture replay cannot clear review');
  result:=public.razorpay_test_operation(actor,'reserve_refund',jsonb_build_object('orderId',result->'order'->>'id','amountPaise',100,'idempotencyKey','late-refund-0001'));
  perform pg_temp.check_test((result->>'shouldRefund')::boolean,'late capture can still be refunded');
- input:=jsonb_build_object('orderId',o->>'id','amountPaise',60,'idempotencyKey','refund-test-0001');
+ perform public.razorpay_test_operation(actor,'attach_refund',jsonb_build_object('orderId',result->'order'->>'id','refundId',result->'refund'->>'id','razorpayRefundId','rfnd_LateCapture','paymentId','pay_LateCapture','amountPaise',100,'currency','INR','status','failed'));
+ result:=public.razorpay_test_operation(actor,'reserve_refund_retry',jsonb_build_object('orderId',result->'order'->>'id','refundId',result->'refund'->>'id'));
+ perform pg_temp.check_test(not(result->>'shouldRefund')::boolean and result->'refund'->>'state'='failed','failed refund cannot be retried as an ambiguous request');
+ perform pg_temp.expect_error(format('select public.razorpay_test_operation(%L,%L,%L)',actor,'reserve_refund',jsonb_build_object('orderId',o->>'id','amountPaise',99,'idempotencyKey','under-minimum-refund')),'22023');
+ perform pg_temp.check_test(not exists(select 1 from private.razorpay_test_refunds where order_id=(o->>'id')::uuid),'under-minimum refund creates no intent');
+ perform pg_temp.expect_error(format('insert into private.razorpay_test_refunds(order_id,idempotency_key,receipt,amount_paise) values(%L,%L,%L,99)',o->>'id','under-minimum-direct','under-minimum-direct'),'23514');
+ input:=jsonb_build_object('orderId',o->>'id','amountPaise',100,'idempotencyKey','refund-test-0001');
  result:=public.razorpay_test_operation(actor,'reserve_refund',input); refund:=result->'refund';
  perform pg_temp.check_test((result->>'shouldRefund')::boolean,'first refund caller alone issues provider request');
  result:=public.razorpay_test_operation(actor,'reserve_refund',input);
  perform pg_temp.check_test(not(result->>'shouldRefund')::boolean and result->'refund'->>'id'=refund->>'id','refund retry uses durable operation');
- perform pg_temp.expect_error(format('select public.razorpay_test_operation(%L,%L,%L)',actor,'reserve_refund',input||'{"amountPaise":61}'),'22023');
- perform pg_temp.expect_error(format('select public.razorpay_test_operation(%L,%L,%L)',actor,'reserve_refund',input||'{"amountPaise":50,"idempotencyKey":"refund-test-0002"}'),'22023');
- refund_data:=jsonb_build_object('orderId',o->>'id','refundId',refund->>'id','razorpayRefundId','rfnd_SyntheticOne','paymentId','pay_SyntheticOne','amountPaise',60,'currency','INR','status','pending');
+ perform pg_temp.expect_error(format('select public.razorpay_test_operation(%L,%L,%L)',actor,'reserve_refund_retry',jsonb_build_object('orderId',o->>'id','refundId','a4050000-0000-4000-8000-000000000099')),'42501');
+ perform pg_temp.expect_error(format('select public.razorpay_test_operation(%L,%L,%L)','a4050000-0000-4000-8000-000000000002','reserve_refund_retry',jsonb_build_object('orderId',o->>'id','refundId',refund->>'id')),'42501');
+ result:=public.razorpay_test_operation(actor,'reserve_refund_retry',jsonb_build_object('orderId',o->>'id','refundId',refund->>'id'));
+ perform pg_temp.check_test(not(result->>'shouldRefund')::boolean,'creating refund cannot be claimed twice');
+ perform public.razorpay_test_operation(actor,'needs_review',jsonb_build_object('orderId',o->>'id','refundId',refund->>'id'));
+ select updated_at into retry_token from private.razorpay_test_refunds where id=(refund->>'id')::uuid;
+ result:=public.razorpay_test_operation(actor,'reserve_refund_retry',jsonb_build_object('orderId',o->>'id','refundId',refund->>'id'));
+ perform pg_temp.check_test(not(result->>'shouldRefund')::boolean,'manual retry requires its preflight version');
+ result:=public.razorpay_test_operation(actor,'reserve_refund_retry',jsonb_build_object('orderId',o->>'id','refundId',refund->>'id','expectedUpdatedAt',retry_token));
+ perform pg_temp.check_test((result->>'shouldRefund')::boolean and result->'refund'->>'state'='creating'
+ and result->'refund'->>'id'=refund->>'id' and result->'refund'->>'receipt'=refund->>'receipt' and result->'refund'->>'amountPaise'='100'
+ and (select count(*) from private.razorpay_test_refunds where order_id=(o->>'id')::uuid)=1,'manual retry claims original identity, receipt and amount without another intent');
+ result:=public.razorpay_test_operation(actor,'reserve_refund_retry',jsonb_build_object('orderId',o->>'id','refundId',refund->>'id'));
+ perform pg_temp.check_test(not(result->>'shouldRefund')::boolean,'claimed manual retry cannot issue a second request');
+ perform public.razorpay_test_operation(actor,'needs_review',jsonb_build_object('orderId',o->>'id','refundId',refund->>'id'));
+ result:=public.razorpay_test_operation(actor,'reserve_refund_retry',jsonb_build_object('orderId',o->>'id','refundId',refund->>'id','expectedUpdatedAt',retry_token));
+ perform pg_temp.check_test(not(result->>'shouldRefund')::boolean and result->'refund'->>'state'='needs_review','stale concurrent preflight cannot retry after another attempt fails');
+ select updated_at into retry_token from private.razorpay_test_refunds where id=(refund->>'id')::uuid;
+ result:=public.razorpay_test_operation(actor,'reserve_refund_retry',jsonb_build_object('orderId',o->>'id','refundId',refund->>'id','expectedUpdatedAt',retry_token));
+ perform pg_temp.check_test((result->>'shouldRefund')::boolean,'fresh explicit preflight can claim failed ambiguous attempt');
+ perform pg_temp.expect_error(format('select public.razorpay_test_operation(%L,%L,%L)',actor,'reserve_refund',input||'{"amountPaise":101}'),'22023');
+ perform pg_temp.expect_error(format('select public.razorpay_test_operation(%L,%L,%L)',actor,'reserve_refund',input||'{"idempotencyKey":"refund-test-0002"}'),'22023');
+ refund_data:=jsonb_build_object('orderId',o->>'id','refundId',refund->>'id','razorpayRefundId','rfnd_SyntheticOne','paymentId','pay_SyntheticOne','amountPaise',100,'currency','INR','status','pending');
  perform pg_temp.expect_error(format('select public.razorpay_test_operation(%L,%L,%L)',actor,'attach_refund',refund_data||'{"paymentId":"pay_Wrong"}'),'22023');
  perform pg_temp.expect_error(format('select public.razorpay_test_operation(%L,%L,%L)',actor,'attach_refund',refund_data||'{"receipt":"wrong-receipt"}'),'22023');
  result:=public.razorpay_test_operation(actor,'attach_refund',refund_data);
  perform pg_temp.check_test(result->'order'->>'refundedAmountPaise'='0','pending refund not counted as processed');
- result:=public.razorpay_test_operation(actor,'attach_refund',refund_data||'{"status":"processed"}');
- perform pg_temp.check_test(result->'order'->>'refundedAmountPaise'='60' and result->'order'->>'state'='partially_refunded','partial processed refund accounted');
- result:=public.razorpay_test_operation(actor,'attach_refund',refund_data||'{"status":"failed"}');
- perform pg_temp.check_test(result->'order'->>'refundedAmountPaise'='60','late failure does not regress processed refund');
- result:=public.razorpay_test_operation(actor,'reserve_refund',input||'{"amountPaise":40,"idempotencyKey":"refund-test-0002"}'); refund:=result->'refund';
+ result:=public.razorpay_test_operation(actor,'reserve_refund_retry',jsonb_build_object('orderId',o->>'id','refundId',refund->>'id'));
+ perform pg_temp.check_test(not(result->>'shouldRefund')::boolean,'pending provider refund cannot be retried');
  perform public.razorpay_test_operation(actor,'needs_review',jsonb_build_object('orderId',o->>'id','refundId',refund->>'id'));
- refund_data:=jsonb_build_object('receipt',refund->>'receipt','razorpayRefundId','rfnd_SyntheticTwo','paymentId','pay_SyntheticOne','amountPaise',40,'currency','INR','status','processed');
+ refund_data:=refund_data||jsonb_build_object('receipt',refund->>'receipt','status','processed');
  result:=public.razorpay_test_webhook('event-refund-processed',repeat('a',64),'refund.processed',null,refund_data);
  perform pg_temp.check_test((result->>'applied')::boolean,'refund webhook reconciles stable receipt after lost response');
  result:=public.razorpay_test_webhook('event-refund-processed',repeat('a',64),'refund.processed',null,refund_data);
@@ -120,6 +143,10 @@ begin
  perform pg_temp.expect_error(format('select public.razorpay_test_webhook(%L,%L,%L,null,%L)','event-refund-processed',repeat('b',64),'refund.processed',refund_data),'22023');
  result:=public.razorpay_test_operation(actor,'status',jsonb_build_object('orderId',o->>'id'));
  perform pg_temp.check_test(result->'order'->>'refundedAmountPaise'='100' and result->'order'->>'state'='refunded','full processed refund accounted once');
+ result:=public.razorpay_test_operation(actor,'reserve_refund_retry',jsonb_build_object('orderId',o->>'id','refundId',refund->>'id'));
+ perform pg_temp.check_test(not(result->>'shouldRefund')::boolean,'processed refund cannot be retried');
+ result:=public.razorpay_test_operation(actor,'attach_refund',refund_data||'{"status":"failed"}');
+ perform pg_temp.check_test(result->'order'->>'refundedAmountPaise'='100','late failure does not regress processed refund');
  perform public.razorpay_test_webhook('event-capture-late',repeat('c',64),'payment.captured',payment||'{"status":"captured"}');
  result:=public.razorpay_test_operation(actor,'status',jsonb_build_object('orderId',o->>'id'));
  perform pg_temp.check_test(result->'order'->>'state'='refunded','late capture cannot regress full refund');
@@ -141,16 +168,16 @@ begin
  result:=public.razorpay_test_webhook('event-before-order-attach',repeat('f',64),'payment.captured',early_payment);
  perform pg_temp.check_test((result->>'applied')::boolean and (result->>'duplicate')::boolean
  and (select count(*) from private.razorpay_test_payments where order_id=(early_order->>'id')::uuid)=1,'applied early payment event is subsequently deduplicated');
- result:=public.razorpay_test_operation(actor,'reserve_refund',jsonb_build_object('orderId',early_order->>'id','amountPaise',60,'idempotencyKey','early-webhook-refund'));
+ result:=public.razorpay_test_operation(actor,'reserve_refund',jsonb_build_object('orderId',early_order->>'id','amountPaise',100,'idempotencyKey','early-webhook-refund'));
  early_refund:=result->'refund';
- refund_data:=jsonb_build_object('razorpayRefundId','rfnd_EarlyWebhook','paymentId','pay_EarlyWebhook','amountPaise',60,'currency','INR','status','processed');
+ refund_data:=jsonb_build_object('razorpayRefundId','rfnd_EarlyWebhook','paymentId','pay_EarlyWebhook','amountPaise',100,'currency','INR','status','processed');
  result:=public.razorpay_test_webhook('event-before-refund-attach',repeat('1',64),'refund.processed',null,refund_data);
  perform pg_temp.check_test(not(result->>'applied')::boolean and (select refunded_amount_paise from private.razorpay_test_orders where id=(early_order->>'id')::uuid)=0,'early refund event remains unapplied before provider refund mapping');
  perform public.razorpay_test_operation(actor,'attach_refund',refund_data||jsonb_build_object('orderId',early_order->>'id','refundId',early_refund->>'id','status','pending'));
  result:=public.razorpay_test_webhook('event-before-refund-attach',repeat('1',64),'refund.processed',null,refund_data);
  perform pg_temp.check_test((result->>'applied')::boolean and not(result->>'duplicate')::boolean,'same-hash early refund event applies after provider mapping');
  result:=public.razorpay_test_webhook('event-before-refund-attach',repeat('1',64),'refund.processed',null,refund_data);
- perform pg_temp.check_test((result->>'duplicate')::boolean and (select refunded_amount_paise from private.razorpay_test_orders where id=(early_order->>'id')::uuid)=60,'early refund replay cannot double-count processed amount');
+ perform pg_temp.check_test((result->>'duplicate')::boolean and (select refunded_amount_paise from private.razorpay_test_orders where id=(early_order->>'id')::uuid)=100,'early refund replay cannot double-count processed amount');
  perform public.razorpay_test_operation(super_actor,'configure','{"enabled":false}');
  perform pg_temp.expect_error(format('select public.razorpay_test_operation(%L,%L,%L)',actor,'status',jsonb_build_object('orderId',o->>'id')),'42501');
  perform pg_temp.check_test((select count(*) from public.bookings)=bookings and (select count(*) from public.paid_access_entitlements)=access_terms

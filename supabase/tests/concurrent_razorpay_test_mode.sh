@@ -100,7 +100,7 @@ reserve_refund() {
  sql <<SQL
 set role service_role;
 begin;
-select public.razorpay_test_operation('$ACTOR','reserve_refund',jsonb_build_object('orderId','$ORDER','amountPaise',60,'idempotencyKey','$1'))->>'shouldRefund';
+select public.razorpay_test_operation('$ACTOR','reserve_refund',jsonb_build_object('orderId','$ORDER','amountPaise',100,'idempotencyKey','$1'))->>'shouldRefund';
 select pg_sleep(1);
 commit;
 SQL
@@ -112,8 +112,32 @@ a_status=0; b_status=0
 wait "$a" || a_status=$?; wait "$b" || b_status=$?
 if [ "$a_status" = 0 ]; then [ "$b_status" != 0 ]; grep -Fq 'Refund exceeds unreserved captured amount' "$RUN_DIR/refund-two.log";
 else [ "$b_status" = 0 ]; grep -Fq 'Refund exceeds unreserved captured amount' "$RUN_DIR/refund-one.log"; fi
-[ "$(sql -c "select count(*) from private.razorpay_test_refunds where order_id='$ORDER' and amount_paise=60;")" = 1 ]
+[ "$(sql -c "select count(*) from private.razorpay_test_refunds where order_id='$ORDER' and amount_paise=100;")" = 1 ]
+
+REFUND="$(sql -c "select id from private.razorpay_test_refunds where order_id='$ORDER';")"
+sql >"$RUN_DIR/refund-review.log" <<SQL
+set role service_role;
+select public.razorpay_test_operation('$ACTOR','needs_review',jsonb_build_object('orderId','$ORDER','refundId','$REFUND'));
+SQL
+RETRY_UPDATED_AT="$(sql -c "select updated_at from private.razorpay_test_refunds where id='$REFUND';")"
+retry_refund() {
+ sql <<SQL
+set role service_role;
+begin;
+select public.razorpay_test_operation('$ACTOR','reserve_refund_retry',jsonb_build_object('orderId','$ORDER','refundId','$REFUND','expectedUpdatedAt','$RETRY_UPDATED_AT'))->>'shouldRefund';
+select pg_sleep(1);
+commit;
+SQL
+}
+retry_refund >"$RUN_DIR/retry-one.log" 2>&1 & a=$!
+sleep 0.2
+retry_refund >"$RUN_DIR/retry-two.log" 2>&1 & b=$!
+wait "$a"; wait "$b"
+[ "$(awk '$0=="true"{n++} END{print n+0}' "$RUN_DIR/retry-one.log" "$RUN_DIR/retry-two.log")" = 1 ]
+[ "$(awk '$0=="false"{n++} END{print n+0}' "$RUN_DIR/retry-one.log" "$RUN_DIR/retry-two.log")" = 1 ]
+[ "$(sql -c "select count(*) from private.razorpay_test_refunds where order_id='$ORDER';")" = 1 ]
+[ "$(sql -c "select id from private.razorpay_test_refunds where order_id='$ORDER' and state='creating';")" = "$REFUND" ]
 
 [ "$(access_counts)" = "$BEFORE" ]
 PASSED=1
-echo 'PASS Razorpay TEST races: one order creator, bounded refunds, unapplied webhook replay applied once, no access grants'
+echo 'PASS Razorpay TEST races: one order creator, bounded refunds and one manual retry claim, unapplied webhook replay applied once, no access grants'

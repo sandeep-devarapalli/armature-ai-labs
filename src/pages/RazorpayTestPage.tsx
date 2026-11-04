@@ -106,7 +106,11 @@ export function RazorpayTestPage() {
           void run({ action: "refund", orderId: order.id, amountPaise: refundable, idempotencyKey: refundKey.current }, "Test refund submitted. Reconcile until Razorpay confirms its final status.");
         }}>Refund remaining test amount</button>
       </div>
-      {order.refunds.length > 0 && <ul>{order.refunds.map(refund => <li key={refund.id}>{money(refund.amountPaise)} test refund · {refund.state.replaceAll("_", " ")}</li>)}</ul>}
+      <p>Before refund testing, check that Razorpay’s Test Mode balance covers the refund after fees. A captured ₹1 test payment can leave less than ₹1 available.</p>
+      {order.refunds.length > 0 && <ul>{order.refunds.map(refund => <li key={refund.id}>
+        {money(refund.amountPaise)} test refund · {refund.state.replaceAll("_", " ")}
+        {refund.state === "needs_review" && <button className="button secondary" disabled={locked} onClick={() => void run({ action: "retry_refund", orderId: order.id, refundId: refund.id }, "Existing test refund reconciled and retried only if needed. Reconcile until its final status is confirmed.")}>Reconcile and retry same test refund</button>}
+      </li>)}</ul>}
       <p>Only captured funds count as a completed test payment. An authorised payment is still pending capture. No state on this page grants real booking or membership access.</p>
     </Section>}
     <div className="wrap test-payment-feedback">{busy && <p role="status">Working with the test payment server…</p>}{message && <p role="status">{message}</p>}{error && <p role="alert">{error}</p>}</div>

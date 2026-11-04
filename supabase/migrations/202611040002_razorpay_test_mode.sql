@@ -28,7 +28,7 @@ create table private.razorpay_test_refunds (
  id uuid primary key default extensions.gen_random_uuid(), order_id uuid not null references private.razorpay_test_orders(id),
  idempotency_key text not null check(length(idempotency_key) between 8 and 200),
  receipt text not null unique check(length(receipt)<=40), razorpay_refund_id text unique check(razorpay_refund_id ~ '^rfnd_[A-Za-z0-9]+$'),
- amount_paise bigint not null check(amount_paise between 1 and 100),
+ amount_paise bigint not null check(amount_paise=100),
  state text not null default 'creating' check(state in ('creating','pending','processed','failed','needs_review')),
  created_at timestamptz not null default now(), updated_at timestamptz not null default now(), unique(order_id,idempotency_key)
 );
@@ -50,7 +50,7 @@ language sql stable security definer set search_path='' as $$
  select jsonb_build_object('id',o.id,'quoteId',o.quote_id,'razorpayOrderId',o.razorpay_order_id,
  'amountPaise',o.amount_paise,'currency',o.currency,'state',o.state,'paymentId',o.payment_id,
  'refundedAmountPaise',o.refunded_amount_paise,'receipt',o.receipt,'createdAt',o.created_at,'refunds',coalesce((
- select jsonb_agg(jsonb_build_object('id',r.id,'razorpayRefundId',r.razorpay_refund_id,'amountPaise',r.amount_paise,'state',r.state,'receipt',r.receipt) order by r.created_at,r.id)
+ select jsonb_agg(jsonb_build_object('id',r.id,'razorpayRefundId',r.razorpay_refund_id,'amountPaise',r.amount_paise,'state',r.state,'receipt',r.receipt,'updatedAt',r.updated_at) order by r.created_at,r.id)
  from private.razorpay_test_refunds r where r.order_id=o.id),'[]'::jsonb));
 $$;
 
@@ -151,7 +151,7 @@ begin
    state=case when captured_at is not null then state when state in ('creating','needs_review') then 'created' else state end,updated_at=now() where id=o.id;
   elsif p_action='record_payment' then perform private.razorpay_test_payment(o.id,p_input);
   elsif p_action='reserve_refund' then
-   if key is null or length(key) not between 8 and 200 or (p_input->>'amountPaise')::bigint is null or (p_input->>'amountPaise')::bigint not between 1 and o.amount_paise then raise exception 'Positive bounded refund and idempotency key required' using errcode='22023'; end if;
+   if key is null or length(key) not between 8 and 200 or (p_input->>'amountPaise')::bigint is null or (p_input->>'amountPaise')::bigint not between 100 and o.amount_paise then raise exception 'Refund of at least INR 1 within captured amount and idempotency key required' using errcode='22023'; end if;
    select * into r from private.razorpay_test_refunds where order_id=o.id and idempotency_key=key for update;
    if r.id is not null then
     if r.amount_paise is distinct from (p_input->>'amountPaise')::bigint then raise exception 'Refund idempotency key conflicts with another amount' using errcode='22023'; end if;
@@ -164,11 +164,19 @@ begin
     values(operation_id,o.id,key,'rr_'||replace(operation_id::text,'-',''),(p_input->>'amountPaise')::bigint) returning * into r;
     should_refund:=true;
    end if;
+  elsif p_action='reserve_refund_retry' then
+   select * into r from private.razorpay_test_refunds where id=(p_input->>'refundId')::uuid and order_id=o.id for update;
+   if r.id is null then raise exception 'Owned test refund required' using errcode='42501'; end if;
+   if o.captured_at is null or o.payment_id is null or o.currency<>'INR' or r.amount_paise<>100 or r.amount_paise>o.amount_paise then raise exception 'Captured INR test payment and valid refund required' using errcode='22023'; end if;
+   if r.state='needs_review' and (p_input->>'expectedUpdatedAt')::timestamptz=r.updated_at then
+    update private.razorpay_test_refunds set state='creating',updated_at=clock_timestamp() where id=r.id returning * into r;
+    should_refund:=true;
+   end if;
   elsif p_action='attach_refund' then
    perform private.razorpay_test_refund(o.id,(p_input->>'refundId')::uuid,p_input);
   elsif p_action='needs_review' then
    if p_input->>'refundId' is not null then
-    update private.razorpay_test_refunds set state='needs_review',updated_at=now() where id=(p_input->>'refundId')::uuid and order_id=o.id and state not in ('processed','failed');
+    update private.razorpay_test_refunds set state='needs_review',updated_at=clock_timestamp() where id=(p_input->>'refundId')::uuid and order_id=o.id and state not in ('processed','failed');
    end if;
    update private.razorpay_test_orders set state='needs_review',updated_at=now() where id=o.id;
   elsif p_action<>'status' then raise exception 'Unknown test operation' using errcode='22023';
@@ -176,7 +184,7 @@ begin
  end if;
  select * into o from private.razorpay_test_orders where id=o.id;
  return jsonb_build_object('order',private.razorpay_test_order_json(o),'shouldCreate',should_create,'shouldRefund',should_refund,
- 'refund',case when r.id is null then null else jsonb_build_object('id',r.id,'receipt',r.receipt,'amountPaise',r.amount_paise,'state',r.state,'razorpayRefundId',r.razorpay_refund_id) end);
+ 'refund',case when r.id is null then null else jsonb_build_object('id',r.id,'receipt',r.receipt,'amountPaise',r.amount_paise,'state',r.state,'razorpayRefundId',r.razorpay_refund_id,'updatedAt',r.updated_at) end);
 end; $$;
 
 create function public.razorpay_test_webhook(p_eventid text,p_hash text,p_event text,p_payment jsonb default null,p_refund jsonb default null) returns jsonb

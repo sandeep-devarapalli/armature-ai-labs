@@ -70,7 +70,7 @@ async function authenticate(request: Request): Promise<string> {
 }
 const deps: TestDependencies = {
   config: () => testConfig(name => Deno.env.get(name)), authenticate, headers,
-  diagnostic: (code, status) => console.info(JSON.stringify({ event: "local_test_request_failed", code, status })),
+  diagnostic: (code, status, providerHttpStatus) => console.info(JSON.stringify({ event: "local_test_request_failed", code, status, providerHttpStatus })),
   operation: async (id, action, input) => await sql(`set role service_role; select public.razorpay_test_operation(${literal(id)}::uuid,${literal(action)},${literal(JSON.stringify(input))}::jsonb);`) as Record<string, unknown>,
   webhook: (id, hash, event, payment, refund) => sql(`set role service_role; select public.razorpay_test_webhook(${literal(id)},${literal(hash)},${literal(event)},${jsonSql(payment)},${jsonSql(refund)});`),
 };

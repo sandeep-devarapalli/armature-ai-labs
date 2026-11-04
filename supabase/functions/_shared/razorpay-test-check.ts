@@ -27,7 +27,7 @@ function setup() {
       if (action === "needs_review") order = { ...order, state: "needs_review" };
       if (action === "reserve_refund") {
         const first = shouldRefund; shouldRefund = false;
-        return { order, shouldRefund: first, refund: { id: refundId, amountPaise: 50, receipt: "stable-refund-receipt" } };
+        return { order, shouldRefund: first, refund: { id: refundId, amountPaise: 100, receipt: "stable-refund-receipt" } };
       }
       return { order };
     },
@@ -36,11 +36,35 @@ function setup() {
       const url = String(input), body = init?.body ? JSON.parse(String(init.body)) : undefined;
       requests.push({ url, body, refundKey: new Headers(init?.headers).get("X-Refund-Idempotency") });
       if (url.endsWith("/orders") && init?.method === "POST") return Response.json({ id: "order_synthetic", amount: 100, currency: "INR", receipt: "testorderreceipt" });
-      if (url.endsWith("/refund")) return Response.json({ id: "rfnd_synthetic", payment_id: "pay_synthetic", amount: 50, currency: "INR", status: "pending", receipt: "stable-refund-receipt" });
+      if (url.endsWith("/refund")) return Response.json({ id: "rfnd_synthetic", payment_id: "pay_synthetic", amount: 100, currency: "INR", status: "pending", receipt: "stable-refund-receipt" });
       return Response.json(payment());
     }) as typeof fetch,
   };
   return { deps, operations, requests, events, get order() { return order; }, set order(value) { order = value; } };
+}
+
+function retrySetup(remoteRefunds: Record<string, unknown>[] = [], remotePayment: Record<string, unknown> = {}) {
+  const s = setup(); let claim = true;
+  s.order = { ...s.order, state: "needs_review", paymentId: "pay_synthetic", refunds: [{ id: refundId, amountPaise: 100, receipt: "stable-refund-receipt", state: "needs_review", razorpayRefundId: null, updatedAt: "2026-11-04T00:00:00.000Z" }] };
+  const operation = s.deps.operation;
+  s.deps.operation = async (...args) => {
+    const result = await operation(...args);
+    if (args[1] === "reserve_refund_retry") {
+      const shouldRefund = claim; claim = false;
+      return { ...result, shouldRefund, refund: s.order.refunds[0] };
+    }
+    if (args[1] === "attach_refund") s.order = { ...s.order, refunds: [{ ...s.order.refunds[0], state: args[2].status, razorpayRefundId: args[2].razorpayRefundId }] };
+    return { ...result, order: s.order };
+  };
+  s.deps.fetcher = (async (input, init) => {
+    const url = String(input), body = init?.body ? JSON.parse(String(init.body)) : undefined;
+    s.requests.push({ url, body, refundKey: new Headers(init?.headers).get("X-Refund-Idempotency") });
+    if (url.includes("/payments/pay_synthetic/refunds")) return Response.json({ items: remoteRefunds });
+    if (url.endsWith("/payments/pay_synthetic/refund") && init?.method === "POST") return Response.json({ id: "rfnd_synthetic", payment_id: "pay_synthetic", amount: 100, currency: "INR", status: "pending", receipt: "stable-refund-receipt" });
+    if (url.endsWith("/payments/pay_synthetic") && init?.method === "GET") return Response.json({ ...payment(), amount_refunded: 0, ...remotePayment });
+    throw new Error("Unexpected provider request");
+  }) as typeof fetch;
+  return s;
 }
 
 Deno.test("payment configuration defaults off and refuses live keys before any transport", () => {
@@ -66,11 +90,11 @@ Deno.test("optional local diagnostics receive only a known code and status, neve
   s.deps.diagnostic = (...args) => { diagnostics.push(args); };
   s.deps.authenticate = async () => { throw new Error("private-synthetic-detail must never reach logs"); };
   const result = await createTestHandler(s.deps)(request({ action: "status", orderId, unrelatedPrivateField: "must-not-log" }));
-  same(diagnostics, [["test_operation_unavailable", 503]]);
+  same(diagnostics, [["test_operation_unavailable", 503, undefined]]);
   assert(!(await result.text()).includes("private-synthetic-detail"));
   s.deps.authenticate = async () => { throw new TestPaymentError(400, "unrecognized_private_detail"); };
   await createTestHandler(s.deps)(request({ action: "status", orderId }));
-  same(diagnostics[1], ["test_operation_unavailable", 400]);
+  same(diagnostics[1], ["test_operation_unavailable", 400, undefined]);
 });
 
 Deno.test("fixture endpoint refuses client pricing; order uses server amount and strips private receipt", async () => {
@@ -123,11 +147,19 @@ Deno.test("authorized payment remains authorized; captured response requires ser
   }
 });
 
+Deno.test("refund below INR 1 is rejected before reserving an intent or calling the provider", async () => {
+  const s = setup(); s.order = { ...s.order, state: "captured", paymentId: "pay_synthetic" };
+  const res = await createTestHandler(s.deps)(request({ action: "refund", orderId, amountPaise: 99, idempotencyKey: "under-minimum" }));
+  same(res.status, 400);
+  assert(!s.operations.some(op => op.action === "reserve_refund"));
+  same(s.requests.length, 0);
+});
+
 Deno.test("refund sends its durable UUID idempotency header and receipt; replay makes no second provider call", async () => {
   const s = setup(); s.order = { ...s.order, state: "captured", paymentId: "pay_synthetic" };
-  const handle = createTestHandler(s.deps), body = { action: "refund", orderId, amountPaise: 50, idempotencyKey: "same-refund" };
+  const handle = createTestHandler(s.deps), body = { action: "refund", orderId, amountPaise: 100, idempotencyKey: "same-refund" };
   same((await handle(request(body))).status, 200);
-  same(s.requests[0].body, { amount: 50, speed: "normal", receipt: "stable-refund-receipt" });
+  same(s.requests[0].body, { amount: 100, speed: "normal", receipt: "stable-refund-receipt" });
   same(s.requests[0].refundKey, refundId);
   same(s.operations.at(-1)?.input.status, "pending");
   await handle(request(body)); same(s.requests.length, 1);
@@ -138,20 +170,80 @@ Deno.test("malformed durable refund IDs cannot become provider headers", async (
   const original = s.deps.operation;
   s.deps.operation = async (...args) => {
     const result = await original(...args);
-    if (args[1] === "reserve_refund") result.refund = { id: "invalid\r\nheader", amountPaise: 50, receipt: "stable-refund-receipt" };
+    if (args[1] === "reserve_refund") result.refund = { id: "invalid\r\nheader", amountPaise: 100, receipt: "stable-refund-receipt" };
     return result;
   };
-  same((await createTestHandler(s.deps)(request({ action: "refund", orderId, amountPaise: 50, idempotencyKey: "same-refund" }))).status, 400);
+  same((await createTestHandler(s.deps)(request({ action: "refund", orderId, amountPaise: 100, idempotencyKey: "same-refund" }))).status, 400);
   same(s.requests.length, 0);
 });
 
 Deno.test("lost refund response holds same intent for reconciliation rather than a new receipt", async () => {
   const s = setup(); s.order = { ...s.order, state: "captured", paymentId: "pay_synthetic" };
   let calls = 0; s.deps.fetcher = (async () => { calls++; return new Response("duplicate receipt", { status: 400 }); }) as typeof fetch;
-  const body = { action: "refund", orderId, amountPaise: 50, idempotencyKey: "same-refund" }, handle = createTestHandler(s.deps);
+  const body = { action: "refund", orderId, amountPaise: 100, idempotencyKey: "same-refund" }, handle = createTestHandler(s.deps);
   same((await handle(request(body))).status, 502);
   same(s.operations.at(-1)?.input.refundId, refundId);
   await handle(request(body)); same(calls, 1);
+});
+
+Deno.test("provider rejection exposes only HTTP status while retaining the refund for review", async () => {
+  const s = setup(), diagnostics: unknown[][] = [];
+  s.order = { ...s.order, state: "captured", paymentId: "pay_synthetic" };
+  s.deps.diagnostic = (...args) => { diagnostics.push(args); };
+  s.deps.fetcher = (async () => new Response(JSON.stringify({ error: { description: "private-provider-body", request: "private-request-detail" } }), { status: 400 })) as typeof fetch;
+  const res = await createTestHandler(s.deps)(request({ action: "refund", orderId, amountPaise: 100, idempotencyKey: "same-refund" }));
+  same(res.status, 502);
+  same(await res.json(), { mode: "test", paidAccessGranted: false, error: "provider_request_rejected", providerHttpStatus: 400 });
+  same(diagnostics, [["provider_request_rejected", 502, 400]]);
+  same(s.operations.at(-1), { action: "needs_review", input: { orderId, refundId } });
+  assert(!JSON.stringify(diagnostics).includes("private-provider-body"));
+});
+
+Deno.test("explicit retry reuses the original refund receipt, amount and UUID and never posts twice", async () => {
+  const s = retrySetup(), handle = createTestHandler(s.deps);
+  const body = { action: "retry_refund", orderId, refundId };
+  same((await handle(request(body))).status, 200);
+  const posts = s.requests.filter(call => call.body);
+  same(posts.length, 1); same(posts[0].body, { amount: 100, speed: "normal", receipt: "stable-refund-receipt" });
+  same(posts[0].refundKey, refundId);
+  same(s.operations.filter(op => op.action === "reserve_refund").length, 0);
+  same(s.operations.filter(op => op.action === "reserve_refund_retry").length, 1);
+  same(s.operations.find(op => op.action === "reserve_refund_retry")?.input, { orderId, refundId, expectedUpdatedAt: "2026-11-04T00:00:00.000Z" });
+  same((await handle(request(body))).status, 200);
+  same(s.requests.filter(call => call.body).length, 1);
+});
+
+Deno.test("retry leaves creating, pending, processed and failed refunds untouched without a provider call", async () => {
+  for (const state of ["creating", "pending", "processed", "failed"]) {
+    const s = retrySetup(); s.order = { ...s.order, refunds: [{ ...s.order.refunds[0], state }] };
+    same((await createTestHandler(s.deps)(request({ action: "retry_refund", orderId, refundId }))).status, 200);
+    same(s.requests.length, 0);
+    same(s.operations.filter(op => op.action === "reserve_refund_retry").length, 0);
+  }
+});
+
+Deno.test("retry attaches an existing provider refund instead of sending another POST", async () => {
+  const s = retrySetup([{ id: "rfnd_synthetic", payment_id: "pay_synthetic", amount: 100, currency: "INR", status: "pending", receipt: "stable-refund-receipt" }]);
+  same((await createTestHandler(s.deps)(request({ action: "retry_refund", orderId, refundId }))).status, 200);
+  same(s.requests.filter(call => call.body).length, 0);
+  same(s.operations.filter(op => op.action === "reserve_refund_retry").length, 0);
+  same(s.operations.filter(op => op.action === "attach_refund").length, 1);
+});
+
+Deno.test("retry rejects unknown refunds or changed provider totals before claiming or posting", async () => {
+  for (const s of [retrySetup([{ id: "rfnd_unknown", payment_id: "pay_synthetic", amount: 100, currency: "INR", status: "pending", receipt: "unknown-refund" }]), retrySetup([], { amount_refunded: 100 })]) {
+    same((await createTestHandler(s.deps)(request({ action: "retry_refund", orderId, refundId }))).status, 409);
+    same(s.requests.filter(call => call.body).length, 0);
+    same(s.operations.filter(op => op.action === "reserve_refund_retry").length, 0);
+  }
+});
+
+Deno.test("retry refuses client amount, receipt or idempotency changes before persistence", async () => {
+  for (const extra of [{ amountPaise: 99 }, { receipt: "changed-receipt" }, { idempotencyKey: "changed-key" }]) {
+    const s = retrySetup();
+    same((await createTestHandler(s.deps)(request({ action: "retry_refund", orderId, refundId, ...extra }))).status, 400);
+    same(s.operations.length, 0); same(s.requests.length, 0);
+  }
 });
 
 Deno.test("webhook verifies exact raw bytes and projects only permitted provider facts", async () => {
@@ -227,12 +319,12 @@ Deno.test("receipt recovery paginates beyond 100 results and explicitly holds wh
 Deno.test("reconciliation binds an ambiguous refund to its persisted receipt and flags unknown refunds", async () => {
   for (const receipt of ["stable-refund-receipt", "unknown-refund"]) {
     const s = setup();
-    s.order = { ...s.order, state: "needs_review", paymentId: "pay_synthetic", refunds: [{ id: refundId, receipt: "stable-refund-receipt", amountPaise: 50, state: "needs_review", razorpayRefundId: null }] };
+    s.order = { ...s.order, state: "needs_review", paymentId: "pay_synthetic", refunds: [{ id: refundId, receipt: "stable-refund-receipt", amountPaise: 100, state: "needs_review", razorpayRefundId: null }] };
     s.deps.fetcher = (async (input, init) => {
       same(init?.method, "GET"); const url = String(input);
       if (url.endsWith("/orders/order_synthetic")) return Response.json({ id: "order_synthetic", amount: 100, currency: "INR", receipt: "testorderreceipt" });
       if (url.includes("/orders/order_synthetic/payments")) return Response.json({ items: [payment()] });
-      if (url.includes("/payments/pay_synthetic/refunds")) return Response.json({ items: [{ id: "rfnd_synthetic", payment_id: "pay_synthetic", amount: 50, currency: "INR", status: "processed", receipt }] });
+      if (url.includes("/payments/pay_synthetic/refunds")) return Response.json({ items: [{ id: "rfnd_synthetic", payment_id: "pay_synthetic", amount: 100, currency: "INR", status: "processed", receipt }] });
       throw new Error("Unexpected provider request");
     }) as typeof fetch;
     same((await createTestHandler(s.deps)(request({ action: "reconcile", orderId }))).status, 200);
