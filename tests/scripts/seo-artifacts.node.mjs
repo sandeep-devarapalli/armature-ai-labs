@@ -6,16 +6,25 @@ import { mkdtemp, mkdir, writeFile, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { legalEntity } from "../../src/data/legalEntity.ts";
 
 const checker = fileURLToPath(new URL("../../scripts/check-seo-artifacts.mjs", import.meta.url));
 const origin = "https://armatureailabs.com";
-const routes = ["/", "/about/", "/services/", "/projects/", "/branding/", "/blog/", "/blog/model-hardware-standard/", "/projects/electrofluidic-fiber-muscles/", "/building-vision/", "/ecosystem/", "/components/", "/maker-desk/", "/join/"];
+const legalPages = {
+  "/contact/": "Contact Us",
+  "/terms/": "Terms and Conditions",
+  "/refund-policy/": "Cancellation and Refund Policy",
+  "/shipping-policy/": "Shipping and Delivery Policy",
+  "/privacy/": "Your information, handled with care."
+};
+const routes = ["/", "/about/", "/services/", "/projects/", "/branding/", "/blog/", "/blog/model-hardware-standard/", "/projects/electrofluidic-fiber-muscles/", "/building-vision/", "/ecosystem/", "/components/", "/maker-desk/", "/join/", ...Object.keys(legalPages)];
 const hash = (html) => createHash("md5").update(html).digest("hex");
-const body = (pathname) => `<div id="root" data-prerendered-path="${pathname.replace(/\/+$/, "") || "/"}"><main><h1>Page ${pathname}</h1><p>${"Synthetic public page content for the SEO artifact checker. ".repeat(4)}</p></main></div>`;
+const footer = `<footer>${Object.keys(legalPages).map((route) => `<a href="${route.slice(0, -1)}">${legalPages[route]}</a>`).join("")}</footer>`;
+const body = (pathname) => `<div id="root" data-prerendered-path="${pathname.replace(/\/+$/, "") || "/"}"><main><h1>${legalPages[pathname] ?? `Page ${pathname}`}</h1><p>${legalPages[pathname] ? `${legalEntity.name}. ` : ""}${"Synthetic public page content for the SEO artifact checker. ".repeat(4)}</p></main>${footer}</div>`;
 const shell = '<html><head><meta name="robots" content="noindex"></head><body><div id="root"></div></body></html>';
 const homepage = (pathname) => `<html><head><title>Page ${pathname}</title><link rel="canonical" href="${origin}${pathname}"><meta name="description" content="Synthetic page"><meta name="robots" content="index,follow">${["title", "description", "image", "image:alt", "type", "site_name", "url"].map((key) => `<meta property="og:${key}" content="${key === "url" ? origin + pathname : "Synthetic"}">`).join("")}${["card", "title", "description", "image", "image:alt"].map((key) => `<meta name="twitter:${key}" content="Synthetic">`).join("")}<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{},{},{}]}</script></head><body>${body(pathname)}</body></html>`;
 
-async function check(t, manifest, extra = "") {
+async function check(t, manifest, extra = "", files = {}) {
   const directory = await mkdtemp(path.join(tmpdir(), "seo-artifacts-"));
   t.after(() => rm(directory, { recursive: true, force: true }));
   for (const pathname of routes) {
@@ -33,8 +42,30 @@ async function check(t, manifest, extra = "") {
   if (manifest !== null) {
     await writeFile(path.join(directory, "sw.js"), `workbox.precacheAndRoute([${manifest}], {}); workbox.createHandlerBoundToURL("/app-shell"); ${extra}`);
   }
+  for (const [filename, content] of Object.entries(files)) {
+    await writeFile(path.join(directory, filename), content);
+  }
   return spawnSync(process.execPath, [checker, directory], { encoding: "utf8" });
 }
+
+for (const [name, html, error] of [
+  ["missing policy entity", homepage("/terms/").replace(`${legalEntity.name}. `, ""), /Policy is missing the legal entity/],
+  ["wrong policy heading", homepage("/terms/").replace("<h1>Terms and Conditions</h1>", "<h1>Not the approved policy</h1>"), /Wrong policy heading/],
+  ["missing legal footer", homepage("/terms/").replace(footer, ""), /Footer is missing \/contact\//]
+]) {
+  test(`${name} fails`, async (t) => {
+    const result = await check(t, `${entry},${appShell}`, "", { "terms/index.html": html });
+    assert.equal(result.status, 1, result.stdout + result.stderr);
+    assert.match(result.stderr, error);
+  });
+}
+
+test("missing policy sitemap route fails", async (t) => {
+  const sitemap = `<urlset>${routes.filter((route) => route !== "/terms/").map((route) => `<url><loc>${origin}${route}</loc></url>`).join("")}</urlset>`;
+  const result = await check(t, `${entry},${appShell}`, "", { "sitemap.xml": sitemap });
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.match(result.stderr, /Sitemap is missing \/terms\//);
+});
 
 const revision = hash(homepage("/"));
 const entry = `{url:"index.html",revision:"${revision}"}`;

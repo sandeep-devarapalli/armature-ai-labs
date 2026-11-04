@@ -36,6 +36,22 @@ const pages: Record<string, PageDefinition> = {
     name: "Privacy",
     description: "How Armature AI Labs handles website visits, browser storage and enquiries, how to contact us about your information, and how free membership registration and private identity review work."
   },
+  "/contact/": {
+    name: "Contact Us",
+    description: "Contact Armature AI Labs, the physical AI and robotics lab in HSR Layout, Bengaluru. Address, phone, email, hours and grievance contact."
+  },
+  "/terms/": {
+    name: "Terms and Conditions",
+    description: "Terms for coworking, equipment rental, hardware sales and workshops at Armature AI Labs, HSR Layout, Bengaluru."
+  },
+  "/refund-policy/": {
+    name: "Cancellation and Refund Policy",
+    description: "Cancellation and refund rules for cabins, seats, equipment bookings, workshops and hardware at Armature AI Labs."
+  },
+  "/shipping-policy/": {
+    name: "Shipping and Delivery Policy",
+    description: "Pickup and courier delivery for robotics hardware and kits bought from Armature AI Labs, Bengaluru."
+  },
   "/about/": {
     name: "Who We Are",
     description: "Armature AI Labs is a makers’ lab for learning, building and sharing physical AI and robotics in Bengaluru."

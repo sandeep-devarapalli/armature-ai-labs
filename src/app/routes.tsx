@@ -21,6 +21,10 @@ const OnboardingPage = lazy(() => import("../pages/OnboardingPage").then((module
 const ProjectsPage = lazy(() => import("../pages/ProjectsPage").then((module) => ({ default: module.ProjectsPage })));
 const BrandingPage = lazy(() => import("../pages/BrandingPage").then((module) => ({ default: module.BrandingPage })));
 const PrivacyPage = lazy(() => import("../pages/PrivacyPage").then((module) => ({ default: module.PrivacyPage })));
+const ContactPage = lazy(() => import("../pages/LegalPages").then((module) => ({ default: module.ContactPage })));
+const TermsPage = lazy(() => import("../pages/LegalPages").then((module) => ({ default: module.TermsPage })));
+const RefundPolicyPage = lazy(() => import("../pages/LegalPages").then((module) => ({ default: module.RefundPolicyPage })));
+const ShippingPolicyPage = lazy(() => import("../pages/LegalPages").then((module) => ({ default: module.ShippingPolicyPage })));
 const AboutPage = lazy(() => import("../pages/AboutPages").then((module) => ({ default: module.AboutPage })));
 const TeamPage = lazy(() => import("../pages/AboutPages").then((module) => ({ default: module.TeamPage })));
 const BlogIndexPage = lazy(() => import("../pages/BlogPages").then((module) => ({ default: module.BlogIndexPage })));
@@ -113,6 +117,10 @@ export const routes: RouteObject[] = [
       { path: "/talent-network", handle: { module: "src/features/talent/directory.tsx" }, element: <TalentDirectory /> },
       { path: "/", element: <HomePage /> },
       { path: "/privacy", element: <PrivacyPage />, handle: { module: "src/pages/PrivacyPage.tsx" } },
+      { path: "/contact", element: <ContactPage />, handle: { module: "src/pages/LegalPages.tsx" } },
+      { path: "/terms", element: <TermsPage />, handle: { module: "src/pages/LegalPages.tsx" } },
+      { path: "/refund-policy", element: <RefundPolicyPage />, handle: { module: "src/pages/LegalPages.tsx" } },
+      { path: "/shipping-policy", element: <ShippingPolicyPage />, handle: { module: "src/pages/LegalPages.tsx" } },
       { path: "/about", element: <AboutPage />, handle: { module: "src/pages/AboutPages.tsx" } },
       { path: "/team", element: <TeamPage />, handle: { module: "src/pages/AboutPages.tsx" } },
       { path: "/equipment", element: equipmentPageAvailable ? <EquipmentPage /> : <Navigate to="/" replace /> },

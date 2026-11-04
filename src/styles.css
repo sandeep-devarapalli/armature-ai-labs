@@ -3748,6 +3748,7 @@ footer p {
 
 .license-note {
   margin-top: 0;
+  grid-column: 1 / -1;
 }
 
 .component-request-form {

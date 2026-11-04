@@ -4,6 +4,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { JSDOM } from "jsdom";
 import ts from "typescript";
+import { legalEntity } from "../src/data/legalEntity.ts";
 
 const directory = path.resolve(process.argv[2] ?? "dist");
 const origin = "https://armatureailabs.com";
@@ -12,6 +13,13 @@ const failures = [];
 const titles = new Set();
 const headings = new Set();
 const canonicals = new Set();
+const legalPages = {
+  "/contact/": "Contact Us",
+  "/terms/": "Terms and Conditions",
+  "/refund-policy/": "Cancellation and Refund Policy",
+  "/shipping-policy/": "Shipping and Delivery Policy",
+  "/privacy/": "Your information, handled with care."
+};
 
 function requiredMeta(document, selector) {
   const elements = document.head.querySelectorAll(selector);
@@ -29,6 +37,13 @@ function checkBody(document, pathname) {
   assert.ok(main.querySelector("h1").textContent.trim(), "Empty H1");
   assert.ok(main.textContent.replace(/\s+/g, " ").trim().length > 120, "Main is empty or only a loading shell");
   assert.equal(root.getAttribute("data-prerendered-path"), pathname.replace(/\/+$/, "") || "/");
+  for (const route of Object.keys(legalPages)) {
+    assert.ok(document.querySelector(`footer a[href="${route}"], footer a[href="${route.slice(0, -1)}"]`), `Footer is missing ${route}`);
+  }
+  if (legalPages[pathname]) {
+    assert.equal(main.querySelector("h1").textContent.trim(), legalPages[pathname], "Wrong policy heading");
+    assert.ok(main.textContent.includes(legalEntity.name), "Policy is missing the legal entity");
+  }
 }
 
 const sitemap = new JSDOM(await readFile(path.join(directory, "sitemap.xml"), "utf8"), { contentType: "application/xml" });
@@ -36,7 +51,7 @@ const urls = [...sitemap.window.document.querySelectorAll("url > loc")].map((nod
 sitemap.window.close();
 assert.ok(urls.length >= 13, "Sitemap is missing public pages or catalog entries");
 assert.equal(new Set(urls).size, urls.length, "Sitemap contains duplicates");
-for (const pathname of ["/", "/about/", "/services/", "/projects/", "/branding/", "/blog/", "/blog/model-hardware-standard/", "/projects/electrofluidic-fiber-muscles/", "/building-vision/", "/ecosystem/", "/components/", "/maker-desk/", "/join/"]) {
+for (const pathname of ["/", "/about/", "/services/", "/projects/", "/branding/", "/blog/", "/blog/model-hardware-standard/", "/projects/electrofluidic-fiber-muscles/", "/building-vision/", "/ecosystem/", "/components/", "/maker-desk/", "/join/", ...Object.keys(legalPages)]) {
   assert.ok(urls.includes(`${origin}${pathname}`), `Sitemap is missing ${pathname}`);
 }
 

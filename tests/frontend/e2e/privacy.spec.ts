@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { legalEntity } from "../../../src/data/legalEntity";
 
 test("privacy is discoverable, readable in every theme and explains registration and document retention", async ({ page }) => {
   await page.goto("/join/");
@@ -6,7 +7,7 @@ test("privacy is discoverable, readable in every theme and explains registration
   await expect(page).toHaveTitle("Privacy | Armature AI Labs");
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://armatureailabs.com/privacy/");
   await expect(page.getByRole("heading", { name: "Basic membership and identity review" })).toBeVisible();
-  await expect(page.locator("main")).toContainText("Jayasri Nageshwara Rao and Partners LLP");
+  await expect(page.locator("main")).toContainText(legalEntity.name);
   await expect(page.locator("main")).toContainText("2026-09-26-release-1");
   await expect(page.locator("main")).toContainText("30 days after upload");
   await expect(page.locator("main")).toContainText("not covered by the 30-day upload cleanup");

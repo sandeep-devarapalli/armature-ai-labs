@@ -6,6 +6,10 @@
 .privacy-content ul { padding-left: 24px; }
 .privacy-content li + li { margin-top: 16px; }
 .privacy-content a { text-decoration: underline; text-underline-offset: 3px; }
+.legal-page .page-hero h1 { overflow-wrap: anywhere; }
+.legal-table-scroll { max-width: 100%; overflow-x: auto; margin-block: 32px; }
+.legal-table-scroll table { width: 100%; min-width: 720px; border-collapse: collapse; }
+.legal-table-scroll th, .legal-table-scroll td { padding: 16px; border: 1px solid var(--hair); text-align: left; vertical-align: top; line-height: 1.8; }
 @media (max-width: 600px) {
   .privacy-content { padding-block: 8px 48px; }
   .privacy-content section { padding-block: 28px; }
