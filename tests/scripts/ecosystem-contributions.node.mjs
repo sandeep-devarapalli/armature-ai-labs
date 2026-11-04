@@ -26,6 +26,12 @@ test('owner lab listing preserves the supplied map pin and remains review-only',
   assert.equal(historical.locality, 'HSR 1490 · 1490, 11th Cross, 20th Main Road, 1st Sector, HSR Layout, Bengaluru, Karnataka 560034');
   assert.equal(lab.data.locality, `HSR 1490 · ${legalEntity.labAddress.formatted}`);
   assert.deepEqual({ ...historical, locality: lab.data.locality }, lab.data);
+  const correction = validateContribution(JSON.parse(await readFile(new URL('../../docs/ecosystem-contributions/address-corrections/owner-20261104-armature-ai-labs-address.json', import.meta.url), 'utf8')));
+  assert.equal(correction.id, 'owner-20261104-armature-ai-labs-address');
+  assert.equal(correction.kind, 'edit');
+  assert.equal(correction.targetSlug, lab.data.slug);
+  assert.equal(correction.baseRevision, 1);
+  assert.deepEqual(correction.data, { ...lab.data, locality: legalEntity.labAddress.formatted });
 });
 test('shared listing validation and explicit public contact permission', () => {
   assert.equal(validateContribution(entry).data.name, 'Synthetic place');
