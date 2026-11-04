@@ -110,8 +110,8 @@ sleep 0.2
 reserve_refund a406-refund-two >"$RUN_DIR/refund-two.log" 2>&1 & b=$!
 a_status=0; b_status=0
 wait "$a" || a_status=$?; wait "$b" || b_status=$?
-if [ "$a_status" = 0 ]; then [ "$b_status" != 0 ]; rg -q 'Refund exceeds unreserved captured amount' "$RUN_DIR/refund-two.log";
-else [ "$b_status" = 0 ]; rg -q 'Refund exceeds unreserved captured amount' "$RUN_DIR/refund-one.log"; fi
+if [ "$a_status" = 0 ]; then [ "$b_status" != 0 ]; grep -Fq 'Refund exceeds unreserved captured amount' "$RUN_DIR/refund-two.log";
+else [ "$b_status" = 0 ]; grep -Fq 'Refund exceeds unreserved captured amount' "$RUN_DIR/refund-one.log"; fi
 [ "$(sql -c "select count(*) from private.razorpay_test_refunds where order_id='$ORDER' and amount_paise=60;")" = 1 ]
 
 [ "$(access_counts)" = "$BEFORE" ]
