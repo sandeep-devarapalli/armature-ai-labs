@@ -65,7 +65,10 @@ do $$begin
  perform public.mark_onboarding_document_deleted('99000000-0000-4000-8000-000000000013');
  raise exception 'Copy marked deleted while storage object exists';
 exception when invalid_parameter_value then null; end; $$;
+-- Simulate completed Storage API removal for this transaction's synthetic object.
+set local storage.allow_delete_query='true';
 delete from storage.objects where name=(select object_path from public.onboarding_documents where id='99000000-0000-4000-8000-000000000013') and bucket_id='onboarding-documents';
+set local storage.allow_delete_query='false';
 select public.mark_onboarding_document_deleted('99000000-0000-4000-8000-000000000013');
 select pg_temp.assert_true((select deleted_at is not null and id_type is null from public.onboarding_documents where id='99000000-0000-4000-8000-000000000013'),'verified storage deletion removes unnecessary government ID type too');
 select pg_temp.assert_true((select status='approved' from public.basic_onboarding_applications where user_id='99000000-0000-4000-8000-000000000001'),'existing identity approval is not revoked by deletion');
