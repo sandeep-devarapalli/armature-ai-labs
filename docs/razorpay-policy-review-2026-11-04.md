@@ -71,7 +71,14 @@ The local SQL ledger recorded one captured and one failed test payment. Real boo
 - `npm test`: 1,124 tests passed across 99 files.
 - Existing `npm run test:e2e`, using a private config on dedicated loopback port 57443: 184 passed; 18 existing environment-dependent tests skipped. The first run was stopped because default port 4173 belonged to an older worktree. No test failure was bypassed; the dedicated run used this branch's demo build.
 - Deno: 17 pure handler/core tests and function/harness type checks passed. Production-env script tests: 5 passed.
-- Actual native PostgreSQL migration/SQL assertions and retention/payment concurrency tests passed against synthetic local records. CI also runs the new SQL/core checks; hosted Supabase and complete CI results must be assessed separately.
+- Actual native PostgreSQL migration/SQL assertions and retention/payment concurrency tests passed against synthetic local records. CI is configured to run the new SQL/core checks; no remote CI result is claimed. Hosted Supabase and complete CI results must be assessed separately.
 - Independent scoped reviews found no remaining commercial/ID-copy contradiction or new material payment-security issue after fixing webhook replay and bounded recovery.
 
 **Before live payment collection:** resolve and successfully retest the provider refund rejection; verify actual HTTPS webhook delivery; finish the hosted synthetic Auth/Storage/retention activation rehearsal; connect reviewed commercial prices, tax/deposit breakdowns, booking availability and fulfilment to server quotes; confirm Razorpay merchant activation/account agreement and operating responsibility for refunds and D+4 complaints; obtain owner review and explicit production release/payment authorization. This stage deliberately exercises a synthetic INR 1 fixture and does not claim a completed customer booking checkout.
+
+
+## Review delivery
+
+Local review branch: `codex/razorpay-test-mode`. The source changes are committed locally. Two Git pushes were rejected by GitHub with server-side ref/HTTP500 errors; the branch was not created remotely. Automatic approval review then rejected an API upload because these changes would become public repository content under the review-before-publication hold. Public draft-PR approval is pending. No workaround upload, merge, production deployment, production migration or payment activation followed.
+
+Owner-facing local report, full patch and genuine browser screenshots are preserved under `output/razorpay-review-2026-11-04/` in the shared Armature Lab workspace. Provider-delivered webhook testing is also pending the owner's choice about a temporary test-only HTTPS endpoint; no tunnel or public webhook was created.
