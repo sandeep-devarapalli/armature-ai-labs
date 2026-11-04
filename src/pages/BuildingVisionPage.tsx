@@ -3,6 +3,7 @@ import { PageHeader, Section } from "../components/Primitives";
 import { BuildingPlanning } from "../components/BuildingPlanning";
 import { ElectricalPlan } from "../components/ElectricalPlan";
 import release from "../data/buildingModelRelease.json";
+import { legalEntity } from "../data/legalEntity";
 import rooms from "../data/buildingRooms";
 import roomViews from "../data/buildingRoomViews.json";
 import "./BuildingVisionPage.css";
@@ -45,7 +46,7 @@ export function BuildingVisionPage() {
     <PageHeader meta="Armature AI Labs · HSR 1490" title="Building Vision"
       description="Explore our ground- and first-floor layouts, room views, and downloadable Blender and CAD designs.">
       <p className="building-vision-quick-links"><a href="#planning-model">Explore models and downloads</a> · <a href="#comparisons">Browse building views</a> · <a href="#electrical-plan">Electrical and setup plan</a></p>
-      <p>1490, 11th Cross, 20th Main, 1st Sector, HSR Layout, Bengaluru – 560034, Karnataka.</p>
+      <p>{legalEntity.labAddress.formatted}</p>
     </PageHeader>
     <BuildingPlanning />
     <Section number="02" id="comparisons" title="Building views."

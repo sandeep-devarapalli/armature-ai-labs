@@ -14,7 +14,7 @@ afterEach(() => {
 
 describe("search metadata", () => {
   it("has unique public titles, descriptions and canonical URLs for the complete static catalog", () => {
-    expect(publicSeoPaths).toHaveLength(20 + components.length);
+    expect(publicSeoPaths).toHaveLength(24 + components.length);
     expect(publicSeoPaths).toContain("/components/wishlist/");
     expect(new Set(publicSeoPaths).size).toBe(publicSeoPaths.length);
     const pages = publicSeoPaths.map(getPageSeo);
@@ -87,6 +87,16 @@ describe("search metadata", () => {
     expect(document.querySelector('meta[name="description"]')?.getAttribute("content")).toBe(source.description);
     expect(document.querySelectorAll("script")).toHaveLength(1);
     expect(JSON.parse(document.querySelector("script")!.textContent!)).toEqual(source.structuredData);
+  });
+
+  it("publishes the corrected lab postal address in organization structured data", () => {
+    const graph = getPageSeo("/contact/").structuredData!["@graph"] as Record<string, unknown>[];
+    const organization = graph.find((item) => item["@type"] === "Organization")!;
+    expect(organization.address).toEqual({
+      "@type": "PostalAddress",
+      streetAddress: "1490, 11th Cross, 20th Main Rd, 1st Sector, HSR Layout",
+      addressLocality: "Bengaluru", addressRegion: "Karnataka", postalCode: "560102", addressCountry: "IN"
+    });
   });
 
   it("replaces prerendered metadata on SPA navigation without duplicates or stale private schema", async () => {

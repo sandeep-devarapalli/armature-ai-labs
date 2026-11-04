@@ -26,6 +26,7 @@ import { AccountMenu } from "./AccountMenu";
 import { BrandMark } from "./BrandMark";
 import { AnalyticsConsent, AnalyticsSettingsButton } from "./AnalyticsConsent";
 import { PageMetadata } from "./PageMetadata";
+import { legalEntity } from "../data/legalEntity";
 
 const primaryLinks = [["/", "The lab"], ["/join", "Membership"], ["/services", "Services"], ["/ecosystem", "Ecosystem"]] as const;
 const moreLinks = [["/members", "Members"], ["/talent-network", "Talent network"],
@@ -267,11 +268,12 @@ export function Shell({ children }: PropsWithChildren) {
           <div>
             <BrandMark />
             <p>The Physical AI and Robotics Lab · HSR Layout, Bengaluru</p>
-            <p>1490, 11th Cross, 20th Main, 1st Sector, HSR Layout, Bengaluru – 560034, Karnataka.</p>
+            <p>{legalEntity.labAddress.formatted}</p>
+            <p>{legalEntity.name} (LLPIN {legalEntity.llpin})</p>
           </div>
           <div className="footer-links">
-            <a href="mailto:hello@armatureailabs.com">hello@armatureailabs.com</a>
-            <a href="tel:+919748485583">+91 9748485583</a>
+            <a href={`mailto:${legalEntity.email}`}>{legalEntity.email}</a>
+            <a href={`tel:${legalEntity.phone.replace(/\s/g, "")}`}>{legalEntity.phone}</a>
             <a href="https://discord.gg/qGNXGmF8z" target="_blank" rel="noreferrer">Discord</a>
             <a href="https://www.linkedin.com/company/armature-ai-labs/" target="_blank" rel="noreferrer">LinkedIn</a>
             <Link to="/members">Members</Link>
@@ -279,7 +281,6 @@ export function Shell({ children }: PropsWithChildren) {
             <Link to="/branding">Brand assets</Link>
             <Link to="/about">Who we are</Link>
             <Link to="/team">Meet the team</Link>
-            <Link to="/privacy">Privacy</Link>
             <AnalyticsSettingsButton />
             <Link to="/building-vision">Building vision</Link>
             <Link to="/blog">Blog</Link>
@@ -288,6 +289,13 @@ export function Shell({ children }: PropsWithChildren) {
             {memberPlatformAvailable && <Link to="/kiosk">Kiosk</Link>}
             <Link to="/join">Join the floor</Link>
           </div>
+          <nav className="footer-links" aria-label="Legal">
+            <Link to="/contact">Contact</Link>
+            <Link to="/terms">Terms and Conditions</Link>
+            <Link to="/refund-policy">Cancellation and Refund Policy</Link>
+            <Link to="/shipping-policy">Shipping and Delivery Policy</Link>
+            <Link to="/privacy">Privacy</Link>
+          </nav>
           <p className="license-note">
             Code and docs Apache-2.0. Armature AI Labs name and brand assets reserved.
             Third-party project media remains subject to its source terms.

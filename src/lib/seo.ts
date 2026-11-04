@@ -1,5 +1,6 @@
 import { basicOnboardingAvailable } from "../config/release";
 import { components } from "../data/components";
+import { legalEntity } from "../data/legalEntity";
 
 export const SITE_URL = "https://armatureailabs.com";
 const SITE_NAME = "Armature AI Labs";
@@ -35,6 +36,22 @@ const pages: Record<string, PageDefinition> = {
   "/privacy/": {
     name: "Privacy",
     description: "How Armature AI Labs handles website visits, browser storage and enquiries, how to contact us about your information, and how free membership registration and private identity review work."
+  },
+  "/contact/": {
+    name: "Contact Us",
+    description: "Contact Armature AI Labs, the physical AI and robotics lab in HSR Layout, Bengaluru. Address, phone, email, hours and grievance contact."
+  },
+  "/terms/": {
+    name: "Terms and Conditions",
+    description: "Terms for coworking, equipment rental, hardware sales and workshops at Armature AI Labs, HSR Layout, Bengaluru."
+  },
+  "/refund-policy/": {
+    name: "Cancellation and Refund Policy",
+    description: "Cancellation and refund rules for cabins, seats, equipment bookings, workshops and hardware at Armature AI Labs."
+  },
+  "/shipping-policy/": {
+    name: "Shipping and Delivery Policy",
+    description: "Pickup and courier delivery for robotics hardware and kits bought from Armature AI Labs, Bengaluru."
   },
   "/about/": {
     name: "Who We Are",
@@ -110,15 +127,15 @@ const organization: JsonLd = {
   url: `${SITE_URL}/`,
   description: pages["/"].description,
   logo: `${SITE_URL}/brand/editorial-2026-09/logos/icon-light-512.png`,
-  email: "hello@armatureailabs.com",
-  telephone: "+919748485583",
+  email: legalEntity.email,
+  telephone: legalEntity.phone.replace(/\s/g, ""),
   address: {
     "@type": "PostalAddress",
-    streetAddress: "1490, 11th Cross, 20th Main, 1st Sector, HSR Layout",
-    addressLocality: "Bengaluru",
-    addressRegion: "Karnataka",
-    postalCode: "560034",
-    addressCountry: "IN"
+    streetAddress: `${legalEntity.labAddress.street}, ${legalEntity.labAddress.locality}`,
+    addressLocality: legalEntity.labAddress.city,
+    addressRegion: legalEntity.labAddress.state,
+    postalCode: legalEntity.labAddress.postalCode,
+    addressCountry: legalEntity.labAddress.country
   },
   sameAs: ["https://www.linkedin.com/company/armature-ai-labs/"]
 };

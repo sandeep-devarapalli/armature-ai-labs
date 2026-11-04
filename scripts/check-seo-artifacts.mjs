@@ -1,9 +1,10 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { JSDOM } from "jsdom";
 import ts from "typescript";
+import { legalEntity } from "../src/data/legalEntity.ts";
 
 const directory = path.resolve(process.argv[2] ?? "dist");
 const origin = "https://armatureailabs.com";
@@ -12,6 +13,13 @@ const failures = [];
 const titles = new Set();
 const headings = new Set();
 const canonicals = new Set();
+const legalPages = {
+  "/contact/": "Contact Us",
+  "/terms/": "Terms and Conditions",
+  "/refund-policy/": "Cancellation and Refund Policy",
+  "/shipping-policy/": "Shipping and Delivery Policy",
+  "/privacy/": "Your information, handled with care."
+};
 
 function requiredMeta(document, selector) {
   const elements = document.head.querySelectorAll(selector);
@@ -29,6 +37,56 @@ function checkBody(document, pathname) {
   assert.ok(main.querySelector("h1").textContent.trim(), "Empty H1");
   assert.ok(main.textContent.replace(/\s+/g, " ").trim().length > 120, "Main is empty or only a loading shell");
   assert.equal(root.getAttribute("data-prerendered-path"), pathname.replace(/\/+$/, "") || "/");
+  const footer = root.querySelector(".app-shell > footer");
+  assert.ok(footer, "Missing shared site footer");
+  assert.ok(footer.textContent.includes(legalEntity.labAddress.formatted), "Footer is missing the current lab address");
+  for (const route of Object.keys(legalPages)) {
+    assert.ok(footer.querySelector(`a[href="${route}"], a[href="${route.slice(0, -1)}"]`), `Footer is missing ${route}`);
+  }
+  if (legalPages[pathname]) {
+    assert.equal(main.querySelector("h1").textContent.trim(), legalPages[pathname], "Wrong policy heading");
+    assert.ok(main.textContent.includes(legalEntity.name), "Policy is missing the legal entity");
+  }
+}
+
+function checkPostalAddresses(value) {
+  let count = 0;
+  function visit(node) {
+    if (!node || typeof node !== "object") return;
+    if (node["@type"] === "PostalAddress" || Array.isArray(node["@type"]) && node["@type"].includes("PostalAddress")) {
+      const address = legalEntity.labAddress;
+      const expected = {
+        streetAddress: `${address.street}, ${address.locality}`,
+        addressLocality: address.city,
+        addressRegion: address.state,
+        postalCode: address.postalCode,
+        addressCountry: address.country
+      };
+      for (const [field, text] of Object.entries(expected)) {
+        assert.equal(node[field], text, `PostalAddress ${field} must match the shared lab address`);
+      }
+      count += 1;
+    }
+    Object.values(node).forEach(visit);
+  }
+  visit(value);
+  return count;
+}
+
+async function checkAddressText(current) {
+  for (const entry of await readdir(current, { withFileTypes: true })) {
+    const filename = path.join(current, entry.name);
+    if (entry.isDirectory()) await checkAddressText(filename);
+    else if (entry.isFile() && /\.(?:html?|[cm]?js|css|json|xml|txt|md|webmanifest|svg)$/i.test(entry.name)) {
+      const text = await readFile(filename, "utf8");
+      assert.ok(!/560034|20th Main,/.test(text), `Superseded lab address in ${path.relative(directory, filename)}`);
+      if (/\.html?$/i.test(entry.name)) {
+        for (const script of text.matchAll(/<script\b[^>]*\btype=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)) {
+          checkPostalAddresses(JSON.parse(script[1]));
+        }
+      }
+    }
+  }
 }
 
 const sitemap = new JSDOM(await readFile(path.join(directory, "sitemap.xml"), "utf8"), { contentType: "application/xml" });
@@ -36,7 +94,7 @@ const urls = [...sitemap.window.document.querySelectorAll("url > loc")].map((nod
 sitemap.window.close();
 assert.ok(urls.length >= 13, "Sitemap is missing public pages or catalog entries");
 assert.equal(new Set(urls).size, urls.length, "Sitemap contains duplicates");
-for (const pathname of ["/", "/about/", "/services/", "/projects/", "/branding/", "/blog/", "/blog/model-hardware-standard/", "/projects/electrofluidic-fiber-muscles/", "/building-vision/", "/ecosystem/", "/components/", "/maker-desk/", "/join/"]) {
+for (const pathname of ["/", "/about/", "/services/", "/projects/", "/branding/", "/blog/", "/blog/model-hardware-standard/", "/projects/electrofluidic-fiber-muscles/", "/building-vision/", "/ecosystem/", "/components/", "/maker-desk/", "/join/", ...Object.keys(legalPages)]) {
   assert.ok(urls.includes(`${origin}${pathname}`), `Sitemap is missing ${pathname}`);
 }
 
@@ -77,11 +135,18 @@ for (const url of urls) {
     const schema = JSON.parse(scripts[0].textContent);
     assert.equal(schema["@context"], "https://schema.org");
     assert.ok(Array.isArray(schema["@graph"]) && schema["@graph"].length >= 3, "Structured graph is missing identity/page nodes");
+    assert.ok(checkPostalAddresses(schema) > 0, "Structured graph is missing the lab PostalAddress");
   } catch (error) {
     failures.push(`${url}: ${error.message}`);
   } finally {
     dom?.window.close();
   }
+}
+
+try {
+  await checkAddressText(directory);
+} catch (error) {
+  failures.push(`Lab address text: ${error.message}`);
 }
 
 for (const filename of ["app-shell.html", "404.html", "members/index.html", "team/index.html"]) {

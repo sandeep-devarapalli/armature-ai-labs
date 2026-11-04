@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { JSDOM } from "jsdom";
+import { legalEntity } from "../src/data/legalEntity.ts";
 
 const base = new URL(process.argv[2] ?? "https://armatureailabs.com");
 assert.ok(["http:", "https:"].includes(base.protocol) && !base.username && !base.password, "Use an HTTP(S) site origin without credentials");
@@ -7,6 +8,13 @@ assert.equal(base.pathname, "/", "Use the site origin, not a subdirectory");
 const canonicalOrigin = "https://armatureailabs.com";
 const failures = [];
 let count = 0;
+const legalPages = {
+  "/contact/": "Contact Us",
+  "/terms/": "Terms and Conditions",
+  "/refund-policy/": "Cancellation and Refund Policy",
+  "/shipping-policy/": "Shipping and Delivery Policy",
+  "/privacy/": "Your information, handled with care."
+};
 
 async function probe(pathname, check) {
   let dom;
@@ -37,7 +45,7 @@ function noindex(response, document) {
   assert.equal(document.querySelectorAll('script[type="application/ld+json"]').length, 0, "Nonindexable page contains public schema");
 }
 
-for (const pathname of ["/", "/blog/", "/blog/model-hardware-standard/", "/building-vision/", "/components/weather-pico-w-controller/"]) {
+for (const pathname of ["/", "/blog/", "/blog/model-hardware-standard/", "/building-vision/", "/components/weather-pico-w-controller/", ...Object.keys(legalPages)]) {
   await probe(pathname, (response, text, document) => {
     assert.equal(response.status, 200, "Public page must return 200 directly");
     assert.ok(document, "Expected text/html");
@@ -50,6 +58,13 @@ for (const pathname of ["/", "/blog/", "/blog/model-hardware-standard/", "/build
     assert.ok(main?.textContent.replace(/\s+/g, " ").trim().length > 120, "Missing meaningful initial main content");
     assert.equal(main.querySelectorAll("h1").length, 1);
     assert.equal(document.querySelector("#root").getAttribute("data-prerendered-path"), pathname.replace(/\/+$/, "") || "/");
+    for (const route of Object.keys(legalPages)) {
+      assert.ok(document.querySelector(`footer a[href="${route}"], footer a[href="${route.slice(0, -1)}"]`), `Footer is missing ${route}`);
+    }
+    if (legalPages[pathname]) {
+      assert.equal(main.querySelector("h1").textContent.trim(), legalPages[pathname], "Wrong policy heading");
+      assert.ok(main.textContent.includes(legalEntity.name), "Policy is missing the legal entity");
+    }
   });
 }
 
@@ -98,6 +113,9 @@ await probe("/sitemap.xml", (response, text) => {
     for (const url of urls) {
       assert.equal(url.origin, canonicalOrigin);
       assert.doesNotMatch(url.pathname, /^\/(?:admin|auth|onboarding|dashboard|profile|book|bookings|check-in|financials|kiosk|inventory|lockers|consumables|toolkits|component-requests|members|membership|equipment|procurement)(?:\/|$)|^\/components\/request\//);
+    }
+    for (const pathname of Object.keys(legalPages)) {
+      assert.ok(urls.some((url) => url.pathname === pathname), `Sitemap is missing ${pathname}`);
     }
   } finally {
     xml.window.close();
