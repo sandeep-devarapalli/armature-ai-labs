@@ -182,9 +182,23 @@ it("records ID retention consent before uploading to the security scanner", asyn
   vi.spyOn(FormData.prototype, "get").mockImplementation(key => key === "file" ? file : key === "id_retention" ? "accepted" : null);
   fireEvent.submit(input.closest("form")!);
   await screen.findByText("Upload checked. Confirm its uploaded status below before submitting your application.");
-  expect(fixture.rpc).toHaveBeenCalledWith("accept_government_id_retention", { p_document_id: "government_id", p_notice_version: "2026-10-14-equipment-id-v1" });
+  expect(fixture.rpc).toHaveBeenCalledWith("accept_government_id_retention", { p_document_id: "government_id", p_notice_version: "2026-11-04-active-service-id-v1" });
   expect(requestDocument).toHaveBeenCalledWith("government_id", file);
   expect(fixture.rpc.mock.invocationCallOrder[0]).toBeLessThan(requestDocument.mock.invocationCallOrder[0]);
+});
+
+it("lets an approved member resubmit a service ID without reopening identity approval", async () => {
+  const fixture = submissionFixture(false);
+  fixture.app.status = "approved";
+  fixture.docs.splice(0);
+  render(<MemoryRouter><OnboardingForm client={fixture.client} requestDocument={vi.fn()} initialUserId="synthetic" /></MemoryRouter>);
+  expect(await screen.findByLabelText("government ID image")).toBeVisible();
+  expect(screen.queryByLabelText("photo image")).not.toBeInTheDocument();
+  expect(screen.getByText(/Your identity approval is preserved when private copies expire/)).toBeVisible();
+  expect(screen.getByText(/mask the first eight digits before upload/)).toBeVisible();
+  expect(screen.getByText(/Your government ID is retained for up to seven days from upload/)).toBeVisible();
+  expect(screen.queryByRole("button", { name: "Keep ID for equipment rentals" })).not.toBeInTheDocument();
+  expect(fixture.app.status).toBe("approved");
 });
 
 

@@ -34,6 +34,8 @@ test("preserves demo and site release guards", () => {
   assert.notEqual(check({ VITE_DEMO_MODE: "true" }).status, 0);
   assert.notEqual(check({ VITE_SITE_URL: "http://localhost:4173" }).status, 0);
   assert.notEqual(check({ VITE_MEMBER_PLATFORM_ENABLED: "" }).status, 0);
+  assert.notEqual(check({ VITE_RAZORPAY_TEST_ENABLED: "true" }).status, 0);
+  assert.equal(check({ VITE_RAZORPAY_TEST_ENABLED: "false" }).status, 0);
 });
 
 

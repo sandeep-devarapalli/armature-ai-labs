@@ -20,3 +20,6 @@ export const componentRequestsAvailable =
 
 export const basicOnboardingAvailable = !demoModeEnabled && isSupabaseConfigured
   && enabled(import.meta.env.VITE_BASIC_ONBOARDING_ENABLED);
+
+export const razorpayTestAvailable = !demoModeEnabled && isSupabaseConfigured
+  && enabled(import.meta.env.VITE_RAZORPAY_TEST_ENABLED);

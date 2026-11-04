@@ -1,0 +1,9 @@
+.razorpay-test-page .page-hero { min-height: 0; }
+.test-payment-notice, .test-payment-quote { border: 1px solid var(--line, #8886); padding: 1.25rem; margin: 1.25rem 0; }
+.test-payment-quote fieldset { margin: 1.25rem 0; border: 0; padding: 0; }
+.test-payment-quote label { display: block; margin: 1rem 0; max-width: 75ch; }
+.test-payment-quote input[type="checkbox"] { margin-right: .6rem; }
+.test-payment-status { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
+.test-payment-status dt { font-weight: 700; }
+.test-payment-status dd { margin: .5rem 0 1.5rem; overflow-wrap: anywhere; }
+.test-payment-feedback { padding-bottom: 2rem; }

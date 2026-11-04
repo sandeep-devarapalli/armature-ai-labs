@@ -8,6 +8,10 @@ Deno.serve(async (request) => {
     assertJobSecret(request, "ONBOARDING_RETENTION_JOB_SECRET");
     if (Deno.env.get("ONBOARDING_RETENTION_ENABLED") !== "true") return json(request, { error: "retention_disabled" }, 503);
     const client = adminClient();
+    const { data: idSla, error: idSlaError } = await client.rpc("onboarding_id_retention_sla");
+    if (idSlaError || !Number.isSafeInteger(idSla?.overdue) || idSla.overdue < 0) throw new Error("Retention deadline lookup failed");
+    const overdueIds = idSla.overdue > 0;
+    if (overdueIds) console.error(JSON.stringify({ event: "onboarding_government_id_retention_overdue", count: idSla.overdue }));
     const { data: documents, error } = await client.rpc("list_due_onboarding_documents", { p_limit: 100 });
     if (error) throw new Error("Retention lookup failed");
     let deleted = 0;
@@ -55,7 +59,7 @@ Deno.serve(async (request) => {
       if (markError) { failed++; continue; }
       deleted++;
     }
-    return json(request, { examined: examined + (talentPhotos?.length ?? 0), deleted, failed }, failed ? 503 : 200);
+    return json(request, { examined: examined + (talentPhotos?.length ?? 0), deleted, failed }, failed || overdueIds ? 503 : 200);
   } catch (error) {
     return json(request, { error: error instanceof HttpError ? error.message : "Retention run failed." }, error instanceof HttpError ? error.status : 500);
   }

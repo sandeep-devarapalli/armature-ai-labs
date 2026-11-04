@@ -55,3 +55,44 @@ path. Supabase documents the code as its runtime health check rejecting incoming
 connections: https://status.supabase.com/incidents/f258dnpx3ss2 . This handles the
 identified provider failure; it does not repair the provider infrastructure or
 establish the cause of separately recorded network failures.
+
+## Prepared active-service ID policy, 4 November 2026
+
+Migration `202611040001_active_service_id_retention.sql` is preparation only.
+Its separate policy gate defaults off. The owner-approved pending-review window
+defaults to 168 hours from upload, and server validation prevents more than seven
+days. Review completion ends that purpose early. Applying the migration alone
+does not rewrite existing member documents or activate the new policy. Preserve
+old notice/consent history. Legacy IDs enter the new policy at activation rather
+than receiving a retroactive service-end SLA breach; earlier finite deadlines are
+never extended without fresh notice acceptance. A reviewed release must activate
+`configure_active_service_id_retention(true, 168)` through an authorised Super admin
+after the affected legacy documents and bounded service records are reviewed,
+then verify the backfill and immediate cleanup queue. Activate the database policy before deploying the matching consent and Edge
+Functions; do not deploy the new document endpoint against a missing migration.
+
+Only an explicitly approved, bounded service period protects a government ID.
+Admins/Super admins record a real contract/confirmed-service reference through
+`record_identity_service_period`; an optional booking reference must be confirmed
+and bounded by the booking end. Account status, rental eligibility, mock grants
+and Razorpay test captures never create service periods. A confirmed future service
+can begin its identity-purpose period at confirmation, before physical use starts.
+Record it before the current review purpose expires; never restore an expired,
+deleted or cleanup-claimed original. Returning approved members can submit a fresh
+government ID without revoking identity/mobile verification or free-course access.
+Independent Admin review of that new copy is separate from past approval history.
+
+Document access ends when its review/service purpose ends. The worker queues it
+immediately; 24 hours is the maximum physical-deletion SLA, not extra viewing or
+retention grace. Government IDs take priority over photo cleanup in the shared
+batch. Storage must be deleted before the tombstone is recorded and unnecessary
+`id_type` metadata is cleared. Verification photos retain their 30-day policy.
+
+`onboarding_id_retention_sla` returns service-only aggregate overdue counts. The
+worker logs only `onboarding_government_id_retention_overdue` and its count, and
+returns 503 if it observed a 24-hour violation, even if that batch cleans it up.
+The existing failed-job alert path therefore remains actionable; the next clean
+scheduled run records recovery. Keep the exact examined/deleted/failed response
+shape, five-minute cleanup leases and prohibition on ambiguous immediate retries.
+Verify the new violation event, failure notification, recovery and origin deletion
+with synthetic fixtures before release; local tests do not prove hosted delivery.

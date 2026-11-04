@@ -17,6 +17,7 @@ it("limits student estimates to individual passes when changing to a cabin", () 
   fireEvent.change(screen.getByLabelText("Pass type"), { target: { value: "cabin" } });
   expect(screen.queryByRole("combobox", { name: /Student discount estimate/ })).not.toBeInTheDocument();
   expect(screen.getAllByText("₹52,500").length).toBeGreaterThan(0);
+  expect(screen.getByText(/Cabin figures show one month's rent, not the full 3-month commitment or deposit/)).toBeVisible();
 });
 it("requires review rather than displaying a total for a week crossing launch expiry", () => {
   render(<BookingBetaPage />);

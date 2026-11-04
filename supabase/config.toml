@@ -133,3 +133,9 @@ verify_jwt = false
 
 [functions.course-session-handoff]
 verify_jwt = false
+
+[functions.razorpay-test]
+verify_jwt = false
+
+[functions.razorpay-test-webhook]
+verify_jwt = false

@@ -1,11 +1,24 @@
-import { expect, it } from 'vitest';
+import { afterEach, expect, it, vi } from 'vitest';
 import { documentAvailable, GOVERNMENT_ID_RETENTION_VERSION, type LocalDocument } from '../../src/lib/onboarding';
+import { onboardingDocumentAvailable } from '../../supabase/functions/_shared/onboarding-retention';
 
-it('recognizes retained IDs without treating malformed expiry as active', () => {
-  const doc: LocalDocument = { id: 'synthetic', user_id: 'synthetic', kind: 'government_id', id_type: 'pan', uploaded_at: '2026-10-14', expires_at: 'infinity', deleted_at: null };
+afterEach(() => vi.useRealTimers());
+
+it('fails closed on unbounded, malformed, expired or deleted identity copies', () => {
+  vi.useFakeTimers();
+  vi.setSystemTime(new Date('2026-11-04T10:00:00Z'));
+  const doc: LocalDocument = { id: 'synthetic', user_id: 'synthetic', kind: 'government_id', id_type: 'pan', uploaded_at: '2026-11-04', expires_at: '2026-11-05T10:00:00Z', deleted_at: null };
   expect(documentAvailable(doc)).toBe(true);
-  expect(documentAvailable({ ...doc, deleted_at: '2026-10-14' })).toBe(false);
-  expect(documentAvailable({ ...doc, expires_at: 'invalid' })).toBe(false);
-  expect(documentAvailable({ ...doc, expires_at: '2020-01-01' })).toBe(false);
-  expect(GOVERNMENT_ID_RETENTION_VERSION).toBe('2026-10-14-equipment-id-v1');
+  for (const unavailable of [
+    { ...doc, deleted_at: '2026-11-04' },
+    { ...doc, expires_at: 'infinity' },
+    { ...doc, expires_at: 'invalid' },
+    { ...doc, expires_at: '2020-01-01' },
+    { ...doc, expires_at: '2026-11-04T10:00:00Z' },
+  ]) {
+    expect(documentAvailable(unavailable)).toBe(false);
+    expect(onboardingDocumentAvailable(unavailable)).toBe(false);
+  }
+  expect(onboardingDocumentAvailable(doc)).toBe(true);
+  expect(GOVERNMENT_ID_RETENTION_VERSION).toBe('2026-11-04-active-service-id-v1');
 });
