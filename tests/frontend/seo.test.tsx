@@ -89,6 +89,16 @@ describe("search metadata", () => {
     expect(JSON.parse(document.querySelector("script")!.textContent!)).toEqual(source.structuredData);
   });
 
+  it("publishes the corrected lab postal address in organization structured data", () => {
+    const graph = getPageSeo("/contact/").structuredData!["@graph"] as Record<string, unknown>[];
+    const organization = graph.find((item) => item["@type"] === "Organization")!;
+    expect(organization.address).toEqual({
+      "@type": "PostalAddress",
+      streetAddress: "1490, 11th Cross, 20th Main Rd, 1st Sector, HSR Layout",
+      addressLocality: "Bengaluru", addressRegion: "Karnataka", postalCode: "560102", addressCountry: "IN"
+    });
+  });
+
   it("replaces prerendered metadata on SPA navigation without duplicates or stale private schema", async () => {
     document.head.insertAdjacentHTML("beforeend", renderSeoHead(getPageSeo("/")));
     const theme = document.createElement("meta");

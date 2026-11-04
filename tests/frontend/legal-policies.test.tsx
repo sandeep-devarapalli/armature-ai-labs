@@ -16,11 +16,12 @@ vi.mock("../../src/context/ThemeContext", () => ({
 }));
 
 const legalName = legalEntity.name;
+const labAddress = "1490, 11th Cross, 20th Main Rd, 1st Sector, HSR Layout, Bengaluru, Karnataka 560102";
 const policies = [
-  { route: "/contact", title: "Contact Us", Page: ContactPage, digest: "120967f39b8a978bf10a712d6c9256801c11901e199e06853f93ee2b478a214e" },
+  { route: "/contact", title: "Contact Us", Page: ContactPage, digest: "c329a43a1fdec02d3d8ebe4837f22cf04fc67abe1719c2601d9675485d664d70" },
   { route: "/terms", title: "Terms and Conditions", Page: TermsPage, digest: "a4ade1e09327ceaeaea52fb2d5c83e33c34c39f8b49773040f701a80167c7262" },
   { route: "/refund-policy", title: "Cancellation and Refund Policy", Page: RefundPolicyPage, digest: "3bc0331ff825fbec12e7e3318be7e4ebd3aaaa0bcb88d2a0851ee0ad5b64fcfc" },
-  { route: "/shipping-policy", title: "Shipping and Delivery Policy", Page: ShippingPolicyPage, digest: "feb42d188e5d3a88c04466089f316c06ebf263bdf916f14ddffa90e6c82dcde8" }
+  { route: "/shipping-policy", title: "Shipping and Delivery Policy", Page: ShippingPolicyPage, digest: "f115335c6fc63160cbab70ac31d31357e6046bb600f9c6bc0d733ced8ec4e402" }
 ];
 const footerLinks = [
   ["Contact", "/contact"], ["Terms and Conditions", "/terms"],
@@ -35,8 +36,10 @@ describe("approved legal policies", () => {
     const { container } = render(<MemoryRouter><Page /></MemoryRouter>);
     expect(screen.getByRole("heading", { level: 1, name: title })).toBeInTheDocument();
     const content = container.querySelector(".privacy-content")!.textContent!;
-    // Pin approved wording while allowing the shared operator name to change in one place.
-    const approvedBody = content.replaceAll(legalName, "[LEGAL_ENTITY_NAME]").replace(/\s+/g, "");
+    // Only the shared operator and superseding lab address vary from the handoff copy.
+    const approvedBody = content.replace(/\s+/g, "")
+      .replaceAll(legalName.replace(/\s+/g, ""), "[LEGAL_ENTITY_NAME]")
+      .replaceAll(legalEntity.labAddress.formatted.replace(/\s+/g, ""), "[LAB_ADDRESS]");
     expect(createHash("sha256").update(approvedBody).digest("hex")).toBe(digest);
     expect(content).toContain(legalName);
     expect(content).not.toContain("\u2014");
@@ -49,12 +52,30 @@ describe("approved legal policies", () => {
       render(<MemoryRouter initialEntries={[route]}><Shell><Page /></Shell></MemoryRouter>);
       expect(screen.getByRole("heading", { level: 1, name: title })).toBeInTheDocument();
       expect(screen.getByRole("main")).toHaveTextContent(legalName);
-      const footer = within(screen.getByRole("contentinfo"));
+      const footerElement = screen.getByRole("contentinfo");
+      expect(within(footerElement).getByText(labAddress, { exact: true })).toBeInTheDocument();
+      expect(footerElement).not.toHaveTextContent("560034");
+      const footer = within(footerElement);
       for (const [name, href] of footerLinks) {
         expect(footer.getByRole("link", { name })).toHaveAttribute("href", href);
       }
     }
   );
+
+  it("uses the corrected lab address while preserving the registered office", () => {
+    expect(legalEntity.labAddress).toMatchObject({
+      street: "1490, 11th Cross, 20th Main Rd, 1st Sector",
+      locality: "HSR Layout", city: "Bengaluru", state: "Karnataka", postalCode: "560102", country: "IN"
+    });
+    expect(legalEntity.labAddress.formatted).toBe(labAddress);
+    expect(legalEntity.registeredOfficeAddress).toEqual([
+      "Flat No. 301, Siddahakala, Sankul Adarsh Nagar Vasco, Chicalim",
+      "Mormugao, South Goa 403711, Goa, India"
+    ]);
+    const { container } = render(<MemoryRouter><ContactPage /></MemoryRouter>);
+    expect(container.querySelector(".privacy-content")).toHaveTextContent(labAddress);
+    expect(container).toHaveTextContent(legalEntity.registeredOfficeAddress.join(" "));
+  });
 
   it("keeps the refund schedule a semantic table and contact channels actionable", () => {
     const { unmount } = render(<MemoryRouter><RefundPolicyPage /></MemoryRouter>);
@@ -77,6 +98,8 @@ describe("approved legal policies", () => {
     expect(headings.indexOf("Payments")).toBe(headings.indexOf("Basic membership and identity review") + 1);
     expect(headings.indexOf("Equipment requests and votes")).toBe(headings.indexOf("Payments") + 1);
     expect(container).toHaveTextContent("Razorpay Payments Private Limited and its partner banks");
+    expect(container).toHaveTextContent(labAddress);
+    expect(container).not.toHaveTextContent("560034");
     expect(container).toHaveTextContent("We keep invoices and payment records for as long as Indian tax and accounting laws require, even if you close your account.");
     expect(container).toHaveTextContent("Payments are covered in the Payments section above, and in our Terms and Conditions and Cancellation and Refund Policy.");
   });

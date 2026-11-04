@@ -1,5 +1,6 @@
 import { basicOnboardingAvailable } from "../config/release";
 import { components } from "../data/components";
+import { legalEntity } from "../data/legalEntity";
 
 export const SITE_URL = "https://armatureailabs.com";
 const SITE_NAME = "Armature AI Labs";
@@ -126,15 +127,15 @@ const organization: JsonLd = {
   url: `${SITE_URL}/`,
   description: pages["/"].description,
   logo: `${SITE_URL}/brand/editorial-2026-09/logos/icon-light-512.png`,
-  email: "hello@armatureailabs.com",
-  telephone: "+919748485583",
+  email: legalEntity.email,
+  telephone: legalEntity.phone.replace(/\s/g, ""),
   address: {
     "@type": "PostalAddress",
-    streetAddress: "1490, 11th Cross, 20th Main, 1st Sector, HSR Layout",
-    addressLocality: "Bengaluru",
-    addressRegion: "Karnataka",
-    postalCode: "560034",
-    addressCountry: "IN"
+    streetAddress: `${legalEntity.labAddress.street}, ${legalEntity.labAddress.locality}`,
+    addressLocality: legalEntity.labAddress.city,
+    addressRegion: legalEntity.labAddress.state,
+    postalCode: legalEntity.labAddress.postalCode,
+    addressCountry: legalEntity.labAddress.country
   },
   sameAs: ["https://www.linkedin.com/company/armature-ai-labs/"]
 };

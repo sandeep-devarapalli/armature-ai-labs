@@ -7,7 +7,8 @@ test("footer publishes direct contact links", async ({ page }) => {
   const discord = footer.getByRole("link", { name: "Discord", exact: true });
   const linkedIn = footer.getByRole("link", { name: "LinkedIn", exact: true });
 
-  await expect(footer).toContainText("1490, 11th Cross, 20th Main, 1st Sector, HSR Layout, Bengaluru – 560034, Karnataka.");
+  await expect(footer.getByText("1490, 11th Cross, 20th Main Rd, 1st Sector, HSR Layout, Bengaluru, Karnataka 560102", { exact: true })).toBeVisible();
+  await expect(footer).not.toContainText("560034");
 
   await expect(footer.getByRole("link", { name: "hello@armatureailabs.com" })).toHaveAttribute("href", "mailto:hello@armatureailabs.com");
   await expect(footer.getByRole("link", { name: legalEntity.phone, exact: true })).toHaveAttribute("href", `tel:${legalEntity.phone.replace(/\s/g, "")}`);

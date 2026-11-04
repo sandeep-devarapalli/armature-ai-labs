@@ -8,6 +8,8 @@ test("privacy is discoverable, readable in every theme and explains registration
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", "https://armatureailabs.com/privacy/");
   await expect(page.getByRole("heading", { name: "Basic membership and identity review" })).toBeVisible();
   await expect(page.locator("main")).toContainText(legalEntity.name);
+  await expect(page.locator("main")).toContainText("1490, 11th Cross, 20th Main Rd, 1st Sector, HSR Layout, Bengaluru, Karnataka 560102");
+  await expect(page.locator("main")).not.toContainText("560034");
   await expect(page.locator("main")).toContainText("2026-09-26-release-1");
   await expect(page.locator("main")).toContainText("30 days after upload");
   await expect(page.locator("main")).toContainText("not covered by the 30-day upload cleanup");

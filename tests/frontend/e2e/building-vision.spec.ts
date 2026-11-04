@@ -188,7 +188,8 @@ test("building vision shows current layouts with a simple gallery and full conta
     await expect(page.locator("#" + id.toLowerCase() + "-cabins img")).toHaveAttribute("src", release.roomPreviews[id].blender);
   }
   const footer = page.locator("footer");
-  await expect(footer).toContainText("1490, 11th Cross, 20th Main, 1st Sector, HSR Layout, Bengaluru – 560034, Karnataka.");
+  await expect(footer.getByText("1490, 11th Cross, 20th Main Rd, 1st Sector, HSR Layout, Bengaluru, Karnataka 560102", { exact: true })).toBeVisible();
+  await expect(footer).not.toContainText("560034");
   await expect(footer.getByRole("link", { name: "hello@armatureailabs.com" })).toHaveAttribute("href", "mailto:hello@armatureailabs.com");
   expect(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth)).toBe(false);
 });

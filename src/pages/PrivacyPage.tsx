@@ -12,7 +12,7 @@ export function PrivacyPage() {
       <section aria-labelledby="privacy-operator">
         <h2 id="privacy-operator">Who is responsible</h2>
         <p>Armature AI Labs is operated by {legalEntity.name} (LLPIN {legalEntity.llpin}). This notice covers armatureailabs.com and enquiries sent to our lab.</p>
-        <p>For privacy questions or requests, email <a href={`mailto:${legalEntity.privacyEmail}`}>{legalEntity.privacyEmail}</a>. Our lab contact address is {legalEntity.labAddress.street}, {legalEntity.labAddress.city} – {legalEntity.labAddress.postalCode}, {legalEntity.labAddress.state}.</p>
+        <p>For privacy questions or requests, email <a href={`mailto:${legalEntity.privacyEmail}`}>{legalEntity.privacyEmail}</a>. Our lab contact address is {legalEntity.labAddress.formatted}.</p>
       </section>
       <section aria-labelledby="privacy-current">
         <h2 id="privacy-current">When you visit or contact us</h2>

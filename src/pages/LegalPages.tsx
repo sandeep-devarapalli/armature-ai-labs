@@ -19,7 +19,7 @@ export function ContactPage() {
       <p>Armature AI Labs is operated by {legalEntity.name} (LLPIN {legalEntity.llpin}).</p>
     <section>
       <h2>Lab address</h2>
-      <p>{legalEntity.labAddress.name}<br />{"\n"}{legalEntity.labAddress.street}<br />{"\n"}{legalEntity.labAddress.city} {legalEntity.labAddress.postalCode}, {legalEntity.labAddress.state}, {legalEntity.labAddress.country}</p>
+      <p>{legalEntity.labAddress.name}<br />{"\n"}{legalEntity.labAddress.formatted}</p>
     </section>
     <section>
       <h2>Registered office</h2>
@@ -166,7 +166,7 @@ export function ShippingPolicyPage() {
       <p>This policy covers robotics hardware and kits sold by {legalEntity.name} under the Armature AI Labs name. Coworking, equipment rental and workshops are services delivered at our lab, so nothing is shipped for them; your booking confirmation is sent by email.</p>
     <section>
       <h2>Pickup from the lab</h2>
-      <p>You can collect your order free of charge from {legalEntity.labAddress.name}, {legalEntity.labAddress.street}, {legalEntity.labAddress.city} {legalEntity.labAddress.postalCode}, during our working hours ({legalEntity.supportHours.replace(/ IST$/, "")}). We email you when it is ready, usually within 2 working days. Bring your order reference and a photo ID.</p>
+      <p>You can collect your order free of charge from {legalEntity.labAddress.name}, {legalEntity.labAddress.formatted}, during our working hours ({legalEntity.supportHours.replace(/ IST$/, "")}). We email you when it is ready, usually within 2 working days. Bring your order reference and a photo ID.</p>
     </section>
     <section>
       <h2>Delivery within India</h2>

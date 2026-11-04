@@ -19,10 +19,15 @@ const legalPages = {
 };
 const routes = ["/", "/about/", "/services/", "/projects/", "/branding/", "/blog/", "/blog/model-hardware-standard/", "/projects/electrofluidic-fiber-muscles/", "/building-vision/", "/ecosystem/", "/components/", "/maker-desk/", "/join/", ...Object.keys(legalPages)];
 const hash = (html) => createHash("md5").update(html).digest("hex");
-const footer = `<footer>${Object.keys(legalPages).map((route) => `<a href="${route.slice(0, -1)}">${legalPages[route]}</a>`).join("")}</footer>`;
-const body = (pathname) => `<div id="root" data-prerendered-path="${pathname.replace(/\/+$/, "") || "/"}"><main><h1>${legalPages[pathname] ?? `Page ${pathname}`}</h1><p>${legalPages[pathname] ? `${legalEntity.name}. ` : ""}${"Synthetic public page content for the SEO artifact checker. ".repeat(4)}</p></main>${footer}</div>`;
+const footer = `<footer><p>${legalEntity.labAddress.formatted}</p>${Object.keys(legalPages).map((route) => `<a href="${route.slice(0, -1)}">${legalPages[route]}</a>`).join("")}</footer>`;
+const body = (pathname) => `<div id="root" data-prerendered-path="${pathname.replace(/\/+$/, "") || "/"}"><div class="app-shell"><main><h1>${legalPages[pathname] ?? `Page ${pathname}`}</h1><p>${legalPages[pathname] ? `${legalEntity.name}. ` : ""}${"Synthetic public page content for the SEO artifact checker. ".repeat(4)}</p></main>${footer}</div></div>`;
 const shell = '<html><head><meta name="robots" content="noindex"></head><body><div id="root"></div></body></html>';
-const homepage = (pathname) => `<html><head><title>Page ${pathname}</title><link rel="canonical" href="${origin}${pathname}"><meta name="description" content="Synthetic page"><meta name="robots" content="index,follow">${["title", "description", "image", "image:alt", "type", "site_name", "url"].map((key) => `<meta property="og:${key}" content="${key === "url" ? origin + pathname : "Synthetic"}">`).join("")}${["card", "title", "description", "image", "image:alt"].map((key) => `<meta name="twitter:${key}" content="Synthetic">`).join("")}<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{},{},{}]}</script></head><body>${body(pathname)}</body></html>`;
+const schema = { "@context": "https://schema.org", "@graph": [{ "@type": "Organization", address: {
+  "@type": "PostalAddress", streetAddress: `${legalEntity.labAddress.street}, ${legalEntity.labAddress.locality}`,
+  addressLocality: legalEntity.labAddress.city, addressRegion: legalEntity.labAddress.state,
+  postalCode: legalEntity.labAddress.postalCode, addressCountry: legalEntity.labAddress.country
+} }, {}, {}] };
+const homepage = (pathname) => `<html><head><title>Page ${pathname}</title><link rel="canonical" href="${origin}${pathname}"><meta name="description" content="Synthetic page"><meta name="robots" content="index,follow">${["title", "description", "image", "image:alt", "type", "site_name", "url"].map((key) => `<meta property="og:${key}" content="${key === "url" ? origin + pathname : "Synthetic"}">`).join("")}${["card", "title", "description", "image", "image:alt"].map((key) => `<meta name="twitter:${key}" content="Synthetic">`).join("")}<script type="application/ld+json">${JSON.stringify(schema)}</script></head><body>${body(pathname)}</body></html>`;
 
 async function check(t, manifest, extra = "", files = {}) {
   const directory = await mkdtemp(path.join(tmpdir(), "seo-artifacts-"));
@@ -43,6 +48,7 @@ async function check(t, manifest, extra = "", files = {}) {
     await writeFile(path.join(directory, "sw.js"), `workbox.precacheAndRoute([${manifest}], {}); workbox.createHandlerBoundToURL("/app-shell"); ${extra}`);
   }
   for (const [filename, content] of Object.entries(files)) {
+    await mkdir(path.dirname(path.join(directory, filename)), { recursive: true });
     await writeFile(path.join(directory, filename), content);
   }
   return spawnSync(process.execPath, [checker, directory], { encoding: "utf8" });
@@ -51,7 +57,12 @@ async function check(t, manifest, extra = "", files = {}) {
 for (const [name, html, error] of [
   ["missing policy entity", homepage("/terms/").replace(`${legalEntity.name}. `, ""), /Policy is missing the legal entity/],
   ["wrong policy heading", homepage("/terms/").replace("<h1>Terms and Conditions</h1>", "<h1>Not the approved policy</h1>"), /Wrong policy heading/],
-  ["missing legal footer", homepage("/terms/").replace(footer, ""), /Footer is missing \/contact\//]
+  ["missing legal footer", homepage("/terms/").replace(footer, `<footer><p>${legalEntity.labAddress.formatted}</p></footer>`), /Footer is missing \/contact\//],
+  ["nested footer cannot supply missing shared footer links", homepage("/terms/").replace(footer, `<footer><p>${legalEntity.labAddress.formatted}</p></footer>`).replace("</main>", `${footer}</main>`), /Footer is missing \/contact\//],
+  ["nested footer cannot supply a missing shared footer address", homepage("/terms/").replace(legalEntity.labAddress.formatted, "A different address").replace("</main>", `${footer}</main>`), /Footer is missing the current lab address/],
+  ["nested footer cannot replace the shared footer", homepage("/terms/").replace(footer, "").replace("</main>", `${footer}</main>`), /Missing shared site footer/],
+  ["wrong footer address", homepage("/terms/").replace(legalEntity.labAddress.formatted, "A different address"), /Footer is missing the current lab address/],
+  ["wrong structured address", homepage("/terms/").replace(`"addressLocality":"${legalEntity.labAddress.city}"`, '"addressLocality":"A different city"'), /PostalAddress addressLocality must match/]
 ]) {
   test(`${name} fails`, async (t) => {
     const result = await check(t, `${entry},${appShell}`, "", { "terms/index.html": html });
@@ -60,11 +71,37 @@ for (const [name, html, error] of [
   });
 }
 
+test("nested content footer before the shared footer passes", async (t) => {
+  const html = homepage("/terms/").replace("</main>", "<footer><p>Nested content note</p></footer></main>");
+  const result = await check(t, `${entry},${appShell}`, "", { "terms/index.html": html });
+  assert.equal(result.status, 0, result.stderr);
+});
+
 test("missing policy sitemap route fails", async (t) => {
   const sitemap = `<urlset>${routes.filter((route) => route !== "/terms/").map((route) => `<url><loc>${origin}${route}</loc></url>`).join("")}</urlset>`;
   const result = await check(t, `${entry},${appShell}`, "", { "sitemap.xml": sitemap });
   assert.equal(result.status, 1, result.stdout + result.stderr);
   assert.match(result.stderr, /Sitemap is missing \/terms\//);
+});
+
+for (const [name, filename, content, error] of [
+  ["old PIN in a JavaScript asset", "assets/old-address.js", 'const oldAddress = "560034";', /Superseded lab address in assets\/old-address.js/],
+  ["old road in unlisted HTML", "old-address.html", "<p>20th Main, HSR Layout</p>", /Superseded lab address in old-address.html/],
+  ["wrong structured address outside the sitemap", "extra.html", `<script type="application/ld+json">${JSON.stringify(schema).replace(`"addressLocality":"${legalEntity.labAddress.city}"`, '"addressLocality":"A different city"')}</script>`, /PostalAddress addressLocality must match/]
+]) {
+  test(`${name} fails`, async (t) => {
+    const result = await check(t, `${entry},${appShell}`, "", { [filename]: content });
+    assert.equal(result.status, 1, result.stdout + result.stderr);
+    assert.match(result.stderr, error);
+  });
+}
+
+test("CAD and binary model data are outside the web-copy address scan", async (t) => {
+  const result = await check(t, `${entry},${appShell}`, "", {
+    "building-models/source.step": "#560034 = CARTESIAN_POINT('',(20,0,0));",
+    "building-models/source.glb": Buffer.from("\0\xff560034")
+  });
+  assert.equal(result.status, 0, result.stderr);
 });
 
 const revision = hash(homepage("/"));

@@ -22,7 +22,7 @@ Models below are candidates unless already specified by the owner. “Quote need
 
 ## Printer and Jetson decision before ordering
 
-Request P2S and P2S Combo on separate quote lines. Robu calls itself an official authorized Bambu distributor and advertises official warranty/nationwide service on its own category page; verify the current manufacturer authorization and written warranty duration, parts/labour coverage, courier costs, DOA policy and commercial shared-lab use. The fetched individual product pages did not expose sufficient stock/tax/shipping detail. A “nationwide service” phrase is not a Bengaluru repair SLA. Request landed delivery to HSR Layout 560034 and a dated dispatch commitment for the planned 17 November service rollout; do not promise October 18 installation from a list page.
+Request P2S and P2S Combo on separate quote lines. Robu calls itself an official authorized Bambu distributor and advertises official warranty/nationwide service on its own category page; verify the current manufacturer authorization and written warranty duration, parts/labour coverage, courier costs, DOA policy and commercial shared-lab use. The fetched individual product pages did not expose sufficient stock/tax/shipping detail. A “nationwide service” phrase is not a Bengaluru repair SLA. Request landed delivery to 1490, 11th Cross, 20th Main Rd, 1st Sector, HSR Layout, Bengaluru, Karnataka 560102 and a dated dispatch commitment for the planned 17 November service rollout; do not promise October 18 installation from a list page.
 
 For Jetson, obtain a four-kit quote against the 8GB developer-kit BOM. Require a boot/firmware/JetPack manifest, storage health check, thermal sustained-load demonstration and tested camera connections. Record all serials at receipt. No memory upgrade, larger Orin NX module or original Jetson Nano substitution is implied. Manufacturer peak TOPS is a specification, not an Armature benchmark or a guarantee a particular model will fit in 8GB.
 
@@ -31,7 +31,7 @@ For Jetson, obtain a four-kit quote against the 8GB developer-kit BOM. Require a
 - Seller legal name/GSTIN, manufacturer authorization evidence, exact manufacturer part numbers and revision; new sealed stock versus assembled kit clearly marked.
 - Quantity, unit ex-tax amount, discount, HSN, tax rate/amount, freight/insurance, installation/training, landed total, quote validity and payment milestones. No assumed 18% tax calculation where supplier treatment is unknown.
 - Every included/excluded accessory; Indian mains supply/plug, power draw, dimensions, working clearances and network requirements.
-- Stock physically held, dispatch date, delivery date to 560034, import responsibility and transit damage process.
+- Stock physically held, dispatch date, delivery date to 1490, 11th Cross, 20th Main Rd, 1st Sector, HSR Layout, Bengaluru, Karnataka 560102, import responsibility and transit damage process.
 - Written warranty applicable to shared-lab use, local repair route, response/repair estimate, replacement/loaner arrangements, spare-part prices and availability.
 - Software/driver versions, supported host OS, SDK licences, offline/network behaviour and reproducible acceptance test. Obtain publication permission for product media separately.
 - Separate optional upgrades from the approved baseline. Do not use contingency automatically to hide an over-budget base configuration.

@@ -1,6 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { legalEntity } from "../../../src/data/legalEntity";
 
+const labAddress = "1490, 11th Cross, 20th Main Rd, 1st Sector, HSR Layout, Bengaluru, Karnataka 560102";
 const policies = [
   ["/contact", "Contact Us"],
   ["/terms", "Terms and Conditions"],
@@ -24,6 +25,11 @@ for (const [route, title] of policies) {
     await expect(page.locator("main")).toContainText(legalEntity.name);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute("href", `https://armatureailabs.com${route}/`);
     const footer = page.locator("footer");
+    await expect(footer.getByText(labAddress, { exact: true })).toBeVisible();
+    await expect(page.locator("main")).not.toContainText("560034");
+    if (["/contact", "/shipping-policy", "/privacy"].includes(route)) {
+      await expect(page.locator("main")).toContainText(labAddress);
+    }
     for (const [name, href] of legalLinks) {
       await expect(footer.getByRole("link", { name, exact: true })).toHaveAttribute("href", href);
     }
@@ -40,6 +46,8 @@ test("all policy content and links are delivered without JavaScript", async ({ b
       expect(response?.status()).toBe(200);
       await expect(page.getByRole("heading", { level: 1, name: title, exact: true })).toBeVisible();
       await expect(page.locator("main")).toContainText(legalEntity.name);
+      await expect(page.locator("footer").getByText(labAddress, { exact: true })).toBeVisible();
+      await expect(page.locator("main")).not.toContainText("560034");
       for (const [name, href] of legalLinks) {
         await expect(page.locator("footer").getByRole("link", { name, exact: true })).toHaveAttribute("href", href);
       }

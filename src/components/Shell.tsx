@@ -268,7 +268,7 @@ export function Shell({ children }: PropsWithChildren) {
           <div>
             <BrandMark />
             <p>The Physical AI and Robotics Lab · HSR Layout, Bengaluru</p>
-            <p>{legalEntity.labAddress.street}, {legalEntity.labAddress.city} – {legalEntity.labAddress.postalCode}, {legalEntity.labAddress.state}.</p>
+            <p>{legalEntity.labAddress.formatted}</p>
             <p>{legalEntity.name} (LLPIN {legalEntity.llpin})</p>
           </div>
           <div className="footer-links">

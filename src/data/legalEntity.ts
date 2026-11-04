@@ -7,11 +7,15 @@ export const legalEntity = {
   ],
   labAddress: {
     name: "Armature AI Lab, HSR 1490",
-    street: "1490, 11th Cross, 20th Main, 1st Sector, HSR Layout",
+    street: "1490, 11th Cross, 20th Main Rd, 1st Sector",
+    locality: "HSR Layout",
     city: "Bengaluru",
-    postalCode: "560034",
+    postalCode: "560102",
     state: "Karnataka",
-    country: "India"
+    country: "IN",
+    get formatted(): string {
+      return `${this.street}, ${this.locality}, ${this.city}, ${this.state} ${this.postalCode}`;
+    }
   },
   email: "hello@armatureailabs.com",
   privacyEmail: "privacy@armatureailabs.com",
