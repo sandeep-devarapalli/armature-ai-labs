@@ -110,14 +110,20 @@ test("submitting current documents starts identity review without changing Basic
   expect(state.submissions()).toBe(1);
 });
 
-test("approved identity with expired private copies needs mobile verification, not new uploads", async ({ page }) => {
-  await fixture(page, { approved: true });
+test("expired ID copies preserve approval and mobile verification while allowing a later service ID", async ({ page }) => {
+  const state = await fixture(page, { approved: true });
   await page.goto("/onboarding");
   await activeBasic(page);
   await page.getByRole("button", { name: "Verify mobile number", exact: true }).click();
   await expect(page.getByRole("region", { name: "Mobile verification", exact: true })).toBeVisible();
   await activeBasic(page);
-  await expect(page.getByLabel("government ID image", { exact: true })).toHaveCount(0);
+  await page.getByRole("navigation", { name: "Registration steps" }).getByRole("button", { name: /Private documents/ }).click();
+  await expect(page.getByText(/Your identity approval is preserved when private copies expire/)).toBeVisible();
+  await expect(page.getByLabel("government ID image", { exact: true })).toBeVisible();
+  await expect(page.getByLabel("photo image", { exact: true })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Submit identity for review", exact: true })).toHaveCount(0);
+  await activeBasic(page);
+  expect(state.submissions()).toBe(0);
 });
 
 for (const [label, options] of [["no authoritative membership", { level: null }], ["server feature hold", { enabled: false }]] as const) {
