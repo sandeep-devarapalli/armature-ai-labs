@@ -6,6 +6,7 @@
 .privacy-content ul { padding-left: 24px; }
 .privacy-content li + li { margin-top: 16px; }
 .privacy-content a { text-decoration: underline; text-underline-offset: 3px; }
+.legal-page .page-hero { min-height: 0; }
 .legal-page .page-hero h1 { overflow-wrap: anywhere; }
 .legal-table-scroll { max-width: 100%; overflow-x: auto; margin-block: 32px; }
 .legal-table-scroll table { width: 100%; min-width: 720px; border-collapse: collapse; }
