@@ -134,6 +134,12 @@ verify_jwt = false
 [functions.course-session-handoff]
 verify_jwt = false
 
+[functions.razorpay-test]
+verify_jwt = false
+
+[functions.razorpay-test-webhook]
+verify_jwt = false
+
 # Browser authentication is verified in the checkout function.
 [functions.desk-checkout]
 verify_jwt = false

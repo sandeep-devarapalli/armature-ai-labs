@@ -1,6 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 
-export const GOVERNMENT_ID_RETENTION_VERSION = "2026-10-14-equipment-id-v1";
+export const GOVERNMENT_ID_RETENTION_VERSION = "2026-11-04-active-service-id-v1";
 export const ONBOARDING_NOTICE_VERSION = "2026-09-26-release-1";
 export interface LocalApplication {
   user_id: string; full_name: string; email: string; phone: string; linkedin_url: string;
@@ -10,10 +10,12 @@ export interface LocalApplication {
 export interface LocalDocument {
   id: string; user_id: string; kind: "photo" | "government_id"; id_type: string | null;
   uploaded_at: string | null; expires_at: string; deleted_at: string | null;
+  retention_notice_version?: string | null; retention_reviewed_at?: string | null;
 }
 export interface LocalReview { id: string; decision: string; reason: string | null; created_at: string }
 export function documentAvailable(document: LocalDocument) {
-  return !document.deleted_at && (document.expires_at === "infinity" || Date.parse(document.expires_at) > Date.now());
+  const expiry = Date.parse(document.expires_at);
+  return !document.deleted_at && Number.isFinite(expiry) && expiry > Date.now();
 }
 export async function requestOnboardingDocument(client: SupabaseClient, url: string, key: string, id: string, file?: File) {
   const { data: { session } } = await client.auth.getSession();

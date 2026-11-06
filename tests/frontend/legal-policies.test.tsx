@@ -18,10 +18,10 @@ vi.mock("../../src/context/ThemeContext", () => ({
 const legalName = legalEntity.name;
 const labAddress = "1490, 11th Cross, 20th Main Rd, 1st Sector, HSR Layout, Bengaluru, Karnataka 560102";
 const policies = [
-  { route: "/contact", title: "Contact Us", Page: ContactPage, digest: "c329a43a1fdec02d3d8ebe4837f22cf04fc67abe1719c2601d9675485d664d70" },
-  { route: "/terms", title: "Terms and Conditions", Page: TermsPage, digest: "a4ade1e09327ceaeaea52fb2d5c83e33c34c39f8b49773040f701a80167c7262" },
-  { route: "/refund-policy", title: "Cancellation and Refund Policy", Page: RefundPolicyPage, digest: "3bc0331ff825fbec12e7e3318be7e4ebd3aaaa0bcb88d2a0851ee0ad5b64fcfc" },
-  { route: "/shipping-policy", title: "Shipping and Delivery Policy", Page: ShippingPolicyPage, digest: "f115335c6fc63160cbab70ac31d31357e6046bb600f9c6bc0d733ced8ec4e402" }
+  { route: "/contact", title: "Contact Us", Page: ContactPage, digest: "fd5441c15d315a0ec9fc5aa34c9048903d86a88918e4648ce08337ed866d42a3" },
+  { route: "/terms", title: "Terms and Conditions", Page: TermsPage, digest: "1279842debd49a4230c9b57c9c5d9fd40cb23a75520ee5561e512843235edde2" },
+  { route: "/refund-policy", title: "Cancellation and Refund Policy", Page: RefundPolicyPage, digest: "104f52e32c04c79930ec84716b3d3c1ca2ee29fd0d4593705a2e81227e34abdd" },
+  { route: "/shipping-policy", title: "Shipping and Delivery Policy", Page: ShippingPolicyPage, digest: "f320496b0ea1e08c8828bfb59fc059e155bd1174441ecee961eb8aa932328b4d" }
 ];
 const footerLinks = [
   ["Contact", "/contact"], ["Terms and Conditions", "/terms"],
@@ -36,7 +36,7 @@ describe("approved legal policies", () => {
     const { container } = render(<MemoryRouter><Page /></MemoryRouter>);
     expect(screen.getByRole("heading", { level: 1, name: title })).toBeInTheDocument();
     const content = container.querySelector(".privacy-content")!.textContent!;
-    // Only the shared operator and superseding lab address vary from the handoff copy.
+    // Includes the owner's 4 November commercial and complaint-policy corrections.
     const approvedBody = content.replace(/\s+/g, "")
       .replaceAll(legalName.replace(/\s+/g, ""), "[LEGAL_ENTITY_NAME]")
       .replaceAll(legalEntity.labAddress.formatted.replace(/\s+/g, ""), "[LAB_ADDRESS]");
@@ -81,15 +81,84 @@ describe("approved legal policies", () => {
     const { unmount } = render(<MemoryRouter><RefundPolicyPage /></MemoryRouter>);
     const table = screen.getByRole("table");
     expect(within(table).getAllByRole("columnheader").map((cell) => cell.textContent)).toEqual(["Service", "Cancel or return", "Refund"]);
-    expect(within(table).getAllByRole("row")).toHaveLength(12);
-    expect(within(table).getByRole("cell", { name: "48 hours or more before the slot" })).toBeInTheDocument();
+    expect(within(table).getAllByRole("row")).toHaveLength(18);
+    expect(within(table).getByRole("cell", { name: "48 hours or more before the rental or session starts" })).toBeInTheDocument();
     unmount();
     render(<MemoryRouter><ContactPage /></MemoryRouter>);
     for (const email of ["hello@armatureailabs.com", "privacy@armatureailabs.com"]) {
       const links = screen.getAllByRole("link", { name: email });
       for (const link of links) expect(link).toHaveAttribute("href", `mailto:${email}`);
     }
-    expect(screen.getByRole("link", { name: "+91 97484 85583" })).toHaveAttribute("href", "tel:+919748485583");
+    for (const link of screen.getAllByRole("link", { name: "+91 97484 85583" })) {
+      expect(link).toHaveAttribute("href", "tel:+919748485583");
+    }
+  });
+
+  it("limits cabin minimums and deposits to cabins and states equipment rental periods", () => {
+    const { container } = render(<MemoryRouter><TermsPage /></MemoryRouter>);
+    expect(container).toHaveTextContent("Cabins have a minimum term of 3 months from the agreed start date. The security deposit is 2 months' rent when agreed monthly rent is ₹1,00,000 or less, and 3 months' rent above ₹1,00,000.");
+    expect(container).toHaveTextContent("The cabin minimum and security deposit do not apply to these passes.");
+    expect(container).toHaveTextContent("on day, week or month plans");
+    expect(container).toHaveTextContent("Rentals are available by the week or month, with a minimum rental of 1 week.");
+    expect(container).toHaveTextContent("Any asset-specific deposit is disclosed in your quote before payment.");
+    expect(container).toHaveTextContent("meeting rooms, are booked for their stated session duration");
+    expect(container).not.toHaveTextContent("booked by the hour or day");
+    expect(container).not.toHaveTextContent("minimum term for a cabin or seat");
+  });
+
+  it("applies the approved cancellation boundary to every desk pass without cabin deductions", () => {
+    render(<MemoryRouter><RefundPolicyPage /></MemoryRouter>);
+    const rows = within(screen.getByRole("table")).getAllByRole("row")
+      .filter((row) => row.textContent?.includes("Day, week or month hot desk or reserved seat"));
+    expect(rows).toHaveLength(3);
+    expect(rows[0]).toHaveTextContent("Cancel at least 48 hours before the pass starts");
+    expect(within(rows[0]).getByRole("cell", { name: /^Full refund$/ })).toBeInTheDocument();
+    expect(rows[1]).toHaveTextContent("Cancel less than 48 hours before the pass starts, or no-show");
+    expect(within(rows[1]).getByRole("cell", { name: /^No refund$/ })).toBeInTheDocument();
+    expect(rows[2]).toHaveTextContent("After the pass starts");
+    expect(rows[2]).toHaveTextContent("No refund for unused time");
+    for (const row of rows) expect(row).not.toHaveTextContent(/deposit|first month's rent|quote/i);
+  });
+
+  it("starts the equipment-deposit refund deadline at return and requires documented deductions", () => {
+    const { container, unmount } = render(<MemoryRouter><TermsPage /></MemoryRouter>);
+    expect(container).toHaveTextContent("within 7 working days of equipment return, less documented unpaid charges or damage");
+    expect(container).toHaveTextContent("The deadline runs from return and is not delayed by open-ended checks.");
+    unmount();
+    render(<MemoryRouter><RefundPolicyPage /></MemoryRouter>);
+    const row = within(screen.getByRole("table")).getAllByRole("row")
+      .find((item) => item.textContent?.startsWith("Equipment rental deposit"))!;
+    expect(row).toHaveTextContent("Equipment returned");
+    expect(row).toHaveTextContent("within 7 working days of return, less documented unpaid charges or damage");
+  });
+
+  it.each([RefundPolicyPage, ShippingPolicyPage])("keeps hardware reporting and valid defect claims consistent", (Page) => {
+    const { container } = render(<MemoryRouter><Page /></MemoryRouter>);
+    expect(container).toHaveTextContent("3 calendar days of delivery or pickup");
+    expect(container).toHaveTextContent("Reasonable opening and testing do not prevent a valid defect claim");
+    expect(container).toHaveTextContent(/manufacturer warrant/i);
+    expect(container).toHaveTextContent("Missing items do not require a return");
+    expect(container).toHaveTextContent("We assess the claim against fulfilment and delivery records");
+    expect(container).toHaveTextContent("If a refund is approved, we initiate it within 5 to 7 working days of approval");
+    expect(container).not.toHaveTextContent("within 48 hours");
+    expect(container).not.toHaveTextContent("Items must be unused");
+  });
+
+  it("distinguishes refund initiation from bank credit and keeps the returned-item deadline bounded", () => {
+    const { container } = render(<MemoryRouter><RefundPolicyPage /></MemoryRouter>);
+    expect(container).toHaveTextContent("within 5 to 7 working days of approval");
+    expect(container).toHaveTextContent("not a promise of when your bank will show the credit");
+    expect(container).toHaveTextContent("within 5 working days of receiving it");
+    expect(container).toHaveTextContent("Deposit refund initiated within 7 working days of move-out");
+    expect(container).not.toHaveTextContent("receiving and checking");
+  });
+
+  it.each([ContactPage, RefundPolicyPage])("acknowledges complaints promptly and defines the D+4 resolution deadline", (Page) => {
+    const { container } = render(<MemoryRouter><Page /></MemoryRouter>);
+    expect(container).toHaveTextContent("within 1 business day");
+    expect(container).toHaveTextContent("by D+4 business days, where D is the date we receive the complaint");
+    expect(container).not.toHaveTextContent("within 30 days");
+    expect(container).not.toHaveTextContent("within 48 hours");
   });
 
   it("places the approved payment notice between identity review and equipment requests", () => {

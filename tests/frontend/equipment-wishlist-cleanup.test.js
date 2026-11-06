@@ -8,7 +8,7 @@ function setup({enabled=true,removeFails=false,documents=0}={}) {
  const from=table=>{const chain={select(){queried(table);return this;},lte(){return this;},order(){return this;},limit:async()=>({data:table==='equipment_wishlist_image_cleanup'?[{object_path:'abandoned'}]:[],error:null}),delete(){return this;},eq:async()=>{acknowledged(table);return {error:null};}};return chain;};
  const remove=vi.fn(async()=>({error:removeFails?new Error('retry'):null}));
  new Function('Deno','assertJobSecret','HttpError','json','adminClient',code)(
- {serve:fn=>handler=fn,env:{get:name=>name==='ONBOARDING_RETENTION_ENABLED'||(enabled&&name==='EQUIPMENT_WISHLIST_CLEANUP_ENABLED')?'true':undefined}},()=>{},class extends Error{},(_r,data,status=200)=>Response.json(data,{status}),()=>({from,storage:{from:()=>({remove})},rpc:async name=>{queried(name);return {data:name==='list_due_onboarding_documents'?Array.from({length:documents},(_,id)=>({id,object_path:`document-${id}`})):name==='claim_equipment_wish_images'?[{object_path:'abandoned'}]:null,error:null};}}));
+ {serve:fn=>handler=fn,env:{get:name=>name==='ONBOARDING_RETENTION_ENABLED'||(enabled&&name==='EQUIPMENT_WISHLIST_CLEANUP_ENABLED')?'true':undefined}},()=>{},class extends Error{},(_r,data,status=200)=>Response.json(data,{status}),()=>({from,storage:{from:()=>({remove})},rpc:async name=>{queried(name);return {data:name==='onboarding_id_retention_sla'?{overdue:0}:name==='list_due_onboarding_documents'?Array.from({length:documents},(_,id)=>({id,object_path:`document-${id}`})):name==='claim_equipment_wish_images'?[{object_path:'abandoned'}]:null,error:null};}}));
  return {handler,acknowledged,queried,remove};
 }
 it('removes abandoned images before acknowledging their cleanup record',async()=>{

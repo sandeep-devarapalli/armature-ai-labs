@@ -19,7 +19,7 @@ for (const theme of ["light", "dark"]) test(`documents and final submission in $
     else if (name === "onboarding_documents") data = docs;
     else if (name === "user") data = user;
     else if (name === "reserve_onboarding_document") { reservations++; const kind = body!().p_kind; const doc = { id: kind, kind, uploaded_at: null, expires_at: "2035-01-01T00:00:00Z", deleted_at: null }; docs.push(doc); data = doc; }
-    else if (name === "accept_government_id_retention") { expect(body!().p_notice_version).toBe("2026-10-14-equipment-id-v1"); idConsents++; data = null; }
+    else if (name === "accept_government_id_retention") { expect(body!().p_notice_version).toBe("2026-11-04-active-service-id-v1"); idConsents++; data = null; }
     else if (name === "submit_basic_application_for_review") { submits++; expect(body!().p_expected_revision).toBe(1); app.submitted_revision = 1; app.submitted_at = new Date().toISOString(); data = app; }
     else if (name === "member-avatar") { await route.fulfill({ status: 404, contentType: "application/json", body: '{"error":"No avatar"}' }); return; }
     await route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify(data) });
@@ -39,7 +39,10 @@ for (const theme of ["light", "dark"]) test(`documents and final submission in $
   const beforeIdUpload = uploads;
   await page.getByRole("button", { name: "Submit government ID", exact: true }).click();
   expect(uploads).toBe(beforeIdUpload); expect(idConsents).toBe(0);
-  await page.getByRole("checkbox", { name: /I agree to retain my government ID privately/ }).check();
+  const idConsent = page.getByRole("checkbox", { name: /I understand that my government ID is used for manual identity review/ });
+  await expect(idConsent).not.toBeChecked();
+  await expect(idConsent).toHaveAccessibleName(/up to seven days from upload.*deleted within 24 hours.*fresh ID for a later service.*does not consent to keeping it for future convenience/);
+  await idConsent.check();
   await page.getByRole("button", { name: "Submit government ID", exact: true }).click();
   await expect(page.getByText("Government ID Uploaded", { exact: true })).toBeVisible(); expect(idConsents).toBe(1); expect(submits).toBe(0);
   await page.evaluate(() => { (document.activeElement as HTMLElement)?.blur(); window.scrollTo({ top: 0, behavior: "instant" }); });

@@ -18,6 +18,10 @@ if (process.env.VITE_DEMO_MODE === "true") {
   throw new Error("Production builds cannot enable VITE_DEMO_MODE.");
 }
 
+if (process.env.VITE_RAZORPAY_TEST_ENABLED === "true") {
+  throw new Error("Production builds cannot enable the Razorpay test console.");
+}
+
 const siteKey = process.env.VITE_TURNSTILE_SITE_KEY.trim();
 if (!/^0x[\w-]{20,}$/.test(siteKey)) {
   throw new Error("Production requires a real Turnstile site key, not a test or placeholder key.");

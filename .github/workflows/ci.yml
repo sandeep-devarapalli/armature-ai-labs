@@ -25,6 +25,8 @@ jobs:
       - uses: denoland/setup-deno@e95548e56dfa95d4e1a28d6f422fafe75c4c26fb # v2.0.3
         with:
           deno-version: v2.9.8
+      - run: deno test --no-config --no-lock supabase/functions/_shared/razorpay-test-check.ts
+      - run: deno check --no-config --no-lock supabase/functions/razorpay-test/index.ts supabase/functions/razorpay-test-webhook/index.ts
       - run: deno test --config supabase/functions/deno.json --no-lock supabase/functions/_shared/live-desk-webhook_test.ts
       - run: deno check --config supabase/functions/deno.json --no-lock supabase/functions/desk-checkout/index.ts supabase/functions/razorpay-booking-webhook/index.ts
       - run: node scripts/test-market-message-files.mjs && node scripts/test-market-message-reminders.mjs && node scripts/test-market-wakeup.mjs
@@ -121,6 +123,10 @@ jobs:
           psql -v ON_ERROR_STOP=1 -f supabase/tests/ecosystem_contributions.sql
           psql -v ON_ERROR_STOP=1 -f supabase/tests/ecosystem_pending_edit.sql
           psql -v ON_ERROR_STOP=1 -f supabase/tests/ecosystem_city_guide.sql
+          psql -v ON_ERROR_STOP=1 -f supabase/tests/active_service_id_retention.sql
+          psql -v ON_ERROR_STOP=1 -f supabase/tests/razorpay_test_mode.sql
+          sh supabase/tests/concurrent_active_service_id_retention.sh --supabase-local-ci
+          sh supabase/tests/concurrent_razorpay_test_mode.sh --supabase-local-ci
           ECOSYSTEM_LOCAL_TEST=true PSQL=psql node supabase/tests/concurrent_ecosystem.mjs
       - run: supabase/tests/concurrent_booking.sh
       - run: DATABASE_URL=postgresql://postgres:postgres@127.0.0.1:54322/postgres sh supabase/tests/concurrent_team_seat.sh
@@ -164,7 +170,6 @@ jobs:
       VITE_BASIC_ONBOARDING_ENABLED: 'true'
       VITE_GOOGLE_AUTH_ENABLED: 'true'
       VITE_MEMBER_PLATFORM_ENABLED: 'false'
-      VITE_DESK_CHECKOUT_ENABLED: ${{ vars.VITE_DESK_CHECKOUT_ENABLED || 'false' }}
       VITE_MEMBERSHIP_LEVELS_ENABLED: 'true'
       VITE_COMPONENT_REQUESTS_ENABLED: 'false'
     steps:

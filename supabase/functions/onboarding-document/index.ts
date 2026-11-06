@@ -5,6 +5,7 @@ import { HttpError, json } from "../_shared/http.ts";
 import { adminClient, authenticatedUser, bearerToken } from "../_shared/supabase.ts";
 
 import { scanOnboardingImage } from "../_shared/onboarding-scanner.ts";
+import { onboardingDocumentAvailable } from "../_shared/onboarding-retention.ts";
 
 const bucket = "onboarding-documents";
 const maxBytes = 5 * 1024 * 1024;
@@ -51,29 +52,36 @@ Deno.serve(async (request) => {
       global: { headers: { Authorization: `Bearer ${bearerToken(request)}` } },
       auth: { persistSession: false, autoRefreshToken: false },
     });
-    const { data: document, error } = await scopedClient.from("onboarding_documents").select("*").eq("id", id).maybeSingle();
+    const { data: listedDocument, error } = await scopedClient.from("onboarding_documents").select("*").eq("id", id).maybeSingle();
     if (error) throw new Error("Document lookup failed");
-    if (!document) throw new HttpError(404, "Document unavailable.");
+    if (!listedDocument) throw new HttpError(404, "Document unavailable.");
+    const { data: document, error: retentionError } = await scopedClient.rpc("get_onboarding_document_retention", { p_document_id: id });
+    if (retentionError || !document) throw new HttpError(503, "Document retention could not be verified.");
     if (document.user_id !== user.id) {
       if (request.method === "POST") throw new HttpError(403, "Only the applicant can upload.");
       // RLS above permits only the applicant or an admin reviewer.
     }
-    if (document.deleted_at || Date.parse(document.expires_at) <= Date.now()) throw new HttpError(410, "Document retention period has ended.");
+    if (!onboardingDocumentAvailable(document)) throw new HttpError(410, "Document retention period has ended.");
     if (request.method === "GET") {
       if (!document.uploaded_at) throw new HttpError(404, "Document unavailable.");
       const { data, error: downloadError } = await client.storage.from(bucket).download(document.object_path);
       if (downloadError || !data) throw new HttpError(404, "Document unavailable.");
       // Proxy instead of issuing a bearer URL that can outlive authorization or expiry.
-      const { data: current } = await scopedClient.from("onboarding_documents").select("expires_at,deleted_at").eq("id", id).maybeSingle();
-      if (!current || current.deleted_at || Date.parse(current.expires_at) <= Date.now()) throw new HttpError(410, "Document retention period has ended.");
+      const { data: current, error: currentError } = await scopedClient.rpc("get_onboarding_document_retention", { p_document_id: id });
+      if (currentError || !current || !onboardingDocumentAvailable(current)) throw new HttpError(410, "Document retention period has ended.");
       return new Response(data, { headers: {
         ...corsHeaders(request), "content-type": "application/octet-stream",
         "content-disposition": 'attachment; filename="onboarding-image"',
         "cache-control": "private, no-store, max-age=0", "x-content-type-options": "nosniff",
       } });
     }
-    const { data: uploadAllowed, error: uploadCheckError } = await scopedClient.rpc("onboarding_document_upload_allowed");
-    if (uploadCheckError || uploadAllowed !== true) throw new HttpError(409, "A current application or identity update with privacy consent is required before uploading.");
+    const { data: serviceIdUploadAllowed, error: serviceIdCheckError } = document.kind === "government_id"
+      ? await scopedClient.rpc("onboarding_service_id_upload_allowed", { p_document_id: id })
+      : { data: false, error: null };
+    const { data: uploadAllowed, error: uploadCheckError } = serviceIdUploadAllowed === true
+      ? { data: true, error: null }
+      : await scopedClient.rpc("onboarding_document_upload_allowed");
+    if (serviceIdCheckError || uploadCheckError || uploadAllowed !== true) throw new HttpError(409, "A current application, approved account or identity update with privacy consent is required before uploading.");
     if (document.kind === "government_id") {
       const { data: consent, error: consentError } = await client.rpc("has_government_id_retention_consent", { p_document_id: id });
       if (consentError || consent !== true) throw new HttpError(403, "Accept the government ID retention notice before uploading.");
@@ -85,15 +93,20 @@ Deno.serve(async (request) => {
       googleCredentials: Deno.env.get("ONBOARDING_SCANNER_GOOGLE_CREDENTIALS_JSON"),
       local: Deno.env.get("ONBOARDING_SCANNER_LOCAL") === "true" && new URL(requiredEnv("SUPABASE_URL")).hostname === "kong",
     });
-    if (Date.parse(document.expires_at) <= Date.now()) throw new HttpError(410, "Document retention period has ended.");
+    const { data: beforeUpload, error: beforeUploadError } = await scopedClient.rpc("get_onboarding_document_retention", { p_document_id: id });
+    if (beforeUploadError || !beforeUpload || !onboardingDocumentAvailable(beforeUpload)) throw new HttpError(410, "Document retention period has ended.");
     const { error: uploadError } = await client.storage.from(bucket).upload(document.object_path, bytes, {
       contentType: request.headers.get("content-type")!, cacheControl: "0", upsert: false,
     });
     if (uploadError) throw new HttpError(409, "Document could not be uploaded. Existing uploads cannot be overwritten.");
-    await client.rpc("finalize_onboarding_document", { p_document_id: id });
-    const { data: latest, error: latestError } = await client.from("onboarding_documents").select("expires_at,deleted_at,uploaded_at").eq("id", id).single();
+    const { error: finalizeError } = await client.rpc("finalize_onboarding_document", { p_document_id: id });
+    if (finalizeError) {
+      await client.storage.from(bucket).remove([document.object_path]);
+      throw new HttpError(409, "The upload could not be finalised. Refresh before trying again.");
+    }
+    const { data: latest, error: latestError } = await scopedClient.rpc("get_onboarding_document_retention", { p_document_id: id });
     if (latestError || !latest) throw new HttpError(503, "Upload status could not be read. Refresh before trying again.");
-    if (!latest.uploaded_at || latest.deleted_at || Date.parse(latest.expires_at) <= Date.now()) {
+    if (!latest.uploaded_at || !onboardingDocumentAvailable(latest)) {
       await client.storage.from(bucket).remove([document.object_path]);
       throw new HttpError(410, "Document retention period has ended.");
     }

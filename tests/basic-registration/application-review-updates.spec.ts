@@ -102,20 +102,22 @@ for (const theme of ["light", "dark"]) test(`approved edits are proposed separat
 });
 
 
-for (const identityChanged of [false, true]) test(`approved upload controls require a pending identity change: ${identityChanged}`, async ({ page }) => {
+for (const identityChanged of [false, true]) test(`approved members can resubmit a service ID; photo evidence requires identity change: ${identityChanged}`, async ({ page }) => {
   const state = await fixture(page, "approved", "dark", identityChanged);
   await page.goto("/onboarding");
   await page.getByRole("button", { name: /^(Manage my registration|View review status|Verify mobile number)$/ }).click();
   await page.getByRole("navigation", { name: "Registration steps" }).getByRole("button", { name: /Private documents/ }).click();
   await expect(page.getByRole("button", { name: "Review application", exact: true })).toBeEnabled();
+  await expect(page.getByLabel("government ID image", { exact: true })).toBeVisible();
+  await expect(page.getByRole("checkbox", { name: /I understand that my government ID is used for manual identity review/ })).not.toBeChecked();
   if (identityChanged) {
     await expect(page.getByLabel("photo image", { exact: true })).toBeVisible();
-    await expect(page.getByLabel("government ID image", { exact: true })).toBeVisible();
+    await expect(page.locator("#private-documents").getByText(/Your existing identity approval remains active\./)).toBeVisible();
   } else {
-    await expect(page.getByText(/New evidence is needed only for proposed changes to your name or date of birth/)).toBeVisible();
+    await expect(page.getByText(/You can submit a fresh government ID for a later cabin, equipment rental or other service without registering again/)).toBeVisible();
     await expect(page.getByLabel("photo image", { exact: true })).toHaveCount(0);
-    await expect(page.getByLabel("government ID image", { exact: true })).toHaveCount(0);
   }
+  expect(state.application.status).toBe("approved"); expect(state.application.revision).toBe(4);
   expect(state.mutations).toEqual([]); expect(state.errors).toEqual([]);
 });
 
