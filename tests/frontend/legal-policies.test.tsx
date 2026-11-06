@@ -19,8 +19,8 @@ const legalName = legalEntity.name;
 const labAddress = "1490, 11th Cross, 20th Main Rd, 1st Sector, HSR Layout, Bengaluru, Karnataka 560102";
 const policies = [
   { route: "/contact", title: "Contact Us", Page: ContactPage, digest: "fd5441c15d315a0ec9fc5aa34c9048903d86a88918e4648ce08337ed866d42a3" },
-  { route: "/terms", title: "Terms and Conditions", Page: TermsPage, digest: "c64bc6fcb3c754c93675f1d2ef2d6a87c83a3bf0e50d41662ffaba2255c8ffa0" },
-  { route: "/refund-policy", title: "Cancellation and Refund Policy", Page: RefundPolicyPage, digest: "e05f14b54b669cf294ca7081392d2c1028db294c1e34f37f0c2aa135e6072c16" },
+  { route: "/terms", title: "Terms and Conditions", Page: TermsPage, digest: "1279842debd49a4230c9b57c9c5d9fd40cb23a75520ee5561e512843235edde2" },
+  { route: "/refund-policy", title: "Cancellation and Refund Policy", Page: RefundPolicyPage, digest: "104f52e32c04c79930ec84716b3d3c1ca2ee29fd0d4593705a2e81227e34abdd" },
   { route: "/shipping-policy", title: "Shipping and Delivery Policy", Page: ShippingPolicyPage, digest: "f320496b0ea1e08c8828bfb59fc059e155bd1174441ecee961eb8aa932328b4d" }
 ];
 const footerLinks = [
@@ -81,7 +81,7 @@ describe("approved legal policies", () => {
     const { unmount } = render(<MemoryRouter><RefundPolicyPage /></MemoryRouter>);
     const table = screen.getByRole("table");
     expect(within(table).getAllByRole("columnheader").map((cell) => cell.textContent)).toEqual(["Service", "Cancel or return", "Refund"]);
-    expect(within(table).getAllByRole("row")).toHaveLength(16);
+    expect(within(table).getAllByRole("row")).toHaveLength(18);
     expect(within(table).getByRole("cell", { name: "48 hours or more before the rental or session starts" })).toBeInTheDocument();
     unmount();
     render(<MemoryRouter><ContactPage /></MemoryRouter>);
@@ -96,8 +96,8 @@ describe("approved legal policies", () => {
 
   it("limits cabin minimums and deposits to cabins and states equipment rental periods", () => {
     const { container } = render(<MemoryRouter><TermsPage /></MemoryRouter>);
-    expect(container).toHaveTextContent("Cabins have a minimum term of 3 months. A cabin security deposit of 2 months' rent");
-    expect(container).toHaveTextContent("The cabin's 3-month minimum and 2-month deposit do not apply to these passes.");
+    expect(container).toHaveTextContent("Cabins have a minimum term of 3 months from the agreed start date. The security deposit is 2 months' rent when agreed monthly rent is ₹1,00,000 or less, and 3 months' rent above ₹1,00,000.");
+    expect(container).toHaveTextContent("The cabin minimum and security deposit do not apply to these passes.");
     expect(container).toHaveTextContent("on day, week or month plans");
     expect(container).toHaveTextContent("Rentals are available by the week or month, with a minimum rental of 1 week.");
     expect(container).toHaveTextContent("Any asset-specific deposit is disclosed in your quote before payment.");

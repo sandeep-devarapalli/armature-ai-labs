@@ -396,7 +396,7 @@ export function JoinPage() {
         ["Day pass", "A flexi desk for your selected day, 9 am–5 pm."],
         ["Week pass", "Flexi desk access for seven consecutive days, during pass hours."],
         ["Monthly reserved desk", "Your reserved desk from the first to the last day of the calendar month."],
-        ["Monthly team cabin", "An entire six-seat cabin for your team; all six seats are included. Cabins have a 3-month minimum and a security deposit of 2 months' rent."]
+        ["Monthly team cabin", "An entire cabin for your team, with a 3-month minimum. The security deposit is 2 months' rent when agreed monthly rent is ₹1,00,000 or less, and 3 months' rent above ₹1,00,000."]
        ].map(([name, detail], index) => <div className="process-row" key={name}><span className="mono">0{index + 1}</span><h3>{name}</h3><p>{detail}</p></div>)}</div><p>Payment collection is not open yet. Equipment rental is charged separately on week or month plans with a 1-week minimum, and requires verification, matching workspace access and any required training. Any asset-specific deposit is disclosed before payment. Choosing a plan to explore does not purchase it.</p></div></section>}
       <Section number="02" title={memberPlatformAvailable ? "What members can reserve" : "Planned member spaces"} lede="Resources will become bookable after commissioning, with confirmed availability, operating rules, and any required safety induction." dark>
         <div className="service-grid">

@@ -63,9 +63,9 @@ export function TermsPage() {
       <h2>3. Cabins and seats</h2>
       <ul>
         <li>Cabins are rented whole, at the cabin's listed price, whatever the number of people using it.</li>
-        <li>Cabins have a minimum term of 3 months. A cabin security deposit of 2 months' rent is payable before move-in.</li>
-        <li>Individual hot desks and seats are available by the day, week or month. The cabin's 3-month minimum and 2-month deposit do not apply to these passes.</li>
-        <li>Cabin rent and monthly desk fees are payable monthly in advance, by the date on your invoice. Day and week passes cover the dates stated in your booking.</li>
+        <li>Cabins have a minimum term of 3 months from the agreed start date. The security deposit is 2 months' rent when agreed monthly rent is ₹1,00,000 or less, and 3 months' rent above ₹1,00,000. The first month's rent and deposit are due before move-in. We prorate a partial first calendar month and bill later months in advance by the 5th.</li>
+        <li>Individual hot desks and seats are available by the day, week or month. The cabin minimum and security deposit do not apply to these passes.</li>
+        <li>Monthly desk fees are payable in advance, by the date on your invoice. Day and week passes cover the dates stated in your booking.</li>
         <li>Either side may end a cabin arrangement after the minimum term with 30 days' written notice.</li>
         <li>Use only the power points provided. Any change to the cabin needs our written approval, and you must restore it when you leave.</li>
         <li>Your signed space agreement, if you have one, takes priority over this section.</li>
@@ -74,7 +74,7 @@ export function TermsPage() {
     <section>
       <h2>4. Equipment rental</h2>
       <ul>
-        <li>Rentals are available by the week or month, with a minimum rental of 1 week. Bookings are confirmed only after payment.</li>
+        <li>Rentals are available by the week or month, with a minimum rental of 1 week. Bookings are confirmed after verified payment and require confirmed workspace access at the lab for the same period.</li>
         <li>You must follow the lab's safety rules and any instructions from our staff. Some equipment needs a short induction first.</li>
         <li>Equipment stays in the lab unless we agree otherwise in writing.</li>
         <li>You are responsible for loss of or damage to equipment during your booking, beyond normal wear. We will charge the repair or replacement cost. Any asset-specific deposit is disclosed in your quote before payment. We initiate its refund within 7 working days of equipment return, less documented unpaid charges or damage. The deadline runs from return and is not delayed by open-ended checks.</li>
@@ -115,7 +115,7 @@ export function TermsPage() {
     </section>
     <section>
       <h2>13. Contact</h2>
-      <p>Questions about these terms: <a href={`mailto:${legalEntity.email}`}>{legalEntity.email}</a> or <a href={`tel:${legalEntity.phone.replace(/\s/g, "")}`}>{legalEntity.phone}</a>.</p>
+      <p>We acknowledge complaints within 1 business day and resolve them by D+4 business days, where D is the date we receive the complaint. Questions about these terms: <a href={`mailto:${legalEntity.email}`}>{legalEntity.email}</a> or <a href={`tel:${legalEntity.phone.replace(/\s/g, "")}`}>{legalEntity.phone}</a>.</p>
     </section>
   </LegalPage>;
 }
@@ -135,7 +135,9 @@ export function RefundPolicyPage() {
           <tr><td>Day, week or month hot desk or reserved seat</td><td>Cancel less than 48 hours before the pass starts, or no-show</td><td>No refund</td></tr>
           <tr><td>Day, week or month hot desk or reserved seat</td><td>After the pass starts</td><td>No refund for unused time</td></tr>
           <tr><td>Equipment rental or meeting room session</td><td>48 hours or more before the rental or session starts</td><td>Full refund, or free reschedule once</td></tr>
-          <tr><td>Equipment rental or meeting room session</td><td>Less than 48 hours, or no-show</td><td>No refund</td></tr>
+          <tr><td>Other equipment rental or meeting room session</td><td>Less than 48 hours, or no-show</td><td>No refund</td></tr>
+          <tr><td>Hiwonder kit, before handover</td><td>Cancel less than 48 hours before start, or no-show</td><td>No rent refund. The full deposit is refunded if the kit was not handed over.</td></tr>
+          <tr><td>Hiwonder kit, paid 30-day rental</td><td>Return before the end of the rental</td><td>Rent is ₹150 per day used, with a 7-day minimum and a ₹3,900 cap. We refund any remaining rent.</td></tr>
           <tr><td>Equipment rental deposit</td><td>Equipment returned</td><td>Deposit refund initiated within 7 working days of return, less documented unpaid charges or damage</td></tr>
           <tr><td>Workshop or event</td><td>24 hours or more before the start</td><td>Full refund</td></tr>
           <tr><td>Workshop or event</td><td>Less than 24 hours before the start</td><td>No refund; credit for a future session</td></tr>
