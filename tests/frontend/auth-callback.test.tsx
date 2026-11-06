@@ -31,6 +31,7 @@ function renderCallback(next: string, suffix = "") {
       <Routes>
         <Route path="/auth/callback" element={<AuthCallbackPage />} />
         <Route path="/join" element={<div>Join destination</div>} />
+        <Route path="/bookings" element={<div>Bookings destination</div>} />
         <Route path="/onboarding" element={<div>Onboarding destination</div>} />
         <Route path="/dashboard" element={<div>Dashboard destination</div>} />
         <Route path="*" element={<div>Unexpected destination</div>} />
@@ -59,6 +60,20 @@ describe("auth callback return path", () => {
     gate.basic = true;
     renderCallback("/book");
     expect(await screen.findByText("Onboarding destination")).toBeInTheDocument();
+  });
+
+  it.each([
+    ["false", "Onboarding destination"],
+    ["true", "Bookings destination"],
+  ])("returns to desk bookings only when the checkout flag is %s", async (enabled, destination) => {
+    gate.basic = true;
+    vi.stubEnv("VITE_DESK_CHECKOUT_ENABLED", enabled);
+    try {
+      renderCallback("/bookings/");
+      expect(await screen.findByText(destination)).toBeInTheDocument();
+    } finally {
+      vi.unstubAllEnvs();
+    }
   });
 
   it.each([

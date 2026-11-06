@@ -27,6 +27,8 @@ jobs:
           deno-version: v2.9.8
       - run: deno test --no-config --no-lock supabase/functions/_shared/razorpay-test-check.ts
       - run: deno check --no-config --no-lock supabase/functions/razorpay-test/index.ts supabase/functions/razorpay-test-webhook/index.ts
+      - run: deno test --config supabase/functions/deno.json --no-lock supabase/functions/_shared/live-desk-webhook_test.ts
+      - run: deno check --config supabase/functions/deno.json --no-lock supabase/functions/desk-checkout/index.ts supabase/functions/razorpay-booking-webhook/index.ts
       - run: node scripts/test-market-message-files.mjs && node scripts/test-market-message-reminders.mjs && node scripts/test-market-wakeup.mjs
       - run: node --test tests/scripts/onboarding-retention.node.mjs
       - run: node --test tests/scripts/production-env.node.mjs
@@ -79,6 +81,17 @@ jobs:
           version: 2.114.0
       - run: supabase start
       - run: supabase test db supabase/tests/database
+      - name: Verify desk capture, replay and refunds in a rollback transaction
+        env:
+          PGHOST: 127.0.0.1
+          PGPORT: '54322'
+          PGDATABASE: postgres
+          PGUSER: postgres
+          PGPASSWORD: postgres
+        run: |
+          psql -v ON_ERROR_STOP=1 -c 'begin' \
+            -f supabase/tests/checkout_inventory_holds.sql \
+            -f supabase/tests/live_desk_checkout.sql -c 'rollback'
       - name: Verify ecosystem privacy, approval and pending-edit rules
         env:
           PGHOST: 127.0.0.1

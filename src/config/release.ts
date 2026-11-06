@@ -23,3 +23,5 @@ export const basicOnboardingAvailable = !demoModeEnabled && isSupabaseConfigured
 
 export const razorpayTestAvailable = !demoModeEnabled && isSupabaseConfigured
   && enabled(import.meta.env.VITE_RAZORPAY_TEST_ENABLED);
+
+export const deskCheckoutAvailable = basicOnboardingAvailable && enabled(import.meta.env.VITE_DESK_CHECKOUT_ENABLED);

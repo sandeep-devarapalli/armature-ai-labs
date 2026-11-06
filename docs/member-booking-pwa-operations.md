@@ -241,3 +241,48 @@ Keep the previous Cloudflare Pages deployment available until the new release
 has passed live smoke checks. A frontend rollback does not revert database
 migrations. Database changes must remain backward compatible until the previous
 frontend is no longer a supported rollback target.
+
+## Razorpay desk checkout pilot
+
+The pilot is default off at the website, checkout function and database. It
+allows one explicitly configured Verified member. It uses actual configured
+desk codes, products, prices, operating hours and closures. Keep cabin, event
+and equipment checkout on their existing paths.
+
+1. Review and publish the current terms, privacy and refund policies. Confirm
+   the production booking inventory, member verification, approved agreement
+   template and document retention workflow. Apply the reviewed inventory hold,
+   desk calendar and live desk checkout migrations in order, leaving the pilot
+   gates off. Deploy `desk-checkout` and `razorpay-booking-webhook` with their
+   repository JWT settings.
+2. Store `LIVE_DESK_RAZORPAY_KEY_ID`, `LIVE_DESK_RAZORPAY_KEY_SECRET`,
+   `LIVE_DESK_RAZORPAY_WEBHOOK_SECRET`, `LIVE_DESK_RAZORPAY_ACCOUNT_ID`,
+   `LIVE_DESK_PANDADOC_API_KEY`, `LIVE_DESK_PANDADOC_SIGNER` and
+   `LIVE_DESK_POLICY_VERSION` in production Edge secrets. Use a distinct webhook
+   secret. Register `payment.captured` and `refund.processed` at
+   `https://uxfhdfagrmaeyuaipaar.supabase.co/functions/v1/razorpay-booking-webhook`.
+   Keep automatic capture configured. The webhook checks the signed body and
+   merchant ID and reads the current payment or refund state from Razorpay.
+3. Staff prepare the agreement for the exact quote, review any requested
+   revisions with the member, and verify the final document contents before
+   sealing. PandaDoc metadata must include `booking_id` (quote UUID),
+   `agreement_hash` (server quote hash), `version` (`1`) and
+   `purpose` (`armature_live_desk`). Assign the customer first and Armature
+   second, with a signature field for each. Send and seal the document before
+   either party signs. The `seal` action takes `quoteId`, `memberId` and
+   `documentId` and requires Admin or Super admin with MFA. Preparing and
+   sealing the agreement is currently a staff-operated handoff.
+4. After provider-level Test Mode acceptance, set the actual pilot UUID and
+   matching policy version in `booking_policy_settings`, enable its desk
+   calendar and live desk checkout, and keep `mock_grants_enabled` false.
+   Set `LIVE_DESK_CHECKOUT_ENABLED=true` and enable the
+   `VITE_DESK_CHECKOUT_ENABLED` website build variable. Verify the owner booking
+   and Premium state on a fresh browser session. To halt new orders, turn off
+   the database and Edge checkout flags first. Keep the webhook operational
+   for orders already issued and rebuild the website with its flag off.
+
+A capture after the hold expires goes to staff review. A partial processed
+refund preserves the reservation and flags the quote for reconciliation. A
+full processed refund revokes the paid entitlement and releases future
+reservations. Review pending order claims and unfulfilled captures in the
+private live desk quote ledger before attempting another order or refund.
