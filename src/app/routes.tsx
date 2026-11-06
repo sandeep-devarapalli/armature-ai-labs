@@ -8,6 +8,7 @@ import { HomePage } from "../pages/HomePage";
 import {
   basicOnboardingAvailable,
   componentRequestsAvailable,
+  deskCheckoutAvailable,
   equipmentPageAvailable,
   memberPlatformAvailable
 } from "../config/release";
@@ -16,6 +17,7 @@ const WhitePaperPage = lazy(() => import("../pages/WhitePaperPage").then(module 
 const ResourceFeedbackPage = lazy(() => import("../pages/ResourceFeedbackPage").then(module => ({ default: module.ResourceFeedbackPage })));
 const ResourceFeedbackAdminPage = lazy(() => import("../pages/ResourceFeedbackPage").then(module => ({ default: module.ResourceFeedbackAdminPage })));
 
+const DeskCheckoutPage = lazy(() => import("../components/DeskCheckout"));
 const BookingBetaPage = lazy(() => import("../pages/BookingBetaPage").then((module) => ({ default: module.BookingBetaPage })));
 const OnboardingPage = lazy(() => import("../pages/OnboardingPage").then((module) => ({ default: module.OnboardingPage })));
 const ProjectsPage = lazy(() => import("../pages/ProjectsPage").then((module) => ({ default: module.ProjectsPage })));
@@ -159,7 +161,7 @@ export const routes: RouteObject[] = [
       { path: "/profile", element: memberFeature(protectedPage(<ProfilePage />)) },
       { path: "/book", element: memberFeature(protectedPage(<BookPage />)) },
       { path: "/book/:resource", element: memberFeature(protectedPage(<ResourceBookingPage />)) },
-      { path: "/bookings", element: memberFeature(protectedPage(<BookingsPage />)) },
+      { path: "/bookings", element: deskCheckoutAvailable ? <DeskCheckoutPage /> : memberFeature(protectedPage(<BookingsPage />)) },
       { path: "/bookings/:id", element: memberFeature(protectedPage(<BookingDetailPage />)) },
       { path: "/check-in", element: memberFeature(protectedPage(<CheckInPage />)) },
       { path: "/component-requests", element: memberComponentRequestFeature(protectedPage(<ComponentRequestsPage />)) },

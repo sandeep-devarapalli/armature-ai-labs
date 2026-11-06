@@ -49,6 +49,7 @@ test("landing and membership pages publish verified community links", async ({ p
 test("public-first production gates operational routes", async ({ page }) => {
   test.skip(process.env.VITE_DEMO_MODE === "true", "Explicit demo build.");
   const basicEnabled = process.env.VITE_BASIC_ONBOARDING_ENABLED === "true";
+  const deskEnabled = basicEnabled && process.env.VITE_DESK_CHECKOUT_ENABLED === "true";
   await page.goto("/auth");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
     basicEnabled ? "Join Armature AI Labs." : "Operational access is opening soon."
@@ -91,9 +92,16 @@ test("public-first production gates operational routes", async ({ page }) => {
     await expect(page.getByRole("table")).toHaveCount(0);
   }
 
+  if (deskEnabled) {
+    await page.goto("/bookings");
+    await expect(page.getByRole("heading", { name: "Book a desk.", exact: true })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Sign in to book", exact: true })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Pay with Razorpay", exact: true })).toHaveCount(0);
+  }
+
   for (const path of [
     "/book",
-    "/bookings",
+    ...(!deskEnabled ? ["/bookings"] : []),
     "/check-in",
     "/inventory",
     "/financials",
