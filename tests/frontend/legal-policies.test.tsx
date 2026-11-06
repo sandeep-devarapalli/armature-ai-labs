@@ -19,8 +19,8 @@ const legalName = legalEntity.name;
 const labAddress = "1490, 11th Cross, 20th Main Rd, 1st Sector, HSR Layout, Bengaluru, Karnataka 560102";
 const policies = [
   { route: "/contact", title: "Contact Us", Page: ContactPage, digest: "c329a43a1fdec02d3d8ebe4837f22cf04fc67abe1719c2601d9675485d664d70" },
-  { route: "/terms", title: "Terms and Conditions", Page: TermsPage, digest: "a4ade1e09327ceaeaea52fb2d5c83e33c34c39f8b49773040f701a80167c7262" },
-  { route: "/refund-policy", title: "Cancellation and Refund Policy", Page: RefundPolicyPage, digest: "3bc0331ff825fbec12e7e3318be7e4ebd3aaaa0bcb88d2a0851ee0ad5b64fcfc" },
+  { route: "/terms", title: "Terms and Conditions", Page: TermsPage, digest: "2cd681a8dcfba3cf4907380a8de358670661cc2a0c25d83f21b5eb7e8268c787" },
+  { route: "/refund-policy", title: "Cancellation and Refund Policy", Page: RefundPolicyPage, digest: "ca9d920dfa79763f7210e76333ed1d26de265c4aaa33a11d7055dc1682a87b77" },
   { route: "/shipping-policy", title: "Shipping and Delivery Policy", Page: ShippingPolicyPage, digest: "f115335c6fc63160cbab70ac31d31357e6046bb600f9c6bc0d733ced8ec4e402" }
 ];
 const footerLinks = [
@@ -81,7 +81,7 @@ describe("approved legal policies", () => {
     const { unmount } = render(<MemoryRouter><RefundPolicyPage /></MemoryRouter>);
     const table = screen.getByRole("table");
     expect(within(table).getAllByRole("columnheader").map((cell) => cell.textContent)).toEqual(["Service", "Cancel or return", "Refund"]);
-    expect(within(table).getAllByRole("row")).toHaveLength(12);
+    expect(within(table).getAllByRole("row")).toHaveLength(15);
     expect(within(table).getByRole("cell", { name: "48 hours or more before the slot" })).toBeInTheDocument();
     unmount();
     render(<MemoryRouter><ContactPage /></MemoryRouter>);

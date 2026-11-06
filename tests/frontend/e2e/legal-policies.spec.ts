@@ -77,7 +77,8 @@ test("refund schedule scrolls within its container on mobile", async ({ page }) 
   await page.goto("/refund-policy");
   const table = page.getByRole("table");
   await expect(table.getByRole("columnheader")).toHaveCount(3);
-  await expect(table.getByRole("row")).toHaveCount(12);
+  await expect(table.getByRole("row")).toHaveCount(15);
+  await expect(table.getByRole("cell", { name: "Desk pass", exact: true })).toHaveCount(3);
   const dimensions = await table.evaluate((element) => {
     const container = element.parentElement!;
     return { tag: element.tagName, overflow: getComputedStyle(container).overflowX, width: container.clientWidth, scrollWidth: container.scrollWidth };

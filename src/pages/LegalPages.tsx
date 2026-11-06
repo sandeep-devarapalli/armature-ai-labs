@@ -48,7 +48,7 @@ export function TermsPage() {
     <section>
       <h2>1. What we offer</h2>
       <ul>
-        <li>Coworking: private cabins and open-area seats at our lab in HSR Layout, Bengaluru, on monthly plans.</li>
+        <li>Coworking: private cabins on monthly plans and individual desk passes for the dates shown in your quote at our lab in HSR Layout, Bengaluru.</li>
         <li>Equipment rental: robotics and AI equipment, such as robotic arms and GPU workstations, booked by the hour or day.</li>
         <li>Hardware sales: robotics hardware and kits, such as educational robotic arms, sensors and components.</li>
         <li>Workshops and events: paid sessions at the lab or online.</li>
@@ -63,9 +63,10 @@ export function TermsPage() {
       <h2>3. Cabins and seats</h2>
       <ul>
         <li>Cabins are rented whole, at the cabin's listed price, whatever the number of people using it.</li>
-        <li>The minimum term for a cabin or seat is 3 months. A security deposit of 2 months' rent is payable before move-in.</li>
-        <li>Rent is payable monthly in advance, by the date on your invoice.</li>
-        <li>Either side may end the arrangement after the minimum term with 30 days' written notice.</li>
+        <li>The minimum term for a cabin is 3 months. A security deposit of 2 months' rent is payable before move-in.</li>
+        <li>Individual desk passes cover the dates stated in your booking. The cabin minimum and security deposit do not apply to desk passes.</li>
+        <li>Cabin rent is payable monthly in advance, by the date on your invoice.</li>
+        <li>Either side may end a cabin arrangement after the minimum term with 30 days' written notice.</li>
         <li>Use only the power points provided. Any change to the cabin needs our written approval, and you must restore it when you leave.</li>
         <li>Your signed space agreement, if you have one, takes priority over this section.</li>
       </ul>
@@ -126,10 +127,13 @@ export function RefundPolicyPage() {
       <table>
         <thead><tr><th scope="col">Service</th><th scope="col">Cancel or return</th><th scope="col">Refund</th></tr></thead>
         <tbody>
-          <tr><td>Cabin or seat, before move-in</td><td>7 or more days before the start date</td><td>Full refund of advance and deposit</td></tr>
-          <tr><td>Cabin or seat, before move-in</td><td>Less than 7 days before the start date</td><td>Deposit refunded; first month's rent kept</td></tr>
-          <tr><td>Cabin or seat, after move-in</td><td>30 days' written notice, after the 3-month minimum</td><td>Deposit refunded within 7 working days of move-out, less unpaid dues and damage</td></tr>
-          <tr><td>Monthly rent already paid</td><td>Any time</td><td>Not refundable for unused days in that month</td></tr>
+          <tr><td>Cabin, before move-in</td><td>7 or more days before the start date</td><td>Full refund of advance and deposit</td></tr>
+          <tr><td>Cabin, before move-in</td><td>Less than 7 days before the start date</td><td>Deposit refunded; first month's rent kept</td></tr>
+          <tr><td>Cabin, after move-in</td><td>30 days' written notice, after the 3-month minimum</td><td>Deposit refunded within 7 working days of move-out, less unpaid dues and damage</td></tr>
+          <tr><td>Monthly cabin rent already paid</td><td>Any time</td><td>Not refundable for unused days in that month</td></tr>
+          <tr><td>Desk pass</td><td>Cancel at least 48 hours before the pass starts</td><td>Full refund</td></tr>
+          <tr><td>Desk pass</td><td>Cancel less than 48 hours before the pass starts, or no-show</td><td>No refund</td></tr>
+          <tr><td>Desk pass</td><td>After the pass starts</td><td>No refund for unused time</td></tr>
           <tr><td>Equipment or meeting room booking</td><td>48 hours or more before the slot</td><td>Full refund, or free reschedule once</td></tr>
           <tr><td>Equipment or meeting room booking</td><td>Less than 48 hours, or no-show</td><td>No refund</td></tr>
           <tr><td>Workshop or event</td><td>24 hours or more before the start</td><td>Full refund</td></tr>
