@@ -11,7 +11,7 @@ const terms = { day: "Day pass", week: "Week pass", month: "Monthly desk" };
 type Term = keyof typeof terms;
 type Availability = { chairs: string[]; dates: { booking_date: string; available: boolean }[] };
 type Quote = {
-  quoteId: string; amountPaise?: number; policyVersion?: string; hasAgreement?: boolean;
+  quoteId: string; amountPaise?: number; policyVersion?: string; hasAgreement?: boolean; manualAgreement?: boolean;
   chair?: string; unit?: Term; start?: string; end?: string;
   customerSigned?: boolean; agreementSigned?: boolean; hasOrder?: boolean; orderPending?: boolean;
   status?: "confirmed" | "refunded" | "cancelled" | "needs_review"; bookingId?: string; membership?: string; reviewReason?: string;
@@ -212,6 +212,7 @@ function DeskCheckout({ memberId }: { memberId: string }) {
         : quote?.status === "refunded" ? <p role="status">This payment has been refunded.</p>
         : quote?.status === "cancelled" ? <p role="status">This desk booking was cancelled.</p>
         : quote?.status === "needs_review" || quote?.orderPending ? <p role="status">Armature needs to reconcile this payment. Contact support before trying again.</p>
+        : quote?.manualAgreement && !quote.agreementSigned ? <p role="status">Check your email for the PandaDoc agreement. Review it, sign and select Finish. Once Armature countersigns and approves it, check the status here to pay.</p>
         : quote && (!quote.hasAgreement && !quote.agreementSigned) ? <p role="status">Armature is preparing your agreement.</p>
         : quote && !quote.agreementSigned ? <>
           <p>{quote.customerSigned ? "Waiting for Armature to countersign." : "Review and sign your agreement in PandaDoc. Select Finish when you are done."}</p>

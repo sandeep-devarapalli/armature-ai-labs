@@ -281,6 +281,19 @@ and equipment checkout on their existing paths.
    the database and Edge checkout flags first. Keep the webhook operational
    for orders already issued and rebuild the website with its flag off.
 
+For the S01 ₹350 day-pass pilot, manual signing can be enabled with
+`LIVE_DESK_MANUAL_AGREEMENT_ENABLED=true` and the configured countersigner.
+In this mode a production PandaDoc API key is optional. The customer requests
+a quote. An Admin or Super admin uses the quote reference in the member's
+Admin details to copy the quote fingerprint and verify the approved details.
+Staff send that version in PandaDoc with the customer first and Armature
+second. After both signers select Finish, the reviewer checks the completed
+PDF and signature certificate against the quote, keeps the PDF in private
+agreement records, and records approval with MFA. The system stores the
+document reference and a digest of the PDF. The buyer refreshes their quote,
+accepts the current policies and has 30 minutes from approval to start
+checkout. The order still requires current price and available inventory.
+
 A capture after the hold expires goes to staff review. A partial processed
 refund preserves the reservation and flags the quote for reconciliation. A
 full processed refund revokes the paid entitlement and releases future

@@ -69,14 +69,17 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
   const secret = live ? razor?.keySecret ?? "" : Deno.env.get("CONNECTED_DESK_RAZORPAY_KEY_SECRET") ?? "";
   const pandaKey = Deno.env.get(config.prefix + (live ? "PANDADOC_API_KEY" : "PANDADOC_SANDBOX_KEY")) ?? "";
   const staffSigner = Deno.env.get(config.prefix + "PANDADOC_SIGNER")?.trim().toLowerCase() ?? "";
+  const manualPilot = live && Deno.env.get(config.prefix + "MANUAL_AGREEMENT_ENABLED") === "true";
   const enabled = Deno.env.get(config.enabled) === "true" && (!live || Boolean(liveWebhookSettings(razor)));
   const policyVersion = live ? Deno.env.get("LIVE_DESK_POLICY_VERSION") ?? "" : "";
   if (Deno.env.get("SUPABASE_URL") !== config.backend || (!live && !enabled)
       || !new RegExp("^rzp_" + mode + "_[A-Za-z0-9]+$").test(key) || !secret
-      || (live && !/^[A-Za-z0-9._-]{4,80}$/.test(policyVersion)) || !pandaKey || !staffSigner) {
+      || (live && !/^[A-Za-z0-9._-]{4,80}$/.test(policyVersion)) || (!pandaKey && !manualPilot) || !staffSigner) {
     return reply({ error: live ? "checkout_not_configured" : "test_checkout_not_configured" }, 503);
   }
-  const present = (q: Quote) => ({ ...view(q), ...(live ? { policyVersion } : {}) });
+  const isManualQuote = (q: Quote) => q.chair === "S01" && q.unit === "day" && q.amount_paise === 35000
+    && ((manualPilot && !q.document_id) || q.sealed_revision === "manual-pilot-v1");
+  const present = (q: Quote) => ({ ...view(q), manualAgreement: isManualQuote(q), ...(live ? { policyVersion } : {}) });
 
   try {
     const user = await authenticatedUser(request);
@@ -89,11 +92,14 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
     if (!enabled && !["status", "verify"].includes(action)) throw new Rejected(503, "checkout_disabled");
     let member = user.id;
     let customer = user.email?.toLowerCase() ?? "";
-    if (action === "seal") {
-      if (live && user.claims.aal !== "aal2") throw new Rejected(403, "staff_mfa_required");
+    const manualReview = action === "manual_review" || action === "approve_manual";
+    if (manualReview && !manualPilot) throw new Rejected(403, "manual_agreement_unavailable");
+    if (action === "seal" || manualReview) {
+      if ((live || manualReview) && user.claims.aal !== "aal2") throw new Rejected(403, "staff_mfa_required");
       await requireStaff(user.id, ["admin", "super_admin"]);
       if (!pattern.test(input.memberId ?? "")) throw new Rejected(400, "invalid_member");
       member = input.memberId;
+      if (manualReview && member === user.id) throw new Rejected(403, "independent_reviewer_required");
       const owner = await client.auth.admin.getUserById(member);
       customer = owner.data.user?.email?.toLowerCase() ?? "";
     }
@@ -108,8 +114,18 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
       if (error || !data) throw new Rejected(503, "checkout_state_unavailable");
       return data as T;
     }
+    async function manualApproval(q: Quote, review?: object): Promise<number> {
+      const { data, error } = await client.rpc("manual_desk_agreement", {
+        p_member: member, p_quote: q.id, ...(review ? { p_review: review } : {}),
+      }).abortSignal(AbortSignal.timeout(10000));
+      if (error?.code === "42501") throw new Rejected(403, "checkout_state_rejected");
+      if (["P0002", "22023"].includes(error?.code ?? "")) throw new Rejected(409, "checkout_state_rejected");
+      if (error) throw new Rejected(503, "checkout_state_unavailable");
+      return typeof data === "string" ? Date.parse(data) : NaN;
+    }
     async function provider<T>(kind: "panda" | "razorpay", path: string, body?: object): Promise<T> {
       if (kind === "razorpay" && razor) return razor.request<T>(path, body);
+      if (kind === "panda" && !pandaKey) throw new Rejected(503, "checkout_not_configured");
       const base = kind === "panda" ? "https://api.pandadoc.com/public/v1" : "https://api.razorpay.com/v1";
       const authorization = kind === "panda" ? "API-Key " + pandaKey : "Basic " + btoa(key + ":" + secret);
       const response = await fetch(base + path, {
@@ -156,17 +172,40 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
         || !/^\d{4}-\d{2}-\d{2}$/.test(from ?? "") || !/^\d{4}-\d{2}-\d{2}$/.test(to ?? ""))) {
         throw new Rejected(400, "invalid_selection");
       }
-      return reply({ mode, ...await operation<object>("availability", { chair, unit, from, to }) });
+      if (manualPilot && chair !== undefined && (chair !== "S01" || unit !== "day")) {
+        return reply({ mode, chairs: [], dates: [] });
+      }
+      const availability = await operation<{ chairs: string[] }>("availability", { chair, unit, from, to });
+      if (manualPilot) availability.chairs = availability.chairs.filter(code => code === "S01");
+      return reply({ mode, ...availability });
     }
     if (action === "quote") {
       if (!/^S(0[1-9]|1[0-9]|2[0-5])$/.test(input.chair ?? "") || !["day", "week", "month"].includes(input.unit)
         || !/^\d{4}-\d{2}-\d{2}$/.test(input.start ?? "")) throw new Rejected(400, "invalid_selection");
-      return reply({ mode, ...present(await operation<Quote>("quote", { chair: input.chair, unit: input.unit, start: input.start })) });
+      if (manualPilot && (input.chair !== "S01" || input.unit !== "day")) throw new Rejected(409, "manual_agreement_unavailable");
+      const quote = await operation<Quote>("quote", { chair: input.chair, unit: input.unit, start: input.start });
+      if (manualPilot && !isManualQuote(quote) && !quote.document_id) throw new Rejected(409, "manual_agreement_unavailable");
+      return reply({ mode, ...present(quote) });
     }
     if (!pattern.test(input.quoteId ?? "")) throw new Rejected(400, "invalid_quote");
     const q = await operation<Quote>("status", { quoteId: input.quoteId });
+    if (manualReview) {
+      if (!isManualQuote(q)) throw new Rejected(409, "manual_agreement_unavailable");
+      if (action === "manual_review") return reply({ mode, ...present(q), customerEmail: customer, staffEmail: staffSigner,
+        agreementSigned: Boolean(q.document_id && Number.isFinite(await manualApproval(q))) });
+      if (input.confirmed !== true || input.agreementHash !== q.agreement_hash
+        || !/^[A-Za-z0-9_-]{8,80}$/.test(input.documentId ?? "")
+        || !/^[0-9a-f]{64}$/.test(input.evidenceSha256 ?? "")) {
+        throw new Rejected(400, "invalid_manual_agreement_evidence");
+      }
+      const signedAt = await manualApproval(q, {
+        reviewerId: user.id, documentId: input.documentId, agreementHash: input.agreementHash, evidenceSha256: input.evidenceSha256,
+      });
+      if (!Number.isFinite(signedAt)) throw new Rejected(503, "checkout_state_unavailable");
+      return reply({ mode, ...present(q), hasAgreement: true, agreementSigned: true });
+    }
     if (action === "seal") {
-      if (q.document_id || !/^[A-Za-z0-9_-]{8,80}$/.test(input.documentId ?? "")) throw new Rejected(409, "invalid_document");
+      if (isManualQuote(q) || q.document_id || !/^[A-Za-z0-9_-]{8,80}$/.test(input.documentId ?? "")) throw new Rejected(409, "invalid_document");
       const { doc, customerSigned } = await agreement(q, input.documentId);
       if (!["document.sent", "document.viewed"].includes(doc.status) || customerSigned) throw new Rejected(409, "seal_before_signing");
       return reply({ mode, ...present(await operation<Quote>("seal", { quoteId: q.id, documentId: doc.id, revision: doc.content_date_modified })) });
@@ -192,10 +231,13 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
     }
     if (action === "status" && !q.document_id) return reply({ mode, ...present(q) });
     if (!q.document_id) throw new Rejected(409, "agreement_required");
-    const state = await agreement(q, q.document_id);
+    const signedAt = isManualQuote(q) ? await manualApproval(q) : NaN;
+    const state = isManualQuote(q) ? {
+      signedAt, customerSigned: Number.isFinite(signedAt), completed: Number.isFinite(signedAt), doc: null,
+    } : await agreement(q, q.document_id);
     if (action === "status") return reply({ mode, ...present(q), customerSigned: state.customerSigned, agreementSigned: state.completed });
     if (action === "sign") {
-      if (state.customerSigned || !["document.sent", "document.viewed"].includes(state.doc.status)) throw new Rejected(409, "customer_signing_unavailable");
+      if (!state.doc || state.customerSigned || !["document.sent", "document.viewed"].includes(state.doc.status)) throw new Rejected(409, "customer_signing_unavailable");
       const session = await provider<{ id: string }>("panda", "/documents/" + q.document_id + "/session", { recipient: customer, lifetime: 900 });
       if (!/^[A-Za-z0-9_-]{8,100}$/.test(session.id)) throw new Rejected(502, "invalid_signing_session");
       return reply({ mode, signingUrl: "https://app.pandadoc.com/s/" + session.id + "/" });
