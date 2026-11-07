@@ -1,6 +1,12 @@
 -- Public launch is opt-in; the existing owner pilot remains independently gated.
 alter table public.booking_policy_settings
-  add column public_desk_checkout_enabled boolean not null default false;
+  add column if not exists public_desk_checkout_enabled boolean not null default false;
+
+-- Preserve earlier fingerprints and payment evidence. Unclaimed legacy quotes
+-- need a fresh quote before a new agreement or order can be approved.
+alter table private.live_desk_quotes
+  add column if not exists quoted_policy_version text
+    check (quoted_policy_version ~ '^[A-Za-z0-9._-]{4,80}$');
 
 create or replace function public.live_desk_checkout(p_action text,p_member uuid,p_input jsonb)
 returns jsonb language plpgsql security definer set search_path='' as $$
@@ -65,6 +71,10 @@ begin
   end if;
 
   if p_action='quote' then
+    if p_input ? 'policyVersion'
+      and p_input->>'policyVersion' is distinct from settings.live_desk_checkout_policy_version then
+      raise exception using errcode='22023', message='Checkout policy configuration changed';
+    end if;
     starts := (p_input->>'start')::date;
     select * into strict product from public.booking_products
     where kind='workspace' and code='workspace-'||pass and unit=pass and enabled and price_paise>=100;
@@ -80,6 +90,7 @@ begin
     select * into q from private.live_desk_quotes
     where member_id=p_member and resource_id=resource and product_id=product.id
       and starts_on=starts and amount_paise=product.price_paise and order_claimed_at is null
+      and quoted_policy_version=settings.live_desk_checkout_policy_version
       and created_at>clock_timestamp()-interval '1 day'
       and not exists (select 1 from private.manual_desk_agreements a
         where a.quote_id=private.live_desk_quotes.id and a.approved_at<=clock_timestamp()-interval '30 minutes')
@@ -87,10 +98,11 @@ begin
     if not found then
       q.id := extensions.gen_random_uuid();
       insert into private.live_desk_quotes
-        (id,member_id,resource_id,product_id,chair,unit,starts_on,ends_on,amount_paise,agreement_hash)
+        (id,member_id,resource_id,product_id,chair,unit,starts_on,ends_on,amount_paise,quoted_policy_version,agreement_hash)
       values (q.id,p_member,resource,product.id,chair_code,pass,starts,days[cardinality(days)],product.price_paise,
+        settings.live_desk_checkout_policy_version,
         encode(extensions.digest(convert_to(jsonb_build_array(q.id,p_member,resource,chair_code,pass,
-          starts,days[cardinality(days)],product.price_paise,'INR','live')::text,'UTF8'),'sha256'),'hex'))
+          starts,days[cardinality(days)],product.price_paise,'INR','live',settings.live_desk_checkout_policy_version)::text,'UTF8'),'sha256'),'hex'))
       returning * into q;
     end if;
     return to_jsonb(q);
@@ -105,6 +117,11 @@ begin
   end if;
 
   if p_action='lookup_order' then return to_jsonb(q); end if;
+
+  if p_action in ('seal','claim_order')
+    and q.quoted_policy_version is distinct from settings.live_desk_checkout_policy_version then
+    raise exception using errcode='22023', message='A fresh quote is required for the current policy';
+  end if;
 
   if p_action='seal' then
     if q.document_id is not null or coalesce(p_input->>'documentId','') !~ '^[A-Za-z0-9_-]{8,80}$'
@@ -217,7 +234,7 @@ revoke all on function public.live_desk_checkout(text,uuid,jsonb) from public,an
 grant execute on function public.live_desk_checkout(text,uuid,jsonb) to service_role;
 
 
-create function public.list_desk_requests(p_member uuid,p_staff boolean default false,p_offset integer default 0)
+create or replace function public.list_desk_requests(p_member uuid,p_staff boolean default false,p_offset integer default 0)
 returns jsonb language plpgsql security definer set search_path='' as $$
 declare
   row record;
@@ -272,6 +289,10 @@ begin
   end if;
 
   q := public.live_desk_checkout('status',p_member,payload);
+  if not exists (select 1 from public.booking_policy_settings where singleton
+    and live_desk_checkout_policy_version=q->>'quoted_policy_version') then
+    raise exception using errcode='22023', message='A fresh quote is required for the current policy';
+  end if;
   if q->>'chair' is distinct from 'S01' or not (
       (q->>'unit'='day' and q->>'amount_paise'='35000')
       or (exists(select 1 from public.booking_policy_settings where singleton and public_desk_checkout_enabled)

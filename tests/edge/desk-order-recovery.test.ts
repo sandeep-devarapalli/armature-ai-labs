@@ -12,21 +12,23 @@ const quote = { id: quoteId, chair: "S01", unit: "day", amount_paise: 35000,
   order_claimed_at: "2026-11-07T01:00:00Z", order_id: null, document_id: "manualdoc123", sealed_revision: "manual-pilot-v1" };
 const providerOrder = { id: "order_Existing", receipt: quoteId, amount: 35000, currency: "INR" };
 const fetcher = vi.fn();
-function post() {
+let checkoutEnabled = false;
+function post(action = "recover_order") {
   return handleDeskCheckout(new Request("https://example.test/desk-checkout", { method: "POST",
     headers: { origin: "https://armatureailabs.com", "content-type": "application/json" },
-    body: JSON.stringify({ action: "recover_order", memberId, quoteId, orderId: providerOrder.id }),
+    body: JSON.stringify({ action, memberId, quoteId, orderId: providerOrder.id }),
   }), "live");
 }
 beforeEach(() => {
   vi.resetAllMocks();
+  checkoutEnabled = false;
   const env: Record<string, string> = {
     SUPABASE_URL: "https://uxfhdfagrmaeyuaipaar.supabase.co", LIVE_DESK_RAZORPAY_KEY_ID: "rzp_live_Synthetic",
     LIVE_DESK_RAZORPAY_KEY_SECRET: "synthetic-provider-secret", LIVE_DESK_POLICY_VERSION: "desk-v1",
     LIVE_DESK_MANUAL_AGREEMENT_ENABLED: "true", LIVE_DESK_PANDADOC_SIGNER: "staff@example.test",
-    LIVE_DESK_CHECKOUT_ENABLED: "false",
+    LIVE_DESK_RAZORPAY_WEBHOOK_SECRET: "independent-synthetic-webhook-secret", LIVE_DESK_RAZORPAY_ACCOUNT_ID: "acc_Synthetic",
   };
-  vi.stubGlobal("Deno", { env: { get: (key: string) => env[key] } });
+  vi.stubGlobal("Deno", { env: { get: (key: string) => key === "LIVE_DESK_CHECKOUT_ENABLED" ? String(checkoutEnabled) : env[key] } });
   vi.stubGlobal("fetch", fetcher);
   mock.authenticate.mockResolvedValue({ id: "independent-reviewer", email: "reviewer@example.test", claims: { aal: "aal2" } });
   mock.staff.mockResolvedValue(undefined);
@@ -74,6 +76,20 @@ it("reports a failed bind without creating or retrying any order", async () => {
   expect((await post()).status).toBe(503);
   expect(fetcher).toHaveBeenCalledTimes(1);
   expect(fetcher.mock.calls[0][1].method).toBe("GET");
+});
+
+it.each([null, "desk-previous"])("requires a new quote for unclaimed signed policy %s", async quotedPolicy => {
+  checkoutEnabled = true;
+  mock.rpc.mockImplementation(() => ({ abortSignal: async () => ({
+    error: null, data: { ...quote, order_claimed_at: null, quoted_policy_version: quotedPolicy },
+  }) }));
+  expect(await (await post("status")).json()).toMatchObject({ policyStale: true, hasAgreement: true });
+  for (const action of ["sign", "seal", "approve_manual", "order"]) {
+    const response = await post(action);
+    expect(response.status).toBe(409);
+    expect(await response.json()).toEqual({ error: "policy_version_changed" });
+  }
+  expect(fetcher).not.toHaveBeenCalled();
 });
 
 async function expiredStatus(payments: object[], orderChanges = {}) {

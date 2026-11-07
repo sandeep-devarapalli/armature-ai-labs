@@ -19,6 +19,7 @@ declare
   quote_id uuid;
   start_date date;
   version text;
+  next_version text := 'test-' || extensions.gen_random_uuid()::text;
   quote jsonb;
   request jsonb;
   approval jsonb;
@@ -74,6 +75,12 @@ begin
   end if;
 
   quote := public.live_desk_checkout('quote',buyer,jsonb_build_object('chair','S01','unit','day','start',start_date));
+  if quote->>'quoted_policy_version' is distinct from version
+    or quote->>'agreement_hash' is distinct from encode(extensions.digest(convert_to(jsonb_build_array(
+      quote->>'id',buyer,quote->>'resource_id','S01','day',start_date,start_date,35000,'INR','live',version
+    )::text,'UTF8'),'sha256'),'hex') then
+    raise exception 'Quote fingerprint did not bind the current policy version';
+  end if;
   if jsonb_array_length(public.list_desk_requests(reviewer,false,0)->'quotes')<>0 then
     raise exception 'Own list leaked another member';
   end if;
@@ -140,6 +147,29 @@ begin
     or public.manual_desk_agreement(reviewer,quote_id) is not null then
     raise exception 'Manual evidence was not bound and stored exactly once';
   end if;
+  update public.booking_policy_settings set live_desk_checkout_policy_version=next_version where singleton;
+  begin
+    perform public.manual_desk_agreement(buyer,quote_id,approval);
+    raise exception 'Stale agreement approval was accepted';
+  exception when invalid_parameter_value then null;
+  end;
+  begin
+    perform public.live_desk_checkout('claim_order',buyer,request||jsonb_build_object('signedAt',approved_at,'policyVersion',next_version));
+    raise exception 'Stale signed quote started an order under the new policy';
+  exception when invalid_parameter_value then null;
+  end;
+  result := public.live_desk_checkout('quote',buyer,jsonb_build_object(
+    'chair','S01','unit','day','start',start_date,'policyVersion',next_version));
+  if result->>'id'=quote_id::text or result->>'quoted_policy_version' is distinct from next_version then
+    raise exception 'Current policy did not produce a fresh quote';
+  end if;
+  update public.booking_policy_settings set live_desk_checkout_policy_version=version where singleton;
+  begin
+    perform public.live_desk_checkout('seal',buyer,jsonb_build_object(
+      'quoteId',result->>'id','documentId','SyntheticStaleDoc','revision','sealed-fixture-v1'));
+    raise exception 'A stale unsigned quote could be sealed';
+  exception when invalid_parameter_value then null;
+  end;
   update private.manual_desk_agreements set approved_at=clock_timestamp()-interval '31 minutes' where manual_desk_agreements.quote_id=(request->>'quoteId')::uuid;
   if public.live_desk_checkout('quote',buyer,jsonb_build_object('chair','S01','unit','day','start',start_date))->>'id'=quote_id::text then
     raise exception 'Expired approval prevented fresh quote';
@@ -147,9 +177,13 @@ begin
   update private.manual_desk_agreements set approved_at=clock_timestamp() where manual_desk_agreements.quote_id=(request->>'quoteId')::uuid;
   perform public.live_desk_checkout('claim_order',buyer,request||jsonb_build_object('signedAt',approved_at,'policyVersion',version));
   perform public.live_desk_checkout('bind_order',buyer,request||'{"orderId":"order_ManualS01Fixture"}');
+  -- Model an existing pre-migration order, then advance the current policy.
+  update private.live_desk_quotes set quoted_policy_version=null where id=quote_id;
+  update public.booking_policy_settings set live_desk_checkout_policy_version=next_version where singleton;
   result := public.live_desk_checkout('capture',null,
     '{"orderId":"order_ManualS01Fixture","paymentId":"pay_ManualS01Fixture","amount":35000,"currency":"INR","refundedAmount":0}');
   if result->>'status' is distinct from 'confirmed' or result->>'membership' is distinct from 'premium'
+    or result->>'policy_version' is distinct from version
     or not exists (select 1 from public.resource_reservations where booking_id=(result->>'bookingId')::uuid and released_at is null) then
     raise exception 'Synthetic capture did not reserve the seat and grant Premium';
   end if;

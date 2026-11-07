@@ -13,6 +13,7 @@ type Review = {
   staffEmail: string;
   agreementSigned?: boolean;
   policyVersion?: string;
+  policyStale?: boolean;
   orderPending?: boolean;
 };
 
@@ -44,7 +45,7 @@ export function ManualDeskAgreementReview({ client, memberId, blocked, initialQu
       if (review?.orderPending) {
         body = { action: "recover_order", memberId, quoteId, orderId: String(form.get("orderId")).trim() };
       } else if (review) {
-        if (review.agreementSigned || form.get("confirmed") !== "on") return;
+        if (review.policyStale || review.agreementSigned || form.get("confirmed") !== "on") return;
         const pdf = form.get("certificate");
         if (!(pdf instanceof File) || pdf.size === 0 || pdf.size > 20 * 1024 * 1024 ||
           await pdf.slice(0, 5).text() !== "%PDF-") {
@@ -96,7 +97,8 @@ export function ManualDeskAgreementReview({ client, memberId, blocked, initialQu
         {review.orderPending ? <>
           <p>Find the existing order in Razorpay and confirm its receipt matches this agreement reference. Linking it does not create an order or charge the customer. After linking, ask the customer to check payment status to reconcile any payment.</p>
           <label>Existing Razorpay order ID<input name="orderId" required pattern="order_[A-Za-z0-9]{1,80}" maxLength={86} disabled={busy || blocked} /></label>
-        </> : review.agreementSigned ? <p role="status">Agreement approved. Ask the customer to check their booking status.</p> : <>
+        </> : review.policyStale ? <p role="status">The policies changed after this quote was issued. Ask the customer to request a new quote before preparing or approving an agreement.</p>
+          : review.agreementSigned ? <p role="status">Agreement approved. Ask the customer to check their booking status.</p> : <>
           <p>Include this booking fingerprint in the agreement before sending it in PandaDoc. Open the completed agreement after both signers finish. Check the booking details and confirm both signatures on its certificate. Keep the completed PDF in the approved private agreement records.</p>
           <label>PandaDoc document ID<input name="documentId" required pattern="[A-Za-z0-9_\\-]{8,80}" maxLength={80} disabled={busy || blocked} /></label>
           <label>Booking fingerprint from the signed agreement<input name="agreementHash" required pattern="[0-9a-fA-F]{64}" maxLength={64} disabled={busy || blocked} /></label>
@@ -105,7 +107,7 @@ export function ManualDeskAgreementReview({ client, memberId, blocked, initialQu
           <label><input type="checkbox" name="confirmed" required disabled={busy || blocked} /> I checked both signers, the approved agreement and the exact booking details.</label>
         </>}
         <div className="member-actions">
-          {review.orderPending ? <button className="button" disabled={busy || blocked}>Link existing order</button> : !review.agreementSigned && <button className="button" disabled={busy || blocked}>Approve agreement</button>}
+          {review.orderPending ? <button className="button" disabled={busy || blocked}>Link existing order</button> : !review.policyStale && !review.agreementSigned && <button className="button" disabled={busy || blocked}>Approve agreement</button>}
           <button type="button" className="button secondary" disabled={busy || blocked} onClick={() => { setReview(null); setError(""); }}>Look up another agreement</button>
         </div>
       </>}
