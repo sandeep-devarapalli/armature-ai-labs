@@ -255,7 +255,8 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
     const state = isManualQuote(q) ? {
       signedAt, customerSigned: Number.isFinite(signedAt), completed: Number.isFinite(signedAt), doc: null,
     } : await agreement(q, q.document_id);
-    if (action === "status") return reply({ mode, ...present(q), customerSigned: state.customerSigned, agreementSigned: state.completed });
+    if (action === "status") return reply({ mode, ...present(q), customerSigned: state.customerSigned, agreementSigned: state.completed,
+      approvedAt: isManualQuote(q) && Number.isFinite(state.signedAt) ? new Date(state.signedAt).toISOString() : null });
     if (action === "sign") {
       if (!state.doc || state.customerSigned || !["document.sent", "document.viewed"].includes(state.doc.status)) throw new Rejected(409, "customer_signing_unavailable");
       const session = await provider<{ id: string }>("panda", "/documents/" + q.document_id + "/session", { recipient: customer, lifetime: 900 });

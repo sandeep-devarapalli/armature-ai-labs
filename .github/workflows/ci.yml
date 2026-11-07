@@ -41,6 +41,7 @@ jobs:
       - run: npm run test:e2e
       - run: npm run test:e2e:ecosystem
       - run: VITE_MEMBERSHIP_LEVELS_ENABLED=true npx playwright test --config playwright.basic-registration.config.ts
+      - run: VITE_DESK_CHECKOUT_ENABLED=true VITE_MEMBERSHIP_LEVELS_ENABLED=true npx playwright test --config playwright.basic-registration.config.ts tests/basic-registration/desk-recovery.spec.ts
       - run: npx playwright test --config playwright.resource-feedback.config.ts
       - name: Verify membership fixtures against a prebuilt alternate backend
         env:
@@ -89,7 +90,8 @@ jobs:
         run: |
           psql -v ON_ERROR_STOP=1 -c 'begin' \
             -f supabase/tests/checkout_inventory_holds.sql \
-            -f supabase/tests/live_desk_checkout.sql -c 'rollback'
+            -f supabase/tests/live_desk_checkout.sql \
+            -f supabase/tests/public_desk_requests.sql -c 'rollback'
       - name: Verify ecosystem privacy, approval and pending-edit rules
         env:
           PGHOST: 127.0.0.1

@@ -1,5 +1,17 @@
--- Run against isolated booking staging after the S01 fixture and manual agreement migration.
-begin;
+-- Run after live_desk_checkout.sql in CI's outer rollback-only transaction.
+reset role;
+insert into public.resources(id,location_id,slug,name,kind,capacity,max_duration_minutes,booking_horizon_days,active,reservable)
+values('e3000000-0000-4000-8000-000000000004','e2000000-0000-4000-8000-000000000001',
+  'desk-s01-rehearsal','Synthetic public S01','workspace',1,480,90,true,true);
+insert into public.resource_booking_policies(resource_id,kind)
+values('e3000000-0000-4000-8000-000000000004','workspace');
+delete from public.booking_inventory where code='S01';
+insert into public.booking_inventory(resource_id,code,floor,room)
+values('e3000000-0000-4000-8000-000000000004','S01','GF','GF-10');
+insert into public.resource_hours(resource_id,day_of_week,opens_at,closes_at)
+select 'e3000000-0000-4000-8000-000000000004',d,time '09:00',time '17:00' from generate_series(0,6) d;
+update public.booking_products set enabled=true,price_paise=case unit when 'day' then 35000 when 'week' then 175000 when 'month' then 1300000 end
+where kind='workspace' and code in ('workspace-day','workspace-week','workspace-month');
 do $$
 declare
   buyer uuid := extensions.gen_random_uuid();
@@ -12,9 +24,18 @@ declare
   approval jsonb;
   approved_at timestamptz;
   result jsonb;
+  pass text;
+  pass_start date;
+  pass_request jsonb;
+  pass_quote jsonb;
+  expected_days integer;
 begin
   if not exists (select 1 from public.resources where slug='desk-s01-rehearsal') then
     raise exception 'This regression requires the isolated S01 staging fixture';
+  end if;
+  if has_function_privilege('authenticated','public.list_desk_requests(uuid,boolean,integer)','execute')
+    or has_function_privilege('anon','public.list_desk_requests(uuid,boolean,integer)','execute') then
+    raise exception 'Browser roles can invoke desk request lists directly';
   end if;
   if has_function_privilege('authenticated','public.manual_desk_agreement(uuid,uuid,jsonb)','execute')
     or has_function_privilege('anon','public.manual_desk_agreement(uuid,uuid,jsonb)','execute') then
@@ -52,6 +73,33 @@ begin
     raise exception 'Nonstaff accessed queue';
   exception when insufficient_privilege then null;
   end;
+  foreach pass in array array['week','month'] loop
+    pass_start := case when pass='month' then (date_trunc('month',start_date+8)+interval '1 month')::date else start_date+1 end;
+    result := public.live_desk_checkout('quote',buyer,jsonb_build_object('chair','S01','unit',pass,'start',pass_start));
+    if result->>'amount_paise' is distinct from case pass when 'week' then '175000' else '1300000' end then
+      raise exception 'Incorrect released desk price';
+    end if;
+    perform public.manual_desk_agreement(buyer,(result->>'id')::uuid,jsonb_build_object(
+      'reviewerId',reviewer,'documentId','PublicAgreement_'||pass,'agreementHash',result->>'agreement_hash',
+      'evidenceSha256',case pass when 'week' then repeat('c',64) else repeat('d',64) end));
+    pass_quote := result;
+    pass_request := jsonb_build_object('quoteId',result->>'id');
+    perform public.live_desk_checkout('claim_order',buyer,pass_request||jsonb_build_object(
+      'signedAt',public.manual_desk_agreement(buyer,(result->>'id')::uuid),'policyVersion',version));
+    perform public.live_desk_checkout('bind_order',buyer,pass_request||jsonb_build_object('orderId','order_Public'||pass));
+    result := public.live_desk_checkout('capture',null,jsonb_build_object(
+      'orderId','order_Public'||pass,'paymentId','pay_Public'||pass,'amount',(pass_quote->>'amount_paise')::bigint,
+      'currency','INR','refundedAmount',0));
+    expected_days := (pass_quote->>'ends_on')::date-(pass_quote->>'starts_on')::date+1;
+    if result->>'status' is distinct from 'confirmed' or result->>'membership' is distinct from 'premium'
+      or jsonb_array_length(result->'bookingIds') is distinct from expected_days
+      or (select count(*) from public.resource_reservations r
+        where r.booking_id in (select value::uuid from jsonb_array_elements_text(result->'bookingIds'))
+          and r.released_at is null)<>expected_days then
+      raise exception 'Public % capture did not reserve every date and grant Premium',pass;
+    end if;
+
+  end loop;
   quote_id := (quote->>'id')::uuid;
   request := jsonb_build_object('quoteId',quote_id);
   if quote->>'amount_paise' <> '35000' or public.manual_desk_agreement(buyer,quote_id) is not null then
@@ -95,5 +143,4 @@ begin
   end if;
 end;
 $$;
-rollback;
-select 'Manual S01 staging regression passed and rolled back' as result;
+select 'Public S01 regression passed; outer transaction must roll back' as result;

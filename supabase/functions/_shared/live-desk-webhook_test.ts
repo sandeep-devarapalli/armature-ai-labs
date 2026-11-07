@@ -15,6 +15,7 @@ function setup() {
   let currentPayment = payment;
   let refunds = [refund];
   let fail = false;
+  let failLedger = false;
   const calls: string[] = [];
   const facts: { action: string; input: object }[] = [];
   const vars: Record<string, string> = { SUPABASE_URL: productionBackend,
@@ -31,7 +32,11 @@ function setup() {
       return provider && { provider, secret, accountId };
     },
     lookup: async orderId => orderId === quote.order_id ? quote : null,
-    apply: async (action, input) => { facts.push({ action, input }); return { status: "confirmed" }; },
+    apply: async (action, input) => {
+      if (failLedger) throw new Error("Synthetic ledger outage");
+      facts.push({ action, input });
+      return { status: "confirmed" };
+    },
   });
   async function post(event = "payment.captured", opts: { wrongAccount?: boolean; unsigned?: boolean; order?: string } = {}) {
     const body = JSON.stringify({ entity: "event", account_id: opts.wrongAccount ? "acc_other" : accountId, event,
@@ -41,7 +46,8 @@ function setup() {
       headers: { "x-razorpay-event-id": "same-event-id", "x-razorpay-signature": signature } }));
   }
   return { post, calls, facts, vars, setPayment: (v: typeof payment) => { currentPayment = v; },
-    setRefunds: (v: typeof refunds) => { refunds = v; }, failProvider: () => { fail = true; } };
+    setRefunds: (v: typeof refunds) => { refunds = v; }, failProvider: () => { fail = true; },
+    failLedger: (v: boolean) => { failLedger = v; } };
 }
 
 Deno.test("live webhook rejects tampered and foreign-account requests before provider access", async () => {
@@ -86,4 +92,60 @@ Deno.test("mismatched, uncaptured and unavailable provider payments cannot fulfi
   s.failProvider();
   expect((await s.post()).status, 502);
   expect(s.facts, []);
+});
+
+Deno.test("failed events do not grant access and delayed capture requires current provider confirmation", async () => {
+  const s = setup();
+  s.setPayment({ ...payment, status: "failed", captured: false });
+  expect((await s.post("payment.failed")).status, 200);
+  expect(s.calls, []);
+  expect((await s.post()).status, 409);
+  expect(s.facts, []);
+  s.setPayment(payment);
+  expect((await s.post()).status, 200);
+  expect(s.facts.length, 1);
+  expect(s.facts[0].action, "capture");
+});
+
+Deno.test("ledger outage returns retryable failure and a later delivery reconciles capture", async () => {
+  const s = setup();
+  s.failLedger(true);
+  expect((await s.post()).status, 503);
+  expect(s.facts, []);
+  s.failLedger(false);
+  expect((await s.post()).status, 200);
+  expect(s.facts.length, 1);
+});
+
+Deno.test("partial then full refunds reconcile cumulative processed totals despite stale capture delivery", async () => {
+  const s = setup();
+  s.setPayment({ ...payment, amount_refunded: 10000 });
+  expect((await s.post("refund.processed")).status, 200);
+  expect(s.facts[0].input, { quoteId: quote.id, orderId: payment.order_id, paymentId: payment.id,
+    amount: 35000, currency: "INR", refundedAmount: 10000 });
+  s.setPayment({ ...payment, status: "refunded", amount_refunded: 35000 });
+  s.setRefunds([refund, { ...refund, id: "rfnd_Balance", amount: 25000 }]);
+  expect((await s.post("refund.processed")).status, 200);
+  expect((await s.post("refund.processed")).status, 200);
+  expect((await s.post()).status, 200);
+  expect(s.facts.slice(1).map(fact => fact.action), ["refund", "refund", "refund"]);
+  expect(s.facts[1].input, { quoteId: quote.id, orderId: payment.order_id, paymentId: payment.id,
+    amount: 35000, currency: "INR", refundedAmount: 35000 });
+  expect(s.facts[1], s.facts[2]);
+  expect(s.facts[2], s.facts[3]);
+});
+
+Deno.test("refund notification waits for provider processing and rejects duplicate refund rows", async () => {
+  const s = setup();
+  s.setPayment({ ...payment, amount_refunded: 10000 });
+  s.setRefunds([{ ...refund, status: "pending" }]);
+  expect((await s.post("refund.processed")).status, 503);
+  expect(s.facts, []);
+  s.setRefunds([refund, refund]);
+  expect((await s.post("refund.processed")).status, 503);
+  expect(s.facts, []);
+  s.setRefunds([refund]);
+  expect((await s.post("refund.processed")).status, 200);
+  expect(s.facts.length, 1);
+  expect(s.facts[0].action, "refund");
 });

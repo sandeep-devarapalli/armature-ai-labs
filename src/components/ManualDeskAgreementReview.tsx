@@ -18,10 +18,11 @@ type Review = {
 const quoteReference = "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
 const amount = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" });
 
-export function ManualDeskAgreementReview({ client, memberId, blocked, mode = "live" }: {
+export function ManualDeskAgreementReview({ client, memberId, blocked, initialQuoteId = "", mode = "live" }: {
   client: SupabaseClient;
   memberId: string;
   blocked?: boolean;
+  initialQuoteId?: string;
   mode?: "test" | "live";
 }) {
   const [review, setReview] = useState<Review | null>(null);
@@ -76,12 +77,12 @@ export function ManualDeskAgreementReview({ client, memberId, blocked, mode = "l
   }
 
   return <details className="member-confirm">
-    <summary>Review a desk pilot agreement</summary>
+    <summary>Review a desk agreement</summary>
     <p>Set up or verify your authenticator before reviewing this agreement.</p>
     <MfaPanel mode="supabase" />
     <form key={review?.quoteId ?? "lookup"} className="ol-form" onSubmit={submit}>
       {!review ? <>
-        <label>Agreement reference<input name="quoteId" required pattern={quoteReference} maxLength={36} disabled={busy || blocked} /></label>
+        <label>Agreement reference<input name="quoteId" defaultValue={initialQuoteId} required pattern={quoteReference} maxLength={36} disabled={busy || blocked} /></label>
         <div className="member-actions"><button className="button secondary" disabled={busy || blocked}>Look up agreement</button></div>
       </> : <>
         <p>Chair <strong>{review.chair}</strong> · {review.start}{review.end !== review.start ? " to " + review.end : ""} · <strong>{amount.format(review.amountPaise / 100)}</strong></p>

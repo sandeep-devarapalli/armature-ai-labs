@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from "react";
-import { legalEntity, policyUpdatedDate } from "../data/legalEntity";
+import { legalEntity } from "../data/legalEntity";
 import "./PrivacyPage.css";
 
 function LegalPage({ title, updated = true, children }: PropsWithChildren<{ title: string; updated?: boolean }>) {
@@ -7,7 +7,7 @@ function LegalPage({ title, updated = true, children }: PropsWithChildren<{ titl
     <header className="page-hero">
       <div className="wrap">
         <h1>{title}</h1>
-        {updated && <p className="hero-copy">Last updated: {policyUpdatedDate}</p>}
+        {updated && <p className="hero-copy">Last updated: 7 November 2026</p>}
       </div>
     </header>
     <div className="wrap privacy-content">{children}</div>
@@ -32,12 +32,12 @@ export function ContactPage() {
         <li>Phone and WhatsApp: <a href={`tel:${legalEntity.phone.replace(/\s/g, "")}`}>{legalEntity.phone}</a></li>
         <li>Hours: {legalEntity.supportHours}</li>
       </ul>
-      <p>For bookings, payments, refunds or invoices, email <a href={`mailto:${legalEntity.email}`}>{legalEntity.email}</a> with your name, the booking or payment reference and a short description. We reply within 2 working days.</p>
+      <p>For bookings, payments, refunds or invoices, email <a href={`mailto:${legalEntity.email}`}>{legalEntity.email}</a> with your name, the booking or payment reference and a short description. We acknowledge requests within 1 business day.</p>
       <p>For privacy requests, email <a href={`mailto:${legalEntity.privacyEmail}`}>{legalEntity.privacyEmail}</a>.</p>
     </section>
     <section>
       <h2>Grievances</h2>
-      <p>If you are not satisfied with how we handled a complaint, write to our Grievance Officer, {legalEntity.grievanceOfficer}, at <a href={`mailto:${legalEntity.email}`}>{legalEntity.email}</a> with the subject "Grievance". We acknowledge grievances within 48 hours and aim to resolve them within 30 days.</p>
+      <p>If you are not satisfied with how we handled a complaint, write to our Grievance Officer, {legalEntity.grievanceOfficer}, at <a href={`mailto:${legalEntity.email}`}>{legalEntity.email}</a> with the subject "Grievance". We acknowledge complaints within 1 business day and resolve them by D+4 business days, where D is the day we receive the complaint.</p>
     </section>
   </LegalPage>;
 }
@@ -49,11 +49,11 @@ export function TermsPage() {
       <h2>1. What we offer</h2>
       <ul>
         <li>Coworking: private cabins on monthly plans and individual desk passes for the dates shown in your quote at our lab in HSR Layout, Bengaluru.</li>
-        <li>Equipment rental: robotics and AI equipment, such as robotic arms and GPU workstations, booked by the hour or day.</li>
+        <li>Equipment rental: the Hiwonder SO-ARM101 Advanced Kit, subject to confirmed availability, for a minimum of 7 days or a fixed 30-day period.</li>
         <li>Hardware sales: robotics hardware and kits, such as educational robotic arms, sensors and components.</li>
         <li>Workshops and events: paid sessions at the lab or online.</li>
       </ul>
-      <p>Current prices are shown on the website or in your quote. Prices are in Indian Rupees and GST is charged as applicable.</p>
+      <p>Current prices are shown on the website or in your quote. Prices are in Indian Rupees. We are not currently GST-registered and do not add GST. Any future applicable tax will be disclosed before you accept a quote or pay.</p>
     </section>
     <section>
       <h2>2. Membership and eligibility</h2>
@@ -63,9 +63,9 @@ export function TermsPage() {
       <h2>3. Cabins and seats</h2>
       <ul>
         <li>Cabins are rented whole, at the cabin's listed price, whatever the number of people using it.</li>
-        <li>The minimum term for a cabin is 3 months. A security deposit of 2 months' rent is payable before move-in.</li>
-        <li>Individual desk passes cover the dates stated in your booking. The cabin minimum and security deposit do not apply to desk passes.</li>
-        <li>Cabin rent is payable monthly in advance, by the date on your invoice.</li>
+        <li>The minimum term for a cabin is 3 months. The security deposit is 2 months' agreed rent at monthly rents up to INR 100,000, and 3 months' agreed rent above that amount.</li>
+        <li>Individual desk passes cover the dates stated in your booking, with access from 9 am to 5 pm IST every day, including weekends, subject to disclosed closures. The cabin minimum and security deposit do not apply to desk passes.</li>
+        <li>For new cabin agreements, the first partial calendar month is prorated and later rent is payable monthly in advance by the 5th. The 3-month minimum runs from the actual start date. Existing signed agreements retain their terms.</li>
         <li>Either side may end a cabin arrangement after the minimum term with 30 days' written notice.</li>
         <li>Use only the power points provided. Any change to the cabin needs our written approval, and you must restore it when you leave.</li>
         <li>Your signed space agreement, if you have one, takes priority over this section.</li>
@@ -76,8 +76,9 @@ export function TermsPage() {
       <ul>
         <li>Bookings are confirmed only after payment.</li>
         <li>You must follow the lab's safety rules and any instructions from our staff. Some equipment needs a short induction first.</li>
-        <li>Equipment stays in the lab unless we agree otherwise in writing.</li>
+        <li>The Hiwonder kit stays in the lab and requires approved workspace access for the same period. It is one complete kit, not two separately rentable arms.</li>
         <li>You are responsible for loss of or damage to equipment during your booking, beyond normal wear. We will charge the repair or replacement cost, and may hold a deposit for higher-value items.</li>
+        <li>The Hiwonder kit costs INR 1,050 per 7 days or INR 3,900 per fixed 30-day period, with a separately disclosed INR 25,000 security deposit.</li>
         <li>Report any fault immediately. Do not try to repair our equipment yourself.</li>
       </ul>
     </section>
@@ -145,10 +146,15 @@ export function RefundPolicyPage() {
       </table>
     </div>
     <section>
+      <h2>Equipment deposits and early returns</h2>
+      <p>Equipment security deposits are returned within 7 working days of return, less documented unpaid charges or damage beyond normal wear. Inspection takes place within that period and does not postpone the deadline.</p>
+      <p>For early return of the Hiwonder kit within a paid 30-day period, rent is recalculated at INR 150 per day used, subject to the 7-day minimum and capped at the INR 3,900 already paid. Any remaining rent is refunded manually to the original payment method.</p>
+    </section>
+    <section>
       <h2>Hardware returns</h2>
       <ul>
         <li>Report the problem within 3 days of delivery or pickup, with photos or a short video and your order reference.</li>
-        <li>Items must be unused, with all parts and the original packaging.</li>
+        <li>Except for reasonable opening and testing to identify a defect, return items with all supplied parts and available original packaging.</li>
         <li>We do not accept returns of opened consumables, cut cables or wires, or components that have been soldered, flashed or modified.</li>
         <li>If an item is faulty, we pay the return shipping. In other cases, return shipping is paid by you.</li>
         <li>We refund or replace within 5 working days of receiving and checking the returned item.</li>
@@ -160,7 +166,7 @@ export function RefundPolicyPage() {
     </section>
     <section>
       <h2>How to ask for a refund</h2>
-      <p>Email <a href={`mailto:${legalEntity.email}`}>{legalEntity.email}</a> with your name, the booking or order reference, and the reason. We reply within 2 working days.</p>
+      <p>Email <a href={`mailto:${legalEntity.email}`}>{legalEntity.email}</a> with your name, the booking or order reference, and the reason. We acknowledge requests within 1 business day.</p>
     </section>
   </LegalPage>;
 }
@@ -184,7 +190,7 @@ export function ShippingPolicyPage() {
     </section>
     <section>
       <h2>Damaged or missing items</h2>
-      <p>Check the package when it arrives. If it is damaged, opened or has items missing, email <a href={`mailto:${legalEntity.email}`}>{legalEntity.email}</a> within 48 hours with photos and your order reference. We will replace the item or refund you, as set out in our Cancellation and Refund Policy.</p>
+      <p>Check the package when it arrives. If it is damaged, opened or has items missing, email <a href={`mailto:${legalEntity.email}`}>{legalEntity.email}</a> within 3 calendar days with photos and your order reference. We allow reasonable opening and testing when assessing defects. We will replace the item or refund you, as set out in our Cancellation and Refund Policy.</p>
     </section>
     <section>
       <h2>Delays</h2>

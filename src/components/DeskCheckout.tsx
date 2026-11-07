@@ -13,7 +13,7 @@ type Availability = { chairs: string[]; dates: { booking_date: string; available
 type Quote = {
   quoteId: string; amountPaise?: number; policyVersion?: string; hasAgreement?: boolean; manualAgreement?: boolean;
   chair?: string; unit?: Term; start?: string; end?: string;
-  customerSigned?: boolean; agreementSigned?: boolean; hasOrder?: boolean; orderPending?: boolean;
+  approvedAt?: string; customerSigned?: boolean; agreementSigned?: boolean; hasOrder?: boolean; orderPending?: boolean;
   status?: "confirmed" | "refunded" | "cancelled" | "needs_review"; bookingId?: string; membership?: string; reviewReason?: string;
 };
 type Order = { keyId: string; orderId: string; amountPaise: number; currency: string };
@@ -62,7 +62,7 @@ export default function DeskCheckoutPage() {
 
   return <>
     <PageHeader meta="Workspace bookings" title="Book a desk." description="Choose a desk pass and an available start date. Review the agreement, sign it and pay through Razorpay once Armature has countersigned." />
-    {verified ? <DeskCheckout key={account.user_id} memberId={account.user_id} /> : <Section number="01" title="Sign in and verify">
+    {signedIn && account?.user_id ? <DeskCheckout key={account.user_id} memberId={account.user_id} canBook={verified} /> : <Section number="01" title="Sign in and verify">
       {loading ? <p role="status">Checking your account…</p>
         : error ? <><p role="alert">{error}</p><button type="button" className="button button-quiet" onClick={() => void refresh()}>Check account status</button></>
         : !signedIn ? <Link className="button button-primary" to="/auth?next=%2Fbookings%2F">Sign in to book</Link>
@@ -71,7 +71,7 @@ export default function DeskCheckoutPage() {
   </>;
 }
 
-function DeskCheckout({ memberId }: { memberId: string }) {
+function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolean }) {
   const { refresh: refreshMembership } = useAccount();
   const { refresh: refreshBookings } = useApp();
   const storageKey = "armature-desk-quote-v1:" + memberId;
@@ -91,11 +91,13 @@ function DeskCheckout({ memberId }: { memberId: string }) {
   const [consent, setConsent] = useState("");
   const [signingUrl, setSigningUrl] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
+  const [recent, setRecent] = useState<Quote[]>([]);
+  const [recentLoaded, setRecentLoaded] = useState(false);
   const modal = useRef<CheckoutInstance | null>(null);
   const choosing = !reference;
 
   useEffect(() => {
-    if (!choosing) return;
+    if (!choosing || !canBook) return;
     let active = true;
     setAvailable(null);
     setCalendarError("");
@@ -105,7 +107,7 @@ function DeskCheckout({ memberId }: { memberId: string }) {
       .then(result => { if (active) setAvailable(result); })
       .catch(reason => { if (active) setCalendarError(reason.message); });
     return () => { active = false; };
-  }, [calendarRetry, chair, choosing, month, today, unit]);
+  }, [calendarRetry, canBook, chair, choosing, month, today, unit]);
 
   useEffect(() => () => modal.current?.close(), []);
 
@@ -160,9 +162,49 @@ function DeskCheckout({ memberId }: { memberId: string }) {
     catch (reason) { modal.current = null; setModalOpen(false); throw reason; }
   }
 
+  async function restore(value: string) {
+    const result = await request<Quote>({ action: "status", quoteId: value });
+    if (result.quoteId !== value) throw new Error("The booking reference did not match.");
+    saveReference(value);
+    setConsent("");
+    setSigningUrl("");
+    await showStatus(result);
+  }
+
+  const approvalExpired = Boolean(quote?.approvedAt && !quote.hasOrder && !quote.orderPending
+    && Date.parse(quote.approvedAt) + 30 * 60 * 1000 <= Date.now());
   const terminal = quote?.status === "confirmed" || quote?.status === "refunded" || quote?.status === "cancelled";
   return <Section number="01" title="Book a desk pass">
-    {choosing ? <form className="booking-form" onSubmit={event => {
+    <ol aria-label="Booking steps">
+      <li>Choose your pass, chair and dates</li>
+      <li>Review your draft and request any corrections</li>
+      <li>Sign in PandaDoc; Armature countersigns and reviews</li>
+      <li>Pay securely, then receive your confirmed reservation</li>
+    </ol>
+    <p>A request does not reserve a desk. Availability is checked again before payment. Do not make a second payment while an earlier attempt is pending.</p>
+    {choosing && <details className="member-confirm">
+      <summary>Resume an existing booking</summary>
+      <button className="button button-quiet" type="button" disabled={busy} onClick={() => void run(async () => {
+        const result = await request<{ quotes: Quote[] }>({ action: "list_own" });
+        setRecent(result.quotes); setRecentLoaded(true);
+      })}>Load my recent requests</button>
+      {recentLoaded && !recent.length && <p>No recent booking requests found.</p>}
+      <ul>{recent.map(item => <li key={item.quoteId}>
+        <button className="button button-quiet" type="button" disabled={busy} onClick={() => void run(() => restore(item.quoteId))}>
+          {item.chair} · {item.unit ? terms[item.unit] : "Desk pass"} · {item.start ? formatDate(item.start) : item.quoteId}
+          {item.status ? ` · ${item.status.replaceAll("_", " ")}` : " · In progress"}
+        </button>
+      </li>)}</ul>
+      <form onSubmit={event => {
+        event.preventDefault();
+        const value = String(new FormData(event.currentTarget).get("reference")).trim().toLowerCase();
+        void run(() => restore(value));
+      }}>
+        <Field label="Existing agreement reference"><input name="reference" required pattern="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}" maxLength={36} disabled={busy} /></Field>
+        <button className="button button-quiet" disabled={busy}>Resume booking</button>
+      </form>
+    </details>}
+    {choosing && !canBook ? <><p>Desk passes require Verified membership.</p><Link className="button button-primary" to="/onboarding">View membership</Link></> : choosing ? <form className="booking-form" onSubmit={event => {
       event.preventDefault();
       if (!available?.dates.some(row => row.available && row.booking_date === start)) return;
       void run(async () => {
@@ -212,7 +254,8 @@ function DeskCheckout({ memberId }: { memberId: string }) {
         : quote?.status === "refunded" ? <p role="status">This payment has been refunded.</p>
         : quote?.status === "cancelled" ? <p role="status">This desk booking was cancelled.</p>
         : quote?.status === "needs_review" || quote?.orderPending ? <p role="status">Armature needs to reconcile this payment. Contact support before trying again.</p>
-        : quote?.manualAgreement && !quote.agreementSigned ? <p role="status">Check your email for the PandaDoc agreement. Review it, sign and select Finish. Once Armature countersigns and approves it, check the status here to pay.</p>
+        : approvalExpired ? <p role="status">This agreement’s payment window expired. Start a fresh request so Armature can check availability and prepare a new agreement.</p>
+        : quote?.manualAgreement && !quote.agreementSigned ? <p role="status">Armature will prepare your PandaDoc agreement and email you when it is ready. Check your details and request corrections before signing. After both signatures, staff will review the completed agreement. Check the status here to continue.</p>
         : quote && (!quote.hasAgreement && !quote.agreementSigned) ? <p role="status">Armature is preparing your agreement.</p>
         : quote && !quote.agreementSigned ? <>
           <p>{quote.customerSigned ? "Waiting for Armature to countersign." : "Review and sign your agreement in PandaDoc. Select Finish when you are done."}</p>
@@ -223,8 +266,8 @@ function DeskCheckout({ memberId }: { memberId: string }) {
             setSigningUrl(url.href);
           })}>Get signing link</button>}
           {!quote.customerSigned && signingUrl && <a href={signingUrl} target="_blank" rel="noreferrer">Open PandaDoc agreement in a new tab</a>}
-        </> : quote?.agreementSigned && <>
-          <p>Both signatures are verified. Confirm the policies before opening Razorpay.</p>
+        </> : quote?.agreementSigned && !canBook ? <p>Verified membership is required before starting a payment. You can still check an existing payment below.</p> : quote?.agreementSigned && <>
+          <p>Both signatures are verified. Payment must start within 30 minutes of staff approval. Confirm the policies before opening Razorpay.</p>
           <label><input type="checkbox" checked={Boolean(quote.policyVersion && consent === quote.policyVersion)}
             disabled={!quote.policyVersion || busy || modalOpen} onChange={event => setConsent(event.target.checked ? quote.policyVersion ?? "" : "")} />
             {" "}I accept the <a href="/terms/" target="_blank" rel="noreferrer">terms</a>, <a href="/privacy/" target="_blank" rel="noreferrer">privacy notice</a> and <a href="/refund-policy/" target="_blank" rel="noreferrer">refund and cancellation policy</a>. I consent to sharing the information described in the privacy notice with Razorpay and its partners to process and reconcile my payment, prevent fraud and comply with regulatory requirements.
@@ -234,11 +277,12 @@ function DeskCheckout({ memberId }: { memberId: string }) {
         </>}
       {!terminal && <button className="button button-quiet" type="button" disabled={busy || modalOpen}
         onClick={() => void run(async () => showStatus(await request<Quote>({ action: "status", quoteId: reference })))}>Check agreement or payment status</button>}
-      {(terminal || (quote && !quote.hasAgreement && !quote.hasOrder && !quote.orderPending && !quote.status)) &&
+      {(terminal || approvalExpired || (quote && !quote.hasAgreement && !quote.hasOrder && !quote.orderPending && !quote.status)) &&
         <button className="button button-quiet" type="button" disabled={busy} onClick={() => {
           saveReference(""); setQuote(null); setStart(""); setConsent(""); setSigningUrl(""); setError("");
         }}>Choose another desk pass</button>}
     </div>}
+    <p>Need a draft correction or help with a payment? Email <a href="mailto:hello@armatureailabs.com">hello@armatureailabs.com</a> with your agreement reference. Do not send identity copies or payment credentials.</p>
     {error && <p className="form-error" role="alert">{error}</p>}
   </Section>;
 }

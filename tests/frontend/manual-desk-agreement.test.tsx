@@ -18,7 +18,7 @@ it("lets an agreement reviewer enroll and verify MFA without visiting the gated 
   mock.challengeAndVerify.mockResolvedValue({ error: null });
   const invoke = vi.fn();
   render(<ManualDeskAgreementReview client={{ functions: { invoke } } as unknown as SupabaseClient} memberId="buyer-fixture" />);
-  fireEvent.click(screen.getByText("Review a desk pilot agreement"));
+  fireEvent.click(screen.getByText("Review a desk agreement"));
   fireEvent.click(await screen.findByRole("button", { name: "Set up authenticator" }));
   fireEvent.change(await screen.findByLabelText("Six-digit authenticator code"), { target: { value: "123456" } });
   fireEvent.click(screen.getByRole("button", { name: "Finish setup" }));
