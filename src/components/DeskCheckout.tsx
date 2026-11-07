@@ -258,7 +258,7 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
         : quote?.status === "refunded" ? <p role="status">This payment has been refunded.</p>
         : quote?.status === "cancelled" ? <p role="status">This desk booking was cancelled.</p>
         : quote?.status === "needs_review" || quote?.orderPending ? <p role="status">Armature needs to reconcile this payment. Contact support before trying again.</p>
-        : staleUnclaimed ? <p role="status">The policies for this unsigned request have changed. Choose a fresh desk pass and review the updated agreement before paying.</p>
+        : staleUnclaimed ? <p role="status">The policies for this unpaid request have changed. Choose a fresh desk pass and review the updated agreement before paying.</p>
         : expiredBoundOrder ? <p role="status">This payment window has expired. {quote?.canRequestReplacement
           ? "Razorpay reports no successful or pending payment. Close any old checkout tabs, then request a fresh agreement. Ask staff to recheck the old payment before approving the replacement."
           : "Check payment status before doing anything else. If a payment is pending or its outcome is unclear, contact Armature for review. Do not pay again."}</p>

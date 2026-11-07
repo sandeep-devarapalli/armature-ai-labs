@@ -185,7 +185,7 @@ it("restarts an unclaimed stale policy request without offering payment", async 
   mock.invoke.mockResolvedValue(reply({ ...signed, policyStale: true }));
   renderPage();
   fireEvent.click(screen.getByRole("button", { name: "Check agreement or payment status" }));
-  expect(await screen.findByText(/policies for this unsigned request have changed/)).toBeInTheDocument();
+  expect(await screen.findByText(/policies for this unpaid request have changed/)).toBeInTheDocument();
   expect(screen.getByRole("button", { name: "Choose another desk pass" })).toBeEnabled();
   expect(screen.queryByRole("button", { name: "Pay with Razorpay" })).not.toBeInTheDocument();
 });
