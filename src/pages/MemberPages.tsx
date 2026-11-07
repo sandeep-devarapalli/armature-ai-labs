@@ -220,7 +220,7 @@ export function ProfilePage() {
   );
 }
 
-function MfaPanel({ mode }: { mode: "demo" | "supabase" }) {
+export function MfaPanel({ mode }: { mode: "demo" | "supabase" }) {
   const [factorId, setFactorId] = useState("");
   const [enrollment, setEnrollment] = useState<{
     id: string;

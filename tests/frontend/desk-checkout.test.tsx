@@ -103,3 +103,18 @@ it("never opens Checkout using a Test Mode key in the live route", async () => {
   expect(await screen.findByRole("alert")).toHaveTextContent("The payment order did not match your approved quote.");
   expect(mock.load).not.toHaveBeenCalled();
 });
+
+it("directs a manual pilot customer to email and waits for staff approval before showing checkout", async () => {
+  localStorage.setItem("armature-desk-quote-v1:member-fixture", quoteId);
+  mock.invoke.mockResolvedValueOnce(reply({ quoteId, manualAgreement: true, hasAgreement: false }))
+    .mockResolvedValueOnce(reply({ ...signed, manualAgreement: true }));
+  renderPage();
+  const status = screen.getByRole("button", { name: "Check agreement or payment status" });
+  fireEvent.click(status);
+  expect(await screen.findByText(/Check your email for the PandaDoc agreement/)).toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: "Get signing link" })).not.toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: "Pay with Razorpay" })).not.toBeInTheDocument();
+
+  fireEvent.click(status);
+  expect(await screen.findByRole("button", { name: "Pay with Razorpay" })).toBeDisabled();
+});
