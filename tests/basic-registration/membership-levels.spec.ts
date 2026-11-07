@@ -71,6 +71,20 @@ test("server hold retains original registration and avoids OTP calls", async ({ 
   await expect(page.getByRole("heading", { name: "Premium", exact: true })).toHaveCount(0);
 });
 
+test("Basic membership cannot request a desk agreement or payment", async ({ page }) => {
+  const { calls } = await fixture(page);
+  await page.goto("/bookings");
+  if (process.env.VITE_DESK_CHECKOUT_ENABLED === "true") {
+    await expect(page.getByText("Desk passes require Verified membership.", { exact: true })).toBeVisible();
+    await expect(page.getByRole("link", { name: "View membership", exact: true })).toHaveAttribute("href", "/onboarding");
+  } else {
+    await expect(page.getByRole("heading", { name: "Operational access is opening soon." })).toBeVisible();
+  }
+  await expect(page.getByRole("button", { name: "Request agreement", exact: true })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Pay with Razorpay", exact: true })).toHaveCount(0);
+  expect(calls).not.toContain("desk-checkout");
+});
+
 test("public membership journey explains all three levels without promising rentals", async ({ page }, info) => {
   await fixture(page);
   await page.goto("/join");
