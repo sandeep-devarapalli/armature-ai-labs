@@ -76,7 +76,7 @@ begin
   foreach pass in array array['week','month'] loop
     pass_start := case when pass='month' then (date_trunc('month',start_date+8)+interval '1 month')::date else start_date+1 end;
     result := public.live_desk_checkout('quote',buyer,jsonb_build_object('chair','S01','unit',pass,'start',pass_start));
-    if result->>'amount_paise' is distinct from case pass when 'week' then '175000' else '1300000' end then
+    if result->>'amount_paise' is distinct from (case pass when 'week' then '175000' else '1300000' end) then
       raise exception 'Incorrect released desk price';
     end if;
     perform public.manual_desk_agreement(buyer,(result->>'id')::uuid,jsonb_build_object(

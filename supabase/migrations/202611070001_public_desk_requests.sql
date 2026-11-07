@@ -68,7 +68,7 @@ begin
     starts := (p_input->>'start')::date;
     select * into strict product from public.booking_products
     where kind='workspace' and code='workspace-'||pass and unit=pass and enabled and price_paise>=100;
-    if p_member is distinct from settings.live_desk_checkout_member and product.price_paise is distinct from case pass when 'day' then 35000 when 'week' then 175000 when 'month' then 1300000 end then
+    if p_member is distinct from settings.live_desk_checkout_member and product.price_paise is distinct from (case pass when 'day' then 35000 when 'week' then 175000 when 'month' then 1300000 end) then
       raise exception using errcode='22023', message='Released desk price required';
     end if;
     if not exists (select 1 from public.list_bookable_desk_dates(chair_code,pass,starts,starts) where available) then
