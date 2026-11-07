@@ -75,3 +75,34 @@ it("reports a failed bind without creating or retrying any order", async () => {
   expect(fetcher).toHaveBeenCalledTimes(1);
   expect(fetcher.mock.calls[0][1].method).toBe("GET");
 });
+
+async function expiredStatus(payments: object[], orderChanges = {}) {
+  mock.authenticate.mockResolvedValue({ id: memberId, email: "buyer@example.test", claims: { aal: "aal1" } });
+  mock.rpc.mockImplementation(name => ({ abortSignal: async () => ({ error: null,
+    data: name === "manual_desk_agreement" ? "2000-01-01T00:00:00Z" : { ...quote, order_id: providerOrder.id },
+  }) }));
+  fetcher.mockImplementation((url: string) => Promise.resolve(Response.json(url.endsWith("/payments")
+    ? { count: payments.length, items: payments }
+    : { ...providerOrder, amount_paid: 0, amount_due: 35000, attempts: payments.length, status: "created", ...orderChanges })));
+  return handleDeskCheckout(new Request("https://example.test/desk-checkout", { method: "POST",
+    headers: { origin: "https://armatureailabs.com", "content-type": "application/json" },
+    body: JSON.stringify({ action: "status", quoteId }),
+  }), "live");
+}
+it("allows a fresh agreement request after a checked expired order has no attempts", async () => {
+  const response = await expiredStatus([]);
+  expect(response.status).toBe(200);
+  expect(await response.json()).toMatchObject({ expiredOrder: true, canRequestReplacement: true });
+  expect(mock.rpc.mock.calls.some(([, args]) => args?.p_action === "bind_order")).toBe(false);
+});
+it.each(["authorized", "created", "unknown"])("keeps ambiguous %s payment attempts out of replacement checkout", async status => {
+  const response = await expiredStatus([{ id: "pay_Pending", order_id: providerOrder.id, status, amount_refunded: 0 }]);
+  expect(await response.json()).toMatchObject({ expiredOrder: true, canRequestReplacement: false });
+});
+it("blocks replacement when provider attempts and fetched records disagree", async () => {
+  expect(await (await expiredStatus([], { attempts: 1 })).json()).toMatchObject({ canRequestReplacement: false });
+});
+it("blocks replacement when provider reports paid funds without a captured payment record", async () => {
+  expect(await (await expiredStatus([], { amount_paid: 35000, amount_due: 0, status: "paid" })).json())
+    .toMatchObject({ canRequestReplacement: false });
+});

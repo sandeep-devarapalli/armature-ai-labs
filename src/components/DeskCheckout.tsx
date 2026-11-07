@@ -11,6 +11,7 @@ const terms = { day: "Day pass", week: "Week pass", month: "Monthly desk" };
 type Term = keyof typeof terms;
 type Availability = { chairs: string[]; dates: { booking_date: string; available: boolean }[] };
 type Quote = {
+  policyStale?: boolean; expiredOrder?: boolean; canRequestReplacement?: boolean;
   quoteId: string; amountPaise?: number; policyVersion?: string; hasAgreement?: boolean; manualAgreement?: boolean;
   chair?: string; unit?: Term; start?: string; end?: string;
   approvedAt?: string; customerSigned?: boolean; agreementSigned?: boolean; hasOrder?: boolean; orderPending?: boolean;
@@ -122,7 +123,7 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
   }
 
   async function showStatus(result: Quote) {
-    setQuote(current => ({ ...current, ...result }));
+    setQuote(current => ({ ...current, expiredOrder: false, canRequestReplacement: false, ...result }));
     if (result.status === "confirmed" || result.status === "refunded") {
       await Promise.allSettled([refreshMembership(), ...(memberPlatformAvailable ? [refreshBookings()] : [])]);
     }
@@ -173,6 +174,9 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
 
   const approvalExpired = Boolean(quote?.approvedAt && !quote.hasOrder && !quote.orderPending
     && Date.parse(quote.approvedAt) + 30 * 60 * 1000 <= Date.now());
+  const staleUnclaimed = Boolean(quote?.policyStale && !quote.hasOrder && !quote.orderPending);
+  const expiredBoundOrder = Boolean(quote?.hasOrder && (quote.expiredOrder ||
+    (quote.approvedAt && Date.parse(quote.approvedAt) + 30 * 60 * 1000 <= Date.now())));
   const terminal = quote?.status === "confirmed" || quote?.status === "refunded" || quote?.status === "cancelled";
   return <Section number="01" title="Book a desk pass">
     <ol aria-label="Booking steps">
@@ -254,6 +258,10 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
         : quote?.status === "refunded" ? <p role="status">This payment has been refunded.</p>
         : quote?.status === "cancelled" ? <p role="status">This desk booking was cancelled.</p>
         : quote?.status === "needs_review" || quote?.orderPending ? <p role="status">Armature needs to reconcile this payment. Contact support before trying again.</p>
+        : staleUnclaimed ? <p role="status">The policies for this unsigned request have changed. Choose a fresh desk pass and review the updated agreement before paying.</p>
+        : expiredBoundOrder ? <p role="status">This payment window has expired. {quote?.canRequestReplacement
+          ? "Razorpay reports no successful or pending payment. Close any old checkout tabs, then request a fresh agreement. Ask staff to recheck the old payment before approving the replacement."
+          : "Check payment status before doing anything else. If a payment is pending or its outcome is unclear, contact Armature for review. Do not pay again."}</p>
         : approvalExpired ? <p role="status">This agreement’s payment window expired. Start a fresh request so Armature can check availability and prepare a new agreement.</p>
         : quote?.manualAgreement && !quote.agreementSigned ? <p role="status">Armature will prepare your PandaDoc agreement and email you when it is ready. Check your details and request corrections before signing. After both signatures, staff will review the completed agreement. Check the status here to continue.</p>
         : quote && (!quote.hasAgreement && !quote.agreementSigned) ? <p role="status">Armature is preparing your agreement.</p>
@@ -277,7 +285,7 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
         </>}
       {!terminal && <button className="button button-quiet" type="button" disabled={busy || modalOpen}
         onClick={() => void run(async () => showStatus(await request<Quote>({ action: "status", quoteId: reference })))}>Check agreement or payment status</button>}
-      {(terminal || approvalExpired || (quote && !quote.hasAgreement && !quote.hasOrder && !quote.orderPending && !quote.status)) &&
+      {(terminal || approvalExpired || staleUnclaimed || (expiredBoundOrder && quote?.canRequestReplacement && !quote.status) || (quote && !quote.hasAgreement && !quote.hasOrder && !quote.orderPending && !quote.status)) &&
         <button className="button button-quiet" type="button" disabled={busy} onClick={() => {
           saveReference(""); setQuote(null); setStart(""); setConsent(""); setSigningUrl(""); setError("");
         }}>Choose another desk pass</button>}

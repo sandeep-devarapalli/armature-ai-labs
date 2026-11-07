@@ -169,3 +169,23 @@ it("offers a fresh request after approval expires without reopening payment", as
   expect(screen.getByRole("button", { name: "Choose another desk pass" })).toBeEnabled();
   expect(screen.queryByRole("button", { name: "Pay with Razorpay" })).not.toBeInTheDocument();
 });
+
+it.each([false, true])("allows an expired bound order replacement only after a conclusive server check: %s", async safe => {
+  localStorage.setItem("armature-desk-quote-v1:member-fixture", quoteId);
+  mock.invoke.mockResolvedValue(reply({ ...signed, hasOrder: true, approvedAt: "2000-01-01T00:00:00Z",
+    expiredOrder: true, canRequestReplacement: safe }));
+  renderPage();
+  fireEvent.click(screen.getByRole("button", { name: "Check agreement or payment status" }));
+  expect(await screen.findByText(/This payment window has expired/)).toBeInTheDocument();
+  expect(Boolean(screen.queryByRole("button", { name: "Choose another desk pass" }))).toBe(safe);
+  expect(screen.queryByRole("button", { name: "Pay with Razorpay" })).not.toBeInTheDocument();
+});
+it("restarts an unclaimed stale policy request without offering payment", async () => {
+  localStorage.setItem("armature-desk-quote-v1:member-fixture", quoteId);
+  mock.invoke.mockResolvedValue(reply({ ...signed, policyStale: true }));
+  renderPage();
+  fireEvent.click(screen.getByRole("button", { name: "Check agreement or payment status" }));
+  expect(await screen.findByText(/policies for this unsigned request have changed/)).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Choose another desk pass" })).toBeEnabled();
+  expect(screen.queryByRole("button", { name: "Pay with Razorpay" })).not.toBeInTheDocument();
+});
