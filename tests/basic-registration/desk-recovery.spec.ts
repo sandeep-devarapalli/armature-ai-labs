@@ -28,5 +28,5 @@ test("guided desk recovery on a fresh device preserves a pending payment", async
   await expect(page.getByRole("button", { name: "Pay with Razorpay" })).toHaveCount(0);
   expect(actions).not.toContain("order");
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(page.viewportSize()!.width);
-  await page.screenshot({ path: `/private/tmp/desk-recovery-${info.project.name}.png`, fullPage: true });
+  await page.screenshot({ path: info.outputPath("desk-recovery.png"), fullPage: true });
 });
