@@ -77,7 +77,7 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
       || (live && !/^[A-Za-z0-9._-]{4,80}$/.test(policyVersion)) || (!pandaKey && !manualPilot) || !staffSigner) {
     return reply({ error: live ? "checkout_not_configured" : "test_checkout_not_configured" }, 503);
   }
-  const isManualQuote = (q: Quote) => q.chair === "S01" && q.unit === "day" && q.amount_paise === 35000
+  const isManualQuote = (q: Quote) => q.chair === "S01" && (({ day: 35000, week: 175000, month: 1300000 } as Record<string, number>)[q.unit] === q.amount_paise)
     && ((manualPilot && !q.document_id) || q.sealed_revision === "manual-pilot-v1");
   const present = (q: Quote) => ({ ...view(q), manualAgreement: isManualQuote(q), ...(live ? { policyVersion } : {}) });
 
@@ -89,7 +89,27 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
     if (!input || typeof input !== "object" || typeof input.action !== "string") throw new Rejected(400, "invalid_request");
     const client = adminClient();
     const action = input.action;
-    if (!enabled && !["status", "verify"].includes(action)) throw new Rejected(503, "checkout_disabled");
+    if (!enabled && !["status", "verify", "list_own", "staff_queue"].includes(action)) throw new Rejected(503, "checkout_disabled");
+    if (action === "list_own" || action === "staff_queue") {
+      if (!live) throw new Rejected(400, "invalid_request");
+      const staff = action === "staff_queue";
+      if (staff) {
+        if (user.claims.aal !== "aal2") throw new Rejected(403, "staff_mfa_required");
+        await requireStaff(user.id, ["admin", "super_admin"]);
+      }
+      const offset = input.offset ?? 0;
+      if (!Number.isInteger(offset) || offset < 0 || offset > 10000) throw new Rejected(400, "invalid_request");
+      const { data, error } = await client.rpc("list_desk_requests", {
+        p_member: user.id, p_staff: staff, p_offset: offset,
+      }).abortSignal(AbortSignal.timeout(10000));
+      if (error) throw new Rejected(503, "checkout_state_unavailable");
+      return reply({ mode, nextOffset: data.nextOffset, quotes: data.quotes.map((q: Quote & {
+        approvedAt?: string; memberId?: string; customerEmail?: string;
+      }) => ({ ...present(q), approvedAt: q.approvedAt ?? null,
+        agreementSigned: Boolean(q.approvedAt),
+        ...(staff ? { memberId: q.memberId, customerEmail: q.customerEmail } : {}),
+      })) });
+    }
     let member = user.id;
     let customer = user.email?.toLowerCase() ?? "";
     const manualReview = action === "manual_review" || action === "approve_manual";
@@ -172,7 +192,7 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
         || !/^\d{4}-\d{2}-\d{2}$/.test(from ?? "") || !/^\d{4}-\d{2}-\d{2}$/.test(to ?? ""))) {
         throw new Rejected(400, "invalid_selection");
       }
-      if (manualPilot && chair !== undefined && (chair !== "S01" || unit !== "day")) {
+      if (manualPilot && chair !== undefined && (chair !== "S01")) {
         return reply({ mode, chairs: [], dates: [] });
       }
       const availability = await operation<{ chairs: string[] }>("availability", { chair, unit, from, to });
@@ -182,7 +202,7 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
     if (action === "quote") {
       if (!/^S(0[1-9]|1[0-9]|2[0-5])$/.test(input.chair ?? "") || !["day", "week", "month"].includes(input.unit)
         || !/^\d{4}-\d{2}-\d{2}$/.test(input.start ?? "")) throw new Rejected(400, "invalid_selection");
-      if (manualPilot && (input.chair !== "S01" || input.unit !== "day")) throw new Rejected(409, "manual_agreement_unavailable");
+      if (manualPilot && (input.chair !== "S01")) throw new Rejected(409, "manual_agreement_unavailable");
       const quote = await operation<Quote>("quote", { chair: input.chair, unit: input.unit, start: input.start });
       if (manualPilot && !isManualQuote(quote) && !quote.document_id) throw new Rejected(409, "manual_agreement_unavailable");
       return reply({ mode, ...present(quote) });
