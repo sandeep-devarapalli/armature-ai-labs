@@ -13,6 +13,7 @@ type Review = {
   staffEmail: string;
   agreementSigned?: boolean;
   policyVersion?: string;
+  orderPending?: boolean;
 };
 
 const quoteReference = "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
@@ -40,7 +41,9 @@ export function ManualDeskAgreementReview({ client, memberId, blocked, initialQu
     setError("");
     try {
       let body: object = { action: "manual_review", memberId, quoteId };
-      if (review) {
+      if (review?.orderPending) {
+        body = { action: "recover_order", memberId, quoteId, orderId: String(form.get("orderId")).trim() };
+      } else if (review) {
         if (review.agreementSigned || form.get("confirmed") !== "on") return;
         const pdf = form.get("certificate");
         if (!(pdf instanceof File) || pdf.size === 0 || pdf.size > 20 * 1024 * 1024 ||
@@ -66,8 +69,9 @@ export function ManualDeskAgreementReview({ client, memberId, blocked, initialQu
           ? "Verify this admin session with MFA before reviewing agreements."
           : "This pilot agreement could not be processed. Check the reference and review the latest status.");
       }
-      if (review && data.agreementSigned !== true) throw new Error("Approval could not be confirmed. Look up the agreement again.");
-      setReview(current => current ? { ...current, agreementSigned: true } : data as Review);
+      if (review?.orderPending && data.recovered !== true) throw new Error("Order recovery could not be confirmed. Check the latest status.");
+      if (review && !review.orderPending && data.agreementSigned !== true) throw new Error("Approval could not be confirmed. Look up the agreement again.");
+      setReview(current => current ? { ...current, ...data, agreementSigned: true } : data as Review);
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : "The agreement could not be processed.");
     } finally {
@@ -89,7 +93,10 @@ export function ManualDeskAgreementReview({ client, memberId, blocked, initialQu
         <p>Customer signer <strong>{review.customerEmail}</strong><br />Armature countersigner <strong>{review.staffEmail}</strong></p>
         {review.policyVersion && <p>Policy version <strong>{review.policyVersion}</strong></p>}
         <p>Booking fingerprint <code style={{ overflowWrap: "anywhere" }}>{review.agreementHash}</code></p>
-        {review.agreementSigned ? <p role="status">Agreement approved. Ask the customer to check their booking status.</p> : <>
+        {review.orderPending ? <>
+          <p>Find the existing order in Razorpay and confirm its receipt matches this agreement reference. Linking it does not create an order or charge the customer. After linking, ask the customer to check payment status to reconcile any payment.</p>
+          <label>Existing Razorpay order ID<input name="orderId" required pattern="order_[A-Za-z0-9]{1,80}" maxLength={86} disabled={busy || blocked} /></label>
+        </> : review.agreementSigned ? <p role="status">Agreement approved. Ask the customer to check their booking status.</p> : <>
           <p>Include this booking fingerprint in the agreement before sending it in PandaDoc. Open the completed agreement after both signers finish. Check the booking details and confirm both signatures on its certificate. Keep the completed PDF in the approved private agreement records.</p>
           <label>PandaDoc document ID<input name="documentId" required pattern="[A-Za-z0-9_\\-]{8,80}" maxLength={80} disabled={busy || blocked} /></label>
           <label>Booking fingerprint from the signed agreement<input name="agreementHash" required pattern="[0-9a-fA-F]{64}" maxLength={64} disabled={busy || blocked} /></label>
@@ -98,7 +105,7 @@ export function ManualDeskAgreementReview({ client, memberId, blocked, initialQu
           <label><input type="checkbox" name="confirmed" required disabled={busy || blocked} /> I checked both signers, the approved agreement and the exact booking details.</label>
         </>}
         <div className="member-actions">
-          {!review.agreementSigned && <button className="button" disabled={busy || blocked}>Approve agreement</button>}
+          {review.orderPending ? <button className="button" disabled={busy || blocked}>Link existing order</button> : !review.agreementSigned && <button className="button" disabled={busy || blocked}>Approve agreement</button>}
           <button type="button" className="button secondary" disabled={busy || blocked} onClick={() => { setReview(null); setError(""); }}>Look up another agreement</button>
         </div>
       </>}

@@ -26,3 +26,22 @@ it("lets an agreement reviewer enroll and verify MFA without visiting the gated 
   expect(mock.challengeAndVerify).toHaveBeenCalledWith({ factorId: "fixture-factor", code: "123456" });
   expect(invoke).not.toHaveBeenCalled();
 });
+
+it("links an existing provider order without resubmitting signature approval", async () => {
+  mock.listFactors.mockResolvedValue({ data: { totp: [{ id: "factor", status: "verified" }] }, error: null });
+  mock.getAuthenticatorAssuranceLevel.mockResolvedValue({ data: { currentLevel: "aal2" }, error: null });
+  const quoteId = "a0000000-0000-4000-8000-000000000002";
+  const data = { mode: "live", quoteId, chair: "S01", start: "2026-11-09", end: "2026-11-09", amountPaise: 35000,
+    customerEmail: "buyer@example.test", staffEmail: "staff@example.test", agreementSigned: true, orderPending: true };
+  const invoke = vi.fn().mockResolvedValueOnce({ data, error: null })
+    .mockResolvedValueOnce({ data: { ...data, orderPending: false, recovered: true }, error: null });
+  render(<ManualDeskAgreementReview client={{ functions: { invoke } } as unknown as SupabaseClient} memberId="buyer-fixture" initialQuoteId={quoteId} />);
+  fireEvent.click(screen.getByText("Review a desk agreement"));
+  fireEvent.click(screen.getByRole("button", { name: "Look up agreement" }));
+  fireEvent.change(await screen.findByLabelText("Existing Razorpay order ID"), { target: { value: "order_Existing" } });
+  fireEvent.click(screen.getByRole("button", { name: "Link existing order" }));
+  expect(await screen.findByText("Agreement approved. Ask the customer to check their booking status.")).toBeInTheDocument();
+  expect(invoke).toHaveBeenLastCalledWith("desk-checkout", { body: {
+    action: "recover_order", memberId: "buyer-fixture", quoteId, orderId: "order_Existing",
+  } });
+});

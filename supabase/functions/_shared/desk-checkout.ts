@@ -89,7 +89,7 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
     if (!input || typeof input !== "object" || typeof input.action !== "string") throw new Rejected(400, "invalid_request");
     const client = adminClient();
     const action = input.action;
-    if (!enabled && !["status", "verify", "list_own", "staff_queue"].includes(action)) throw new Rejected(503, "checkout_disabled");
+    if (!enabled && !["status", "verify", "list_own", "staff_queue", "manual_review", "recover_order"].includes(action)) throw new Rejected(503, "checkout_disabled");
     if (action === "list_own" || action === "staff_queue") {
       if (!live) throw new Rejected(400, "invalid_request");
       const staff = action === "staff_queue";
@@ -114,12 +114,14 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
     let customer = user.email?.toLowerCase() ?? "";
     const manualReview = action === "manual_review" || action === "approve_manual";
     if (manualReview && !manualPilot) throw new Rejected(403, "manual_agreement_unavailable");
-    if (action === "seal" || manualReview) {
-      if ((live || manualReview) && user.claims.aal !== "aal2") throw new Rejected(403, "staff_mfa_required");
+    const recovery = action === "recover_order";
+    if (recovery && !live) throw new Rejected(403, "order_recovery_unavailable");
+    if (action === "seal" || manualReview || recovery) {
+      if ((live || manualReview || recovery) && user.claims.aal !== "aal2") throw new Rejected(403, "staff_mfa_required");
       await requireStaff(user.id, ["admin", "super_admin"]);
       if (!pattern.test(input.memberId ?? "")) throw new Rejected(400, "invalid_member");
       member = input.memberId;
-      if (manualReview && member === user.id) throw new Rejected(403, "independent_reviewer_required");
+      if ((manualReview || recovery) && member === user.id) throw new Rejected(403, "independent_reviewer_required");
       const owner = await client.auth.admin.getUserById(member);
       customer = owner.data.user?.email?.toLowerCase() ?? "";
     }
@@ -209,6 +211,18 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
     }
     if (!pattern.test(input.quoteId ?? "")) throw new Rejected(400, "invalid_quote");
     const q = await operation<Quote>("status", { quoteId: input.quoteId });
+    if (recovery) {
+      if (!q.order_claimed_at || !q.document_id || q.status || !/^order_[A-Za-z0-9]{1,80}$/.test(input.orderId ?? "")
+        || (q.order_id && q.order_id !== input.orderId)) throw new Rejected(409, "order_recovery_unavailable");
+      const signed = isManualQuote(q) ? Number.isFinite(await manualApproval(q)) : (await agreement(q, q.document_id)).completed;
+      if (!signed) throw new Rejected(409, "agreement_required");
+      const order = await provider<Order>("razorpay", "/orders/" + input.orderId);
+      if (order.id !== input.orderId || order.receipt !== q.id || order.amount !== q.amount_paise || order.currency !== "INR") {
+        throw new Rejected(409, "provider_order_mismatch");
+      }
+      const bound = await operation<Quote>("bind_order", { quoteId: q.id, orderId: order.id });
+      return reply({ mode, ...present(bound), recovered: true });
+    }
     if (manualReview) {
       if (!isManualQuote(q)) throw new Rejected(409, "manual_agreement_unavailable");
       if (action === "manual_review") return reply({ mode, ...present(q), customerEmail: customer, staffEmail: staffSigner,
