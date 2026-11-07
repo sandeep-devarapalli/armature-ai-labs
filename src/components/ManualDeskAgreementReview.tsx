@@ -1,5 +1,6 @@
 import { useRef, useState, type FormEvent } from "react";
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { MfaPanel } from "../pages/MemberPages";
 
 type Review = {
   quoteId: string;
@@ -76,6 +77,8 @@ export function ManualDeskAgreementReview({ client, memberId, blocked, mode = "l
 
   return <details className="member-confirm">
     <summary>Review a desk pilot agreement</summary>
+    <p>Set up or verify your authenticator before reviewing this agreement.</p>
+    <MfaPanel mode="supabase" />
     <form key={review?.quoteId ?? "lookup"} className="ol-form" onSubmit={submit}>
       {!review ? <>
         <label>Agreement reference<input name="quoteId" required pattern={quoteReference} maxLength={36} disabled={busy || blocked} /></label>
