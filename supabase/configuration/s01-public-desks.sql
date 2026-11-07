@@ -14,6 +14,7 @@ begin
       (code,unit) in (('workspace-day','day'),('workspace-week','week'),('workspace-month','month')))<>3 then
     raise exception 'Expected exactly three desk products';
   end if;
+  update public.resources set booking_horizon_days=90 where id=chair;
   delete from public.resource_hours where resource_id=chair;
   insert into public.resource_hours(resource_id,day_of_week,opens_at,closes_at)
     select chair,d,time '09:00',time '17:00' from generate_series(0,6) d;

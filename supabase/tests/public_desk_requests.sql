@@ -61,6 +61,18 @@ begin
   exception when insufficient_privilege then null;
   end;
   update public.booking_policy_settings set public_desk_checkout_enabled=true where singleton;
+  -- The complete pass must finish inside the rolling 90-day resource horizon.
+  if not exists (select 1 from public.list_bookable_desk_dates('S01','day',
+      (now() at time zone 'Asia/Kolkata')::date+89,(now() at time zone 'Asia/Kolkata')::date+89) where available)
+    or exists (select 1 from public.list_bookable_desk_dates('S01','day',
+      (now() at time zone 'Asia/Kolkata')::date+91,(now() at time zone 'Asia/Kolkata')::date+91) where available)
+    or not exists (select 1 from public.list_bookable_desk_dates('S01','week',
+      (now() at time zone 'Asia/Kolkata')::date+83,(now() at time zone 'Asia/Kolkata')::date+83) where available)
+    or exists (select 1 from public.list_bookable_desk_dates('S01','week',
+      (now() at time zone 'Asia/Kolkata')::date+85,(now() at time zone 'Asia/Kolkata')::date+85) where available) then
+    raise exception 'Desk horizon did not enforce the full 90-day booking window';
+  end if;
+
   quote := public.live_desk_checkout('quote',buyer,jsonb_build_object('chair','S01','unit','day','start',start_date));
   if jsonb_array_length(public.list_desk_requests(reviewer,false,0)->'quotes')<>0 then
     raise exception 'Own list leaked another member';
