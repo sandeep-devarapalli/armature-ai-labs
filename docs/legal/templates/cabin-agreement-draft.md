@@ -46,24 +46,24 @@ New bookings start on the first day of a calendar month and cover whole calendar
 
 Agreed rent is INR 40,000 per calendar month for Cabin 101. The current advertised standard amount is INR 60,000; this agreement uses the agreed rent, not an additional percentage discount. Confirm the offer remains available before issuing the quote.
 
-The first full calendar month is paid at booking with the deposit. Later rent is billed monthly in advance and is due by the 5th. Daily proration is not offered. State the exact first calendar month below; the initial collection does not settle later rent or authorise recurring debits.
+The first full calendar month is paid through Razorpay at booking. The deposit is paid separately by bank transfer using Armature's verified instructions and the booking reference. Later rent is billed monthly in advance and is due by the 5th. Daily proration is not offered. State the exact first calendar month below; the initial collection does not settle later rent or authorise recurring debits.
 
 | Charge | Final quote amount |
 | --- | --- |
 | First rental period | [FIRST_DAY] to [LAST_DAY_OF_CALENDAR_MONTH] |
-| First rent due | INR [FIRST_RENT] |
-| Refundable security deposit | INR 80,000 |
+| First rent due through Razorpay | INR [FIRST_RENT] |
+| Refundable security deposit by bank transfer | INR 80,000 |
 | GST collected | INR 0; Armature is currently unregistered for GST |
-| Total initial payment | INR [FIRST_RENT_PLUS_80000] |
+| Total initial obligation across both payment methods | INR [FIRST_RENT_PLUS_80000] |
 | Next rent period, due date and amount | [PERIOD], [DUE_DATE], INR [AMOUNT] |
 
 The approved deposit tier is two agreed monthly rents at or below INR 100,000 monthly rent, and three above it. This Cabin 101 draft uses INR 40,000 rent and the corresponding INR 80,000 deposit. A differently priced future cabin requires a separately completed quote and agreement.
 
 ## 4. Deposit and handover
 
-The deposit is interest-free and is not a substitute for the last months' rent. At move-in and move-out, both parties complete a dated handover record identifying condition, furniture, keys, existing marks and supporting evidence.
+The deposit is interest-free and is not a substitute for the last months' rent. Armature records it separately as a refundable deposit liability and issues a separate deposit receipt. Staff verify the credit against the bank record before recording receipt; a customer transfer reference or screenshot alone is not confirmation. Bank instructions must be confirmed by Armature for this booking, not inferred from this draft. At move-in and move-out, both parties complete a dated handover record identifying condition, furniture, keys, existing marks and supporting evidence.
 
-The published refund policy returns the deposit within seven working days of move-out, less unpaid dues and damage. Complete inspection within that window and supply the deduction record; do not use handover or inspection scheduling to postpone the published deadline.
+Armature returns the deposit by bank transfer to a verified refund account within seven working days of move-out, less documented unpaid dues and damage beyond normal wear. Staff approve and record the refund amount, any deductions and the bank transfer reference. The Customer supplies the refund account-holder name, bank name, account number and IFSC privately in the signed-in booking flow and confirms ownership of that account. Authorised staff review the current details before transferring the refund; changed details require renewed review. Full account details are restricted to the Customer and authorised staff using MFA and are not included in public receipts or listings. Do not provide banking passwords, PINs or OTPs. This flow records a staff-completed bank transfer and does not initiate an automatic payout. Complete inspection within that window and supply the deduction record; do not use handover or inspection scheduling to postpone the published deadline.
 
 ## 5. Cancellation and termination
 
@@ -74,7 +74,7 @@ The existing published cancellation/refund commitments apply:
 - After move-in: either party may terminate at month-end with at least 30 days' written notice. Rent remains due for the whole calendar months through that end date.
 - Deposit refund: within seven working days of move-out, less unpaid dues and damage.
 - Monthly cabin rent already paid: no refund for unused days in that month.
-- Approved refunds go back to the original payment method within five to seven working days of approval; bank credit time may be additional. The specific move-out deposit deadline above remains applicable.
+- Approved rent refunds are initiated through Razorpay to the original payment method within five to seven working days of approval; bank credit time may be additional. Bank deposits are refunded separately by bank transfer. The specific move-out deposit deadline above remains applicable.
 
 These commitments are recorded in the Cancellation and Refund Policy (`src/pages/LegalPages.tsx`); they do not need blanket reconfirmation. Do not substitute the desk pass's 48-hour rule.
 
@@ -90,7 +90,7 @@ The owner-selected route is manual stamping where required, followed by PandaDoc
 
 The Customer signs first and Armature countersigns in separate provider sessions. Each signer must finish the signing process. A separate Admin/Super admin account using MFA inspects the completed document and signature certificate, checks the exact quote binding and records approval.
 
-Start Razorpay checkout within 30 minutes of that staff approval. Availability and price must still pass the final server check. An expired window requires a fresh quote/availability process. Booking confirmation and access require server-verified captured payment matching the order, amount and currency, plus the recorded cabin reservation. A browser redirect or signature alone is not payment confirmation. Access and membership entitlements remain limited to their recorded terms.
+Staff verify the separate bank deposit before rent checkout becomes available. Start Razorpay checkout within 30 minutes after both the signed agreement and bank deposit have been approved, measured from the later approval. Availability and price must still pass the final server check. An expired window requires a fresh quote/availability process. Razorpay collects only the quoted rent. Booking confirmation and access require server-verified captured rent matching the order, amount and currency, staff verification of the separate bank deposit, and the recorded cabin reservation. A browser redirect or signature alone is not payment confirmation. Access and membership entitlements remain limited to their recorded terms.
 
 ## 7. Notices, records and complaints
 

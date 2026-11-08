@@ -113,3 +113,61 @@ it("discovers only the selected member's requests and opens the chosen quote", a
   await screen.findByText("1. Confirm the final draft and particulars");
   expect(invoke.mock.calls[1][1].body).toEqual({ action: "manual_review", memberId: "buyer", quoteId });
 });
+
+it("records bank receipt only through the independent MFA-reviewed action", async () => {
+  const bankQuote = { ...base, agreementSigned: true, status: "awaiting_deposit", depositMethod: "bank_transfer",
+    depositStatus: "submitted", depositReference: "TEST-INCOMING-100", rentPaise: 5000, depositPaise: 10000,
+    amountPaise: 15000, paymentAmountPaise: 5000, testFixture: true, refundAccount: { version: 1, accountName: "Synthetic Renter", bankName: "Synthetic Bank", ifsc: "TEST0000001", last4: "0001", verifiedAt: "2026-11-08T10:00:00Z", ownershipConfirmed: true } };
+  invoke.mockResolvedValueOnce({ data: bankQuote });
+  setup(); fireEvent.click(screen.getByRole("button", { name: "Find rental agreement" }));
+  await screen.findByText("Bank deposit verification");
+  expect(screen.getByLabelText("Verified incoming bank reference")).toHaveValue("TEST-INCOMING-100");
+  fireEvent.change(screen.getByLabelText("Bank credit evidence reference"), { target: { value: "Simulated staging credit of exactly INR 100" } });
+  fireEvent.click(screen.getByLabelText("I checked the simulated staging bank credit and exact deposit amount."));
+  invoke.mockResolvedValueOnce({ data: { ...bankQuote, depositStatus: "verified", depositVerifiedAt: "2026-11-08T10:00:00Z", status: "approved" } });
+  fireEvent.click(screen.getByRole("button", { name: "Verify bank deposit receipt" }));
+  await waitFor(() => expect(invoke).toHaveBeenCalledTimes(2));
+  expect(invoke.mock.calls[1][1].body).toEqual({ action: "verify_bank_deposit", memberId: "buyer", quoteId,
+    reference: "TEST-INCOMING-100", evidence: "Simulated staging credit of exactly INR 100", confirmed: true });
+});
+it("keeps bank deposit returns outside Razorpay refund allocation", async () => {
+  const bankQuote = { ...base, agreementSigned: true, status: "confirmed", bookingId: "booking-fixture", depositMethod: "bank_transfer",
+    depositStatus: "verified", depositVerifiedAt: "2026-11-08T10:00:00Z", rentPaise: 5000, depositPaise: 10000,
+    amountPaise: 15000, paymentAmountPaise: 5000, testFixture: true, refundAccount: { version: 1, accountName: "Synthetic Renter", bankName: "Synthetic Bank", ifsc: "TEST0000001", last4: "0001", verifiedAt: "2026-11-08T10:00:00Z", ownershipConfirmed: true } };
+  invoke.mockResolvedValueOnce({ data: bankQuote });
+  setup(); fireEvent.click(screen.getByRole("button", { name: "Find rental agreement" }));
+  fireEvent.click(await screen.findByText("Record a bank deposit refund"));
+  expect(screen.queryByLabelText("Deposit refunded, rupees")).not.toBeInTheDocument();
+  fireEvent.change(screen.getByLabelText("Outgoing bank transfer reference"), { target: { value: "TEST-RETURN-100" } });
+  fireEvent.change(screen.getByLabelText("Deposit returned, rupees"), { target: { value: "100" } });
+  fireEvent.change(screen.getByLabelText("Bank refund evidence and reviewed deductions"), { target: { value: "Simulated full bank return with no deductions" } });
+  fireEvent.click(screen.getByLabelText("I verified the completed outgoing bank transfer and reviewed settlement."));
+  invoke.mockResolvedValueOnce({ data: { ...bankQuote, depositStatus: "refunded", bankDepositRefundedPaise: 10000 } });
+  fireEvent.click(screen.getByRole("button", { name: "Record completed bank deposit refund" }));
+  await waitFor(() => expect(invoke).toHaveBeenCalledTimes(2));
+  expect(invoke.mock.calls[1][1].body).toEqual({ action: "record_bank_deposit_refund", memberId: "buyer", quoteId,
+    reference: "TEST-RETURN-100", amountPaise: 10000, refundAccountVersion: 1, evidence: "Simulated full bank return with no deductions", confirmed: true });
+});
+
+it("reveals a private refund account only on explicit MFA action and verifies its exact version", async () => {
+  const account = { version: 2, accountName: "Synthetic Renter", bankName: "Synthetic Bank", ifsc: "TEST0000001", last4: "0001", verifiedAt: null, ownershipConfirmed: true };
+  const bankQuote = { ...base, agreementSigned: true, depositMethod: "bank_transfer", depositStatus: "verified", depositVerifiedAt: "2026-11-08T10:00:00Z", refundAccount: account };
+  invoke.mockResolvedValueOnce({ data: bankQuote }); setup();
+  fireEvent.click(screen.getByRole("button", { name: "Find rental agreement" }));
+  await screen.findByRole("button", { name: "View private refund bank details" });
+  expect(screen.queryByText("000000000001")).not.toBeInTheDocument();
+  fireEvent.click(screen.getByText("Record a bank deposit refund"));
+  expect(screen.getByRole("button", { name: "Record completed bank deposit refund" })).toBeDisabled();
+  invoke.mockResolvedValueOnce({ data: { ...bankQuote, refundAccount: { ...account, accountNumber: "000000000001" } } });
+  fireEvent.click(screen.getByRole("button", { name: "View private refund bank details" }));
+  expect(await screen.findByText("000000000001")).toBeInTheDocument();
+  expect(invoke.mock.calls[1][1].body).toEqual({ action: "get_refund_account", memberId: "buyer", quoteId });
+  fireEvent.change(screen.getByLabelText("Refund account verification evidence"), { target: { value: "Verified synthetic account holder and bank details" } });
+  fireEvent.click(screen.getByLabelText(/I verified this account belongs to the contracting/));
+  invoke.mockResolvedValueOnce({ data: { ...bankQuote, refundAccount: { ...account, verifiedAt: "2026-11-08T10:00:00Z" } } });
+  fireEvent.click(screen.getByRole("button", { name: "Verify this refund account version" }));
+  await waitFor(() => expect(invoke).toHaveBeenCalledTimes(3));
+  expect(invoke.mock.calls[2][1].body).toEqual({ action: "verify_refund_account", memberId: "buyer", quoteId, version: 2, confirmed: true, evidence: "Verified synthetic account holder and bank details" });
+  await waitFor(() => expect(screen.queryByText("000000000001")).not.toBeInTheDocument());
+  expect(screen.getByRole("button", { name: "Record completed bank deposit refund" })).toBeEnabled();
+});

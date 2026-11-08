@@ -27,7 +27,8 @@ insert into public.equipment_rental_units(asset_unit_id,resource_id,commissioned
 values('93000000-0000-4000-8000-000000000016','93000000-0000-4000-8000-000000000012',true,'93000000-0000-4000-8000-000000000003',now(),'Synthetic rollback fixture');
 update private.rental_checkout_settings set cabin_resource='93000000-0000-4000-8000-000000000011',equipment_resource='93000000-0000-4000-8000-000000000012';
 select throws_ok($$select public.rental_checkout('quote','93000000-0000-4000-8000-000000000001','{"product":"cabin101","start":"2027-02-01","end":"2027-04-30"}')$$,'42501','Rental checkout unavailable','Closed release denies quotes');
-update private.rental_checkout_settings set enabled=true,release_ready=true;
+-- Legacy combined-payment contracts remain supported. New bank contracts are covered in 064.
+update private.rental_checkout_settings set enabled=true,release_ready=true,bank_deposits_enabled=false;
 select throws_ok($$select public.rental_checkout('quote','93000000-0000-4000-8000-000000000001','{"product":"cabin101","start":"2027-01-01","end":"2027-01-31"}')$$,'22023','Cabin 101 requires whole calendar months starting on the first','Existing cabin occupancy remains blocked');
 select throws_ok($$select public.rental_checkout('quote','93000000-0000-4000-8000-000000000001','{"product":"cabin101","start":"2027-02-02","end":"2027-03-31"}')$$,'22023','Cabin 101 requires whole calendar months starting on the first','Mid-month cabin start rejected');
 select set_config('rental.q',public.rental_checkout('quote','93000000-0000-4000-8000-000000000001','{"product":"cabin101","partyType":"individual","start":"2027-02-01","end":"2027-04-30"}')::text,true);

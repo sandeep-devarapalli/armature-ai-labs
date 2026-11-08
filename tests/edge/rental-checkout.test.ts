@@ -146,3 +146,141 @@ it("allows condition recording by independent MFA staff after checkout closure",
   expect(mock.rpc).toHaveBeenCalledWith("rental_checkout", expect.objectContaining({ p_action: "handover",
     p_input: expect.objectContaining({ reviewerId, reviewerAal: "aal2" }) }));
 });
+
+it("collects only rent for a bank-deposit quote after verification", async () => {
+  Object.assign(quote, { deposit_method: "bank_transfer", payment_amount_paise: 105000,
+    deposit_verified_at: new Date().toISOString(), payment_window_at: new Date().toISOString() });
+  fetcher.mockResolvedValue(Response.json({ id: "order_Synthetic", receipt: quoteId, amount: 105000, currency: "INR" }));
+  const response = await post({ action: "order", quoteId, acceptedPolicies: true, policyVersion: "rental-2026-11-08" });
+  expect(response.status).toBe(200);
+  expect(JSON.parse(fetcher.mock.calls[0][1].body).amount).toBe(105000);
+});
+it("blocks rent collection until the bank deposit is verified", async () => {
+  Object.assign(quote, { deposit_method: "bank_transfer", payment_amount_paise: 105000 });
+  const response = await post({ action: "order", quoteId, acceptedPolicies: true, policyVersion: "rental-2026-11-08" });
+  expect(await response.json()).toEqual({ error: "bank_deposit_verification_required" });
+  expect(fetcher).not.toHaveBeenCalled();
+});
+it("never verifies a bank credit as the buyer", async () => {
+  Object.assign(quote, { deposit_method: "bank_transfer" });
+  expect((await post({ action: "verify_bank_deposit", quoteId, memberId, reference: "UTR123456", evidence: "Bank credit checked", confirmed: true })).status).toBe(403);
+  expect(mock.rpc).not.toHaveBeenCalled();
+});
+function useStagingFixture() {
+  Object.assign(env, { SUPABASE_URL: "https://gwrdmpvczwuypvvzfyty.supabase.co", RENTAL_TEST_RAZORPAY_KEY_ID: "rzp_test_Synthetic",
+    RENTAL_TEST_RAZORPAY_KEY_SECRET: "synthetic-provider-secret", RENTAL_TEST_CHECKOUT_ENABLED: "true",
+    RENTAL_TEST_POLICY_VERSION: "rental-2026-11-08", RENTAL_TEST_PANDADOC_SIGNER: "staff@example.test",
+    RENTAL_TEST_FIXTURE_ENABLED: "true", RENTAL_TEST_FIXTURE_BUYER: memberId });
+}
+it("forwards a reference as unverified without granting anything", async () => {
+  useStagingFixture();
+  Object.assign(quote, { deposit_method: "bank_transfer", test_fixture: true });
+  expect((await post({ action: "submit_deposit_reference", quoteId, reference: "test-utr123" }, "test")).status).toBe(200);
+  expect(mock.rpc.mock.calls.at(-1)?.[1]).toMatchObject({ p_action: "submit_deposit_reference", p_member: memberId,
+    p_input: { reference: "TEST-UTR123", quoteId } });
+  expect(fetcher).not.toHaveBeenCalled();
+});
+it("requires verified server bank configuration for real transfer instructions", async () => {
+  Object.assign(quote, { deposit_method: "bank_transfer", test_fixture: false });
+  expect(await (await post({ action: "submit_deposit_reference", quoteId, reference: "UTR123456" })).json()).toEqual({ error: "bank_instructions_not_configured" });
+});
+it("rejects user-selected tiny fixture prices on production", async () => {
+  const response = await post({ action: "quote", product: "hiwonder", unit: "week", start: "2027-02-01", testFixture: true });
+  expect(response.status).toBe(403);
+  expect(mock.rpc).not.toHaveBeenCalled();
+});
+it("allows fixed staging fixtures only for the configured test buyer", async () => {
+  Object.assign(env, { SUPABASE_URL: "https://gwrdmpvczwuypvvzfyty.supabase.co", RENTAL_TEST_RAZORPAY_KEY_ID: "rzp_test_Synthetic",
+    RENTAL_TEST_RAZORPAY_KEY_SECRET: "synthetic-provider-secret", RENTAL_TEST_CHECKOUT_ENABLED: "true",
+    RENTAL_TEST_POLICY_VERSION: "rental-2026-11-08", RENTAL_TEST_PANDADOC_SIGNER: "staff@example.test",
+    RENTAL_TEST_FIXTURE_ENABLED: "true", RENTAL_TEST_FIXTURE_BUYER: memberId });
+  expect((await post({ action: "quote", product: "hiwonder", unit: "week", start: "2027-02-01", testFixture: true }, "test")).status).toBe(200);
+  expect(mock.rpc.mock.calls[0][1].p_input).toMatchObject({ testFixture: true });
+  env.RENTAL_TEST_FIXTURE_BUYER = reviewerId;
+  expect((await post({ action: "quote", product: "hiwonder", unit: "week", start: "2027-02-01", testFixture: true }, "test")).status).toBe(403);
+});
+it("does not allocate a Razorpay refund to a bank deposit", async () => {
+  Object.assign(quote, { deposit_method: "bank_transfer", payment_id: "pay_Synthetic" });
+  mock.authenticate.mockResolvedValue({ id: reviewerId, email: "staff@example.test", claims: { aal: "aal2" } });
+  const response = await post({ action: "allocate_refund", quoteId, memberId, refundId: "rfnd_Synthetic", rentPaise: 0, depositPaise: 100,
+    reason: "Deposit refunded separately" });
+  expect(response.status).toBe(400);
+  expect(fetcher).not.toHaveBeenCalled();
+});
+it("requires explicit ownership confirmation for the refund account", async () => {
+  Object.assign(quote, { deposit_method: "bank_transfer" });
+  const response = await post({ action: "save_refund_account", quoteId, accountName: "Synthetic Renter", bankName: "Synthetic Bank", accountNumber: "000000000001", ifsc: "TEST0000001", ownershipConfirmed: false });
+  expect(response.status).toBe(400);
+  expect(mock.rpc.mock.calls.map(([, args]) => args.p_action)).toEqual(["status"]);
+});
+it("saves customer refund bank details only through the authenticated quote operation", async () => {
+  Object.assign(quote, { deposit_method: "bank_transfer" });
+  const response = await post({ action: "save_refund_account", quoteId, accountName: "Synthetic Renter", bankName: "Synthetic Bank", accountNumber: "000000000001", ifsc: "TEST0000001", ownershipConfirmed: true });
+  expect(response.status).toBe(200);
+  expect(mock.rpc.mock.calls.at(-1)?.[1]).toMatchObject({ p_member: memberId, p_action: "save_refund_account", p_input: { ownershipConfirmed: true } });
+  expect(fetcher).not.toHaveBeenCalled();
+});
+it.each(["get_refund_account", "verify_refund_account"])("requires independent MFA staff for %s", async action => {
+  Object.assign(quote, { deposit_method: "bank_transfer" });
+  expect((await post({ action, quoteId, memberId, version: 1, confirmed: true, evidence: "Synthetic review complete" })).status).toBe(403);
+  expect(mock.rpc).not.toHaveBeenCalled();
+});
+it("binds a bank refund receipt to the exact reviewed beneficiary version", async () => {
+  useStagingFixture();
+  Object.assign(quote, { deposit_method: "bank_transfer", test_fixture: true });
+  mock.authenticate.mockResolvedValue({ id: reviewerId, email: "staff@example.test", claims: { aal: "aal2" } });
+  const payload = { action: "record_bank_deposit_refund", quoteId, memberId, reference: "TEST-OUT-001", evidence: "Synthetic transfer checked", confirmed: true, amountPaise: 10000 };
+  expect((await post(payload, "test")).status).toBe(400);
+  expect((await post({ ...payload, refundAccountVersion: 2 }, "test")).status).toBe(200);
+  expect(mock.rpc.mock.calls.at(-1)?.[1].p_input.refundAccountVersion).toBe(2);
+  expect(fetcher).not.toHaveBeenCalled();
+});
+
+it("never charges a persisted staging fixture through live keys", async () => {
+  Object.assign(quote, { test_fixture: true, deposit_method: "bank_transfer", payment_amount_paise: 5000,
+    deposit_verified_at: new Date().toISOString(), payment_window_at: new Date().toISOString() });
+  expect((await post({ action: "order", quoteId, acceptedPolicies: true, policyVersion: "rental-2026-11-08" })).status).toBe(403);
+  expect(fetcher).not.toHaveBeenCalled();
+});
+const companyBank = JSON.stringify({ confirmedCompanyAccount: true, bankName: "Synthetic Bank", accountName: "Synthetic Company",
+  accountNumber: "000000000002", ifsc: "TEST0000002", accountType: "Current" });
+it("shows company bank instructions only to the member after signing and before verification", async () => {
+  env.LIVE_RENTAL_BANK_INSTRUCTIONS = companyBank;
+  Object.assign(quote, { deposit_method: "bank_transfer" });
+  expect((await (await post({ action: "status", quoteId })).json()).bankInstructions).toMatchObject({ ifsc: "TEST0000002" });
+  quote.approved_at = null;
+  expect((await (await post({ action: "status", quoteId })).json()).bankInstructions).toBeNull();
+  Object.assign(quote, { approved_at: new Date().toISOString(), deposit_verified_at: new Date().toISOString() });
+  expect((await (await post({ action: "status", quoteId })).json()).bankInstructions).toBeNull();
+  quote.deposit_verified_at = undefined;
+  mock.authenticate.mockResolvedValue({ id: reviewerId, email: "reviewer@example.test", claims: { aal: "aal2" } });
+  expect((await (await post({ action: "manual_review", quoteId, memberId })).json()).bankInstructions).toBeNull();
+});
+it("does not read the unprefixed bank variable shared by live and staging", async () => {
+  env.RENTAL_BANK_INSTRUCTIONS = companyBank;
+  Object.assign(quote, { deposit_method: "bank_transfer" });
+  expect((await (await post({ action: "status", quoteId })).json()).bankInstructions).toBeNull();
+});
+it("records a bank deposit refund even when company instructions are not configured", async () => {
+  Object.assign(quote, { deposit_method: "bank_transfer", status: "returned" });
+  mock.authenticate.mockResolvedValue({ id: reviewerId, email: "reviewer@example.test", claims: { aal: "aal2" } });
+  const response = await post({ action: "record_bank_deposit_refund", quoteId, memberId, reference: "UTR-REFUND-001", confirmed: true,
+    evidence: "Synthetic bank statement line checked", amountPaise: 1000, refundAccountVersion: 1 });
+  expect(response.status).toBe(200);
+});
+it("rejects every action on a staging fixture quote outside the staging gate", async () => {
+  Object.assign(quote, { deposit_method: "bank_transfer", test_fixture: true });
+  const response = await post({ action: "submit_deposit_reference", quoteId, reference: "UTR-FIXTURE-001" });
+  expect(response.status).toBe(403);
+  expect(mock.rpc.mock.calls.map(([, args]) => args.p_action)).toEqual(["status"]);
+});
+it("does not pass raw reconciliation rows through to the browser", async () => {
+  mock.rpc.mockImplementation((_name, args) => ({ abortSignal: async () => ({ error: null, data:
+    args.p_action === "capture" ? { ...quote, status: "confirmed", refund_account: { accountName: "Leaked" }, member_id: memberId } : quote }) }));
+  Object.assign(quote, { order_id: "order_Synthetic" });
+  fetcher.mockResolvedValue(Response.json({ items: [{ id: "pay_Synthetic", order_id: "order_Synthetic", amount: 2605000, currency: "INR",
+    status: "captured", captured: true, method: "upi", created_at: 1 }] }));
+  const body = await (await post({ action: "status", quoteId })).json();
+  expect(body).not.toHaveProperty("refund_account");
+  expect(body).not.toHaveProperty("member_id");
+});

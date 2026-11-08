@@ -19,8 +19,8 @@ const legalName = legalEntity.name;
 const labAddress = "1490, 11th Cross, 20th Main Rd, 1st Sector, HSR Layout, Bengaluru, Karnataka 560102";
 const policies = [
   { route: "/contact", title: "Contact Us", Page: ContactPage, digest: "81125ab8d08f9448db7215015354e4988c8401018b49fe7bdfb53418f1f7a0ce" },
-  { route: "/terms", title: "Terms and Conditions", Page: TermsPage, digest: "448b7cb48e31ad8eac586608368111d982d0fa7db763e5c5a04b5dcc938941f4" },
-  { route: "/refund-policy", title: "Cancellation and Refund Policy", Page: RefundPolicyPage, digest: "54f88463c8484f135a34638e8d44a1c88bfc0eb13f5b1f9087993d801bc1797a" },
+  { route: "/terms", title: "Terms and Conditions", Page: TermsPage, digest: "f0c432c862145fe11b9a115201cb0e2bf42b9697036fac90187b91069ea4b040" },
+  { route: "/refund-policy", title: "Cancellation and Refund Policy", Page: RefundPolicyPage, digest: "52cec48ffb8371a7b4bd65bf10659878f2e7e2159f74340ff1ff7e8c9115de0b" },
   { route: "/shipping-policy", title: "Shipping and Delivery Policy", Page: ShippingPolicyPage, digest: "67163c16f6dbdaf3e3918a7cdecc7974432ee1b32c752b785df19032628badd3" }
 ];
 const footerLinks = [
@@ -108,6 +108,12 @@ describe("approved legal policies", () => {
     expect(headings.indexOf("Payments")).toBe(headings.indexOf("Basic membership and identity review") + 1);
     expect(headings.indexOf("Equipment requests and votes")).toBe(headings.indexOf("Payments") + 1);
     expect(container).toHaveTextContent("Razorpay Payments Private Limited and its partner banks");
+    expect(container).toHaveTextContent("security deposits are paid separately by bank transfer");
+    expect(container).toHaveTextContent("restricted accounting and contract records");
+    expect(container).toHaveTextContent("refund account-holder name, bank name, account number and IFSC");
+    expect(container).toHaveTextContent("available only to you and authorised staff using MFA");
+    expect(container).toHaveTextContent("any change requires renewed review");
+    expect(container).toHaveTextContent("Saving these details does not initiate an automatic payout");
     expect(container).toHaveTextContent(labAddress);
     expect(container).not.toHaveTextContent("560034");
     expect(container).toHaveTextContent("We keep invoices and payment records for as long as Indian tax and accounting laws require, even if you close your account.");
@@ -155,4 +161,18 @@ it("applies the new whole-month cabin notice rules without rewriting existing ag
   expect(rows.map(row => row.textContent).join(" ")).toContain("30 or more days before the start date");
   expect(rows.map(row => row.textContent).join(" ")).not.toContain("3-month minimum");
   expect(rows.map(row => row.textContent).join(" ")).not.toContain("7 days before");
+});
+
+
+it("separates bank deposits from Razorpay rent and requires verified receipt", () => {
+  const terms = render(<MemoryRouter><TermsPage /></MemoryRouter>);
+  expect(terms.container).toHaveTextContent("security deposits are collected separately by bank transfer");
+  expect(terms.container).toHaveTextContent("refundable liabilities");
+  expect(terms.container).toHaveTextContent("a transfer reference or screenshot alone is not sufficient");
+  expect(terms.container).toHaveTextContent("approved signed agreement, captured rent and a verified deposit");
+  terms.unmount();
+  const refunds = render(<MemoryRouter><RefundPolicyPage /></MemoryRouter>);
+  expect(refunds.container).toHaveTextContent("security deposits are paid and refunded by bank transfer");
+  expect(refunds.container).toHaveTextContent("Cabin deposits are returned within 7 working days of move-out");
+  expect(refunds.container).toHaveTextContent("Equipment security deposits are returned within 7 working days of return");
 });

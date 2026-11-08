@@ -1,11 +1,19 @@
 import { supabase } from "./supabase";
 
 export const rentalMode = import.meta.env.VITE_RENTAL_CHECKOUT_MODE === "test" ? "test" : "live";
+// Summary responses carry only bankName/last4; full details come only from the staff get_refund_account action.
+export type RentalRefundAccount = { version: number; bankName: string; last4: string; accountName?: string; ifsc?: string;
+  verifiedAt: string | null; ownershipConfirmed: boolean };
 export type RentalQuote = {
   quoteId: string; parentQuoteId?: string | null; product: "cabin101" | "hiwonder"; unit: string; start: string; end: string;
   rentPaise: number; depositPaise: number; amountPaise: number; agreementHash: string; policyVersion: string;
   approvedAt: string | null; preparedAt?: string | null; agreementSigned: boolean; hasOrder: boolean; orderPending: boolean;
   status: string; reviewReason?: string; customerEmail?: string; staffEmail?: string;
+  refundAccount?: RentalRefundAccount | null;
+  depositMethod?: "bank_transfer" | "razorpay";
+  depositStatus?: "not_required" | "pending" | "submitted" | "verified" | "partially_refunded" | "refunded";
+  depositReference?: string | null; depositVerifiedReference?: string | null; depositVerifiedAt?: string | null; bankDepositRefundedPaise?: number;
+  paymentAmountPaise?: number; paymentWindowAt?: string | null; testFixture?: boolean; bankInstructions?: { bankName: string; accountName: string; accountNumber: string; ifsc: string; accountType?: string } | null;
 };
 export const rentalMoney = (value: number) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(value / 100);
 export async function rentalRequest<T>(body: object | FormData, expectedMember?: string): Promise<T> {

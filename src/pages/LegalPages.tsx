@@ -65,7 +65,7 @@ export function TermsPage() {
         <li>Cabins are rented whole, at the cabin's listed price, whatever the number of people using it.</li>
         <li>New cabin bookings start on the first day of a calendar month and are charged in whole calendar months. There is no three-month minimum. The security deposit is 2 months' agreed rent at monthly rents up to INR 100,000, and 3 months' agreed rent above that amount.</li>
         <li>Individual desk passes cover the dates stated in your booking, with access from 9 am to 5 pm IST every day, including weekends, subject to disclosed closures. The cabin minimum and security deposit do not apply to desk passes.</li>
-        <li>The first full calendar month is paid at booking with the security deposit. Later rent is payable monthly in advance by the 5th. Daily proration is not offered. Existing signed agreements retain their terms.</li>
+        <li>The first full calendar month is paid through Razorpay at booking. The security deposit is paid separately by bank transfer. Later rent is payable monthly in advance by the 5th. Daily proration is not offered. Existing signed agreements retain their terms.</li>
         <li>Either side may end a new cabin arrangement at month-end with at least 30 days' written notice. Rent remains payable for the full calendar months through that end date.</li>
         <li>Use only the power points provided. Any change to the cabin needs our written approval, and you must restore it when you leave.</li>
         <li>Your signed space agreement, if you have one, takes priority over this section.</li>
@@ -74,7 +74,7 @@ export function TermsPage() {
     <section>
       <h2>4. Equipment rental</h2>
       <ul>
-        <li>Bookings are confirmed only after payment.</li>
+        <li>Equipment bookings require an approved signed agreement, verified rent payment through Razorpay and staff verification of the separate bank-transfer security deposit before confirmation or handover.</li>
         <li>You must follow the lab's safety rules and any instructions from our staff. Some equipment needs a short induction first.</li>
         <li>The Hiwonder kit stays in the lab and requires approved workspace access for the same period. It is one complete kit, not two separately rentable arms.</li>
         <li>You are responsible for loss of or damage to equipment during your booking, beyond normal wear. We will charge the repair or replacement cost, and may hold a deposit for higher-value items.</li>
@@ -92,7 +92,8 @@ export function TermsPage() {
     </section>
     <section>
       <h2>7. Payments</h2>
-      <p>Online payments are processed by Razorpay. We do not see or store your card, UPI or net-banking details. Tax invoices are issued in the name you provide at checkout. Late payments may lead to suspension of access until dues are cleared.</p>
+      <p>Razorpay processes desk-pass payments and cabin and equipment rent. New cabin and equipment security deposits are collected separately by bank transfer using instructions confirmed by Armature for your booking. We do not see or store your card details, UPI PIN or net-banking credentials. Receipts are issued in the name you provide at checkout. Late payments may lead to suspension of access until dues are cleared.</p>
+      <p>We record security deposits separately as refundable liabilities and issue a separate deposit receipt. Staff verify actual bank credit before confirming receipt; a transfer reference or screenshot alone is not sufficient. Cabin and equipment confirmation requires an approved signed agreement, captured rent and a verified deposit. Existing signed agreements and their recorded payment methods remain unchanged.</p>
     </section>
     <section>
       <h2>8. Conduct and safety</h2>
@@ -123,7 +124,7 @@ export function TermsPage() {
 
 export function RefundPolicyPage() {
   return <LegalPage title="Cancellation and Refund Policy">
-      <p>This policy covers payments made to {legalEntity.name} for Armature AI Labs. Approved refunds go back to the original payment method within 5 to 7 working days of approval. Your bank may take a few more days to show the credit.</p>
+      <p>This policy covers payments made to {legalEntity.name} for Armature AI Labs. Approved refunds for payments collected through Razorpay are initiated to the original payment method within 5 to 7 working days of approval. Your bank may take a few more days to show the credit.</p>
     <p>The cabin rules below apply to new agreements. Existing signed cabin agreements retain their agreed cancellation and termination terms.</p>
     <div className="legal-table-scroll" role="region" aria-label="Cancellation and refund rules" tabIndex={0}>
       <table>
@@ -147,7 +148,8 @@ export function RefundPolicyPage() {
       </table>
     </div>
     <section>
-      <h2>Equipment deposits and early returns</h2>
+      <h2>Bank deposits and equipment early returns</h2>
+      <p>New cabin and equipment security deposits are paid and refunded by bank transfer, separately from Razorpay rent payments. Staff review deductions, verify the refund account and record the bank transfer reference. Cabin deposits are returned within 7 working days of move-out, less documented unpaid dues or damage beyond normal wear. Existing signed agreements and historical payment methods are preserved.</p>
       <p>Equipment security deposits are returned within 7 working days of return, less documented unpaid charges or damage beyond normal wear. Inspection takes place within that period and does not postpone the deadline.</p>
       <p>For early return of the Hiwonder kit within a paid 30-day period, rent is recalculated at INR 150 per day used, subject to the 7-day minimum and capped at the INR 3,900 already paid. Any remaining rent is refunded manually to the original payment method.</p>
     </section>

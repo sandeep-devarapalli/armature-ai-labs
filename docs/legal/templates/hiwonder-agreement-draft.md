@@ -44,13 +44,15 @@ The minimum rental is seven days. Choose either exactly seven days at INR 1,050 
 
 | Charge | Final quote amount |
 | --- | --- |
-| Seven-day rent OR fixed 30-day rent | INR [1050_OR_3900] |
-| Refundable security deposit | INR 25,000 |
+| Seven-day rent OR fixed 30-day rent through Razorpay | INR [1050_OR_3900] |
+| Refundable security deposit by bank transfer | INR 25,000 |
 | GST collected | INR 0; Armature is currently unregistered for GST |
-| Initial total | INR [26050_OR_28900] |
+| Total initial obligation across both payment methods | INR [26050_OR_28900] |
 | Workspace access | [SEPARATE_CONFIRMED_WORKSPACE_CHARGES_OR_REFERENCE] |
 
-The deposit does not limit documented liability under the agreed damage/loss terms. Armature initiates the deposit refund within seven working days of return, less documented unpaid charges or damage. Inspection occurs inside that period and does not postpone the deadline. Armature provides a written deduction statement with supporting evidence. Normal wear is not charged.
+Pay the deposit separately by bank transfer using Armature's verified instructions and the booking reference. Armature records it as a refundable deposit liability and issues a separate deposit receipt. Staff verify the credit against the bank record; a customer transfer reference or screenshot alone does not confirm receipt. Bank instructions must be confirmed by Armature for this booking, not inferred from this draft.
+
+The deposit does not limit documented liability under the agreed damage/loss terms. Armature returns the deposit by bank transfer to a verified refund account within seven working days of return, less documented unpaid charges or damage. Staff approve and record the refund amount, any deductions and the bank transfer reference. The Customer supplies the refund account-holder name, bank name, account number and IFSC privately in the signed-in booking flow and confirms ownership of that account. Authorised staff review the current details before transferring the refund; changed details require renewed review. Full account details are restricted to the Customer and authorised staff using MFA and are not included in public receipts or listings. Do not provide banking passwords, PINs or OTPs. This flow records a staff-completed bank transfer and does not initiate an automatic payout. Inspection occurs inside that period and does not postpone the deadline. Armature provides a written deduction statement with supporting evidence. Normal wear is not charged.
 
 For early return within a paid 30-day period, rent is INR 150 per day used, subject to the seven-day minimum, capped at INR 3,900 already paid. Armature manually refunds any remaining rent. Do not impose an additional rental charge solely because this calculation reaches the cap. Record the actual return time and agreed day count.
 
@@ -68,7 +70,7 @@ Do not disassemble, drill, reprint parts, rewire or change servo IDs or firmware
 
 ## 6. Cancellation, late return and damage
 
-The existing published equipment booking policy provides a full refund or one free reschedule when cancellation is at least 48 hours before the slot. Cancellation less than 48 hours before the slot, or no-show, receives no refund. Approved refunds go back to the original payment method within five to seven working days of approval, with possible additional bank credit time. Preserve these commitments from `src/pages/LegalPages.tsx`; do not request blanket reconfirmation.
+The existing published equipment booking policy provides a full refund or one free reschedule when cancellation is at least 48 hours before the slot. Cancellation less than 48 hours before the slot, or no-show, receives no refund. Approved rent refunds are initiated through Razorpay to the original payment method within five to seven working days of approval, with possible additional bank credit time. Bank deposits are refunded separately by bank transfer. Preserve these commitments from `src/pages/LegalPages.tsx`; do not request blanket reconfirmation.
 
 Separately state how the security deposit is returned when the kit was never handed over: [STAFF_REVIEWED_UNUSED_DEPOSIT_DECISION_AND_REASON_CONFIRMED_BEFORE_SIGNING]. The owner requires manual review before a rule is promised. Record the agreed treatment before signing; neither automatic refund nor forfeiture is authorised by this draft. Do not infer deposit forfeiture from the booking-fee cancellation rule.
 
@@ -88,7 +90,7 @@ The current single Hiwonder kit uses PandaDoc without stamping under the owner's
 
 The Customer signs the approved version first; Armature countersigns in a separate session. Each signer must finish the provider process. A separate Admin/Super admin account using MFA reviews the completed PDF and signature certificate, checks both signers and the exact quote binding, and records approval.
 
-Start Razorpay checkout within 30 minutes of staff approval. Availability, price and the workspace prerequisite must still pass the final server checks. An expired window requires fresh availability/quote handling. Confirm the rental only after server verification of the captured payment, order, amount and currency and successful allocation of the kit. A browser redirect or signature alone is not payment confirmation. Equipment payment does not itself grant workspace access.
+Staff verify the separate bank deposit before rent checkout becomes available. Start Razorpay checkout within 30 minutes after both the signed agreement and bank deposit have been approved, measured from the later approval. Availability, price and the workspace prerequisite must still pass the final server checks. An expired window requires fresh availability/quote handling. Razorpay collects only the quoted rent. Confirm the rental only after server verification of the captured rent, order, amount and currency, staff verification of the separate bank deposit, and successful allocation of the kit. A browser redirect or signature alone is not payment confirmation. Equipment payment does not itself grant workspace access.
 
 ## 8. Notices, records and complaints
 

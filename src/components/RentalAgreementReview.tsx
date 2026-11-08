@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { MfaPanel } from "../pages/MemberPages";
-import { rentalMode, rentalMoney, type RentalQuote } from "../lib/rental-checkout";
+import { rentalMode, rentalMoney, type RentalQuote, type RentalRefundAccount } from "../lib/rental-checkout";
 
 type Review = RentalQuote & { particulars?: Record<string, unknown>; bookingId?: string | null; parentQuoteId?: string | null;
   operations?: { handed_over_at?: string | null; returned_at?: string | null } | null };
-const statusLabels: Record<string, string> = { awaiting_staff: "Awaiting staff review", awaiting_signatures: "Awaiting signatures", approved: "Approved for payment", awaiting_payment: "Awaiting payment", confirmed: "Booking confirmed", refunded: "Fully refunded", needs_review: "Payment needs staff review" };
+const statusLabels: Record<string, string> = { awaiting_staff: "Awaiting staff review", awaiting_signatures: "Awaiting signatures", approved: "Approved for payment", awaiting_payment: "Awaiting payment", awaiting_deposit: "Awaiting bank deposit verification", confirmed: "Booking confirmed", refunded: "Fully refunded", needs_review: "Payment needs staff review" };
 const reference = "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
 
 export function RentalAgreementReview({ client, actorId, memberId, blocked, onBusyChange }: {
@@ -14,6 +14,7 @@ export function RentalAgreementReview({ client, actorId, memberId, blocked, onBu
   const [requests, setRequests] = useState<(Review & { memberId: string })[]>([]), [queueLoaded, setQueueLoaded] = useState(false);
   const [offset, setOffset] = useState(0), [moreRequests, setMoreRequests] = useState(false);
   const [review, setReview] = useState<Review | null>(null);
+  const [privateRefundAccount, setPrivateRefundAccount] = useState<(RentalRefundAccount & { accountName: string; ifsc: string; accountNumber: string }) | null>(null);
   const [busy, setBusy] = useState(false), [error, setError] = useState("");
   const active = useRef(false), working = useRef(false);
   useEffect(() => { active.current = true; return () => { active.current = false; if (working.current) onBusyChange(false); }; }, [onBusyChange]);
@@ -54,8 +55,15 @@ export function RentalAgreementReview({ client, actorId, memberId, blocked, onBu
       else if (action === "renewal_quote") {
         if (fields.get("unchanged") !== "on") throw new Error("Confirm the original agreement terms are unchanged.");
         body = { ...body, parentQuoteId: quoteId, start: fields.get("start"), confirmed: true };
+      } else if (action === "verify_refund_account") {
+        if (!privateRefundAccount || fields.get("confirmed") !== "on") throw new Error("Open and check the current refund account before verifying it.");
+        body = { ...body, version: privateRefundAccount.version, confirmed: true, evidence: String(fields.get("evidence") ?? "").trim() };
+      } else if (action === "verify_bank_deposit" || action === "record_bank_deposit_refund") {
+        if (fields.get("confirmed") !== "on") throw new Error("Confirm the bank statement check before recording the transfer.");
+        body = { ...body, reference: String(fields.get("reference") ?? "").trim(), evidence: String(fields.get("evidence") ?? "").trim(), confirmed: true,
+          ...(action === "record_bank_deposit_refund" ? { amountPaise: Math.round(Number(fields.get("amount")) * 100), refundAccountVersion: review?.refundAccount?.version } : {}) };
       } else if (action === "allocate_refund") {
-        const rentPaise = Math.round(Number(fields.get("rent")) * 100), depositPaise = Math.round(Number(fields.get("deposit")) * 100);
+        const rentPaise = Math.round(Number(fields.get("rent")) * 100), depositPaise = Math.round(Number(fields.get("deposit") ?? 0) * 100);
         if (![rentPaise, depositPaise].every(value => Number.isSafeInteger(value) && value >= 0) || rentPaise + depositPaise <= 0) throw new Error("Enter the positive processed refund split in rupees.");
         body = { ...body, refundId: String(fields.get("refundId") ?? "").trim(), rentPaise, depositPaise, reason: String(fields.get("reason") ?? "").trim() };
       }
@@ -69,6 +77,11 @@ export function RentalAgreementReview({ client, actorId, memberId, blocked, onBu
         setOffset(Number(fields.get("offset") ?? 0)); setMoreRequests(data.quotes.length === 50); setQueueLoaded(true); return;
       }
       if (failure || data?.mode !== rentalMode || (action !== "renewal_quote" && data?.quoteId !== quoteId) || (action === "renewal_quote" && (!data?.quoteId || data.quoteId === quoteId))) throw new Error("The action could not be confirmed. Refresh the agreement status before retrying.");
+      if (action === "get_refund_account") {
+        if (!data.refundAccount?.accountNumber || !Number.isSafeInteger(data.refundAccount.version)) throw new Error("The private refund account could not be loaded.");
+        setPrivateRefundAccount(data.refundAccount); return;
+      }
+      setPrivateRefundAccount(null);
       if (action === "approve_manual" && !data.agreementSigned) throw new Error("Approval was not confirmed. Refresh the agreement status.");
       setReview(current => action === "renewal_quote" ? { ...data, customerEmail: current?.customerEmail, staffEmail: current?.staffEmail } : current?.quoteId === data.quoteId ? { ...current, ...data } : data);
     } catch (reason) { if (active.current) setError(reason instanceof Error ? reason.message : "The action could not be completed."); }
@@ -91,7 +104,9 @@ export function RentalAgreementReview({ client, actorId, memberId, blocked, onBu
       <button className="button secondary" disabled={disabled}>Find rental agreement</button>
     </form> : <>
       <h3>{review.product === "cabin101" ? "Cabin 101" : "Hiwonder kit"}</h3><p>{review.start} to {review.end}</p>
+      {review.testFixture && <p role="status">TEST SPECIMEN: ₹50 rent and ₹100 simulated bank deposit. No real transfer or rental.</p>}
       <p>Rent {rentalMoney(review.rentPaise)} · Deposit {rentalMoney(review.depositPaise)} · Total {rentalMoney(review.amountPaise)}. No GST added.</p>
+      {review.depositMethod === "bank_transfer" && <p>Razorpay collects {rentalMoney(review.paymentAmountPaise ?? review.rentPaise)} rent only. The deposit is recorded separately as a refundable bank-transfer liability.</p>}
       <p>Customer: {review.customerEmail}. Armature signer: {review.staffEmail}.</p><p>Status: <strong>{statusLabels[review.status] ?? "Review required"}</strong></p>
       <p>Quote fingerprint: <code style={{ overflowWrap: "anywhere" }}>{review.agreementHash}</code></p>
       {!review.agreementSigned && !review.hasOrder && !review.orderPending && <>
@@ -129,7 +144,46 @@ export function RentalAgreementReview({ client, actorId, memberId, blocked, onBu
       {review.orderPending && <form className="ol-form" onSubmit={event => void submit(event, "recover_order")}><h4>Recover the existing order</h4>
         <p>Find the matching receipt in Razorpay. This links the existing order without charging again.</p>
         <label>Existing rental order ID<input name="orderId" required pattern="order_[A-Za-z0-9]+" disabled={disabled} /></label><button className="button" disabled={disabled}>Link existing rental order</button></form>}
-      {review.agreementSigned && !review.bookingId && <p>Both signatures are approved. Ask the customer to check their booking status and complete payment within the approved window.</p>}
+      {review.agreementSigned && !review.bookingId && <p>Both signatures are approved. {review.depositMethod === "bank_transfer" ? "Verify the deposit in the bank statement before asking the customer to pay rent. The 30-minute payment window starts after both agreement approval and deposit verification." : "Ask the customer to check their booking status and complete payment within the approved window."}</p>}
+      {review.agreementSigned && review.depositMethod === "bank_transfer" && review.depositPaise > 0 && <>
+        <h4>Refund account review</h4>
+        {review.refundAccount ? <><p>{review.refundAccount.bankName} · Account ending {review.refundAccount.last4}.</p>
+          <p>{review.refundAccount.verifiedAt ? "Current refund account verified." : "The current account needs staff verification before a deposit refund."}</p>
+          <form onSubmit={event => void submit(event, "get_refund_account")}><button className="button secondary" disabled={disabled}>View private refund bank details</button></form>
+          {privateRefundAccount && <div data-private="true"><dl style={{ overflowWrap: "anywhere" }}><dt>Refund account holder</dt><dd>{privateRefundAccount.accountName}</dd>
+            <dt>Refund bank</dt><dd>{privateRefundAccount.bankName}</dd><dt>Full refund account number</dt><dd>{privateRefundAccount.accountNumber}</dd>
+            <dt>Refund IFSC</dt><dd>{privateRefundAccount.ifsc}</dd><dt>Account version</dt><dd>{privateRefundAccount.version}</dd></dl>
+            <button className="button secondary" disabled={disabled} onClick={() => setPrivateRefundAccount(null)}>Hide private bank details</button>
+            <form className="ol-form" onSubmit={event => void submit(event, "verify_refund_account")}>
+              <label>Refund account verification evidence<textarea name="evidence" minLength={10} maxLength={1000} required disabled={disabled} /></label>
+              <label><input name="confirmed" type="checkbox" required disabled={disabled} /> I verified this account belongs to the contracting person or company and checked the account number and IFSC.</label>
+              <button className="button secondary" disabled={disabled}>Verify this refund account version</button>
+            </form></div>}
+        </> : <p>The customer must provide a refund bank account in their signed-in booking flow.</p>}
+        <h4>Bank deposit verification</h4>
+        <p>Deposit status: {review.depositStatus ?? "pending"}. {review.depositReference ? "Customer reference: " + review.depositReference : "No customer reference submitted."}</p>
+        {review.depositStatus === "verified" || review.depositStatus === "partially_refunded" || review.depositStatus === "refunded"
+          ? <p>Receipt verified{review.depositVerifiedAt ? " on " + new Date(review.depositVerifiedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) + " IST" : ""}. Bank deposit returned: {rentalMoney(review.bankDepositRefundedPaise ?? 0)}.</p>
+          : <form className="ol-form" onSubmit={event => void submit(event, "verify_bank_deposit")}>
+            <p>Check the actual bank credit for {rentalMoney(review.depositPaise)} and this agreement. A customer screenshot alone is not sufficient.</p>
+            {review.testFixture && <p>This staging specimen uses simulated bank evidence only. Do not transfer real money.</p>}
+            <label>Verified incoming bank reference<input name="reference" required minLength={6} maxLength={80} disabled={disabled} defaultValue={review.depositReference ?? ""} /></label>
+            <label>Bank credit evidence reference<textarea name="evidence" required minLength={10} maxLength={1000} disabled={disabled} /></label>
+            <label><input name="confirmed" type="checkbox" required disabled={disabled} /> {review.testFixture ? "I checked the simulated staging bank credit and exact deposit amount." : "I checked the bank statement, payer, exact deposit amount and agreement reference."}</label>
+            <button className="button" disabled={disabled}>Verify bank deposit receipt</button>
+          </form>}
+        {review.depositVerifiedAt && <details><summary>Record a bank deposit refund</summary>
+          <p>This records an already completed bank transfer. It does not send money. Confirm the customer account privately and review any documented deductions first.</p>
+          <form className="ol-form" onSubmit={event => void submit(event, "record_bank_deposit_refund")}>
+            <label>Outgoing bank transfer reference<input name="reference" required minLength={6} maxLength={80} disabled={disabled} /></label>
+            <label>Deposit returned, rupees<input name="amount" type="number" required min="0.01" step="0.01" max={(review.depositPaise - (review.bankDepositRefundedPaise ?? 0)) / 100} disabled={disabled} /></label>
+            <label>Bank refund evidence and reviewed deductions<textarea name="evidence" required minLength={10} maxLength={1000} disabled={disabled} /></label>
+            <label><input name="confirmed" type="checkbox" required disabled={disabled} /> I verified the completed outgoing bank transfer and reviewed settlement.</label>
+            {!review.refundAccount?.verifiedAt && <p>Verify the customer's current refund account before recording a bank deposit refund.</p>}
+            <button className="button secondary" disabled={disabled || review.depositStatus === "refunded" || !review.refundAccount?.verifiedAt}>Record completed bank deposit refund</button>
+          </form>
+        </details>}
+      </>}
       {review.bookingId && review.product === "cabin101" && !review.parentQuoteId && review.status === "confirmed" && <form className="ol-form" onSubmit={event => void submit(event, "renewal_quote")}>
         <h4>Next calendar month's rent</h4><p>Use the original signed terms. This creates a ₹40,000 rent request with no additional deposit or automatic debit. A changed contract needs a fresh agreement.</p>
         <label>Next unpaid month's first date<input name="start" type="date" required disabled={disabled} /></label>
@@ -141,16 +195,16 @@ export function RentalAgreementReview({ client, actorId, memberId, blocked, onBu
           <label>Condition and handover evidence reference<textarea name="evidence" required minLength={10} maxLength={1000} disabled={disabled || Boolean(review.operations?.returned_at)} /></label>
           <button className="button secondary" disabled={disabled || Boolean(review.operations?.returned_at)}>{review.operations?.handed_over_at ? "Record return" : "Record handover"}</button>
         </form>
-        <details><summary>Allocate an already processed refund</summary><p>This records a verified Razorpay refund; it does not send money or approve a new refund.</p>
+        <details><summary>Allocate an already processed refund</summary><p>This records a verified Razorpay refund; it does not send money or approve a new refund. Bank-transfer deposits are reconciled separately.</p>
           <form className="ol-form" onSubmit={event => void submit(event, "allocate_refund")}>
             <label>Processed refund ID<input name="refundId" required pattern="rfnd_[A-Za-z0-9]+" disabled={disabled} /></label>
             <label>Rent refunded, rupees<input name="rent" type="number" min="0" step="0.01" required disabled={disabled} /></label>
-            <label>Deposit refunded, rupees<input name="deposit" type="number" min="0" step="0.01" required disabled={disabled} /></label>
+            {review.depositMethod !== "bank_transfer" && <label>Deposit refunded, rupees<input name="deposit" type="number" min="0" step="0.01" required disabled={disabled} /></label>}
             <label>Refund allocation reason<textarea name="reason" minLength={10} maxLength={1000} required disabled={disabled} /></label>
             <button className="button secondary" disabled={disabled}>Record processed refund split</button>
           </form></details></>}
       <form onSubmit={event => void submit(event, "manual_review")}><button className="button secondary" disabled={disabled}>Refresh rental status</button></form>
-      <button type="button" className="button secondary" disabled={disabled} onClick={() => { setReview(null); setError(""); }}>Find another rental</button>
+      <button type="button" className="button secondary" disabled={disabled} onClick={() => { setReview(null); setPrivateRefundAccount(null); setError(""); }}>Find another rental</button>
     </>}
     {error && <p role="alert">{error}</p>}
   </details>;

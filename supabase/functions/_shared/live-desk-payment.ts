@@ -45,7 +45,7 @@ export type Payment = {
   amount_refunded: number;
 };
 type Refund = { id: string; payment_id: string; amount: number; currency: string; status: string };
-type Quote = { id: string; order_id: string | null; amount_paise: number };
+type Quote = { id: string; order_id: string | null; amount_paise: number; payment_amount_paise?: number };
 type Operation = (action: string, input: object) => Promise<unknown>;
 
 export async function reconcileLivePayment(
@@ -56,7 +56,7 @@ export async function reconcileLivePayment(
   expectedRefundId?: string,
 ): Promise<object> {
   if (!paymentIdPattern.test(payment.id) || !quote.order_id || payment.order_id !== quote.order_id
-      || payment.amount !== quote.amount_paise || payment.currency !== "INR"
+      || payment.amount !== (quote.payment_amount_paise ?? quote.amount_paise) || payment.currency !== "INR"
       || !Number.isSafeInteger(payment.amount_refunded) || payment.amount_refunded < 0
       || payment.amount_refunded > payment.amount) {
     throw new PaymentError(409, "payment_mismatch");
