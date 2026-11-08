@@ -3,6 +3,8 @@ import { backendOrigin, authStorageKey } from "./backend-fixture";
 
 test("rental staff review separates particulars and completed signatures", async ({ page }, info) => {
   test.skip(process.env.VITE_RENTAL_CHECKOUT_ENABLED !== "true", "Rental review is gated off");
+  const mode = process.env.VITE_RENTAL_CHECKOUT_MODE === "test" ? "test" : "live";
+  const endpoint = mode === "test" ? "test-rental-checkout" : "rental-checkout";
   const staffId = "10000000-0000-4000-8000-000000000061", memberId = "10000000-0000-4000-8000-000000000062";
   const quoteId = "a0000000-0000-4000-8000-000000000062";
   const user = { id: staffId, aud: "authenticated", role: "authenticated", email: "staff@example.test", app_metadata: {}, user_metadata: {}, created_at: "2026-09-01T00:00:00Z", factors: [{ id: "factor", status: "verified", factor_type: "totp" }] };
@@ -16,9 +18,9 @@ test("rental staff review separates particulars and completed signatures", async
     else if (name === "get_membership_levels_release_status") data = { membership_levels_enabled: true };
     else if (name === "list_basic_members") data = { items: [{ user_id: memberId, name: "Synthetic Renter", email: "renter@example.test", registered_at: "2026-09-01T00:00:00Z", status: "incomplete", application_status: null, role: "member", revision: null, photo_available: false, id_available: false, reviewed_at: null }], total: 1, counts: {} };
     else if (name === "user") data = user;
-    else if (name === "rental-checkout") {
+    else if (name === endpoint) {
       const body = route.request().postDataJSON(); actions.push(body.action);
-      data = { mode: "live", quoteId, product: "hiwonder", unit: "week", start: "2099-06-10", end: "2099-06-16", rentPaise: 105000, depositPaise: 2500000, amountPaise: 2605000, agreementHash: "a".repeat(64), policyVersion: "rental-fixture", agreementSigned: false, hasOrder: false, orderPending: false, preparedAt: null, approvedAt: null, status: "awaiting_staff", customerEmail: "renter@example.test", staffEmail: "signer@example.test" };
+      data = { mode, quoteId, product: "hiwonder", unit: "week", start: "2099-06-10", end: "2099-06-16", rentPaise: 105000, depositPaise: 2500000, amountPaise: 2605000, agreementHash: "a".repeat(64), policyVersion: "rental-fixture", agreementSigned: false, hasOrder: false, orderPending: false, preparedAt: null, approvedAt: null, status: "awaiting_staff", customerEmail: "renter@example.test", staffEmail: "signer@example.test" };
     }
     await route.fulfill({ json: data });
   });

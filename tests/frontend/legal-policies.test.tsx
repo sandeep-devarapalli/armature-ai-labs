@@ -31,6 +31,16 @@ const footerLinks = [
 
 afterEach(cleanup);
 
+it("distinguishes signed contract evidence from expiring identity uploads", () => {
+  render(<MemoryRouter><PrivacyPage /></MemoryRouter>);
+  const records = screen.getByRole("region", { name: "Signed agreements and contract records" });
+  expect(records).toHaveTextContent("retained during and after the contract");
+  expect(records).toHaveTextContent("PAN and contracting address");
+  expect(records).toHaveTextContent("Access is restricted");
+  expect(records).toHaveTextContent("not deleted automatically when those uploads expire");
+  expect(records).toHaveTextContent("request a retention review");
+});
+
 describe("approved legal policies", () => {
   it.each(policies)("preserves every approved word and table cell on $route", ({ Page, title, digest }) => {
     const { container } = render(<MemoryRouter><Page /></MemoryRouter>);

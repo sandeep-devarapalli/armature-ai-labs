@@ -52,7 +52,7 @@ for (const product of ["cabin101", "hiwonder"]) test(`synthetic ${product} guide
   const notice = page.getByRole("button", { name: "Dismiss update notice" });
   if (await notice.isVisible()) await notice.click();
   await page.evaluate(() => window.scrollTo(0, 0));
-  await page.screenshot({ path: `/private/tmp/rental-${product}-${info.project.name}.png`, fullPage: true });
+  await page.screenshot({ path: info.outputPath(`rental-${product}.png`), fullPage: true });
   await page.locator("section").filter({ has: page.getByRole("heading", { name: "Your booking" }) })
-    .screenshot({ path: `/private/tmp/rental-${product}-${info.project.name}-booking.png` });
+    .screenshot({ path: info.outputPath(`rental-${product}-booking.png`) });
 });
