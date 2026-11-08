@@ -86,7 +86,7 @@ These clauses do not remove rights that applicable law makes mandatory. The conf
 
 ## 7. Signing and payment
 
-The current single Hiwonder kit uses PandaDoc without stamping under the owner's explicit exception. This exception does not approve unstamped agreements for future equipment.
+The current single Hiwonder kit uses PandaDoc or DocuSign without stamping under the owner's explicit exception. This exception does not approve unstamped agreements for future equipment.
 
 The Customer signs the approved version first; Armature countersigns in a separate session. Each signer must finish the provider process. A separate Admin/Super admin account using MFA reviews the completed PDF and signature certificate, checks both signers and the exact quote binding, and records approval.
 

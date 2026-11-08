@@ -2,8 +2,10 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { MfaPanel } from "../pages/MemberPages";
 import { DepositReceipts } from "./RentalCheckout";
+
 import { rentalMode, rentalMoney, type RentalQuote, type RentalRefundAccount } from "../lib/rental-checkout";
 
+const providerName = (review: { particulars?: Record<string, unknown> }) => review.particulars?.signingProvider === "docusign" ? "DocuSign" : "PandaDoc";
 type Review = RentalQuote & { particulars?: Record<string, unknown>; bookingId?: string | null; parentQuoteId?: string | null;
   operations?: { handed_over_at?: string | null; returned_at?: string | null } | null };
 const statusLabels: Record<string, string> = { awaiting_staff: "Awaiting staff review", awaiting_signatures: "Awaiting signatures", approved: "Approved for payment", awaiting_payment: "Awaiting payment", awaiting_deposit: "Awaiting bank deposit verification", confirmed: "Booking confirmed", refunded: "Fully refunded", needs_review: "Payment needs staff review" };
@@ -34,6 +36,7 @@ export function RentalAgreementReview({ client, actorId, memberId, blocked, onBu
       if (action === "prepare" && review) {
         const cabin = review.product === "cabin101";
         const particulars = { termsVersion: review.policyVersion, availabilityConfirmed: fields.get("available") === "on",
+          signingProvider: fields.get("signingProvider") === "docusign" ? "docusign" : "pandadoc",
           stampRequired: cabin && fields.get("stampRequired") === "yes", stampDecisionReason: String(fields.get("stampReason") ?? "").trim(),
           recordsPolicyReference: String(fields.get("recordsPolicyReference") ?? "").trim(),
           ...(!cabin ? { unusedDepositTerms: String(fields.get("unusedDepositTerms") ?? "").trim() } : {}),
@@ -45,7 +48,7 @@ export function RentalAgreementReview({ client, actorId, memberId, blocked, onBu
       } else if (action === "approve_manual" && review) {
         const pdf = fields.get("completedPdf");
         if (!(pdf instanceof File) || pdf.size < 5 || pdf.size > 20 * 1024 * 1024 || await pdf.slice(0, 5).text() !== "%PDF-") {
-          throw new Error("Choose the completed PandaDoc PDF with both signatures and certificate, up to 20 MB.");
+          throw new Error("Choose the completed " + providerName(review) + " PDF with both signatures and certificate, up to 20 MB.");
         }
         if (fields.get("confirmed") !== "on" || fields.get("agreementHash") !== review.agreementHash) throw new Error("Confirm both signers and match the signed booking fingerprint exactly.");
         const upload = new FormData();
@@ -130,12 +133,17 @@ export function RentalAgreementReview({ client, actorId, memberId, blocked, onBu
             <p>Record the manually reviewed decision if the kit is never handed over. Do not assume an automatic refund or forfeiture. Confirm these terms with the customer before the final signing version.</p></>}
           <label>Executed-agreement records policy reference<textarea name="recordsPolicyReference" required minLength={10} maxLength={1000} disabled={disabled} defaultValue={String(review.particulars?.recordsPolicyReference ?? "")} /></label>
           <p>The agreement includes PAN during the contract. Reference the reviewed storage, access and post-contract retention decision; do not invent a retention period.</p>
+          <label>Signing provider<select name="signingProvider" required disabled={disabled} defaultValue={review.particulars?.signingProvider === "docusign" ? "docusign" : "pandadoc"}>
+            <option value="pandadoc">PandaDoc</option><option value="docusign">DocuSign</option></select></label>
+          <p>Either provider follows the same steps: correct the draft, stamp manually where required, customer signs, Armature countersigns, then an independent MFA Admin checks the completed document and audit certificate.</p>
           <label>Stamping decision reason<textarea name="stampReason" minLength={10} maxLength={1000} required disabled={disabled} /></label>
           <button className="button secondary" disabled={disabled}>Save final particulars</button>
         </form>
-        {review.preparedAt && <><h4>2. Review both completed signatures</h4><p>Include the fingerprint above in the final PandaDoc document. Upload the completed PDF and certificate after both signers select Finish. The file is stored privately.</p>
+        {review.preparedAt && <><h4>2. Review both completed signatures</h4><p>Include the fingerprint above in the final {providerName(review)} document. Upload the completed PDF and certificate after both signers select Finish. The file is stored privately.</p>
           <form className="ol-form" onSubmit={event => void submit(event, "approve_manual")}>
-            <label>PandaDoc document ID<input name="documentId" required pattern="[A-Za-z0-9_-]{8,80}" disabled={disabled} /></label>
+            {review.particulars?.signingProvider === "docusign"
+              ? <label>DocuSign envelope ID<input name="documentId" required pattern="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}" disabled={disabled} /></label>
+              : <label>PandaDoc document ID<input name="documentId" required pattern="[A-Za-z0-9_-]{8,80}" disabled={disabled} /></label>}
             <label>Fingerprint from the signed agreement<input name="agreementHash" required pattern="[0-9a-f]{64}" disabled={disabled} /></label>
             <label>Completed rental PDF with signature certificate<input name="completedPdf" type="file" accept="application/pdf,.pdf" required disabled={disabled} /></label>
             <label><input name="confirmed" type="checkbox" required disabled={disabled} /> I checked both signers, final terms, any stamp evidence and the exact quote.</label>
