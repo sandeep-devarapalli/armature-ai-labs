@@ -14,10 +14,13 @@ export default defineConfig({
     reuseExistingServer: true
   },
   projects: [
-    { name: "chromium", use: { ...devices["Desktop Chrome"] } },
+    { name: "chromium", grepInvert: /@isolated/, use: { ...devices["Desktop Chrome"] } },
     {
       name: "mobile",
+      grepInvert: /@isolated/,
       use: { ...devices["iPhone 13"], browserName: "chromium" }
-    }
+    },
+    // Service-worker activation can stall while other browser tests compete for CPU; run these alone, after the rest.
+    { name: "isolated", grep: /@isolated/, use: { ...devices["Desktop Chrome"] } }
   ]
 });

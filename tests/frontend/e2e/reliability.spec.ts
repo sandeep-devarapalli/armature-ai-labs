@@ -112,8 +112,7 @@ test("deep navigation survives an evicted service-worker app shell", async ({ pa
 });
 
 
-test("a waiting deployment updates only on request and preserves account storage", async ({ browser }, testInfo) => {
-  test.skip(testInfo.project.name !== "chromium", "One browser exercises two real service-worker versions.");
+test("a waiting deployment updates only on request and preserves account storage", { tag: "@isolated" }, async ({ browser }, testInfo) => {
   let version = "old";
   const root = path.resolve("dist");
   const server = createServer(async (request, response) => {
