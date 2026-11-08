@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 import { backendOrigin, authStorageKey } from "./backend-fixture";
 
 for (const product of ["cabin101", "hiwonder"]) test(`synthetic ${product} guided signing and payment UI`, async ({ page }, info) => {
-  test.skip(process.env.VITE_RENTAL_CHECKOUT_ENABLED !== "true", "Rental interface is gated off in this build");
+  test.skip(process.env.VITE_RENTAL_CHECKOUT_ENABLED !== "true" || process.env.VITE_RENTAL_CHECKOUT_MODE !== "test", "Synthetic payment UI runs only on test-mode rental builds");
   const user = { id: "10000000-0000-4000-8000-000000000052", aud: "authenticated", role: "authenticated", email: "rental-fixture@example.test", app_metadata: {}, user_metadata: {}, created_at: "2026-09-01T00:00:00Z" };
   const quote = { quoteId: "a0000000-0000-4000-8000-000000000052", product, unit: product === "cabin101" ? "month" : "week",
     start: "2027-02-01", end: product === "cabin101" ? "2027-02-28" : "2027-02-07",
