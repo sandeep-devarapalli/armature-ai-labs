@@ -284,3 +284,22 @@ it("does not pass raw reconciliation rows through to the browser", async () => {
   expect(body).not.toHaveProperty("refund_account");
   expect(body).not.toHaveProperty("member_id");
 });
+async function approveWith(documentId: string) {
+  mock.authenticate.mockResolvedValue({ id: reviewerId, email: "reviewer@example.test", claims: { aal: "aal2" } });
+  const metadata = JSON.stringify({ action: "approve_manual", quoteId, memberId, confirmed: true, agreementHash: quote.agreement_hash, documentId });
+  const body = '--testboundary\r\nContent-Disposition: form-data; name="metadata"\r\n\r\n' + metadata
+    + '\r\n--testboundary\r\nContent-Disposition: form-data; name="completedPdf"; filename="signed.pdf"\r\nContent-Type: application/pdf\r\n\r\n%PDF-synthetic signed specimen\r\n--testboundary--\r\n';
+  return handleRentalCheckout(new Request("https://example.test/rental-checkout", { method: "POST",
+    headers: { origin: "https://armatureailabs.com", "content-type": "multipart/form-data; boundary=testboundary" }, body }), "live");
+}
+it("requires a DocuSign envelope id when DocuSign was chosen for the final draft", async () => {
+  quote.particulars = { signingProvider: "docusign" };
+  expect((await approveWith("manualdoc123")).status).toBe(400);
+  expect(mock.upload).not.toHaveBeenCalled();
+  expect((await approveWith("3f2a1b4c-5d6e-4f70-8a9b-0c1d2e3f4a5b")).status).toBe(200);
+});
+it("rejects unknown signing providers in final particulars", async () => {
+  mock.authenticate.mockResolvedValue({ id: reviewerId, email: "reviewer@example.test", claims: { aal: "aal2" } });
+  expect((await post({ action: "prepare", quoteId, memberId, particulars: { signingProvider: "adobe-sign" } })).status).toBe(400);
+  expect(mock.rpc.mock.calls.map(([, args]) => args.p_action)).not.toContain("prepare");
+});
