@@ -141,3 +141,12 @@ verify_jwt = false
 # Razorpay signs the raw body instead of using Supabase JWTs.
 [functions.razorpay-booking-webhook]
 verify_jwt = false
+
+[functions.rental-checkout]
+verify_jwt = false
+
+[functions.test-rental-checkout]
+verify_jwt = false
+
+[functions.test-rental-webhook]
+verify_jwt = false

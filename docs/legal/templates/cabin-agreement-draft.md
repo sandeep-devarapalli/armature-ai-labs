@@ -24,7 +24,7 @@ Prepared from the owner-supplied cabin draft and confirmed operating decisions. 
 | Agreed access hours and permitted users | [ACCESS_HOURS], [SCHEDULE_A_USERS] |
 | Quote validity and availability confirmation | [VALID_UNTIL], [STAFF_CONFIRMATION] |
 
-**Inventory release hold:** Cabin 101 is occupied through 31 January 2027 inclusive. A new quote must exclude those dates and receive a fresh staff availability confirmation; this draft does not promise availability after that date. Cabins 201 and 202 are not offered under this template.
+**Inventory release hold:** Cabin 101 is occupied through 31 January 2027 inclusive. Requests may start from 1 February 2027. A new quote must exclude occupied dates and receive a fresh staff availability confirmation before signing or payment; accepting a request does not promise availability. Cabins 201 and 202 are not offered under this template.
 
 ## 1. Parties, review and final version
 
@@ -38,19 +38,19 @@ This is one whole-cabin team booking. It grants a non-transferable licence to us
 
 Residential use, hazardous storage and unsafe electrical work are prohibited. Changes affecting walls, wiring or fixtures require Armature's approval. Use existing power points and approved power strips or UPS. Armature may enter for emergencies, safety checks and maintenance, with notice where practical.
 
-Each permitted user must satisfy the agreed membership, identity, access and safety requirements. Cabin capacity, furniture and included services must be recorded in Schedule A; neither the floor drawing nor this template establishes them. Equipment, machine reservations and consumables are separate unless expressly included.
+Each permitted user must satisfy the agreed membership, identity, access and safety requirements. Cabin capacity and access hours are confirmed per staff-approved quote, with no public capacity or hours promised. Capacity, furniture and included services must be recorded in Schedule A; neither the floor drawing nor this template establishes them. Equipment, machine reservations and consumables are separate unless expressly included.
 
 ## 3. Term, rent and billing
 
-The minimum commitment is three months measured from the actual start date. The completed term above must satisfy that minimum. Continuation beyond the agreed term requires a renewal subject to availability and agreed pricing.
+New bookings start on the first day of a calendar month and cover whole calendar months. There is no three-month minimum. Continuation beyond the agreed term requires a renewal subject to availability and agreed pricing.
 
 Agreed rent is INR 40,000 per calendar month for Cabin 101. The current advertised standard amount is INR 60,000; this agreement uses the agreed rent, not an additional percentage discount. Confirm the offer remains available before issuing the quote.
 
-If the start is partway through a calendar month, prorate the first rent by the number of covered calendar days divided by the calendar days in that month. Later rent is billed monthly in advance and is due by the 5th. Prorate any agreed final partial calendar month consistently. State the exact first billing period and calculation below; the initial collection does not settle later rent or authorise recurring debits.
+The first full calendar month is paid at booking with the deposit. Later rent is billed monthly in advance and is due by the 5th. Daily proration is not offered. State the exact first calendar month below; the initial collection does not settle later rent or authorise recurring debits.
 
 | Charge | Final quote amount |
 | --- | --- |
-| First rental period and proration calculation | [DATES], [COVERED_DAYS] / [CALENDAR_DAYS] × INR 40,000 |
+| First rental period | [FIRST_DAY] to [LAST_DAY_OF_CALENDAR_MONTH] |
 | First rent due | INR [FIRST_RENT] |
 | Refundable security deposit | INR 80,000 |
 | GST collected | INR 0; Armature is currently unregistered for GST |
@@ -65,20 +65,20 @@ The deposit is interest-free and is not a substitute for the last months' rent. 
 
 The published refund policy returns the deposit within seven working days of move-out, less unpaid dues and damage. Complete inspection within that window and supply the deduction record; do not use handover or inspection scheduling to postpone the published deadline.
 
-## 5. Cancellation, minimum term and termination
+## 5. Cancellation and termination
 
 The existing published cancellation/refund commitments apply:
 
-- Cancellation seven or more days before the start date: full refund of advance and deposit.
-- Cancellation less than seven days before the start date: deposit refunded; first month's rent retained.
-- After move-in: 30 days' written notice after the three-month minimum.
+- Cancellation 30 or more days before the start date: full refund of advance and deposit.
+- Cancellation less than 30 days before the start date: deposit refunded; first month's rent retained.
+- After move-in: either party may terminate at month-end with at least 30 days' written notice. Rent remains due for the whole calendar months through that end date.
 - Deposit refund: within seven working days of move-out, less unpaid dues and damage.
 - Monthly cabin rent already paid: no refund for unused days in that month.
 - Approved refunds go back to the original payment method within five to seven working days of approval; bank credit time may be additional. The specific move-out deposit deadline above remains applicable.
 
 These commitments are recorded in the Cancellation and Refund Policy (`src/pages/LegalPages.tsx`); they do not need blanket reconfirmation. Do not substitute the desk pass's 48-hour rule.
 
-**Resolve before execution:** the policy's “first month's rent” wording must state the exact amount retained when the initial month is prorated. Record [LATE_CANCELLATION_AMOUNT_FOR_PRORATED_FIRST_MONTH]. The three-month minimum also needs explicit [EARLY_EXIT_DURING_MINIMUM_TERM_AND_ANY_REMAINING_RENT_LIABILITY]. Do not infer an extra charge or a full remaining-rent obligation from the minimum alone.
+For cancellation less than 30 days before the start, retain exactly INR 40,000, the first full month's rent, and refund the deposit. Existing signed agreements retain their agreed terms.
 
 Complete the remaining source-draft operating clauses: [NONPAYMENT_AND_BREACH_NOTICE_CURE_AND_TERMINATION_RULE] and [MOVE_OUT_RESTORATION_AND_KEY_RETURN_REQUIREMENTS]. Preserve existing signed agreements and their historical invoices/deposits.
 
@@ -92,9 +92,9 @@ Start Razorpay checkout within 30 minutes of that staff approval. Availability a
 
 ## 7. Notices, records and complaints
 
-Formal notices use the confirmed email addresses above. Day-to-day messaging does not replace a required formal notice. Armature acknowledges complaints within one business day and resolves them by D+4 business days, with D being receipt.
+The operations queue is hello@armatureailabs.com; Sandeep is responsible for review and exceptions. Formal notices use the confirmed email addresses above. Day-to-day messaging does not replace a required formal notice. Armature acknowledges complaints within one business day and resolves them by D+4 business days, with D being receipt.
 
-The executed agreement and its audit record are stored with restricted access under [APPROVED_EXECUTED_AGREEMENT_RETENTION_AND_PRIVACY_NOTICE]. Raw identity uploads are separate records; this agreement does not change their retention policy. Complete this records reference before execution.
+The executed agreement and its audit record are stored with restricted access under [APPROVED_EXECUTED_AGREEMENT_RETENTION_AND_PRIVACY_NOTICE]. Necessary PAN and contracting identity details are retained during the contract. Any post-contract archive must follow a separately confirmed purpose and retention period. Raw identity uploads are separate records; this agreement does not change their retention policy. Complete this records reference before execution.
 
 This document and its completed schedules record the parties' agreement. Subsequent changes require written agreement by both parties. Identify the applicable website terms and cancellation/refund policies above and resolve conflicting language before signature. Confidential non-public business information must be protected. Proposed source-draft governing-law clause for review: Indian law, with disputes before competent courts at Bengaluru, subject to mandatory statutory rights.
 

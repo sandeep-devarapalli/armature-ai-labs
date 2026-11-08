@@ -7,7 +7,7 @@ function LegalPage({ title, updated = true, children }: PropsWithChildren<{ titl
     <header className="page-hero">
       <div className="wrap">
         <h1>{title}</h1>
-        {updated && <p className="hero-copy">Last updated: 7 November 2026</p>}
+        {updated && <p className="hero-copy">Last updated: 8 November 2026</p>}
       </div>
     </header>
     <div className="wrap privacy-content">{children}</div>
@@ -63,10 +63,10 @@ export function TermsPage() {
       <h2>3. Cabins and seats</h2>
       <ul>
         <li>Cabins are rented whole, at the cabin's listed price, whatever the number of people using it.</li>
-        <li>The minimum term for a cabin is 3 months. The security deposit is 2 months' agreed rent at monthly rents up to INR 100,000, and 3 months' agreed rent above that amount.</li>
+        <li>New cabin bookings start on the first day of a calendar month and are charged in whole calendar months. There is no three-month minimum. The security deposit is 2 months' agreed rent at monthly rents up to INR 100,000, and 3 months' agreed rent above that amount.</li>
         <li>Individual desk passes cover the dates stated in your booking, with access from 9 am to 5 pm IST every day, including weekends, subject to disclosed closures. The cabin minimum and security deposit do not apply to desk passes.</li>
-        <li>For new cabin agreements, the first partial calendar month is prorated and later rent is payable monthly in advance by the 5th. The 3-month minimum runs from the actual start date. Existing signed agreements retain their terms.</li>
-        <li>Either side may end a cabin arrangement after the minimum term with 30 days' written notice.</li>
+        <li>The first full calendar month is paid at booking with the security deposit. Later rent is payable monthly in advance by the 5th. Daily proration is not offered. Existing signed agreements retain their terms.</li>
+        <li>Either side may end a new cabin arrangement at month-end with at least 30 days' written notice. Rent remains payable for the full calendar months through that end date.</li>
         <li>Use only the power points provided. Any change to the cabin needs our written approval, and you must restore it when you leave.</li>
         <li>Your signed space agreement, if you have one, takes priority over this section.</li>
       </ul>
@@ -124,13 +124,14 @@ export function TermsPage() {
 export function RefundPolicyPage() {
   return <LegalPage title="Cancellation and Refund Policy">
       <p>This policy covers payments made to {legalEntity.name} for Armature AI Labs. Approved refunds go back to the original payment method within 5 to 7 working days of approval. Your bank may take a few more days to show the credit.</p>
+    <p>The cabin rules below apply to new agreements. Existing signed cabin agreements retain their agreed cancellation and termination terms.</p>
     <div className="legal-table-scroll" role="region" aria-label="Cancellation and refund rules" tabIndex={0}>
       <table>
         <thead><tr><th scope="col">Service</th><th scope="col">Cancel or return</th><th scope="col">Refund</th></tr></thead>
         <tbody>
-          <tr><td>Cabin, before move-in</td><td>7 or more days before the start date</td><td>Full refund of advance and deposit</td></tr>
-          <tr><td>Cabin, before move-in</td><td>Less than 7 days before the start date</td><td>Deposit refunded; first month's rent kept</td></tr>
-          <tr><td>Cabin, after move-in</td><td>30 days' written notice, after the 3-month minimum</td><td>Deposit refunded within 7 working days of move-out, less unpaid dues and damage</td></tr>
+          <tr><td>Cabin, before move-in</td><td>30 or more days before the start date</td><td>Full refund of advance and deposit</td></tr>
+          <tr><td>Cabin, before move-in</td><td>Less than 30 days before the start date</td><td>Deposit refunded; first month's rent kept</td></tr>
+          <tr><td>Cabin, after move-in</td><td>Month-end after at least 30 days' written notice from either party</td><td>Deposit refunded within 7 working days of move-out, less unpaid dues and damage</td></tr>
           <tr><td>Monthly cabin rent already paid</td><td>Any time</td><td>Not refundable for unused days in that month</td></tr>
           <tr><td>Desk pass</td><td>Cancel at least 48 hours before the pass starts</td><td>Full refund</td></tr>
           <tr><td>Desk pass</td><td>Cancel less than 48 hours before the pass starts, or no-show</td><td>No refund</td></tr>

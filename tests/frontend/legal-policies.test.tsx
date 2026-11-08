@@ -19,8 +19,8 @@ const legalName = legalEntity.name;
 const labAddress = "1490, 11th Cross, 20th Main Rd, 1st Sector, HSR Layout, Bengaluru, Karnataka 560102";
 const policies = [
   { route: "/contact", title: "Contact Us", Page: ContactPage, digest: "81125ab8d08f9448db7215015354e4988c8401018b49fe7bdfb53418f1f7a0ce" },
-  { route: "/terms", title: "Terms and Conditions", Page: TermsPage, digest: "cc7c8d062aac61214e96c04664df08424f660c8733458f1e7a5fec3513604754" },
-  { route: "/refund-policy", title: "Cancellation and Refund Policy", Page: RefundPolicyPage, digest: "42fdccf29669a31efdc6093c707421dd543bfd7373da1f56d73561ff72e228a4" },
+  { route: "/terms", title: "Terms and Conditions", Page: TermsPage, digest: "448b7cb48e31ad8eac586608368111d982d0fa7db763e5c5a04b5dcc938941f4" },
+  { route: "/refund-policy", title: "Cancellation and Refund Policy", Page: RefundPolicyPage, digest: "54f88463c8484f135a34638e8d44a1c88bfc0eb13f5b1f9087993d801bc1797a" },
   { route: "/shipping-policy", title: "Shipping and Delivery Policy", Page: ShippingPolicyPage, digest: "67163c16f6dbdaf3e3918a7cdecc7974432ee1b32c752b785df19032628badd3" }
 ];
 const footerLinks = [
@@ -36,7 +36,7 @@ describe("approved legal policies", () => {
     const { container } = render(<MemoryRouter><Page /></MemoryRouter>);
     expect(screen.getByRole("heading", { level: 1, name: title })).toBeInTheDocument();
     const content = container.querySelector(".privacy-content")!.textContent!;
-    // Baseline includes owner-approved booking and complaint rules reconciled on 7 November 2026.
+    // Baseline includes owner-approved booking and complaint rules reconciled on 8 November 2026.
     const approvedBody = content.replace(/\s+/g, "")
       .replaceAll(legalName.replace(/\s+/g, ""), "[LEGAL_ENTITY_NAME]")
       .replaceAll(legalEntity.labAddress.formatted.replace(/\s+/g, ""), "[LAB_ADDRESS]");
@@ -131,4 +131,18 @@ it("publishes the approved rental and complaint commitments without adding GST",
   const shipping = render(<MemoryRouter><ShippingPolicyPage /></MemoryRouter>);
   expect(shipping.container).toHaveTextContent("within 3 calendar days");
   expect(shipping.container).toHaveTextContent("reasonable opening and testing");
+});
+
+it("applies the new whole-month cabin notice rules without rewriting existing agreements", () => {
+  const terms = render(<MemoryRouter><TermsPage /></MemoryRouter>);
+  expect(terms.container).toHaveTextContent("There is no three-month minimum");
+  expect(terms.container).toHaveTextContent("Daily proration is not offered");
+  expect(terms.container).toHaveTextContent("Existing signed agreements retain their terms");
+  expect(terms.container).toHaveTextContent("at least 30 days' written notice");
+  terms.unmount();
+  const refunds = render(<MemoryRouter><RefundPolicyPage /></MemoryRouter>);
+  const rows = within(refunds.container).getAllByRole("row").filter(row => row.textContent?.includes("Cabin"));
+  expect(rows.map(row => row.textContent).join(" ")).toContain("30 or more days before the start date");
+  expect(rows.map(row => row.textContent).join(" ")).not.toContain("3-month minimum");
+  expect(rows.map(row => row.textContent).join(" ")).not.toContain("7 days before");
 });

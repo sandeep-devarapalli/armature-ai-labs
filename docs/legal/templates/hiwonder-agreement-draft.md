@@ -70,13 +70,13 @@ Do not disassemble, drill, reprint parts, rewire or change servo IDs or firmware
 
 The existing published equipment booking policy provides a full refund or one free reschedule when cancellation is at least 48 hours before the slot. Cancellation less than 48 hours before the slot, or no-show, receives no refund. Approved refunds go back to the original payment method within five to seven working days of approval, with possible additional bank credit time. Preserve these commitments from `src/pages/LegalPages.tsx`; do not request blanket reconfirmation.
 
-Separately state how the security deposit is returned when the kit was never handed over: [UNUSED_SECURITY_DEPOSIT_RETURN_CLAUSE]. Do not infer deposit forfeiture from the booking-fee cancellation rule.
+Separately state how the security deposit is returned when the kit was never handed over: [STAFF_REVIEWED_UNUSED_DEPOSIT_DECISION_AND_REASON_CONFIRMED_BEFORE_SIGNING]. The owner requires manual review before a rule is promised. Record the agreed treatment before signing; neither automatic refund nor forfeiture is authorised by this draft. Do not infer deposit forfeiture from the booking-fee cancellation rule.
 
 The following additional clauses come from the equipment draft and remain subject to final approval. Resolve every review marker before signing; do not silently treat a proposed clause as approved.
 
-- Proposed late-return clause: INR 150 per day overdue; seven days overdue without contact may be treated as loss after recorded follow-up. [CONFIRM_LATE_RETURN_AND_LOSS_PROCESS]
-- Proposed damage clause: charge actual repair or replacement-part cost for damage beyond normal wear, and current replacement cost for missing items. For loss or theft, use documented current replacement cost, including applicable shipping/import duty. [CONFIRM_DAMAGE_AND_REPLACEMENT_BASIS]
-- Proposed theft/shortfall clause: report theft to police and provide the complaint within 48 hours; pay documented amounts above the deposit within seven days of the written statement. [CONFIRM_REPORTING_AND_SHORTFALL_CLAUSE]
+- No automatic late fee applies. Any extension requires staff approval and a written agreement on availability, dates and charges before continued use. Staff record and follow up on overdue use; it is not automatically classified as loss.
+- Charge documented repair or replacement costs for damage beyond normal wear. Give the customer an itemised explanation and supporting evidence before making deductions. Separate loss/theft and amounts above the deposit remain subject to the agreed review process.
+- For documented costs above the deposit, Armature sends an itemised claim and evidence for customer review. Resolve the balance manually; this agreement does not authorise an automatic card charge or debit.
 - Proposed termination clause: Armature may recover the kit for breach of use rules, false information or nonpayment, refunding unused rent less documented lawful deductions. [CONFIRM_TERMINATION_AND_REFUND_CLAUSE]
 
 These clauses do not remove rights that applicable law makes mandatory. The confirmed seven-working-day deposit return deadline above remains distinct from the general approved-refund processing period.
@@ -91,9 +91,9 @@ Start Razorpay checkout within 30 minutes of staff approval. Availability, price
 
 ## 8. Notices, records and complaints
 
-Formal notices use the confirmed email addresses above. Day-to-day messaging does not replace required formal notice. Armature acknowledges complaints within one business day and resolves them by D+4 business days, with D being receipt.
+The operations queue is hello@armatureailabs.com; Sandeep is responsible for review and exceptions. Formal notices use the confirmed email addresses above. Day-to-day messaging does not replace required formal notice. Armature acknowledges complaints within one business day and resolves them by D+4 business days, with D being receipt.
 
-The executed PAN-bearing agreement and audit record are stored with restricted access under [APPROVED_EXECUTED_AGREEMENT_RETENTION_AND_PRIVACY_NOTICE]. Raw identity uploads are separate records; this agreement does not change their retention policy. Complete this reference before execution.
+The executed PAN-bearing agreement and audit record are stored with restricted access under [APPROVED_EXECUTED_AGREEMENT_RETENTION_AND_PRIVACY_NOTICE]. Necessary PAN and contracting identity details are retained during the contract. Any post-contract archive must follow a separately confirmed purpose and retention period. Raw identity uploads are separate records; this agreement does not change their retention policy. Complete this reference before execution.
 
 This document and its completed schedules record the parties' agreement. Subsequent changes require written agreement by both parties. Identify the applicable website terms/refund policies above and resolve conflicting language before signature. Confidential non-public business information must be protected. Proposed source-draft governing-law clause for review: Indian law, with disputes before competent courts at Bengaluru, subject to mandatory statutory rights.
 
