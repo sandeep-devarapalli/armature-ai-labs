@@ -75,7 +75,8 @@ Separately state how the security deposit is returned when the kit was never han
 The following additional clauses come from the equipment draft and remain subject to final approval. Resolve every review marker before signing; do not silently treat a proposed clause as approved.
 
 - No automatic late fee applies. Any extension requires staff approval and a written agreement on availability, dates and charges before continued use. Staff record and follow up on overdue use; it is not automatically classified as loss.
-- Charge documented repair or replacement costs for damage beyond normal wear. Give the customer an itemised explanation and supporting evidence before making deductions. Separate loss/theft and amounts above the deposit remain subject to the agreed review process.
+- Charge documented repair or replacement costs for damage beyond normal wear. Give the customer an itemised explanation and supporting evidence before making deductions.
+- For loss or theft, investigate responsibility before making a claim. Liability is not presumed. Provide the evidence and an itemised claim for customer review, then resolve the matter manually without an automatic card charge or debit.
 - For documented costs above the deposit, Armature sends an itemised claim and evidence for customer review. Resolve the balance manually; this agreement does not authorise an automatic card charge or debit.
 - Proposed termination clause: Armature may recover the kit for breach of use rules, false information or nonpayment, refunding unused rent less documented lawful deductions. [CONFIRM_TERMINATION_AND_REFUND_CLAUSE]
 

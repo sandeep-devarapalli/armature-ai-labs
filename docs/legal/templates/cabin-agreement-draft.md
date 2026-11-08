@@ -80,7 +80,9 @@ These commitments are recorded in the Cancellation and Refund Policy (`src/pages
 
 For cancellation less than 30 days before the start, retain exactly INR 40,000, the first full month's rent, and refund the deposit. Existing signed agreements retain their agreed terms.
 
-Complete the remaining source-draft operating clauses: [NONPAYMENT_AND_BREACH_NOTICE_CURE_AND_TERMINATION_RULE] and [MOVE_OUT_RESTORATION_AND_KEY_RETURN_REQUIREMENTS]. Preserve existing signed agreements and their historical invoices/deposits.
+For nonpayment or another fixable breach, Armature gives written notice identifying the issue and allows 14 days to remedy it before terminating for that breach. Immediate suspension is limited to serious safety concerns or unlawful use. The ordinary 30-day, month-end termination rule above remains separate.
+
+At move-out, the Customer removes their belongings, returns all keys and leaves the cabin clean. Normal wear is exempt from deductions. Any unpaid dues or damage deductions must be documented, and the deposit refund remains due within seven working days of move-out. Preserve existing signed agreements and their historical invoices/deposits.
 
 ## 6. Stamping, signing and payment
 
