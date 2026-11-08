@@ -139,8 +139,10 @@ it("shows configured company bank details only after agreement approval", async 
 
 it("shows the verified receipt reference separately from the customer's submitted reference", async () => {
   await openBankQuote({ ...bankQuote, depositStatus: "verified", status: "approved", depositReference: "CUSTOMER-REFERENCE",
-    depositVerifiedReference: "BANK-CREDIT-100", depositVerifiedAt: "2026-11-08T10:00:00Z" });
-  expect(screen.getByText("Deposit receipt · Test specimen")).toBeInTheDocument();
+    depositVerifiedReference: "BANK-CREDIT-100", depositVerifiedAt: "2026-11-08T10:00:00Z",
+    depositReceipts: [{ receiptNumber: "ARM-DEP-202611-000001", direction: "received", amountPaise: 10000, reference: "BANK-CREDIT-100", recordedAt: "2026-11-08T10:00:00Z" }] });
+  expect(screen.getByText("Security deposit receipt · Test specimen, no money moved")).toBeInTheDocument();
+  expect(screen.getByText("ARM-DEP-202611-000001")).toBeInTheDocument();
   expect(screen.getByText("BANK-CREDIT-100")).toBeInTheDocument();
   expect(screen.queryByText("CUSTOMER-REFERENCE")).not.toBeInTheDocument();
   expect(screen.getByText(/8\/11\/2026.*IST/)).toBeInTheDocument();
@@ -172,4 +174,14 @@ it("warns that editing a saved refund account requires a fresh review", async ()
   fireEvent.click(screen.getByRole("button", { name: "Change refund account" }));
   expect(screen.getByText(/Changing the account requires a fresh staff review/)).toBeInTheDocument();
   expect(screen.getByLabelText("Account number", { exact: true })).toHaveValue("");
+});
+
+it("issues a separate refund receipt showing only the last four account digits", async () => {
+  await openBankQuote({ ...bankQuote, depositStatus: "refunded", status: "returned", bankDepositRefundedPaise: 10000,
+    depositReceipts: [{ receiptNumber: "ARM-DEP-202611-000001", direction: "received", amountPaise: 10000, reference: "SIM-IN-0001", recordedAt: "2026-11-08T10:00:00Z" },
+      { receiptNumber: "ARM-DRF-202612-000002", direction: "refunded", amountPaise: 10000, reference: "SIM-OUT-0001", recordedAt: "2026-12-08T10:00:00Z", refundAccountLast4: "4321" }] });
+  expect(screen.getByText("Security deposit refund receipt · Test specimen, no money moved")).toBeInTheDocument();
+  expect(screen.getByText("ARM-DRF-202612-000002")).toBeInTheDocument();
+  expect(screen.getByText("Ending 4321")).toBeInTheDocument();
+  expect(screen.getAllByText(/not rent or income and carries no GST/)).toHaveLength(2);
 });

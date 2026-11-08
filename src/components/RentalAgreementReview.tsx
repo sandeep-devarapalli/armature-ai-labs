@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { MfaPanel } from "../pages/MemberPages";
+import { DepositReceipts } from "./RentalCheckout";
 import { rentalMode, rentalMoney, type RentalQuote, type RentalRefundAccount } from "../lib/rental-checkout";
 
 type Review = RentalQuote & { particulars?: Record<string, unknown>; bookingId?: string | null; parentQuoteId?: string | null;
@@ -163,7 +164,7 @@ export function RentalAgreementReview({ client, actorId, memberId, blocked, onBu
         <h4>Bank deposit verification</h4>
         <p>Deposit status: {review.depositStatus ?? "pending"}. {review.depositReference ? "Customer reference: " + review.depositReference : "No customer reference submitted."}</p>
         {review.depositStatus === "verified" || review.depositStatus === "partially_refunded" || review.depositStatus === "refunded"
-          ? <p>Receipt verified{review.depositVerifiedAt ? " on " + new Date(review.depositVerifiedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) + " IST" : ""}. Bank deposit returned: {rentalMoney(review.bankDepositRefundedPaise ?? 0)}.</p>
+          ? <><p>Receipt verified{review.depositVerifiedAt ? " on " + new Date(review.depositVerifiedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) + " IST" : ""}. Bank deposit returned: {rentalMoney(review.bankDepositRefundedPaise ?? 0)}.</p><DepositReceipts quote={review} /></>
           : <form className="ol-form" onSubmit={event => void submit(event, "verify_bank_deposit")}>
             <p>Check the actual bank credit for {rentalMoney(review.depositPaise)} and this agreement. A customer screenshot alone is not sufficient.</p>
             {review.testFixture && <p>This staging specimen uses simulated bank evidence only. Do not transfer real money.</p>}

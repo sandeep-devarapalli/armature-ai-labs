@@ -8,7 +8,7 @@ const date = /^\d{4}-\d{2}-\d{2}$/;
 type Quote = {
   id: string; parent_quote_id?: string | null; product: string; unit: string; starts_on: string; ends_on: string;
   rent_paise: number; deposit_paise: number; amount_paise: number; agreement_hash: string;
-  refund_account?: object;
+  refund_account?: object; deposit_receipts?: object[];
   deposit_method?: "bank_transfer" | "razorpay"; payment_amount_paise?: number; deposit_status?: string;
   deposit_reference?: string; deposit_verified_reference?: string; deposit_verified_at?: string; payment_window_at?: string; bank_deposit_refunded_paise?: number; test_fixture?: boolean;
   prepared_at?: string | null; particulars?: object; operations?: object; bookingId?: string; rent_refunded?: number; deposit_refunded?: number; refunded_amount?: number; refund_allocation_pending?: boolean; policy_version: string; order_id: string | null; order_claimed_at: string | null;
@@ -35,7 +35,7 @@ class Rejected extends Error { constructor(readonly status: number, readonly cod
 // bankPrefix is set only for the member; staff responses never carry company bank details.
 function present(q: Quote, bankPrefix: string | null = null) {
   return { quoteId: q.id, parentQuoteId: q.parent_quote_id, product: q.product, unit: q.unit, start: q.starts_on, end: q.ends_on,
-    refundAccount: q.refund_account,
+    refundAccount: q.refund_account, depositReceipts: q.deposit_receipts ?? [],
     depositMethod: q.deposit_method ?? "razorpay", depositStatus: q.deposit_status,
     depositReference: q.deposit_reference, depositVerifiedReference: q.deposit_verified_reference, depositVerifiedAt: q.deposit_verified_at, paymentWindowAt: q.payment_window_at ?? q.approved_at,
     bankDepositRefundedPaise: q.bank_deposit_refunded_paise ?? 0, paymentAmountPaise: q.payment_amount_paise ?? q.amount_paise, testFixture: q.test_fixture === true,
