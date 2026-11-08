@@ -71,3 +71,39 @@ Before release, reconcile the account-specific Razorpay checklist held in the wo
 1. Complete the approved manual stamping route: confirm cabin duty treatment/amount, procurement details and final-document binding. Recommendation: prepare/review in PandaDoc, then procure stamp paper after customer approval and complete signing; keep cabin payment unavailable until this step is complete.
 2. Confirm releasable inventory and closures under the approved daily 09:00–17:00 IST desk schedule, including weekends. Recommendation: retain one desk and one reconciled kit first in the configuration, adding only physically checked resources; this does not change the owner's combined-launch objective.
 3. Set offer expiry and an operational backup for the confirmed hello@armatureailabs.com queue/Sandeep review owner; verify restricted agreement backup/access arrangements. Ask each decision separately with concise recommended choices, rather than requesting a bulk register.
+
+## Signing provider
+
+Staff choose PandaDoc or DocuSign when saving the final particulars (migration `202611080007`). The choice is part of the hashed particulars, so changing provider after signing needs a fresh final draft. Both follow the same route:
+1. The customer reviews the exact draft and requests corrections.
+2. The final draft is approved and manually stamped where required.
+3. The customer signs, then Armature countersigns.
+4. An independent MFA Admin uploads the completed PDF and checks it, with the provider's audit/completion certificate, against the exact quote fingerprint.
+
+DocuSign approval requires the envelope ID (a UUID). There is no DocuSign API automation: account and API access have not been verified, and the completed-document upload remains the integration path. Provider choice never bypasses bank-deposit verification, rent capture or release checks. The `*_PANDADOC_SIGNER` setting is the Armature countersigner email for either provider.
+
+## Deposit receipts
+
+Each verified bank deposit and each recorded deposit refund gets an immutable receipt, numbered by the database: `ARM-DEP-YYYYMM-NNNNNN` for deposits received and `ARM-DRF-YYYYMM-NNNNNN` for deposits returned (migration `202611080006`). The customer and staff see these receipts with the bank reference and, for refunds, only the last four digits of the refund account. They state that the deposit is not rent or income and carries no GST. They are never sent to Refrens. Staging fixtures say "Test specimen, no money moved".
+
+## Refrens invoicing (disabled)
+
+Rent, desk-pass and licence-fee invoices go through a durable outbox (`private.billing_operations`, migration `202611080005`), not the browser. A database trigger enqueues one `invoice_create` and one `payment_apply` per payment, the first time Razorpay capture is recorded. Replayed callbacks and webhooks therefore cannot invoice twice. Rental invoices carry `rent_paise` only. Refundable bank security deposits are never invoiced and never recorded as revenue; they keep their own deposit ledger and receipts. Rent refunds create a `refund_review` item for staff, because Refrens documents no refund or credit-note API.
+
+The `billing-dispatch` job sends only when both `REFRENS_INVOICING_ENABLED=true` and `private.billing_settings.invoicing_enabled` are on. Otherwise it returns a dry-run validation report with no payload values. It never sends the Refrens `email` object, so customers are not emailed. Staging fixtures are never sent by the live worker.
+
+Duplicate protection:
+- The ledger has unique keys per source and event, plus a unique invoice number `ARM-{D|R}-YYYYMM-<id>`.
+- Payloads are immutable once enqueued. Claims are exclusive (`SKIP LOCKED`), and settled operations cannot change.
+- Refrens idempotency is bound to one token for 24 hours, so timeouts, 5xx, 429 and in-progress replies are marked `ambiguous`.
+- The next attempt pages invoices newest-first for the invoice number before resending. If the scan cannot prove the invoice is absent, the operation goes to `needs_staff`.
+- Payments are checked by `refId` (the Razorpay payment id) before every apply.
+
+GST: Armature is not GST-registered. Invoices use `invoiceType: "BOS"` (bill of supply, no tax) with no GSTIN or tax fields. `private.billing_settings` can hold a future GSTIN, state code, effective date, SAC, rate and accountant-approved treatment. A database check refuses `gst_enabled` until all of these are recorded and the state code matches the GSTIN. After that, invoices dated on or after the effective date use `invoiceType: "INVOICE"` with `billedBy.gstin`/`gstState` and item `gstRate`. A missing customer place of supply goes to staff. Refrens documents CGST/SGST/IGST only as response fields, and documents no place-of-supply or HSN/SAC input. Confirm these with Refrens and the accountant on a synthetic specimen before enabling GST.
+
+Before enabling invoicing:
+- Confirm the sustained API plan, email verification and the business `urlKey`.
+- Create and review one synthetic BOS specimen and its PDF/view link without email delivery.
+- Confirm whether `paymentMethod` is required for payment updates.
+- Agree with staff how `needs_staff` and `refund_review` items are resolved.
+

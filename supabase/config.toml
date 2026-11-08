@@ -76,6 +76,9 @@ verify_jwt = false
 [functions.retry-reminders]
 verify_jwt = false
 
+[functions.billing-dispatch]
+verify_jwt = false
+
 [functions.booking-ics]
 verify_jwt = false
 

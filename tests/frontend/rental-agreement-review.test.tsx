@@ -49,7 +49,7 @@ it("prepares explicit particulars before showing signed PDF approval", async () 
   invoke.mockResolvedValueOnce({ data: { ...base, preparedAt: "2026-11-08T10:00:00Z", agreementHash: "b".repeat(64) } });
   fireEvent.click(screen.getByRole("button", { name: "Save final particulars" }));
   await screen.findByRole("button", { name: "Approve rental agreement" });
-  expect(invoke.mock.calls.at(-1)?.[1].body.particulars).toEqual({ availabilityConfirmed: true, termsVersion: "rental-v1", capacity: 4,
+  expect(invoke.mock.calls.at(-1)?.[1].body.particulars).toEqual({ availabilityConfirmed: true, termsVersion: "rental-v1", signingProvider: "pandadoc", capacity: 4,
     accessStart: "09:00", accessEnd: "17:00", includedFacilities: "Four chairs and one key", permittedUsers: ["Sample renter"], stampRequired: true,
     stampDecisionReason: "Reviewed manual stamping completed", recordsPolicyReference: "Reviewed restricted records policy reference", stampReference: "stamp-test-1" });
 });
@@ -170,4 +170,12 @@ it("reveals a private refund account only on explicit MFA action and verifies it
   expect(invoke.mock.calls[2][1].body).toEqual({ action: "verify_refund_account", memberId: "buyer", quoteId, version: 2, confirmed: true, evidence: "Verified synthetic account holder and bank details" });
   await waitFor(() => expect(screen.queryByText("000000000001")).not.toBeInTheDocument());
   expect(screen.getByRole("button", { name: "Record completed bank deposit refund" })).toBeEnabled();
+});
+it("asks for a DocuSign envelope id when DocuSign was chosen", async () => {
+  invoke.mockResolvedValueOnce({ data: { ...base, preparedAt: "2026-11-08T10:00:00Z", particulars: { signingProvider: "docusign" } } });
+  setup(); fireEvent.click(screen.getByRole("button", { name: "Find rental agreement" }));
+  await screen.findByRole("button", { name: "Approve rental agreement" });
+  expect(screen.getByLabelText("DocuSign envelope ID")).toBeInTheDocument();
+  expect(screen.queryByLabelText("PandaDoc document ID")).not.toBeInTheDocument();
+  expect(screen.getByText(/final DocuSign document/)).toBeInTheDocument();
 });

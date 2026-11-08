@@ -8,7 +8,7 @@ const date = /^\d{4}-\d{2}-\d{2}$/;
 type Quote = {
   id: string; parent_quote_id?: string | null; product: string; unit: string; starts_on: string; ends_on: string;
   rent_paise: number; deposit_paise: number; amount_paise: number; agreement_hash: string;
-  refund_account?: object;
+  refund_account?: object; deposit_receipts?: object[];
   deposit_method?: "bank_transfer" | "razorpay"; payment_amount_paise?: number; deposit_status?: string;
   deposit_reference?: string; deposit_verified_reference?: string; deposit_verified_at?: string; payment_window_at?: string; bank_deposit_refunded_paise?: number; test_fixture?: boolean;
   prepared_at?: string | null; particulars?: object; operations?: object; bookingId?: string; rent_refunded?: number; deposit_refunded?: number; refunded_amount?: number; refund_allocation_pending?: boolean; policy_version: string; order_id: string | null; order_claimed_at: string | null;
@@ -27,6 +27,11 @@ function bankInstructions(prefix: string): BankInstructions | null {
       ...(value.accountType ? { accountType: value.accountType } : {}) };
   } catch { return null; }
 }
+// DocuSign envelope IDs are UUIDs; PandaDoc document IDs keep the original pattern.
+function documentIdPattern(q: Quote) {
+  return (q.particulars as { signingProvider?: string } | undefined)?.signingProvider === "docusign"
+    ? /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/ : /^[A-Za-z0-9_-]{8,80}$/;
+}
 // Reconciliation returns the raw RPC row; keep only presented fields.
 function reconciled(q: Quote, result: unknown): Quote {
   return result && typeof result === "object" && "id" in result ? result as Quote : q;
@@ -35,7 +40,7 @@ class Rejected extends Error { constructor(readonly status: number, readonly cod
 // bankPrefix is set only for the member; staff responses never carry company bank details.
 function present(q: Quote, bankPrefix: string | null = null) {
   return { quoteId: q.id, parentQuoteId: q.parent_quote_id, product: q.product, unit: q.unit, start: q.starts_on, end: q.ends_on,
-    refundAccount: q.refund_account,
+    refundAccount: q.refund_account, depositReceipts: q.deposit_receipts ?? [],
     depositMethod: q.deposit_method ?? "razorpay", depositStatus: q.deposit_status,
     depositReference: q.deposit_reference, depositVerifiedReference: q.deposit_verified_reference, depositVerifiedAt: q.deposit_verified_at, paymentWindowAt: q.payment_window_at ?? q.approved_at,
     bankDepositRefundedPaise: q.bank_deposit_refunded_paise ?? 0, paymentAmountPaise: q.payment_amount_paise ?? q.amount_paise, testFixture: q.test_fixture === true,
@@ -131,13 +136,14 @@ export async function handleRentalCheckout(request: Request, mode: "test" | "liv
     if (["prepare", "approve_manual", "order"].includes(action) && q.policy_version !== policyVersion) throw new Rejected(409, "policy_version_changed");
     if (action === "manual_review") return reply({ mode, ...show(q), particulars: q.particulars, operations: q.operations, customerEmail: customer, staffEmail: signer });
     if (action === "prepare") {
-      if (!input.particulars || typeof input.particulars !== "object" || Array.isArray(input.particulars)) throw new Rejected(400, "invalid_particulars");
+      if (!input.particulars || typeof input.particulars !== "object" || Array.isArray(input.particulars)
+        || ![undefined, "pandadoc", "docusign"].includes(input.particulars.signingProvider)) throw new Rejected(400, "invalid_particulars");
       const prepared = await operation<Quote>("prepare", { quoteId: q.id, reviewerId: user.id, reviewerAal: "aal2", particulars: input.particulars });
       return reply({ mode, ...show(prepared), particulars: prepared.particulars, operations: prepared.operations, customerEmail: customer, staffEmail: signer });
     }
     if (action === "approve_manual") {
       if (input.confirmed !== true || input.agreementHash !== q.agreement_hash
-        || !/^[A-Za-z0-9_-]{8,80}$/.test(input.documentId ?? "") || !completedPdf
+        || !documentIdPattern(q).test(input.documentId ?? "") || !completedPdf
         || completedPdf.type !== "application/pdf" || completedPdf.size < 5 || completedPdf.size > 20 * 1024 * 1024
         || await completedPdf.slice(0, 5).text() !== "%PDF-") throw new Rejected(400, "invalid_agreement_evidence");
       const bytes = await completedPdf.arrayBuffer();

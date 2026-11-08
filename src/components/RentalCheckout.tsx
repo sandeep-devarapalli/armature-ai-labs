@@ -5,6 +5,25 @@ import { loadRazorpayCheckout, type CheckoutInstance } from "../lib/razorpay-che
 import { rentalMode, rentalMoney, rentalRequest as invokeRental, type RentalQuote } from "../lib/rental-checkout";
 import { PageHeader, Section } from "./Primitives";
 
+const ist = (value: string) => new Date(value).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) + " IST";
+
+// Refundable deposits are liabilities: their receipts stay separate from rent invoices and carry no GST.
+export function DepositReceipts({ quote }: { quote: RentalQuote }) {
+  if (!quote.depositReceipts?.length) return null;
+  return <div data-private="true">
+    {quote.depositReceipts.map(receipt => <section key={receipt.receiptNumber} aria-label={"Deposit receipt " + receipt.receiptNumber}>
+      <h5>{receipt.direction === "received" ? "Security deposit receipt" : "Security deposit refund receipt"}{quote.testFixture ? " · Test specimen, no money moved" : ""}</h5>
+      <p>Refundable security deposit, recorded separately from rent. It is not rent or income and carries no GST.</p>
+      <dl style={{ overflowWrap: "anywhere" }}><dt>Receipt number</dt><dd>{receipt.receiptNumber}</dd>
+        <dt>{receipt.direction === "received" ? "Deposit received" : "Deposit returned"}</dt><dd>{rentalMoney(receipt.amountPaise)}</dd>
+        <dt>Bank transfer reference</dt><dd>{receipt.reference}</dd>
+        {receipt.refundAccountLast4 && <><dt>Returned to account</dt><dd>Ending {receipt.refundAccountLast4}</dd></>}
+        <dt>Agreement reference</dt><dd>{quote.quoteId}</dd><dt>Recorded</dt><dd>{ist(receipt.recordedAt)}</dd></dl>
+    </section>)}
+    <button type="button" className="button secondary" onClick={() => window.print()}>Print deposit receipts</button>
+  </div>;
+}
+
 export default function RentalCheckoutPage() {
   const { account, signedIn } = useAccount();
   const verified = accountMembershipLevelsEnabled(account) && ["verified", "premium"].includes(account?.membership_level ?? "");
@@ -119,12 +138,8 @@ function RentalCheckout({ canBook, memberId }: { canBook: boolean; memberId: str
           <button className="button secondary" disabled={busy || checkoutOpen}>Save refund account securely</button>
         </form>}
         <h4>Bank-transfer deposit</h4>
-        {quote.depositStatus === "verified" ? <><h5>Deposit receipt{quote.testFixture ? " · Test specimen" : ""}</h5>
-            <p>Staff verified the bank deposit. It is recorded separately from rent.</p>
-            <dl style={{ overflowWrap: "anywhere" }}><dt>Deposit received</dt><dd>{rentalMoney(quote.depositPaise)}</dd>
-              <dt>Agreement reference</dt><dd>{quote.quoteId}</dd><dt>Verified transfer reference</dt><dd>{quote.depositVerifiedReference ?? "Contact Armature for the verified bank reference"}</dd>
-              <dt>Receipt verified</dt><dd>{quote.depositVerifiedAt ? new Date(quote.depositVerifiedAt).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) + " IST" : "Contact Armature for the verification record"}</dd></dl></>
-          : quote.depositStatus === "refunded" || quote.depositStatus === "partially_refunded" ? <p>Bank deposit returned: {rentalMoney(quote.bankDepositRefundedPaise ?? 0)}. Contact Armature for the reviewed settlement.</p>
+        {quote.depositStatus === "verified" ? <><p>Staff verified the bank deposit. It is recorded separately from rent.</p><DepositReceipts quote={quote} /></>
+          : quote.depositStatus === "refunded" || quote.depositStatus === "partially_refunded" ? <><p>Bank deposit returned: {rentalMoney(quote.bankDepositRefundedPaise ?? 0)}.</p><DepositReceipts quote={quote} /></>
           : <><p>The deposit is a refundable liability, collected and returned by bank transfer. A transfer reference or screenshot alone does not confirm receipt.</p>
             {quote.agreementSigned ? <>
               {quote.testFixture ? <p>Staging only: enter a simulated bank reference. Do not transfer money to any bank account.</p>
