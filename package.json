@@ -41,7 +41,7 @@
   "dependencies": {
     "@google/model-viewer": "^4.3.1",
     "@supabase/supabase-js": "^2.57.4",
-    "@zxing/browser": "^0.1.5",
+    "@zxing/browser": "^0.2.1",
     "date-fns": "^4.1.0",
     "dompurify": "^3.4.17",
     "katex": "^0.19.0",
