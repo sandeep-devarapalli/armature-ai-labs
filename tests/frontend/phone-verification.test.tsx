@@ -25,6 +25,14 @@ it("starts SMS first, requires code and refreshes account after confirmation", a
   expect(screen.queryByLabelText("Verification code")).not.toBeInTheDocument();
   window.removeEventListener("armature:account-changed", update);
 });
+it("labels a shared approval as staff-confirmed and does not send a code", async () => {
+  const { invoke } = setup([{ ...empty, verified: true, method: "staff_shared" }]);
+  expect(await screen.findByText("Shared mobile confirmed by staff")).toBeInTheDocument();
+  expect(screen.queryByText(/Mobile verified/)).not.toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: "Send SMS code" })).not.toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Change mobile number" })).toBeEnabled();
+  expect(invoke).toHaveBeenCalledExactlyOnceWith("member-phone-verification", { body: { action: "status" } });
+});
 it("offers WhatsApp only when the server enables it, without automatically sending", async () => {
   const { invoke } = setup([{ ...empty, available_channels: ["sms", "whatsapp"] }, { ...pending, available_channels: ["sms", "whatsapp"], channel: "whatsapp" }]);
   fireEvent.change(await screen.findByLabelText("Mobile number"), { target: { value: "9999991234" } });
