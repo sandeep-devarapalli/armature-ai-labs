@@ -10,7 +10,7 @@ vi.mock("../../src/lib/rental-checkout", () => ({ rentalMode: "test", rentalRequ
   rentalMoney: (value: number) => "₹" + value / 100 }));
 const quote = { quoteId: "a0000000-0000-4000-8000-000000000001", product: "cabin101", unit: "month",
   start: "2027-02-01", end: "2027-02-28", rentPaise: 4000000, depositPaise: 8000000, amountPaise: 12000000,
-  agreementHash: "a".repeat(64), policyVersion: "rental-v1", status: "draft", agreementSigned: false, hasOrder: false };
+  agreementHash: "a".repeat(64), policyVersion: "rental-v1", status: "awaiting_staff", agreementSigned: false, hasOrder: false };
 function show() { return render(<StrictMode><MemoryRouter><RentalCheckoutPage /></MemoryRouter></StrictMode>); }
 beforeEach(() => { vi.clearAllMocks(); mock.verified = true; mock.signedIn = true;
   mock.request.mockImplementation(async body => body.action === "availability" ? { available: true } : quote); });
@@ -58,4 +58,18 @@ it("drops an in-flight response after the member screen unmounts", async () => {
   view.unmount(); resolve({ available: true });
   await Promise.resolve();
   expect(mock.request).toHaveBeenCalledTimes(1);
+});
+
+it.each([
+  ["awaiting_staff", "Awaiting draft preparation"],
+  ["awaiting_signatures", "Ready for customer and Armature signatures"],
+  ["awaiting_payment", "Payment pending; check payment status"],
+])("shows the server's %s stage without inventing per-signer progress", async (status, label) => {
+  mock.request.mockImplementation(async body => body.action === "availability" ? { available: true } : { ...quote, status });
+  show();
+  fireEvent.change(screen.getByLabelText("Start date"), { target: { value: "2027-02-01" } });
+  fireEvent.change(screen.getByLabelText("Last day of the final month"), { target: { value: "2027-02-28" } });
+  fireEvent.click(screen.getByRole("button", { name: "Request agreement" }));
+  expect(await screen.findByText(label)).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Check agreement or payment status" })).toBeEnabled();
 });
