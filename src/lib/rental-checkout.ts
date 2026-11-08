@@ -4,12 +4,15 @@ export const rentalMode = import.meta.env.VITE_RENTAL_CHECKOUT_MODE === "test" ?
 // Summary responses carry only bankName/last4; full details come only from the staff get_refund_account action.
 export type RentalRefundAccount = { version: number; bankName: string; last4: string; accountName?: string; ifsc?: string;
   verifiedAt: string | null; ownershipConfirmed: boolean };
+export type RentalDepositReceipt = { receiptNumber: string; direction: "received" | "refunded"; amountPaise: number;
+  reference: string; recordedAt: string; refundAccountLast4?: string | null };
 export type RentalQuote = {
   quoteId: string; parentQuoteId?: string | null; product: "cabin101" | "hiwonder"; unit: string; start: string; end: string;
   rentPaise: number; depositPaise: number; amountPaise: number; agreementHash: string; policyVersion: string;
   approvedAt: string | null; preparedAt?: string | null; agreementSigned: boolean; hasOrder: boolean; orderPending: boolean;
   status: string; reviewReason?: string; customerEmail?: string; staffEmail?: string;
   refundAccount?: RentalRefundAccount | null;
+  depositReceipts?: RentalDepositReceipt[];
   depositMethod?: "bank_transfer" | "razorpay";
   depositStatus?: "not_required" | "pending" | "submitted" | "verified" | "partially_refunded" | "refunded";
   depositReference?: string | null; depositVerifiedReference?: string | null; depositVerifiedAt?: string | null; bankDepositRefundedPaise?: number;

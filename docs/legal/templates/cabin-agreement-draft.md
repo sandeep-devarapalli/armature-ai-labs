@@ -86,7 +86,7 @@ At move-out, the Customer removes their belongings, returns all keys and leaves 
 
 ## 6. Stamping, signing and payment
 
-The owner-selected route is manual stamping where required, followed by PandaDoc signing. Armature pays the approved cabin stamp duty. After the Customer approves the complete final draft, confirm the instrument treatment, duty amount, procurement method and binding of the stamp paper to that version. Record [STAMP_REFERENCE], [DUTY_AMOUNT], [PROCUREMENT_DATE] and [FINAL_DOCUMENT_BINDING]. Obtain the appropriate legal review of that treatment. Leegality availability is not a dependency if the approved manual route is completed; PandaDoc signing alone does not waive this step.
+The owner-selected route is manual stamping where required, followed by PandaDoc or DocuSign signing (same review, stamping, signing and MFA verification steps for either). Armature pays the approved cabin stamp duty. After the Customer approves the complete final draft, confirm the instrument treatment, duty amount, procurement method and binding of the stamp paper to that version. Record [STAMP_REFERENCE], [DUTY_AMOUNT], [PROCUREMENT_DATE] and [FINAL_DOCUMENT_BINDING]. Obtain the appropriate legal review of that treatment. Leegality availability is not a dependency if the approved manual route is completed; PandaDoc signing alone does not waive this step.
 
 The Customer signs first and Armature countersigns in separate provider sessions. Each signer must finish the signing process. A separate Admin/Super admin account using MFA inspects the completed document and signature certificate, checks the exact quote binding and records approval.
 

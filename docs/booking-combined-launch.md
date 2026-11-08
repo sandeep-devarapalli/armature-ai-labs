@@ -72,6 +72,20 @@ Before release, reconcile the account-specific Razorpay checklist held in the wo
 2. Confirm releasable inventory and closures under the approved daily 09:00–17:00 IST desk schedule, including weekends. Recommendation: retain one desk and one reconciled kit first in the configuration, adding only physically checked resources; this does not change the owner's combined-launch objective.
 3. Set offer expiry and an operational backup for the confirmed hello@armatureailabs.com queue/Sandeep review owner; verify restricted agreement backup/access arrangements. Ask each decision separately with concise recommended choices, rather than requesting a bulk register.
 
+## Signing provider
+
+Staff choose PandaDoc or DocuSign when saving the final particulars (migration `202611080007`). The choice is part of the hashed particulars, so changing provider after signing needs a fresh final draft. Both follow the same route:
+1. The customer reviews the exact draft and requests corrections.
+2. The final draft is approved and manually stamped where required.
+3. The customer signs, then Armature countersigns.
+4. An independent MFA Admin uploads the completed PDF and checks it, with the provider's audit/completion certificate, against the exact quote fingerprint.
+
+DocuSign approval requires the envelope ID (a UUID). There is no DocuSign API automation: account and API access have not been verified, and the completed-document upload remains the integration path. Provider choice never bypasses bank-deposit verification, rent capture or release checks. The `*_PANDADOC_SIGNER` setting is the Armature countersigner email for either provider.
+
+## Deposit receipts
+
+Each verified bank deposit and each recorded deposit refund gets an immutable receipt, numbered by the database: `ARM-DEP-YYYYMM-NNNNNN` for deposits received and `ARM-DRF-YYYYMM-NNNNNN` for deposits returned (migration `202611080006`). The customer and staff see these receipts with the bank reference and, for refunds, only the last four digits of the refund account. They state that the deposit is not rent or income and carries no GST. They are never sent to Refrens. Staging fixtures say "Test specimen, no money moved".
+
 ## Refrens invoicing (disabled)
 
 Rent, desk-pass and licence-fee invoices go through a durable outbox (`private.billing_operations`, migration `202611080005`), not the browser. A database trigger enqueues one `invoice_create` and one `payment_apply` per payment, the first time Razorpay capture is recorded. Replayed callbacks and webhooks therefore cannot invoice twice. Rental invoices carry `rent_paise` only. Refundable bank security deposits are never invoiced and never recorded as revenue; they keep their own deposit ledger and receipts. Rent refunds create a `refund_review` item for staff, because Refrens documents no refund or credit-note API.
