@@ -7,8 +7,10 @@ export function phoneChannels(enabled: boolean, whatsappEnabled = false): PhoneC
   return enabled ? whatsappEnabled ? ["sms", "whatsapp"] : ["sms"] : [];
 }
 export function phoneStatus(data: Record<string, unknown>, enabled: boolean, whatsappEnabled = false) {
-  const phone = typeof data.phone === "string" ? data.phone : null;
+  const shared = data.verified === true && data.method === "staff_shared";
+  const phone = !shared && typeof data.phone === "string" ? data.phone : null;
   return { enabled, available_channels: phoneChannels(enabled, whatsappEnabled), verified: data.verified === true, masked_phone: phone ? `•••• ${phone.slice(-4)}` : null,
+    ...(shared ? { method: "staff_shared" } : {}),
     channel: data.channel ?? null, expires_at: data.expires_at ?? null, resend_available_at: data.resend_available_at ?? null };
 }
 export async function verifyPhoneHook(raw: string, headers: Headers, secret: string, now = Date.now()) {

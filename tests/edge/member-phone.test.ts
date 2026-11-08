@@ -28,6 +28,12 @@ it("validates E164 and exposes only a masked status",()=>{
  for(const invalid of [null,"9000000001","+91abc","+123"]) expect(()=>phoneNumber(invalid)).toThrow();
  expect(phoneStatus({phone,verified:true},false)).toEqual({enabled:false,available_channels:[],verified:true,masked_phone:"•••• 0001",channel:null,expires_at:null,resend_available_at:null});
 });
+it("returns the staff-approved method without the source phone or account", async () => {
+ mocks.rpc.mockResolvedValueOnce({data:{verified:true,method:"staff_shared",phone,source_email:"source@example.test"},error:null});
+ expect(await (await handlePhoneVerification(request({action:"status"}))).json()).toEqual({
+   enabled:false,available_channels:[],verified:true,method:"staff_shared",masked_phone:null,channel:null,expires_at:null,resend_available_at:null,
+ });
+});
 it("authenticates raw hook bytes, timestamp, signature and secret",async()=>{
  const raw='{"synthetic":true}', headers=await signed(raw);
  await expect(verifyPhoneHook(raw,headers,`v1,whsec_${secret}`)).resolves.toBe("synthetic-hook");

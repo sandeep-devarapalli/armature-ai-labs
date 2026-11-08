@@ -122,3 +122,74 @@ it("keeps current tier independent of verification upgrades and retained origina
  expect(memberTierLabel({ membership_level: null, status: "approved", verification: { email: true, mobile: true, identity: true } })).toBe("Access restricted");
  expect(memberTierLabel({ membership_level: null, status: "revoked" })).toBe("Access revoked");
 });
+
+function sharedMobileReview(role: string, currentLevel = "aal2") {
+  vi.stubEnv("VITE_MEMBERSHIP_LEVELS_ENABLED", "true");
+  const target = { ...member, status: "approved", application_status: "approved", membership_level: "basic",
+    verification: { email: true, identity: true, mobile: false } };
+  const headers = vi.fn();
+  const rpc = vi.fn((name: string, _args?: unknown) => {
+    const response = Promise.resolve({ error: null, data: name === "get_basic_account_summary"
+      ? { role, membership_levels_enabled: true } : name === "approve_shared_member_phone"
+      ? { approved: true, method: "staff_shared" } : name === "list_basic_members"
+      ? { items: [target], total: 1, counts: {} } : { items: [], total: 0 } });
+    return Object.assign(response, { setHeader: (key: string, value: string) => {
+      headers(name, key, value);
+      return response;
+    } });
+  });
+  const getSession = vi.fn(async () => ({
+    data: { session: { user: { id: "actor" }, access_token: "synthetic-admin-token" } }, error: null,
+  }));
+  const client = { rpc, auth: { getSession, mfa: { getAuthenticatorAssuranceLevel: async () => ({ data: { currentLevel }, error: null }) },
+    onAuthStateChange: () => ({ data: { subscription: { unsubscribe() {} } } }) } } as unknown as SupabaseClient;
+  const view = render(<MemoryRouter><MemberManagementPage client={client} /></MemoryRouter>);
+  return { ...view, rpc, getSession, headers };
+}
+
+async function openSharedMobileForm() {
+  fireEvent.click(await screen.findByRole("button", { name: /View Synthetic/ }));
+  fireEvent.click(screen.getByRole("button", { name: "Approve shared mobile" }));
+  fireEvent.change(screen.getByLabelText("Source account email"), { target: { value: "Source@Example.test" } });
+  fireEvent.change(screen.getByLabelText("Approval reason"), { target: { value: "Same owner confirmed on both accounts" } });
+}
+
+it("binds approval to the selected member after the reviewer attests to consent", async () => {
+  const { rpc, headers, unmount } = sharedMobileReview("admin");
+  try {
+    await openSharedMobileForm();
+    const submit = screen.getByRole("button", { name: "Confirm shared mobile approval" });
+    fireEvent.submit(submit.closest("form")!);
+    expect(rpc).not.toHaveBeenCalledWith("approve_shared_member_phone", expect.anything());
+    fireEvent.click(screen.getByRole("checkbox", { name: /both accounts belong to the same person/ }));
+    fireEvent.click(submit);
+    expect(await screen.findByText("Shared mobile confirmed by staff.")).toBeInTheDocument();
+    expect(rpc).toHaveBeenCalledWith("approve_shared_member_phone", {
+      p_target_user_id: "other", p_source_email: "source@example.test",
+      p_reason: "Same owner confirmed on both accounts", p_confirmed_same_person: true,
+    });
+    expect(headers).toHaveBeenCalledWith("approve_shared_member_phone", "Authorization", "Bearer synthetic-admin-token");
+  } finally { unmount(); vi.unstubAllEnvs(); }
+});
+
+it("does not present shared-mobile approval to identity review Staff", async () => {
+  const { unmount } = sharedMobileReview("membership_reviewer");
+  try {
+    fireEvent.click(await screen.findByRole("button", { name: /View Synthetic/ }));
+    expect(screen.queryByRole("button", { name: "Approve shared mobile" })).not.toBeInTheDocument();
+  } finally { unmount(); vi.unstubAllEnvs(); }
+});
+
+it.each(["session changed", "MFA missing"])("does not submit shared-mobile approval when %s", async issue => {
+  const { rpc, getSession, unmount } = sharedMobileReview("admin", issue === "MFA missing" ? "aal1" : "aal2");
+  try {
+    await openSharedMobileForm();
+    if (issue === "session changed") getSession.mockResolvedValueOnce({
+      data: { session: { user: { id: "different" }, access_token: "other-synthetic-token" } }, error: null,
+    });
+    fireEvent.click(screen.getByRole("checkbox", { name: /both accounts belong to the same person/ }));
+    fireEvent.click(screen.getByRole("button", { name: "Confirm shared mobile approval" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("Verify the current Admin session with your authenticator");
+    expect(rpc).not.toHaveBeenCalledWith("approve_shared_member_phone", expect.anything());
+  } finally { unmount(); vi.unstubAllEnvs(); }
+});

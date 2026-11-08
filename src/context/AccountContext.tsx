@@ -3,9 +3,12 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { supabase } from "../lib/supabase";
 
 export type MembershipLevel = "basic" | "verified" | "premium";
+export type MobileVerificationMethod = "otp" | "staff_shared";
+export const sharedMobileConfirmedLabel = "Shared mobile confirmed by staff";
 export interface AccountSummary {
   membership_level?: MembershipLevel | null; membership_levels_enabled?: boolean;
   verification?: { email: boolean; mobile: boolean; identity: boolean }; next_status_change_at?: string | null;
+  mobile_verification_method?: MobileVerificationMethod | null;
   user_id: string; name: string; email: string; status: string;
   application_status: string | null; role: "member" | "membership_reviewer" | "admin" | "super_admin";
   revision: number | null; owner_approval_available: boolean;

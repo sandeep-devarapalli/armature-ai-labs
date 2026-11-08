@@ -2,10 +2,12 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { PhoneNumberField } from "./PhoneNumberField";
 import { canonicalPhone, formatPhone, phoneDraft } from "../lib/phoneNumber";
+import { sharedMobileConfirmedLabel } from "../context/AccountContext";
 
 interface PhoneStatus {
   available_channels?: ("whatsapp" | "sms")[];
   enabled: boolean; verified: boolean; masked_phone: string | null;
+  method?: "staff_shared";
   channel: "whatsapp" | "sms" | null; expires_at: string | null; resend_available_at: string | null;
 }
 interface PhoneVerificationProps {
@@ -120,8 +122,8 @@ function AccountPhoneVerification({ client, initialPhone = "", userId, showHeadi
     {busy && <p role="status">Checking verification…</p>}
     {!status && !busy && <button className="button secondary" onClick={() => void request("status")}>Retry mobile verification</button>}
     {status && !available && <p>Mobile verification is not available yet. You can continue using your account and free courses.</p>}
+    {status?.verified && (status.enabled || status.method === "staff_shared") && <><p className="ol-uploaded" role="status">{status.method === "staff_shared" ? sharedMobileConfirmedLabel : `Mobile verified${status.masked_phone ? " · " + status.masked_phone : ""}`}</p>{available && !changing && <button className="button secondary" disabled={busy} onClick={() => editNumber(true)}>Change mobile number</button>}</>}
     {status?.enabled && <>
-      {status.verified && <><p className="ol-uploaded" role="status">Mobile verified · {status.masked_phone}</p>{available && !changing && <button className="button secondary" disabled={busy} onClick={() => editNumber(true)}>Change mobile number</button>}</>}
       {available && (!status.verified || changing) && <>
         <form className="ol-form" onSubmit={start}>
           {editing ? <PhoneNumberField key={editorKey} defaultValue={editorValue} disabled={busy} onPhoneChange={value => { pristine.current = false; setPhone(value); }} /> : !status.expires_at && phone ? <>
