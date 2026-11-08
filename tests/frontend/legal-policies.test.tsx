@@ -41,6 +41,11 @@ it("distinguishes signed contract evidence from expiring identity uploads", () =
   expect(records).toHaveTextContent("request a retention review");
 });
 
+it("asks for masked Aadhaar and keeps PAN or passport as alternatives", () => {
+  render(<MemoryRouter><PrivacyPage /></MemoryRouter>);
+  expect(screen.getByText(/Aadhaar is optional; PAN and passport are alternatives\. Mask the first eight Aadhaar digits before uploading\. Authorised reviewers must reject unmasked copies\./)).toBeInTheDocument();
+});
+
 describe("approved legal policies", () => {
   it.each(policies)("preserves every approved word and table cell on $route", ({ Page, title, digest }) => {
     const { container } = render(<MemoryRouter><Page /></MemoryRouter>);
