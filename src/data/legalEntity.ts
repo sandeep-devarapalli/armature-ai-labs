@@ -24,4 +24,4 @@ export const legalEntity = {
   grievanceOfficer: "Sandeep Devarapalli"
 } as const;
 
-export const policyUpdatedDate = "4 November 2026";
+export const policyUpdatedDate = "8 November 2026";

@@ -9,7 +9,7 @@ const mock = vi.hoisted(() => ({
 }));
 vi.mock("../../src/lib/supabase", () => ({ supabase: { functions: { invoke: mock.invoke } } }));
 vi.mock("../../src/lib/razorpay-checkout", () => ({ loadRazorpayCheckout: mock.load }));
-vi.mock("../../src/config/release", () => ({ memberPlatformAvailable: false }));
+vi.mock("../../src/config/release", () => ({ memberPlatformAvailable: false, rentalCheckoutAvailable: false }));
 vi.mock("../../src/context/AppContext", () => ({ useApp: () => ({ refresh: vi.fn() }) }));
 vi.mock("../../src/context/AccountContext", () => ({
   accountMembershipLevelsEnabled: () => true,

@@ -2,11 +2,11 @@ import { bodyBytes, RazorpayRequestError, validHmac } from "./razorpay-signature
 import { type LiveRazorpay, orderIdPattern, type Payment, paymentIdPattern,
   reconcileLivePayment, refundIdPattern } from "./live-desk-payment.ts";
 
-type Quote = { id: string; order_id: string | null; amount_paise: number };
+type Quote = { checkout_kind?: "desk" | "rental"; id: string; order_id: string | null; amount_paise: number };
 type WebhookDependencies = {
   config: () => { provider: LiveRazorpay; secret: string; accountId: string } | null;
   lookup: (orderId: string) => Promise<Quote | null>;
-  apply: (action: string, input: object) => Promise<unknown>;
+  apply: (action: string, input: object, quote: Quote) => Promise<unknown>;
 };
 
 export function createLiveDeskWebhook({ config, lookup, apply }: WebhookDependencies) {
@@ -47,7 +47,7 @@ export function createLiveDeskWebhook({ config, lookup, apply }: WebhookDependen
       }
       if (!orderIdPattern.test(payment.order_id)) return reply({ received: true });
       quote ??= await lookup(payment.order_id);
-      if (quote) await reconcileLivePayment(settings.provider, payment, quote, apply, refund?.id);
+      if (quote) await reconcileLivePayment(settings.provider, payment, quote, (action, input) => apply(action, input, quote!), refund?.id);
       return reply({ received: true });
     } catch (error) {
       if (error instanceof RazorpayRequestError) return reply({ error: error.code }, error.status);

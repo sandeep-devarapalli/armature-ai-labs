@@ -10,7 +10,8 @@ import { ApplicationUpdateQueue } from "../components/ApplicationUpdateQueue";
 import { DeskAgreementQueue } from "../components/DeskAgreementQueue";
 import { ManualDeskAgreementReview } from "../components/ManualDeskAgreementReview";
 import { SharedMobileApproval } from "../components/SharedMobileApproval";
-import { deskCheckoutAvailable } from "../config/release";
+import { RentalAgreementReview } from "../components/RentalAgreementReview";
+import { deskCheckoutAvailable, rentalCheckoutAvailable } from "../config/release";
 import { accountMembershipLevelsEnabled, applicationStatusLabel, membershipLevelLabels, sharedMobileConfirmedLabel, type MembershipLevel, type MobileVerificationMethod } from "../context/AccountContext";
 import "./MemberManagementPage.css";
 
@@ -63,7 +64,8 @@ export function MemberManagementPage({ client = supabase as SupabaseClient | nul
   const [busy, setBusy] = useState(false);
   const [formBusy, setFormBusy] = useState(false), [queueBusy, setQueueBusy] = useState(false);
   const [sharedMobileBusy, setSharedMobileBusy] = useState(false);
-  const reviewInProgress = formBusy || queueBusy || sharedMobileBusy;
+  const [rentalBusy, setRentalBusy] = useState(false);
+  const reviewInProgress = formBusy || queueBusy || sharedMobileBusy || rentalBusy;
   const interactionBusy = busy || reviewInProgress;
   const reviewBusy = useRef(false), reloadAfterReview = useRef(false);
   reviewBusy.current = reviewInProgress;
@@ -145,6 +147,7 @@ export function MemberManagementPage({ client = supabase as SupabaseClient | nul
               window.dispatchEvent(new Event("armature:account-changed"));
             }} />}
         {admin && deskCheckoutAvailable && <ManualDeskAgreementReview key={selected.user_id} client={client!} memberId={selected.user_id} blocked={interactionBusy} />}
+        {admin && session && rentalCheckoutAvailable && <RentalAgreementReview key={`rental:${session.user.id}:${selected.user_id}`} client={client!} actorId={session.user.id} memberId={selected.user_id} blocked={interactionBusy} onBusyChange={setRentalBusy} />}
         {selected.application_status ? <OnboardingForm key={`${selected.user_id}:${selected.revision}`} client={client} requestDocument={requestDocument} initialUserId={selected.user_id} onBusyChange={setFormBusy} /> : <p>This account has not submitted an application yet.</p>}
       </section>}
     </>}

@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { accountMembershipLevelsEnabled, useAccount } from "../context/AccountContext";
 import { useApp } from "../context/AppContext";
-import { memberPlatformAvailable } from "../config/release";
+import { memberPlatformAvailable, rentalCheckoutAvailable } from "../config/release";
 import { loadRazorpayCheckout, type CheckoutInstance, type CheckoutResult } from "../lib/razorpay-checkout";
 import { supabase } from "../lib/supabase";
 import { Field, PageHeader, Section } from "./Primitives";
@@ -63,6 +63,7 @@ export default function DeskCheckoutPage() {
 
   return <>
     <PageHeader meta="Workspace bookings" title="Book a desk." description="Choose a desk pass and an available start date. Review the agreement, sign it and pay through Razorpay once Armature has countersigned." />
+    {rentalCheckoutAvailable && <p><Link className="button secondary" to="/bookings/rentals">Book a cabin or Hiwonder kit</Link></p>}
     {signedIn && account?.user_id ? <DeskCheckout key={account.user_id} memberId={account.user_id} canBook={verified} /> : <Section number="01" title="Sign in and verify">
       {loading ? <p role="status">Checking your account…</p>
         : error ? <><p role="alert">{error}</p><button type="button" className="button button-quiet" onClick={() => void refresh()}>Check account status</button></>

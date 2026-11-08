@@ -212,8 +212,10 @@ it('lets confirmed-email Basic members enroll and read full free lessons when bo
     fireEvent.click(screen.getByText('Enroll in course'));
     fireEvent.click(await screen.findByRole('button', { name: 'Protected lesson' }));
     await screen.findByText('Protected explanation');
-    fireEvent.click(screen.getByText('Mark as read'));
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Mark as read' })).toBeEnabled());
+    fireEvent.click(screen.getByRole('button', { name: 'Mark as read' }));
     await screen.findByText('Marked as read');
+    expect(context.handler).toHaveBeenCalledWith('save_course_lesson_progress', expect.objectContaining({ p_lesson_id: 'protected', p_read: true }));
     fireEvent.click(screen.getByLabelText('Account menu'));
     expect(screen.getByText('Basic member')).toBeInTheDocument();
     expect(screen.getByText('Admin')).toBeInTheDocument();

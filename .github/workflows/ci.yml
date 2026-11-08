@@ -26,7 +26,7 @@ jobs:
         with:
           deno-version: v2.9.8
       - run: deno test --config supabase/functions/deno.json --no-lock supabase/functions/_shared/live-desk-webhook_test.ts
-      - run: deno check --config supabase/functions/deno.json --no-lock supabase/functions/desk-checkout/index.ts supabase/functions/razorpay-booking-webhook/index.ts
+      - run: deno check --config supabase/functions/deno.json --no-lock supabase/functions/desk-checkout/index.ts supabase/functions/razorpay-booking-webhook/index.ts supabase/functions/billing-dispatch/index.ts
       - run: node scripts/test-market-message-files.mjs && node scripts/test-market-message-reminders.mjs && node scripts/test-market-wakeup.mjs
       - run: node --test tests/scripts/onboarding-retention.node.mjs
       - run: node --test tests/scripts/production-env.node.mjs
@@ -42,6 +42,7 @@ jobs:
       - run: npm run test:e2e:ecosystem
       - run: VITE_MEMBERSHIP_LEVELS_ENABLED=true npx playwright test --config playwright.basic-registration.config.ts
       - run: VITE_DESK_CHECKOUT_ENABLED=true VITE_MEMBERSHIP_LEVELS_ENABLED=true npx playwright test --config playwright.basic-registration.config.ts tests/basic-registration/desk-recovery.spec.ts
+      - run: VITE_RENTAL_CHECKOUT_ENABLED=true VITE_RENTAL_CHECKOUT_MODE=test VITE_MEMBERSHIP_LEVELS_ENABLED=true npx playwright test --config playwright.basic-registration.config.ts tests/basic-registration/rental-booking.spec.ts tests/basic-registration/rental-staff-review.spec.ts
       - run: npx playwright test --config playwright.resource-feedback.config.ts
       - name: Verify membership fixtures against a prebuilt alternate backend
         env:

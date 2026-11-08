@@ -19,8 +19,8 @@ const legalName = legalEntity.name;
 const labAddress = "1490, 11th Cross, 20th Main Rd, 1st Sector, HSR Layout, Bengaluru, Karnataka 560102";
 const policies = [
   { route: "/contact", title: "Contact Us", Page: ContactPage, digest: "81125ab8d08f9448db7215015354e4988c8401018b49fe7bdfb53418f1f7a0ce" },
-  { route: "/terms", title: "Terms and Conditions", Page: TermsPage, digest: "cc7c8d062aac61214e96c04664df08424f660c8733458f1e7a5fec3513604754" },
-  { route: "/refund-policy", title: "Cancellation and Refund Policy", Page: RefundPolicyPage, digest: "42fdccf29669a31efdc6093c707421dd543bfd7373da1f56d73561ff72e228a4" },
+  { route: "/terms", title: "Terms and Conditions", Page: TermsPage, digest: "f0c432c862145fe11b9a115201cb0e2bf42b9697036fac90187b91069ea4b040" },
+  { route: "/refund-policy", title: "Cancellation and Refund Policy", Page: RefundPolicyPage, digest: "52cec48ffb8371a7b4bd65bf10659878f2e7e2159f74340ff1ff7e8c9115de0b" },
   { route: "/shipping-policy", title: "Shipping and Delivery Policy", Page: ShippingPolicyPage, digest: "67163c16f6dbdaf3e3918a7cdecc7974432ee1b32c752b785df19032628badd3" }
 ];
 const footerLinks = [
@@ -31,12 +31,22 @@ const footerLinks = [
 
 afterEach(cleanup);
 
+it("distinguishes signed contract evidence from expiring identity uploads", () => {
+  render(<MemoryRouter><PrivacyPage /></MemoryRouter>);
+  const records = screen.getByRole("region", { name: "Signed agreements and contract records" });
+  expect(records).toHaveTextContent("retained during and after the contract");
+  expect(records).toHaveTextContent("PAN and contracting address");
+  expect(records).toHaveTextContent("Access is restricted");
+  expect(records).toHaveTextContent("not deleted automatically when those uploads expire");
+  expect(records).toHaveTextContent("request a retention review");
+});
+
 describe("approved legal policies", () => {
   it.each(policies)("preserves every approved word and table cell on $route", ({ Page, title, digest }) => {
     const { container } = render(<MemoryRouter><Page /></MemoryRouter>);
     expect(screen.getByRole("heading", { level: 1, name: title })).toBeInTheDocument();
     const content = container.querySelector(".privacy-content")!.textContent!;
-    // Baseline includes owner-approved booking and complaint rules reconciled on 7 November 2026.
+    // Baseline includes owner-approved booking and complaint rules reconciled on 8 November 2026.
     const approvedBody = content.replace(/\s+/g, "")
       .replaceAll(legalName.replace(/\s+/g, ""), "[LEGAL_ENTITY_NAME]")
       .replaceAll(legalEntity.labAddress.formatted.replace(/\s+/g, ""), "[LAB_ADDRESS]");
@@ -98,6 +108,12 @@ describe("approved legal policies", () => {
     expect(headings.indexOf("Payments")).toBe(headings.indexOf("Basic membership and identity review") + 1);
     expect(headings.indexOf("Equipment requests and votes")).toBe(headings.indexOf("Payments") + 1);
     expect(container).toHaveTextContent("Razorpay Payments Private Limited and its partner banks");
+    expect(container).toHaveTextContent("security deposits are paid separately by bank transfer");
+    expect(container).toHaveTextContent("restricted accounting and contract records");
+    expect(container).toHaveTextContent("refund account-holder name, bank name, account number and IFSC");
+    expect(container).toHaveTextContent("available only to you and authorised staff using MFA");
+    expect(container).toHaveTextContent("any change requires renewed review");
+    expect(container).toHaveTextContent("Saving these details does not initiate an automatic payout");
     expect(container).toHaveTextContent(labAddress);
     expect(container).not.toHaveTextContent("560034");
     expect(container).toHaveTextContent("We keep invoices and payment records for as long as Indian tax and accounting laws require, even if you close your account.");
@@ -131,4 +147,32 @@ it("publishes the approved rental and complaint commitments without adding GST",
   const shipping = render(<MemoryRouter><ShippingPolicyPage /></MemoryRouter>);
   expect(shipping.container).toHaveTextContent("within 3 calendar days");
   expect(shipping.container).toHaveTextContent("reasonable opening and testing");
+});
+
+it("applies the new whole-month cabin notice rules without rewriting existing agreements", () => {
+  const terms = render(<MemoryRouter><TermsPage /></MemoryRouter>);
+  expect(terms.container).toHaveTextContent("There is no three-month minimum");
+  expect(terms.container).toHaveTextContent("Daily proration is not offered");
+  expect(terms.container).toHaveTextContent("Existing signed agreements retain their terms");
+  expect(terms.container).toHaveTextContent("at least 30 days' written notice");
+  terms.unmount();
+  const refunds = render(<MemoryRouter><RefundPolicyPage /></MemoryRouter>);
+  const rows = within(refunds.container).getAllByRole("row").filter(row => row.textContent?.includes("Cabin"));
+  expect(rows.map(row => row.textContent).join(" ")).toContain("30 or more days before the start date");
+  expect(rows.map(row => row.textContent).join(" ")).not.toContain("3-month minimum");
+  expect(rows.map(row => row.textContent).join(" ")).not.toContain("7 days before");
+});
+
+
+it("separates bank deposits from Razorpay rent and requires verified receipt", () => {
+  const terms = render(<MemoryRouter><TermsPage /></MemoryRouter>);
+  expect(terms.container).toHaveTextContent("security deposits are collected separately by bank transfer");
+  expect(terms.container).toHaveTextContent("refundable liabilities");
+  expect(terms.container).toHaveTextContent("a transfer reference or screenshot alone is not sufficient");
+  expect(terms.container).toHaveTextContent("approved signed agreement, captured rent and a verified deposit");
+  terms.unmount();
+  const refunds = render(<MemoryRouter><RefundPolicyPage /></MemoryRouter>);
+  expect(refunds.container).toHaveTextContent("security deposits are paid and refunded by bank transfer");
+  expect(refunds.container).toHaveTextContent("Cabin deposits are returned within 7 working days of move-out");
+  expect(refunds.container).toHaveTextContent("Equipment security deposits are returned within 7 working days of return");
 });
