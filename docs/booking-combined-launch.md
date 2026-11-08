@@ -1,0 +1,65 @@
+# Combined booking launch
+
+Prepared 7 November 2026. This is an implementation and operating checklist, not activation approval or legal certification. Scope: desk passes, Cabin 101 and the single Hiwonder kit. PandaDoc is the current signing provider for all three, with manual stamp-paper procurement where required and Armature paying the approved cabin stamp duty. Provider choice does not waive the separate stamping gate. Keep public collection closed until the checks below pass and the owner approves the release.
+
+## Confirmed commercial configuration
+
+| Offering | Price and term | Inventory and conditions |
+| --- | --- | --- |
+| Desk day pass | INR 500 standard / INR 350 offer; no cabin deposit | One confirmed numbered seat; daily 09:00–17:00 IST access, including weekends, with a confirmed closure calendar. |
+| Desk week pass | INR 2,500 standard / INR 1,750 offer; no cabin deposit | Daily 09:00–17:00 IST access, including weekends; show actual dates and closures in the displayed week. |
+| Desk month pass | INR 15,000 standard / INR 13,000 offer per seat; no cabin deposit | Daily 09:00–17:00 IST access, including weekends; show exact start/end dates and reserved seat. |
+| Cabin 101 / GF-01 | INR 60,000 standard / INR 40,000 agreed monthly rent; minimum three months from actual start | Already occupied through 31 January 2027 inclusive. Block those dates without inventing historical payment records. Do not promise later availability until staff confirm it. |
+| Hiwonder LeRobot SO-ARM101 Advanced Kit, assembled | INR 1,050 per seven days or INR 3,900 per fixed 30 days; INR 25,000 deposit | One complete leader/follower setup with cameras, controller and essential accessories. Quantity one, lab-only; workspace access required for the rental period. Reconcile actual contents and readiness before release. |
+
+No GST is collected while Armature is unregistered. Do not publish a GSTIN, add GST, or describe an ordinary receipt as a GST tax invoice. A later registration requires a reviewed pricing, invoice and policy change. Display standard and offer amounts without claiming the standard price was previously charged. Offer expiry remains to be confirmed.
+
+Cabin checkout collects first rent plus the deposit. Prorate an initial partial calendar month; later rent is billed in advance by the 5th. At INR 40,000 agreed monthly rent the deposit is INR 80,000. The approved tier is two months at or below INR 100,000 monthly rent and three months above it. Preserve existing signed terms and historical invoices. Monthly billing is not permission for automatic recurring debits.
+
+Cabins 201 / FF-04 and 202 / FF-06 stay Coming soon, with no price or payable quote. Event-space launch is separate from this three-product checklist. The new seven-day desk schedule applies to future released inventory; it does not extend the signed pilot beyond 9 November 2026, 09:00–17:00 IST.
+
+## Agreement workflow
+
+1. **Choose service and dates.** Show the product, pass duration, available dates and actual inventory. Require a Basic account before collecting booking details; require Verified membership before the paid booking proceeds. Keep identity approval, mobile verification, staff roles and payment entitlements separate.
+2. **Issue the server-priced quote.** Bind product/resource, dates and hours, currency, rent, deposit, tax treatment, offer and policy version to an immutable quote reference and fingerprint. Do not trust browser prices. Preserve the quoted version when a product price later changes.
+3. **Confirm the contracting party.** The customer privately confirms legal name, individual/company PAN and full contracting address. A company also confirms its authorised representative and designation. Do not reuse another member's identity or infer missing values. Keep real details and agreement files outside Git, public assets, analytics and logs.
+4. **Review and revise.** Show an unsigned draft and a clear Request changes action. Record requested corrections and issue a new version. Confirm the exact final version before procuring any stamp paper or sending for execution. A substantive later change requires fresh approval and signing.
+5. **Complete the stamping decision.** Record whether stamping is required by the approved product policy and the confirmed agreement treatment. For a cabin, Armature pays the agreed duty. Use the owner-approved manual stamp-paper procurement route, confirming the amount, legally reviewed treatment and binding to the final document before execution. PandaDoc signs that final document. Leegality integration is not a launch dependency when this manual stamping route is reviewed and completed; its unavailability is not a stamping waiver. This is the owner's operating gate, not a claim that a particular instrument or duty is legally required without review. The current Hiwonder kit has the owner's explicit no-stamping exception; future higher-value equipment follows a separately confirmed stamping decision, including the owner's above-INR-50,000 rule.
+6. **Obtain both signatures.** Send the approved document through the configured signing provider, customer first and Armature second. Notify the Armature countersigner by email when action is required. Clearly show Awaiting your signature, Awaiting Armature, and Awaiting staff review. Use separate generous signature blocks and require each signer to finish the provider session.
+7. **Record staff approval.** A different Admin/Super admin account uses MFA, inspects the completed PDF and provider certificate, confirms both signers and exact quote fingerprint, and stores the restricted evidence. Record reviewer, document reference, PDF digest and approval timestamp. A typed name, uploaded unsigned draft or email assertion is not signing evidence.
+8. **Take payment.** Start the 30-minute payment window at staff approval. Recheck availability and price, acquire the inventory hold and bind the payment order to the approved quote. After expiry use a fresh availability/quote workflow; do not extend an immutable approval silently. Show the total and separate refundable deposit before Razorpay Checkout opens.
+9. **Confirm fulfillment.** Verify the captured payment server-side against the issued order, amount and currency. Reserve inventory and grant the correct dated entitlement atomically and idempotently. Only then show confirmation, receipt and access instructions. A late capture or unresolved reservation goes to staff review, not a false success screen.
+
+Keep the ledger independent of signing-provider-specific session URLs. Retain the approved document version, signer completion evidence and quote binding so a later provider change does not invalidate historical records. Manual review remains explicit until an equally verified automated path is implemented.
+
+## Product-specific operations
+
+- **Desks:** full refund for cancellation at least 48 hours before start; later cancellation, no-show and unused time after start are non-refundable. Preserve the published five-to-seven-working-day approved-refund initiation wording. Configure real seats for 09:00–17:00 IST every day, including weekends, with confirmed closures and capacity before releasing any inventory beyond the pilot chair. Preserve existing signed booking dates/hours.
+- **Cabin 101:** finalise the handover schedule, permitted users, furniture/condition, keys, access hours and included facilities. Carry forward the published seven-day pre-start cancellation boundary, 30 days' notice after the three-month minimum, seven-working-day move-out deposit return and no refund for unused paid monthly rent. Resolve the prorated-first-month cancellation amount and early-exit liability narrowly before execution. Do not infer capacity or dimensions from the partition drawing.
+- **Hiwonder:** staff record the complete kit inventory and condition at handover and return. Workspace access is a prerequisite and is separately priced. Thirty-day early-return rent is INR 150 per day used, subject to the seven-day minimum and capped at INR 3,900; manually refund any remaining rent. Return the deposit within seven working days of return, less documented charges/damage, with inspection inside that window. Preserve the published equipment cancellation rule: at least 48 hours receives a full refund or one free reschedule; later cancellation/no-show receives no refund. Resolve never-handed-over deposit handling and unapproved late-return/loss/damage wording before execution.
+- **Complaints and defects:** acknowledge within one business day and resolve by D+4 business days, with D being receipt. Report damaged, wrong or missing hardware within three calendar days of handover/delivery, allowing reasonable opening/testing for defects. Assign an operating owner and backup for these deadlines, refunds, deposits and daily payment reconciliation.
+- **Membership:** verified paid workspace fulfillment grants Premium under the recorded entitlement period; physical desk/cabin access remains limited to booked dates/hours. Equipment alone must not silently grant a workspace entitlement. Preserve account suspension/revocation and separately verify the intended team-member entitlement rules for cabins.
+- **Retention:** the owner has put the government-ID retention change on hold. This launch does not activate deletion jobs or alter existing ID retention. Signed PAN-bearing agreement retention, restricted storage, backup and access auditing require a documented policy separate from raw ID copies.
+
+## Evidence and release gates
+
+The owner-controlled INR 350 S01 live pilot demonstrated completed two-party signing, MFA staff approval, real captured payment, a confirmed reservation, a paid Razorpay entitlement and Premium membership. Browser success was observed and reservation/entitlement records were checked server-side. New pilot order gates were closed afterward. These facts prove one desk day-pass journey, not the combined public launch. Keep the private evidence references in the restricted release record, not this public document.
+
+| Gate | Required acceptance | Current evidence |
+| --- | --- | --- |
+| Payment callback | Correct order/amount/currency and server-confirmed fulfillment | Day-pass pilot passed. |
+| Independent webhook delivery | Actual signed provider event delivery, duplicate/replay handling and durable reconciliation | Independent live delivery not yet evidenced by the pilot. |
+| Weekly/monthly desks | Actual dates, availability, both signatures, capture, reservation and entitlement | Full hosted journeys still require acceptance. |
+| Cabin workflow | Occupancy blocking, quote/proration/deposit, team details, stamping resolution, signatures, payment and handover | Combined production journey pending. |
+| Kit workflow | Quantity-one overlap prevention, workspace prerequisite, rent/deposit, signing, payment, condition/return/refund records | Combined production journey pending. |
+| Recovery/refunds | Failed, cancelled, pending and delayed payment; expired holds; duplicate callbacks; full/partial refunds; correct access reversal | Carry forward exact existing test evidence and close unresolved cases before release. |
+| Customer UI | Product-first guided selection, dates, inventory, membership, review/corrections, signing, staff status, checkout and receipt | Validate real deployed desktop/mobile and an existing PWA session, not only fresh mocks. |
+| Release safety | Owner authorisation, all required CI checks, reviewed production configuration, no private artifacts, post-deploy verification | Product activation remains a separate recorded release step. |
+
+Before release, reconcile the account-specific Razorpay checklist held in the workspace with current merchant activities, policies, consent, credential handling, reconciliation/chargeback responsibilities and evidence retention. Its supplied private agreement copies must never be published. Confirm provider/account requirements through the responsible owner; do not present checklist completion as compliance certification.
+
+## Next decisions, one at a time
+
+1. Complete the approved manual stamping route: confirm cabin duty treatment/amount, procurement details and final-document binding. Recommendation: prepare/review in PandaDoc, then procure stamp paper after customer approval and complete signing; keep cabin payment unavailable until this step is complete.
+2. Confirm releasable inventory and closures under the approved daily 09:00–17:00 IST desk schedule, including weekends. Recommendation: retain one desk and one reconciled kit first in the configuration, adding only physically checked resources; this does not change the owner's combined-launch objective.
+3. Set offer expiry, operational owner/backup and private executed-agreement retention/backup policy. Ask each decision separately with concise recommended choices, rather than requesting a bulk register.

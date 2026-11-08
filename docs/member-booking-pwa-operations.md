@@ -294,6 +294,13 @@ document reference and a digest of the PDF. The buyer refreshes their quote,
 accepts the current policies and has 30 minutes from approval to start
 checkout. The order still requires current price and available inventory.
 
+Close new checkout before changing the policy release. Publish the matching
+policy pages and set the same new policy version in the Edge configuration
+and `booking_policy_settings` before reopening. Each quote fingerprint binds
+its policy version. Ask customers with older unclaimed agreements to request
+a fresh quote and sign again. Keep the original quote, approval and accepted
+policy for existing orders so staff can reconcile their payments and refunds.
+
 A capture after the hold expires goes to staff review. A partial processed
 refund preserves the reservation and flags the quote for reconciliation. A
 full processed refund revokes the paid entitlement and releases future

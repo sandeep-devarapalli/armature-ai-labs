@@ -111,10 +111,81 @@ it("directs a manual pilot customer to email and waits for staff approval before
   renderPage();
   const status = screen.getByRole("button", { name: "Check agreement or payment status" });
   fireEvent.click(status);
-  expect(await screen.findByText(/Check your email for the PandaDoc agreement/)).toBeInTheDocument();
+  expect(await screen.findByText(/Armature will prepare your PandaDoc agreement/)).toBeInTheDocument();
   expect(screen.queryByRole("button", { name: "Get signing link" })).not.toBeInTheDocument();
   expect(screen.queryByRole("button", { name: "Pay with Razorpay" })).not.toBeInTheDocument();
 
   fireEvent.click(status);
   expect(await screen.findByRole("button", { name: "Pay with Razorpay" })).toBeDisabled();
+});
+
+
+it("restores a confirmed request on another device without starting a new payment", async () => {
+  mock.invoke.mockImplementation((_, { body }) => Promise.resolve(reply(body.action === "list_own"
+    ? { quotes: [{ quoteId, chair: "S01", unit: "day", start: "2099-06-10", status: "confirmed" }] }
+    : body.action === "status" ? { ...signed, status: "confirmed", membership: "premium" }
+    : { chairs: ["S01"], dates: [] })));
+  renderPage();
+  fireEvent.click(screen.getByText("Resume an existing booking"));
+  fireEvent.click(screen.getByRole("button", { name: "Load my recent requests" }));
+  fireEvent.click(await screen.findByRole("button", { name: /S01.*confirmed/ }));
+  expect(await screen.findByText(/Desk booking confirmed.*Premium/)).toBeInTheDocument();
+  expect(mock.load).not.toHaveBeenCalled();
+  expect(mock.invoke).not.toHaveBeenCalledWith(expect.anything(), expect.objectContaining({ body: expect.objectContaining({ action: "order" }) }));
+});
+
+it("does not adopt a reference when the server rejects another member's quote", async () => {
+  mock.invoke.mockImplementation((_, { body }) => Promise.resolve(body.action === "status"
+    ? { data: null, error: new Error("denied") }
+    : reply({ chairs: [], dates: [] })));
+  renderPage();
+  fireEvent.click(screen.getByText("Resume an existing booking"));
+  fireEvent.change(screen.getByLabelText("Existing agreement reference"), { target: { value: quoteId } });
+  fireEvent.click(screen.getByRole("button", { name: "Resume booking" }));
+  expect(await screen.findByRole("alert")).toBeInTheDocument();
+  expect(localStorage.getItem("armature-desk-quote-v1:member-fixture")).toBeNull();
+  expect(screen.queryByRole("button", { name: "Pay with Razorpay" })).not.toBeInTheDocument();
+});
+
+
+it("lets a signed-in Basic member recover an existing payment without offering new bookings", async () => {
+  mock.level = "basic";
+  mock.invoke.mockResolvedValue(reply({ ...signed, status: "refunded" }));
+  renderPage();
+  expect(mock.invoke).not.toHaveBeenCalled();
+  fireEvent.click(screen.getByText("Resume an existing booking"));
+  fireEvent.change(screen.getByLabelText("Existing agreement reference"), { target: { value: quoteId } });
+  fireEvent.click(screen.getByRole("button", { name: "Resume booking" }));
+  expect(await screen.findByText("This payment has been refunded.")).toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: "Request agreement" })).not.toBeInTheDocument();
+});
+
+it("offers a fresh request after approval expires without reopening payment", async () => {
+  localStorage.setItem("armature-desk-quote-v1:member-fixture", quoteId);
+  mock.invoke.mockResolvedValue(reply({ ...signed, approvedAt: "2000-01-01T00:00:00Z", manualAgreement: true }));
+  renderPage();
+  fireEvent.click(screen.getByRole("button", { name: "Check agreement or payment status" }));
+  expect(await screen.findByText(/This agreement’s payment window expired/)).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Choose another desk pass" })).toBeEnabled();
+  expect(screen.queryByRole("button", { name: "Pay with Razorpay" })).not.toBeInTheDocument();
+});
+
+it.each([false, true])("allows an expired bound order replacement only after a conclusive server check: %s", async safe => {
+  localStorage.setItem("armature-desk-quote-v1:member-fixture", quoteId);
+  mock.invoke.mockResolvedValue(reply({ ...signed, hasOrder: true, approvedAt: "2000-01-01T00:00:00Z",
+    expiredOrder: true, canRequestReplacement: safe }));
+  renderPage();
+  fireEvent.click(screen.getByRole("button", { name: "Check agreement or payment status" }));
+  expect(await screen.findByText(/This payment window has expired/)).toBeInTheDocument();
+  expect(Boolean(screen.queryByRole("button", { name: "Choose another desk pass" }))).toBe(safe);
+  expect(screen.queryByRole("button", { name: "Pay with Razorpay" })).not.toBeInTheDocument();
+});
+it("restarts an unclaimed stale policy request without offering payment", async () => {
+  localStorage.setItem("armature-desk-quote-v1:member-fixture", quoteId);
+  mock.invoke.mockResolvedValue(reply({ ...signed, policyStale: true }));
+  renderPage();
+  fireEvent.click(screen.getByRole("button", { name: "Check agreement or payment status" }));
+  expect(await screen.findByText(/policies for this unpaid request have changed/)).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Choose another desk pass" })).toBeEnabled();
+  expect(screen.queryByRole("button", { name: "Pay with Razorpay" })).not.toBeInTheDocument();
 });

@@ -31,7 +31,8 @@ type Quote = {
   sealed_revision: string | null;
   order_id: string | null;
   order_claimed_at: string | null;
-  policy_version?: string;
+  policy_version?: string | null;
+  quoted_policy_version?: string | null;
   status?: string;
   bookingId?: string;
   bookingIds?: string[];
@@ -77,9 +78,13 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
       || (live && !/^[A-Za-z0-9._-]{4,80}$/.test(policyVersion)) || (!pandaKey && !manualPilot) || !staffSigner) {
     return reply({ error: live ? "checkout_not_configured" : "test_checkout_not_configured" }, 503);
   }
-  const isManualQuote = (q: Quote) => q.chair === "S01" && q.unit === "day" && q.amount_paise === 35000
+  const isManualQuote = (q: Quote) => q.chair === "S01" && (({ day: 35000, week: 175000, month: 1300000 } as Record<string, number>)[q.unit] === q.amount_paise)
     && ((manualPilot && !q.document_id) || q.sealed_revision === "manual-pilot-v1");
-  const present = (q: Quote) => ({ ...view(q), manualAgreement: isManualQuote(q), ...(live ? { policyVersion } : {}) });
+  const policyStale = (q: Quote) => live && !q.order_claimed_at && q.quoted_policy_version !== policyVersion;
+  const present = (q: Quote) => ({
+    ...view(q), manualAgreement: isManualQuote(q),
+    ...(live ? { policyVersion: q.quoted_policy_version ?? q.policy_version, policyStale: policyStale(q) } : {}),
+  });
 
   try {
     const user = await authenticatedUser(request);
@@ -89,17 +94,39 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
     if (!input || typeof input !== "object" || typeof input.action !== "string") throw new Rejected(400, "invalid_request");
     const client = adminClient();
     const action = input.action;
-    if (!enabled && !["status", "verify"].includes(action)) throw new Rejected(503, "checkout_disabled");
+    if (!enabled && !["status", "verify", "list_own", "staff_queue", "manual_review", "recover_order"].includes(action)) throw new Rejected(503, "checkout_disabled");
+    if (action === "list_own" || action === "staff_queue") {
+      if (!live) throw new Rejected(400, "invalid_request");
+      const staff = action === "staff_queue";
+      if (staff) {
+        if (user.claims.aal !== "aal2") throw new Rejected(403, "staff_mfa_required");
+        await requireStaff(user.id, ["admin", "super_admin"]);
+      }
+      const offset = input.offset ?? 0;
+      if (!Number.isInteger(offset) || offset < 0 || offset > 10000) throw new Rejected(400, "invalid_request");
+      const { data, error } = await client.rpc("list_desk_requests", {
+        p_member: user.id, p_staff: staff, p_offset: offset,
+      }).abortSignal(AbortSignal.timeout(10000));
+      if (error) throw new Rejected(503, "checkout_state_unavailable");
+      return reply({ mode, nextOffset: data.nextOffset, quotes: data.quotes.map((q: Quote & {
+        approvedAt?: string; memberId?: string; customerEmail?: string;
+      }) => ({ ...present(q), approvedAt: q.approvedAt ?? null,
+        agreementSigned: Boolean(q.approvedAt),
+        ...(staff ? { memberId: q.memberId, customerEmail: q.customerEmail } : {}),
+      })) });
+    }
     let member = user.id;
     let customer = user.email?.toLowerCase() ?? "";
     const manualReview = action === "manual_review" || action === "approve_manual";
     if (manualReview && !manualPilot) throw new Rejected(403, "manual_agreement_unavailable");
-    if (action === "seal" || manualReview) {
-      if ((live || manualReview) && user.claims.aal !== "aal2") throw new Rejected(403, "staff_mfa_required");
+    const recovery = action === "recover_order";
+    if (recovery && !live) throw new Rejected(403, "order_recovery_unavailable");
+    if (action === "seal" || manualReview || recovery) {
+      if ((live || manualReview || recovery) && user.claims.aal !== "aal2") throw new Rejected(403, "staff_mfa_required");
       await requireStaff(user.id, ["admin", "super_admin"]);
       if (!pattern.test(input.memberId ?? "")) throw new Rejected(400, "invalid_member");
       member = input.memberId;
-      if (manualReview && member === user.id) throw new Rejected(403, "independent_reviewer_required");
+      if ((manualReview || recovery) && member === user.id) throw new Rejected(403, "independent_reviewer_required");
       const owner = await client.auth.admin.getUserById(member);
       customer = owner.data.user?.email?.toLowerCase() ?? "";
     }
@@ -172,7 +199,7 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
         || !/^\d{4}-\d{2}-\d{2}$/.test(from ?? "") || !/^\d{4}-\d{2}-\d{2}$/.test(to ?? ""))) {
         throw new Rejected(400, "invalid_selection");
       }
-      if (manualPilot && chair !== undefined && (chair !== "S01" || unit !== "day")) {
+      if (manualPilot && chair !== undefined && (chair !== "S01")) {
         return reply({ mode, chairs: [], dates: [] });
       }
       const availability = await operation<{ chairs: string[] }>("availability", { chair, unit, from, to });
@@ -182,13 +209,30 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
     if (action === "quote") {
       if (!/^S(0[1-9]|1[0-9]|2[0-5])$/.test(input.chair ?? "") || !["day", "week", "month"].includes(input.unit)
         || !/^\d{4}-\d{2}-\d{2}$/.test(input.start ?? "")) throw new Rejected(400, "invalid_selection");
-      if (manualPilot && (input.chair !== "S01" || input.unit !== "day")) throw new Rejected(409, "manual_agreement_unavailable");
-      const quote = await operation<Quote>("quote", { chair: input.chair, unit: input.unit, start: input.start });
+      if (manualPilot && (input.chair !== "S01")) throw new Rejected(409, "manual_agreement_unavailable");
+      const quote = await operation<Quote>("quote", {
+        chair: input.chair, unit: input.unit, start: input.start, ...(live ? { policyVersion } : {}),
+      });
       if (manualPilot && !isManualQuote(quote) && !quote.document_id) throw new Rejected(409, "manual_agreement_unavailable");
       return reply({ mode, ...present(quote) });
     }
     if (!pattern.test(input.quoteId ?? "")) throw new Rejected(400, "invalid_quote");
     const q = await operation<Quote>("status", { quoteId: input.quoteId });
+    if (policyStale(q) && ["sign", "seal", "approve_manual", "order"].includes(action)) {
+      throw new Rejected(409, "policy_version_changed");
+    }
+    if (recovery) {
+      if (!q.order_claimed_at || !q.document_id || q.status || !/^order_[A-Za-z0-9]{1,80}$/.test(input.orderId ?? "")
+        || (q.order_id && q.order_id !== input.orderId)) throw new Rejected(409, "order_recovery_unavailable");
+      const signed = isManualQuote(q) ? Number.isFinite(await manualApproval(q)) : (await agreement(q, q.document_id)).completed;
+      if (!signed) throw new Rejected(409, "agreement_required");
+      const order = await provider<Order>("razorpay", "/orders/" + input.orderId);
+      if (order.id !== input.orderId || order.receipt !== q.id || order.amount !== q.amount_paise || order.currency !== "INR") {
+        throw new Rejected(409, "provider_order_mismatch");
+      }
+      const bound = await operation<Quote>("bind_order", { quoteId: q.id, orderId: order.id });
+      return reply({ mode, ...present(bound), recovered: true });
+    }
     if (manualReview) {
       if (!isManualQuote(q)) throw new Rejected(409, "manual_agreement_unavailable");
       if (action === "manual_review") return reply({ mode, ...present(q), customerEmail: customer, staffEmail: staffSigner,
@@ -221,9 +265,12 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
       }
       return reply({ mode, ...await capture(q, payment) });
     }
+    let checkedPayments: { count: number; items: Payment[] } | null = null;
     if (live && action === "status" && q.status) return reply({ mode, ...present(q) });
+    if (action === "status" && policyStale(q)) return reply({ mode, ...present(q) });
     if (action === "status" && q.order_id) {
-      const payments = await provider<{ items: Payment[] }>("razorpay", "/orders/" + q.order_id + "/payments");
+      const payments = await provider<{ count: number; items: Payment[] }>("razorpay", "/orders/" + q.order_id + "/payments");
+      checkedPayments = payments;
       const payment = payments.items.find(item => live
         ? ["captured", "refunded"].includes(item.status) : item.status === "captured" && item.amount_refunded === 0);
       if (payment && razor) return reply({ mode, ...present(q), ...await reconcileLivePayment(razor, payment, q, operation) });
@@ -235,7 +282,23 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
     const state = isManualQuote(q) ? {
       signedAt, customerSigned: Number.isFinite(signedAt), completed: Number.isFinite(signedAt), doc: null,
     } : await agreement(q, q.document_id);
-    if (action === "status") return reply({ mode, ...present(q), customerSigned: state.customerSigned, agreementSigned: state.completed });
+    if (action === "status") {
+      const expiredOrder = Boolean(q.order_id && Date.now() >= state.signedAt + 30 * 60_000);
+      let canRequestReplacement = false;
+      if (expiredOrder && checkedPayments) {
+        const order = await provider<Order & { amount_paid: number; amount_due: number; attempts: number; status: string }>(
+          "razorpay", "/orders/" + q.order_id);
+        canRequestReplacement = order.id === q.order_id && order.receipt === q.id && order.amount === q.amount_paise
+          && order.currency === "INR" && order.amount_paid === 0 && order.amount_due === q.amount_paise
+          && ["created", "attempted"].includes(order.status) && Number.isSafeInteger(order.attempts)
+          && order.attempts === checkedPayments.count && checkedPayments.count === checkedPayments.items.length
+          && checkedPayments.items.every(payment => payment.order_id === q.order_id && payment.status === "failed"
+            && payment.amount_refunded === 0);
+      }
+      return reply({ mode, ...present(q), customerSigned: state.customerSigned, agreementSigned: state.completed,
+        approvedAt: Number.isFinite(state.signedAt) ? new Date(state.signedAt).toISOString() : null,
+        expiredOrder, canRequestReplacement });
+    }
     if (action === "sign") {
       if (!state.doc || state.customerSigned || !["document.sent", "document.viewed"].includes(state.doc.status)) throw new Rejected(409, "customer_signing_unavailable");
       const session = await provider<{ id: string }>("panda", "/documents/" + q.document_id + "/session", { recipient: customer, lifetime: 900 });
