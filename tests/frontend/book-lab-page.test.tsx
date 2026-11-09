@@ -3,8 +3,9 @@ import { MemoryRouter, Route, Routes, useLocation } from "react-router-dom";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import BookLabPage from "../../src/pages/BookLabPage";
 
-const mock = vi.hoisted(() => ({ desk: true, rental: true, signedIn: true, request: vi.fn() }));
-vi.mock("../../src/config/release", () => ({ get deskCheckoutAvailable() { return mock.desk; }, get rentalCheckoutAvailable() { return mock.rental; } }));
+const mock = vi.hoisted(() => ({ desk: true, rental: true, event: false, signedIn: true, request: vi.fn() }));
+vi.mock("../../src/config/release", () => ({ get deskCheckoutAvailable() { return mock.desk; }, get rentalCheckoutAvailable() { return mock.rental; }, get eventCheckoutAvailable() { return mock.event; } }));
+vi.mock("../../src/components/EventCheckout", () => ({ EventBooking: () => <p>Event checkout</p> }));
 vi.mock("../../src/context/AccountContext", () => ({ useAccount: () => ({ account: mock.signedIn ? { user_id: "buyer" } : null, signedIn: mock.signedIn }) }));
 vi.mock("../../src/lib/rental-checkout", () => ({ rentalRequest: mock.request }));
 vi.mock("../../src/components/DeskCheckout", () => ({ DeskBooking: () => <p>Desk checkout</p> }));
@@ -22,7 +23,7 @@ const products = [
 
 function Where() { const { pathname, search } = useLocation(); return <output aria-label="Location">{pathname + search}</output>; }
 const show = (path = "/bookings") => render(<MemoryRouter initialEntries={[path]}><Routes><Route path="/bookings" element={<><BookLabPage /><Where /></>} /></Routes></MemoryRouter>);
-beforeEach(() => { mock.desk = true; mock.rental = true; mock.signedIn = true; mock.request.mockReset().mockResolvedValue({ products }); Element.prototype.scrollIntoView = vi.fn(); });
+beforeEach(() => { mock.desk = true; mock.rental = true; mock.event = false; mock.signedIn = true; mock.request.mockReset().mockResolvedValue({ products }); Element.prototype.scrollIntoView = vi.fn(); });
 afterEach(cleanup);
 
 it("compares desk, cabins, equipment and events, with live equipment prices", async () => {
@@ -79,4 +80,12 @@ it("shows the cabins' published statuses to visitors who are not signed in", () 
   expect(mock.request).not.toHaveBeenCalled();
   expect(screen.getByText("101 occupied · 201 coming soon · 202 coming soon · 203 coming soon")).toBeInTheDocument();
   expect(screen.getByText(/No cabin is open for booking yet/)).toBeInTheDocument();
+});
+
+it("opens the event checkout and shows the hourly rate when events are on", () => {
+  mock.event = true;
+  show("/bookings?item=event");
+  expect(screen.getByText("₹2,500 / hour")).toBeInTheDocument();
+  expect(screen.getByText("Event checkout")).toBeInTheDocument();
+  expect(screen.queryByText(/Event bookings open soon/)).not.toBeInTheDocument();
 });
