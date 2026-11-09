@@ -16,11 +16,26 @@ it("does not query an undeployed rental RPC while the rental webhook gate is clo
 it("routes only a known rental order to the rental ledger", async () => {
   enabled = true;
   mock.rpc.mockImplementation(rpc => ({ abortSignal: async () => ({ error: null, data:
-    rpc === "live_desk_checkout" ? { status: "ignored" } : { id: "rental", status: "approved" } }) }));
+    rpc === "rental_checkout" ? { id: "rental", status: "approved" } : { status: "ignored" } }) }));
   const quote = await mock.dependencies!.lookup("order_Rental");
   expect(quote).toMatchObject({ checkout_kind: "rental" });
   await mock.dependencies!.apply("capture", { orderId: "order_Rental" }, quote!);
   expect(mock.rpc).toHaveBeenLastCalledWith("rental_checkout", expect.objectContaining({ p_action: "capture", p_member: null }));
+});
+it("routes only a known event order to the event ledger", async () => {
+  enabled = true;
+  mock.rpc.mockImplementation(rpc => ({ abortSignal: async () => ({ error: null, data:
+    rpc === "event_checkout" ? { id: "event", status: "approved" } : { status: "ignored" } }) }));
+  const quote = await mock.dependencies!.lookup("order_Event");
+  expect(quote).toMatchObject({ id: "event", checkout_kind: "event" });
+  await mock.dependencies!.apply("capture", { orderId: "order_Event" }, quote!);
+  expect(mock.rpc).toHaveBeenLastCalledWith("event_checkout", expect.objectContaining({ p_action: "capture", p_member: null }));
+});
+it("does not query the event RPC while its webhook gate is closed", async () => {
+  vi.stubGlobal("Deno", { env: { get: (key: string) => String(key === "LIVE_RENTAL_WEBHOOK_ENABLED") } });
+  mock.rpc.mockImplementation(() => ({ abortSignal: async () => ({ error: null, data: { status: "ignored" } }) }));
+  expect(await mock.dependencies!.lookup("order_Unknown")).toBeNull();
+  expect(mock.rpc.mock.calls.map(([rpc]) => rpc)).toEqual(["live_desk_checkout", "rental_checkout"]);
 });
 it("rejects order collisions rather than applying one ledger arbitrarily", async () => {
   enabled = true;
@@ -35,5 +50,6 @@ it("does not interpret a transient desk lookup error as a rental order", async (
 });
 it("rejects application without a positively identified ledger", async () => {
   expect(() => mock.dependencies!.apply("capture", {}, {})).toThrow("Unknown");
+  expect(() => mock.dependencies!.apply("capture", {}, { checkout_kind: "constructor" })).toThrow("Unknown");
   expect(mock.rpc).not.toHaveBeenCalled();
 });
