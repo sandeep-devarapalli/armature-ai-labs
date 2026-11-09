@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import { render, screen, fireEvent, waitFor, cleanup } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
-import RentalCheckoutPage from "../../src/components/RentalCheckout";
+import RentalCheckoutPage, { RentalBooking } from "../../src/components/RentalCheckout";
 import type { RentalQuote } from "../../src/lib/rental-checkout";
 const mock = vi.hoisted(() => ({ request: vi.fn(), refresh: vi.fn(), verified: true, signedIn: true, checkout: vi.fn(), open: vi.fn() }));
 vi.mock("../../src/context/AccountContext", () => ({ accountMembershipLevelsEnabled: () => true,
@@ -211,4 +211,12 @@ it("says No deposit for equipment without one", async () => {
   await show();
   fireEvent.change(screen.getByLabelText("What would you like?"), { target: { value: "waveshare-ov5693" } });
   expect(await screen.findByText(/2 units\..*No deposit; no GST added\./)).toBeInTheDocument();
+});
+
+it("starts on the product the bookings page chose, and falls back when it is not available", async () => {
+  render(<MemoryRouter><RentalBooking initialProduct="waveshare-ov5693" /></MemoryRouter>);
+  await waitFor(() => expect((screen.getByLabelText("What would you like?") as HTMLSelectElement).value).toBe("waveshare-ov5693"));
+  cleanup();
+  render(<MemoryRouter><RentalBooking initialProduct="cabin201" /></MemoryRouter>);
+  await waitFor(() => expect((screen.getByLabelText("What would you like?") as HTMLSelectElement).value).toBe("cabin101"));
 });

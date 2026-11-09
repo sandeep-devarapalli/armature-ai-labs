@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { accountMembershipLevelsEnabled, useAccount } from "../context/AccountContext";
 import { loadRazorpayCheckout, type CheckoutInstance } from "../lib/razorpay-checkout";
 import { rentalLabel, rentalMode, rentalMoney, rentalRequest as invokeRental, type RentalProduct, type RentalQuote } from "../lib/rental-checkout";
@@ -25,14 +25,20 @@ export function DepositReceipts({ quote }: { quote: RentalQuote }) {
 }
 
 export default function RentalCheckoutPage() {
-  const { account, signedIn } = useAccount();
-  const verified = accountMembershipLevelsEnabled(account) && ["verified", "premium"].includes(account?.membership_level ?? "");
   return <><PageHeader meta={rentalMode === "test" ? "Test bookings · no real rental" : "Cabins and equipment"}
     title="Choose your space or kit." description="Choose dates, review and sign your agreement, transfer the deposit by bank and pay rent through Razorpay after staff review." />
-    {signedIn && account?.user_id ? <RentalCheckout key={account.user_id} memberId={account.user_id} canBook={verified} />
-      : <Section number="01" title="Sign in first"><Link to="/auth?next=%2Fbookings%2Frentals" className="button">Sign in</Link></Section>}</>;
+    <RentalBooking /></>;
 }
-function RentalCheckout({ canBook, memberId }: { canBook: boolean; memberId: string }) {
+
+// The rental checkout with its sign-in gate, without a page header, so the bookings page can embed it with a product already chosen.
+export function RentalBooking({ initialProduct }: { initialProduct?: string }) {
+  const { account, signedIn } = useAccount();
+  const { pathname, search } = useLocation();
+  const verified = accountMembershipLevelsEnabled(account) && ["verified", "premium"].includes(account?.membership_level ?? "");
+  return signedIn && account?.user_id ? <RentalCheckout key={account.user_id} memberId={account.user_id} canBook={verified} initialProduct={initialProduct} />
+    : <Section number="01" title="Sign in first"><Link to={"/auth?next=" + encodeURIComponent(pathname + search)} className="button">Sign in</Link></Section>;
+}
+function RentalCheckout({ canBook, memberId, initialProduct }: { canBook: boolean; memberId: string; initialProduct?: string }) {
   const rentalRequest = <T,>(body: object) => invokeRental<T>(body, memberId);
   const { refresh } = useAccount();
   const [testFixture, setTestFixture] = useState(false);
@@ -49,9 +55,11 @@ function RentalCheckout({ canBook, memberId }: { canBook: boolean; memberId: str
   useEffect(() => {
     invokeRental<{ products: RentalProduct[] }>({ action: "availability" }, memberId).then(result => {
       if (!active.current) return;
-      setProducts(result.products); setProduct(result.products.find(entry => entry.status === "available")?.product ?? "");
+      setProducts(result.products);
+      const available = result.products.filter(entry => entry.status === "available");
+      setProduct((available.find(entry => entry.product === initialProduct) ?? available[0])?.product ?? "");
     }).catch(() => { if (active.current) setProducts([]); });
-  }, [memberId]);
+  }, [memberId, initialProduct]);
   async function run(action: () => Promise<void>) {
     if (!active.current || working.current) return;
     working.current = true; setBusy(true); setError("");

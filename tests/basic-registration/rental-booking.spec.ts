@@ -45,7 +45,7 @@ for (const product of ["cabin101", "hiwonder"]) test(`synthetic ${product} guide
     }
     await route.fulfill({ json: data });
   });
-  await page.goto("/bookings/rentals");
+  await page.goto("/bookings?item=kit");
   await expect(page.getByRole("list", { name: "Rental booking steps" })).toBeVisible();
   await page.getByLabel("What would you like?").selectOption(product);
   await page.getByLabel("Start date", { exact: true }).fill("2027-02-01");

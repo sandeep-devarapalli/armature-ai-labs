@@ -17,8 +17,7 @@ const WhitePaperPage = lazy(() => import("../pages/WhitePaperPage").then(module 
 const ResourceFeedbackPage = lazy(() => import("../pages/ResourceFeedbackPage").then(module => ({ default: module.ResourceFeedbackPage })));
 const ResourceFeedbackAdminPage = lazy(() => import("../pages/ResourceFeedbackPage").then(module => ({ default: module.ResourceFeedbackAdminPage })));
 
-const RentalCheckoutPage = lazy(() => import("../components/RentalCheckout"));
-const DeskCheckoutPage = lazy(() => import("../components/DeskCheckout"));
+const BookLabPage = lazy(() => import("../pages/BookLabPage"));
 const BookingBetaPage = lazy(() => import("../pages/BookingBetaPage").then((module) => ({ default: module.BookingBetaPage })));
 const OnboardingPage = lazy(() => import("../pages/OnboardingPage").then((module) => ({ default: module.OnboardingPage })));
 const ProjectsPage = lazy(() => import("../pages/ProjectsPage").then((module) => ({ default: module.ProjectsPage })));
@@ -162,8 +161,8 @@ export const routes: RouteObject[] = [
       { path: "/profile", element: memberFeature(protectedPage(<ProfilePage />)) },
       { path: "/book", element: memberFeature(protectedPage(<BookPage />)) },
       { path: "/book/:resource", element: memberFeature(protectedPage(<ResourceBookingPage />)) },
-      { path: "/bookings/rentals", element: rentalCheckoutAvailable ? <RentalCheckoutPage /> : <Navigate to="/bookings" replace /> },
-      { path: "/bookings", element: deskCheckoutAvailable ? <DeskCheckoutPage /> : memberFeature(protectedPage(<BookingsPage />)) },
+      { path: "/bookings/rentals", element: <Navigate to={rentalCheckoutAvailable ? "/bookings?item=cabin" : "/bookings"} replace /> },
+      { path: "/bookings", element: deskCheckoutAvailable || rentalCheckoutAvailable ? <BookLabPage /> : memberFeature(protectedPage(<BookingsPage />)) },
       { path: "/bookings/:id", element: memberFeature(protectedPage(<BookingDetailPage />)) },
       { path: "/check-in", element: memberFeature(protectedPage(<CheckInPage />)) },
       { path: "/component-requests", element: memberComponentRequestFeature(protectedPage(<ComponentRequestsPage />)) },
