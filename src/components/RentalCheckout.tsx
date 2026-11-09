@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { accountMembershipLevelsEnabled, useAccount } from "../context/AccountContext";
 import { loadRazorpayCheckout, type CheckoutInstance } from "../lib/razorpay-checkout";
 import { rentalLabel, rentalMode, rentalMoney, rentalRequest as invokeRental, type RentalProduct, type RentalQuote } from "../lib/rental-checkout";
+import { BookingSteps } from "./BookingSteps";
 import { PageHeader, Section } from "./Primitives";
 
 const ist = (value: string) => new Date(value).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) + " IST";
@@ -38,6 +39,9 @@ export function RentalBooking({ initialProduct }: { initialProduct?: string }) {
   return signedIn && account?.user_id ? <RentalCheckout key={account.user_id} memberId={account.user_id} canBook={verified} initialProduct={initialProduct} />
     : <Section number="01" title="Sign in first"><Link to={"/auth?next=" + encodeURIComponent(pathname + search)} className="button">Sign in</Link></Section>;
 }
+const rentalSteps = ["Choose product and dates", "Review the draft and request corrections", "Customer signs, then Armature countersigns",
+  "Staff reviews the signed agreement", "Transfer the deposit; staff verifies bank receipt", "Pay rent through Razorpay and receive confirmation"];
+
 function RentalCheckout({ canBook, memberId, initialProduct }: { canBook: boolean; memberId: string; initialProduct?: string }) {
   const rentalRequest = <T,>(body: object) => invokeRental<T>(body, memberId);
   const { refresh } = useAccount();
@@ -91,9 +95,11 @@ function RentalCheckout({ canBook, memberId, initialProduct }: { canBook: boolea
     modal.on("payment.failed", () => { if (active.current) setError("Payment attempt failed. Check status before trying again."); });
     checkout.current = modal; setCheckoutOpen(true); modal.open();
   }
+  const hasDeposit = quote ? quote.depositMethod === "bank_transfer" && quote.depositPaise > 0 : item?.depositPaise !== 0;
+  const step = !quote ? 0 : ({ awaiting_staff: 1, awaiting_signatures: 2, awaiting_deposit: 4, approved: 5, awaiting_payment: 5, confirmed: 6, returned: 6 } as Record<string, number>)[quote.status]
+    ?? (quote.agreementSigned ? 5 : 1);
   return <Section number="01" title="Your booking">
-    <ol aria-label="Rental booking steps"><li>Choose product and dates</li><li>Review the draft and request corrections</li>
-      <li>Customer signs, then Armature countersigns</li><li>Staff reviews the signed agreement</li><li>Transfer the deposit; staff verifies bank receipt</li><li>Pay rent through Razorpay and receive confirmation</li></ol>
+    <BookingSteps label="Rental booking steps" steps={hasDeposit ? rentalSteps : rentalSteps.filter((_, i) => i !== 4)} current={hasDeposit || step < 4 ? step : step - 1} />
     {!canBook && <p>Verified membership is required. <Link to="/onboarding">Complete verification</Link>.</p>}
     <button className="button secondary" disabled={busy || checkoutOpen} onClick={() => void run(async () => {
       const result = await rentalRequest<{ quotes: RentalQuote[] }>({ action: "list_own" }); if (active.current) setRecent(result.quotes);

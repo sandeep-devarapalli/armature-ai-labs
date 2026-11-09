@@ -220,3 +220,51 @@ it("starts on the product the bookings page chose, and falls back when it is not
   render(<MemoryRouter><RentalBooking initialProduct="cabin201" /></MemoryRouter>);
   await waitFor(() => expect((screen.getByLabelText("What would you like?") as HTMLSelectElement).value).toBe("cabin101"));
 });
+
+const currentStep = () => screen.queryByRole("listitem", { current: "step" })?.textContent;
+const stepCount = () => screen.getByRole("list", { name: "Rental booking steps" }).querySelectorAll("li").length;
+async function openQuote(value: RentalQuote) {
+  mock.request.mockImplementation(async body => body.action === "availability" ? (body.product ? { available: true } : { products }) : value);
+  await show();
+  fireEvent.change(screen.getByLabelText("Start date"), { target: { value: "2027-02-01" } });
+  fireEvent.change(screen.getByLabelText("Last day of the final month"), { target: { value: "2027-02-28" } });
+  fireEvent.click(screen.getByRole("button", { name: "Request agreement" }));
+  await screen.findByText(/Agreement reference/);
+}
+
+it("starts on the first step and hides the deposit step for items without a deposit", async () => {
+  await show();
+  expect(currentStep()).toBe("1Choose product and dates");
+  expect(stepCount()).toBe(6);
+  fireEvent.change(screen.getByLabelText("What would you like?"), { target: { value: "waveshare-ov5693" } });
+  await waitFor(() => expect(stepCount()).toBe(5));
+  expect(screen.queryByText("Transfer the deposit; staff verifies bank receipt")).not.toBeInTheDocument();
+});
+
+it.each([
+  ["awaiting_staff", "2Review the draft and request corrections"],
+  ["awaiting_signatures", "3Customer signs, then Armature countersigns"],
+])("marks the current step for a %s quote", async (status, step) => {
+  await openQuote({ ...quote, status } as RentalQuote);
+  expect(currentStep()).toBe(step);
+});
+
+it("moves from the deposit step to payment once staff verify the bank deposit", async () => {
+  await openBankQuote();
+  expect(currentStep()).toBe("5Transfer the deposit; staff verifies bank receipt");
+  expect(screen.getAllByText("(done)")).toHaveLength(4);
+  cleanup();
+  await openBankQuote({ ...bankQuote, depositStatus: "verified", status: "approved" });
+  expect(currentStep()).toBe("6Pay rent through Razorpay and receive confirmation");
+});
+
+it("numbers payment as step 5 when the quote has no deposit, and marks every step done once confirmed", async () => {
+  const noDeposit = { ...quote, depositPaise: 0, amountPaise: 4000000, agreementSigned: true, approvedAt: "2026-11-08T10:00:00Z", orderPending: false } as RentalQuote;
+  await openQuote({ ...noDeposit, status: "approved" });
+  expect(stepCount()).toBe(5);
+  expect(currentStep()).toBe("5Pay rent through Razorpay and receive confirmation");
+  cleanup();
+  await openQuote({ ...noDeposit, status: "confirmed" });
+  expect(currentStep()).toBeUndefined();
+  expect(screen.getAllByText("(done)")).toHaveLength(5);
+});
