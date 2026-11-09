@@ -73,7 +73,7 @@ test("server hold retains original registration and avoids OTP calls", async ({ 
 
 test("Basic membership cannot request a desk agreement or payment", async ({ page }) => {
   const { calls } = await fixture(page);
-  await page.goto("/bookings");
+  await page.goto("/bookings?item=desk");
   if (process.env.VITE_DESK_CHECKOUT_ENABLED === "true") {
     await expect(page.getByText("Desk passes require Verified membership.", { exact: true })).toBeVisible();
     await expect(page.getByRole("link", { name: "View membership", exact: true })).toHaveAttribute("href", "/onboarding");

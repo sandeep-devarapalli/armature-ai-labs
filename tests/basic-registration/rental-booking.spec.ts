@@ -45,7 +45,7 @@ for (const product of ["cabin101", "hiwonder"]) test(`synthetic ${product} guide
     }
     await route.fulfill({ json: data });
   });
-  await page.goto("/bookings/rentals");
+  await page.goto("/bookings?item=kit");
   await expect(page.getByRole("list", { name: "Rental booking steps" })).toBeVisible();
   await page.getByLabel("What would you like?").selectOption(product);
   await page.getByLabel("Start date", { exact: true }).fill("2027-02-01");
@@ -81,6 +81,6 @@ for (const product of ["cabin101", "hiwonder"]) test(`synthetic ${product} guide
   if (await notice.isVisible()) await notice.click();
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.screenshot({ path: info.outputPath(`rental-${product}.png`), fullPage: true });
-  await page.locator("section").filter({ has: page.getByRole("heading", { name: "Your booking" }) })
+  await page.locator("section").filter({ has: page.getByRole("heading", { name: "Your booking" }) }).last()
     .screenshot({ path: info.outputPath(`rental-${product}-booking.png`) });
 });

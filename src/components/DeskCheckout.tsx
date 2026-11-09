@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { accountMembershipLevelsEnabled, useAccount } from "../context/AccountContext";
 import { useApp } from "../context/AppContext";
 import { memberPlatformAvailable, rentalCheckoutAvailable } from "../config/release";
@@ -57,20 +57,25 @@ function readReference(key: string) {
 }
 
 export default function DeskCheckoutPage() {
-  const { account, signedIn, loading, error, refresh } = useAccount();
-  const verified = accountMembershipLevelsEnabled(account)
-    && (account?.membership_level === "verified" || account?.membership_level === "premium");
-
   return <>
     <PageHeader meta="Workspace bookings" title="Book a desk." description="Choose a desk pass and an available start date. Review the agreement, sign it and pay through Razorpay once Armature has countersigned." />
-    {rentalCheckoutAvailable && <p><Link className="button secondary" to="/bookings/rentals">Book a cabin or Hiwonder kit</Link></p>}
-    {signedIn && account?.user_id ? <DeskCheckout key={account.user_id} memberId={account.user_id} canBook={verified} /> : <Section number="01" title="Sign in and verify">
-      {loading ? <p role="status">Checking your account…</p>
-        : error ? <><p role="alert">{error}</p><button type="button" className="button button-quiet" onClick={() => void refresh()}>Check account status</button></>
-        : !signedIn ? <Link className="button button-primary" to="/auth?next=%2Fbookings%2F">Sign in to book</Link>
-        : <><p>Desk passes require Verified membership.</p><Link className="button button-primary" to="/onboarding">View membership</Link></>}
-    </Section>}
+    {rentalCheckoutAvailable && <p><Link className="button secondary" to="/bookings?item=cabin">Book a cabin or Hiwonder kit</Link></p>}
+    <DeskBooking />
   </>;
+}
+
+// The desk checkout with its sign-in and verification gate, without a page header, so the bookings page can embed it.
+export function DeskBooking() {
+  const { account, signedIn, loading, error, refresh } = useAccount();
+  const { pathname, search } = useLocation();
+  const verified = accountMembershipLevelsEnabled(account)
+    && (account?.membership_level === "verified" || account?.membership_level === "premium");
+  return signedIn && account?.user_id ? <DeskCheckout key={account.user_id} memberId={account.user_id} canBook={verified} /> : <Section number="01" title="Sign in and verify">
+    {loading ? <p role="status">Checking your account…</p>
+      : error ? <><p role="alert">{error}</p><button type="button" className="button button-quiet" onClick={() => void refresh()}>Check account status</button></>
+      : !signedIn ? <Link className="button button-primary" to={"/auth?next=" + encodeURIComponent(pathname + search)}>Sign in to book</Link>
+      : <><p>Desk passes require Verified membership.</p><Link className="button button-primary" to="/onboarding">View membership</Link></>}
+  </Section>;
 }
 
 function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolean }) {

@@ -93,8 +93,8 @@ test("public-first production gates operational routes", async ({ page }) => {
   }
 
   if (deskEnabled) {
-    await page.goto("/bookings");
-    await expect(page.getByRole("heading", { name: "Book a desk.", exact: true })).toBeVisible();
+    await page.goto("/bookings?item=desk");
+    await expect(page.getByRole("heading", { name: "Book the lab.", exact: true })).toBeVisible();
     await expect(page.getByRole("link", { name: "Sign in to book", exact: true })).toBeVisible();
     await expect(page.getByRole("button", { name: "Pay with Razorpay", exact: true })).toHaveCount(0);
   }

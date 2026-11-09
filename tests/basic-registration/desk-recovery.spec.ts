@@ -19,7 +19,7 @@ test("guided desk recovery on a fresh device preserves a pending payment", async
     }
     await route.fulfill({ json: data });
   });
-  await page.goto("/bookings/");
+  await page.goto("/bookings/?item=desk");
   await expect(page.getByRole("list", { name: "Booking steps" })).toBeVisible();
   await page.getByText("Resume an existing booking", { exact: true }).click();
   await page.getByRole("button", { name: "Load my recent requests" }).click();

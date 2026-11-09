@@ -5729,3 +5729,30 @@ footer p {
 .cabin-thumbs button { width: 72px; height: 72px; padding: 0; border: 1px solid var(--hair-strong); border-radius: 8px; overflow: hidden; cursor: pointer; }
 .cabin-thumbs button[aria-pressed="true"] { border-color: var(--saffron); box-shadow: 0 0 0 1px var(--saffron); }
 .cabin-thumbs img { width: 100%; height: 100%; object-fit: cover; }
+
+#steps { scroll-margin-top: 110px; }
+.book-table-wrap { min-width: 0; max-width: 100%; overflow-x: auto; border: 1px solid var(--hair-strong); border-radius: 12px; }
+.book-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.book-table caption { text-align: left; padding: 12px 16px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: var(--kicker); }
+.book-table th, .book-table td { padding: 14px 16px; border-top: 1px solid var(--hair); text-align: left; vertical-align: top; font-weight: 400; }
+.book-table thead th { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--fg-3); }
+.book-table tbody th strong { display: block; font-size: 1.05rem; }
+.book-table small { display: block; color: var(--fg-3); }
+.book-table tr.is-selected { background: var(--panel-2); }
+.book-price { display: block; white-space: nowrap; font-weight: 600; }
+.book-note { color: var(--fg-3); font-size: 0.86rem; max-width: 70ch; }
+.book-items { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; margin: 0 0 20px; padding: 0; list-style: none; }
+.book-items button { display: grid; gap: 2px; width: 100%; padding: 10px 12px; text-align: left; background: var(--panel); color: inherit; border: 1px solid var(--hair-strong); border-radius: 8px; cursor: pointer; font: inherit; }
+.book-items button[aria-pressed="true"] { border-color: var(--saffron); box-shadow: inset 0 0 0 1px var(--saffron); }
+.book-items button:disabled { cursor: not-allowed; opacity: 0.6; }
+.book-items span { font-size: 0.8rem; color: var(--fg-3); }
+@media (max-width: 760px) {
+  .book-table thead { display: none; }
+  .book-table, .book-table tbody, .book-table caption { display: block; min-width: 0; }
+  .book-price { white-space: normal; }
+  .book-table tbody tr { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px 16px; padding: 14px 16px; border-top: 1px solid var(--hair); }
+  .book-table tbody th, .book-table tbody td { padding: 0; border: 0; }
+  .book-table tbody th, .book-table tbody td:last-child, .book-table tbody td[data-label="Cancellation"] { grid-column: 1 / -1; }
+  .book-table tbody td[data-label]::before { content: attr(data-label); display: block; font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--fg-3); }
+  .book-table tbody td:last-child .button { width: 100%; }
+}

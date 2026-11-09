@@ -13,11 +13,11 @@ test("basic registration opens independently while paid access remains gated", a
   await expect(page.getByRole("button", { name: "Email me a secure link" })).toBeVisible();
   await expect(page.getByText("Complete your profile and identity review", { exact: false })).toBeVisible();
   await expect(page.getByRole("button", { name: "Continue with Google" })).toBeVisible();
-  await page.goto("/bookings");
+  await page.goto("/bookings?item=desk");
   if (process.env.VITE_DESK_CHECKOUT_ENABLED === "true") {
-    await expect(page.getByRole("heading", { name: "Book a desk.", exact: true })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Book the lab.", exact: true })).toBeVisible();
     await expect(page.getByRole("heading", { name: "Sign in and verify", exact: true })).toBeVisible();
-    await expect(page.getByRole("link", { name: "Sign in to book", exact: true })).toHaveAttribute("href", "/auth?next=%2Fbookings%2F");
+    await expect(page.getByRole("link", { name: "Sign in to book", exact: true })).toHaveAttribute("href", "/auth?next=%2Fbookings%3Fitem%3Ddesk");
     await expect(page.getByRole("button", { name: "Request agreement", exact: true })).toHaveCount(0);
     await expect(page.getByRole("button", { name: "Pay with Razorpay", exact: true })).toHaveCount(0);
   } else {
