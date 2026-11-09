@@ -159,7 +159,7 @@ export function Shell({ children }: PropsWithChildren) {
             {navigationLinks.map(([to, label], index) => (
               <span className="primary-nav-item" key={to}>
                 <NavLink to={to} end={to === "/"}>{label}</NavLink>
-                {index === 1 && <a href={coursesUrl}>Courses</a>}
+                {index === (deskCheckoutAvailable ? 2 : 1) && <a href={coursesUrl}>Courses</a>}
               </span>
             ))}
             <details className="nav-more" ref={resourcesMenu}>
@@ -195,8 +195,8 @@ export function Shell({ children }: PropsWithChildren) {
         </div>
         <nav className="compact-mobile-nav" aria-label="Quick navigation">
           <NavLink to="/" end>The lab</NavLink>
-          <a href={coursesUrl}>Courses</a>
           {deskCheckoutAvailable && <NavLink to="/bookings/">Bookings</NavLink>}
+          <a href={coursesUrl}>Courses</a>
           <button ref={mobileTrigger} type="button" aria-label={mobileMenuOpen ? "Close navigation" : "Open navigation"} aria-expanded={mobileMenuOpen} aria-controls="mobile-public-menu" onClick={() => setMobileMenuOpen(open => !open)}>Menu <span aria-hidden="true">{mobileMenuOpen ? "−" : "+"}</span></button>
         </nav>
         {mobileMenuOpen && (
