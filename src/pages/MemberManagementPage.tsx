@@ -8,10 +8,11 @@ import { AccountAvatar } from "../components/AccountAvatar";
 import { OnboardingForm } from "./OnboardingForm";
 import { ApplicationUpdateQueue } from "../components/ApplicationUpdateQueue";
 import { DeskAgreementQueue } from "../components/DeskAgreementQueue";
+import { EventAgreementQueue } from "../components/EventAgreementQueue";
 import { ManualDeskAgreementReview } from "../components/ManualDeskAgreementReview";
 import { SharedMobileApproval } from "../components/SharedMobileApproval";
 import { RentalAgreementReview } from "../components/RentalAgreementReview";
-import { deskCheckoutAvailable, rentalCheckoutAvailable } from "../config/release";
+import { deskCheckoutAvailable, eventCheckoutAvailable, rentalCheckoutAvailable } from "../config/release";
 import { accountMembershipLevelsEnabled, applicationStatusLabel, membershipLevelLabels, sharedMobileConfirmedLabel, type MembershipLevel, type MobileVerificationMethod } from "../context/AccountContext";
 import "./MemberManagementPage.css";
 
@@ -64,8 +65,8 @@ export function MemberManagementPage({ client = supabase as SupabaseClient | nul
   const [busy, setBusy] = useState(false);
   const [formBusy, setFormBusy] = useState(false), [queueBusy, setQueueBusy] = useState(false);
   const [sharedMobileBusy, setSharedMobileBusy] = useState(false);
-  const [rentalBusy, setRentalBusy] = useState(false);
-  const reviewInProgress = formBusy || queueBusy || sharedMobileBusy || rentalBusy;
+  const [rentalBusy, setRentalBusy] = useState(false), [eventBusy, setEventBusy] = useState(false);
+  const reviewInProgress = formBusy || queueBusy || sharedMobileBusy || rentalBusy || eventBusy;
   const interactionBusy = busy || reviewInProgress;
   const reviewBusy = useRef(false), reloadAfterReview = useRef(false);
   reviewBusy.current = reviewInProgress;
@@ -135,6 +136,7 @@ export function MemberManagementPage({ client = supabase as SupabaseClient | nul
       {session && role !== "member" && <ApplicationUpdateQueue key={`updates:${session.user.id}`} client={client!} userId={session.user.id} blocked={formBusy || busy} onBusyChange={setQueueBusy} />}
       {admin && session && <MemberNotificationStatus key={`notifications:${session.user.id}`} client={client!} />}
       {admin && session && deskCheckoutAvailable && <DeskAgreementQueue key={`desk:${session.user.id}`} client={client!} blocked={interactionBusy} />}
+      {admin && session && eventCheckoutAvailable && <EventAgreementQueue key={`event:${session.user.id}`} client={client!} actorId={session.user.id} blocked={busy || formBusy || queueBusy || sharedMobileBusy || rentalBusy} onBusyChange={setEventBusy} />}
       {selected && <section id="selected-member" className="member-detail" aria-label="Selected member"><h2 ref={detailHeading} tabIndex={-1}>{selected.name || selected.email}</h2><button className="button secondary" disabled={interactionBusy} onClick={() => { setSelected(null); setAction(null); }}>Close details</button><p className="member-document-note">Verification originals — Photo: {selected.photo_available ? "available" : "not available"}; ID: {selected.id_available ? "available" : "not available"}. Original documents expire under the retention policy; deletion alone does not remove identity approval.</p>
         {admin && <div className="member-actions">{selected.user_id !== session?.user.id && selected.application_status === "approved" && <button className="button secondary" disabled={interactionBusy} onClick={() => setAction("revoke")}>Revoke membership</button>}{selected.user_id !== session?.user.id && selected.application_status === "revoked" && <button className="button secondary" disabled={interactionBusy} onClick={() => setAction("reinstate")}>Reinstate membership</button>}{canManageMemberRole(role, selected.role, selected.user_id === session?.user.id) && <button className="button secondary" disabled={interactionBusy} onClick={() => { setTargetRole(selected.role); setAction("role"); }}>Manage staff role</button>}</div>}
         {action && <form className="ol-form member-confirm" onSubmit={perform}><h3>{action === "role" ? "Confirm staff access change" : `Confirm ${action === "revoke" ? "membership revocation" : "membership reinstatement"}`}</h3><p>Account: <strong>{selected.email}</strong></p>{action === "role" ? <><label>New role<select value={targetRole} onChange={(event) => setTargetRole(event.target.value as Role)}><option value="member">Member — remove staff access</option><option value="membership_reviewer">Staff — pending application review and approval</option>{role === "super_admin" && <option value="admin">Admin — membership and Staff management</option>}</select></label><p>{targetRole === "admin" ? "Admin access permits membership decisions and Staff management, but not Admin appointments." : targetRole === "membership_reviewer" ? "Staff can inspect pending applications and approve membership only." : "All staff privileges will be removed. Personal membership remains unchanged."}</p></> : <><label>Reason<textarea name="reason" required minLength={10} maxLength={1000} rows={3} /></label><p>Staff access is separate and will not change. {action === "revoke" ? "The member retains sign-in and their own status page, but loses community privileges." : levelsEnabled ? "Identity approval will be restored. Your membership level still depends on mobile verification and active subscriptions." : "Previously approved basic membership will be restored."}</p></>}<label><input type="checkbox" required /> I confirm this change for the account above.</label><div className="member-actions"><button className="button" disabled={interactionBusy || (action === "role" && targetRole === selected.role)}>Confirm change</button><button type="button" className="button secondary" disabled={interactionBusy} onClick={() => setAction(null)}>Cancel</button></div></form>}
