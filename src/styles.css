@@ -5756,3 +5756,13 @@ footer p {
   .book-table tbody td[data-label]::before { content: attr(data-label); display: block; font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--fg-3); }
   .book-table tbody td:last-child .button { width: 100%; }
 }
+
+/* Booking steps: numbered rail with done, current and next states */
+.booking-steps { list-style: none; margin: 0 0 20px 13px; padding: 0; border-left: 1px solid var(--hair-strong); }
+.booking-steps > li { position: relative; padding: 2px 0 18px 26px; }
+.booking-steps > li:last-child { padding-bottom: 2px; }
+.booking-step-dot { position: absolute; left: -13px; top: 0; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--hair-strong); background: var(--paper); font-size: 11px; }
+.booking-steps > li.is-done .booking-step-dot { background: var(--moss); border-color: var(--moss); color: var(--paper); }
+.booking-steps > li.is-current { font-weight: 600; }
+.booking-steps > li.is-current .booking-step-dot { background: var(--saffron); border-color: var(--saffron); color: #0a1220; }
+.booking-steps > li.is-next { color: var(--fg-3); }

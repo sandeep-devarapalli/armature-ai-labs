@@ -5,6 +5,7 @@ import { useApp } from "../context/AppContext";
 import { memberPlatformAvailable, rentalCheckoutAvailable } from "../config/release";
 import { loadRazorpayCheckout, type CheckoutInstance, type CheckoutResult } from "../lib/razorpay-checkout";
 import { supabase } from "../lib/supabase";
+import { BookingSteps } from "./BookingSteps";
 import { Field, PageHeader, Section } from "./Primitives";
 
 const terms = { day: "Day pass", week: "Week pass", month: "Monthly desk" };
@@ -47,6 +48,9 @@ async function request<T>(body: object): Promise<T> {
   }
   return data as T;
 }
+
+const deskSteps = ["Choose your pass, chair and dates", "Review your draft and request any corrections",
+  "Sign in PandaDoc; Armature countersigns and reviews", "Pay securely, then receive your confirmed reservation"];
 
 function readReference(key: string) {
   try {
@@ -184,13 +188,9 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
   const expiredBoundOrder = Boolean(quote?.hasOrder && (quote.expiredOrder ||
     (quote.approvedAt && Date.parse(quote.approvedAt) + 30 * 60 * 1000 <= Date.now())));
   const terminal = quote?.status === "confirmed" || quote?.status === "refunded" || quote?.status === "cancelled";
+  const step = choosing ? 0 : quote?.status === "confirmed" ? 4 : quote?.agreementSigned ? 3 : quote?.hasAgreement && !quote.manualAgreement ? 2 : 1;
   return <Section number="01" title="Book a desk pass">
-    <ol aria-label="Booking steps">
-      <li>Choose your pass, chair and dates</li>
-      <li>Review your draft and request any corrections</li>
-      <li>Sign in PandaDoc; Armature countersigns and reviews</li>
-      <li>Pay securely, then receive your confirmed reservation</li>
-    </ol>
+    <BookingSteps steps={deskSteps} current={step} />
     <p>A request does not reserve a desk. Availability is checked again before payment. Do not make a second payment while an earlier attempt is pending.</p>
     {choosing && <details className="member-confirm">
       <summary>Resume an existing booking</summary>

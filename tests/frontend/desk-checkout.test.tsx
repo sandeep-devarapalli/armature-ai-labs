@@ -24,6 +24,7 @@ const policyVersion = "desk-policy-v1";
 const signed = { quoteId, amountPaise: 35000, policyVersion, hasAgreement: true, agreementSigned: true };
 const reply = (data: object) => ({ data: { mode: "live", ...data }, error: null });
 const renderPage = () => render(<MemoryRouter><DeskCheckoutPage /></MemoryRouter>);
+const currentStep = () => screen.queryByRole("listitem", { current: "step" })?.textContent;
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -63,6 +64,7 @@ it("quotes an available chair, waits for signatures, submits versioned consent a
   });
 
   renderPage();
+  expect(currentStep()).toBe("1Choose your pass, chair and dates");
   await screen.findByRole("option", { name: "S07" });
   fireEvent.change(screen.getByLabelText("Chair"), { target: { value: "S07" } });
   expect(await screen.findByRole("option", { name: /Unavailable/ })).toBeDisabled();
@@ -70,11 +72,13 @@ it("quotes an available chair, waits for signatures, submits versioned consent a
   fireEvent.click(screen.getByRole("button", { name: "Request agreement" }));
   expect(await screen.findByText("Armature is preparing your agreement.")).toBeInTheDocument();
   expect(actions).toHaveBeenCalledWith({ action: "quote", chair: "S07", unit: "day", start });
+  expect(currentStep()).toBe("2Review your draft and request any corrections");
   expect(screen.queryByRole("button", { name: "Pay with Razorpay" })).not.toBeInTheDocument();
 
   fireEvent.click(screen.getByRole("button", { name: "Check agreement or payment status" }));
   const pay = await screen.findByRole("button", { name: "Pay with Razorpay" });
   expect(pay).toBeDisabled();
+  expect(currentStep()).toBe("4Pay securely, then receive your confirmed reservation");
   fireEvent.click(screen.getByRole("checkbox"));
   fireEvent.click(pay);
   await waitFor(() => expect(open).toHaveBeenCalledOnce());
@@ -87,6 +91,8 @@ it("quotes an available chair, waits for signatures, submits versioned consent a
     action: "verify", quoteId, razorpay_order_id: "order_Fixture", razorpay_payment_id: "pay_Fixture", razorpay_signature: "callback-signature",
   });
   expect(await screen.findByText(/Desk booking confirmed.*Membership: Premium/)).toBeInTheDocument();
+  expect(currentStep()).toBeUndefined();
+  expect(screen.getAllByText("(done)")).toHaveLength(4);
   expect(mock.refreshMembership).toHaveBeenCalledOnce();
 });
 
@@ -112,6 +118,7 @@ it("directs a manual pilot customer to email and waits for staff approval before
   const status = screen.getByRole("button", { name: "Check agreement or payment status" });
   fireEvent.click(status);
   expect(await screen.findByText(/Armature will prepare your PandaDoc agreement/)).toBeInTheDocument();
+  expect(currentStep()).toBe("2Review your draft and request any corrections");
   expect(screen.queryByRole("button", { name: "Get signing link" })).not.toBeInTheDocument();
   expect(screen.queryByRole("button", { name: "Pay with Razorpay" })).not.toBeInTheDocument();
 
@@ -119,6 +126,15 @@ it("directs a manual pilot customer to email and waits for staff approval before
   expect(await screen.findByRole("button", { name: "Pay with Razorpay" })).toBeDisabled();
 });
 
+it("marks the signing step current once the agreement is ready", async () => {
+  localStorage.setItem("armature-desk-quote-v1:member-fixture", quoteId);
+  mock.invoke.mockResolvedValueOnce(reply({ quoteId, hasAgreement: true, agreementSigned: false }));
+  renderPage();
+  fireEvent.click(screen.getByRole("button", { name: "Check agreement or payment status" }));
+  await screen.findByRole("button", { name: "Get signing link" });
+  expect(currentStep()).toBe("3Sign in PandaDoc; Armature countersigns and reviews");
+  expect(screen.getAllByText("(done)")).toHaveLength(2);
+});
 
 it("restores a confirmed request on another device without starting a new payment", async () => {
   mock.invoke.mockImplementation((_, { body }) => Promise.resolve(reply(body.action === "list_own"
