@@ -7,7 +7,7 @@ function LegalPage({ title, updated = true, children }: PropsWithChildren<{ titl
     <header className="page-hero">
       <div className="wrap">
         <h1>{title}</h1>
-        {updated && <p className="hero-copy">Last updated: 8 November 2026</p>}
+        {updated && <p className="hero-copy">Last updated: 9 November 2026</p>}
       </div>
     </header>
     <div className="wrap privacy-content">{children}</div>
@@ -89,6 +89,7 @@ export function TermsPage() {
     <section>
       <h2>6. Workshops and events</h2>
       <p>A seat is confirmed once payment is received. We may change the schedule, venue or instructor with reasonable notice. If we cancel a session, you get a full refund.</p>
+      <p>Hiring the event space needs Armature's review, a signed agreement and payment through Razorpay. The hire is confirmed once payment is received.</p>
     </section>
     <section>
       <h2>7. Payments</h2>
@@ -139,8 +140,10 @@ export function RefundPolicyPage() {
           <tr><td>Desk pass</td><td>After the pass starts</td><td>No refund for unused time</td></tr>
           <tr><td>Equipment or meeting room booking</td><td>48 hours or more before the slot</td><td>Full refund, or free reschedule once</td></tr>
           <tr><td>Equipment or meeting room booking</td><td>Less than 48 hours, or no-show</td><td>No refund</td></tr>
-          <tr><td>Workshop or event</td><td>24 hours or more before the start</td><td>Full refund</td></tr>
-          <tr><td>Workshop or event</td><td>Less than 24 hours before the start</td><td>No refund; credit for a future session</td></tr>
+          <tr><td>Workshop or event seat</td><td>24 hours or more before the start</td><td>Full refund</td></tr>
+          <tr><td>Workshop or event seat</td><td>Less than 24 hours before the start</td><td>No refund; credit for a future session</td></tr>
+          <tr><td>Event space hire</td><td>48 hours or more before the event</td><td>50% refund</td></tr>
+          <tr><td>Event space hire</td><td>Less than 48 hours before the event, or no-show</td><td>No refund</td></tr>
           <tr><td>Session cancelled by us</td><td>Any time</td><td>Full refund</td></tr>
           <tr><td>Hardware order, not yet dispatched</td><td>Any time before dispatch</td><td>Full refund</td></tr>
           <tr><td>Hardware, damaged, defective or wrong item</td><td>Report within 3 days of delivery</td><td>Replacement, or full refund if no replacement is available</td></tr>
