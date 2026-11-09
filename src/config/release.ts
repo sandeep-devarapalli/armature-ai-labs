@@ -24,3 +24,5 @@ export const basicOnboardingAvailable = !demoModeEnabled && isSupabaseConfigured
 export const deskCheckoutAvailable = basicOnboardingAvailable && enabled(import.meta.env.VITE_DESK_CHECKOUT_ENABLED);
 
 export const rentalCheckoutAvailable = basicOnboardingAvailable && enabled(import.meta.env.VITE_RENTAL_CHECKOUT_ENABLED);
+
+export const eventCheckoutAvailable = basicOnboardingAvailable && enabled(import.meta.env.VITE_EVENT_CHECKOUT_ENABLED);

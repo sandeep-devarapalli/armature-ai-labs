@@ -8,7 +8,7 @@ import { HomePage } from "../pages/HomePage";
 import {
   basicOnboardingAvailable,
   componentRequestsAvailable,
-  deskCheckoutAvailable, rentalCheckoutAvailable,
+  deskCheckoutAvailable, eventCheckoutAvailable, rentalCheckoutAvailable,
   equipmentPageAvailable,
   memberPlatformAvailable
 } from "../config/release";
@@ -163,7 +163,7 @@ export const routes: RouteObject[] = [
       { path: "/book", element: memberFeature(protectedPage(<BookPage />)) },
       { path: "/book/:resource", element: memberFeature(protectedPage(<ResourceBookingPage />)) },
       { path: "/bookings/rentals", element: <Navigate to={rentalCheckoutAvailable ? "/bookings?item=cabin" : "/bookings"} replace /> },
-      { path: "/bookings", element: deskCheckoutAvailable || rentalCheckoutAvailable ? <BookLabPage /> : memberFeature(protectedPage(<BookingsPage />)) },
+      { path: "/bookings", element: deskCheckoutAvailable || rentalCheckoutAvailable || eventCheckoutAvailable ? <BookLabPage /> : memberFeature(protectedPage(<BookingsPage />)) },
       ...(rentalCheckoutAvailable ? [{ path: "/bookings/equipment", element: <EquipmentRentalPage /> }, { path: "/bookings/equipment/:code", element: <EquipmentRentalPage /> }] : []),
       { path: "/bookings/:id", element: memberFeature(protectedPage(<BookingDetailPage />)) },
       { path: "/check-in", element: memberFeature(protectedPage(<CheckInPage />)) },

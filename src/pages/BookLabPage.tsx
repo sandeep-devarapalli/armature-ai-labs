@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { CabinMap } from "../components/CabinMap";
 import { DeskBooking } from "../components/DeskCheckout";
+import { EventBooking } from "../components/EventCheckout";
 import { PageHeader } from "../components/Primitives";
 import { RentalBooking } from "../components/RentalCheckout";
-import { deskCheckoutAvailable, rentalCheckoutAvailable } from "../config/release";
+import { deskCheckoutAvailable, eventCheckoutAvailable, rentalCheckoutAvailable } from "../config/release";
 import { useAccount } from "../context/AccountContext";
 import { cabins, formatPaise, seatPaise, statusLabel } from "../lib/cabins";
 import { rentalRequest, type RentalProduct } from "../lib/rental-checkout";
@@ -41,7 +42,7 @@ export default function BookLabPage() {
       prices: [`${formatPaise(seatPaise)} / seat a month`], deposit: "To be confirmed", minimum: "1 calendar month",
       cancellation: "30 days or more before the start: full refund" } as Row, { id: "kit", name: "Equipment", summary: "Robot arms and cameras to use in the lab.",
       prices: lowestRent(equipment), deposit: "Shown per item", minimum: "1 day (cameras), 7 days (arms)", cancellation: "48 hours or more before the start: full refund" } as Row] : []),
-    { id: "event", name: "Event space", summary: "The demo floor for meetups, launches and live demos.", prices: ["Coming soon"], deposit: "None", minimum: "1 hour",
+    { id: "event", name: "Event space", summary: "The demo floor for meetups, launches and live demos.", prices: [eventCheckoutAvailable ? `${formatPaise(250000)} / hour` : "Coming soon"], deposit: "None", minimum: "1 hour",
       cancellation: "48 hours or more before the event: 50% refund" }
   ];
   const item = rows.find(r => r.id === params.get("item"));
@@ -93,7 +94,7 @@ export default function BookLabPage() {
             {kit ? `Specs, photos and what's in the box for ${kit.name}` : "Compare specs, photos and what's in the box"}</Link></p>}
           <RentalBooking key={kit?.product ?? "kit"} initialProduct={kit?.product} />
         </>}
-        {item.id === "event" && <p className="book-note">Event bookings open soon. To book the demo floor now, write to <a href="mailto:hello@armatureailabs.com">hello@armatureailabs.com</a>.</p>}
+        {item.id === "event" && (eventCheckoutAvailable ? <EventBooking /> : <p className="book-note">Event bookings open soon. To book the demo floor now, write to <a href="mailto:hello@armatureailabs.com">hello@armatureailabs.com</a>.</p>)}
       </div>
     </section>}
   </>;
