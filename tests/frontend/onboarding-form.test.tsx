@@ -166,6 +166,7 @@ it("requires explicit ID retention consent before sending document bytes", async
   render(<MemoryRouter><OnboardingForm client={fixture.client} requestDocument={requestDocument} /></MemoryRouter>);
   await goToStep("Private documents");
   const input = await screen.findByLabelText("government ID image");
+  expect(screen.getByText("For Aadhaar, mask the first eight digits before upload. PAN or passport are alternatives.")).toBeVisible();
   const file = new File(["synthetic"], "id.png", { type: "image/png" });
   vi.spyOn(FormData.prototype, "get").mockImplementation(key => key === "file" ? file : null);
   fireEvent.submit(input.closest("form")!);
