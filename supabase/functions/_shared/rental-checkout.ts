@@ -5,8 +5,9 @@ import { rentalProvider, rentalStagingBackend } from "./rental-payment.ts";
 
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 const date = /^\d{4}-\d{2}-\d{2}$/;
+const productCode = /^[a-z0-9-]{2,40}$/;
 type Quote = {
-  id: string; parent_quote_id?: string | null; product: string; unit: string; starts_on: string; ends_on: string;
+  id: string; parent_quote_id?: string | null; product: string; kind?: string; productName?: string; unit: string; starts_on: string; ends_on: string;
   rent_paise: number; deposit_paise: number; amount_paise: number; agreement_hash: string;
   refund_account?: object; deposit_receipts?: object[];
   deposit_method?: "bank_transfer" | "razorpay"; payment_amount_paise?: number; deposit_status?: string;
@@ -39,7 +40,7 @@ function reconciled(q: Quote, result: unknown): Quote {
 class Rejected extends Error { constructor(readonly status: number, readonly code: string) { super(code); } }
 // bankPrefix is set only for the member; staff responses never carry company bank details.
 function present(q: Quote, bankPrefix: string | null = null) {
-  return { quoteId: q.id, parentQuoteId: q.parent_quote_id, product: q.product, unit: q.unit, start: q.starts_on, end: q.ends_on,
+  return { quoteId: q.id, parentQuoteId: q.parent_quote_id, product: q.product, kind: q.kind, productName: q.productName, unit: q.unit, start: q.starts_on, end: q.ends_on,
     refundAccount: q.refund_account, depositReceipts: q.deposit_receipts ?? [],
     depositMethod: q.deposit_method ?? "razorpay", depositStatus: q.deposit_status,
     depositReference: q.deposit_reference, depositVerifiedReference: q.deposit_verified_reference, depositVerifiedAt: q.deposit_verified_at, paymentWindowAt: q.payment_window_at ?? q.approved_at,
@@ -113,9 +114,12 @@ export async function handleRentalCheckout(request: Request, mode: "test" | "liv
       const result = await operation<{ quotes: (Quote & { member_id: string })[] }>(action, { offset, ...(staff ? { reviewerId: user.id, reviewerAal: "aal2" } : {}) });
       return reply({ mode, quotes: result.quotes.map(q => ({ ...show(q), ...(staff ? { memberId: q.member_id } : {}) })) });
     }
+    if (action === "availability" && input.product === undefined && input.start === undefined) return reply({ mode, ...await operation<object>("availability", {}) });
     if (action === "availability" || action === "quote") {
-      if (!["cabin101", "hiwonder"].includes(input.product) || !date.test(input.start ?? "")
-        || (input.product === "cabin101" ? !date.test(input.end ?? "") : !["week", "month"].includes(input.unit))) throw new Rejected(400, "invalid_selection");
+      // The catalogue decides which products exist and whether each needs an end date (cabins) or a unit (equipment).
+      if (typeof input.product !== "string" || !productCode.test(input.product) || !date.test(input.start ?? "")
+        || (input.end !== undefined && !date.test(input.end)) || (input.unit !== undefined && !["week", "month"].includes(input.unit))
+        || (input.end === undefined && input.unit === undefined)) throw new Rejected(400, "invalid_selection");
       const testFixture = input.testFixture === true;
       if (testFixture && (mode !== "test" || Deno.env.get("SUPABASE_URL") !== rentalStagingBackend
         || Deno.env.get("RENTAL_TEST_FIXTURE_ENABLED") !== "true" || Deno.env.get("RENTAL_TEST_FIXTURE_BUYER") !== user.id)) throw new Rejected(403, "test_fixture_not_allowed");
