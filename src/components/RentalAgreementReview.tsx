@@ -3,7 +3,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { MfaPanel } from "../pages/MemberPages";
 import { DepositReceipts } from "./RentalCheckout";
 
-import { rentalMode, rentalMoney, type RentalQuote, type RentalRefundAccount } from "../lib/rental-checkout";
+import { rentalLabel, rentalMode, rentalMoney, type RentalQuote, type RentalRefundAccount } from "../lib/rental-checkout";
 
 const providerName = (review: { particulars?: Record<string, unknown> }) => review.particulars?.signingProvider === "docusign" ? "DocuSign" : "PandaDoc";
 type Review = RentalQuote & { particulars?: Record<string, unknown>; bookingId?: string | null; parentQuoteId?: string | null;
@@ -34,7 +34,7 @@ export function RentalAgreementReview({ client, actorId, memberId, blocked, onBu
       const quoteId = String(fields.get("quoteId") ?? review?.quoteId ?? "").trim().toLowerCase();
       let body: object | FormData = action === "staff_queue" ? { action, offset: Number(fields.get("offset") ?? 0) } : { action, memberId, quoteId };
       if (action === "prepare" && review) {
-        const cabin = review.product === "cabin101";
+        const cabin = review.kind === "cabin";
         const particulars = { termsVersion: review.policyVersion, availabilityConfirmed: fields.get("available") === "on",
           signingProvider: fields.get("signingProvider") === "docusign" ? "docusign" : "pandadoc",
           stampRequired: cabin && fields.get("stampRequired") === "yes", stampDecisionReason: String(fields.get("stampReason") ?? "").trim(),
@@ -99,7 +99,7 @@ export function RentalAgreementReview({ client, actorId, memberId, blocked, onBu
     {queueLoaded && <div aria-label="Member rental requests">
       {requests.length === 0 && <p>No requests for this member in this batch. Use the next batch if available, or look up a reference.</p>}
       {requests.map(item => <form key={item.quoteId} onSubmit={event => void submit(event, "manual_review")}><input name="quoteId" type="hidden" value={item.quoteId} />
-        <button className="button secondary" disabled={disabled}>{item.product === "cabin101" ? "Cabin 101" : "Hiwonder kit"} · {item.start} · {statusLabels[item.status] ?? "Review required"}</button></form>)}
+        <button className="button secondary" disabled={disabled}>{rentalLabel(item)} · {item.start} · {statusLabels[item.status] ?? "Review required"}</button></form>)}
       {offset > 0 && <form onSubmit={event => void submit(event, "staff_queue")}><input name="offset" type="hidden" value={Math.max(0, offset - 50)} /><button className="button secondary" disabled={disabled}>Previous request batch</button></form>}
       {moreRequests && <form onSubmit={event => void submit(event, "staff_queue")}><input name="offset" type="hidden" value={offset + 50} /><button className="button secondary" disabled={disabled}>Next request batch</button></form>}
     </div>}
@@ -107,7 +107,7 @@ export function RentalAgreementReview({ client, actorId, memberId, blocked, onBu
       <label>Rental agreement reference<input name="quoteId" required pattern={reference} disabled={disabled} /></label>
       <button className="button secondary" disabled={disabled}>Find rental agreement</button>
     </form> : <>
-      <h3>{review.product === "cabin101" ? "Cabin 101" : "Hiwonder kit"}</h3><p>{review.start} to {review.end}</p>
+      <h3>{rentalLabel(review)}</h3><p>{review.start} to {review.end}</p>
       {review.testFixture && <p role="status">TEST SPECIMEN: ₹50 rent and ₹100 simulated bank deposit. No real transfer or rental.</p>}
       <p>Rent {rentalMoney(review.rentPaise)} · Deposit {rentalMoney(review.depositPaise)} · Total {rentalMoney(review.amountPaise)}. No GST added.</p>
       {review.depositMethod === "bank_transfer" && <p>Razorpay collects {rentalMoney(review.paymentAmountPaise ?? review.rentPaise)} rent only. The deposit is recorded separately as a refundable bank-transfer liability.</p>}
@@ -118,7 +118,7 @@ export function RentalAgreementReview({ client, actorId, memberId, blocked, onBu
         <p>Resolve corrections with the customer first. Complete any required stamping before signing. Changing these particulars changes the fingerprint and requires a fresh final draft.</p>
         <form key={review.agreementHash} className="ol-form" onSubmit={event => void submit(event, "prepare")}>
           <label><input name="available" type="checkbox" required disabled={disabled} /> I confirmed availability and the final terms with the customer.</label>
-          {review.product === "cabin101" && <>
+          {review.kind === "cabin" && <>
             <label>Confirmed maximum occupants<input name="capacity" type="number" min="1" max="100" required disabled={disabled} defaultValue={String(review.particulars?.capacity ?? "")} /></label>
             <label>Daily access starts<input name="accessStart" type="time" required disabled={disabled} defaultValue={String(review.particulars?.accessStart ?? "")} /></label>
             <label>Daily access ends<input name="accessEnd" type="time" required disabled={disabled} defaultValue={String(review.particulars?.accessEnd ?? "")} /></label>
@@ -128,7 +128,7 @@ export function RentalAgreementReview({ client, actorId, memberId, blocked, onBu
             <label>Stamping decision<select name="stampRequired" required disabled={disabled} defaultValue=""><option value="" disabled>Choose reviewed treatment</option><option value="yes">Required, completed manually</option><option value="no">Not required under reviewed treatment</option></select></label>
             <label>Stamp-paper reference, if required<input name="stampReference" disabled={disabled} /></label>
           </>}
-          {review.product === "hiwonder" && <><p>The current kit uses the approved no-stamping exception. Confirm its condition, contents and the customer's paid workspace coverage.</p>
+          {review.kind === "equipment" && <><p>Equipment rentals use the approved no-stamping exception. Confirm its condition, contents and the customer's paid workspace coverage.</p>
             <label>Reviewed unused-deposit terms<textarea name="unusedDepositTerms" required minLength={10} maxLength={1000} disabled={disabled} defaultValue={String(review.particulars?.unusedDepositTerms ?? "")} /></label>
             <p>Record the manually reviewed decision if the kit is never handed over. Do not assume an automatic refund or forfeiture. Confirm these terms with the customer before the final signing version.</p></>}
           <label>Executed-agreement records policy reference<textarea name="recordsPolicyReference" required minLength={10} maxLength={1000} disabled={disabled} defaultValue={String(review.particulars?.recordsPolicyReference ?? "")} /></label>
@@ -193,8 +193,8 @@ export function RentalAgreementReview({ client, actorId, memberId, blocked, onBu
           </form>
         </details>}
       </>}
-      {review.bookingId && review.product === "cabin101" && !review.parentQuoteId && review.status === "confirmed" && <form className="ol-form" onSubmit={event => void submit(event, "renewal_quote")}>
-        <h4>Next calendar month's rent</h4><p>Use the original signed terms. This creates a ₹40,000 rent request with no additional deposit or automatic debit. A changed contract needs a fresh agreement.</p>
+      {review.bookingId && review.kind === "cabin" && !review.parentQuoteId && review.status === "confirmed" && <form className="ol-form" onSubmit={event => void submit(event, "renewal_quote")}>
+        <h4>Next calendar month's rent</h4><p>Use the original signed terms. This creates a {rentalMoney(review.rentPaise)} rent request with no additional deposit or automatic debit. A changed contract needs a fresh agreement.</p>
         <label>Next unpaid month's first date<input name="start" type="date" required disabled={disabled} /></label>
         <label><input name="unchanged" type="checkbox" required disabled={disabled} /> The original agreement terms and approved users are unchanged.</label>
         <button className="button secondary" disabled={disabled}>Prepare next month's rent</button>

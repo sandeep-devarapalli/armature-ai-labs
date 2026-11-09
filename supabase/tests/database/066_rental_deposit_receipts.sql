@@ -1,5 +1,7 @@
 begin;
 select no_plan();
+-- These fixtures quote Cabin 101 at its pre-2026-11-09 terms; it is now listed as occupied.
+update private.rental_catalogue set occupied=false,monthly_rent_paise=4000000 where code='cabin101';
 insert into auth.users(id,aud,role,email) values
 ('96000000-0000-4000-8000-000000000001','authenticated','authenticated','receipt-renter@example.test'),
 ('96000000-0000-4000-8000-000000000002','authenticated','authenticated','receipt-staff@example.test');

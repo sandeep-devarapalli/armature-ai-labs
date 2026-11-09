@@ -9,6 +9,10 @@ for (const product of ["cabin101", "hiwonder"]) test(`synthetic ${product} guide
     rentPaise: 5000, depositPaise: 10000, amountPaise: 15000, paymentAmountPaise: 5000,
     refundAccount: { version: 1, accountName: "Synthetic Renter", bankName: "Synthetic Bank", ifsc: "TEST0000001", last4: "0001", verifiedAt: null, ownershipConfirmed: true },
     depositMethod: "bank_transfer", depositStatus: "pending", testFixture: true, bankInstructions: null, policyVersion: "rental-fixture", status: "draft", agreementSigned: false };
+  const products = [
+    { product: "cabin101", kind: "cabin", name: "Cabin 101", floor: "Ground floor", billableSeats: null, extraSeats: 0, monthlyRentPaise: 4000000, weekRentPaise: null, monthRentPaise: null, depositPaise: 8000000, availableFrom: "2027-02-01", status: "available", quantity: 1 },
+    { product: "hiwonder", kind: "equipment", name: "Hiwonder robotics kit", floor: null, billableSeats: null, extraSeats: 0, monthlyRentPaise: null, weekRentPaise: 105000, monthRentPaise: 390000, depositPaise: 2500000, availableFrom: null, status: "available", quantity: 1 },
+  ];
   const actions: string[] = [];
   let depositSubmitted = false;
   let accountSaved = false;
@@ -28,10 +32,11 @@ for (const product of ["cabin101", "hiwonder"]) test(`synthetic ${product} guide
     else if (name === "get_membership_levels_release_status") data = { membership_levels_enabled: true };
     else if (name === "user") data = user;
     else if (name === "test-rental-checkout") {
-      const { action } = route.request().postDataJSON(); actions.push(action);
+      const body = route.request().postDataJSON(); const { action } = body;
+      if (!(action === "availability" && body.product === undefined)) actions.push(action);
       if (action === "submit_deposit_reference") depositSubmitted = true;
       if (action === "save_refund_account") accountSaved = true;
-      data = { mode: "test", ...(action === "availability" ? { available: true } : action === "status"
+      data = { mode: "test", ...(action === "availability" ? (body.product ? { available: true } : { products }) : action === "status"
         ? { ...quote, refundAccount: accountSaved ? quote.refundAccount : null, status: depositSubmitted ? "approved" : "awaiting_deposit", depositStatus: depositSubmitted ? "verified" : "pending", agreementSigned: true, approvedAt: new Date().toISOString() }
         : action === "save_refund_account" ? { ...quote, status: "awaiting_deposit", agreementSigned: true }
         : action === "submit_deposit_reference" ? { ...quote, status: "awaiting_deposit", depositStatus: "submitted", depositReference: "STAGING-BANK-100", agreementSigned: true }

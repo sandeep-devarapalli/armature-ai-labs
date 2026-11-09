@@ -1,5 +1,7 @@
 begin;
 select no_plan();
+-- These fixtures quote Cabin 101 at its pre-2026-11-09 terms; it is now listed as occupied.
+update private.rental_catalogue set occupied=false,monthly_rent_paise=4000000 where code='cabin101';
 select ok(not has_function_privilege('authenticated','public.billing_dispatch(text,jsonb)','execute'),'Browser cannot drive billing');
 select ok(not has_table_privilege('authenticated','private.billing_operations','SELECT'),'Browser cannot read billing ledger');
 select ok((select not invoicing_enabled and not gst_enabled from private.billing_settings),'Invoicing and GST default off');

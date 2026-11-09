@@ -153,3 +153,9 @@ verify_jwt = false
 
 [functions.test-rental-webhook]
 verify_jwt = false
+
+[functions.event-checkout]
+verify_jwt = false
+
+[functions.test-event-checkout]
+verify_jwt = false

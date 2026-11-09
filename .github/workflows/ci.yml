@@ -26,7 +26,7 @@ jobs:
         with:
           deno-version: v2.9.8
       - run: deno test --config supabase/functions/deno.json --no-lock supabase/functions/_shared/live-desk-webhook_test.ts
-      - run: deno check --config supabase/functions/deno.json --no-lock supabase/functions/desk-checkout/index.ts supabase/functions/razorpay-booking-webhook/index.ts supabase/functions/billing-dispatch/index.ts
+      - run: deno check --config supabase/functions/deno.json --no-lock supabase/functions/desk-checkout/index.ts supabase/functions/razorpay-booking-webhook/index.ts supabase/functions/event-checkout/index.ts supabase/functions/billing-dispatch/index.ts
       - run: node scripts/test-market-message-files.mjs && node scripts/test-market-message-reminders.mjs && node scripts/test-market-wakeup.mjs
       - run: node --test tests/scripts/onboarding-retention.node.mjs
       - run: node --test tests/scripts/production-env.node.mjs

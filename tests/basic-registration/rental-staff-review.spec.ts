@@ -20,7 +20,7 @@ test("rental staff review separates particulars and completed signatures", async
     else if (name === "user") data = user;
     else if (name === endpoint) {
       const body = route.request().postDataJSON(); actions.push(body.action);
-      data = { mode, quoteId, product: "hiwonder", unit: "week", start: "2099-06-10", end: "2099-06-16", rentPaise: 105000, depositPaise: 2500000, amountPaise: 2605000, agreementHash: "a".repeat(64), policyVersion: "rental-fixture", agreementSigned: false, hasOrder: false, orderPending: false, preparedAt: null, approvedAt: null, status: "awaiting_staff", customerEmail: "renter@example.test", staffEmail: "signer@example.test" };
+      data = { mode, quoteId, product: "hiwonder", kind: "equipment", productName: "Hiwonder robotics kit", unit: "week", start: "2099-06-10", end: "2099-06-16", rentPaise: 105000, depositPaise: 2500000, amountPaise: 2605000, agreementHash: "a".repeat(64), policyVersion: "rental-fixture", agreementSigned: false, hasOrder: false, orderPending: false, preparedAt: null, approvedAt: null, status: "awaiting_staff", customerEmail: "renter@example.test", staffEmail: "signer@example.test" };
     }
     await route.fulfill({ json: data });
   });
@@ -43,6 +43,6 @@ test("rental staff review separates particulars and completed signatures", async
     expect(box.left).toBeGreaterThanOrEqual(0); expect(box.right).toBeLessThanOrEqual(page.viewportSize()!.width + 1);
   }
   await page.screenshot({ path: info.outputPath("rental-staff-review.png"), fullPage: true });
-  await page.getByRole("heading", { name: "Hiwonder kit", exact: true }).scrollIntoViewIfNeeded();
+  await page.getByRole("heading", { name: "Hiwonder robotics kit", exact: true }).scrollIntoViewIfNeeded();
   await page.screenshot({ path: info.outputPath("rental-staff-viewport.png") });
 });

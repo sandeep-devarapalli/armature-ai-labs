@@ -5,7 +5,7 @@ import { RentalAgreementReview } from "../../src/components/RentalAgreementRevie
 vi.mock("../../src/pages/MemberPages", () => ({ MfaPanel: () => <p>MFA panel</p> }));
 vi.mock("../../src/lib/supabase", () => ({ supabase: null }));
 const quoteId = "a0000000-0000-4000-8000-000000000002";
-const base = { mode: "live", quoteId, product: "cabin101", unit: "month", start: "2027-02-01", end: "2027-02-28",
+const base = { mode: "live", quoteId, product: "cabin101", kind: "cabin", productName: "Cabin 101", unit: "month", start: "2027-02-01", end: "2027-02-28",
   rentPaise: 4000000, depositPaise: 8000000, amountPaise: 12000000, agreementHash: "a".repeat(64), policyVersion: "rental-v1",
   approvedAt: null, preparedAt: null, agreementSigned: false, hasOrder: false, orderPending: false, status: "awaiting_staff",
   customerEmail: "buyer@example.test", staffEmail: "staff@example.test" };

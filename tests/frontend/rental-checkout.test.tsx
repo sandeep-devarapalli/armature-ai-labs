@@ -8,62 +8,78 @@ const mock = vi.hoisted(() => ({ request: vi.fn(), refresh: vi.fn(), verified: t
 vi.mock("../../src/context/AccountContext", () => ({ accountMembershipLevelsEnabled: () => true,
   useAccount: () => ({ account: { user_id: "buyer", membership_level: mock.verified ? "verified" : "basic" }, signedIn: mock.signedIn, refresh: mock.refresh }) }));
 vi.mock("../../src/lib/rental-checkout", () => ({ rentalMode: "test", rentalRequest: mock.request,
-  rentalMoney: (value: number) => "₹" + value / 100 }));
+  rentalMoney: (value: number) => "₹" + value / 100, rentalLabel: (q: { product: string; productName?: string }) => q.productName ?? q.product }));
 vi.mock("../../src/lib/razorpay-checkout", () => ({ loadRazorpayCheckout: async () => class {
   constructor(options: unknown) { mock.checkout(options); }
   on() {} close() {} open() { mock.open(); }
 } }));
-const quote = { quoteId: "a0000000-0000-4000-8000-000000000001", product: "cabin101" as const, unit: "month",
+const products = [
+  { product: "cabin101", kind: "cabin", name: "Cabin 101", floor: "Ground floor", billableSeats: null, extraSeats: 0, monthlyRentPaise: 4000000,
+    weekRentPaise: null, monthRentPaise: null, depositPaise: 8000000, availableFrom: "2027-02-01", status: "available", quantity: 1 },
+  { product: "cabin201", kind: "cabin", name: "Cabin 201", floor: "Top floor", billableSeats: 10, extraSeats: 2, monthlyRentPaise: 15000000,
+    weekRentPaise: null, monthRentPaise: null, depositPaise: null, availableFrom: null, status: "coming_soon", quantity: 0 },
+  { product: "hiwonder", kind: "equipment", name: "Hiwonder robotics kit", floor: null, billableSeats: null, extraSeats: 0, monthlyRentPaise: null,
+    weekRentPaise: 105000, monthRentPaise: 390000, depositPaise: 2500000, availableFrom: null, status: "available", quantity: 1 },
+  { product: "waveshare-ov5693", kind: "equipment", name: "OV5693 5MP USB Camera (A)", floor: null, billableSeats: null, extraSeats: 0, monthlyRentPaise: null,
+    weekRentPaise: 100000, monthRentPaise: 200000, depositPaise: 0, availableFrom: null, status: "available", quantity: 2 },
+];
+const quote = { quoteId: "a0000000-0000-4000-8000-000000000001", product: "cabin101", kind: "cabin" as const, productName: "Cabin 101", unit: "month",
   start: "2027-02-01", end: "2027-02-28", rentPaise: 4000000, depositPaise: 8000000, amountPaise: 12000000,
   agreementHash: "a".repeat(64), policyVersion: "rental-v1", status: "awaiting_staff", agreementSigned: false, hasOrder: false };
-function show() { return render(<StrictMode><MemoryRouter><RentalCheckoutPage /></MemoryRouter></StrictMode>); }
+// The product list loads on mount; these helpers look only at the booking calls after it.
+const flow = () => mock.request.mock.calls.filter(([body]) => !(body.action === "availability" && body.product === undefined));
+async function show() {
+  const view = render(<StrictMode><MemoryRouter><RentalCheckoutPage /></MemoryRouter></StrictMode>);
+  if (mock.signedIn) await screen.findByRole("option", { name: /Cabin 101/ });
+  return view;
+}
 beforeEach(() => { vi.clearAllMocks(); mock.verified = true; mock.signedIn = true;
-  mock.request.mockImplementation(async body => body.action === "availability" ? { available: true } : quote); });
+  mock.request.mockImplementation(async body => body.action === "availability" ? (body.product ? { available: true } : { products }) : quote); });
 afterEach(cleanup);
-it("shows distinct customer, Armature and staff actions", () => {
-  show();
+it("shows distinct customer, Armature and staff actions", async () => {
+  await show();
   expect(screen.getByText("Customer signs, then Armature countersigns")).toBeInTheDocument();
   expect(screen.getByText("Transfer the deposit; staff verifies bank receipt")).toBeInTheDocument();
   expect(screen.getByText("Pay rent through Razorpay and receive confirmation")).toBeInTheDocument();
   expect(screen.getByText(/Test bookings/)).toBeInTheDocument();
 });
 it("checks availability before requesting a full-calendar cabin quote in StrictMode", async () => {
-  show();
+  await show();
   fireEvent.change(screen.getByLabelText("Start date"), { target: { value: "2027-02-01" } });
   fireEvent.change(screen.getByLabelText("Last day of the final month"), { target: { value: "2027-02-28" } });
   fireEvent.click(screen.getByRole("button", { name: "Request agreement" }));
   await screen.findByText("₹120000");
-  expect(mock.request.mock.calls.map(([body]) => body.action)).toEqual(["availability", "quote"]);
+  expect(flow().map(([body]) => body.action)).toEqual(["availability", "quote"]);
   expect(mock.request).toHaveBeenLastCalledWith(expect.objectContaining({ product: "cabin101", start: "2027-02-01", end: "2027-02-28" }), "buyer");
   expect(screen.queryByRole("button", { name: /Pay with Razorpay/ })).not.toBeInTheDocument();
 });
 it("does not create a quote for unavailable dates", async () => {
-  mock.request.mockResolvedValue({ available: false }); show();
+  mock.request.mockImplementation(async body => body.product ? { available: false } : { products }); await show();
   fireEvent.change(screen.getByLabelText("Start date"), { target: { value: "2027-02-01" } });
   fireEvent.change(screen.getByLabelText("Last day of the final month"), { target: { value: "2027-02-28" } });
   fireEvent.click(screen.getByRole("button", { name: "Request agreement" }));
   await screen.findByRole("alert");
-  expect(mock.request).toHaveBeenCalledTimes(1);
+  expect(flow()).toHaveLength(1);
 });
-it("requires Verified membership and does not imply kit payment supplies workspace", () => {
-  mock.verified = false; show();
+it("requires Verified membership and does not imply kit payment supplies workspace", async () => {
+  mock.verified = false; await show();
   expect(screen.getByRole("button", { name: "Request agreement" })).toBeDisabled();
   fireEvent.change(screen.getByLabelText("What would you like?"), { target: { value: "hiwonder" } });
   expect(screen.getByText(/Active workspace access is required throughout/)).toBeInTheDocument();
-  expect(screen.getByRole("option", { name: "7 days · ₹1,050 rent" })).toBeInTheDocument();
-  expect(screen.getByRole("option", { name: "30 days · ₹3,900 rent" })).toBeInTheDocument();
+  expect(screen.getByRole("option", { name: "7 days · ₹1050 rent" })).toBeInTheDocument();
+  expect(screen.getByRole("option", { name: "30 days · ₹3900 rent" })).toBeInTheDocument();
 });
 it("drops an in-flight response after the member screen unmounts", async () => {
   let resolve!: (value: object) => void;
-  mock.request.mockReturnValue(new Promise(r => { resolve = r; }));
-  const view = show();
+  mock.request.mockImplementation(body => body.product === undefined && body.action === "availability" ? Promise.resolve({ products }) : new Promise(r => { resolve = r; }));
+  const view = await show();
   fireEvent.change(screen.getByLabelText("Start date"), { target: { value: "2027-02-01" } });
   fireEvent.change(screen.getByLabelText("Last day of the final month"), { target: { value: "2027-02-28" } });
   fireEvent.click(screen.getByRole("button", { name: "Request agreement" }));
-  await waitFor(() => expect(mock.request).toHaveBeenCalledTimes(1));
+  await waitFor(() => expect(flow()).toHaveLength(1));
   view.unmount(); resolve({ available: true });
   await Promise.resolve();
-  expect(mock.request).toHaveBeenCalledTimes(1);
+  expect(flow()).toHaveLength(1);
 });
 
 it.each([
@@ -71,8 +87,8 @@ it.each([
   ["awaiting_signatures", "Ready for customer and Armature signatures"],
   ["awaiting_payment", "Payment pending; check payment status"],
 ])("shows the server's %s stage without inventing per-signer progress", async (status, label) => {
-  mock.request.mockImplementation(async body => body.action === "availability" ? { available: true } : { ...quote, status });
-  show();
+  mock.request.mockImplementation(async body => body.action === "availability" ? (body.product ? { available: true } : { products }) : { ...quote, status });
+  await show();
   fireEvent.change(screen.getByLabelText("Start date"), { target: { value: "2027-02-01" } });
   fireEvent.change(screen.getByLabelText("Last day of the final month"), { target: { value: "2027-02-28" } });
   fireEvent.click(screen.getByRole("button", { name: "Request agreement" }));
@@ -85,8 +101,8 @@ const bankQuote: RentalQuote = { refundAccount: savedRefundAccount, ...quote, re
   depositMethod: "bank_transfer", depositStatus: "pending", status: "awaiting_deposit", agreementSigned: true,
   testFixture: true, bankInstructions: null, approvedAt: "2026-11-08T10:00:00Z", orderPending: false };
 async function openBankQuote(value = bankQuote) {
-  mock.request.mockImplementation(async body => body.action === "availability" ? { available: true } : value);
-  show();
+  mock.request.mockImplementation(async body => body.action === "availability" ? (body.product ? { available: true } : { products }) : value);
+  await show();
   fireEvent.change(screen.getByLabelText("Start date"), { target: { value: "2027-02-01" } });
   fireEvent.change(screen.getByLabelText("Last day of the final month"), { target: { value: "2027-02-28" } });
   fireEvent.click(screen.getByRole("button", { name: "Request agreement" }));
@@ -159,7 +175,7 @@ it("requires matching bank account entries and saves the refund account without 
   fireEvent.click(screen.getByLabelText(/This account belongs to the person or company/));
   fireEvent.click(screen.getByRole("button", { name: "Save refund account securely" }));
   expect(await screen.findByRole("alert")).toHaveTextContent("do not match");
-  expect(mock.request).toHaveBeenCalledTimes(2);
+  expect(flow()).toHaveLength(2);
   fireEvent.change(screen.getByLabelText("Confirm account number"), { target: { value: "000000000001" } });
   mock.request.mockResolvedValueOnce(bankQuote);
   fireEvent.click(screen.getByRole("button", { name: "Save refund account securely" }));
@@ -184,4 +200,15 @@ it("issues a separate refund receipt showing only the last four account digits",
   expect(screen.getByText("ARM-DRF-202612-000002")).toBeInTheDocument();
   expect(screen.getByText("Ending 4321")).toBeInTheDocument();
   expect(screen.getAllByText(/not rent or income and carries no GST/)).toHaveLength(2);
+});
+it("lists catalogue items with their own prices and keeps unpriced cabins unselectable", async () => {
+  await show();
+  expect(screen.getByRole("option", { name: "Cabin 201 · Top floor · Coming soon" })).toBeDisabled();
+  expect(screen.getByText(/₹40000 monthly rent plus ₹80000 refundable/)).toBeInTheDocument();
+  expect(screen.getByLabelText("Start date")).toHaveAttribute("min", "2027-02-01");
+});
+it("says No deposit for equipment without one", async () => {
+  await show();
+  fireEvent.change(screen.getByLabelText("What would you like?"), { target: { value: "waveshare-ov5693" } });
+  expect(await screen.findByText(/2 units\..*No deposit; no GST added\./)).toBeInTheDocument();
 });
