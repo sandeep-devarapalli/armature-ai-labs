@@ -18,6 +18,7 @@ const ResourceFeedbackPage = lazy(() => import("../pages/ResourceFeedbackPage").
 const ResourceFeedbackAdminPage = lazy(() => import("../pages/ResourceFeedbackPage").then(module => ({ default: module.ResourceFeedbackAdminPage })));
 
 const BookLabPage = lazy(() => import("../pages/BookLabPage"));
+const EquipmentRentalPage = lazy(() => import("../pages/EquipmentRentalPage"));
 const BookingBetaPage = lazy(() => import("../pages/BookingBetaPage").then((module) => ({ default: module.BookingBetaPage })));
 const OnboardingPage = lazy(() => import("../pages/OnboardingPage").then((module) => ({ default: module.OnboardingPage })));
 const ProjectsPage = lazy(() => import("../pages/ProjectsPage").then((module) => ({ default: module.ProjectsPage })));
@@ -163,6 +164,7 @@ export const routes: RouteObject[] = [
       { path: "/book/:resource", element: memberFeature(protectedPage(<ResourceBookingPage />)) },
       { path: "/bookings/rentals", element: <Navigate to={rentalCheckoutAvailable ? "/bookings?item=cabin" : "/bookings"} replace /> },
       { path: "/bookings", element: deskCheckoutAvailable || rentalCheckoutAvailable ? <BookLabPage /> : memberFeature(protectedPage(<BookingsPage />)) },
+      ...(rentalCheckoutAvailable ? [{ path: "/bookings/equipment", element: <EquipmentRentalPage /> }, { path: "/bookings/equipment/:code", element: <EquipmentRentalPage /> }] : []),
       { path: "/bookings/:id", element: memberFeature(protectedPage(<BookingDetailPage />)) },
       { path: "/check-in", element: memberFeature(protectedPage(<CheckInPage />)) },
       { path: "/component-requests", element: memberComponentRequestFeature(protectedPage(<ComponentRequestsPage />)) },

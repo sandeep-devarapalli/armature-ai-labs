@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { CabinMap } from "../components/CabinMap";
 import { DeskBooking } from "../components/DeskCheckout";
 import { PageHeader } from "../components/Primitives";
@@ -89,6 +89,8 @@ export default function BookLabPage() {
             {equipment.map(p => <li key={p.product}><button type="button" aria-pressed={p.product === kit?.product} disabled={p.status !== "available"}
               onClick={() => choose({ item: "kit", product: p.product })}><strong>{p.name}</strong><span>{lowestRent([p])[0]}{p.status !== "available" ? " · " + statusLabel[p.status] : ""}</span></button></li>)}
           </ul>}
+          {equipment.length > 0 && <p className="book-note"><Link to={kit ? `/bookings/equipment/${encodeURIComponent(kit.product)}` : "/bookings/equipment"}>
+            {kit ? `Specs, photos and what's in the box for ${kit.name}` : "Compare specs, photos and what's in the box"}</Link></p>}
           <RentalBooking key={kit?.product ?? "kit"} initialProduct={kit?.product} />
         </>}
         {item.id === "event" && <p className="book-note">Event bookings open soon. To book the demo floor now, write to <a href="mailto:hello@armatureailabs.com">hello@armatureailabs.com</a>.</p>}
