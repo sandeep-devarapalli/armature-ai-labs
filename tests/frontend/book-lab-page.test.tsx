@@ -66,9 +66,11 @@ it("opens the rental checkout on the cabin picked on the map, but never for an o
 it("passes the picked equipment item to the rental checkout", async () => {
   show("/bookings?item=kit");
   expect(screen.getByText("Rental checkout: none")).toBeInTheDocument();
+  expect(await screen.findByRole("link", { name: "Compare specs, photos and what's in the box" })).toHaveAttribute("href", "/bookings/equipment");
   fireEvent.click(await screen.findByRole("button", { name: /USB camera/ }));
   await waitFor(() => expect(screen.getByText("Rental checkout: camera")).toBeInTheDocument());
   expect(screen.getByLabelText("Location").textContent).toBe("/bookings?item=kit&product=camera");
+  expect(screen.getByRole("link", { name: /Specs, photos and what's in the box for USB camera/ })).toHaveAttribute("href", "/bookings/equipment/camera");
 });
 
 it("shows the cabins' published statuses to visitors who are not signed in", () => {
