@@ -17,7 +17,7 @@ function release(root) {
   materials.forEach(material => material.dispose());
   geometries.forEach(geometry => geometry.dispose());
 }
-export async function mountViewer(host, { kind = 'printer', onPin = () => {}, onSeat = () => {}, selectedSeat = null, onCabin = () => {}, selectedCabin = null, bookingType = 'desk', unavailableCodes = [] } = {}) {
+export async function mountViewer(host, { kind = 'printer', onPin = () => {}, onSeat = () => {}, selectedSeat = null, onCabin = () => {}, selectedCabin = null, bookingType = 'desk', unavailableCodes = [], cabins = null } = {}) {
   active.get(host)?.dispose();
   host.style.position='relative';
   const container=document.createElement('div');
@@ -28,14 +28,18 @@ export async function mountViewer(host, { kind = 'printer', onPin = () => {}, on
   notice.textContent='Loading 3D study…';container.append(notice);
   let renderer, controls, scene, observer, frame=0, disposed=false, fitDistance=0, radius=1;
   const seatMode=kind==='ground-seats'||kind==='first-seats';
+  const roomsMode=seatMode&&bookingType==='cabin'&&Array.isArray(cabins);
+  let rooms=null;
   const cabinPins=[];
   const seats=[], blockedSeats=new Set(unavailableCodes);
   let fullCenter=null, fullExtent=1, seatingBounds=null;
   const replacedMaterials=new Set();
   const pins=[], abort=new AbortController(), projected=new THREE.Vector3();
-  const api={dispose,selectSeat,selectCabin,focusSeats,setUnavailable,reset:()=>{ if(!controls||!fitDistance)return;if(seatMode){camera.zoom=1;camera.up.set(0,0,-1);controls.target.copy(fullCenter);camera.position.copy(fullCenter).add(new THREE.Vector3(0,fullExtent*3,.0001));camera.updateProjectionMatrix();}else camera.position.copy(controls.target).add(new THREE.Vector3(1.1,.9,1.4).normalize().multiplyScalar(fitDistance));controls.update();requestRender(); }};
+  const api={dispose,selectSeat,selectCabin,frameCabin,focusSeats,setUnavailable,reset:()=>{ if(!controls||!fitDistance)return;if(roomsMode){aim(fullCenter,1);return;}if(seatMode){camera.zoom=1;camera.up.set(0,0,-1);controls.target.copy(fullCenter);camera.position.copy(fullCenter).add(new THREE.Vector3(0,fullExtent*3,.0001));camera.updateProjectionMatrix();}else camera.position.copy(controls.target).add(new THREE.Vector3(1.1,.9,1.4).normalize().multiplyScalar(fitDistance));controls.update();requestRender(); }};
   function setUnavailable(codes){blockedSeats.clear();codes.forEach(code=>blockedSeats.add(code));seats.forEach(seat=>{seat.blocked=blockedSeats.has(seat.id);seat.button.disabled=seat.blocked;seat.button.setAttribute('aria-label',`${seat.id} chair ${seat.blocked?'not selected for this view':'explore'}`);});cabinPins.forEach(pin=>{pin.button.disabled=blockedSeats.has(pin.id);pin.button.setAttribute('aria-label',pin.button.getAttribute('aria-label').replace(/ unavailable$/, '')+(pin.button.disabled?' unavailable':''));});if(blockedSeats.has(selectedSeat))selectedSeat=null;if(blockedSeats.has(selectedCabin))selectedCabin=null;selectSeat(selectedSeat);selectCabin(selectedCabin);}
-  function selectCabin(id){if(blockedSeats.has(id))return;selectedCabin=id;cabinPins.forEach(pin=>{const chosen=pin.id===id;pin.button.setAttribute('aria-pressed',String(chosen));pin.button.style.background=chosen?'#165b3e':blockedSeats.has(pin.id)?'#676b66':'#f5f9f1';pin.button.style.color=chosen||blockedSeats.has(pin.id)?'white':'#244b38';});requestRender();}
+  function aim(target,zoom){const offset=camera.position.clone().sub(controls.target);controls.target.copy(target);camera.position.copy(target).add(offset);camera.zoom=zoom;camera.updateProjectionMatrix();controls.update();requestRender();}
+  function frameCabin(id){const cabin=rooms?.cabins.find(c=>c.id===id);if(!cabin||!fitDistance)return;const size=cabin.bounds.getSize(new THREE.Vector3());aim(cabin.bounds.getCenter(new THREE.Vector3()),Math.min(2.6,Math.max(1,Math.min((camera.right-camera.left)/Math.max(size.x,.1),(camera.top-camera.bottom)/Math.max(size.z,.1))*.42)));}
+  function selectCabin(id){if(roomsMode){selectedCabin=id;rooms?.select(id);cabinPins.forEach(pin=>{const chosen=pin.id===id;pin.button.setAttribute('aria-pressed',String(chosen));pin.button.style.background=chosen?'#e8892b':'#fbfaf6';pin.button.style.color=chosen?'#1d1b16':'#244b38';pin.button.style.borderColor=chosen?'#8a4a0c':'#244b38';});if(id)frameCabin(id);requestRender();return;}if(blockedSeats.has(id))return;selectedCabin=id;cabinPins.forEach(pin=>{const chosen=pin.id===id;pin.button.setAttribute('aria-pressed',String(chosen));pin.button.style.background=chosen?'#165b3e':blockedSeats.has(pin.id)?'#676b66':'#f5f9f1';pin.button.style.color=chosen||blockedSeats.has(pin.id)?'white':'#244b38';});requestRender();}
   function selectSeat(id){if(blockedSeats.has(id))return;selectedSeat=id;seats.forEach(seat=>{const chosen=seat.id===id;seat.button.setAttribute('aria-pressed',String(chosen));seat.button.querySelectorAll('[data-chair-part]').forEach(part=>part.style.background=chosen?'#165b3e':seat.blocked?'#676b66':'#f5f9f1');seat.button.style.color=chosen||seat.blocked?'white':'#244b38';seat.materials.forEach(material=>{material.color.set(chosen?'#20aa65':seat.blocked?'#8c8e87':'#b9c9a8');if(material.emissive)material.emissive.set(chosen?'#084b20':'#000000');});});requestRender();}
   function focusSeats(){if(!seatingBounds||!controls)return;const c=seatingBounds.getCenter(new THREE.Vector3()),size=seatingBounds.getSize(new THREE.Vector3());controls.target.copy(c);camera.position.copy(c).add(new THREE.Vector3(0,fullExtent*3,.0001));camera.zoom=Math.min(8,Math.max(1,Math.min((camera.right-camera.left)/Math.max(size.x,.1),(camera.top-camera.bottom)/Math.max(size.z,.1))*.82));camera.updateProjectionMatrix();controls.update();requestRender();}
   active.set(host,api);
@@ -73,6 +77,7 @@ export async function mountViewer(host, { kind = 'printer', onPin = () => {}, on
     controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=false;controls.enableZoom=false;controls.enablePan=false;
     controls.maxPolarAngle=Math.PI*.48;
     if(seatMode){camera.up.set(0,0,-1);controls.enableRotate=false;controls.enablePan=true;controls.mouseButtons.LEFT=THREE.MOUSE.PAN;controls.maxPolarAngle=.00001;}
+    if(roomsMode){camera.up.set(0,1,0);controls.maxPolarAngle=Math.PI*.4;}
     // One-finger vertical gestures scroll the page; touchscreen orbit is deliberately disabled.
     controls.touches.ONE=null;controls.touches.TWO=null;renderer.domElement.style.touchAction='pan-y';
     controls.addEventListener('change',requestRender);
@@ -96,9 +101,10 @@ export async function mountViewer(host, { kind = 'printer', onPin = () => {}, on
       notice.textContent='Illustrative model · feature markers are not electrical pinouts';
     }
     let cabinStudy=null;
-    if(building){const {reconcileCabins}=await import('./cabin-layout.js');if(disposed){release(root);return api;}cabinStudy=reconcileCabins(root,floorKind,THREE);api.cabinSources=cabinStudy.cabins.map(({chairs,...cabin})=>({...cabin,chairs:chairs.map(({center,bounds})=>({center,bounds}))}));renderer.domElement.dataset.cabinCounts=JSON.stringify(Object.fromEntries(cabinStudy.cabins.map(cabin=>[cabin.id,cabin.chairs.length])));}
+    if(building&&!roomsMode){const {reconcileCabins}=await import('./cabin-layout.js');if(disposed){release(root);return api;}cabinStudy=reconcileCabins(root,floorKind,THREE);api.cabinSources=cabinStudy.cabins.map(({chairs,...cabin})=>({...cabin,chairs:chairs.map(({center,bounds})=>({center,bounds}))}));renderer.domElement.dataset.cabinCounts=JSON.stringify(Object.fromEntries(cabinStudy.cabins.map(cabin=>[cabin.id,cabin.chairs.length])));}
     if(floorKind==='ground-floor'){const keep=new Set(['C1','C4','C7','C9','C12','C15','C17',...Array.from({length:9},(_,i)=>[`T${i+1}L`,`T${i+1}R`]).flat()]);root.traverse(node=>{const key=node.name.match(/GF10.*PROPOSED_(C\d+|T\d+[LRE])_chair_placeholder/i)?.[1];if(key&&!keep.has(key))node.visible=false;});}
     scene.add(root);root.updateMatrixWorld(true);
+    if(roomsMode){const {buildCabinRooms}=await import('./cabin-rooms.js');if(disposed)return api;rooms=buildCabinRooms(root,floorKind,THREE,cabins);root.updateMatrixWorld(true);renderer.domElement.dataset.cabinRooms=JSON.stringify(rooms.cabins.map(({id,desks,chairs,wardrobe})=>({id,desks,chairs,wardrobe})));}
     if(floorKind==='ground-floor'){let count=0;root.traverse(node=>{if(/GF10.*PROPOSED_.*chair_placeholder/i.test(node.name)&&node.isMesh&&node.visible)count++;});renderer.domElement.dataset.sharedChairs=String(count);}
     const bounds=new THREE.Box3().setFromObject(root),center=bounds.getCenter(new THREE.Vector3());
     const size=bounds.getSize(new THREE.Vector3()),extent=Math.max(size.x,size.y,size.z);
@@ -106,7 +112,7 @@ export async function mountViewer(host, { kind = 'printer', onPin = () => {}, on
     radius=Math.max(.1,size.length()/2);
     camera.position.copy(center).add(new THREE.Vector3(1.1,.9,1.4).normalize().multiplyScalar(extent*2.2));
     fullCenter=center.clone();fullExtent=extent;
-    if(seatMode)camera.position.copy(center).add(new THREE.Vector3(0,extent*3,.0001));
+    if(seatMode)camera.position.copy(center).add(roomsMode?new THREE.Vector3(0,extent*2.4,extent*1.35):new THREE.Vector3(0,extent*3,.0001));
     controls.target.copy(center);controls.update();controls.saveState();
     if(kind==='ground-seats'&&bookingType!=='cabin'){
       const chairs=[];root.traverse(node=>{if(/GF10.*PROPOSED_.*chair_placeholder/i.test(node.name)&&node.isMesh&&node.visible)chairs.push(node);});
@@ -121,6 +127,10 @@ export async function mountViewer(host, { kind = 'printer', onPin = () => {}, on
       });
       api.seatSources=seats.map(({id,source,position})=>({id,source,position}));selectSeat(selectedSeat);
     }
+    if(roomsMode){
+      rooms.cabins.forEach(room=>{const cabin=cabins.find(c=>c.code===room.id);const button=document.createElement('button');button.type='button';button.className='viewer-cabin';button.dataset.cabin=room.id;button.innerHTML=`<strong style="display:block;font-size:13px"></strong><span style="display:block;font-weight:500;font-size:11px"></span>`;button.children[0].textContent=cabin.label;button.children[1].textContent=cabin.detail;button.setAttribute('aria-label',`${cabin.label}, ${cabin.detail}`);button.style.cssText='position:absolute;transform:translate(-50%,-50%);padding:6px 10px;min-height:40px;white-space:nowrap;border:2px solid #244b38;border-radius:6px;cursor:pointer;font:600 12px/1.25 sans-serif;text-align:left;box-shadow:0 2px 6px #0003;z-index:1;';button.addEventListener('click',()=>{selectCabin(room.id);onCabin(room.id);},{signal:abort.signal});container.append(button);pins.push({button,position:new THREE.Vector3(...room.center).setY(room.center[1]+1.2)});cabinPins.push({id:room.id,button});});
+      notice.textContent='Glass and doors from the 9 Nov 2026 plan · indicative layout';
+    }
     if(seatMode&&bookingType==='cabin'&&cabinStudy){
       cabinStudy.cabins.forEach(cabin=>{const button=document.createElement('button');button.type='button';button.className='viewer-cabin';button.dataset.cabin=cabin.id;button.disabled=blockedSeats.has(cabin.id);button.textContent=`${cabin.id} · 6 seats`;button.setAttribute('aria-label',`${cabin.id} whole six-seat cabin in ${cabin.roomId}${blockedSeats.has(cabin.id)?' unavailable':''}`);button.style.cssText='position:absolute;transform:translate(-50%,-50%);padding:10px 12px;min-height:40px;white-space:nowrap;border:2px solid #244b38;border-radius:6px;cursor:pointer;font:600 12px sans-serif;box-shadow:0 2px 6px #0003;z-index:1;';button.addEventListener('click',()=>{selectCabin(cabin.id);onCabin(cabin.id);},{signal:abort.signal});container.append(button);pins.push({button,position:new THREE.Vector3(...cabin.center)});cabinPins.push({id:cabin.id,button});});selectCabin(selectedCabin);
       notice.textContent='Six-seat cabin layout study · whole-cabin selection · installation and clearance review pending';
@@ -131,6 +141,7 @@ export async function mountViewer(host, { kind = 'printer', onPin = () => {}, on
       const button=document.createElement('button');button.type='button';button.setAttribute('aria-label',label);button.title=label;button.textContent=text;
       button.style.cssText='width:42px;height:42px;background:#f8faf4;border:1px solid #a6b2a5;color:#263e35;border-radius:6px;font:20px sans-serif;cursor:pointer;';
       button.addEventListener('click',()=>{
+        if(roomsMode){const offset=camera.position.clone().sub(controls.target).applyAxisAngle(new THREE.Vector3(0,1,0),angle);camera.position.copy(controls.target).add(offset);camera.zoom=Math.min(6,Math.max(.8,camera.zoom/scale));camera.updateProjectionMatrix();controls.update();requestRender();return;}
         if(seatMode){if(angle)camera.up.applyAxisAngle(new THREE.Vector3(0,1,0),angle);camera.zoom=Math.min(8,Math.max(.8,camera.zoom/scale));camera.updateProjectionMatrix();camera.lookAt(controls.target);requestRender();return;}
         const offset=camera.position.clone().sub(controls.target).applyAxisAngle(new THREE.Vector3(0,1,0),angle);
         offset.setLength(Math.min(fitDistance*2.5,Math.max(radius*1.15,offset.length()*scale)));
@@ -147,7 +158,7 @@ export async function mountViewer(host, { kind = 'printer', onPin = () => {}, on
     observer=new ResizeObserver(()=>{
       const width=container.clientWidth,height=container.clientHeight;if(!width||!height)return;
       renderer.setSize(width,height,false);camera.aspect=width/height;
-      if(seatMode){const span=fullExtent*1.12;camera.left=-span/2;camera.right=span/2;camera.top=span/2/camera.aspect;camera.bottom=-camera.top;if(camera.aspect>1){camera.top=span/2;camera.bottom=-span/2;camera.left=-span/2*camera.aspect;camera.right=-camera.left;}fitDistance=span;camera.updateProjectionMatrix();requestRender();return;}
+      if(seatMode){const span=fullExtent*1.12;camera.left=-span/2;camera.right=span/2;camera.top=span/2/camera.aspect;camera.bottom=-camera.top;if(camera.aspect>1){camera.top=span/2;camera.bottom=-span/2;camera.left=-span/2*camera.aspect;camera.right=-camera.left;}const first=!fitDistance;fitDistance=span;camera.updateProjectionMatrix();if(first&&roomsMode)selectCabin(selectedCabin);requestRender();return;}
       const previousFit=fitDistance;
       const halfFov=Math.min(THREE.MathUtils.degToRad(camera.fov/2),Math.atan(Math.tan(THREE.MathUtils.degToRad(camera.fov/2))*camera.aspect));
       fitDistance=radius/Math.sin(halfFov)*1.15;
