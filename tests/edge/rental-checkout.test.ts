@@ -303,3 +303,12 @@ it("rejects unknown signing providers in final particulars", async () => {
   expect((await post({ action: "prepare", quoteId, memberId, particulars: { signingProvider: "adobe-sign" } })).status).toBe(400);
   expect(mock.rpc.mock.calls.map(([, args]) => args.p_action)).not.toContain("prepare");
 });
+it("passes any catalogue product code through and rejects malformed selections", async () => {
+  expect((await post({ action: "quote", product: "cabin202", start: "2027-03-01", end: "2027-03-31" })).status).toBe(200);
+  expect(mock.rpc).toHaveBeenLastCalledWith("rental_checkout", expect.objectContaining({ p_action: "quote",
+    p_input: expect.objectContaining({ product: "cabin202", end: "2027-03-31" }) }));
+  for (const bad of [{ product: "Cabin 202", start: "2027-03-01", end: "2027-03-31" }, { product: "jetson-nano", start: "2027-03-01" },
+    { product: "jetson-nano", start: "2027-03-01", unit: "day" }, { product: "cabin202", start: "2027-03-01", end: "31-03-2027" }]) {
+    expect((await post({ action: "quote", ...bad })).status).toBe(400);
+  }
+});

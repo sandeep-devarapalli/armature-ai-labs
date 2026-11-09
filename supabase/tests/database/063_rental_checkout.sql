@@ -1,5 +1,7 @@
 begin;
 select no_plan();
+-- These fixtures quote Cabin 101 at its pre-2026-11-09 terms; it is now listed as occupied.
+update private.rental_catalogue set occupied=false,monthly_rent_paise=4000000 where code='cabin101';
 select ok(not has_function_privilege('authenticated','public.rental_checkout(text,uuid,jsonb)','execute'),'Browser cannot write rental ledger');
 select ok(not has_table_privilege('authenticated','private.rental_quotes','INSERT'),'Browser cannot create forged paid quotes');
 select ok((select not enabled and not release_ready from private.rental_checkout_settings),'Rental collection defaults closed');
@@ -25,7 +27,7 @@ insert into public.inventory_locations(id,lab_location_id,code,name) values('930
 insert into public.asset_units(id,component_id,inventory_location_id,asset_tag) values('93000000-0000-4000-8000-000000000016','93000000-0000-4000-8000-000000000014','93000000-0000-4000-8000-000000000015','ARM-TEST-930001');
 insert into public.equipment_rental_units(asset_unit_id,resource_id,commissioned,commissioned_by,commissioned_at,reason)
 values('93000000-0000-4000-8000-000000000016','93000000-0000-4000-8000-000000000012',true,'93000000-0000-4000-8000-000000000003',now(),'Synthetic rollback fixture');
-update private.rental_checkout_settings set cabin_resource='93000000-0000-4000-8000-000000000011',equipment_resource='93000000-0000-4000-8000-000000000012';
+insert into private.rental_catalogue_resources(code,resource_id) values('cabin101','93000000-0000-4000-8000-000000000011'),('hiwonder','93000000-0000-4000-8000-000000000012');
 select throws_ok($$select public.rental_checkout('quote','93000000-0000-4000-8000-000000000001','{"product":"cabin101","start":"2027-02-01","end":"2027-04-30"}')$$,'42501','Rental checkout unavailable','Closed release denies quotes');
 -- Legacy combined-payment contracts remain supported. New bank contracts are covered in 064.
 update private.rental_checkout_settings set enabled=true,release_ready=true,bank_deposits_enabled=false;
