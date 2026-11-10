@@ -7,7 +7,7 @@ function LegalPage({ title, updated = true, children }: PropsWithChildren<{ titl
     <header className="page-hero">
       <div className="wrap">
         <h1>{title}</h1>
-        {updated && <p className="hero-copy">Last updated: 9 November 2026</p>}
+        {updated && <p className="hero-copy">Last updated: 10 November 2026</p>}
       </div>
     </header>
     <div className="wrap privacy-content">{children}</div>
@@ -144,6 +144,8 @@ export function RefundPolicyPage() {
           <tr><td>Workshop or event seat</td><td>Less than 24 hours before the start</td><td>No refund; credit for a future session</td></tr>
           <tr><td>Event space hire</td><td>48 hours or more before the event</td><td>50% refund</td></tr>
           <tr><td>Event space hire</td><td>Less than 48 hours before the event, or no-show</td><td>No refund</td></tr>
+          <tr><td>Equipment bought in the lab</td><td>Before you collect the item</td><td>Full refund</td></tr>
+          <tr><td>Equipment bought in the lab</td><td>After you collect the item</td><td>No refund</td></tr>
           <tr><td>Session cancelled by us</td><td>Any time</td><td>Full refund</td></tr>
           <tr><td>Hardware order, not yet dispatched</td><td>Any time before dispatch</td><td>Full refund</td></tr>
           <tr><td>Hardware, damaged, defective or wrong item</td><td>Report within 3 days of delivery</td><td>Replacement, or full refund if no replacement is available</td></tr>

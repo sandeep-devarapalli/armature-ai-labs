@@ -3,10 +3,12 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import EquipmentRentalPage from "../../src/pages/EquipmentRentalPage";
 
-const mock = vi.hoisted(() => ({ signedIn: true, request: vi.fn(), rpc: vi.fn() }));
+const mock = vi.hoisted(() => ({ signedIn: true, request: vi.fn(), rpc: vi.fn(), sales: false }));
 vi.mock("../../src/context/AccountContext", () => ({ useAccount: () => ({ account: mock.signedIn ? { user_id: "buyer" } : null, signedIn: mock.signedIn }) }));
 vi.mock("../../src/lib/rental-checkout", () => ({ rentalRequest: mock.request }));
 vi.mock("../../src/lib/supabase", () => ({ supabase: { rpc: mock.rpc } }));
+vi.mock("../../src/config/release", () => ({ get equipmentSaleAvailable() { return mock.sales; } }));
+vi.mock("../../src/components/EquipmentBuy", () => ({ EquipmentBuy: (props: { code: string; inStock: boolean }) => <p>Buy panel {props.code} {String(props.inStock)}</p> }));
 
 const base = { floor: null, billableSeats: null, extraSeats: 0, monthlyRentPaise: null, availableFrom: null, room: null };
 const products = [
@@ -29,6 +31,7 @@ const publicItems = products.filter(p => p.kind === "equipment").map(p => {
 });
 beforeEach(() => {
   mock.signedIn = true;
+  mock.sales = false;
   mock.request.mockReset().mockResolvedValue({ products });
   mock.rpc.mockReset().mockResolvedValue({ data: publicItems, error: null });
 });
@@ -96,4 +99,11 @@ it("blocks renting an out-of-stock item and shows no deposit as None", async () 
 it("says when an item is not listed", async () => {
   show("/bookings/equipment/cabin101");
   expect(await screen.findByText(/This item is not listed/)).toBeInTheDocument();
+});
+
+it("shows the buy panel instead of the email note once online buying is on", async () => {
+  mock.sales = true;
+  show("/bookings/equipment/hiwonder");
+  expect(await screen.findByText("Buy panel hiwonder true")).toBeInTheDocument();
+  expect(screen.queryByText(/Online buying opens later/)).not.toBeInTheDocument();
 });

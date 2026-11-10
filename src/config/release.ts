@@ -26,3 +26,5 @@ export const deskCheckoutAvailable = basicOnboardingAvailable && enabled(import.
 export const rentalCheckoutAvailable = basicOnboardingAvailable && enabled(import.meta.env.VITE_RENTAL_CHECKOUT_ENABLED);
 
 export const eventCheckoutAvailable = basicOnboardingAvailable && enabled(import.meta.env.VITE_EVENT_CHECKOUT_ENABLED);
+
+export const equipmentSaleAvailable = rentalCheckoutAvailable && enabled(import.meta.env.VITE_EQUIPMENT_SALE_ENABLED);

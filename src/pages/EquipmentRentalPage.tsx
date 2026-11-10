@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
+import { EquipmentBuy } from "../components/EquipmentBuy";
 import { PageHeader } from "../components/Primitives";
+import { equipmentSaleAvailable } from "../config/release";
 import { useAccount } from "../context/AccountContext";
 import { formatPaise } from "../lib/cabins";
 import { rentalRequest, type RentalProduct } from "../lib/rental-checkout";
@@ -74,7 +76,8 @@ function Detail({ item, signInLink }: { item: RentalProduct; signInLink?: string
         {item.salePaise && <div className="eq-offer">
           <h2 className="mono">Buy</h2>
           <p className="eq-sale">{formatPaise(item.salePaise)}</p>
-          <p className="eq-note">Online buying opens later. To buy now, ask in the lab or write to <a href="mailto:hello@armatureailabs.com">hello@armatureailabs.com</a>.</p>
+          {equipmentSaleAvailable ? <EquipmentBuy code={item.product} pricePaise={item.salePaise} inStock={free > 0} />
+            : <p className="eq-note">Online buying opens later. To buy now, ask in the lab or write to <a href="mailto:hello@armatureailabs.com">hello@armatureailabs.com</a>.</p>}
         </div>}
         {(item.highlights?.length ?? 0) > 0 && <ul className="eq-includes">{item.highlights!.map(line => <li key={line}>{line}</li>)}</ul>}
       </div>
