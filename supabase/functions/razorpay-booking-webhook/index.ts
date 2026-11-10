@@ -2,8 +2,8 @@ import { adminClient } from "../_shared/supabase.ts";
 import { liveRazorpay, liveWebhookSettings } from "../_shared/live-desk-payment.ts";
 import { createLiveDeskWebhook } from "../_shared/live-desk-webhook.ts";
 
-type Kind = "desk" | "rental" | "event";
-const ledgers: Record<Kind, string> = { desk: "live_desk_checkout", rental: "rental_checkout", event: "event_checkout" };
+type Kind = "desk" | "rental" | "event" | "sale";
+const ledgers: Record<Kind, string> = { desk: "live_desk_checkout", rental: "rental_checkout", event: "event_checkout", sale: "equipment_sale" };
 async function operate(action: string, input: object, kind: Kind = "desk") {
   const { data, error } = await adminClient().rpc(ledgers[kind], {
     p_action: action, p_member: null, p_input: input,
@@ -19,6 +19,7 @@ export const handleWebhook = createLiveDeskWebhook({
     const kinds: Kind[] = ["desk"];
     if (Deno.env.get("LIVE_RENTAL_WEBHOOK_ENABLED") === "true") kinds.push("rental");
     if (Deno.env.get("LIVE_EVENT_WEBHOOK_ENABLED") === "true") kinds.push("event");
+    if (Deno.env.get("LIVE_SALE_WEBHOOK_ENABLED") === "true") kinds.push("sale");
     const found = [];
     for (const kind of kinds) {
       const quote = await operate("lookup_order", { orderId }, kind);
@@ -29,7 +30,9 @@ export const handleWebhook = createLiveDeskWebhook({
   },
   apply: (action, input, quote) => {
     if (!quote.checkout_kind || !Object.hasOwn(ledgers, quote.checkout_kind)) throw new Error("Unknown payment order type");
-    return operate(action, input, quote.checkout_kind);
+    // The sale ledger names its record saleId rather than quoteId.
+    const { quoteId, ...rest } = input as { quoteId?: string };
+    return operate(action, quote.checkout_kind === "sale" ? { saleId: quoteId, ...rest } : input, quote.checkout_kind);
   },
 });
 
