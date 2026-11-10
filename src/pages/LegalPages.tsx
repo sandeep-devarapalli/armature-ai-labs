@@ -85,6 +85,7 @@ export function TermsPage() {
     <section>
       <h2>5. Hardware sales</h2>
       <p>Product descriptions and prices are on the website or in your quote. An order is confirmed once payment is received. Delivery is covered by our Shipping and Delivery Policy and returns by our Cancellation and Refund Policy. Manufacturer warranties, where offered, are passed on to you.</p>
+      <p>Equipment bought in the lab is sold as checked: you inspect it in person and accept its condition before paying. You get a full refund until you collect it, and no refund or return after collection.</p>
     </section>
     <section>
       <h2>6. Workshops and events</h2>
@@ -166,6 +167,7 @@ export function RefundPolicyPage() {
         <li>We do not accept returns of opened consumables, cut cables or wires, or components that have been soldered, flashed or modified.</li>
         <li>If an item is faulty, we pay the return shipping. In other cases, return shipping is paid by you.</li>
         <li>We refund or replace within 5 working days of receiving and checking the returned item.</li>
+        <li>Equipment bought in the lab is checked by you in person before you pay, so these returns do not apply to it once you collect it.</li>
       </ul>
     </section>
     <section>
