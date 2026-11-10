@@ -37,7 +37,7 @@ export function RentalBooking({ initialProduct }: { initialProduct?: string }) {
   const { pathname, search } = useLocation();
   const verified = accountMembershipLevelsEnabled(account) && ["verified", "premium"].includes(account?.membership_level ?? "");
   return signedIn && account?.user_id ? <RentalCheckout key={account.user_id} memberId={account.user_id} canBook={verified} initialProduct={initialProduct} />
-    : <Section number="01" title="Sign in first"><Link to={"/auth?next=" + encodeURIComponent(pathname + search)} className="button">Sign in</Link></Section>;
+    : <Section number="01" title="Sign in first"><Link to={"/auth?next=" + encodeURIComponent(pathname + search)} className="button button-primary">Sign in</Link></Section>;
 }
 const rentalSteps = ["Choose product and dates", "Review the draft and request corrections", "Customer signs, then Armature countersigns",
   "Staff reviews the signed agreement", "Transfer the deposit; staff verifies bank receipt", "Pay rent through Razorpay and receive confirmation"];

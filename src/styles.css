@@ -5764,7 +5764,7 @@ footer p {
 .booking-step-dot { position: absolute; left: -13px; top: 0; display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--hair-strong); background: var(--paper); font-size: 11px; }
 .booking-steps > li.is-done .booking-step-dot { background: var(--moss); border-color: var(--moss); color: var(--paper); }
 .booking-steps > li.is-current { font-weight: 600; }
-.booking-steps > li.is-current .booking-step-dot { background: var(--saffron); border-color: var(--saffron); color: #0a1220; }
+.booking-steps > li.is-current .booking-step-dot { background: var(--saffron); border-color: var(--saffron); color: var(--paper); }
 .booking-steps > li.is-next { color: var(--fg-3); }
 
 /* Equipment list and item pages */
