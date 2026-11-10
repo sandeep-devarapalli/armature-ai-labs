@@ -50,6 +50,9 @@ function RentalCheckout({ canBook, memberId, initialProduct }: { canBook: boolea
   const [products, setProducts] = useState<RentalProduct[] | null>(null);
   const [product, setProduct] = useState("");
   const item = products?.find(entry => entry.product === product);
+  const [withAddon, setWithAddon] = useState(false);
+  const addon = products?.find(entry => item?.addonCodes?.includes(entry.product) && entry.status === "available");
+  const bundled = withAddon && addon ? addon : null;
   const [quote, setQuote] = useState<RentalQuote | null>(null);
   const [recent, setRecent] = useState<RentalQuote[]>([]);
   const [busy, setBusy] = useState(false), [error, setError] = useState("");
@@ -107,22 +110,24 @@ function RentalCheckout({ canBook, memberId, initialProduct }: { canBook: boolea
     {recent.map(item => <button key={item.quoteId} className="button secondary" disabled={busy || checkoutOpen}
       onClick={() => void run(() => status(item.quoteId))}>{rentalLabel(item)} · {item.start}{item.status ? " · " + item.status : ""}</button>)}
     {!quote ? <form className="ol-form" onSubmit={event => { event.preventDefault(); const fields = new FormData(event.currentTarget);
-      void run(async () => { const selection = { product, start: fields.get("start"), end: fields.get("end"), unit: fields.get("unit"), partyType: fields.get("partyType"), ...(rentalMode === "test" && testFixture ? { testFixture: true } : {}) };
+      void run(async () => { const selection = { product, start: fields.get("start"), end: fields.get("end"), unit: fields.get("unit"), partyType: fields.get("partyType"), ...(rentalMode === "test" && testFixture ? { testFixture: true } : {}),
+        ...(bundled ? { addons: [bundled.product] } : {}) };
         const available = await rentalRequest<{ available: boolean }>({ action: "availability", ...selection });
         if (!active.current) return;
         if (available.available !== true) throw new Error("Those dates cannot be booked. Choose another period or ask Armature to confirm availability.");
         const result = await rentalRequest<RentalQuote>({ action: "quote", ...selection }); if (active.current) setQuote(result); }); }}>
       {products?.length === 0 && <p>Cabin and equipment options could not be loaded. Contact Armature to book.</p>}
-      <label>What would you like?<select value={product} disabled={busy || !products?.length} onChange={event => setProduct(event.target.value)}>
+      <label>What would you like?<select value={product} disabled={busy || !products?.length} onChange={event => { setProduct(event.target.value); setWithAddon(false); }}>
         {products?.map(entry => <option key={entry.product} value={entry.product} disabled={entry.status !== "available"}>
           {entry.name}{entry.floor ? " · " + entry.floor : entry.kind === "equipment" ? " · Lab-only" : ""}{entry.status === "occupied" ? " · Occupied" : entry.status !== "available" ? " · Coming soon" : ""}</option>)}</select></label>
       {rentalMode === "test" && <label><input type="checkbox" checked={testFixture} disabled={busy} onChange={event => setTestFixture(event.target.checked)} /> Use the staging specimen: ₹50 rent and ₹100 simulated bank deposit. No real rental or transfer.</label>}
       {testFixture && rentalMode === "test" ? <p>These reduced amounts apply only to an authorised synthetic staging account. Normal rental prices are unchanged.</p>
         : item?.kind === "cabin" ? <p>Requests from {item.availableFrom ? new Date(item.availableFrom + "T00:00:00").toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" }) : "the release date"}. Full calendar months only, {rentalMoney(item.monthlyRentPaise ?? 0)} monthly rent plus {rentalMoney(item.depositPaise ?? 0)} refundable bank-transfer deposit.{item.billableSeats ? ` ${item.billableSeats} billable seats, up to ${item.billableSeats + item.extraSeats} people.` : ""} Capacity, access hours and availability need staff confirmation.</p>
         : item ? <p>{item.quantity === 1 ? "One unit." : `${item.quantity} units.`} Active workspace access is required throughout the rental. {item.depositPaise ? `${rentalMoney(item.depositPaise)} bank-transfer deposit` : "No deposit"}; no GST added.</p> : null}
-      {item?.kind === "equipment" && <label>Rental period<select name="unit" disabled={busy}>
-        {([["day", "1 day, 9am to 5pm", item.dayRentPaise], ["week", "7 days", item.weekRentPaise], ["month", "30 days", item.monthRentPaise]] as const).map(([unit, label, rent]) =>
-          rent ? <option key={unit} value={unit}>{label + " · " + (testFixture ? "Test specimen" : rentalMoney(rent) + " rent")}</option> : null)}</select></label>}
+      {addon && <label className="checkbox-field"><input type="checkbox" checked={withAddon} disabled={busy} onChange={event => setWithAddon(event.target.checked)} /> <span>Add the {[addon.maker, addon.name].filter(Boolean).join(" ")}. Its rent is added; no extra deposit.</span></label>}
+      {item?.kind === "equipment" && <label>Rental period<select key={bundled ? "bundle" : "single"} name="unit" disabled={busy}>
+        {([["day", "1 day, 9am to 5pm", item.dayRentPaise, bundled?.dayRentPaise], ["week", "7 days", item.weekRentPaise, bundled?.weekRentPaise], ["month", "30 days", item.monthRentPaise, bundled?.monthRentPaise]] as const).map(([unit, label, rent, extra]) =>
+          rent && (!bundled || extra) ? <option key={unit} value={unit}>{label + " · " + (testFixture ? "Test specimen" : rentalMoney(rent + (extra ?? 0)) + " rent")}</option> : null)}</select></label>}
       <label>Start date<input name="start" type="date" min={item?.kind === "cabin" ? item.availableFrom ?? undefined : undefined} required disabled={busy} /></label>
       {item?.kind === "cabin" && <label>Last day of the final month<input name="end" type="date" required disabled={busy} /></label>}
       <label>Contracting party<select name="partyType" disabled={busy}><option value="individual">Individual</option><option value="company">Company</option></select></label>

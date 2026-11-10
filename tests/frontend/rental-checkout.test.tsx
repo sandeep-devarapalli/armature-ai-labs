@@ -277,3 +277,24 @@ it("numbers payment as step 5 when the quote has no deposit, and marks every ste
   expect(currentStep()).toBeUndefined();
   expect(screen.getAllByText("(done)")).toHaveLength(5);
 });
+
+it("adds the camera to an arm rental with the combined rent and no day option", async () => {
+  const arm = { product: "thinkrobotics-so101", kind: "equipment", name: "SO-101 robotic arm", maker: "ThinkRobotics", floor: null, billableSeats: null, extraSeats: 0,
+    monthlyRentPaise: null, weekRentPaise: 80000, monthRentPaise: 250000, dayRentPaise: null, depositPaise: 2500000, availableFrom: null, status: "available",
+    quantity: 1, addonCodes: ["waveshare-ov5693"] };
+  mock.request.mockImplementation(async body => body.action === "availability" ? (body.product ? { available: true } : { products: [...products, arm] }) : quote);
+  await show();
+  const periods = () => Array.from((screen.getByLabelText("Rental period") as HTMLSelectElement).options).map(option => option.textContent);
+  fireEvent.change(screen.getByLabelText("What would you like?"), { target: { value: "thinkrobotics-so101" } });
+  fireEvent.click(await screen.findByLabelText(/Add the OV5693 5MP USB Camera \(A\)/));
+  await waitFor(() => expect(periods()).toEqual(["7 days · ₹1800 rent", "30 days · ₹4500 rent"]));
+  fireEvent.change(screen.getByLabelText("Start date"), { target: { value: "2027-02-01" } });
+  fireEvent.click(screen.getByRole("button", { name: "Request agreement" }));
+  await waitFor(() => expect(flow().map(([body]) => body.action)).toEqual(["availability", "quote"]));
+  expect(flow().every(([body]) => JSON.stringify(body.addons) === '["waveshare-ov5693"]' && body.product === "thinkrobotics-so101")).toBe(true);
+});
+it("does not offer a camera add-on on items without one", async () => {
+  await show();
+  fireEvent.change(screen.getByLabelText("What would you like?"), { target: { value: "hiwonder" } });
+  expect(screen.queryByLabelText(/Add the/)).not.toBeInTheDocument();
+});
