@@ -307,8 +307,9 @@ it("passes any catalogue product code through and rejects malformed selections",
   expect((await post({ action: "quote", product: "cabin202", start: "2027-03-01", end: "2027-03-31" })).status).toBe(200);
   expect(mock.rpc).toHaveBeenLastCalledWith("rental_checkout", expect.objectContaining({ p_action: "quote",
     p_input: expect.objectContaining({ product: "cabin202", end: "2027-03-31" }) }));
+  expect((await post({ action: "quote", product: "waveshare-ov5693", start: "2027-03-01", unit: "day" })).status).toBe(200);
   for (const bad of [{ product: "Cabin 202", start: "2027-03-01", end: "2027-03-31" }, { product: "jetson-nano", start: "2027-03-01" },
-    { product: "jetson-nano", start: "2027-03-01", unit: "day" }, { product: "cabin202", start: "2027-03-01", end: "31-03-2027" }]) {
+    { product: "jetson-nano", start: "2027-03-01", unit: "hour" }, { product: "cabin202", start: "2027-03-01", end: "31-03-2027" }]) {
     expect((await post({ action: "quote", ...bad })).status).toBe(400);
   }
 });

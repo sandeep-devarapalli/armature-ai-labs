@@ -21,9 +21,9 @@ const products = [
   { product: "hiwonder", kind: "equipment", name: "Hiwonder robotics kit", floor: null, billableSeats: null, extraSeats: 0, monthlyRentPaise: null,
     weekRentPaise: 105000, monthRentPaise: 390000, depositPaise: 2500000, availableFrom: null, status: "available", quantity: 1 },
   { product: "waveshare-ov5693", kind: "equipment", name: "OV5693 5MP USB Camera (A)", floor: null, billableSeats: null, extraSeats: 0, monthlyRentPaise: null,
-    weekRentPaise: 100000, monthRentPaise: 200000, depositPaise: 0, availableFrom: null, status: "available", quantity: 2 },
+    weekRentPaise: 100000, monthRentPaise: 200000, dayRentPaise: 20000, depositPaise: 0, availableFrom: null, status: "available", quantity: 2 },
 ];
-const quote = { quoteId: "a0000000-0000-4000-8000-000000000001", product: "cabin101", kind: "cabin" as const, productName: "Cabin 101", unit: "month",
+const quote = { quoteId: "a0000000-0000-4000-8000-000000000001", product: "cabin101", kind: "cabin" as const, productName: "Cabin 101", unit: "month" as const,
   start: "2027-02-01", end: "2027-02-28", rentPaise: 4000000, depositPaise: 8000000, amountPaise: 12000000,
   agreementHash: "a".repeat(64), policyVersion: "rental-v1", status: "awaiting_staff", agreementSigned: false, hasOrder: false };
 // The product list loads on mount; these helpers look only at the booking calls after it.
@@ -211,6 +211,15 @@ it("says No deposit for equipment without one", async () => {
   await show();
   fireEvent.change(screen.getByLabelText("What would you like?"), { target: { value: "waveshare-ov5693" } });
   expect(await screen.findByText(/2 units\..*No deposit; no GST added\./)).toBeInTheDocument();
+});
+it("offers only the rental periods a product has prices for", async () => {
+  await show();
+  const periods = () => Array.from((screen.getByLabelText("Rental period") as HTMLSelectElement).options).map(option => option.value);
+  fireEvent.change(screen.getByLabelText("What would you like?"), { target: { value: "waveshare-ov5693" } });
+  await waitFor(() => expect(periods()).toEqual(["day", "week", "month"]));
+  expect(screen.getByRole("option", { name: /^1 day, 9am to 5pm · ₹200/ })).toBeInTheDocument();
+  fireEvent.change(screen.getByLabelText("What would you like?"), { target: { value: "hiwonder" } });
+  await waitFor(() => expect(periods()).toEqual(["week", "month"]));
 });
 
 it("starts on the product the bookings page chose, and falls back when it is not available", async () => {

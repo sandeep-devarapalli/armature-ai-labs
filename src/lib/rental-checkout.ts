@@ -6,8 +6,9 @@ export type RentalRefundAccount = { version: number; bankName: string; last4: st
   verifiedAt: string | null; ownershipConfirmed: boolean };
 export type RentalDepositReceipt = { receiptNumber: string; direction: "received" | "refunded"; amountPaise: number;
   reference: string; recordedAt: string; refundAccountLast4?: string | null };
+export type RentalUnit = "day" | "week" | "month";
 export type RentalQuote = {
-  quoteId: string; parentQuoteId?: string | null; product: string; kind?: "cabin" | "equipment"; productName?: string; unit: string; start: string; end: string;
+  quoteId: string; parentQuoteId?: string | null; product: string; kind?: "cabin" | "equipment"; productName?: string; unit: RentalUnit; start: string; end: string;
   rentPaise: number; depositPaise: number; amountPaise: number; agreementHash: string; policyVersion: string;
   approvedAt: string | null; preparedAt?: string | null; agreementSigned: boolean; hasOrder: boolean; orderPending: boolean;
   status: string; reviewReason?: string; customerEmail?: string; staffEmail?: string;

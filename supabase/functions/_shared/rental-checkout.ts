@@ -118,7 +118,7 @@ export async function handleRentalCheckout(request: Request, mode: "test" | "liv
     if (action === "availability" || action === "quote") {
       // The catalogue decides which products exist and whether each needs an end date (cabins) or a unit (equipment).
       if (typeof input.product !== "string" || !productCode.test(input.product) || !date.test(input.start ?? "")
-        || (input.end !== undefined && !date.test(input.end)) || (input.unit !== undefined && !["week", "month"].includes(input.unit))
+        || (input.end !== undefined && !date.test(input.end)) || (input.unit !== undefined && !["day", "week", "month"].includes(input.unit))
         || (input.end === undefined && input.unit === undefined)) throw new Rejected(400, "invalid_selection");
       const testFixture = input.testFixture === true;
       if (testFixture && (mode !== "test" || Deno.env.get("SUPABASE_URL") !== rentalStagingBackend
