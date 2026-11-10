@@ -60,9 +60,9 @@ function BuyPanel({ memberId, code, pricePaise, inStock, canBuy }: { memberId: s
   }
   const locked = busy || checkoutOpen;
   const expires = sale?.paymentExpiresAt ? new Date(sale.paymentExpiresAt).toLocaleTimeString("en-IN", { timeZone: "Asia/Kolkata", hour: "2-digit", minute: "2-digit" }) : "";
-  return <div className="eq-buy-flow" aria-live="polite">
+  return <div className="eq-buy-flow booking-flow" aria-live="polite">
     <BookingSteps label="Buying steps" steps={buySteps} current={sale ? stepFor[sale.status] ?? 1 : 0} />
-    {saleMode === "test" && <p role="status">Test purchases · no real item or charge.</p>}
+    {saleMode === "test" && <p className="booking-notice" role="status">Test purchases · no real item or charge.</p>}
     {!sale ? <>
       {!canBuy && <p className="eq-note">Verified membership is required. <Link to="/onboarding">Complete verification</Link>.</p>}
       <button type="button" className="button button-primary" disabled={locked || !canBuy || !inStock}

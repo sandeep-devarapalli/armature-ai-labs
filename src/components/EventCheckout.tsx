@@ -75,9 +75,9 @@ function EventCheckout({ canBook, memberId }: { canBook: boolean; memberId: stri
   }
   const latest = slots ? 23 - Number(start.slice(0, 2)) : 1;
   const locked = busy || checkoutOpen;
-  return <div className="event-checkout">
+  return <div className="event-checkout booking-flow">
     <BookingSteps label="Event booking steps" steps={eventSteps} current={quote ? stepFor[quote.status] ?? 1 : 0} />
-    {eventMode === "test" && <p role="status">Test bookings · no real event or charge.</p>}
+    {eventMode === "test" && <p className="booking-notice" role="status">Test bookings · no real event or charge.</p>}
     {!canBook && <p>Verified membership is required. <Link to="/onboarding">Complete verification</Link>.</p>}
     <button className="button secondary" disabled={locked} onClick={() => void run(async () => {
       const result = await request<{ quotes: EventQuote[] }>({ action: "list_own" }); if (active.current) setRecent(result.quotes);

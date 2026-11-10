@@ -101,7 +101,7 @@ function RentalCheckout({ canBook, memberId, initialProduct }: { canBook: boolea
   const hasDeposit = quote ? quote.depositMethod === "bank_transfer" && quote.depositPaise > 0 : item?.depositPaise !== 0;
   const step = !quote ? 0 : ({ awaiting_staff: 1, awaiting_signatures: 2, awaiting_deposit: 4, approved: 5, awaiting_payment: 5, confirmed: 6, returned: 6 } as Record<string, number>)[quote.status]
     ?? (quote.agreementSigned ? 5 : 1);
-  return <Section number="01" title="Your booking">
+  return <Section number="01" title="Your booking"><div className="booking-flow">
     <BookingSteps label="Rental booking steps" steps={hasDeposit ? rentalSteps : rentalSteps.filter((_, i) => i !== 4)} current={hasDeposit || step < 4 ? step : step - 1} />
     {!canBook && <p>Verified membership is required. <Link to="/onboarding">Complete verification</Link>.</p>}
     <button className="button secondary" disabled={busy || checkoutOpen} onClick={() => void run(async () => {
@@ -135,7 +135,7 @@ function RentalCheckout({ canBook, memberId, initialProduct }: { canBook: boolea
       <button className="button" disabled={busy || !canBook || !item}>Request agreement</button>
     </form> : <div aria-live="polite">
       <h3>{rentalLabel(quote)}</h3><p>{quote.start} to {quote.end}</p>
-      {quote.testFixture && <p role="status">TEST SPECIMEN: ₹50 simulated rent payment and ₹100 simulated bank deposit. No real rental, bank transfer or charge.</p>}
+      {quote.testFixture && <p className="booking-notice" role="status">TEST SPECIMEN: ₹50 simulated rent payment and ₹100 simulated bank deposit. No real rental, bank transfer or charge.</p>}
       <dl><dt>Rent collected now</dt><dd>{rentalMoney(quote.rentPaise)}</dd><dt>{quote.depositMethod === "bank_transfer" && quote.depositPaise > 0 ? "Security deposit by bank transfer" : "Security deposit"}</dt><dd>{quote.depositPaise > 0 ? rentalMoney(quote.depositPaise) : "None"}</dd>
         <dt>GST</dt><dd>Not added</dd><dt>Total across payment methods</dt><dd>{rentalMoney(quote.amountPaise)}</dd>{quote.depositMethod === "bank_transfer" && quote.depositPaise > 0 && <><dt>Pay through Razorpay</dt><dd>{rentalMoney(quote.paymentAmountPaise ?? quote.rentPaise)} rent only</dd></>}</dl>
       <p>Agreement reference: <code style={{ overflowWrap: "anywhere" }}>{quote.quoteId}</code></p><p>Status: <strong>{({ confirmed: "Reservation confirmed", refunded: "Payment refunded", needs_review: "Staff review needed", approved: "Ready for payment", awaiting_signatures: "Ready for customer and Armature signatures", awaiting_staff: "Awaiting draft preparation", awaiting_payment: "Payment pending; check payment status", awaiting_deposit: "Awaiting bank deposit verification", superseded: "Replaced by a revised quote", returned: "Rental returned", cancelled: "Reservation cancelled" } as Record<string, string>)[quote.status] ?? "Awaiting staff confirmation"}</strong></p>
@@ -200,5 +200,5 @@ function RentalCheckout({ canBook, memberId, initialProduct }: { canBook: boolea
       {!quote.hasOrder && !quote.orderPending && <button className="button secondary" disabled={busy || checkoutOpen} onClick={() => { setQuote(null); setConsent(false); setEditingRefundAccount(false); }}>Choose another booking</button>}
     </div>}
     {error && <p role="alert">{error}</p>}
-  </Section>;
+  </div></Section>;
 }
