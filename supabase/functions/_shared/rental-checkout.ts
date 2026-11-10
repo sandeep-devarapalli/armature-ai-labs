@@ -14,6 +14,7 @@ type Quote = {
   deposit_reference?: string; deposit_verified_reference?: string; deposit_verified_at?: string; payment_window_at?: string; bank_deposit_refunded_paise?: number; test_fixture?: boolean;
   prepared_at?: string | null; particulars?: object; operations?: object; bookingId?: string; rent_refunded?: number; deposit_refunded?: number; refunded_amount?: number; refund_allocation_pending?: boolean; policy_version: string; order_id: string | null; order_claimed_at: string | null;
   payment_id?: string | null; approved_at: string | null; document_id: string | null; status: string; review_reason?: string;
+  addons?: { code: string; name: string; maker: string | null; rentPaise: number }[];
 };
 type BankInstructions = { bankName: string; accountName: string; accountNumber: string; ifsc: string; accountType?: string };
 function bankInstructions(prefix: string): BankInstructions | null {
@@ -51,7 +52,7 @@ function present(q: Quote, bankPrefix: string | null = null) {
     agreementHash: q.agreement_hash, policyVersion: q.policy_version, approvedAt: q.approved_at, preparedAt: q.prepared_at,
     hasAgreement: Boolean(q.document_id), agreementSigned: Boolean(q.approved_at && q.document_id),
     hasOrder: Boolean(q.order_id), orderPending: Boolean(q.order_claimed_at && !q.order_id),
-    status: q.status, reviewReason: q.review_reason, bookingId: q.bookingId, rentRefunded: q.rent_refunded, depositRefunded: q.deposit_refunded, refundedAmount: q.refunded_amount, refundAllocationPending: q.refund_allocation_pending };
+    addons: q.addons ?? [], status: q.status, reviewReason: q.review_reason, bookingId: q.bookingId, rentRefunded: q.rent_refunded, depositRefunded: q.deposit_refunded, refundedAmount: q.refunded_amount, refundAllocationPending: q.refund_allocation_pending };
 }
 export async function handleRentalCheckout(request: Request, mode: "test" | "live"): Promise<Response> {
   const origin = mode === "live" ? "https://armatureailabs.com" : "https://booking-staging.armature-lab.pages.dev";
@@ -119,11 +120,14 @@ export async function handleRentalCheckout(request: Request, mode: "test" | "liv
       // The catalogue decides which products exist and whether each needs an end date (cabins) or a unit (equipment).
       if (typeof input.product !== "string" || !productCode.test(input.product) || !date.test(input.start ?? "")
         || (input.end !== undefined && !date.test(input.end)) || (input.unit !== undefined && !["day", "week", "month"].includes(input.unit))
-        || (input.end === undefined && input.unit === undefined)) throw new Rejected(400, "invalid_selection");
+        || (input.end === undefined && input.unit === undefined)
+        || (input.addons !== undefined && (!Array.isArray(input.addons) || input.addons.length > 1 || !input.addons.every((code: unknown) => typeof code === "string" && productCode.test(code)))))
+        throw new Rejected(400, "invalid_selection");
       const testFixture = input.testFixture === true;
       if (testFixture && (mode !== "test" || Deno.env.get("SUPABASE_URL") !== rentalStagingBackend
         || Deno.env.get("RENTAL_TEST_FIXTURE_ENABLED") !== "true" || Deno.env.get("RENTAL_TEST_FIXTURE_BUYER") !== user.id)) throw new Rejected(403, "test_fixture_not_allowed");
-      const result = await operation<Quote>(action, { testFixture, product: input.product, unit: input.unit, start: input.start, end: input.end, partyType: input.partyType, policyVersion });
+      const result = await operation<Quote>(action, { testFixture, product: input.product, unit: input.unit, start: input.start, end: input.end, partyType: input.partyType, policyVersion,
+        ...(input.addons?.length ? { addons: input.addons } : {}) });
       return reply({ mode, ...(action === "quote" ? show(result) : result) });
     }
     if (action === "renewal_quote") {
@@ -243,7 +247,7 @@ export async function handleRentalCheckout(request: Request, mode: "test" | "liv
       throw new Rejected(409, "order_pending_staff_recovery");
     }
     const order = await provider.request<{ id: string; receipt: string; amount: number; currency: string }>("/orders", {
-      amount: q.payment_amount_paise ?? q.amount_paise, currency: "INR", receipt: q.id, notes: { purpose: "armature_rental_" + mode, product: q.product },
+      amount: q.payment_amount_paise ?? q.amount_paise, currency: "INR", receipt: q.id, notes: { purpose: "armature_rental_" + mode, product: [q.product, ...(q.addons ?? []).map(a => a.code)].join(",") },
     });
     if (!orderIdPattern.test(order.id) || order.receipt !== q.id || order.amount !== (q.payment_amount_paise ?? q.amount_paise) || order.currency !== "INR") throw new Rejected(502, "provider_order_mismatch");
     await operation<Quote>("bind_order", { quoteId: q.id, orderId: order.id });

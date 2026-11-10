@@ -17,6 +17,7 @@ export type RentalQuote = {
   depositMethod?: "bank_transfer" | "razorpay";
   depositStatus?: "not_required" | "pending" | "submitted" | "verified" | "partially_refunded" | "refunded";
   depositReference?: string | null; depositVerifiedReference?: string | null; depositVerifiedAt?: string | null; bankDepositRefundedPaise?: number;
+  addons?: { code: string; name: string; maker: string | null; rentPaise: number }[];
   paymentAmountPaise?: number; paymentWindowAt?: string | null; testFixture?: boolean; bankInstructions?: { bankName: string; accountName: string; accountNumber: string; ifsc: string; accountType?: string } | null;
 };
 // Catalogue entries without a price, deposit or start date list as coming soon.
@@ -26,8 +27,9 @@ export type RentalProduct = { product: string; kind: "cabin" | "equipment"; name
   dayRentPaise?: number | null; salePaise?: number | null; freeUnits?: number; category?: string | null; maker?: string | null;
   version?: string | null; summary?: string | null; images?: { src: string; alt: string }[]; highlights?: string[];
   specs?: [string, string][]; parts?: [string, string][]; partsNote?: string | null; sourceLabel?: string | null;
-  sourceUrl?: string | null; stockNote?: string | null; inStock?: boolean };
-export const rentalLabel = (quote: Pick<RentalQuote, "product" | "productName">) => quote.productName ?? quote.product;
+  sourceUrl?: string | null; stockNote?: string | null; inStock?: boolean; addonCodes?: string[] };
+export const rentalLabel = (quote: Pick<RentalQuote, "product" | "productName" | "addons">) =>
+  [quote.productName ?? quote.product, ...(quote.addons ?? []).map(addon => addon.name)].join(" + ");
 export const rentalMoney = (value: number) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(value / 100);
 export async function rentalRequest<T>(body: object | FormData, expectedMember?: string): Promise<T> {
   if (!supabase) throw new Error("Booking service is unavailable.");

@@ -43,7 +43,7 @@ jobs:
       - run: npm run test:e2e:ecosystem
       - run: VITE_MEMBERSHIP_LEVELS_ENABLED=true npx playwright test --config playwright.basic-registration.config.ts
       - run: VITE_DESK_CHECKOUT_ENABLED=true VITE_MEMBERSHIP_LEVELS_ENABLED=true npx playwright test --config playwright.basic-registration.config.ts tests/basic-registration/desk-recovery.spec.ts
-      - run: VITE_RENTAL_CHECKOUT_ENABLED=true VITE_RENTAL_CHECKOUT_MODE=test VITE_MEMBERSHIP_LEVELS_ENABLED=true npx playwright test --config playwright.basic-registration.config.ts tests/basic-registration/rental-booking.spec.ts tests/basic-registration/rental-staff-review.spec.ts tests/basic-registration/equipment-pages.spec.ts
+      - run: VITE_RENTAL_CHECKOUT_ENABLED=true VITE_RENTAL_CHECKOUT_MODE=test VITE_MEMBERSHIP_LEVELS_ENABLED=true npx playwright test --config playwright.basic-registration.config.ts tests/basic-registration/rental-booking.spec.ts tests/basic-registration/rental-staff-review.spec.ts tests/basic-registration/equipment-pages.spec.ts tests/basic-registration/rental-bundle.spec.ts
       - run: VITE_EVENT_CHECKOUT_ENABLED=true VITE_EVENT_CHECKOUT_MODE=test VITE_MEMBERSHIP_LEVELS_ENABLED=true npx playwright test --config playwright.basic-registration.config.ts tests/basic-registration/event-booking.spec.ts
       - run: VITE_RENTAL_CHECKOUT_ENABLED=true VITE_RENTAL_CHECKOUT_MODE=test VITE_EQUIPMENT_SALE_ENABLED=true VITE_EQUIPMENT_SALE_MODE=test VITE_MEMBERSHIP_LEVELS_ENABLED=true npx playwright test --config playwright.basic-registration.config.ts tests/basic-registration/equipment-sale.spec.ts
       - run: npx playwright test --config playwright.resource-feedback.config.ts

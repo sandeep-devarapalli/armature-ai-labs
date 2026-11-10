@@ -313,3 +313,14 @@ it("passes any catalogue product code through and rejects malformed selections",
     expect((await post({ action: "quote", ...bad })).status).toBe(400);
   }
 });
+it("forwards one camera add-on and returns it with the quote", async () => {
+  quote = { ...quote, product: "thinkrobotics-so101", addons: [{ code: "waveshare-ov5693", name: "OV5693 5MP USB Camera (A)", maker: "Waveshare", rentPaise: 100000 }] };
+  const response = await post({ action: "quote", product: "thinkrobotics-so101", unit: "week", start: "2027-02-01", addons: ["waveshare-ov5693"] });
+  expect(response.status).toBe(200);
+  expect(mock.rpc.mock.calls[0][1].p_input).toMatchObject({ product: "thinkrobotics-so101", addons: ["waveshare-ov5693"] });
+  expect((await response.json()).addons).toEqual([expect.objectContaining({ code: "waveshare-ov5693", rentPaise: 100000 })]);
+});
+it.each([[["waveshare-ov5693", "hiwonder"]], ["waveshare-ov5693"], [["Bad Code"]]])("rejects an invalid add-on list %j", async addons => {
+  expect((await post({ action: "quote", product: "thinkrobotics-so101", unit: "week", start: "2027-02-01", addons })).status).toBe(400);
+  expect(mock.rpc).not.toHaveBeenCalled();
+});
