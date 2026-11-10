@@ -79,7 +79,7 @@ jobs:
         with:
           node-version: 22.22.2
       - run: sudo apt-get update && sudo apt-get install -y postgresql-client
-      - uses: supabase/setup-cli@46f7f98c7f948ad727d22c1e67fab04c223a0520 # v3
+      - uses: supabase/setup-cli@689adcfb80d947100a1eab127289b97d1fb07b13 # v3
         with:
           version: 2.114.0
       - run: supabase start
