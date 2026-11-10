@@ -7,7 +7,7 @@ function LegalPage({ title, updated = true, children }: PropsWithChildren<{ titl
     <header className="page-hero">
       <div className="wrap">
         <h1>{title}</h1>
-        {updated && <p className="hero-copy">Last updated: 9 November 2026</p>}
+        {updated && <p className="hero-copy">Last updated: 10 November 2026</p>}
       </div>
     </header>
     <div className="wrap privacy-content">{children}</div>
@@ -85,6 +85,7 @@ export function TermsPage() {
     <section>
       <h2>5. Hardware sales</h2>
       <p>Product descriptions and prices are on the website or in your quote. An order is confirmed once payment is received. Delivery is covered by our Shipping and Delivery Policy and returns by our Cancellation and Refund Policy. Manufacturer warranties, where offered, are passed on to you.</p>
+      <p>Equipment bought in the lab is sold as checked: you inspect it in person and accept its condition before paying. You get a full refund until you collect it, and no refund or return after collection.</p>
     </section>
     <section>
       <h2>6. Workshops and events</h2>
@@ -144,6 +145,8 @@ export function RefundPolicyPage() {
           <tr><td>Workshop or event seat</td><td>Less than 24 hours before the start</td><td>No refund; credit for a future session</td></tr>
           <tr><td>Event space hire</td><td>48 hours or more before the event</td><td>50% refund</td></tr>
           <tr><td>Event space hire</td><td>Less than 48 hours before the event, or no-show</td><td>No refund</td></tr>
+          <tr><td>Equipment bought in the lab</td><td>Before you collect the item</td><td>Full refund</td></tr>
+          <tr><td>Equipment bought in the lab</td><td>After you collect the item</td><td>No refund</td></tr>
           <tr><td>Session cancelled by us</td><td>Any time</td><td>Full refund</td></tr>
           <tr><td>Hardware order, not yet dispatched</td><td>Any time before dispatch</td><td>Full refund</td></tr>
           <tr><td>Hardware, damaged, defective or wrong item</td><td>Report within 3 days of delivery</td><td>Replacement, or full refund if no replacement is available</td></tr>
@@ -164,6 +167,7 @@ export function RefundPolicyPage() {
         <li>We do not accept returns of opened consumables, cut cables or wires, or components that have been soldered, flashed or modified.</li>
         <li>If an item is faulty, we pay the return shipping. In other cases, return shipping is paid by you.</li>
         <li>We refund or replace within 5 working days of receiving and checking the returned item.</li>
+        <li>Equipment bought in the lab is checked by you in person before you pay, so these returns do not apply to it once you collect it.</li>
       </ul>
     </section>
     <section>
