@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -145,7 +146,7 @@ jobs:
 
   deploy-production:
     if: >-
-      github.event_name == 'push' &&
+      (github.event_name == 'push' || github.event_name == 'workflow_dispatch') &&
       github.ref == 'refs/heads/main' &&
       vars.CLOUDFLARE_DEPLOY_ENABLED == 'true'
     needs:
