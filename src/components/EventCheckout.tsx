@@ -21,7 +21,7 @@ export function EventBooking() {
   const { pathname, search } = useLocation();
   const verified = accountMembershipLevelsEnabled(account) && ["verified", "premium"].includes(account?.membership_level ?? "");
   return signedIn && account?.user_id ? <EventCheckout key={account.user_id} memberId={account.user_id} canBook={verified} />
-    : <p><Link to={"/auth?next=" + encodeURIComponent(pathname + search)} className="button">Sign in to book the event space</Link></p>;
+    : <p><Link to={"/auth?next=" + encodeURIComponent(pathname + search)} className="button button-primary">Sign in to book the event space</Link></p>;
 }
 
 function EventCheckout({ canBook, memberId }: { canBook: boolean; memberId: string }) {
