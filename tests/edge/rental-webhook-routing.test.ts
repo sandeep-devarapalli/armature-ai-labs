@@ -53,3 +53,12 @@ it("rejects application without a positively identified ledger", async () => {
   expect(() => mock.dependencies!.apply("capture", {}, { checkout_kind: "constructor" })).toThrow("Unknown");
   expect(mock.rpc).not.toHaveBeenCalled();
 });
+it("routes only a known sale order to the sale ledger, renaming the record id", async () => {
+  enabled = true;
+  mock.rpc.mockImplementation(rpc => ({ abortSignal: async () => ({ error: null, data:
+    rpc === "equipment_sale" ? { id: "sale", status: "awaiting_payment" } : { status: "ignored" } }) }));
+  const quote = await mock.dependencies!.lookup("order_Sale");
+  expect(quote).toMatchObject({ id: "sale", checkout_kind: "sale" });
+  await mock.dependencies!.apply("capture", { quoteId: "sale", orderId: "order_Sale" }, quote!);
+  expect(mock.rpc).toHaveBeenLastCalledWith("equipment_sale", { p_action: "capture", p_member: null, p_input: { saleId: "sale", orderId: "order_Sale" } });
+});

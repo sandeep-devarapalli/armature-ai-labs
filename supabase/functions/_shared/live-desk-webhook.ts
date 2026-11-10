@@ -2,7 +2,7 @@ import { bodyBytes, RazorpayRequestError, validHmac } from "./razorpay-signature
 import { type LiveRazorpay, orderIdPattern, type Payment, paymentIdPattern,
   reconcileLivePayment, refundIdPattern } from "./live-desk-payment.ts";
 
-type Quote = { checkout_kind?: "desk" | "rental" | "event"; id: string; order_id: string | null; amount_paise: number };
+type Quote = { checkout_kind?: "desk" | "rental" | "event" | "sale"; id: string; order_id: string | null; amount_paise: number };
 type WebhookDependencies = {
   config: () => { provider: LiveRazorpay; secret: string; accountId: string } | null;
   lookup: (orderId: string) => Promise<Quote | null>;

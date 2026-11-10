@@ -159,3 +159,9 @@ verify_jwt = false
 
 [functions.test-event-checkout]
 verify_jwt = false
+
+[functions.equipment-sale]
+verify_jwt = false
+
+[functions.test-equipment-sale]
+verify_jwt = false
