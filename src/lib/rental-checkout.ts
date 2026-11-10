@@ -26,7 +26,7 @@ export type RentalProduct = { product: string; kind: "cabin" | "equipment"; name
   dayRentPaise?: number | null; salePaise?: number | null; freeUnits?: number; category?: string | null; maker?: string | null;
   version?: string | null; summary?: string | null; images?: { src: string; alt: string }[]; highlights?: string[];
   specs?: [string, string][]; parts?: [string, string][]; partsNote?: string | null; sourceLabel?: string | null;
-  sourceUrl?: string | null; stockNote?: string | null };
+  sourceUrl?: string | null; stockNote?: string | null; inStock?: boolean };
 export const rentalLabel = (quote: Pick<RentalQuote, "product" | "productName">) => quote.productName ?? quote.product;
 export const rentalMoney = (value: number) => new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(value / 100);
 export async function rentalRequest<T>(body: object | FormData, expectedMember?: string): Promise<T> {

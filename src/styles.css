@@ -5776,7 +5776,6 @@ footer p {
 .eq-prices { width: 100%; min-width: 0; border-collapse: collapse; font-size: 0.92rem; }
 .eq-prices th, .eq-prices td { padding: 8px 0; border-bottom: 1px solid var(--hair); text-align: left; font-weight: 400; vertical-align: top; }
 .eq-prices td { text-align: right; white-space: nowrap; padding-left: 12px; }
-.eq-signin { display: grid; gap: 12px; justify-items: start; margin-bottom: 20px; }
 .eq-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 260px)); gap: 14px; margin-bottom: 28px; }
 .eq-card { display: grid; gap: 6px; justify-items: start; align-content: start; padding: 12px; text-decoration: none; border: 1px solid var(--hair-strong); border-radius: 12px; background: var(--panel); color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
 .eq-card img { width: 100%; aspect-ratio: 1; object-fit: contain; background: #fff; border-radius: 8px; }

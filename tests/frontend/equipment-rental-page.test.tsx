@@ -3,9 +3,10 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import EquipmentRentalPage from "../../src/pages/EquipmentRentalPage";
 
-const mock = vi.hoisted(() => ({ signedIn: true, request: vi.fn() }));
+const mock = vi.hoisted(() => ({ signedIn: true, request: vi.fn(), rpc: vi.fn() }));
 vi.mock("../../src/context/AccountContext", () => ({ useAccount: () => ({ account: mock.signedIn ? { user_id: "buyer" } : null, signedIn: mock.signedIn }) }));
 vi.mock("../../src/lib/rental-checkout", () => ({ rentalRequest: mock.request }));
+vi.mock("../../src/lib/supabase", () => ({ supabase: { rpc: mock.rpc } }));
 
 const base = { floor: null, billableSeats: null, extraSeats: 0, monthlyRentPaise: null, availableFrom: null, room: null };
 const products = [
@@ -22,14 +23,42 @@ const products = [
 const show = (path: string) => render(<MemoryRouter initialEntries={[path]}><Routes>
   <Route path="/bookings/equipment" element={<EquipmentRentalPage />} /><Route path="/bookings/equipment/:code" element={<EquipmentRentalPage />} />
 </Routes></MemoryRouter>);
-beforeEach(() => { mock.signedIn = true; mock.request.mockReset().mockResolvedValue({ products }); });
+const publicItems = products.filter(p => p.kind === "equipment").map(p => {
+  const { quantity: _quantity, freeUnits, ...rest } = p as typeof p & { freeUnits?: number };
+  return { ...rest, inStock: (freeUnits ?? 0) > 0 };
+});
+beforeEach(() => {
+  mock.signedIn = true;
+  mock.request.mockReset().mockResolvedValue({ products });
+  mock.rpc.mockReset().mockResolvedValue({ data: publicItems, error: null });
+});
 afterEach(cleanup);
 
-it("asks visitors to sign in and does not call the catalogue", () => {
+it("lets visitors browse the public list without unit counts", async () => {
+  mock.signedIn = false;
+  show("/bookings/equipment");
+  const arm = await screen.findByRole("link", { name: /SO-101 arm kit/ });
+  expect(arm).toHaveTextContent("In stock");
+  expect(arm).not.toHaveTextContent("of 2");
+  expect(arm).toHaveTextContent("Buy ₹55,000");
+  expect(screen.getByRole("link", { name: /USB camera/ })).toHaveTextContent("Out of stock");
+  expect(mock.rpc).toHaveBeenCalledWith("public_equipment_catalog");
+  expect(mock.request).not.toHaveBeenCalled();
+});
+
+it("asks visitors to sign in to rent from an item page", async () => {
   mock.signedIn = false;
   show("/bookings/equipment/hiwonder");
-  expect(screen.getByRole("link", { name: "Sign in" })).toHaveAttribute("href", "/auth?next=%2Fbookings%2Fequipment%2Fhiwonder");
-  expect(mock.request).not.toHaveBeenCalled();
+  expect(await screen.findByRole("link", { name: "Sign in to rent" })).toHaveAttribute("href", "/auth?next=%2Fbookings%2Fequipment%2Fhiwonder");
+  expect(screen.queryByRole("link", { name: "Request to rent" })).not.toBeInTheDocument();
+  expect(screen.getByRole("row", { name: "Refundable deposit ₹25,000" })).toBeInTheDocument();
+});
+
+it("shows an error when the public list fails", async () => {
+  mock.signedIn = false;
+  mock.rpc.mockResolvedValue({ data: null, error: new Error("down") });
+  show("/bookings/equipment");
+  expect(await screen.findByRole("alert")).toHaveTextContent("Equipment could not load");
 });
 
 it("lists equipment only, with stock and prices", async () => {
