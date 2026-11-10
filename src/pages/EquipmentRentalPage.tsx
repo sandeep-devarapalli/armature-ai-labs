@@ -4,13 +4,18 @@ import { PageHeader } from "../components/Primitives";
 import { useAccount } from "../context/AccountContext";
 import { formatPaise } from "../lib/cabins";
 import { rentalRequest, type RentalProduct } from "../lib/rental-checkout";
+import { supabase } from "../lib/supabase";
 
 const gstNote = "Armature is not GST-registered, so no GST is added.";
 const rentLink = (code: string) => `/bookings?item=kit&product=${encodeURIComponent(code)}#steps`;
 
+// Members see unit counts; the public catalogue only says whether an item is in stock.
+const freeUnits = (item: RentalProduct) => item.freeUnits ?? (item.inStock ? 1 : 0);
+
 function Stock({ item }: { item: RentalProduct }) {
-  const free = item.freeUnits ?? 0;
-  const label = item.status !== "available" ? "Coming soon" : free === 0 ? "Out of stock" : `${free} of ${item.quantity} available`;
+  const free = freeUnits(item);
+  const label = item.status !== "available" ? "Coming soon" : free === 0 ? "Out of stock"
+    : item.freeUnits === undefined ? "In stock" : `${free} of ${item.quantity} available`;
   return <span className={`eq-stock mono ${item.status === "available" && free ? "is-in" : "is-out"}`}>{label}{item.stockNote ? ` · ${item.stockNote}` : ""}</span>;
 }
 
@@ -31,10 +36,10 @@ function Card({ item }: { item: RentalProduct }) {
   </Link>;
 }
 
-function Detail({ item }: { item: RentalProduct }) {
+function Detail({ item, signInLink }: { item: RentalProduct; signInLink?: string }) {
   const [shown, setShown] = useState(0);
   const images = item.images ?? [];
-  const free = item.freeUnits ?? 0;
+  const free = freeUnits(item);
   const hasRent = Boolean(item.dayRentPaise || item.weekRentPaise || item.monthRentPaise);
   const blocker = item.status !== "available" ? "Coming soon" : free === 0 ? "Out of stock" : !hasRent ? "Rental price to be confirmed" : null;
   return <article className="eq-detail" aria-labelledby="eq-name">
@@ -62,6 +67,7 @@ function Detail({ item }: { item: RentalProduct }) {
             <tr><th>Refundable deposit</th><td>{item.depositPaise === null ? "To be confirmed" : item.depositPaise === 0 ? "None" : formatPaise(item.depositPaise)}</td></tr>
           </tbody></table> : <p className="eq-note">Rental price to be confirmed by Armature.</p>}
           {blocker ? <button type="button" className="button" disabled>{blocker}</button>
+            : signInLink ? <Link className="button button-primary" to={signInLink}>Sign in to rent</Link>
             : <Link className="button button-primary" to={rentLink(item.product)}>Request to rent</Link>}
           <p className="eq-note">Used in the lab only, with workspace access for the same period. Armature reviews every request before the agreement.</p>
         </div>
@@ -90,7 +96,8 @@ function Detail({ item }: { item: RentalProduct }) {
   </article>;
 }
 
-// Equipment list at /bookings/equipment and one page per item at /bookings/equipment/:code. The catalogue is read for signed-in members only.
+// Equipment list at /bookings/equipment and one page per item at /bookings/equipment/:code.
+// Visitors read the public catalogue; members get unit counts from the rental checkout.
 export default function EquipmentRentalPage() {
   const { code } = useParams();
   const { pathname } = useLocation();
@@ -99,11 +106,15 @@ export default function EquipmentRentalPage() {
   const [items, setItems] = useState<RentalProduct[] | null>(null);
   const [error, setError] = useState("");
   useEffect(() => {
-    if (!memberId) return;
     let active = true;
     setError("");
-    rentalRequest<{ products: RentalProduct[] }>({ action: "availability" }, memberId)
-      .then(result => { if (active) setItems(result.products.filter(p => p.kind === "equipment")); })
+    setItems(null);
+    const load = memberId
+      ? rentalRequest<{ products: RentalProduct[] }>({ action: "availability" }, memberId).then(result => result.products)
+      : supabase ? Promise.resolve(supabase.rpc("public_equipment_catalog")).then(({ data, error }) => { if (error) throw error; return data as unknown as RentalProduct[]; })
+      : Promise.reject(new Error("unavailable"));
+    load
+      .then(products => { if (active) setItems(products.filter(p => p.kind === "equipment")); })
       .catch(() => { if (active) setError("Equipment could not load. Try again in a moment."); });
     return () => { active = false; };
   }, [memberId]);
@@ -114,13 +125,9 @@ export default function EquipmentRentalPage() {
     <section className="section">
       <div className="wrap">
         {code && <Link className="mono eq-back" to="/bookings/equipment">← All equipment</Link>}
-        {!memberId ? <div className="eq-signin">
-          <p>Sign in to see equipment, prices and stock.</p>
-          <Link className="button button-primary" to={"/auth?next=" + encodeURIComponent(pathname)}>Sign in</Link>
-        </div>
-          : error ? <p role="alert">{error}</p>
+        {error ? <p role="alert">{error}</p>
           : !items ? <p role="status">Loading equipment…</p>
-          : code ? item ? <Detail item={item} /> : <p role="status">This item is not listed. <Link to="/bookings/equipment">See all equipment</Link>.</p>
+          : code ? item ? <Detail item={item} signInLink={memberId ? undefined : "/auth?next=" + encodeURIComponent(pathname)} /> : <p role="status">This item is not listed. <Link to="/bookings/equipment">See all equipment</Link>.</p>
           : <div className="eq-grid">{items.map(p => <Card key={p.product} item={p} />)}</div>}
         <p className="eq-note">{gstNote}</p>
       </div>

@@ -3585,6 +3585,7 @@ export type Database = {
           starts_at: string
         }[]
       }
+      public_equipment_catalog: { Args: never; Returns: Json }
       record_classified_notification_event: {
         Args: {
           p_event_id: string
