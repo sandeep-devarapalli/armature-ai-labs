@@ -1880,7 +1880,7 @@ td {
   font-weight: 400;
 }
 
-input,
+input:not([type="checkbox"]):not([type="radio"]),
 textarea,
 select {
   width: 100%;
@@ -5821,3 +5821,48 @@ footer p {
   .eq-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
   .eq-card { padding: 8px; }
 }
+
+/* Checkboxes and radios sit inline with their label text */
+input[type="checkbox"], input[type="radio"] { width: 18px; height: 18px; margin: 0 8px 0 0; vertical-align: -3px; accent-color: var(--ink); flex: none; }
+label:has(> input[type="checkbox"]), label:has(> input[type="radio"]) { display: block; line-height: 1.55; }
+input[type="checkbox"]:focus-visible, input[type="radio"]:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+
+/* Shared form rhythm: label above its control, fields spaced */
+.ol-form { display: grid; gap: 16px; min-width: 0; }
+.ol-form label:not(:has(> input[type="checkbox"], > input[type="radio"])) { display: grid; gap: 6px; font-size: 13px; color: var(--fg-2); }
+.ol-form > .button, .ol-form > button { justify-self: start; }
+.button.secondary { background: transparent; color: var(--ink); border-color: var(--hair-strong); }
+.button.secondary:hover:not(:disabled) { background: var(--panel-2); }
+
+/* Booking flows: one primary action, quiet secondary actions, readable summaries */
+.booking-flow { display: grid; gap: 18px; min-width: 0; }
+.booking-flow .button:not(.button-primary):not(.button-quiet):not(.secondary):not(.button-danger) { color: var(--paper); background: var(--ink); border-color: var(--ink); }
+.booking-flow .button:not(.button-primary):not(.button-quiet):not(.secondary):not(.button-danger):hover:not(:disabled) { color: var(--ink); background: var(--paper); }
+.booking-flow .button:disabled { opacity: 1; color: var(--fg-3); background: transparent; border: 1px dashed var(--hair-strong); }
+.booking-flow .button-row { margin-top: 0; }
+.booking-flow details > summary { cursor: pointer; color: var(--fg-2); font-size: 13px; }
+.booking-flow details[open] > summary { margin-bottom: 12px; }
+.booking-flow [role="alert"] { margin: 0; padding: 10px 12px; color: var(--brick); border: 1px solid color-mix(in srgb, var(--brick) 55%, transparent); font-size: 13px; }
+.booking-summary { display: grid; margin: 0; border-top: 1px solid var(--hair); }
+.booking-summary > div { display: grid; grid-template-columns: minmax(8em, 40%) 1fr; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--hair); }
+.booking-summary dt { color: var(--fg-3); font-size: 13px; }
+.booking-summary dd { margin: 0; overflow-wrap: anywhere; }
+.booking-summary .is-money { text-align: right; font-variant-numeric: tabular-nums; }
+.booking-summary .is-total { font-weight: 600; border-bottom: 1px solid var(--ink); }
+.booking-summary .is-total dt { color: var(--ink); }
+.booking-notice { margin: 0; padding: 10px 12px; border: 1px solid var(--hair-strong); border-left: 3px solid var(--kicker, var(--saffron)); color: var(--fg-2); font-size: 13px; }
+.booking-chip { display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px; border: 1px solid var(--hair-strong); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; }
+.booking-chip::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--fg-3); }
+.booking-chip.is-ready::before { background: var(--kicker, var(--saffron)); }
+.booking-chip.is-done { border-color: color-mix(in srgb, var(--moss) 60%, transparent); }
+.booking-chip.is-done::before { background: var(--moss); }
+.booking-chip.is-attention { border-color: color-mix(in srgb, var(--brick) 55%, transparent); }
+.booking-chip.is-attention::before { background: var(--brick); }
+:root[data-theme="dark"] .booking-chip.is-done::before { background: #9bc28a; }
+.booking-flow > .button, .booking-flow > button { justify-self: start; }
+.booking-flow .button { margin: 6px 8px 0 0; }
+.booking-flow .ol-form > .button, .booking-flow .ol-form > button { margin: 0; }
+.booking-flow label:has(> input[type="checkbox"]) { margin-bottom: 6px; }
+.booking-flow details { margin: 10px 0; }
+.booking-flow .checkbox-field { align-items: flex-start; }
+.booking-flow .checkbox-field input { margin-top: 3px; }

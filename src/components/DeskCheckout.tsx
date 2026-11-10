@@ -189,7 +189,7 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
     (quote.approvedAt && Date.parse(quote.approvedAt) + 30 * 60 * 1000 <= Date.now())));
   const terminal = quote?.status === "confirmed" || quote?.status === "refunded" || quote?.status === "cancelled";
   const step = choosing ? 0 : quote?.status === "confirmed" ? 4 : quote?.agreementSigned ? 3 : quote?.hasAgreement && !quote.manualAgreement ? 2 : 1;
-  return <Section number="01" title="Book a desk pass">
+  return <Section number="01" title="Book a desk pass"><div className="booking-flow">
     <BookingSteps steps={deskSteps} current={step} />
     <p>A request does not reserve a desk. Availability is checked again before payment. Do not make a second payment while an earlier attempt is pending.</p>
     {choosing && <details className="member-confirm">
@@ -298,5 +298,5 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
     </div>}
     <p>Need a draft correction or help with a payment? Email <a href="mailto:hello@armatureailabs.com">hello@armatureailabs.com</a> with your agreement reference. Do not send identity copies or payment credentials.</p>
     {error && <p className="form-error" role="alert">{error}</p>}
-  </Section>;
+  </div></Section>;
 }
