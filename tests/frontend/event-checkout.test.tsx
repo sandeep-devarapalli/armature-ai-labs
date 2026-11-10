@@ -24,8 +24,8 @@ async function open(fields: object) {
   mock.request.mockImplementation(async body => body.action === "list_own" ? { quotes: [{ ...quote, ...fields }] } : { ...quote, ...fields });
   show();
   fireEvent.click(screen.getByRole("button", { name: "Find my event requests" }));
-  fireEvent.click(await screen.findByRole("button", { name: /2027-03-12 · 10:00/ }));
-  await screen.findByText(/Agreement reference/);
+  fireEvent.click(await screen.findByRole("button", { name: /12 Mar 2027 · 10:00/ }));
+  await screen.findByRole("button", { name: "Copy full reference" });
 }
 beforeEach(() => { vi.clearAllMocks(); mock.verified = true; mock.signedIn = true;
   mock.request.mockImplementation(async body => body.action === "availability" ? slots : quote); });
@@ -41,7 +41,7 @@ it("shows the day's bookings, then requests the chosen slot", async () => {
   expect(current()).toBe("1Choose date, time and guests");
   expect(screen.getByRole("button", { name: "Request the event space" })).toBeDisabled();
   fireEvent.change(screen.getByLabelText("Event date"), { target: { value: "2027-03-12" } });
-  expect(await screen.findByText(/Already booked: 14:00–16:00/)).toBeInTheDocument();
+  expect(await screen.findByLabelText(/Already booked: 14:00–16:00/)).toBeInTheDocument();
   expect(mock.request).toHaveBeenCalledWith({ action: "availability", date: "2027-03-12" }, "host");
   fireEvent.change(screen.getByLabelText("Start time"), { target: { value: "10:00" } });
   fireEvent.change(screen.getByLabelText("Hours"), { target: { value: "2" } });
@@ -57,7 +57,7 @@ it("shows the day's bookings, then requests the chosen slot", async () => {
 it("needs Verified membership to request", async () => {
   mock.verified = false; show();
   fireEvent.change(screen.getByLabelText("Event date"), { target: { value: "2027-03-12" } });
-  await screen.findByText(/Already booked/);
+  await screen.findByText("Already booked");
   expect(screen.getByRole("button", { name: "Request the event space" })).toBeDisabled();
 });
 

@@ -56,7 +56,7 @@ function nextStep(q: RentalQuote) {
     case "approved": return bank ? "Accept the terms and pay the rent within 30 minutes." : "Accept the terms and pay within 30 minutes.";
     case "awaiting_payment": return "A payment was started. Check the payment status before trying again.";
     case "confirmed": return q.kind === "cabin" ? "Your cabin is reserved for these dates." : "Collect the equipment from the lab at the start of your rental.";
-    case "needs_review": return "Armature will contact you. Do not make another payment.";
+    case "needs_review": return "Staff must reconcile this booking. Do not make another payment.";
     default: return undefined;
   }
 }

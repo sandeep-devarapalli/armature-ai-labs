@@ -24,7 +24,7 @@ test("event space request from the bookings page", async ({ page }, info) => {
   await page.goto("/bookings?item=event");
   await expect(page.getByText("₹2,500 / hour")).toBeVisible();
   await page.getByLabel("Event date").fill("2027-03-12");
-  await expect(page.getByText(/Already booked: 14:00–16:00/)).toBeVisible();
+  await expect(page.getByLabel(/Already booked: 14:00–16:00/)).toBeVisible();
   await page.getByLabel("Hours").selectOption("2");
   await page.getByLabel("Guests").fill("20");
   await page.getByLabel("What is the event?").fill("Robotics meetup with demos");

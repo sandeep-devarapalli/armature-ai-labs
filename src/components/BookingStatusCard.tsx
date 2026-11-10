@@ -9,7 +9,7 @@ export function bookingDates(start: string, end?: string | null) {
   const a = day(start), b = day(end ?? start);
   if (Number.isNaN(a.getTime()) || Number.isNaN(b.getTime())) return end ? `${start} to ${end}` : start;
   const full = (d: Date) => d.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
-  if (a.getTime() === b.getTime()) return a.toLocaleDateString("en-IN", { weekday: "short", day: "numeric", month: "short", year: "numeric" });
+  if (a.getTime() === b.getTime()) return `${a.toLocaleDateString("en-IN", { weekday: "short" })} ${full(a)}`;
   if (a.getFullYear() !== b.getFullYear()) return `${full(a)} – ${full(b)}`;
   if (a.getMonth() !== b.getMonth()) return `${a.toLocaleDateString("en-IN", { day: "numeric", month: "short" })} – ${full(b)}`;
   return `${a.getDate()}–${full(b)}`;
