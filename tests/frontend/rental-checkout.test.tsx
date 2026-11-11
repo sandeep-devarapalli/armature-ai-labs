@@ -112,14 +112,14 @@ it("keeps rent checkout disabled until independent deposit verification", async 
   await openBankQuote();
   expect(screen.getByText("₹50 rent only")).toBeInTheDocument();
   expect(screen.getByText("Deposit needed")).toBeInTheDocument();
-  fireEvent.click(screen.getByLabelText(/I accept the/));
-  expect(screen.getByRole("button", { name: "Pay rent with Razorpay Test Mode" })).toBeDisabled();
+  expect(screen.queryByLabelText(/I accept the/)).not.toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: /Pay rent/ })).not.toBeInTheDocument();
   fireEvent.change(screen.getByLabelText("Simulated bank transfer reference"), { target: { value: "TEST-BANK-100" } });
   mock.request.mockResolvedValueOnce({ ...bankQuote, depositStatus: "submitted", depositReference: "TEST-BANK-100" });
   fireEvent.click(screen.getByRole("button", { name: "Submit deposit reference for review" }));
   await screen.findByText("TEST-BANK-100");
   expect(mock.request).toHaveBeenLastCalledWith({ action: "submit_deposit_reference", quoteId: quote.quoteId, reference: "TEST-BANK-100" }, "buyer");
-  expect(screen.getByRole("button", { name: "Pay rent with Razorpay Test Mode" })).toBeDisabled();
+  expect(screen.queryByRole("button", { name: /Pay rent/ })).not.toBeInTheDocument();
 });
 it("sends only the server-approved rent to Razorpay for bank-deposit quotes", async () => {
   await openBankQuote({ ...bankQuote, depositStatus: "verified", status: "approved" });
@@ -151,6 +151,8 @@ it("shows configured company bank details only after agreement approval", async 
   await openBankQuote({ ...bankQuote, testFixture: false, agreementSigned: false, bankInstructions: instructions });
   expect(screen.queryByText("Synthetic Company")).not.toBeInTheDocument();
   expect(screen.getByText("Complete agreement review and signing before transferring the deposit.")).toBeInTheDocument();
+  expect(screen.queryByLabelText("Account holder name")).not.toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: /Pay rent/ })).not.toBeInTheDocument();
 });
 
 it("shows the verified receipt reference separately from the customer's submitted reference", async () => {

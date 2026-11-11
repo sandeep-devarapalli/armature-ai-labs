@@ -55,8 +55,8 @@ for (const product of ["cabin101", "hiwonder"]) test(`synthetic ${product} guide
   await expect(page.getByRole("button", { name: /Pay with Razorpay/ })).toHaveCount(0);
   expect(actions).toEqual(["availability", "quote"]);
   await page.getByRole("button", { name: "Check agreement or payment status" }).click();
-  await expect(page.getByText("Both signatures were reviewed.", { exact: false })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Pay rent with Razorpay Test Mode" })).toBeDisabled();
+  await expect(page.getByLabel("Account holder name")).toBeVisible();
+  await expect(page.getByRole("button", { name: /Pay rent/ })).toHaveCount(0);
   await page.getByLabel("Account holder name").fill("Synthetic Renter");
   await page.getByLabel("Bank name", { exact: true }).fill("Synthetic Bank");
   await page.getByLabel("Account number", { exact: true }).fill("000000000001");
@@ -69,7 +69,7 @@ for (const product of ["cabin101", "hiwonder"]) test(`synthetic ${product} guide
   await page.getByLabel("Simulated bank transfer reference").fill("STAGING-BANK-100");
   await page.getByRole("button", { name: "Submit deposit reference for review" }).click();
   await expect(page.getByText("STAGING-BANK-100", { exact: true })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Pay rent with Razorpay Test Mode" })).toBeDisabled();
+  await expect(page.getByRole("button", { name: /Pay rent/ })).toHaveCount(0);
   await page.getByRole("button", { name: "Check agreement or payment status" }).click();
   await expect(page.getByText("Staff verified the bank deposit.", { exact: false })).toBeVisible();
   await page.getByRole("checkbox").check();

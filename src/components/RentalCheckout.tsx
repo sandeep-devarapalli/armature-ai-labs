@@ -16,11 +16,11 @@ export function DepositReceipts({ quote }: { quote: RentalQuote }) {
     {quote.depositReceipts.map(receipt => <section key={receipt.receiptNumber} aria-label={"Deposit receipt " + receipt.receiptNumber}>
       <h5>{receipt.direction === "received" ? "Security deposit receipt" : "Security deposit refund receipt"}{quote.testFixture ? " · Test specimen, no money moved" : ""}</h5>
       <p>Refundable security deposit, recorded separately from rent. It is not rent or income and carries no GST.</p>
-      <dl style={{ overflowWrap: "anywhere" }}><dt>Receipt number</dt><dd>{receipt.receiptNumber}</dd>
-        <dt>{receipt.direction === "received" ? "Deposit received" : "Deposit returned"}</dt><dd>{rentalMoney(receipt.amountPaise)}</dd>
-        <dt>Bank transfer reference</dt><dd>{receipt.reference}</dd>
-        {receipt.refundAccountLast4 && <><dt>Returned to account</dt><dd>Ending {receipt.refundAccountLast4}</dd></>}
-        <dt>Agreement reference</dt><dd>{quote.quoteId}</dd><dt>Recorded</dt><dd>{ist(receipt.recordedAt)}</dd></dl>
+      <dl className="booking-summary"><div><dt>Receipt number</dt><dd>{receipt.receiptNumber}</dd></div>
+        <div><dt>{receipt.direction === "received" ? "Deposit received" : "Deposit returned"}</dt><dd>{rentalMoney(receipt.amountPaise)}</dd></div>
+        <div><dt>Bank transfer reference</dt><dd>{receipt.reference}</dd></div>
+        {receipt.refundAccountLast4 && <div><dt>Returned to account</dt><dd>Ending {receipt.refundAccountLast4}</dd></div>}
+        <div><dt>Agreement reference</dt><dd>{quote.quoteId}</dd></div><div><dt>Recorded</dt><dd>{ist(receipt.recordedAt)}</dd></div></dl>
     </section>)}
     <button type="button" className="button secondary" onClick={() => window.print()}>Print deposit receipts</button>
   </div>;
@@ -171,11 +171,13 @@ function RentalCheckout({ canBook, memberId, initialProduct }: { canBook: boolea
       actions={<><button className="button secondary" disabled={busy || checkoutOpen} onClick={() => void run(() => status(quote.quoteId))}>Check agreement or payment status</button>
         {!quote.hasOrder && !quote.orderPending && <button className="button secondary" disabled={busy || checkoutOpen} onClick={() => { setQuote(null); setConsent(false); setEditingRefundAccount(false); }}>Choose another booking</button>}</>}>
       {quote.testFixture && <p className="booking-notice" role="status">TEST SPECIMEN: ₹50 simulated rent payment and ₹100 simulated bank deposit. No real rental, bank transfer or charge.</p>}
-      {quote.depositMethod === "bank_transfer" && quote.depositPaise > 0 && <div>
+      {quote.depositMethod === "bank_transfer" && quote.depositPaise > 0 && !quote.agreementSigned && <div>
+        <h4>Bank-transfer deposit</h4><p>Complete agreement review and signing before transferring the deposit.</p></div>}
+      {quote.depositMethod === "bank_transfer" && quote.depositPaise > 0 && quote.agreementSigned && <div>
         <h4>Deposit refund account</h4>
         <p>Provide the contracting person's or company's bank account for returning the deposit. Staff reviews these details before any refund. Do not enter card details, passwords or OTPs.</p>
         {quote.testFixture && <p>Staging specimen: use synthetic bank details only, never a real account.</p>}
-        {quote.refundAccount && <><dl style={{ overflowWrap: "anywhere" }}><dt>Refund bank</dt><dd>{quote.refundAccount.bankName}</dd><dt>Saved account</dt><dd>Ending {quote.refundAccount.last4}</dd><dt>Staff review</dt><dd>{quote.refundAccount.verifiedAt ? "Verified for deposit refund" : "Awaiting staff verification"}</dd></dl>
+        {quote.refundAccount && <><dl className="booking-summary"><div><dt>Refund bank</dt><dd>{quote.refundAccount.bankName}</dd></div><div><dt>Saved account</dt><dd>Ending {quote.refundAccount.last4}</dd></div><div><dt>Staff review</dt><dd>{quote.refundAccount.verifiedAt ? "Verified for deposit refund" : "Awaiting staff verification"}</dd></div></dl>
           <button className="button secondary" disabled={busy || checkoutOpen} onClick={() => setEditingRefundAccount(value => !value)}>{editingRefundAccount ? "Cancel account change" : "Change refund account"}</button></>}
         {(!quote.refundAccount || editingRefundAccount) && <form className="ol-form" autoComplete="off" data-private="true" onSubmit={event => {
           event.preventDefault(); const form = event.currentTarget; const fields = new FormData(form);
@@ -195,19 +197,19 @@ function RentalCheckout({ canBook, memberId, initialProduct }: { canBook: boolea
           <label>Account number<input name="accountNumber" inputMode="numeric" pattern="[0-9]{6,24}" required autoComplete="off" disabled={busy || checkoutOpen} /></label>
           <label>Confirm account number<input name="confirmAccountNumber" inputMode="numeric" pattern="[0-9]{6,24}" required autoComplete="off" disabled={busy || checkoutOpen} /></label>
           <label>IFSC<input name="ifsc" pattern="[A-Za-z]{4}0[A-Za-z0-9]{6}" maxLength={11} required autoComplete="off" disabled={busy || checkoutOpen} /></label>
-          <label><input name="ownershipConfirmed" type="checkbox" required disabled={busy || checkoutOpen} /> This account belongs to the person or company named in this agreement, and I authorise Armature to use it for the deposit refund.</label>
+          <label className="checkbox-field"><input name="ownershipConfirmed" type="checkbox" required disabled={busy || checkoutOpen} /> <span>This account belongs to the person or company named in this agreement, and I authorise Armature to use it for the deposit refund.</span></label>
           <button className="button secondary" disabled={busy || checkoutOpen}>Save refund account securely</button>
         </form>}
         <h4>Bank-transfer deposit</h4>
         {quote.depositStatus === "verified" ? <><p>Staff verified the bank deposit. It is recorded separately from rent.</p><DepositReceipts quote={quote} /></>
           : quote.depositStatus === "refunded" || quote.depositStatus === "partially_refunded" ? <><p>Bank deposit returned: {rentalMoney(quote.bankDepositRefundedPaise ?? 0)}.</p><DepositReceipts quote={quote} /></>
           : <><p>The deposit is a refundable liability, collected and returned by bank transfer. A transfer reference or screenshot alone does not confirm receipt.</p>
-            {quote.agreementSigned ? <>
+            <>
               {quote.testFixture ? <p>Staging only: enter a simulated bank reference. Do not transfer money to any bank account.</p>
-                : quote.bankInstructions ? <dl style={{ overflowWrap: "anywhere" }}><dt>Account holder</dt><dd>{quote.bankInstructions.accountName}</dd>
-                  <dt>Bank</dt><dd>{quote.bankInstructions.bankName}</dd><dt>Account number</dt><dd>{quote.bankInstructions.accountNumber}</dd>
-                  <dt>IFSC</dt><dd>{quote.bankInstructions.ifsc}</dd>{quote.bankInstructions.accountType && <><dt>Account type</dt><dd>{quote.bankInstructions.accountType}</dd></>}
-                  <dt>Transfer description</dt><dd>{quote.quoteId}</dd></dl>
+                : quote.bankInstructions ? <dl className="booking-summary"><div><dt>Account holder</dt><dd>{quote.bankInstructions.accountName}</dd></div>
+                  <div><dt>Bank</dt><dd>{quote.bankInstructions.bankName}</dd></div><div><dt>Account number</dt><dd>{quote.bankInstructions.accountNumber}</dd></div>
+                  <div><dt>IFSC</dt><dd>{quote.bankInstructions.ifsc}</dd></div>{quote.bankInstructions.accountType && <div><dt>Account type</dt><dd>{quote.bankInstructions.accountType}</dd></div>}
+                  <div><dt>Transfer description</dt><dd><code>{quote.quoteId}</code></dd></div></dl>
                 : <p>Bank instructions are not available yet. Contact Armature for verified company bank details before transferring.</p>}
               {quote.depositReference && <p>Submitted reference: <code style={{ overflowWrap: "anywhere" }}>{quote.depositReference}</code>. Staff must check the bank credit.</p>}
               {!quote.refundAccount && <p>Save your deposit refund account before submitting the transfer reference.</p>}
@@ -216,13 +218,13 @@ function RentalCheckout({ canBook, memberId, initialProduct }: { canBook: boolea
                 <label>{quote.testFixture ? "Simulated bank transfer reference" : "Bank transfer reference"}<input name="reference" required minLength={6} maxLength={80} disabled={busy || checkoutOpen} /></label>
                 <button className="button secondary" disabled={busy || checkoutOpen}>Submit deposit reference for review</button>
               </form>}
-            </> : <p>Complete agreement review and signing before transferring the deposit.</p>}
+            </>
           </>}
       </div>}
-      {quote.agreementSigned && !["confirmed", "refunded", "needs_review", "cancelled", "returned", "superseded"].includes(quote.status) && <>
+      {quote.agreementSigned && ["approved", "awaiting_payment"].includes(quote.status) && <>
         <h4>{quote.depositMethod === "bank_transfer" ? "Rent payment" : "Payment"}</h4>
         <p>Both signatures were reviewed. {quote.depositMethod === "bank_transfer" ? "Rent payment opens after staff verifies the bank deposit. The payment window is 30 minutes from the later of agreement approval and deposit verification, subject to availability." : "Payment is available for 30 minutes after staff approval, subject to availability."}</p>
-        <label><input type="checkbox" checked={consent} disabled={busy || checkoutOpen} onChange={event => setConsent(event.target.checked)} /> I accept the <Link to="/terms">terms</Link> and <Link to="/refund-policy">refund policy</Link> for this quote.</label>
+        <label className="checkbox-field"><input type="checkbox" checked={consent} disabled={busy || checkoutOpen} onChange={event => setConsent(event.target.checked)} /> <span>I accept the <Link to="/terms">terms</Link> and <Link to="/refund-policy">refund policy</Link> for this quote.</span></label>
         <button className="button" disabled={busy || checkoutOpen || !consent || !canBook || (quote.depositMethod === "bank_transfer" && quote.depositPaise > 0 && quote.depositStatus !== "verified")} onClick={() => void run(() => pay(quote))}>{quote.depositMethod === "bank_transfer" ? "Pay rent with Razorpay" : "Pay with Razorpay"}{rentalMode === "test" ? " Test Mode" : ""}</button></>}
       </BookingStatusCard>
     </div>}
