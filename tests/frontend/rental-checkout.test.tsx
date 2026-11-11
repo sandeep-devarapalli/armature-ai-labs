@@ -83,9 +83,9 @@ it("drops an in-flight response after the member screen unmounts", async () => {
 });
 
 it.each([
-  ["awaiting_staff", "Awaiting draft preparation"],
-  ["awaiting_signatures", "Ready for customer and Armature signatures"],
-  ["awaiting_payment", "Payment pending; check payment status"],
+  ["awaiting_staff", "Request received"],
+  ["awaiting_signatures", "Ready to sign"],
+  ["awaiting_payment", "Payment pending"],
 ])("shows the server's %s stage without inventing per-signer progress", async (status, label) => {
   mock.request.mockImplementation(async body => body.action === "availability" ? (body.product ? { available: true } : { products }) : { ...quote, status });
   await show();
@@ -111,7 +111,7 @@ async function openBankQuote(value = bankQuote) {
 it("keeps rent checkout disabled until independent deposit verification", async () => {
   await openBankQuote();
   expect(screen.getByText("₹50 rent only")).toBeInTheDocument();
-  expect(screen.getByText("Awaiting bank deposit verification")).toBeInTheDocument();
+  expect(screen.getByText("Deposit needed")).toBeInTheDocument();
   fireEvent.click(screen.getByLabelText(/I accept the/));
   expect(screen.getByRole("button", { name: "Pay rent with Razorpay Test Mode" })).toBeDisabled();
   fireEvent.change(screen.getByLabelText("Simulated bank transfer reference"), { target: { value: "TEST-BANK-100" } });
@@ -238,7 +238,7 @@ async function openQuote(value: RentalQuote) {
   fireEvent.change(screen.getByLabelText("Start date"), { target: { value: "2027-02-01" } });
   fireEvent.change(screen.getByLabelText("Last day of the final month"), { target: { value: "2027-02-28" } });
   fireEvent.click(screen.getByRole("button", { name: "Request agreement" }));
-  await screen.findByText(/Agreement reference/);
+  await screen.findByRole("button", { name: "Copy full reference" });
 }
 
 it("starts on the first step and hides the deposit step for items without a deposit", async () => {
@@ -297,4 +297,11 @@ it("does not offer a camera add-on on items without one", async () => {
   await show();
   fireEvent.change(screen.getByLabelText("What would you like?"), { target: { value: "hiwonder" } });
   expect(screen.queryByLabelText(/Add the/)).not.toBeInTheDocument();
+});
+
+it("splits bundle rent between the item and its add-on and shortens the reference", async () => {
+  await openQuote({ ...quote, approvedAt: null, orderPending: false, rentPaise: 180000, amountPaise: 180000 + quote.depositPaise, addons: [{ code: "waveshare-ov5693", name: "OV5693 camera", maker: "Waveshare", rentPaise: 100000 }] });
+  expect(screen.getByText("Cabin 101 rent").nextSibling).toHaveTextContent("₹800");
+  expect(screen.getByText("OV5693 camera rent").nextSibling).toHaveTextContent("₹1000");
+  expect(screen.getByText("A0000000")).toHaveAttribute("title", quote.quoteId);
 });

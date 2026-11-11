@@ -51,7 +51,7 @@ for (const product of ["cabin101", "hiwonder"]) test(`synthetic ${product} guide
   await page.getByLabel("Start date", { exact: true }).fill("2027-02-01");
   if (product === "cabin101") await page.getByLabel("Last day of the final month").fill("2027-02-28");
   await page.getByRole("button", { name: "Request agreement" }).click();
-  await expect(page.getByRole("heading", { name: "Review and signing" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Copy full reference" })).toBeVisible();
   await expect(page.getByRole("button", { name: /Pay with Razorpay/ })).toHaveCount(0);
   expect(actions).toEqual(["availability", "quote"]);
   await page.getByRole("button", { name: "Check agreement or payment status" }).click();
@@ -74,7 +74,7 @@ for (const product of ["cabin101", "hiwonder"]) test(`synthetic ${product} guide
   await expect(page.getByText("Staff verified the bank deposit.", { exact: false })).toBeVisible();
   await page.getByRole("checkbox").check();
   await page.getByRole("button", { name: "Pay rent with Razorpay Test Mode" }).click();
-  await expect(page.getByText("Reservation confirmed", { exact: true })).toBeVisible();
+  await expect(page.getByText("Confirmed", { exact: true })).toBeVisible();
   expect(actions).toEqual(["availability", "quote", "status", "save_refund_account", "submit_deposit_reference", "status", "order", "verify"]);
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(page.viewportSize()!.width);
   const notice = page.getByRole("button", { name: "Dismiss update notice" });

@@ -5866,3 +5866,18 @@ input[type="checkbox"]:focus-visible, input[type="radio"]:focus-visible { outlin
 .booking-flow details { margin: 10px 0; }
 .booking-flow .checkbox-field { align-items: flex-start; }
 .booking-flow .checkbox-field input { margin-top: 3px; }
+
+/* Booking status card: what, when, status, next step, price, reference */
+.booking-card { display: grid; gap: 16px; max-width: 760px; min-width: 0; padding: clamp(16px, 3vw, 24px); border: 1px solid var(--hair-strong); background: var(--panel); }
+.booking-card-head { display: grid; gap: 6px; justify-items: start; }
+.booking-card-title { margin: 0; font-family: var(--serif); font-style: italic; font-weight: 400; font-size: clamp(1.7rem, 4vw, 2.4rem); line-height: 1.05; overflow-wrap: anywhere; }
+.booking-card-when { margin: 0; color: var(--fg-2); }
+.booking-next { padding: 12px 14px; background: var(--panel-2); border-left: 3px solid var(--kicker, var(--saffron)); }
+.booking-next strong { display: block; margin-bottom: 4px; color: var(--fg-3); font-size: 11px; font-weight: 400; letter-spacing: 0.08em; text-transform: uppercase; }
+.booking-card h4 { margin: 8px 0 0; }
+.booking-card > div > p, .booking-card > p { margin: 0 0 10px; }
+.booking-ref { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0; color: var(--fg-3); font-size: 12px; }
+.booking-ref .text-link { font-size: 12px; }
+.booking-card-actions { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 14px; border-top: 1px solid var(--hair); }
+.booking-flow .booking-card-actions .button { margin: 0; }
+.booking-recent { display: flex; flex-wrap: wrap; gap: 8px; }

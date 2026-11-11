@@ -4,6 +4,7 @@ import { accountMembershipLevelsEnabled, useAccount } from "../context/AccountCo
 import { loadRazorpayCheckout, type CheckoutInstance } from "../lib/razorpay-checkout";
 import { rentalLabel, rentalMode, rentalMoney, rentalRequest as invokeRental, type RentalProduct, type RentalQuote } from "../lib/rental-checkout";
 import { BookingSteps } from "./BookingSteps";
+import { BookingStatusCard, bookingDates, type BookingRow, type BookingTone } from "./BookingStatusCard";
 import { PageHeader, Section } from "./Primitives";
 
 const ist = (value: string) => new Date(value).toLocaleString("en-IN", { timeZone: "Asia/Kolkata" }) + " IST";
@@ -42,6 +43,36 @@ export function RentalBooking({ initialProduct }: { initialProduct?: string }) {
 const rentalSteps = ["Choose product and dates", "Review the draft and request corrections", "Customer signs, then Armature countersigns",
   "Staff reviews the signed agreement", "Transfer the deposit; staff verifies bank receipt", "Pay rent through Razorpay and receive confirmation"];
 
+const rentalStatus: Record<string, [string, BookingTone]> = { awaiting_staff: ["Request received", "neutral"], awaiting_signatures: ["Ready to sign", "ready"],
+  awaiting_deposit: ["Deposit needed", "ready"], approved: ["Ready to pay", "ready"], awaiting_payment: ["Payment pending", "attention"], confirmed: ["Confirmed", "done"],
+  returned: ["Returned", "done"], refunded: ["Refunded", "neutral"], cancelled: ["Cancelled", "neutral"], needs_review: ["Staff review needed", "attention"], superseded: ["Replaced by a revised quote", "neutral"] };
+const statusOf = (q: RentalQuote) => rentalStatus[q.status] ?? ["Awaiting staff confirmation", "neutral"] as [string, BookingTone];
+function nextStep(q: RentalQuote) {
+  const bank = q.depositMethod === "bank_transfer" && q.depositPaise > 0;
+  switch (q.status) {
+    case "awaiting_staff": return "Armature checks availability and prepares your draft agreement. Check back here for its status.";
+    case "awaiting_signatures": return "Review the draft Armature sends you and request any corrections, then sign. Armature countersigns after you.";
+    case "awaiting_deposit": return q.depositReference ? "Staff are checking your bank transfer. Payment opens once the deposit is verified." : "Save your refund account, transfer the deposit and enter the bank reference below.";
+    case "approved": return bank ? "Accept the terms and pay the rent within 30 minutes." : "Accept the terms and pay within 30 minutes.";
+    case "awaiting_payment": return "A payment was started. Check the payment status before trying again.";
+    case "confirmed": return q.kind === "cabin" ? "Your cabin is reserved for these dates." : "Collect the equipment from the lab at the start of your rental.";
+    case "needs_review": return "Armature will contact you. Do not make another payment.";
+    default: return undefined;
+  }
+}
+function rentalRows(q: RentalQuote): BookingRow[] {
+  const addonRent = (q.addons ?? []).reduce((sum, addon) => sum + addon.rentPaise, 0);
+  const bank = q.depositMethod === "bank_transfer" && q.depositPaise > 0;
+  return [
+    ...(q.addons?.length ? [{ label: (q.productName ?? q.product) + " rent", value: rentalMoney(q.rentPaise - addonRent), money: true },
+      ...q.addons.map(addon => ({ label: addon.name + " rent", value: rentalMoney(addon.rentPaise), money: true }))]
+      : [{ label: "Rent", value: rentalMoney(q.rentPaise), money: true }]),
+    { label: bank ? "Security deposit, by bank transfer" : "Security deposit", value: q.depositPaise > 0 ? rentalMoney(q.depositPaise) : "None", money: true },
+    { label: "GST", value: "Not added", money: true },
+    { label: "Total", value: rentalMoney(q.amountPaise), money: true, total: true },
+    ...(bank ? [{ label: "Paid online through Razorpay", value: rentalMoney(q.paymentAmountPaise ?? q.rentPaise) + " rent only", money: true }] : []),
+  ];
+}
 function RentalCheckout({ canBook, memberId, initialProduct }: { canBook: boolean; memberId: string; initialProduct?: string }) {
   const rentalRequest = <T,>(body: object) => invokeRental<T>(body, memberId);
   const { refresh } = useAccount();
@@ -104,11 +135,11 @@ function RentalCheckout({ canBook, memberId, initialProduct }: { canBook: boolea
   return <Section number="01" title="Your booking"><div className="booking-flow">
     <BookingSteps label="Rental booking steps" steps={hasDeposit ? rentalSteps : rentalSteps.filter((_, i) => i !== 4)} current={hasDeposit || step < 4 ? step : step - 1} />
     {!canBook && <p>Verified membership is required. <Link to="/onboarding">Complete verification</Link>.</p>}
-    <button className="button secondary" disabled={busy || checkoutOpen} onClick={() => void run(async () => {
+    <p className="booking-ref"><button type="button" className="text-link" disabled={busy || checkoutOpen} onClick={() => void run(async () => {
       const result = await rentalRequest<{ quotes: RentalQuote[] }>({ action: "list_own" }); if (active.current) setRecent(result.quotes);
-    })}>Find my existing requests</button>
-    {recent.map(item => <button key={item.quoteId} className="button secondary" disabled={busy || checkoutOpen}
-      onClick={() => void run(() => status(item.quoteId))}>{rentalLabel(item)} · {item.start}{item.status ? " · " + item.status : ""}</button>)}
+    })}>Find my existing requests</button></p>
+    {recent.length > 0 && <div className="booking-recent">{recent.map(item => <button key={item.quoteId} className="button secondary" disabled={busy || checkoutOpen}
+      onClick={() => void run(() => status(item.quoteId))}>{rentalLabel(item)} · {bookingDates(item.start, item.end)}{item.status ? " · " + statusOf(item)[0] : ""}</button>)}</div>}
     {!quote ? <form className="ol-form" onSubmit={event => { event.preventDefault(); const fields = new FormData(event.currentTarget);
       void run(async () => { const selection = { product, start: fields.get("start"), end: fields.get("end"), unit: fields.get("unit"), partyType: fields.get("partyType"), ...(rentalMode === "test" && testFixture ? { testFixture: true } : {}),
         ...(bundled ? { addons: [bundled.product] } : {}) };
@@ -133,15 +164,13 @@ function RentalCheckout({ canBook, memberId, initialProduct }: { canBook: boolea
       <label>Contracting party<select name="partyType" disabled={busy}><option value="individual">Individual</option><option value="company">Company</option></select></label>
       <p>A request does not reserve inventory. Staff confirms the draft and any stamping requirements before signing.</p>
       <button className="button" disabled={busy || !canBook || !item}>Request agreement</button>
-    </form> : <div aria-live="polite">
-      <h3>{rentalLabel(quote)}</h3><p>{quote.start} to {quote.end}</p>
+    </form> : <div aria-live="polite"><BookingStatusCard kicker={quote.kind === "cabin" ? "Team cabin" : "Equipment rental"} title={rentalLabel(quote)}
+      when={bookingDates(quote.start, quote.end)} status={statusOf(quote)[0]} tone={statusOf(quote)[1]} next={nextStep(quote)} rows={rentalRows(quote)} reference={quote.quoteId}
+      details={!quote.agreementSigned ? <><p>Armature prepares your draft in PandaDoc. Confirm your legal name, PAN, address and any company authority privately. Request corrections before signing. Armature then countersigns and an independent staff reviewer checks the completed document.</p>
+        <a href="mailto:hello@armatureailabs.com">Contact Armature about this agreement</a></> : undefined}
+      actions={<><button className="button secondary" disabled={busy || checkoutOpen} onClick={() => void run(() => status(quote.quoteId))}>Check agreement or payment status</button>
+        {!quote.hasOrder && !quote.orderPending && <button className="button secondary" disabled={busy || checkoutOpen} onClick={() => { setQuote(null); setConsent(false); setEditingRefundAccount(false); }}>Choose another booking</button>}</>}>
       {quote.testFixture && <p className="booking-notice" role="status">TEST SPECIMEN: ₹50 simulated rent payment and ₹100 simulated bank deposit. No real rental, bank transfer or charge.</p>}
-      <dl><dt>Rent collected now</dt><dd>{rentalMoney(quote.rentPaise)}</dd><dt>{quote.depositMethod === "bank_transfer" && quote.depositPaise > 0 ? "Security deposit by bank transfer" : "Security deposit"}</dt><dd>{quote.depositPaise > 0 ? rentalMoney(quote.depositPaise) : "None"}</dd>
-        <dt>GST</dt><dd>Not added</dd><dt>Total across payment methods</dt><dd>{rentalMoney(quote.amountPaise)}</dd>{quote.depositMethod === "bank_transfer" && quote.depositPaise > 0 && <><dt>Pay through Razorpay</dt><dd>{rentalMoney(quote.paymentAmountPaise ?? quote.rentPaise)} rent only</dd></>}</dl>
-      <p>Agreement reference: <code style={{ overflowWrap: "anywhere" }}>{quote.quoteId}</code></p><p>Status: <strong>{({ confirmed: "Reservation confirmed", refunded: "Payment refunded", needs_review: "Staff review needed", approved: "Ready for payment", awaiting_signatures: "Ready for customer and Armature signatures", awaiting_staff: "Awaiting draft preparation", awaiting_payment: "Payment pending; check payment status", awaiting_deposit: "Awaiting bank deposit verification", superseded: "Replaced by a revised quote", returned: "Rental returned", cancelled: "Reservation cancelled" } as Record<string, string>)[quote.status] ?? "Awaiting staff confirmation"}</strong></p>
-      {!quote.agreementSigned && <><h4>Review and signing</h4><p>Armature prepares your draft in PandaDoc. Confirm your legal name, PAN, address and any company authority privately. Request corrections before signing. Armature then countersigns and an independent staff reviewer checks the completed document.</p>
-        <p>For cabins, manual stamping where required happens after draft approval and before signing. Equipment rentals do not require stamping under this release.</p>
-        <a href="mailto:hello@armatureailabs.com">Contact Armature about this agreement</a></>}
       {quote.depositMethod === "bank_transfer" && quote.depositPaise > 0 && <div>
         <h4>Deposit refund account</h4>
         <p>Provide the contracting person's or company's bank account for returning the deposit. Staff reviews these details before any refund. Do not enter card details, passwords or OTPs.</p>
@@ -195,9 +224,7 @@ function RentalCheckout({ canBook, memberId, initialProduct }: { canBook: boolea
         <p>Both signatures were reviewed. {quote.depositMethod === "bank_transfer" ? "Rent payment opens after staff verifies the bank deposit. The payment window is 30 minutes from the later of agreement approval and deposit verification, subject to availability." : "Payment is available for 30 minutes after staff approval, subject to availability."}</p>
         <label><input type="checkbox" checked={consent} disabled={busy || checkoutOpen} onChange={event => setConsent(event.target.checked)} /> I accept the <Link to="/terms">terms</Link> and <Link to="/refund-policy">refund policy</Link> for this quote.</label>
         <button className="button" disabled={busy || checkoutOpen || !consent || !canBook || (quote.depositMethod === "bank_transfer" && quote.depositPaise > 0 && quote.depositStatus !== "verified")} onClick={() => void run(() => pay(quote))}>{quote.depositMethod === "bank_transfer" ? "Pay rent with Razorpay" : "Pay with Razorpay"}{rentalMode === "test" ? " Test Mode" : ""}</button></>}
-      {quote.status === "needs_review" && <p>Staff must reconcile this booking. Do not make another payment.</p>}
-      <button className="button secondary" disabled={busy || checkoutOpen} onClick={() => void run(() => status(quote.quoteId))}>Check agreement or payment status</button>
-      {!quote.hasOrder && !quote.orderPending && <button className="button secondary" disabled={busy || checkoutOpen} onClick={() => { setQuote(null); setConsent(false); setEditingRefundAccount(false); }}>Choose another booking</button>}
+      </BookingStatusCard>
     </div>}
     {error && <p role="alert">{error}</p>}
   </div></Section>;
