@@ -5,6 +5,7 @@ import { loadRazorpayCheckout, type CheckoutInstance } from "../lib/razorpay-che
 import { saleMode, saleRequest, type EquipmentSale } from "../lib/equipment-sale";
 import { rentalMoney as money } from "../lib/rental-checkout";
 import { BookingSteps } from "./BookingSteps";
+import { BookingStatusCard, type BookingTone } from "./BookingStatusCard";
 
 const buySteps = ["Ask to buy", "Check the item in the lab with Armature", "Pay online within 30 minutes", "Collect it from the lab"];
 const stepFor: Record<string, number> = { awaiting_check: 1, ready_to_pay: 2, payment_expired: 2, awaiting_payment: 2, paid: 3, refund_pending: 3, collected: 4 };
@@ -12,6 +13,7 @@ const statusText: Record<string, string> = { awaiting_check: "Waiting for the in
   payment_expired: "Payment window closed", awaiting_payment: "Payment pending; check payment status", paid: "Paid · collect from the lab",
   collected: "Collected", refund_pending: "Refund approved · on its way", refunded: "Refunded", needs_review: "Armature is reviewing this payment",
   declined: "Request declined", cancelled: "Request cancelled" };
+const toneFor: Record<string, BookingTone> = { ready_to_pay: "ready", paid: "done", collected: "done", payment_expired: "attention", awaiting_payment: "attention", needs_review: "attention" };
 const closed = ["declined", "cancelled", "refunded", "collected"];
 
 // Buy one item: ask, check it in the lab, pay inside the window staff open, then collect.
@@ -70,16 +72,19 @@ function BuyPanel({ memberId, code, pricePaise, inStock, canBuy }: { memberId: s
         {inStock ? `Ask to buy · ${money(pricePaise)}` : "Out of stock"}</button>
       <p className="eq-note">Nothing is charged now. Armature shows you the item in the lab first; payment opens only after that check.</p>
     </> : <>
-      <p>Status: <strong>{statusText[sale.status] ?? sale.status}</strong> · {money(sale.amountPaise)}</p>
-      {sale.status === "awaiting_check" && <p className="eq-note">Visit the lab to check the item with Armature. <a href="mailto:hello@armatureailabs.com">Arrange a time</a>.</p>}
-      {sale.status === "ready_to_pay" && <>
-        <p className="eq-note">Payment is open until {expires}.</p>
-        <label className="checkbox-field"><input type="checkbox" checked={consent} disabled={locked} onChange={event => setConsent(event.target.checked)} /> <span>I accept the <Link to="/terms">terms</Link> and <Link to="/refund-policy">refund policy</Link>: full refund until I collect the item, none after.</span></label>
-        <button type="button" className="button button-primary" disabled={locked || !consent} onClick={() => void run(() => pay(sale))}>Pay {money(sale.amountPaise)}{saleMode === "test" ? " (test)" : ""}</button>
-      </>}
-      {sale.status === "payment_expired" && <p className="eq-note">The 30-minute payment window closed. Ask Armature to reopen it.</p>}
-      {sale.status === "paid" && <p className="eq-note">Collect the item from the lab. You can still get a full refund until you collect it.</p>}
-      {sale.status === "needs_review" && <p className="eq-note">Do not pay again. Armature will contact you.</p>}
+      <BookingStatusCard kicker="Your purchase request" status={statusText[sale.status] ?? sale.status} tone={toneFor[sale.status] ?? "neutral"} reference={sale.saleId}
+        rows={[{ label: "Price", value: money(sale.amountPaise), money: true, total: true }]}
+        next={sale.status === "awaiting_check" ? <>Visit the lab to check the item with Armature. <a href="mailto:hello@armatureailabs.com">Arrange a time</a>.</>
+          : sale.status === "ready_to_pay" ? `Payment is open until ${expires}.`
+          : sale.status === "payment_expired" ? "The 30-minute payment window closed. Ask Armature to reopen it."
+          : sale.status === "paid" ? "Collect the item from the lab. You can still get a full refund until you collect it."
+          : sale.status === "needs_review" ? "Do not pay again. Armature will contact you." : undefined}
+        actions={<button type="button" className="button secondary" disabled={locked} onClick={() => void run(async () => update(await request<EquipmentSale>({ action: "status", saleId: sale.saleId })))}>Check status</button>}>
+        {sale.status === "ready_to_pay" && <>
+          <label className="checkbox-field"><input type="checkbox" checked={consent} disabled={locked} onChange={event => setConsent(event.target.checked)} /> <span>I accept the <Link to="/terms">terms</Link> and <Link to="/refund-policy">refund policy</Link>: full refund until I collect the item, none after.</span></label>
+          <button type="button" className="button button-primary" disabled={locked || !consent} onClick={() => void run(() => pay(sale))}>Pay {money(sale.amountPaise)}{saleMode === "test" ? " (test)" : ""}</button>
+        </>}
+      </BookingStatusCard>
       {["awaiting_check", "ready_to_pay", "payment_expired"].includes(sale.status) && !sale.hasOrder && !sale.orderPending && <details>
         <summary>Cancel this request</summary>
         <form className="ol-form" onSubmit={event => { event.preventDefault(); const reason = String(new FormData(event.currentTarget).get("reason") ?? "").trim();
@@ -88,7 +93,6 @@ function BuyPanel({ memberId, code, pricePaise, inStock, canBuy }: { memberId: s
           <button className="button secondary" disabled={locked}>Cancel request</button>
         </form>
       </details>}
-      <button type="button" className="button secondary" disabled={locked} onClick={() => void run(async () => update(await request<EquipmentSale>({ action: "status", saleId: sale.saleId })))}>Check status</button>
     </>}
     {error && <p role="alert">{error}</p>}
   </div>;
