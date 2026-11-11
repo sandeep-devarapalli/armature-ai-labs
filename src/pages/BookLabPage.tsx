@@ -67,7 +67,7 @@ export default function BookLabPage() {
                 <td data-label="Deposit">{row.deposit}</td>
                 <td data-label="Minimum">{row.minimum}</td>
                 <td data-label="Cancellation"><small>{row.cancellation}</small></td>
-                <td><button type="button" className={row.id === item?.id ? "button button-primary" : "button button-quiet"} aria-pressed={row.id === item?.id}
+                <td><button type="button" className={row.id === item?.id ? "button button-quiet" : "button button-primary"} aria-pressed={row.id === item?.id}
                   aria-label={`${row.id === item?.id ? "Selected" : "Choose"} ${row.name.toLowerCase()}`} onClick={() => choose({ item: row.id })}>{row.id === item?.id ? "Selected" : "Choose"}</button></td>
               </tr>)}
             </tbody>
