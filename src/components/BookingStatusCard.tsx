@@ -18,14 +18,14 @@ export const shortReference = (id: string) => id.replace(/-/g, "").slice(0, 8).t
 
 // One booking at a glance: what, when, where it stands, what to do next, what it costs.
 export function BookingStatusCard({ kicker, title, when, status, tone, next, rows, reference, details, actions, children }: {
-  kicker: string; title: ReactNode; when?: ReactNode; status: string; tone: BookingTone; next?: ReactNode; rows?: BookingRow[];
+  kicker: string; title?: ReactNode; when?: ReactNode; status: string; tone: BookingTone; next?: ReactNode; rows?: BookingRow[];
   reference?: string; details?: ReactNode; actions?: ReactNode; children?: ReactNode;
 }) {
   const [copied, setCopied] = useState(false);
   return <article className="booking-card">
     <header className="booking-card-head">
       <span className="eq-kicker">{kicker}</span>
-      <h3 className="booking-card-title">{title}</h3>
+      {title && <h3 className="booking-card-title">{title}</h3>}
       {when && <p className="booking-card-when">{when}</p>}
       <span className={"booking-chip is-" + tone}>{status}</span>
     </header>

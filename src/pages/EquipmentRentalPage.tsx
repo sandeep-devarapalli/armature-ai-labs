@@ -60,6 +60,7 @@ function Detail({ item, signInLink }: { item: RentalProduct; signInLink?: string
         {item.version && <p className="eq-version"><span className="mono">Version</span>{item.version}</p>}
         <Stock item={item} />
         {item.summary && <p className="eq-lede">{item.summary}</p>}
+        {(item.highlights?.length ?? 0) > 0 && <ul className="eq-includes">{item.highlights!.map(line => <li key={line}>{line}</li>)}</ul>}
         <div className="eq-offer">
           <h2 className="mono">Rent</h2>
           {hasRent ? <table className="eq-prices"><tbody>
@@ -79,7 +80,6 @@ function Detail({ item, signInLink }: { item: RentalProduct; signInLink?: string
           {equipmentSaleAvailable ? <EquipmentBuy code={item.product} pricePaise={item.salePaise} inStock={free > 0} />
             : <p className="eq-note">Online buying opens later. To buy now, ask in the lab or write to <a href="mailto:hello@armatureailabs.com">hello@armatureailabs.com</a>.</p>}
         </div>}
-        {(item.highlights?.length ?? 0) > 0 && <ul className="eq-includes">{item.highlights!.map(line => <li key={line}>{line}</li>)}</ul>}
       </div>
     </div>
     {((item.specs?.length ?? 0) > 0 || (item.parts?.length ?? 0) > 0) && <div className="eq-specs">
