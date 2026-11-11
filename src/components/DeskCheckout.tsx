@@ -6,6 +6,7 @@ import { memberPlatformAvailable, rentalCheckoutAvailable } from "../config/rele
 import { loadRazorpayCheckout, type CheckoutInstance, type CheckoutResult } from "../lib/razorpay-checkout";
 import { supabase } from "../lib/supabase";
 import { BookingSteps } from "./BookingSteps";
+import { BookingStatusCard, bookingDates, type BookingTone } from "./BookingStatusCard";
 import { Field, PageHeader, Section } from "./Primitives";
 
 const terms = { day: "Day pass", week: "Week pass", month: "Monthly desk" };
@@ -189,7 +190,16 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
     (quote.approvedAt && Date.parse(quote.approvedAt) + 30 * 60 * 1000 <= Date.now())));
   const terminal = quote?.status === "confirmed" || quote?.status === "refunded" || quote?.status === "cancelled";
   const step = choosing ? 0 : quote?.status === "confirmed" ? 4 : quote?.agreementSigned ? 3 : quote?.hasAgreement && !quote.manualAgreement ? 2 : 1;
-  return <Section number="01" title="Book a desk pass"><div className="booking-flow">
+  // Same order as before: the first matching state decides the label, the next step and which controls show.
+  const stage = !quote ? "" : quote.status === "confirmed" || quote.status === "refunded" || quote.status === "cancelled" ? quote.status
+    : quote.status === "needs_review" || quote.orderPending ? "review" : staleUnclaimed ? "stale" : expiredBoundOrder ? "expiredOrder" : approvalExpired ? "expired"
+    : quote.manualAgreement && !quote.agreementSigned ? "manual" : !quote.hasAgreement && !quote.agreementSigned ? "preparing"
+    : !quote.agreementSigned ? (quote.customerSigned ? "countersign" : "sign") : canBook ? "pay" : "membership";
+  const [label, tone] = ({ confirmed: ["Confirmed", "done"], refunded: ["Refunded", "neutral"], cancelled: ["Cancelled", "neutral"], review: ["Staff review needed", "attention"],
+    stale: ["Policies changed", "attention"], expiredOrder: ["Payment window expired", "attention"], expired: ["Payment window expired", "attention"],
+    manual: ["Agreement in preparation", "neutral"], preparing: ["Agreement in preparation", "neutral"], countersign: ["Awaiting countersignature", "neutral"],
+    sign: ["Ready to sign", "ready"], pay: ["Ready to pay", "ready"], membership: ["Membership needed", "attention"] } as Record<string, [string, BookingTone]>)[stage] ?? ["Request received", "neutral"];
+  return <Section number="01" title="Your booking"><div className="booking-flow">
     <BookingSteps steps={deskSteps} current={step} />
     <p>A request does not reserve a desk. Availability is checked again before payment. Do not make a second payment while an earlier attempt is pending.</p>
     {choosing && <details className="member-confirm">
@@ -253,50 +263,51 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
       {calendarError && <><p role="alert" className="form-error">{calendarError}</p>
         <button type="button" className="button button-quiet" onClick={() => retryCalendar(value => value + 1)}>Retry availability</button></>}
       <button className="button button-primary" disabled={busy || !start || !available} type="submit">Request agreement</button>
-    </form> : <div className="booking-form">
-      <p>Agreement reference <strong>{reference}</strong></p>
-      {quote?.chair && quote.unit && quote.start && <p>{terms[quote.unit]} · Chair {quote.chair} · {formatDate(quote.start)}{quote.end && quote.end !== quote.start && <> to {formatDate(quote.end)}</>}</p>}
-      {typeof quote?.amountPaise === "number" && <p>Total <strong>{money.format(quote.amountPaise / 100)}</strong></p>}
-      {quote?.status === "confirmed" ? <div role="status">
-        <p>Desk booking confirmed. {memberPlatformAvailable && quote.bookingId && <Link to={`/bookings/${quote.bookingId}`}>Open reservation</Link>} {quote.membership === "premium" && "Membership: Premium."}</p>
-        {quote.reviewReason === "partial_refund" && <p>A partial refund was recorded. Contact Armature if you need details.</p>}
-      </div>
-        : quote?.status === "refunded" ? <p role="status">This payment has been refunded.</p>
-        : quote?.status === "cancelled" ? <p role="status">This desk booking was cancelled.</p>
-        : quote?.status === "needs_review" || quote?.orderPending ? <p role="status">Armature needs to reconcile this payment. Contact support before trying again.</p>
-        : staleUnclaimed ? <p role="status">The policies for this unpaid request have changed. Choose a fresh desk pass and review the updated agreement before paying.</p>
-        : expiredBoundOrder ? <p role="status">This payment window has expired. {quote?.canRequestReplacement
+    </form> : <BookingStatusCard kicker="Desk pass" title={quote?.unit ? terms[quote.unit] + (quote.chair ? " · Chair " + quote.chair : "") : "Desk pass"}
+      when={quote?.start ? bookingDates(quote.start, quote.end) : undefined} status={label} tone={tone} reference={reference}
+      rows={typeof quote?.amountPaise === "number" ? [{ label: "GST", value: "Not added", money: true }, { label: "Total", value: money.format(quote.amountPaise / 100), money: true, total: true }] : undefined}
+      next={stage === "confirmed" ? <span role="status">Desk booking confirmed. {memberPlatformAvailable && quote?.bookingId && <Link to={`/bookings/${quote.bookingId}`}>Open reservation</Link>} {quote?.membership === "premium" && "Membership: Premium."}</span>
+        : stage === "refunded" ? <span role="status">This payment has been refunded.</span>
+        : stage === "cancelled" ? <span role="status">This desk booking was cancelled.</span>
+        : stage === "review" ? <span role="status">Armature needs to reconcile this payment. Contact support before trying again.</span>
+        : stage === "stale" ? <span role="status">The policies for this unpaid request have changed. Choose a fresh desk pass and review the updated agreement before paying.</span>
+        : stage === "expiredOrder" ? <span role="status">This payment window has expired. {quote?.canRequestReplacement
           ? "Razorpay reports no successful or pending payment. Close any old checkout tabs, then request a fresh agreement. Ask staff to recheck the old payment before approving the replacement."
-          : "Check payment status before doing anything else. If a payment is pending or its outcome is unclear, contact Armature for review. Do not pay again."}</p>
-        : approvalExpired ? <p role="status">This agreement’s payment window expired. Start a fresh request so Armature can check availability and prepare a new agreement.</p>
-        : quote?.manualAgreement && !quote.agreementSigned ? <p role="status">Armature will prepare your PandaDoc agreement and email you when it is ready. Check your details and request corrections before signing. After both signatures, staff will review the completed agreement. Check the status here to continue.</p>
-        : quote && (!quote.hasAgreement && !quote.agreementSigned) ? <p role="status">Armature is preparing your agreement.</p>
-        : quote && !quote.agreementSigned ? <>
-          <p>{quote.customerSigned ? "Waiting for Armature to countersign." : "Review and sign your agreement in PandaDoc. Select Finish when you are done."}</p>
-          {!quote.customerSigned && <button className="button button-quiet" type="button" disabled={busy} onClick={() => void run(async () => {
-            const result = await request<{ signingUrl: string }>({ action: "sign", quoteId: reference });
-            const url = new URL(result.signingUrl);
-            if (url.origin !== "https://app.pandadoc.com" || !/^\/s\/[A-Za-z0-9_-]+\/$/.test(url.pathname)) throw new Error("The signing link was invalid.");
-            setSigningUrl(url.href);
-          })}>Get signing link</button>}
-          {!quote.customerSigned && signingUrl && <a href={signingUrl} target="_blank" rel="noreferrer">Open PandaDoc agreement in a new tab</a>}
-        </> : quote?.agreementSigned && !canBook ? <p>Verified membership is required before starting a payment. You can still check an existing payment below.</p> : quote?.agreementSigned && <>
-          <p>Both signatures are verified. Payment must start within 30 minutes of staff approval. Confirm the policies before opening Razorpay.</p>
-          <label><input type="checkbox" checked={Boolean(quote.policyVersion && consent === quote.policyVersion)}
-            disabled={!quote.policyVersion || busy || modalOpen} onChange={event => setConsent(event.target.checked ? quote.policyVersion ?? "" : "")} />
-            {" "}I accept the <a href="/terms/" target="_blank" rel="noreferrer">terms</a>, <a href="/privacy/" target="_blank" rel="noreferrer">privacy notice</a> and <a href="/refund-policy/" target="_blank" rel="noreferrer">refund and cancellation policy</a>. I consent to sharing the information described in the privacy notice with Razorpay and its partners to process and reconcile my payment, prevent fraud and comply with regulatory requirements.
-          </label>
-          <button className="button button-primary" type="button" disabled={busy || modalOpen || !quote.policyVersion || consent !== quote.policyVersion}
-            onClick={() => void run(() => pay(quote))}>Pay with Razorpay</button>
-        </>}
-      {!terminal && <button className="button button-quiet" type="button" disabled={busy || modalOpen}
-        onClick={() => void run(async () => showStatus(await request<Quote>({ action: "status", quoteId: reference })))}>Check agreement or payment status</button>}
-      {(terminal || approvalExpired || staleUnclaimed || (expiredBoundOrder && quote?.canRequestReplacement && !quote.status) || (quote && !quote.hasAgreement && !quote.hasOrder && !quote.orderPending && !quote.status)) &&
-        <button className="button button-quiet" type="button" disabled={busy} onClick={() => {
-          saveReference(""); setQuote(null); setStart(""); setConsent(""); setSigningUrl(""); setError("");
-        }}>Choose another desk pass</button>}
-    </div>}
-    <p>Need a draft correction or help with a payment? Email <a href="mailto:hello@armatureailabs.com">hello@armatureailabs.com</a> with your agreement reference. Do not send identity copies or payment credentials.</p>
+          : "Check payment status before doing anything else. If a payment is pending or its outcome is unclear, contact Armature for review. Do not pay again."}</span>
+        : stage === "expired" ? <span role="status">This agreement’s payment window expired. Start a fresh request so Armature can check availability and prepare a new agreement.</span>
+        : stage === "manual" ? <span role="status">Armature will prepare your PandaDoc agreement and email you when it is ready. Check your details and request corrections before signing. After both signatures, staff will review the completed agreement. Check the status here to continue.</span>
+        : stage === "preparing" ? <span role="status">Armature is preparing your agreement.</span>
+        : stage === "countersign" ? "Waiting for Armature to countersign."
+        : stage === "sign" ? "Review and sign your agreement in PandaDoc. Select Finish when you are done."
+        : stage === "membership" ? "Verified membership is required before starting a payment. You can still check an existing payment below."
+        : stage === "pay" ? "Both signatures are verified. Payment must start within 30 minutes of staff approval. Confirm the policies before opening Razorpay." : undefined}
+      details={<p>Need a draft correction or help with a payment? Email <a href="mailto:hello@armatureailabs.com">hello@armatureailabs.com</a> with your agreement reference. Do not send identity copies or payment credentials.</p>}
+      actions={<>
+        {!terminal && <button className="button secondary" type="button" disabled={busy || modalOpen}
+          onClick={() => void run(async () => showStatus(await request<Quote>({ action: "status", quoteId: reference })))}>Check agreement or payment status</button>}
+        {(terminal || approvalExpired || staleUnclaimed || (expiredBoundOrder && quote?.canRequestReplacement && !quote.status) || (quote && !quote.hasAgreement && !quote.hasOrder && !quote.orderPending && !quote.status)) &&
+          <button className="button secondary" type="button" disabled={busy} onClick={() => {
+            saveReference(""); setQuote(null); setStart(""); setConsent(""); setSigningUrl(""); setError("");
+          }}>Choose another desk pass</button>}</>}>
+      {stage === "sign" && <div>
+        <button className="button" type="button" disabled={busy} onClick={() => void run(async () => {
+          const result = await request<{ signingUrl: string }>({ action: "sign", quoteId: reference });
+          const url = new URL(result.signingUrl);
+          if (url.origin !== "https://app.pandadoc.com" || !/^\/s\/[A-Za-z0-9_-]+\/$/.test(url.pathname)) throw new Error("The signing link was invalid.");
+          setSigningUrl(url.href);
+        })}>Get signing link</button>
+        {signingUrl && <a href={signingUrl} target="_blank" rel="noreferrer">Open PandaDoc agreement in a new tab</a>}
+      </div>}
+      {stage === "pay" && quote && <>
+        <label className="checkbox-field"><input type="checkbox" checked={Boolean(quote.policyVersion && consent === quote.policyVersion)}
+          disabled={!quote.policyVersion || busy || modalOpen} onChange={event => setConsent(event.target.checked ? quote.policyVersion ?? "" : "")} />
+          {" "}<span>I accept the <a href="/terms/" target="_blank" rel="noreferrer">terms</a>, <a href="/privacy/" target="_blank" rel="noreferrer">privacy notice</a> and <a href="/refund-policy/" target="_blank" rel="noreferrer">refund and cancellation policy</a>. I consent to sharing the information described in the privacy notice with Razorpay and its partners to process and reconcile my payment, prevent fraud and comply with regulatory requirements.</span>
+        </label>
+        <button className="button" type="button" disabled={busy || modalOpen || !quote.policyVersion || consent !== quote.policyVersion}
+          onClick={() => void run(() => pay(quote))}>Pay with Razorpay</button>
+      </>}
+    </BookingStatusCard>}
+    {choosing && <p>Need a draft correction or help with a payment? Email <a href="mailto:hello@armatureailabs.com">hello@armatureailabs.com</a> with your agreement reference. Do not send identity copies or payment credentials.</p>}
     {error && <p className="form-error" role="alert">{error}</p>}
   </div></Section>;
 }

@@ -5881,3 +5881,4 @@ input[type="checkbox"]:focus-visible, input[type="radio"]:focus-visible { outlin
 .booking-card-actions { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 14px; border-top: 1px solid var(--hair); }
 .booking-flow .booking-card-actions .button { margin: 0; }
 .booking-recent { display: flex; flex-wrap: wrap; gap: 8px; }
+.booking-next p { margin: 0; }
