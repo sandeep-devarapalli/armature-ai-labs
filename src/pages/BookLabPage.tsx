@@ -33,7 +33,7 @@ export default function BookLabPage() {
   }, [memberId]);
 
   const equipment = products.filter(p => p.kind === "equipment");
-  const cabinList = cabins.map(c => { const live = products.find(p => p.kind === "cabin" && p.room === c.room); return live ? { ...c, status: live.status } : c; });
+  const cabinList = cabins.map(c => { const live = products.find(p => p.kind === "cabin" && p.room === c.room); return live ? { ...c, status: live.status, depositPaise: live.depositPaise } : c; });
   const rows: Row[] = [
     ...(deskCheckoutAvailable ? [{ id: "desk", name: "Desk pass", summary: "A chair on the lab floor, by the day, week or month.",
       prices: [`${formatPaise(35000)} / day`, `${formatPaise(175000)} / 7 days`, `${formatPaise(1300000)} / calendar month`], deposit: "None", minimum: "1 day",

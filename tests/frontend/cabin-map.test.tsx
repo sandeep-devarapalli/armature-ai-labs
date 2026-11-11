@@ -27,18 +27,19 @@ it("shows Cabin 101's price and two photos but cannot book an occupied cabin", (
   expect(choose).not.toHaveBeenCalled();
 });
 
-it("keeps coming-soon cabins unbookable and without photos", () => {
+it("keeps coming-soon cabins unbookable and labels their images as illustrations", () => {
   render(<CabinMap onChoose={() => {}} />);
   fireEvent.click(screen.getByRole("button", { name: /Cabin 202/ }));
   expect((screen.getByRole("button", { name: "Cabin 202 is coming soon" }) as HTMLButtonElement).disabled).toBe(true);
-  expect(screen.getByText("Photos of Cabin 202 are coming. It is fitted out like Cabin 101.")).toBeTruthy();
-  expect(screen.queryByText(/November 2026/)).toBeNull();
+  expect(screen.getByText("Cabin 202, illustration based on Cabin 101")).toBeTruthy();
+  expect(screen.getByText("To be confirmed")).toBeTruthy();
 });
 
 it("lets an available cabin be chosen and passes the room list to the 3D view", async () => {
   const choose = vi.fn();
-  const open = cabins.map(c => c.code === "C04" ? { ...c, status: "available" as const } : c);
+  const open = cabins.map(c => c.code === "C04" ? { ...c, status: "available" as const, depositPaise: 60000000 } : c);
   render(<CabinMap list={open} onChoose={choose} />);
+  expect(screen.getByText("₹6,00,000, refundable")).toBeTruthy();
   fireEvent.click(screen.getByRole("button", { name: "Book Cabin 201" }));
   expect(choose).toHaveBeenCalledWith("C04");
   await vi.waitFor(() => expect(mount).toHaveBeenCalled());

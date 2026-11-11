@@ -62,14 +62,14 @@ export function CabinMap({ list = defaultCabins, chosen, onChoose }: { list?: Ca
         <div><dt>Where</dt><dd>{floorName(cabin)}, room {cabin.room}</dd></div>
         <div><dt>Seats</dt><dd>{cabin.billable} billable, plus {cabin.extra} extra seats free (room for {cabin.billable + cabin.extra})</dd></div>
         <div><dt>Rent</dt><dd>{formatPaise(seatPaise)} a seat · {formatPaise(cabinRent(cabin))} a month</dd></div>
-        <div><dt>Deposit</dt><dd>To be confirmed</dd></div>
+        <div><dt>Deposit</dt><dd>{cabin.depositPaise ? `${formatPaise(cabin.depositPaise)}, refundable` : "To be confirmed"}</dd></div>
       </dl>
       {cabin.photos.length ? <figure className="cabin-photos">
         <img src={cabin.photos[shown].src} alt={cabin.photos[shown].alt} />
         <div className="cabin-thumbs" role="group" aria-label={`${cabin.name} photos`}>
           {cabin.photos.map((p, i) => <button key={p.src} type="button" aria-pressed={i === shown} onClick={() => setShown(i)}><img src={p.src} alt="" /><span className="sr-only">{p.alt}</span></button>)}
         </div>
-        <figcaption className="mono">{cabin.name}, November 2026</figcaption>
+        <figcaption className="mono">{cabin.photoCaption ?? `${cabin.name}, November 2026`}</figcaption>
       </figure> : <p className="cabin-map-placeholder">Photos of {cabin.name} are coming. It is fitted out like Cabin 101.</p>}
       {cabin.status === "available"
         ? <button type="button" className="button button-primary" aria-pressed={chosen === cabin.code} onClick={() => onChoose(cabin.code)}>{chosen === cabin.code ? `${cabin.name} selected` : `Book ${cabin.name}`}</button>
