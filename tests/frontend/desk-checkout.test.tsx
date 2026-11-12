@@ -6,7 +6,9 @@ import type { CheckoutOptions } from "../../src/lib/razorpay-checkout";
 
 const mock = vi.hoisted(() => ({
   invoke: vi.fn(), refreshMembership: vi.fn(), load: vi.fn(), level: "verified",
+  viewer: { dispose: vi.fn(), reset: vi.fn(), selectSeat: vi.fn(), setUnavailable: vi.fn(), focusSeats: vi.fn() }, mount: vi.fn(),
 }));
+vi.mock("../../src/lib/booking-map/viewer.js", () => ({ mountViewer: mock.mount }));
 vi.mock("../../src/lib/supabase", () => ({ supabase: { functions: { invoke: mock.invoke } } }));
 vi.mock("../../src/lib/razorpay-checkout", () => ({ loadRazorpayCheckout: mock.load }));
 vi.mock("../../src/config/release", () => ({ memberPlatformAvailable: false, rentalCheckoutAvailable: false }));
@@ -30,6 +32,25 @@ beforeEach(() => {
   vi.clearAllMocks();
   localStorage.clear();
   mock.level = "verified";
+  mock.mount.mockResolvedValue(mock.viewer);
+});
+
+it("picks a chair on the 3D plan and keeps unoffered chairs unavailable", async () => {
+  mock.invoke.mockImplementation((_, { body }) => Promise.resolve(reply({ chairs: ["S01", "S02", "S13"],
+    dates: body.chair ? [{ booking_date: "2099-06-10", available: true }] : [] })));
+  renderPage();
+  await waitFor(() => expect(mock.viewer.setUnavailable).toHaveBeenCalled());
+  expect(mock.viewer.focusSeats).toHaveBeenCalled();
+  const options = mock.mount.mock.calls[0][1];
+  expect(options).toMatchObject({ kind: "ground-seats", bookingType: "desk", notice: "3 chairs open for desk passes · GF-10 commons" });
+  const blocked = mock.viewer.setUnavailable.mock.calls.at(-1)![0];
+  expect(blocked).toHaveLength(22);
+  expect(blocked).not.toContain("S02");
+  expect(blocked).toContain("S14");
+  act(() => options.onSeat("S02"));
+  expect(screen.getByLabelText("Chair")).toHaveValue("S02");
+  await waitFor(() => expect(mock.viewer.selectSeat).toHaveBeenLastCalledWith("S02"));
+  await waitFor(() => expect(mock.invoke).toHaveBeenLastCalledWith(expect.anything(), expect.objectContaining({ body: expect.objectContaining({ action: "availability", chair: "S02" }) })));
 });
 
 it("requires Verified membership before requesting live availability", () => {
