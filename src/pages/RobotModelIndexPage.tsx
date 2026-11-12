@@ -52,7 +52,7 @@ const commercialLabels: Record<string, string> = { yes: "Yes", conditional: "Con
 const questions = [
   { q: "What does it do?", a: "Its role in a robot: planner, embodied reasoning, VLA, world model, speech or perception, and what it outputs." },
   { q: "How do I get it?", a: "Open weights, public API, waitlist or partners only, and from which providers." },
-  { q: "What does it cost, and until when?", a: "Prices with start and end dates. Gemini Robotics ER 2 costs $1 / $5 per million tokens through 31 December 2026, then $2 / $10." },
+  { q: "What does it cost, and until when?", a: <>Prices with start and end dates. <a href="https://aistudio.google.com/docs/pricing#gemini-robotics-er-2">Gemini Developer API pricing</a> for Gemini Robotics ER 2 is $1 input / $5 output per million tokens through 31 December 2026, then $2 / $10 from 1 January 2027.</> },
   { q: "Can I use it commercially?", a: "The whole licence chain: code, weights, base models and training data, with a plain answer and the reason." },
   { q: "Will it run on my robot’s computer?", a: "Hardware fit per device, marked as measured by Armature, reported by the community, claimed by the vendor, or untested." },
   { q: "What’s the catch?", a: "Limitations and key terms, each with its source: preview status, gating, safety responsibilities, numerical drift." }
@@ -141,14 +141,15 @@ export function RobotModelIndexPage() {
       </div>
 
       <figure className="rmi-chain">
-        <figcaption>Why every entry traces the whole licence chain</figcaption>
+        <figcaption>Draft example: why every entry traces the whole licence chain</figcaption>
         <ol>
           <li><span>π0.5 code (openpi)</span><strong>Apache 2.0</strong></li>
-          <li><span>π0.5 checkpoints</span><strong>Licence not stated</strong></li>
+          <li><span>π0.5 checkpoints</span><strong>Licence scope unverified</strong></li>
           <li><span>Built on</span><strong>PaliGemma</strong></li>
           <li><span>Which brings</span><strong>Gemma Terms of Use</strong><em>Use restrictions that must be passed on to anyone you redistribute to</em></li>
         </ol>
-        <p className="rmi-verdict"><span>Commercial use</span><strong>Conditional</strong></p>
+        <p className="rmi-verdict"><span>Commercial use</span><strong>Unclear</strong></p>
+        <p>Checkpoint licence scope and training-data rights still need verification. PaliGemma brings Gemma obligations, but that does not resolve the rest of the chain.</p>
         <p className="rmi-chain-source">Sources: <a href="https://github.com/Physical-Intelligence/openpi">openpi</a>, <a href="https://arxiv.org/abs/2504.16054">π0.5 paper</a>, <a href="https://ai.google.dev/gemma/terms">Gemma Terms</a>. Not legal advice.</p>
       </figure>
     </section>
