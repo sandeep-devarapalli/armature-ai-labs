@@ -5,8 +5,8 @@ select ok(not has_table_privilege('authenticated','private.event_quotes','SELECT
 select ok((select not enabled and not release_ready from private.event_checkout_settings),'Event checkout defaults closed');
 select is((select public from storage.buckets where id='event-agreements'),false,'Event agreement PDFs remain private');
 select is((select price_paise from public.booking_products where code='event-hour'),250000::bigint,'Event hire is 2500 per hour');
-select is(private.event_refund_due(750000,'2027-03-10 10:00+05:30','2027-03-08 10:00+05:30'),375000::bigint,'Cancelling exactly 48 hours before refunds half');
-select is(private.event_refund_due(750000,'2027-03-10 10:00+05:30','2027-03-08 10:01+05:30'),0::bigint,'Cancelling under 48 hours refunds nothing');
+select is(private.event_refund_due(750000,'2027-03-13 10:00+05:30','2027-03-08 10:00+05:30'),375000::bigint,'Cancelling exactly 48 hours before refunds half');
+select is(private.event_refund_due(750000,'2027-03-13 10:00+05:30','2027-03-08 10:01+05:30'),0::bigint,'Cancelling under 48 hours refunds nothing');
 
 insert into auth.users(id,aud,role,email,email_confirmed_at,phone,phone_confirmed_at)
 select ('94000000-0000-4000-8000-'||lpad(n::text,12,'0'))::uuid,'authenticated','authenticated','event-live-'||n||'@example.test',now(),'1202555094'||n,now() from generate_series(1,3)n;
@@ -21,19 +21,23 @@ insert into public.resources(id,location_id,slug,name,kind,capacity,max_duration
 values('94000000-0000-4000-8000-000000000011','94000000-0000-4000-8000-000000000010','event-fixture','Synthetic event room','room',40,900,366);
 insert into public.resource_booking_policies(resource_id,kind) values('94000000-0000-4000-8000-000000000011','event');
 
-select throws_ok($$select public.event_checkout('quote','94000000-0000-4000-8000-000000000001','{"date":"2027-03-10","startTime":"10:00","hours":3,"attendees":20,"purpose":"Synthetic robotics meetup"}')$$,'42501','Event checkout unavailable','Closed release denies quotes');
+select throws_ok($$select public.event_checkout('quote','94000000-0000-4000-8000-000000000001','{"date":"2027-03-13","startTime":"10:00","hours":3,"attendees":20,"purpose":"Synthetic robotics meetup"}')$$,'42501','Event checkout unavailable','Closed release denies quotes');
 update private.event_checkout_settings set enabled=true,release_ready=true,event_resource='94000000-0000-4000-8000-000000000011';
-select throws_ok($$select public.event_checkout('quote','94000000-0000-4000-8000-000000000001','{"date":"2027-03-10","startTime":"10:00","hours":0,"attendees":20,"purpose":"Synthetic robotics meetup"}')$$,'22023',null,'Events need at least one hour');
-select throws_ok($$select public.event_checkout('quote','94000000-0000-4000-8000-000000000001','{"date":"2027-03-10","startTime":"07:00","hours":2,"attendees":20,"purpose":"Synthetic robotics meetup"}')$$,'22023',null,'Events cannot start before 08:00');
-select throws_ok($$select public.event_checkout('quote','94000000-0000-4000-8000-000000000001','{"date":"2027-03-10","startTime":"21:00","hours":3,"attendees":20,"purpose":"Synthetic robotics meetup"}')$$,'22023',null,'Events must end by 23:00');
-select throws_ok($$select public.event_checkout('quote','94000000-0000-4000-8000-000000000001','{"date":"2027-03-10","startTime":"10:30","hours":2,"attendees":20,"purpose":"Synthetic robotics meetup"}')$$,'22023',null,'Events start on the hour');
-select throws_ok($$select public.event_checkout('quote','94000000-0000-4000-8000-000000000001','{"date":"2027-03-10","startTime":"10:00","hours":2,"attendees":36,"purpose":"Synthetic robotics meetup"}')$$,'22023',null,'Events are capped at 35 attendees');
-select throws_ok($$select public.event_checkout('quote','94000000-0000-4000-8000-000000000001','{"date":"2027-03-10","startTime":"10:00","hours":2,"attendees":20,"purpose":"short"}')$$,'22023',null,'Events need a purpose');
+select throws_ok($$select public.event_checkout('quote','94000000-0000-4000-8000-000000000001','{"date":"2027-03-13","startTime":"10:00","hours":0,"attendees":20,"purpose":"Synthetic robotics meetup"}')$$,'22023',null,'Events need at least one hour');
+select throws_ok($$select public.event_checkout('quote','94000000-0000-4000-8000-000000000001','{"date":"2027-03-13","startTime":"07:00","hours":2,"attendees":20,"purpose":"Synthetic robotics meetup"}')$$,'22023',null,'Events cannot start before 08:00');
+select throws_ok($$select public.event_checkout('quote','94000000-0000-4000-8000-000000000001','{"date":"2027-03-10","startTime":"16:00","hours":2,"attendees":20,"purpose":"Synthetic robotics meetup"}')$$,'22023',null,'Weekday events cannot start before 17:00');
+select is(public.event_checkout('availability','94000000-0000-4000-8000-000000000001','{"date":"2027-03-10"}')->>'opens','17:00','Weekdays open at 17:00');
+select is(public.event_checkout('availability','94000000-0000-4000-8000-000000000001','{"date":"2027-03-13"}')->>'opens','08:00','Saturdays open at 08:00');
+select is(private.event_opens('2027-03-14'),time '08:00','Sundays open at 08:00');
+select throws_ok($$select public.event_checkout('quote','94000000-0000-4000-8000-000000000001','{"date":"2027-03-13","startTime":"21:00","hours":3,"attendees":20,"purpose":"Synthetic robotics meetup"}')$$,'22023',null,'Events must end by 23:00');
+select throws_ok($$select public.event_checkout('quote','94000000-0000-4000-8000-000000000001','{"date":"2027-03-13","startTime":"10:30","hours":2,"attendees":20,"purpose":"Synthetic robotics meetup"}')$$,'22023',null,'Events start on the hour');
+select throws_ok($$select public.event_checkout('quote','94000000-0000-4000-8000-000000000001','{"date":"2027-03-13","startTime":"10:00","hours":2,"attendees":36,"purpose":"Synthetic robotics meetup"}')$$,'22023',null,'Events are capped at 35 attendees');
+select throws_ok($$select public.event_checkout('quote','94000000-0000-4000-8000-000000000001','{"date":"2027-03-13","startTime":"10:00","hours":2,"attendees":20,"purpose":"short"}')$$,'22023',null,'Events need a purpose');
 
-select set_config('event.q',public.event_checkout('quote','94000000-0000-4000-8000-000000000001','{"date":"2027-03-10","startTime":"10:00","hours":3,"attendees":20,"purpose":"Synthetic robotics meetup"}')::text,true);
+select set_config('event.q',public.event_checkout('quote','94000000-0000-4000-8000-000000000001','{"date":"2027-03-13","startTime":"10:00","hours":3,"attendees":20,"purpose":"Synthetic robotics meetup"}')::text,true);
 select is((current_setting('event.q')::jsonb->>'amount_paise')::bigint,750000::bigint,'Three hours cost 7500');
 select is(current_setting('event.q')::jsonb->>'status','awaiting_staff','New request waits for staff');
-select is((current_setting('event.q')::jsonb->>'starts_at')::timestamptz,'2027-03-10 10:00+05:30'::timestamptz,'Start is stored in lab time');
+select is((current_setting('event.q')::jsonb->>'starts_at')::timestamptz,'2027-03-13 10:00+05:30'::timestamptz,'Start is stored in lab time');
 select throws_ok(format('select public.event_checkout(''claim_order'',''%s'',''%s'')','94000000-0000-4000-8000-000000000001',jsonb_build_object('quoteId',current_setting('event.q')::jsonb->>'id')),'22023','Fresh approved agreement required','Unapproved request cannot pay');
 select throws_ok(format('select public.event_checkout(''status'',''%s'',''%s'')','94000000-0000-4000-8000-000000000002',jsonb_build_object('quoteId',current_setting('event.q')::jsonb->>'id')),'42501','Event request unavailable','Members cannot read other requests');
 select is(public.event_checkout('lookup_order',null,'{"orderId":"order_unknown"}')->>'status','ignored','Unknown order leaves desk and rental webhook routing intact');
@@ -50,8 +54,8 @@ select is(current_setting('event.q')::jsonb->>'status','approved','Signed agreem
 select is(public.event_checkout('claim_order','94000000-0000-4000-8000-000000000001',current_setting('event.staff')::jsonb)->>'claimed','true','First claim holds the slot');
 select is(public.event_checkout('claim_order','94000000-0000-4000-8000-000000000001',current_setting('event.staff')::jsonb)->>'claimed','false','Second claim cannot issue another order');
 select is((select upper(period)-lower(period) from private.checkout_inventory_holds where quote_id=(current_setting('event.q')::jsonb->>'id')::uuid),interval '3 hours 40 minutes','Hold covers the setup buffer');
-select throws_ok($$select public.event_checkout('quote','94000000-0000-4000-8000-000000000002','{"date":"2027-03-10","startTime":"13:00","hours":1,"attendees":5,"purpose":"Synthetic overlapping workshop"}')$$,'23P01','Event slot is no longer available','Held slot blocks a back-to-back request inside the buffer');
-select is(jsonb_array_length(public.event_checkout('availability','94000000-0000-4000-8000-000000000002','{"date":"2027-03-10"}')->'busy'),1,'Availability shows the held period');
+select throws_ok($$select public.event_checkout('quote','94000000-0000-4000-8000-000000000002','{"date":"2027-03-13","startTime":"13:00","hours":1,"attendees":5,"purpose":"Synthetic overlapping workshop"}')$$,'23P01','Event slot is no longer available','Held slot blocks a back-to-back request inside the buffer');
+select is(jsonb_array_length(public.event_checkout('availability','94000000-0000-4000-8000-000000000002','{"date":"2027-03-13"}')->'busy'),1,'Availability shows the held period');
 
 select public.event_checkout('bind_order','94000000-0000-4000-8000-000000000001',current_setting('event.staff')::jsonb||'{"orderId":"order_eventfixture"}');
 select set_config('event.payment',(current_setting('event.staff')::jsonb||'{"orderId":"order_eventfixture","paymentId":"pay_eventfixture","amount":750000,"currency":"INR","refundedAmount":0}')::text,true);
@@ -71,7 +75,7 @@ select is(current_setting('event.q')::jsonb->>'status','cancelled','Member can c
 select is((current_setting('event.q')::jsonb->>'refund_due_paise')::bigint,375000::bigint,'Early cancellation records a 50% refund due');
 select is((select status::text from public.bookings where id=(current_setting('event.q')::jsonb->>'bookingId')::uuid),'cancelled','Cancellation cancels the booking');
 select ok((select revoked_at is not null from public.paid_access_entitlements where id=(current_setting('event.q')::jsonb->>'entitlement_id')::uuid),'Cancellation revokes event access');
-select is(jsonb_array_length(public.event_checkout('availability','94000000-0000-4000-8000-000000000002','{"date":"2027-03-10"}')->'busy'),0,'Cancelled slot is free again');
+select is(jsonb_array_length(public.event_checkout('availability','94000000-0000-4000-8000-000000000002','{"date":"2027-03-13"}')->'busy'),0,'Cancelled slot is free again');
 select public.event_checkout('refund',null,current_setting('event.payment')::jsonb||'{"refundedAmount":375000}');
 select is((select review_reason from private.event_quotes where payment_id='pay_eventfixture'),null,'Policy refund needs no review');
 select public.event_checkout('refund',null,current_setting('event.payment')::jsonb||'{"refundedAmount":500000}');

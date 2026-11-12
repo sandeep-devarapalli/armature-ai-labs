@@ -26,8 +26,8 @@ beforeEach(() => {
     LIVE_EVENT_CHECKOUT_ENABLED: "true", LIVE_EVENT_POLICY_VERSION: "event-2026-11-09", LIVE_EVENT_PANDADOC_SIGNER: "staff@example.test" });
   vi.stubGlobal("Deno", { env: { get: (key: string) => env[key] } });
   vi.stubGlobal("fetch", fetcher);
-  quote = { id: quoteId, event_date: "2027-03-10", start_time: "10:00:00", hours: 3, attendees: 20, purpose: "Synthetic robotics meetup",
-    starts_at: "2027-03-10T04:30:00Z", ends_at: "2027-03-10T07:30:00Z", rent_paise: 750000, amount_paise: 750000,
+  quote = { id: quoteId, event_date: "2027-03-13", start_time: "10:00:00", hours: 3, attendees: 20, purpose: "Synthetic robotics meetup",
+    starts_at: "2027-03-13T04:30:00Z", ends_at: "2027-03-13T07:30:00Z", rent_paise: 750000, amount_paise: 750000,
     agreement_hash: "a".repeat(64), policy_version: "event-2026-11-09", approved_at: new Date().toISOString(),
     payment_window_at: new Date().toISOString(), document_id: "manualdoc123", order_id: null, order_claimed_at: null, status: "approved" };
   mock.authenticate.mockResolvedValue({ id: memberId, email: "buyer@example.test", claims: { aal: "aal1" } });
@@ -66,26 +66,27 @@ it("reuses a bound order instead of creating another", async () => {
   expect(fetcher).not.toHaveBeenCalled();
 });
 it.each([
-  { date: "2027-03-10", startTime: "07:00", hours: 2, attendees: 10 },
-  { date: "2027-03-10", startTime: "10:30", hours: 2, attendees: 10 },
-  { date: "2027-03-10", startTime: "21:00", hours: 3, attendees: 10 },
-  { date: "2027-03-10", startTime: "10:00", hours: 0, attendees: 10 },
-  { date: "2027-03-10", startTime: "10:00", hours: 2, attendees: 36 },
-  { date: "2027-03-10", startTime: "10:00", hours: 1.5, attendees: 10 },
+  { date: "2027-03-13", startTime: "07:00", hours: 2, attendees: 10 },
+  { date: "2027-03-10", startTime: "16:00", hours: 2, attendees: 10 },
+  { date: "2027-03-13", startTime: "10:30", hours: 2, attendees: 10 },
+  { date: "2027-03-13", startTime: "21:00", hours: 3, attendees: 10 },
+  { date: "2027-03-13", startTime: "10:00", hours: 0, attendees: 10 },
+  { date: "2027-03-13", startTime: "10:00", hours: 2, attendees: 36 },
+  { date: "2027-03-13", startTime: "10:00", hours: 1.5, attendees: 10 },
 ])("rejects requests outside event rules %o", async selection => {
   expect((await post({ action: "quote", purpose: "Synthetic robotics meetup", ...selection })).status).toBe(400);
   expect(mock.rpc).not.toHaveBeenCalled();
 });
 it("passes a valid request to the ledger without a client price", async () => {
-  const response = await post({ action: "quote", date: "2027-03-10", startTime: "10:00", hours: 3, attendees: 20, purpose: "  Synthetic robotics meetup ", amountPaise: 1 });
+  const response = await post({ action: "quote", date: "2027-03-13", startTime: "10:00", hours: 3, attendees: 20, purpose: "  Synthetic robotics meetup ", amountPaise: 1 });
   expect(response.status).toBe(200);
   expect(await response.json()).toMatchObject({ amountPaise: 750000, startTime: "10:00", status: "approved" });
   expect(mock.rpc).toHaveBeenCalledWith("event_checkout", { p_action: "quote", p_member: memberId,
-    p_input: { date: "2027-03-10", startTime: "10:00", hours: 3, attendees: 20, purpose: "Synthetic robotics meetup" } });
+    p_input: { date: "2027-03-13", startTime: "10:00", hours: 3, attendees: 20, purpose: "Synthetic robotics meetup" } });
 });
 it("reports a taken slot as a conflict", async () => {
   mock.rpc.mockImplementation(() => ({ abortSignal: async () => ({ error: { code: "23P01" }, data: null }) }));
-  const response = await post({ action: "quote", date: "2027-03-10", startTime: "10:00", hours: 3, attendees: 20, purpose: "Synthetic robotics meetup" });
+  const response = await post({ action: "quote", date: "2027-03-13", startTime: "10:00", hours: 3, attendees: 20, purpose: "Synthetic robotics meetup" });
   expect(response.status).toBe(409);
   expect(await response.json()).toEqual({ error: "event_slot_unavailable" });
 });
@@ -129,7 +130,7 @@ it("lets a member cancel with confirmation and a reason", async () => {
 });
 it("keeps cancellation open when new checkout is closed", async () => {
   env.LIVE_EVENT_CHECKOUT_ENABLED = "false";
-  expect((await post({ action: "quote", date: "2027-03-10", startTime: "10:00", hours: 3, attendees: 20, purpose: "Synthetic robotics meetup" })).status).toBe(503);
+  expect((await post({ action: "quote", date: "2027-03-13", startTime: "10:00", hours: 3, attendees: 20, purpose: "Synthetic robotics meetup" })).status).toBe(503);
   expect((await post({ action: "cancel", quoteId, reason: "Synthetic change of plans", confirmed: true })).status).toBe(200);
 });
 it("stays closed without its own configuration", async () => {

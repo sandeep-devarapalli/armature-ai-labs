@@ -6,6 +6,8 @@ import { rentalProvider } from "./rental-payment.ts";
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 const date = /^\d{4}-\d{2}-\d{2}$/;
 const hour = /^(0[89]|1\d|2[0-2]):00$/;
+// Weekdays open at 17:00 because desks use the space until then; weekends open at 08:00.
+const opensAt = (day: string) => [0, 6].includes(new Date(day + "T00:00:00Z").getUTCDay()) ? 8 : 17;
 type Quote = {
   id: string; member_id?: string; event_date: string; start_time: string; hours: number; attendees: number; purpose: string;
   starts_at: string; ends_at: string; rent_paise: number; amount_paise: number; agreement_hash: string; policy_version: string;
@@ -95,7 +97,7 @@ export async function handleEventCheckout(request: Request, mode: "test" | "live
     }
     if (action === "quote") {
       if (!date.test(input.date ?? "") || !hour.test(input.startTime ?? "") || !Number.isInteger(input.hours) || input.hours < 1
-        || Number(input.startTime.slice(0, 2)) + input.hours > 23 || !Number.isInteger(input.attendees) || input.attendees < 1
+        || Number(input.startTime.slice(0, 2)) < opensAt(input.date) || Number(input.startTime.slice(0, 2)) + input.hours > 23 || !Number.isInteger(input.attendees) || input.attendees < 1
         || input.attendees > 35 || !reasonOk(input.purpose)) throw new Rejected(400, "invalid_selection");
       return reply({ mode, ...present(await operation<Quote>("quote", { date: input.date, startTime: input.startTime,
         hours: input.hours, attendees: input.attendees, purpose: input.purpose.trim() })) });

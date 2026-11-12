@@ -54,7 +54,7 @@ function EventCheckout({ canBook, memberId }: { canBook: boolean; memberId: stri
     setSlots(null);
     if (!day) return;
     let current = true;
-    invokeEvent<EventAvailability>({ action: "availability", date: day }, memberId).then(result => { if (current && active.current) setSlots(result); })
+    invokeEvent<EventAvailability>({ action: "availability", date: day }, memberId).then(result => { if (current && active.current) { setSlots(result); setStart(s => s < result.opens ? result.opens : s); } })
       .catch(reason => { if (current && active.current) setError(reason instanceof Error ? reason.message : "Availability could not be loaded."); });
     return () => { current = false; };
   }, [day, memberId]);
@@ -111,7 +111,7 @@ function EventCheckout({ canBook, memberId }: { canBook: boolean; memberId: stri
             <span className="booking-ref">Already booked</span>{slots.busy.map(b => <span key={b.start} className="booking-chip is-attention">{b.start}–{b.end}</span>)}
             <span className="booking-ref">Allow {slots.bufferMinutes} minutes between events.</span></div> : <p>Nothing booked yet.</p>}</>)}
       <label>Start time<select value={start} disabled={busy || !slots || slots.closed} onChange={event => setStart(event.target.value)}>
-        {hours.map(h => <option key={h} value={h}>{h}</option>)}</select></label>
+        {hours.filter(h => h >= (slots?.opens ?? "08:00")).map(h => <option key={h} value={h}>{h}</option>)}</select></label>
       <label>Hours<select name="hours" disabled={busy || !slots || slots.closed}>
         {Array.from({ length: latest }, (_, i) => i + 1).map(n => <option key={n} value={n}>{n} hour{n > 1 ? "s" : ""}{slots ? " · " + money(n * slots.ratePaise) : ""}</option>)}</select></label>
       <label>Guests<input name="attendees" type="number" min={1} max={slots?.maxAttendees ?? 35} defaultValue={10} required disabled={busy || !slots || slots.closed} /></label>
