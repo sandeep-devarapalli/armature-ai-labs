@@ -6,6 +6,7 @@ import { memberPlatformAvailable, rentalCheckoutAvailable } from "../config/rele
 import { loadRazorpayCheckout, type CheckoutInstance, type CheckoutResult } from "../lib/razorpay-checkout";
 import { supabase } from "../lib/supabase";
 import { BookingSteps } from "./BookingSteps";
+import { DeskChairMap } from "./DeskChairMap";
 import { BookingStatusCard, bookingDates, type BookingTone } from "./BookingStatusCard";
 import { Field, PageHeader, Section } from "./Primitives";
 
@@ -95,6 +96,7 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
   const today = todayInBengaluru();
   const [month, setMonth] = useState(today.slice(0, 7));
   const [available, setAvailable] = useState<Availability | null>(null);
+  const [openChairs, setOpenChairs] = useState<string[]>([]);
   const [calendarError, setCalendarError] = useState("");
   const [calendarRetry, retryCalendar] = useState(0);
   const [busy, setBusy] = useState(false);
@@ -116,7 +118,7 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
     const first = month + "-01";
     const last = new Date(Date.UTC(Number(month.slice(0, 4)), Number(month.slice(5)), 0)).toISOString().slice(0, 10);
     void request<Availability>(chair ? { action: "availability", chair, unit, from: first < today ? today : first, to: last } : { action: "availability" })
-      .then(result => { if (active) setAvailable(result); })
+      .then(result => { if (active) { setAvailable(result); setOpenChairs(result.chairs); } })
       .catch(reason => { if (active) setCalendarError(reason.message); });
     return () => { active = false; };
   }, [calendarRetry, canBook, chair, choosing, month, today, unit]);
@@ -241,6 +243,8 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
         <option value="">Choose a chair</option>
         {(available?.chairs ?? (chair ? [chair] : [])).map(code => <option key={code}>{code}</option>)}
       </select></Field>
+      {!!openChairs.length && <DeskChairMap chairs={openChairs} chosen={chair} disabled={busy || !available}
+        onChoose={code => { if (code !== chair) { setChair(code); setStart(""); } }} />}
       {chair && <>
         <Field label="Month"><input type="month" value={month} min={today.slice(0, 7)} disabled={busy} onChange={event => {
           if (/^\d{4}-(0[1-9]|1[0-2])$/.test(event.target.value) && event.target.value >= today.slice(0, 7)) {

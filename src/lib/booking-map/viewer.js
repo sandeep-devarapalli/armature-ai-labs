@@ -17,7 +17,7 @@ function release(root) {
   materials.forEach(material => material.dispose());
   geometries.forEach(geometry => geometry.dispose());
 }
-export async function mountViewer(host, { kind = 'printer', onPin = () => {}, onSeat = () => {}, selectedSeat = null, onCabin = () => {}, selectedCabin = null, bookingType = 'desk', unavailableCodes = [], cabins = null } = {}) {
+export async function mountViewer(host, { kind = 'printer', onPin = () => {}, onSeat = () => {}, selectedSeat = null, onCabin = () => {}, selectedCabin = null, bookingType = 'desk', unavailableCodes = [], cabins = null, notice: noticeText = null } = {}) {
   active.get(host)?.dispose();
   host.style.position='relative';
   const container=document.createElement('div');
@@ -95,7 +95,7 @@ export async function mountViewer(host, { kind = 'printer', onPin = () => {}, on
       if(disposed)return api;
       const result=await new GLTFLoader().parseAsync(bytes,modelDirectory);
       if(disposed){release(result.scene);return api;}root=result.scene;
-      notice.textContent=seatMode?(kind==='ground-seats'?'25 chairs · proposed layout · final positions to be confirmed':'First-floor cabin layout · final arrangement under review'):'Existing building model · working prototype · final equipment positions to be confirmed';
+      notice.textContent=noticeText??(seatMode?(kind==='ground-seats'?'25 chairs · proposed layout · final positions to be confirmed':'First-floor cabin layout · final arrangement under review'):'Existing building model · working prototype · final equipment positions to be confirmed');
     } else {
       throw new Error('Only building floors are supported.');
       notice.textContent='Illustrative model · feature markers are not electrical pinouts';
