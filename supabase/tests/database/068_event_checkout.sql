@@ -5,8 +5,8 @@ select ok(not has_table_privilege('authenticated','private.event_quotes','SELECT
 select ok((select not enabled and not release_ready from private.event_checkout_settings),'Event checkout defaults closed');
 select is((select public from storage.buckets where id='event-agreements'),false,'Event agreement PDFs remain private');
 select is((select price_paise from public.booking_products where code='event-hour'),250000::bigint,'Event hire is 2500 per hour');
-select is(private.event_refund_due(750000,'2027-03-13 10:00+05:30','2027-03-08 10:00+05:30'),375000::bigint,'Cancelling exactly 48 hours before refunds half');
-select is(private.event_refund_due(750000,'2027-03-13 10:00+05:30','2027-03-08 10:01+05:30'),0::bigint,'Cancelling under 48 hours refunds nothing');
+select is(private.event_refund_due(750000,'2027-03-10 10:00+05:30','2027-03-08 10:00+05:30'),375000::bigint,'Cancelling exactly 48 hours before refunds half');
+select is(private.event_refund_due(750000,'2027-03-10 10:00+05:30','2027-03-08 10:01+05:30'),0::bigint,'Cancelling under 48 hours refunds nothing');
 
 insert into auth.users(id,aud,role,email,email_confirmed_at,phone,phone_confirmed_at)
 select ('94000000-0000-4000-8000-'||lpad(n::text,12,'0'))::uuid,'authenticated','authenticated','event-live-'||n||'@example.test',now(),'1202555094'||n,now() from generate_series(1,3)n;
