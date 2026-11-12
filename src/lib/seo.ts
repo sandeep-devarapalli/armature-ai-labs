@@ -26,6 +26,7 @@ export type PageSeo = {
 const pages: Record<string, PageDefinition> = {
   "/resources/white-paper/robotic-actuators/feedback/": { name: "Actuator Comments and Corrections", description: "Read reviewed feedback on the robotic actuators white paper and specifications. Basic members can submit comments and suggest corrections for admin review.", parent: "/resources/white-paper/robotic-actuators/" },
   "/resources/": { name: "Resources", description: "Research and engineering references from Armature AI Labs." },
+  "/resources/robot-model-index/": { name: "Robot Model Index", description: "An open, sourced catalog of AI models for robots, from LLMs to VLAs and world models: availability, pricing, licences, hardware fit and limitations. Every fact dated.", parent: "/resources/" },
   "/resources/white-paper/": { name: "White Paper", description: "Research papers on robotic actuators, innovation and manufacturing in India.", parent: "/resources/" },
   "/resources/white-paper/robotic-actuators/": { name: "Robotic Actuators", description: "Read the robotic actuators white paper and compare 24 actuator entries with specifications, weights and sourcing evidence.", parent: "/resources/white-paper/" },
   "/talent-network/": { name: "Armature Talent Network", description: "Find engineers. Connect with builders. Get things made. Discover engineering talent, view professional profiles and connect through LinkedIn." },

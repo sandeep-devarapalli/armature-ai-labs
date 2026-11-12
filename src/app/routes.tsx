@@ -14,6 +14,7 @@ import {
 } from "../config/release";
 
 const WhitePaperPage = lazy(() => import("../pages/WhitePaperPage").then(module => ({ default: module.WhitePaperPage })));
+const RobotModelIndexPage = lazy(() => import("../pages/RobotModelIndexPage").then(module => ({ default: module.RobotModelIndexPage })));
 const ResourceFeedbackPage = lazy(() => import("../pages/ResourceFeedbackPage").then(module => ({ default: module.ResourceFeedbackPage })));
 const ResourceFeedbackAdminPage = lazy(() => import("../pages/ResourceFeedbackPage").then(module => ({ default: module.ResourceFeedbackAdminPage })));
 
@@ -134,6 +135,7 @@ export const routes: RouteObject[] = [
       { path: "/resources", element: <WhitePaperPage />, handle: { module: "src/pages/WhitePaperPage.tsx" } },
       { path: "/resources/white-paper", element: <WhitePaperPage />, handle: { module: "src/pages/WhitePaperPage.tsx" } },
       { path: "/resources/white-paper/robotic-actuators", element: <WhitePaperPage />, handle: { module: "src/pages/WhitePaperPage.tsx" } },
+      { path: "/resources/robot-model-index", element: <RobotModelIndexPage />, handle: { module: "src/pages/RobotModelIndexPage.tsx" } },
       { path: "/resources/white-paper/robotic-actuators/feedback", element: <ResourceFeedbackPage />, handle: { module: "src/pages/ResourceFeedbackPage.tsx" } },
       { path: "/admin/resource-feedback", element: <ResourceFeedbackAdminPage /> },
       { path: "/blog", element: <BlogIndexPage />, handle: { module: "src/pages/BlogPages.tsx" } },

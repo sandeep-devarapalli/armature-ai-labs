@@ -169,6 +169,7 @@ export function Shell({ children }: PropsWithChildren) {
                 <NavLink to="/resources/white-paper/robotic-actuators">Robotic actuators</NavLink>
                 <a href="/resources/white-paper/robotic-actuators/white-paper.html">Read white paper</a>
                 <a href="/resources/white-paper/robotic-actuators/actuator-specifications.html">Actuator specifications</a>
+                <NavLink to="/resources/robot-model-index">Robot Model Index</NavLink>
                 <NavLink to="/ecosystem#builder-resources">Tools &amp; resources for builders</NavLink>
               </div>
             </details>
@@ -211,6 +212,7 @@ export function Shell({ children }: PropsWithChildren) {
               <NavLink to="/resources/white-paper/robotic-actuators">Robotic actuators</NavLink>
               <a href="/resources/white-paper/robotic-actuators/white-paper.html">Read white paper</a>
               <a href="/resources/white-paper/robotic-actuators/actuator-specifications.html">Actuator specifications</a>
+              <NavLink to="/resources/robot-model-index">Resources / Robot Model Index</NavLink>
               {memberPlatformAvailable && <Link to={currentMember ? "/dashboard" : "/auth"}>
                 {currentMember ? "Member workspace" : "Member sign in"}
               </Link>}
