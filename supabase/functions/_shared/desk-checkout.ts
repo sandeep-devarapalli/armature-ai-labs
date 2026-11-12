@@ -78,7 +78,8 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
       || (live && !/^[A-Za-z0-9._-]{4,80}$/.test(policyVersion)) || (!pandaKey && !manualPilot) || !staffSigner) {
     return reply({ error: live ? "checkout_not_configured" : "test_checkout_not_configured" }, 503);
   }
-  const isManualQuote = (q: Quote) => q.chair === "S01" && (({ day: 35000, week: 175000, month: 1300000 } as Record<string, number>)[q.unit] === q.amount_paise)
+  const releasedChair = (code?: string) => /^S(0[1-9]|1[0-3])$/.test(code ?? "");
+  const isManualQuote = (q: Quote) => releasedChair(q.chair) && (({ day: 35000, week: 175000, month: 1300000 } as Record<string, number>)[q.unit] === q.amount_paise)
     && ((manualPilot && !q.document_id) || q.sealed_revision === "manual-pilot-v1");
   const policyStale = (q: Quote) => live && !q.order_claimed_at && q.quoted_policy_version !== policyVersion;
   const present = (q: Quote) => ({
@@ -199,17 +200,17 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
         || !/^\d{4}-\d{2}-\d{2}$/.test(from ?? "") || !/^\d{4}-\d{2}-\d{2}$/.test(to ?? ""))) {
         throw new Rejected(400, "invalid_selection");
       }
-      if (manualPilot && chair !== undefined && (chair !== "S01")) {
+      if (manualPilot && chair !== undefined && !releasedChair(chair)) {
         return reply({ mode, chairs: [], dates: [] });
       }
       const availability = await operation<{ chairs: string[] }>("availability", { chair, unit, from, to });
-      if (manualPilot) availability.chairs = availability.chairs.filter(code => code === "S01");
+      if (manualPilot) availability.chairs = availability.chairs.filter(code => releasedChair(code));
       return reply({ mode, ...availability });
     }
     if (action === "quote") {
       if (!/^S(0[1-9]|1[0-9]|2[0-5])$/.test(input.chair ?? "") || !["day", "week", "month"].includes(input.unit)
         || !/^\d{4}-\d{2}-\d{2}$/.test(input.start ?? "")) throw new Rejected(400, "invalid_selection");
-      if (manualPilot && (input.chair !== "S01")) throw new Rejected(409, "manual_agreement_unavailable");
+      if (manualPilot && !releasedChair(input.chair)) throw new Rejected(409, "manual_agreement_unavailable");
       const quote = await operation<Quote>("quote", {
         chair: input.chair, unit: input.unit, start: input.start, ...(live ? { policyVersion } : {}),
       });
