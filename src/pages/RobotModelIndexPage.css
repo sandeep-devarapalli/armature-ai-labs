@@ -1,0 +1,86 @@
+.rmi-page { padding-bottom: 48px; }
+.rmi-crumb { display: flex; flex-wrap: wrap; gap: 10px; padding: 25px 0; font-size: 11px; }
+
+/* Hero: ink block in every theme, like the white paper hero */
+.rmi-hero { --link: #d99a50; --link-hover: #eab779; --kicker: #e0703a; display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 380px); gap: 56px; padding: 48px 50px; background: #111110; color: #f5f5ef; align-items: center; }
+.rmi-kicker { margin: 0 0 18px; color: var(--kicker); font-size: 12px; font-weight: 700; letter-spacing: .06em; }
+:root body .rmi-hero h1 { margin: 0; color: inherit; font-family: var(--serif); font-style: italic; font-weight: 400; font-size: clamp(48px, 6vw, 84px); line-height: .96; letter-spacing: -.02em; }
+.rmi-lede { max-width: 58ch; margin: 22px 0 26px; color: #c9c9bd; font-size: 14px; line-height: 1.9; }
+.rmi-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 22px; font-size: 12px; }
+.rmi-actions a { color: #f5f5ef; }
+.rmi-hero .rmi-button { --link: #111110; --link-hover: #111110; display: inline-flex; align-items: center; gap: 22px; min-height: 48px; padding: 13px 18px; background: #fff; color: #111110; border: 1px solid #fff; text-decoration: none; }
+.rmi-hero .rmi-button:hover { background: #ede6d6; }
+.rmi-status { margin: 26px 0 0; padding-top: 18px; border-top: 1px solid #ffffff35; color: #bdbdb1; font-size: 11px; line-height: 1.7; }
+
+/* The licence chain: the one diagram on the page */
+.rmi-chain { margin: 0; padding: 26px 26px 22px; border: 1px solid #ffffff2e; background: #1a1a19; }
+.rmi-chain figcaption { margin-bottom: 20px; color: #bdbdb1; font-size: 11px; line-height: 1.6; }
+.rmi-chain ol { position: relative; margin: 0; padding: 0; list-style: none; }
+.rmi-chain ol::before { content: ""; position: absolute; top: 9px; bottom: 9px; left: 5px; border-left: 1px dashed #ffffff4d; }
+.rmi-chain li { position: relative; display: grid; gap: 3px; padding: 0 0 18px 26px; }
+.rmi-chain li::before { content: ""; position: absolute; top: 5px; left: 0; width: 9px; height: 9px; border: 1px solid #f5f5ef; border-radius: 50%; background: #1a1a19; }
+.rmi-chain li:last-child::before { background: var(--kicker); border-color: var(--kicker); }
+.rmi-chain li span { color: #a8a89c; font-size: 11px; }
+:root body .rmi-chain li strong { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 24px; line-height: 1.15; color: #f5f5ef; }
+.rmi-chain li em { color: #c9c9bd; font-size: 11px; font-style: normal; line-height: 1.6; }
+.rmi-verdict { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin: 4px 0 16px; padding: 14px 0 0; border-top: 1px solid #ffffff35; font-size: 11px; color: #bdbdb1; }
+:root body .rmi-verdict strong { color: var(--kicker); font-family: var(--serif); font-style: italic; font-weight: 400; font-size: 30px; }
+.rmi-chain-source { margin: 0; color: #a8a89c; font-size: 10px; line-height: 1.7; }
+
+/* Sections */
+.rmi-section { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 36px; padding: 44px 0; border-bottom: 1px solid var(--hair); }
+.rmi-section > h2 { grid-column: 1; margin: 0; }
+.rmi-section > :not(h2) { grid-column: 2; }
+:root body .rmi-section > h2 { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: clamp(30px, 3vw, 40px); line-height: 1.05; letter-spacing: -.01em; }
+.rmi-intro, .rmi-empty p { max-width: 64ch; margin: 0 0 18px; font-size: 13px; line-height: 1.9; }
+
+.rmi-questions, .rmi-rules { display: grid; grid-template-columns: 1fr 1fr; margin: 0; border-top: 2px solid var(--ink); }
+.rmi-questions > div, .rmi-rules > div { padding: 18px 22px 20px 0; border-bottom: 1px solid var(--hair); }
+.rmi-questions > div:nth-child(odd), .rmi-rules > div:nth-child(odd) { padding-right: 28px; border-right: 1px solid var(--hair); }
+.rmi-questions > div:nth-child(even), .rmi-rules > div:nth-child(even) { padding-left: 28px; }
+:root body .rmi-questions dt { font-family: var(--serif); font-style: italic; font-size: 22px; line-height: 1.2; margin-bottom: 8px; }
+.rmi-rules dt { font-size: 13px; font-weight: 700; margin-bottom: 6px; }
+.rmi-questions dd, .rmi-rules dd { margin: 0; color: var(--fg-2); font-size: 12px; line-height: 1.8; }
+
+/* Live table */
+.rmi-table-scroll { overflow-x: auto; margin-bottom: 24px; }
+.rmi-table { width: 100%; min-width: 760px; border-collapse: collapse; font-size: 12px; }
+.rmi-table caption { text-align: left; padding-bottom: 10px; color: var(--fg-3); font-size: 11px; }
+.rmi-table th, .rmi-table td { padding: 12px 14px 12px 0; border-bottom: 1px solid var(--hair); text-align: left; vertical-align: top; }
+.rmi-table thead th { border-bottom: 2px solid var(--ink); font-size: 11px; font-weight: 700; }
+.rmi-commercial { font-weight: 700; }
+.rmi-commercial.is-yes { color: var(--ink); }
+.rmi-commercial.is-conditional, .rmi-commercial.is-unclear { color: var(--kicker); }
+
+/* Models in review */
+.rmi-empty { padding: 18px 20px 4px; border-left: 3px solid var(--kicker); background: var(--panel-2); margin-bottom: 28px; }
+.rmi-review { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px 28px; }
+:root body .rmi-review h3 { margin: 0 0 10px; padding-bottom: 8px; border-bottom: 2px solid var(--ink); font-size: 11px; font-weight: 700; letter-spacing: .02em; }
+.rmi-review ul { margin: 0; padding: 0; list-style: none; }
+.rmi-review li { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--hair); font-size: 12px; }
+.rmi-review li span { flex: none; color: var(--fg-4); font-size: 10px; }
+.rmi-review li span.is-drafted { color: var(--kicker); font-weight: 700; }
+
+/* Data endpoints */
+.rmi-endpoints { margin: 0 0 22px; padding: 0; list-style: none; border-top: 2px solid var(--ink); }
+.rmi-endpoints li { display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 20px; padding: 12px 0; border-bottom: 1px solid var(--hair); font-size: 12px; }
+.rmi-endpoints code, .rmi-code { font-family: var(--body); font-size: 11px; overflow-wrap: anywhere; }
+.rmi-code { padding: 1px 5px; background: var(--panel-2); }
+.rmi-endpoints span { color: var(--fg-2); }
+.rmi-contribute { display: flex; flex-wrap: wrap; gap: 24px; font-size: 12px; margin-bottom: 16px; }
+.rmi-note { margin: 0; color: var(--fg-3); font-size: 11px; }
+
+@media (max-width: 1000px) {
+  .rmi-hero { grid-template-columns: 1fr; gap: 36px; padding: 38px 34px; }
+  .rmi-section { grid-template-columns: 1fr; gap: 20px; }
+  .rmi-section > h2, .rmi-section > :not(h2) { grid-column: 1; }
+  .rmi-review { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .rmi-hero { padding: 28px 22px; }
+  .rmi-lede { font-size: 12px; }
+  .rmi-chain { padding: 20px 18px 16px; }
+  .rmi-questions, .rmi-rules, .rmi-review { grid-template-columns: 1fr; }
+  .rmi-questions > div:nth-child(n), .rmi-rules > div:nth-child(n) { padding: 16px 0; border-right: 0; }
+  .rmi-endpoints li { grid-template-columns: 1fr; gap: 4px; }
+}
