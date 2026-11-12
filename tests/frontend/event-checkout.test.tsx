@@ -4,7 +4,9 @@ import { MemoryRouter } from "react-router-dom";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { EventBooking } from "../../src/components/EventCheckout";
 
-const mock = vi.hoisted(() => ({ request: vi.fn(), refresh: vi.fn(), verified: true, signedIn: true, checkout: vi.fn(), open: vi.fn() }));
+const mock = vi.hoisted(() => ({ request: vi.fn(), refresh: vi.fn(), verified: true, signedIn: true, checkout: vi.fn(), open: vi.fn(),
+  viewer: { dispose: vi.fn(), reset: vi.fn(), focusEvent: vi.fn() }, mount: vi.fn() }));
+vi.mock("../../src/lib/booking-map/viewer.js", () => ({ mountViewer: mock.mount }));
 vi.mock("../../src/context/AccountContext", () => ({ accountMembershipLevelsEnabled: () => true,
   useAccount: () => ({ account: { user_id: "host", membership_level: mock.verified ? "verified" : "basic" }, signedIn: mock.signedIn, refresh: mock.refresh }) }));
 vi.mock("../../src/lib/event-checkout", () => ({ eventMode: "test", eventRequest: mock.request }));
@@ -27,9 +29,18 @@ async function open(fields: object) {
   fireEvent.click(await screen.findByRole("button", { name: /13 Mar 2027 · 10:00/ }));
   await screen.findByRole("button", { name: "Copy full reference" });
 }
-beforeEach(() => { vi.clearAllMocks(); mock.verified = true; mock.signedIn = true;
+beforeEach(() => { vi.clearAllMocks(); mock.verified = true; mock.signedIn = true; mock.mount.mockResolvedValue(mock.viewer);
   mock.request.mockImplementation(async body => body.action === "availability" ? slots : quote); });
 afterEach(cleanup);
+
+it("shows the event space in 3D, framed on GF-09 and GF-10", async () => {
+  render(<MemoryRouter><EventBooking /></MemoryRouter>);
+  await waitFor(() => expect(mock.viewer.focusEvent).toHaveBeenCalled());
+  expect(mock.mount.mock.calls[0][1]).toMatchObject({ kind: "ground-seats", bookingType: "event" });
+  expect(screen.getByText("Event space · GF-09 lounge and presentation hall + GF-10 commons")).toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "Whole floor" }));
+  expect(mock.viewer.reset).toHaveBeenCalled();
+});
 
 it("asks signed-out visitors to sign in", () => {
   mock.signedIn = false; show();

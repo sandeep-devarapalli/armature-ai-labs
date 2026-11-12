@@ -29,19 +29,22 @@ export async function mountViewer(host, { kind = 'printer', onPin = () => {}, on
   let renderer, controls, scene, observer, frame=0, disposed=false, fitDistance=0, radius=1;
   const seatMode=kind==='ground-seats'||kind==='first-seats';
   const roomsMode=seatMode&&bookingType==='cabin'&&Array.isArray(cabins);
+  const eventMode=kind==='ground-seats'&&bookingType==='event';
   let rooms=null;
   const cabinPins=[];
   const seats=[], blockedSeats=new Set(unavailableCodes);
-  let fullCenter=null, fullExtent=1, seatingBounds=null;
+  let fullCenter=null, fullExtent=1, seatingBounds=null, eventBounds=null;
   const replacedMaterials=new Set();
   const pins=[], abort=new AbortController(), projected=new THREE.Vector3();
-  const api={dispose,selectSeat,selectCabin,frameCabin,focusSeats,setUnavailable,reset:()=>{ if(!controls||!fitDistance)return;if(roomsMode){aim(fullCenter,1);return;}if(seatMode){camera.zoom=1;camera.up.set(0,0,-1);controls.target.copy(fullCenter);camera.position.copy(fullCenter).add(new THREE.Vector3(0,fullExtent*3,.0001));camera.updateProjectionMatrix();}else camera.position.copy(controls.target).add(new THREE.Vector3(1.1,.9,1.4).normalize().multiplyScalar(fitDistance));controls.update();requestRender(); }};
+  const api={dispose,selectSeat,selectCabin,frameCabin,focusSeats,focusEvent,setUnavailable,reset:()=>{ if(!controls||!fitDistance)return;if(roomsMode){aim(fullCenter,1);return;}if(seatMode){camera.zoom=1;camera.up.set(0,0,-1);controls.target.copy(fullCenter);camera.position.copy(fullCenter).add(new THREE.Vector3(0,fullExtent*3,.0001));camera.updateProjectionMatrix();}else camera.position.copy(controls.target).add(new THREE.Vector3(1.1,.9,1.4).normalize().multiplyScalar(fitDistance));controls.update();requestRender(); }};
   function setUnavailable(codes){blockedSeats.clear();codes.forEach(code=>blockedSeats.add(code));seats.forEach(seat=>{seat.blocked=blockedSeats.has(seat.id);seat.button.disabled=seat.blocked;seat.button.setAttribute('aria-label',`${seat.id} chair ${seat.blocked?'not selected for this view':'explore'}`);});cabinPins.forEach(pin=>{pin.button.disabled=blockedSeats.has(pin.id);pin.button.setAttribute('aria-label',pin.button.getAttribute('aria-label').replace(/ unavailable$/, '')+(pin.button.disabled?' unavailable':''));});if(blockedSeats.has(selectedSeat))selectedSeat=null;if(blockedSeats.has(selectedCabin))selectedCabin=null;selectSeat(selectedSeat);selectCabin(selectedCabin);}
   function aim(target,zoom){const offset=camera.position.clone().sub(controls.target);controls.target.copy(target);camera.position.copy(target).add(offset);camera.zoom=zoom;camera.updateProjectionMatrix();controls.update();requestRender();}
   function frameCabin(id){const cabin=rooms?.cabins.find(c=>c.id===id);if(!cabin||!fitDistance)return;const size=cabin.bounds.getSize(new THREE.Vector3());aim(cabin.bounds.getCenter(new THREE.Vector3()),Math.min(2.6,Math.max(1,Math.min((camera.right-camera.left)/Math.max(size.x,.1),(camera.top-camera.bottom)/Math.max(size.z,.1))*.42)));}
   function selectCabin(id){if(roomsMode){selectedCabin=id;rooms?.select(id);cabinPins.forEach(pin=>{const chosen=pin.id===id;pin.button.setAttribute('aria-pressed',String(chosen));pin.button.style.background=chosen?'#e8892b':'#fbfaf6';pin.button.style.color=chosen?'#1d1b16':'#244b38';pin.button.style.borderColor=chosen?'#8a4a0c':'#244b38';});if(id)frameCabin(id);requestRender();return;}if(blockedSeats.has(id))return;selectedCabin=id;cabinPins.forEach(pin=>{const chosen=pin.id===id;pin.button.setAttribute('aria-pressed',String(chosen));pin.button.style.background=chosen?'#165b3e':blockedSeats.has(pin.id)?'#676b66':'#f5f9f1';pin.button.style.color=chosen||blockedSeats.has(pin.id)?'white':'#244b38';});requestRender();}
   function selectSeat(id){if(blockedSeats.has(id))return;selectedSeat=id;seats.forEach(seat=>{const chosen=seat.id===id;seat.button.setAttribute('aria-pressed',String(chosen));seat.button.querySelectorAll('[data-chair-part]').forEach(part=>part.style.background=chosen?'#165b3e':seat.blocked?'#676b66':'#f5f9f1');seat.button.style.color=chosen||seat.blocked?'white':'#244b38';seat.materials.forEach(material=>{material.color.set(chosen?'#20aa65':seat.blocked?'#8c8e87':'#b9c9a8');if(material.emissive)material.emissive.set(chosen?'#084b20':'#000000');});});requestRender();}
-  function focusSeats(){if(!seatingBounds||!controls)return;const c=seatingBounds.getCenter(new THREE.Vector3()),size=seatingBounds.getSize(new THREE.Vector3());controls.target.copy(c);camera.position.copy(c).add(new THREE.Vector3(0,fullExtent*3,.0001));camera.zoom=Math.min(8,Math.max(1,Math.min((camera.right-camera.left)/Math.max(size.x,.1),(camera.top-camera.bottom)/Math.max(size.z,.1))*.82));camera.updateProjectionMatrix();controls.update();requestRender();}
+  function focusSeats(){focusBox(seatingBounds,.82);}
+  function focusEvent(){focusBox(eventBounds,.9);}
+  function focusBox(box,fill){if(!box||box.isEmpty()||!controls)return;const c=box.getCenter(new THREE.Vector3()),size=box.getSize(new THREE.Vector3());controls.target.copy(c);camera.position.copy(c).add(new THREE.Vector3(0,fullExtent*3,.0001));camera.zoom=Math.min(8,Math.max(1,Math.min((camera.right-camera.left)/Math.max(size.x,.1),(camera.top-camera.bottom)/Math.max(size.z,.1))*fill));camera.updateProjectionMatrix();controls.update();requestRender();}
   active.set(host,api);
   function dispose() {
     if(disposed)return;disposed=true;cancelAnimationFrame(frame);abort.abort();observer?.disconnect();
@@ -114,7 +117,7 @@ export async function mountViewer(host, { kind = 'printer', onPin = () => {}, on
     fullCenter=center.clone();fullExtent=extent;
     if(seatMode)camera.position.copy(center).add(roomsMode?new THREE.Vector3(0,extent*2.4,extent*1.35):new THREE.Vector3(0,extent*3,.0001));
     controls.target.copy(center);controls.update();controls.saveState();
-    if(kind==='ground-seats'&&bookingType!=='cabin'){
+    if(kind==='ground-seats'&&bookingType!=='cabin'&&!eventMode){
       const chairs=[];root.traverse(node=>{if(/GF10.*PROPOSED_.*chair_placeholder/i.test(node.name)&&node.isMesh&&node.visible)chairs.push(node);});
       const order=name=>{const key=name.match(/PROPOSED_(C\d+|T\d+[LRE])/i)?.[1]||'';return key.startsWith('C')?Number(key.slice(1)):100+Number(key.match(/\d+/)[0])*3+({L:0,R:1,E:2}[key.slice(-1)]);};
       chairs.sort((a,b)=>order(a.name)-order(b.name));
@@ -130,6 +133,19 @@ export async function mountViewer(host, { kind = 'printer', onPin = () => {}, on
     if(roomsMode){
       rooms.cabins.forEach(room=>{const cabin=cabins.find(c=>c.code===room.id);const button=document.createElement('button');button.type='button';button.className='viewer-cabin';button.dataset.cabin=room.id;button.innerHTML=`<strong style="display:block;font-size:13px"></strong><span style="display:block;font-weight:500;font-size:11px"></span>`;button.children[0].textContent=cabin.label;button.children[1].textContent=cabin.detail;button.setAttribute('aria-label',`${cabin.label}, ${cabin.detail}`);button.style.cssText='position:absolute;transform:translate(-50%,-50%);padding:6px 10px;min-height:40px;white-space:nowrap;border:2px solid #244b38;border-radius:6px;cursor:pointer;font:600 12px/1.25 sans-serif;text-align:left;box-shadow:0 2px 6px #0003;z-index:1;';button.addEventListener('click',()=>{selectCabin(room.id);onCabin(room.id);},{signal:abort.signal});container.append(button);pins.push({button,position:new THREE.Vector3(...room.center).setY(room.center[1]+1.2)});cabinPins.push({id:room.id,button});});
       notice.textContent='Glass and doors from the 9 Nov 2026 plan · indicative layout';
+    }
+    if(eventMode){
+      eventBounds=new THREE.Box3();
+      [['GF-09','Lounge and presentation hall'],['GF-10','Commons']].forEach(([room,label])=>{
+        const key=`${room} | floor`.replace(/[ |]/g,'');let floor=null;root.traverse(node=>{if(!floor&&node.name.replace(/[ |_]/g,'').startsWith(key))floor=node;});if(!floor)return;
+        floor.traverse(mesh=>{if(!mesh.isMesh)return;const originals=Array.isArray(mesh.material)?mesh.material:[mesh.material];originals.forEach(material=>replacedMaterials.add(material));
+          const tinted=originals.map(material=>{const copy=material.clone();copy.color?.set('#e8892b');return copy;});mesh.material=Array.isArray(mesh.material)?tinted:tinted[0];});
+        const box=new THREE.Box3().setFromObject(floor);eventBounds.union(box);
+        const tag=document.createElement('div');tag.className='viewer-room';tag.dataset.room=room;tag.textContent=`${room} · ${label}`;
+        tag.style.cssText='position:absolute;transform:translate(-50%,-50%);padding:4px 8px;border:2px solid #8a4a0c;border-radius:6px;background:#fbfaf6;color:#1d1b16;font:600 12px sans-serif;white-space:nowrap;pointer-events:none;z-index:1;';
+        container.append(tag);const at=box.getCenter(new THREE.Vector3());at.y=box.max.y+1;pins.push({button:tag,position:at});
+      });
+      renderer.domElement.dataset.eventRooms=String(container.querySelectorAll('.viewer-room').length);
     }
     if(seatMode&&bookingType==='cabin'&&cabinStudy){
       cabinStudy.cabins.forEach(cabin=>{const button=document.createElement('button');button.type='button';button.className='viewer-cabin';button.dataset.cabin=cabin.id;button.disabled=blockedSeats.has(cabin.id);button.textContent=`${cabin.id} · 6 seats`;button.setAttribute('aria-label',`${cabin.id} whole six-seat cabin in ${cabin.roomId}${blockedSeats.has(cabin.id)?' unavailable':''}`);button.style.cssText='position:absolute;transform:translate(-50%,-50%);padding:10px 12px;min-height:40px;white-space:nowrap;border:2px solid #244b38;border-radius:6px;cursor:pointer;font:600 12px sans-serif;box-shadow:0 2px 6px #0003;z-index:1;';button.addEventListener('click',()=>{selectCabin(cabin.id);onCabin(cabin.id);},{signal:abort.signal});container.append(button);pins.push({button,position:new THREE.Vector3(...cabin.center)});cabinPins.push({id:cabin.id,button});});selectCabin(selectedCabin);
@@ -147,7 +163,7 @@ export async function mountViewer(host, { kind = 'printer', onPin = () => {}, on
         offset.setLength(Math.min(fitDistance*2.5,Math.max(radius*1.15,offset.length()*scale)));
         camera.position.copy(controls.target).add(offset);controls.update();requestRender();
       },{signal:abort.signal});toolbar.append(button);
-    });if(kind==='ground-seats'&&bookingType!=='cabin'){const button=document.createElement('button');button.type='button';button.textContent='Zoom to seating';button.style.cssText='padding:0 10px;border:1px solid #a6b2a5;border-radius:6px;background:#f8faf4;color:#263e35;font:12px sans-serif;cursor:pointer;';button.addEventListener('click',focusSeats,{signal:abort.signal});toolbar.append(button);}container.append(toolbar);
+    });if(kind==='ground-seats'&&bookingType!=='cabin'&&!eventMode){const button=document.createElement('button');button.type='button';button.textContent='Zoom to seating';button.style.cssText='padding:0 10px;border:1px solid #a6b2a5;border-radius:6px;background:#f8faf4;color:#263e35;font:12px sans-serif;cursor:pointer;';button.addEventListener('click',focusSeats,{signal:abort.signal});toolbar.append(button);}container.append(toolbar);
     definitions.forEach(([label,coordinates,detail],index)=>{
       const button=document.createElement('button');button.type='button';button.className='viewer-pin';
       button.style.cssText='position:absolute;transform:translate(-50%,-50%);width:34px;height:34px;border-radius:50%;background:#263e35;color:white;border:2px solid #fff;cursor:pointer;font:600 12px sans-serif;box-shadow:0 2px 8px #0003;';
