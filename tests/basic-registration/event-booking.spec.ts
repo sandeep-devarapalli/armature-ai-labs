@@ -4,8 +4,8 @@ import { backendOrigin, authStorageKey } from "./backend-fixture";
 test("event space request from the bookings page", async ({ page }, info) => {
   test.skip(process.env.VITE_EVENT_CHECKOUT_ENABLED !== "true" || process.env.VITE_EVENT_CHECKOUT_MODE !== "test", "Event checkout runs only on test-mode event builds");
   const user = { id: "10000000-0000-4000-8000-000000000061", aud: "authenticated", role: "authenticated", email: "event-fixture@example.test", app_metadata: {}, user_metadata: {}, created_at: "2026-09-01T00:00:00Z" };
-  const slots = { mode: "test", date: "2027-03-12", ratePaise: 250000, opens: "08:00", closes: "23:00", bufferMinutes: 20, maxAttendees: 35, closed: false, busy: [{ start: "14:00", end: "16:00" }] };
-  const quote = { mode: "test", quoteId: "e0000000-0000-4000-8000-000000000061", date: "2027-03-12", startTime: "10:00", hours: 2, attendees: 20,
+  const slots = { mode: "test", date: "2027-03-13", ratePaise: 250000, opens: "08:00", closes: "23:00", bufferMinutes: 20, maxAttendees: 35, closed: false, busy: [{ start: "14:00", end: "16:00" }] };
+  const quote = { mode: "test", quoteId: "e0000000-0000-4000-8000-000000000061", date: "2027-03-13", startTime: "10:00", hours: 2, attendees: 20,
     purpose: "Robotics meetup with demos", rentPaise: 500000, amountPaise: 500000, agreementHash: "a".repeat(64), policyVersion: "event-v1",
     approvedAt: null, hasAgreement: false, hasOrder: false, orderPending: false, refundDuePaise: null, declineReason: null, status: "awaiting_staff" };
   await page.addInitScript(({ user, key }) => localStorage.setItem(key, JSON.stringify({ access_token: "synthetic-token", refresh_token: "synthetic-refresh",
@@ -23,7 +23,7 @@ test("event space request from the bookings page", async ({ page }, info) => {
   const width = page.viewportSize()!.width;
   await page.goto("/bookings?item=event");
   await expect(page.getByText("₹2,500 / hour")).toBeVisible();
-  await page.getByLabel("Event date").fill("2027-03-12");
+  await page.getByLabel("Event date").fill("2027-03-13");
   await expect(page.getByLabel(/Already booked: 14:00–16:00/)).toBeVisible();
   await page.getByLabel("Hours").selectOption("2");
   await page.getByLabel("Guests").fill("20");
@@ -32,7 +32,7 @@ test("event space request from the bookings page", async ({ page }, info) => {
   await page.screenshot({ path: info.outputPath("event-form.png"), fullPage: true });
   await page.getByRole("button", { name: "Request the event space" }).click();
   await expect(page.getByText("Awaiting Armature review")).toBeVisible();
-  expect(sent.at(-1)).toMatchObject({ action: "quote", date: "2027-03-12", startTime: "10:00", hours: 2, attendees: 20 });
+  expect(sent.at(-1)).toMatchObject({ action: "quote", date: "2027-03-13", startTime: "10:00", hours: 2, attendees: 20 });
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
   await page.screenshot({ path: info.outputPath("event-request.png"), fullPage: true });
 });
