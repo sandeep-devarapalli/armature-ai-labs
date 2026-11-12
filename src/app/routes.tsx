@@ -105,6 +105,15 @@ if (import.meta.env.DEV && import.meta.env.VITE_DEMO_MODE === "true") {
   const OnboardingLocalPage = lazy(() => import("../pages/OnboardingLocalPage").then((module) => ({ default: module.OnboardingLocalPage })));
   onboardingLocalRoutes.push({ path: "/onboarding-local", element: <OnboardingLocalPage /> });
 }
+if (import.meta.env.DEV) {
+  const BookingPreviewPage = lazy(() => import("../features/bookings-preview/BookingPreviewPage").then(module => ({ default: module.BookingPreviewPage })));
+  onboardingLocalRoutes.push(
+    { path: "/booking-preview", element: <Navigate to="/booking-preview/a" replace /> },
+    { path: "/booking-preview/:option", element: <BookingPreviewPage /> },
+    { path: "/booking-preview/:option/:item", element: <BookingPreviewPage /> },
+    { path: "/booking-preview/:option/:item/:code", element: <BookingPreviewPage /> }
+  );
+}
 
 const TalentDirectory = lazy(() => import("../features/talent/directory").then(module => ({ default: module.TalentDirectory })));
 
