@@ -47,6 +47,7 @@ it("picks a chair on the 3D plan and keeps unoffered chairs unavailable", async 
   expect(blocked).toHaveLength(22);
   expect(blocked).not.toContain("S02");
   expect(blocked).toContain("S14");
+  expect(screen.getByText(/welcome at weekends too when the lab is open, as a bonus/)).toBeInTheDocument();
   act(() => options.onSeat("S02"));
   expect(screen.getByLabelText("Chair")).toHaveValue("S02");
   await waitFor(() => expect(mock.viewer.selectSeat).toHaveBeenLastCalledWith("S02"));

@@ -236,7 +236,7 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
         setQuote(result);
       });
     }}>
-      <Field label="Desk pass"><select value={unit} disabled={busy} onChange={event => { setUnit(event.target.value as Term); setStart(""); }}>
+      <Field label="Desk pass" hint="Passes cover Monday to Friday, 9 am to 5 pm. You are welcome at weekends too when the lab is open, as a bonus; weekend seats are not reserved."><select value={unit} disabled={busy} onChange={event => { setUnit(event.target.value as Term); setStart(""); }}>
         {Object.entries(terms).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
       </select></Field>
       <Field label="Chair"><select value={chair} disabled={busy || (!available && !chair)} onChange={event => { setChair(event.target.value); setStart(""); }}>
