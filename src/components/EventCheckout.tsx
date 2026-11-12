@@ -6,6 +6,7 @@ import { eventMode, eventRequest as invokeEvent, type EventAvailability, type Ev
 import { rentalMoney as money } from "../lib/rental-checkout";
 import { BookingSteps } from "./BookingSteps";
 import { BookingStatusCard, bookingDates, type BookingTone } from "./BookingStatusCard";
+import { EventSpaceMap } from "./EventSpaceMap";
 
 const eventSteps = ["Choose date, time and guests", "Armature reviews your request and prepares the agreement",
   "You sign, then Armature countersigns", "Pay through Razorpay and receive confirmation"];
@@ -94,6 +95,7 @@ function EventCheckout({ canBook, memberId }: { canBook: boolean; memberId: stri
   return <div className="event-checkout booking-flow">
     <BookingSteps label="Event booking steps" steps={eventSteps} current={quote ? stepFor[quote.status] ?? 1 : 0} />
     {eventMode === "test" && <p className="booking-notice" role="status">Test bookings · no real event or charge.</p>}
+    <EventSpaceMap />
     {!canBook && <p>Verified membership is required. <Link to="/onboarding">Complete verification</Link>.</p>}
     <p className="booking-ref"><button type="button" className="text-link" disabled={locked} onClick={() => void run(async () => {
       const result = await request<{ quotes: EventQuote[] }>({ action: "list_own" }); if (active.current) setRecent(result.quotes);
