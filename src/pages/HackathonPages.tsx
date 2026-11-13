@@ -21,7 +21,7 @@ export function HackathonsPage() {
           <div>
             <p className="hackathon-label">{hackathon.dates} · {hackathon.format}</p>
             <h2>{hackathon.name}</h2>
-            <p>{hackathon.stats[0].value} {hackathon.stats[0].label}. See the top {hackathon.builds.length} builds.</p>
+            <p>{hackathon.stats[0].value} {hackathon.stats[0].label}. See the {hackathon.builds.length} winning builds.</p>
             <Link to={hackathonPath(hackathon)}>See the results →</Link>
           </div>
         </li>
@@ -81,7 +81,7 @@ export function HackathonPage({ hackathon = humanoidChallenge2026 }: { hackathon
             <span className="hackathon-watch"><span aria-hidden="true">▶</span> {build.videoLabel}</span>
           </a>
           <div className="hackathon-build-body">
-            <p className="hackathon-rank">{String(index + 1).padStart(2, "0")}</p>
+            <p className="hackathon-rank">{build.rankLabel ?? String(index + 1).padStart(2, "0")}</p>
             <h3 id={`build-${build.slug}`}>{build.title}</h3>
             <p className="hackathon-builder">{build.builder} · {build.institution}</p>
             <p className="hackathon-metric"><strong>{build.metric}</strong><span>{build.metricLabel}</span></p>
