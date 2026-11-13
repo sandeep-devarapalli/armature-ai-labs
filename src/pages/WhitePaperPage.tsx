@@ -12,6 +12,7 @@ export function WhitePaperPage() {
       <h1>{resources ? "Resources" : "White Paper"}</h1>
       <p>Research and engineering references from Armature AI Labs.</p>
       <section className="publication-context"><h2>{resources ? "White Paper" : "Robotic actuators"}</h2><div><p>Explore actuator technologies, innovation opportunities and manufacturing in India, with a separate specification comparison covering 24 actuator entries.</p><Link to={resources ? "/resources/white-paper" : base}>{resources ? "Browse white papers" : "Explore robotic actuators"} →</Link></div></section>
+      {resources && <section className="publication-context"><h2>Hackathons</h2><div><p>Build challenges in physical AI and robotics. See the brief, how it was judged and the top builds from the Humanoid Challenge 2026.</p><Link to="/resources/hackathons">Browse hackathons →</Link></div></section>}
       {resources && <p><Link to="/ecosystem#builder-resources">Tools &amp; resources for builders</Link></p>}
     </article>;
   }

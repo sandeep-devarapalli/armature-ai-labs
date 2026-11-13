@@ -1,0 +1,83 @@
+.hackathon-page { padding-bottom: 48px; }
+.hackathon-crumb { display: flex; flex-wrap: wrap; gap: 10px; padding: 25px 0; font-size: 11px; }
+.hackathon-label { font-size: 10px; text-transform: uppercase; letter-spacing: .1em; color: var(--kicker, #b4501f); font-weight: 700; margin: 0 0 14px; }
+.hackathon-index-title { margin: 0; }
+.hackathon-index-lede { max-width: 640px; font-size: 13px; line-height: 1.9; }
+.hackathon-index { list-style: none; margin: 30px 0 0; padding: 0; border-top: 1px solid var(--hair); }
+.hackathon-index li { display: grid; grid-template-columns: 300px minmax(0,1fr); gap: 36px; align-items: center; padding: 30px 0; border-bottom: 1px solid var(--hair); }
+.hackathon-index img { width: 100%; height: 190px; object-fit: cover; display: block; }
+.hackathon-index h2 { font-size: 28px; margin: 0 0 10px; }
+.hackathon-index p { font-size: 13px; line-height: 1.9; }
+
+.hackathon-hero { --kicker: #e0703a; display: grid; grid-template-columns: minmax(0,1fr) 280px; gap: 55px; padding: 45px 50px; background: #111110; color: #f5f5ef; align-items: end; }
+.hackathon-hero h1 { font: 700 54px/1.08 Helvetica Neue,Helvetica,Arial,sans-serif; letter-spacing: -.035em; margin: 0; color: inherit; }
+.hackathon-lede { color: #c9c9bd; font-size: 14px; line-height: 1.9; margin: 20px 0; max-width: 640px; }
+.hackathon-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 22px; font-size: 12px; }
+.hackathon-actions a { color: #f5f5ef; }
+.hackathon-button { display: inline-flex; align-items: center; padding: 13px 18px; min-height: 48px; background: #fff; color: #111110 !important; border: 1px solid #fff; text-decoration: none; }
+.hackathon-hosts { margin: 0; border-top: 2px solid var(--saffron, #e89a2c); padding-top: 14px; font-size: 12px; line-height: 1.7; color: #c9c9bd; }
+.hackathon-hosts dt { color: #f5f5ef; font-weight: 700; }
+.hackathon-hosts dd { margin: 0 0 12px; }
+
+.hackathon-stats { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); border-bottom: 1px solid var(--hair); }
+.hackathon-stats li { padding: 26px 24px 26px 0; display: grid; gap: 8px; border-right: 1px solid var(--hair); }
+.hackathon-stats li:last-child { border-right: 0; }
+.hackathon-stats li + li { padding-left: 24px; }
+.hackathon-stats strong { font: 700 40px/1 Helvetica Neue,Helvetica,Arial,sans-serif; letter-spacing: -.03em; }
+.hackathon-stats span { font-size: 11px; line-height: 1.6; }
+
+.hackathon-context { display: grid; grid-template-columns: 180px minmax(0,1fr); gap: 36px; padding: 34px 0; border-bottom: 1px solid var(--hair); }
+.hackathon-context h2 { font-size: 18px; margin: 0; }
+.hackathon-context p { font-size: 13px; line-height: 1.9; margin: 0 0 12px; max-width: 760px; }
+.hackathon-rule { border-left: 2px solid var(--saffron, #e89a2c); padding-left: 14px; }
+.hackathon-criteria { list-style: none; margin: 0 0 14px; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 24px; }
+.hackathon-criteria li { display: flex; gap: 14px; border-top: 1px solid var(--hair-strong); padding-top: 14px; }
+.hackathon-criteria li > span { color: var(--kicker, #b4501f); font-weight: 700; font-size: 12px; }
+.hackathon-criteria strong { display: block; font-size: 14px; margin-bottom: 6px; }
+.hackathon-criteria p { font-size: 12px; margin: 0; }
+.hackathon-note { font-size: 11px !important; }
+
+.hackathon-builds { padding: 46px 0 10px; }
+.hackathon-builds > h2 { font: 700 40px/1.1 Helvetica Neue,Helvetica,Arial,sans-serif; letter-spacing: -.03em; margin: 0 0 18px; }
+.hackathon-build { display: grid; grid-template-columns: minmax(0,1.25fr) minmax(0,1fr); gap: 40px; padding: 36px 0; border-top: 1px solid var(--hair); }
+.hackathon-media { position: relative; display: block; overflow: hidden; background: var(--hair); align-self: start; }
+.hackathon-media img { display: block; width: 100%; height: 340px; object-fit: cover; }
+.hackathon-watch { position: absolute; left: 14px; bottom: 14px; display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 16px; background: #111110; color: #f5f5ef; font-size: 12px; }
+.hackathon-watch span { color: var(--saffron, #e89a2c); }
+.hackathon-build-body { display: flex; flex-direction: column; align-items: flex-start; }
+.hackathon-rank { color: var(--kicker, #b4501f); font-weight: 700; font-size: 12px; margin: 0 0 6px; }
+.hackathon-build h3 { font: 700 26px/1.15 Helvetica Neue,Helvetica,Arial,sans-serif; letter-spacing: -.02em; margin: 0; }
+.hackathon-builder { font-size: 12px; margin: 8px 0 0; }
+.hackathon-metric { display: flex; flex-wrap: wrap; align-items: baseline; gap: 14px; width: 100%; margin: 18px 0 0; padding: 14px 0; border-top: 2px solid var(--saffron, #e89a2c); border-bottom: 1px solid var(--hair); }
+.hackathon-metric strong { font: 700 44px/1 Helvetica Neue,Helvetica,Arial,sans-serif; letter-spacing: -.03em; }
+.hackathon-metric span { flex: 1 1 180px; font-size: 12px; line-height: 1.6; }
+.hackathon-build dl { display: grid; grid-template-columns: 92px minmax(0,1fr); gap: 8px 14px; margin: 16px 0; font-size: 12px; line-height: 1.6; }
+.hackathon-build dt { opacity: .72; }
+.hackathon-build dd { margin: 0; }
+.hackathon-build-body > a { font-size: 12px; }
+
+.hackathon-partners ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 14px; }
+.hackathon-partners li { border: 1px solid var(--hair); padding: 16px; display: grid; gap: 6px; font-size: 12px; line-height: 1.6; }
+.hackathon-partners strong { font-size: 15px; }
+
+@media (max-width: 1000px) {
+  .hackathon-hero { grid-template-columns: 1fr; gap: 28px; padding: 35px; }
+  .hackathon-hero h1 { font-size: 42px; }
+  .hackathon-stats { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .hackathon-stats li:nth-child(2) { border-right: 0; }
+  .hackathon-stats li:nth-child(3) { padding-left: 0; }
+  .hackathon-build { grid-template-columns: 1fr; gap: 22px; }
+  .hackathon-criteria, .hackathon-partners ul { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 600px) {
+  .hackathon-hero { padding: 28px 22px; }
+  .hackathon-hero h1 { font-size: 34px; }
+  .hackathon-lede { font-size: 12px; }
+  .hackathon-context { display: block; }
+  .hackathon-context h2 { margin-bottom: 14px; }
+  .hackathon-criteria, .hackathon-partners ul { grid-template-columns: 1fr; }
+  .hackathon-media img { height: 220px; }
+  .hackathon-builds > h2 { font-size: 30px; }
+  .hackathon-index li { grid-template-columns: 1fr; gap: 18px; }
+  .hackathon-stats strong { font-size: 32px; }
+}
