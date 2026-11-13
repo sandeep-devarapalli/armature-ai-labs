@@ -2,6 +2,7 @@ export type HackathonBuild = {
   slug: string;
   title: string;
   builder: string;
+  rankLabel?: string;
   institution: string;
   metric: string;
   metricLabel: string;
@@ -43,13 +44,13 @@ export const humanoidChallenge2026: Hackathon = {
   tagline: "Humanoid Challenge 2026",
   dates: "26 October to 4 November 2026",
   format: "Online",
-  lede: "We skipped the resume screen. Builders filmed themselves doing a simple task on a phone, then used that footage to make a Unitree G1 humanoid do it in simulation. Here are the five strongest submissions.",
+  lede: "We skipped the resume screen. Builders filmed themselves doing a simple task on a phone, then used that footage to make a Unitree G1 humanoid do it in simulation. Here are the winning builds, including both joint fifth-place finishers.",
   lumaUrl: "https://luma.com/784lh668",
   hosts: "Awign (a Mynavi company) and Armature AI Labs, with RIC (Robotics India Community) and Tanna TechBiz (NVIDIA Preferred Partner).",
   prize: "Paid 2-month robot learning internships with Awign in Bangalore.",
   stats: [
     { value: "160+", label: "participants" },
-    { value: "5", label: "featured builds" }
+    { value: "6", label: "featured builds" }
   ],
   brief: "Collect a small manipulation dataset yourself, then use it to drive a humanoid or dexterous hand in simulation. Post-train a policy, retarget your hand to a five-finger hand, push success up with RL, try a world model, or make a policy run faster. Any route was open.",
   hardRule: "The data you personally recorded has to play a real role in your approach.",
@@ -59,7 +60,7 @@ export const humanoidChallenge2026: Hackathon = {
     { title: "Clarity", text: "A simple implementation and an honest write-up of what worked and what did not." }
   ],
   evaluationNote: "Every repository was cloned and read by the organisers, and run where it could run on a CPU. Judges Varun and Vaish reviewed every submission. Numbers below are as each builder reported them in their own write-up.",
-  buildsHeading: "The top 5 builds",
+  buildsHeading: "The winning builds",
   builds: [
     {
       slug: "harsh-patil",
@@ -129,6 +130,7 @@ export const humanoidChallenge2026: Hackathon = {
       slug: "khushali-patel",
       title: "Paper Hands",
       builder: "Khushali Patel",
+      rankLabel: "05 · Joint fifth place",
       institution: "San José State University",
       metric: "20/20",
       metricLabel: "randomized trials, with grip held near 1.9 N by fingertip touch",
@@ -140,6 +142,23 @@ export const humanoidChallenge2026: Hackathon = {
       videoUrl: "https://github.com/khushali-patel1299/Humanoid-Challenge",
       videoLabel: "Watch the demo",
       repoUrl: "https://github.com/khushali-patel1299/Humanoid-Challenge"
+    },
+    {
+      slug: "vasanth-k",
+      title: "Phone video to humanoid",
+      builder: "Vasanth K",
+      rankLabel: "05 · Joint fifth place",
+      institution: "IIT Delhi",
+      metric: "25 of 32",
+      metricLabel: "recordings completed, and 5 of 8 clips the controller had never seen",
+      task: "Move a cup onto a coaster",
+      robot: "Unitree G1 with a five-finger Inspire hand",
+      data: "46 iPhone clips, 32 labelled by hand",
+      approach: "One contact-checked controller shared across every clip",
+      image: { src: `${media}/vasanth.jpg`, alt: "A tracked hand over a coaster, above the G1 holding a cup", width: 960, height: 1080, position: "center 25%" },
+      videoUrl: "https://github.com/benzene73/hand-to-humanoid",
+      videoLabel: "Watch the demo",
+      repoUrl: "https://github.com/benzene73/hand-to-humanoid"
     }
   ],
   partners: [
