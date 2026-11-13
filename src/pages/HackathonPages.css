@@ -19,7 +19,7 @@
 .hackathon-hosts dt { color: #f5f5ef; font-weight: 700; }
 .hackathon-hosts dd { margin: 0 0 12px; }
 
-.hackathon-stats { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); border-bottom: 1px solid var(--hair); }
+.hackathon-stats { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); border-bottom: 1px solid var(--hair); }
 .hackathon-stats li { padding: 26px 24px 26px 0; display: grid; gap: 8px; border-right: 1px solid var(--hair); }
 .hackathon-stats li:last-child { border-right: 0; }
 .hackathon-stats li + li { padding-left: 24px; }

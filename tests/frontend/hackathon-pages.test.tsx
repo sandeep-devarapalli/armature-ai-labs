@@ -10,9 +10,9 @@ import { WhitePaperPage } from "../../src/pages/WhitePaperPage";
 afterEach(cleanup);
 
 describe("hackathon results", () => {
-  it("publishes exactly the top 10 builds with their own media and source links", () => {
-    expect(humanoidChallenge2026.builds).toHaveLength(10);
-    expect(new Set(humanoidChallenge2026.builds.map((build) => build.slug)).size).toBe(10);
+  it("publishes exactly the top 5 builds with their own media and source links", () => {
+    expect(humanoidChallenge2026.builds).toHaveLength(5);
+    expect(new Set(humanoidChallenge2026.builds.map((build) => build.slug)).size).toBe(5);
     for (const build of humanoidChallenge2026.builds) {
       expect(existsSync(path.join("public", build.image.src))).toBe(true);
       expect(build.repoUrl).toMatch(/^https:\/\/github\.com\//);
@@ -24,16 +24,25 @@ describe("hackathon results", () => {
     render(<MemoryRouter><HackathonPage /></MemoryRouter>);
     expect(screen.getByRole("heading", { level: 1, name: "Teach a Humanoid With Your Own Hands" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /original brief on Luma/ })).toHaveAttribute("href", "https://luma.com/784lh668");
-    const builds = within(screen.getByRole("region", { name: "The top 10 builds" })).getAllByRole("article");
-    expect(builds).toHaveLength(10);
+    const builds = within(screen.getByRole("region", { name: "The top 5 builds" })).getAllByRole("article");
+    expect(builds).toHaveLength(5);
     expect(within(builds[0]).getByRole("heading", { level: 3 })).toHaveTextContent("A standing G1 that learned two tasks");
     expect(within(builds[0]).getByText("01")).toBeInTheDocument();
-    expect(within(builds[9]).getByText("10")).toBeInTheDocument();
+    expect(within(builds[4]).getByText("05")).toBeInTheDocument();
+    for (const [index, name] of ["Harsh Patil", "Aneesh Deepak Lade", "Angelo Antu", "Aditya Sharma", "Khushali Patel"].entries()) {
+      expect(within(builds[index]).getByText(new RegExp(name))).toBeInTheDocument();
+    }
+    const stats = screen.getByRole("list", { name: "By the numbers" });
+    expect(within(stats).getAllByRole("listitem")).toHaveLength(2);
+    for (const label of ["160+", "participants", "5", "featured builds"]) expect(within(stats).getByText(label, { exact: true })).toBeInTheDocument();
+    expect(stats).not.toHaveTextContent(/19|days from launch/);
     expect(screen.getByRole("heading", { name: "How we judged" })).toBeInTheDocument();
   });
 
   it("lists the hackathon on the index and the Resources hub", () => {
     render(<MemoryRouter><HackathonsPage /></MemoryRouter>);
+    expect(screen.getByText("160+ participants. See the top 5 builds.")).toBeInTheDocument();
+    expect(screen.queryByText(/19 submissions|top 10/)).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: "See the results →" })).toHaveAttribute("href", "/resources/hackathons/humanoid-challenge-2026");
     cleanup();
     render(<MemoryRouter initialEntries={["/resources"]}><WhitePaperPage /></MemoryRouter>);
