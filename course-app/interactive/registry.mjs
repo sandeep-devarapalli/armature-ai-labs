@@ -11,6 +11,10 @@ export const scenes = Object.freeze({
   'lathe-thread': { title: 'Single-start thread lead', label: 'Pitch', min: 1, max: 5, step: .25, initial: 2, unit: 'mm', kind: '3d', description: 'A single-start 60° thread on a 20 mm bar, generated from the pitch, with a form tool sitting in the groove. One revolution advances by one pitch. Thread depth follows the basic 0.6134 × pitch form; it is a geometry model, not a cutting-force model.' },
   'milling-motion': { title: 'Cutter rotation and chip load', label: 'Spindle angle', min: 0, max: 360, step: 15, initial: 0, unit: '°', kind: '3d', description: 'A four-flute end mill cuts a slot. Each tooth takes 0.05 mm, so the cutter advances 0.20 mm per revolution relative to the work; the feed is drawn ten times larger so it is visible. The highlighted flute is the one cutting, and chips leave from the cut. Material removal is shown schematically.' },
   'milling-index': { title: 'Equal angular divisions', label: 'Number of divisions', min: 3, max: 24, step: 1, initial: 6, unit: '', kind: '3d', description: 'A 40:1 dividing head: the crank turns 40 divided by the count per division. The model picks a standard index-plate hole circle that gives the fractional turn exactly, and sets the sector arms to that many holes.' },
+  'bevel-hypoid': { title: 'Bevel or hypoid: do the shafts meet?', label: 'Pinion shaft offset', min: 0, max: 20, step: 2, initial: 10, unit: 'mm', kind: '3d', description: 'Our 15-tooth pinion and 45-tooth bevel gear (3:1), shafts at right angles. At zero offset the two shafts meet at one point: a bevel pair. Slide the pinion shaft sideways and the shafts pass each other: a hypoid. The offset lets a bigger, stronger pinion fit, but the teeth start to slide along each other.' },
+  'worm-backdrive': { title: 'Can the wheel drive the worm back?', label: 'Friction coefficient', min: .02, max: .12, step: .01, initial: .05, unit: '', kind: '3d', description: 'Our 40:1 worm set: a single-start steel worm of 16 mm pitch diameter, lead angle 3.58 degrees, driving a 40-tooth bronze wheel. A load tries to turn the wheel backwards. If the friction angle is smaller than the lead angle, the wheel drives the worm back; if it is larger, the set locks.' },
+  'differential-turn': { title: 'A differential in a turn', label: 'Turn radius', min: 1, max: 10, step: .5, initial: 2, unit: 'm', kind: '3d', description: 'An open differential (carrier case left out) driving two wheels 0.50 m apart, with 0.10 m wheels and the robot centre moving at 1.0 m/s. Arrows show each wheel speed. The carrier always turns at the average of the two wheel speeds, and the spider gears spin on their pin to make up the difference.' },
+  'rv-two-stage': { title: 'Turning an RV reducer', label: 'Input angle', min: 0, max: 1080, step: 15, initial: 360, unit: '°', kind: '3d', description: 'Our 121:1 RV reducer pulled apart along its shaft: a 12-tooth input pinion turns three 36-tooth crank gears; each crank wobbles two 39-lobe discs, half a turn apart, against 40 housing pins; the green carrier holding the cranks is the output. Turn the input and watch the cranks turn three times slower while the output creeps round.' },
   'pic-timing': { title: 'Oscillator and instruction timing', label: 'Oscillator frequency', min: 1, max: 20, step: 1, initial: 4, unit: 'MHz', kind: '2d', description: 'For the PIC mid-range timing model used here (the PIC16F84A is rated to 20 MHz), four oscillator periods make one instruction cycle. A normal instruction uses one cycle; a taken control-flow change can use two. Device-specific instructions and clock configuration still need checking.' },
   'pic-register': { title: 'An eight-bit output latch', label: 'Unsigned latch value', min: 0, max: 255, step: 1, initial: 85, unit: '', kind: '2d', description: 'Bit 7 has weight 128 and bit 0 has weight 1. A one in an output latch requests a high level only when the corresponding pin is configured as a digital output. Actual pin current and alternate functions are separate constraints.' },
 });
@@ -32,6 +36,24 @@ export function bldcSixStep(deg) {
   const code = ['101', '100', '110', '010', '011', '001'][k], pair = [['A', 'B'], ['A', 'C'], ['B', 'C'], ['B', 'A'], ['C', 'A'], ['C', 'B']][k];
   const field = [60, 120, 180, 240, 300, 0][k], north = d - 60, lead = (((field - north) % 360) + 360) % 360;
   return { sector: k, code, plus: pair[0], minus: pair[1], field, north, lead };
+}
+// Worm set of Lesson 6.5: lead angle atan(lead / (pi d)) for a single start, module 1 mm, 16 mm pitch diameter.
+export const WORM_LEAD_DEG = Math.atan(Math.PI * 1 / (Math.PI * 16)) * 180 / Math.PI;
+export function wormLock(mu) {
+  const lam = WORM_LEAD_DEG * Math.PI / 180, phi = Math.atan(mu);
+  const forward = Math.tan(lam) / Math.tan(lam + phi), backward = lam > phi ? Math.tan(lam - phi) / Math.tan(lam) : 0;
+  return { lead: WORM_LEAD_DEG, friction: phi * 180 / Math.PI, forward, backward, locked: lam <= phi };
+}
+// Differential of Lesson 6.6: track 0.50 m, wheel radius 0.10 m, centre speed 1.0 m/s; 16-tooth side gears, 10-tooth spiders.
+export function diffTurn(radius, track = .5, wheel = .1, speed = 1) {
+  const inner = speed * (radius - track / 2) / radius / wheel, outer = speed * (radius + track / 2) / radius / wheel;
+  return { inner, outer, carrier: (inner + outer) / 2, spider: (outer - inner) / 2 * 16 / 10 };
+}
+// RV reducer of Lesson 8.4: R = (Z2 / Z1) * Zp + 1 with Z1 = 12, Z2 = 36, Zp = 40. Angles in degrees.
+export const RV = { z1: 12, z2: 36, pins: 40, ratio: 36 / 12 * 40 + 1 };
+export function rvAngles(input) {
+  const output = input / RV.ratio, crank = -(input - output) * RV.z1 / RV.z2;   // crank turn relative to the carrier
+  return { output, crank, eccentric: output + crank };
 }
 export function srmFiring(deg) {
   for (let p = 0; p < 4; p++) { const d = (((45 * p - (deg - 15)) % 60) + 60) % 60; if (d > 1e-9 && d <= 15 + 1e-9) return { phase: p, gap: Math.round(d) }; }
@@ -62,6 +84,10 @@ export function measurements(id, value) {
     case 'axial-exploded': return value === 0 ? 'Assembled: the stator sits between the two rotors with a 1 mm air gap on each side, and the magnets pull both rotors towards it.' : `Rotors pulled ${value} mm out along the shaft. Parts: two steel rotor discs with 10 magnets each, and a stator of 12 pressed teeth with 12 coils and no steel back plate. Gap faces from 35 to 60 mm: at 21 kPa the two faces give about 15 N·m.`;
     case 'bldc-rotating-field': { const s = bldcSixStep(value); return `Rotor at ${value}°: Hall code ${s.code}, so the controller drives ${s.plus}+ ${s.minus}−. The stator field points at ${s.field}° and leads the rotor's north pole by ${s.lead}°, giving ${Math.round(Math.sin(s.lead * Math.PI / 180) * 100)} % of the maximum torque (best at 90°).`; }
     case 'srm-gap': { const rel = .12 / (value + .02), mag = (2.86 + .10) / (2.86 + value); return `Aligned flux is ${(rel * 100).toFixed(0)} % of its value at 0.10 mm, so torque falls by about ${((1 - rel) * 100).toFixed(0)} % (linear model, steel worth 0.02 mm of air). The same gap change would cost our magnet motor only ${((1 - mag) * 100).toFixed(1)} %.`; }
+    case 'bevel-hypoid': return value === 0 ? 'Bevel: the two shafts meet at one point. 15 and 45 teeth give 3:1; the teeth roll on each other, typically 95 to 99 % efficient.' : `Hypoid: the pinion shaft passes ${value} mm from the gear's axis, so the shafts no longer meet. The offset fits a bigger, stronger pinion and keeps more teeth in contact, but the teeth now slide as they roll: typically 90 to 95 % efficient, with special oil.`;
+    case 'worm-backdrive': { const w = wormLock(value); return `Friction ${value.toFixed(2)}: friction angle ${w.friction.toFixed(2)}° against a lead angle of ${w.lead.toFixed(2)}°. ` + (w.locked ? `The friction angle is larger, so the wheel cannot drive the worm: the set locks. Forward efficiency only ${Math.round(w.forward * 100)} %.` : `The lead angle is larger, so the wheel can drive the worm backwards at ${Math.round(w.backward * 100)} % efficiency. Forward efficiency ${Math.round(w.forward * 100)} %.`); }
+    case 'differential-turn': { const d = diffTurn(value); return `Turn radius ${value.toFixed(1)} m at 1.0 m/s: inner wheel ${d.inner.toFixed(2)} rad/s, outer wheel ${d.outer.toFixed(2)} rad/s. The carrier turns at their average, ${d.carrier.toFixed(1)} rad/s, and the spider gears spin on their pin at ${d.spider.toFixed(2)} rad/s. The torque on the two wheels stays equal.`; }
+    case 'rv-two-stage': { const r = rvAngles(value); return `Input turned ${value}°. The cranks have turned ${Math.abs(r.crank).toFixed(1)}° the other way relative to the carrier, wobbling the discs with them; the carrier, the output, has turned ${r.output.toFixed(2)}°, the input ÷ ${RV.ratio}. One output turn takes ${RV.ratio} input turns.`; }
     default: return '';
   }
 }
