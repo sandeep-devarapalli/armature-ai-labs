@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
-import { indexingPlan, srmFiring, bldcSixStep } from './registry.mjs';
+import { indexingPlan, srmFiring, bldcSixStep, wormLock, diffTurn, rvAngles, RV } from './registry.mjs';
 
 // Switched reluctance motor geometry (scene units: 1 = 10 mm). 8 stator poles, 6 rotor teeth, no magnets.
 const SRM = { Ro: 2.0, Ry: 1.62, Rb: 1.03, poleW: .44, Rr: 1.0, Rroot: .66, toothW: .5, shaft: .22 };
@@ -325,6 +325,122 @@ export function createScene(host, id) {
     label(`field leads rotor by ${f.lead}°`, [-3.3, .4, 0], 2.7);
   }
 
+  // ---------- gearbox family (Lessons 6.5, 6.6, 8.4) ----------
+  // Bevel gear on local +y: back face at y = 0, cone apex at y = r * mate / N. Teeth sit on the pitch cone, simplified to straight wedges.
+  function bevelGear(N, mate, m, F, mat, phase = 0, hubMat = mat) {
+    const g = new THREE.Group(), r = m * N / 2, apex = r * mate / N, A = Math.hypot(r, apex), dl = Math.atan2(apex, r);
+    const k = (A - F) / A, rTop = r * k - m, hgt = F * Math.sin(dl);
+    const body = new THREE.Mesh(new THREE.CylinderGeometry(Math.max(rTop, .05), r - m, hgt, 64), mat); body.position.y = hgt / 2; g.add(body);
+    const hub = new THREE.Mesh(new THREE.CylinderGeometry(r * .45, r * .45, .3 + m, 40), hubMat); hub.position.y = -(.3 + m) / 2; g.add(hub);
+    const s = F / 2, rr = r - s * Math.cos(dl), yy = s * Math.sin(dl), h = 2.1 * m, w = Math.PI * m / 2 * .9 * (rr / r);
+    for (let i = 0; i < N; i++) {
+      const piv = new THREE.Group(); piv.rotation.y = -(2 * Math.PI * i / N + phase);
+      const tooth = new THREE.Mesh(new THREE.BoxGeometry(F, h, w), mat);
+      tooth.position.set(rr - .2 * m * Math.sin(dl), yy - .2 * m * Math.cos(dl), 0); tooth.rotation.z = -dl; piv.add(tooth); g.add(piv);
+    }
+    return { group: g, apex };
+  }
+  // Point a gear's local +y along a world axis and put its back-face centre at `back`.
+  function aim(group, axis, back) {
+    const R = { '+x': ['z', -Math.PI / 2], '-x': ['z', Math.PI / 2], '+y': null, '-y': ['x', Math.PI], '+z': ['x', Math.PI / 2], '-z': ['x', -Math.PI / 2] }[axis];
+    const holder = new THREE.Group(); holder.add(group); if (R) holder.rotation[R[0]] = R[1]; holder.position.set(...back); root.add(holder); return holder;
+  }
+  function gearOutline(N, m, ad = .85, phase = 0) {
+    const s = new THREE.Shape(), rp = m * N / 2, ra = rp + ad * m, rf = rp - 1.25 * m;
+    for (let i = 0; i < N; i++) {
+      const a = 2 * Math.PI * i / N + phase, p = 2 * Math.PI / N;
+      for (const [f, r] of [[0, rf], [.18, rf], [.32, ra], [.68, ra], [.82, rf]]) { const x = r * Math.cos(a + f * p), y = r * Math.sin(a + f * p); if (i === 0 && f === 0) s.moveTo(x, y); else s.lineTo(x, y); }
+    }
+    s.closePath(); return s;
+  }
+  function bevelHypoid(mm) {
+    camDist = 12; camHeight = 5.0; camYaw = -.8; lookY = .8;
+    const blue = std('#7892be', .15, .62), amber = std('#d6964a', .15, .62), shaftM = std('#c6cbcf', .15, .62), red = std('#c0392b', .15, .62);
+    const gear = bevelGear(45, 15, .2, 1.4, blue); root.add(gear.group);
+    const d = mm / 10, drop = (Math.hypot(3.6, d) - 3.6) / 3;
+    const pin = bevelGear(15, 45, .2, 1.4, amber, Math.PI / 15);
+    aim(pin.group, '+x', [-4.5, gear.apex - drop, d]);
+    const gs = new THREE.Mesh(new THREE.CylinderGeometry(.35, .35, 4, 32), shaftM); gs.position.y = 0; root.add(gs);
+    const ps = new THREE.Mesh(new THREE.CylinderGeometry(.22, .22, 5, 32), shaftM); ps.rotation.z = Math.PI / 2; ps.position.set(-6.2, gear.apex - drop, d); root.add(ps);
+    line([new THREE.Vector3(0, -2.2, 0), new THREE.Vector3(0, 3.4, 0)], '#3b4650');
+    line([new THREE.Vector3(-8.5, gear.apex - drop, d), new THREE.Vector3(1.5, gear.apex - drop, d)], '#c47b26');
+    if (d > 0) { const m1 = new THREE.Mesh(new THREE.CylinderGeometry(.04, .04, d, 12), red); m1.rotation.x = Math.PI / 2; m1.position.set(0, gear.apex - drop, d / 2); root.add(m1); label(`offset ${mm} mm`, [.4, gear.apex + .7, d / 2], 1.8); }
+    else label('shafts meet here', [.4, gear.apex + .7, 0], 2.0);
+    label('45-tooth gear', [3.2, -.9, 2.6], 1.8); label('15-tooth pinion', [-4.6, gear.apex + 2.0, d], 2.0);
+    label(d > 0 ? 'hypoid' : 'bevel', [0, 4.0, 0], 1.3);
+  }
+  function wormBackdrive(mu) {
+    camDist = 8.6; camHeight = 3.4; camYaw = .35; lookY = .3;
+    const w = wormLock(mu), bronze = std('#c48a4a', .15, .62), shaftM = std('#c6cbcf', .15, .62);
+    const wormM = std(w.locked ? '#b05050' : '#5f9a6a', .55, .38), coreM = std('#7892be', .15, .62);
+    const wheelG = new THREE.Group(); root.add(wheelG); upright(gearOutline(40, .1, .85, 7.5 * Math.PI / 180), .8, 0, bronze, wheelG);
+    const ws = new THREE.Mesh(new THREE.CylinderGeometry(.4, .4, 2.6, 32), shaftM); ws.position.y = .2; root.add(ws);
+    const core = new THREE.Mesh(new THREE.CylinderGeometry(.675, .675, 3.6, 40), coreM); core.rotation.z = Math.PI / 2; core.position.set(0, .4, 2.8); root.add(core);
+    const pts = []; for (let i = 0; i <= 900; i++) { const x = -1.7 + 3.4 * i / 900, a = 2 * Math.PI * x / (Math.PI * .1); pts.push(new THREE.Vector3(x, .4 + .78 * Math.cos(a), 2.8 + .78 * Math.sin(a))); }
+    root.add(new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 900, .1, 8, false), wormM));
+    const wsh = new THREE.Mesh(new THREE.CylinderGeometry(.3, .3, 6.4, 32), shaftM); wsh.rotation.z = Math.PI / 2; wsh.position.set(0, .4, 2.8); root.add(wsh);
+    arrow([-2.25, 1.2, -.9], [-1.55, 1.2, -1.75], '#c0392b', .3); label('load pushes the wheel back', [-1.0, 2.0, -2.4], 3.0);
+    label(w.locked ? 'LOCKED: the wheel cannot turn the worm' : `SLIPS: the wheel drives the worm back (${Math.round(w.backward * 100)} %)`, [0, 2.7, 2.8], 5.6);
+    label(`lead angle ${w.lead.toFixed(2)}°, friction angle ${w.friction.toFixed(2)}°`, [0, -.45, 3.6], 4.6);
+  }
+  function differentialTurn(R) {
+    camDist = 15.5; camHeight = 5.2; camYaw = .45; lookY = .6;
+    const d = diffTurn(R), blue = std('#7892be', .15, .62), amber = std('#d6964a', .15, .62), green = std('#60a684', .15, .62), dkgreen = std('#408064', .15, .62);
+    const shaftM = std('#c6cbcf', .15, .62), tyre = std('#2e3338', .15, .62);
+    const side = () => bevelGear(16, 10, .15, .55, blue).group, spider = (ph) => bevelGear(10, 16, .15, .55, amber, ph).group;
+    aim(side(), '+x', [-.75, 0, 0]); aim(side(), '-x', [.75, 0, 0]);
+    const sp = d.spider * .25; aim(spider(sp), '-z', [0, 0, 1.2]); aim(spider(-sp), '+z', [0, 0, -1.2]);
+    const ring = bevelGear(36, 12, .15, .9, green, 0, green); aim(ring.group, '-x', [.75 + ring.apex, 0, 0]);
+    const pin = bevelGear(12, 36, .15, .9, dkgreen, Math.PI / 12); aim(pin.group, '+y', [.75, -2.7, 0]);
+    const cross = new THREE.Mesh(new THREE.CylinderGeometry(.12, .12, 2.9, 20), shaftM); cross.rotation.x = Math.PI / 2; root.add(cross);
+    for (const s of [-1, 1]) {
+      const ax = new THREE.Mesh(new THREE.CylinderGeometry(.14, .14, 3.6, 20), shaftM); ax.rotation.z = Math.PI / 2; ax.position.x = s * 2.6; root.add(ax);
+      const wh = new THREE.Mesh(new THREE.CylinderGeometry(1.0, 1.0, .5, 48), tyre); wh.rotation.z = Math.PI / 2; wh.position.x = s * 4.4; root.add(wh);
+      const v = s < 0 ? d.inner : d.outer; const bar = new THREE.Mesh(new THREE.BoxGeometry(.5, .2 * v, .5), std(s < 0 ? '#c47b26' : '#2c5d8f', .15, .62)); bar.position.set(s * 4.4, 1.2 + .1 * v, 0); root.add(bar);
+      label(`${s < 0 ? 'inner' : 'outer'} wheel ${v.toFixed(2)} rad/s`, [s * 4.4, 1.6 + .2 * v, 0], 3.6);
+    }
+    label(`carrier ${d.carrier.toFixed(1)} rad/s (the average)`, [0, 4.4, 0], 4.4);
+    label(`spiders spin ${d.spider.toFixed(2)} rad/s`, [0, -2.2, 2.2], 3.6);
+  }
+  function rvTwoStage(inputDeg) {
+    camDist = 21; camHeight = 8.0; camYaw = .75; lookY = -1.0;
+    const D = Math.PI / 180, a = rvAngles(inputDeg), e = .1, R = 5.0, rr = .2, RC = 2.8, CR = [90, 210, 330].map(x => x * D);
+    const grey = std('#969ca6', .15, .62), pinM = std('#c8cbd2', .15, .62), amber = std('#d6964a', .15, .62), blue = std('#5c7ab2', .15, .62);
+    const dkblue = std('#3e5c9c', .15, .62), green = std('#60a684', .15, .62), camM = std('#7892be', .15, .62), shaftM = std('#c6cbcf', .15, .62), red = std('#c0392b', .15, .62);
+    const out = a.output * D, yG = 4.4, yCT = 2.2, yA = 0, yB = -2.2, yCB = -4.4, yH = -6.8;
+    const housing = new THREE.Group(); root.add(housing); upright(ring(R, R + .9), .9, 0, grey, housing); housing.position.y = yH;
+    for (let k = 0; k < RV.pins; k++) { const t = 2 * Math.PI * k / RV.pins; const p = new THREE.Mesh(new THREE.CylinderGeometry(rr, rr, 1.5, 16), pinM); p.position.set(R * Math.cos(t), yH + .6, -R * Math.sin(t)); root.add(p); }
+    const prof = new THREE.Shape(), N = 1600, n = RV.pins;
+    for (let i = 0; i <= N; i++) {
+      const t = 2 * Math.PI * i / N, qx = R * Math.cos(t) - e * Math.cos(n * t), qy = R * Math.sin(t) - e * Math.sin(n * t);
+      const dx = -R * Math.sin(t) + n * e * Math.sin(n * t), dy = R * Math.cos(t) - n * e * Math.cos(n * t), L = Math.hypot(dx, dy);
+      const x = qx - rr * dy / L, y = qy + rr * dx / L; if (i === 0) prof.moveTo(x, y); else prof.lineTo(x, y);
+    }
+    const holes = () => { const hs = [new THREE.Path().absarc(0, 0, .9 + e, 0, 2 * Math.PI, true)];
+      for (const c of CR) { hs.push(new THREE.Path().absarc(RC * Math.cos(c), RC * Math.sin(c), .65, 0, 2 * Math.PI, true)); hs.push(new THREE.Path().absarc(RC * Math.cos(c + Math.PI / 3), RC * Math.sin(c + Math.PI / 3), .5 + e, 0, 2 * Math.PI, true)); }
+      return hs; };
+    for (const [y0, sgn, clock] of [[yA, 1, 0], [yB, -1, Math.PI / (RV.pins - 1)]]) {
+      const g = new THREE.Group(); root.add(g); const sh = prof.clone(); sh.holes = holes();
+      const m = upright(sh, .5, 0, amber, g); m.rotation.y = clock;
+      const ecc = a.eccentric * D + (sgn < 0 ? Math.PI : 0);
+      g.position.set(sgn * 0 + e * Math.cos(ecc), y0, -e * Math.sin(ecc)); g.rotation.y = out;
+      const ptr = new THREE.Mesh(new THREE.BoxGeometry(1.6, .08, .12), red); ptr.position.set(.8 * Math.cos(ecc), y0 + .6, -.8 * Math.sin(ecc)); ptr.rotation.y = ecc; root.add(ptr);
+    }
+    for (const yp of [yCT, yCB]) { const g = new THREE.Group(); root.add(g); const s = new THREE.Shape(); s.absarc(0, 0, 4.2, 0, 2 * Math.PI, false); s.holes = [new THREE.Path().absarc(0, 0, .9, 0, 2 * Math.PI, true), ...CR.map(c => new THREE.Path().absarc(RC * Math.cos(c), RC * Math.sin(c), .36, 0, 2 * Math.PI, true))]; upright(s, .4, 0, green, g); g.position.y = yp; g.rotation.y = out;
+      const flag = new THREE.Mesh(new THREE.BoxGeometry(.9, .14, .3), red); flag.position.set(4.3 * Math.cos(out), yp + .3, -4.3 * Math.sin(out)); flag.rotation.y = out; root.add(flag); }
+    for (const c of CR) {
+      const t = c + out, x = RC * Math.cos(t), z = -RC * Math.sin(t);
+      const sh = new THREE.Mesh(new THREE.CylinderGeometry(.35, .35, yG - yCB + .9, 20), shaftM); sh.position.set(x, (yG + yCB) / 2, z); root.add(sh);
+      for (const [y0, sgn] of [[yA, 1], [yB, -1]]) { const ecc = a.eccentric * D + (sgn < 0 ? Math.PI : 0); const cam = new THREE.Mesh(new THREE.CylinderGeometry(.65, .65, .5, 32), camM); cam.position.set(x + e * Math.cos(ecc), y0 + .25, z - e * Math.sin(ecc)); root.add(cam); }
+      const gg = new THREE.Group(); upright(gearOutline(36, 7 / 60, 1, 0), .5, 0, blue, gg); gg.position.set(x, yG, z); gg.rotation.y = (a.output + a.crank) * D; root.add(gg);
+      const mk = new THREE.Mesh(new THREE.BoxGeometry(1.0, .06, .1), red); mk.position.set(x + .5 * Math.cos((a.output + a.crank) * D), yG + .55, z - .5 * Math.sin((a.output + a.crank) * D)); mk.rotation.y = (a.output + a.crank) * D; root.add(mk);
+    }
+    const pg = new THREE.Group(); upright(gearOutline(12, 7 / 60, 1, 15 * D), .5, 0, dkblue, pg); pg.position.y = yG; pg.rotation.y = inputDeg * D; root.add(pg);
+    const ish = new THREE.Mesh(new THREE.CylinderGeometry(.3, .3, 2.6, 24), shaftM); ish.position.y = yG + 1.3; root.add(ish);
+    label(`input ${inputDeg}°`, [0, yG + 2.9, 0], 2.4); label(`cranks ${Math.abs(a.crank).toFixed(0)}° the other way`, [7.6, yG + .4, 0], 4.6);
+    label('discs wobble with the cranks', [8.0, (yA + yB) / 2, 0], 4.6); label(`output carrier ${a.output.toFixed(2)}°`, [7.8, yCB, 0], 4.4); label('40 fixed pins', [7.2, yH + .7, 0], 3.0);
+  }
+
   function update(value, view = 0) {
     clear(); while (materials.length > BASE) { const m = materials.pop(); m.map?.dispose(); m.dispose(); }
     angle = view * Math.PI / 180; camDist = 7; camHeight = 4.5; camYaw = .65; lookY = 0; place();
@@ -340,6 +456,10 @@ export function createScene(host, id) {
     else if (id === 'srm-gap') srmGap(value);
     else if (id === 'axial-exploded') axialExploded(value);
     else if (id === 'bldc-rotating-field') bldcRotatingField(value);
+    else if (id === 'bevel-hypoid') bevelHypoid(value);
+    else if (id === 'worm-backdrive') wormBackdrive(value);
+    else if (id === 'differential-turn') differentialTurn(value);
+    else if (id === 'rv-two-stage') rvTwoStage(value);
     resize();
   }
   return { update, dispose() { observer.disconnect(); visible.disconnect(); document.removeEventListener('visibilitychange', shown); clear(); materials.forEach(m => { m.map?.dispose(); m.dispose(); }); renderer.dispose(); envTex?.dispose(); renderer.forceContextLoss(); renderer.domElement.remove(); } };
