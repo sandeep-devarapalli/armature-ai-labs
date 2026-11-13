@@ -21,7 +21,7 @@ export function HackathonsPage() {
           <div>
             <p className="hackathon-label">{hackathon.dates} · {hackathon.format}</p>
             <h2>{hackathon.name}</h2>
-            <p>{hackathon.stats[0].value} {hackathon.stats[0].label}, {hackathon.stats[1].value} submissions. See the top {hackathon.builds.length} builds.</p>
+            <p>{hackathon.stats[0].value} {hackathon.stats[0].label}. See the top {hackathon.builds.length} builds.</p>
             <Link to={hackathonPath(hackathon)}>See the results →</Link>
           </div>
         </li>
