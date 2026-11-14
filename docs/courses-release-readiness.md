@@ -140,3 +140,9 @@ Evidence: output/courses-hosting-2026-10-04/live-release-manifest.json, live bro
 - Owner chose to allow it. site-r17 changes only `_headers`: `script-src` adds `https://static.cloudflareinsights.com` and `connect-src` adds `https://cloudflareinsights.com`, as Cloudflare documents for Web Analytics. Everything else in the CSP is unchanged.
 - `scripts/courses/check-release.mjs` now pins both directives exactly, so any further widening of script or connect sources fails the release check.
 - Release folder: output/courses-release-2026-11-14-r17 in the main Armature Lab folder; rollback is site-r16 (deployment 4a641082).
+
+### Correction and analytics counting — 14 November 2026
+
+- Correction to the two entries above: the blocked Web Analytics console error on courses pages came from the hidden main-site sign-in bridge (`armatureailabs.com/auth/course-session`), where Cloudflare injects the beacon and that page's CSP blocks it. Cloudflare was not injecting into courses pages at all, because the courses `Cache-Control` carried `no-transform` (added in site-r2 for that purpose). site-r17's CSP change was therefore necessary but not sufficient.
+- Owner chose to count courses visits and to stop counting the bridge. Courses site-r18 drops `no-transform` from the courses `Cache-Control` (still `private, no-store`) so Cloudflare injects the beacon, which the site-r17 CSP allows. The main site adds `no-transform` to `/auth/course-session` and `/auth/course-session.html` so the bridge, which is not a real visit, is neither counted nor logs a blocked-script error.
+- Release check after deploy: the served courses HTML must equal the built `index.html` apart from the injected beacon tag; otherwise redeploy site-r17 (deployment 0f1c39fa).
