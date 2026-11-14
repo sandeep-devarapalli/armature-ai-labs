@@ -126,3 +126,10 @@ Evidence: output/courses-hosting-2026-10-04/live-release-manifest.json, live bro
 - Real local Auth/Mailpit browser checks: same-profile sign-in succeeds; different-profile callback shows recovery; a fresh request from that profile then succeeds. No external mail sent.
 - All 582 tests across 57 files and course production build pass. Published site-r3, deployment 132c94a2.armature-courses.pages.dev. Live desktop/mobile checks pass with no console errors or overflow; all 72 served files match the release.
 - Shared Supabase, membership rules, templates, course data, payments and certificate policies unchanged. User must retry with a new link in the requesting browser/profile; their real live completion is still unverified.
+
+### Full-screen course figures published — 14 November 2026
+
+- Owner asked for a tap-to-enlarge view because 480 x 280 lesson figures are unreadable at phone width. PR #230 adds a full-screen figure view (opens zoomed in on upright phones, zoom/fit toggle, pinch-zoom, Escape/Close/backdrop to close, focus kept inside and returned).
+- A production build of the base 65a75ad reproduced live site-r15 byte for byte before the change; site-r16 differs only in the LessonBlocks-dependent chunks, the main CSS/JS and index.html. CI passed; course tests 107 files / 1,111 tests; `check-release` passed (77 files).
+- Published site-r16, deployment 4a641082.armature-courses.pages.dev, from main a892b28. All 74 served static files match the release hashes; `_headers` is applied (CSP, HSTS, no-store, noindex) and unknown paths return 404. The custom domain serves Cloudflare's managed robots.txt and injects the Web Analytics beacon, which the CSP blocks; both are zone settings, unchanged by this release.
+- Rollback: redeploy site-r15 (deployment 579de648). Release folder: output/courses-release-2026-11-14-r16 in the main Armature Lab folder.

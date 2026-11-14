@@ -28,3 +28,11 @@ The server validator was extended by `supabase/migrations/202610250101_course_sr
 ## Robot Actuators v9 scenes (27 October 2026)
 
 `course-app/interactive/registry.mjs` (scenes axial-exploded and bldc-rotating-field, bldcSixStep, their measurements cases), `course-app/interactive/scene.mjs` (axialExploded, bldcRotatingField, sector, upright, ring; environment lighting for ids matching srm-, axial- or bldc-) and `course-app/interactive/registry.d.mts` (bldcSixStep type). The database migration `supabase/migrations/202610270101_course_axial_bldc_scenes.sql` is already applied and course v9 uses both scenes. These are LIVE since site-r13 (deployed 28 October 2026, on top of the catalogue redesign). Any future courses deploy must include them, or Lessons 3.3 and 3.8 fall back to static figures. course-app/ is not yet in git: commit it before the next deploy.
+
+## Full-screen figure view (14 November 2026)
+
+site-r16 (deployment 4a641082, main a892b28, PR #230) opens lesson figures full screen: `DiagramViewer` and the
+rewritten `Diagram` in `course-app/LessonBlocks.tsx`, the `.diagram-art-open` and `.diagram-viewer*` rules in
+`course-app/styles.css` (they replace the old `.diagram-expanded` rule), and `tests/frontend/course-diagram-viewer.test.tsx`.
+Keep them when building or deploying the courses site. Quick check after a build: the `MemberApp-*.js` chunk contains
+`Enlarged diagram` and the CSS contains `diagram-viewer-stage`. Release folder: output/courses-release-2026-11-14-r16.
