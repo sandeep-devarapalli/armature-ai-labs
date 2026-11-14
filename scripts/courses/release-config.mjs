@@ -25,7 +25,7 @@ export function courseHostingAssets(backend) {
   Referrer-Policy: no-referrer
   Strict-Transport-Security: max-age=31536000; includeSubDomains
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
-  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://media.armatureailabs.com; font-src 'self' data:; connect-src 'self' ${origin}; frame-src https://armatureailabs.com; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://media.armatureailabs.com; font-src 'self' data:; connect-src 'self' ${origin} https://cloudflareinsights.com; frame-src https://armatureailabs.com; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'
 `,
     'robots.txt': 'User-agent: *\nDisallow: /\n',
     '404.html': '<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Page not found · Armature AI Labs</title><main><h1>Page not found</h1><p><a href="/">Return to Armature courses</a></p></main></html>\n',
