@@ -1,4 +1,5 @@
-import { Component, lazy, Suspense, useState, type ReactNode } from 'react';
+import { Component, lazy, Suspense, useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 const InteractiveDiagram = lazy(() => import('./interactive/InteractiveDiagram'));
 import DOMPurify from 'dompurify';
 import katex from 'katex';
@@ -26,17 +27,60 @@ export function Rich({ html = '', className = '' }: { html?: string; className?:
   }) }} />;
 }
 
+const sanitizeSvg = (svg: string) => DOMPurify.sanitize(readableSvgScripts(svg), {
+  USE_PROFILES: { svg: true, svgFilters: true }, FORBID_TAGS: ['image', 'foreignObject', 'script', 'style'],
+});
+
+// Full-screen view of one figure, so that small labels can be read on a phone. Escape, the Close button or a tap
+// outside the white panel closes it; focus stays inside while it is open and returns to the opener afterwards.
+function DiagramViewer({ html, caption, onClose }: { html: string; caption?: string; onClose: () => void }) {
+  const viewerRef = useRef<HTMLDivElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+  // On a phone held upright the fitted figure is no wider than in the lesson, so start zoomed in for panning.
+  const [zoomed, setZoomed] = useState(() => typeof window.matchMedia === 'function' && window.matchMedia('(orientation: portrait) and (max-width: 700px)').matches);
+  useEffect(() => {
+    const opener = document.activeElement as HTMLElement | null;
+    const overflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    closeRef.current?.focus();
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') { event.preventDefault(); onClose(); return; }
+      if (event.key !== 'Tab' || !viewerRef.current) return;
+      const buttons = [...viewerRef.current.querySelectorAll<HTMLButtonElement>('button')];
+      const first = buttons[0], last = buttons[buttons.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    };
+    document.addEventListener('keydown', onKey);
+    return () => { document.removeEventListener('keydown', onKey); document.body.style.overflow = overflow; opener?.focus?.(); };
+  }, [onClose]);
+  return createPortal(<div className="diagram-viewer" role="dialog" aria-modal="true" aria-label="Enlarged diagram" ref={viewerRef}
+    onClick={event => { if (event.target === event.currentTarget) onClose(); }}>
+    <div className="diagram-viewer-bar">
+      <button type="button" className="small" aria-pressed={zoomed} onClick={() => setZoomed(!zoomed)}>{zoomed ? 'Fit to screen' : 'Zoom in'}</button>
+      <button type="button" className="primary small" ref={closeRef} onClick={onClose}>Close</button>
+    </div>
+    <div className={`diagram-viewer-stage ${zoomed ? 'zoomed' : ''}`}>
+      <div className="diagram-art" dangerouslySetInnerHTML={{ __html: html }} />
+    </div>
+    {caption ? <p className="diagram-viewer-caption"><ScriptText text={caption} /></p> : null}
+    <p className="diagram-viewer-hint">Turn your phone sideways for a bigger view.</p>
+  </div>, document.body);
+}
+
 function Diagram({ block }: { block: Block }) {
   const { name, svgCode, caption } = block.content;
-  const [expanded, setExpanded] = useState(false);
-  return <figure className={`diagram ${expanded ? 'diagram-expanded' : ''}`}>
-    <button className="diagram-toggle" onClick={() => setExpanded(!expanded)} aria-expanded={expanded}>{expanded ? 'Fit diagram' : 'Enlarge diagram'}</button>
+  const [open, setOpen] = useState(false);
+  const close = useCallback(() => setOpen(false), []);
+  const html = svgCode ? sanitizeSvg(svgCode) : '';
+  return <figure className="diagram">
+    {html ? <button type="button" className="diagram-toggle" aria-haspopup="dialog" onClick={() => setOpen(true)}>Enlarge diagram</button> : null}
     <div className="diagram-viewport">
-      {svgCode ? <div className="diagram-art" dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(readableSvgScripts(svgCode), {
-        USE_PROFILES: { svg: true, svgFilters: true }, FORBID_TAGS: ['image', 'foreignObject', 'script', 'style'],
-      }) }} /> : <p className="notice">This source diagram is unavailable. Reference: {name || 'unnamed'}.</p>}
+      {html ? <div className="diagram-art diagram-art-open" title="Tap to enlarge" onClick={() => setOpen(true)} dangerouslySetInnerHTML={{ __html: html }} />
+        : <p className="notice">This source diagram is unavailable. Reference: {name || 'unnamed'}.</p>}
     </div>
     {caption ? <figcaption><ScriptText text={caption} /></figcaption> : null}
+    {open ? <DiagramViewer html={html} caption={caption} onClose={close} /> : null}
   </figure>;
 }
 
