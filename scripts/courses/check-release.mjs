@@ -30,4 +30,9 @@ assert(!/sb_secret_[A-Za-z0-9_-]{15,}|service_role|private-assessments|questionB
 assert(!bundle.includes('Local test password'), 'Local password control in release.');
 assert(!bundle.includes('Local preview'), 'Local-preview title in release.');
 for (const [name, expected] of Object.entries(courseHostingAssets(backendOrigin))) assert.equal(await readFile(path.join(root, name), 'utf8'), expected, 'Hosting asset mismatch: ' + name);
+const csp = (await readFile(path.join(root, '_headers'), 'utf8')).match(/Content-Security-Policy: (.*)/)[1];
+const directive = name => csp.split(';').map(part => part.trim()).find(part => part.startsWith(name + ' '));
+// Scripts may come only from the site itself and Cloudflare Web Analytics (static.cloudflareinsights.com), whose beacon reports to cloudflareinsights.com.
+assert.equal(directive('script-src'), "script-src 'self' https://static.cloudflareinsights.com", 'Unexpected script sources in the CSP.');
+assert.equal(directive('connect-src'), `connect-src 'self' ${backendOrigin} https://cloudflareinsights.com`, 'Unexpected connect sources in the CSP.');
 console.log(`Course production artifact passed: ${files.length} allowlisted static files; hosted backend, private-content boundary, headers and root-query routing checked.`);

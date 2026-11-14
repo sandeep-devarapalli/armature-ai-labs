@@ -133,3 +133,10 @@ Evidence: output/courses-hosting-2026-10-04/live-release-manifest.json, live bro
 - A production build of the base 65a75ad reproduced live site-r15 byte for byte before the change; site-r16 differs only in the LessonBlocks-dependent chunks, the main CSS/JS and index.html. CI passed; course tests 107 files / 1,111 tests; `check-release` passed (77 files).
 - Published site-r16, deployment 4a641082.armature-courses.pages.dev, from main a892b28. All 74 served static files match the release hashes; `_headers` is applied (CSP, HSTS, no-store, noindex) and unknown paths return 404. The custom domain serves Cloudflare's managed robots.txt and injects the Web Analytics beacon, which the CSP blocks; both are zone settings, unchanged by this release.
 - Rollback: redeploy site-r15 (deployment 579de648). Release folder: output/courses-release-2026-11-14-r16 in the main Armature Lab folder.
+
+### Cloudflare Web Analytics allowed on the courses site — 14 November 2026
+
+- Cloudflare injects its Web Analytics beacon on courses.armatureailabs.com (a zone setting; the no-transform directive from site-r2 does not stop it). The strict CSP blocked it, leaving one console error per page and no course visit counts.
+- Owner chose to allow it. site-r17 changes only `_headers`: `script-src` adds `https://static.cloudflareinsights.com` and `connect-src` adds `https://cloudflareinsights.com`, as Cloudflare documents for Web Analytics. Everything else in the CSP is unchanged.
+- `scripts/courses/check-release.mjs` now pins both directives exactly, so any further widening of script or connect sources fails the release check.
+- Release folder: output/courses-release-2026-11-14-r17 in the main Armature Lab folder; rollback is site-r16 (deployment 4a641082).
