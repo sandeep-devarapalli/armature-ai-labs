@@ -18,7 +18,7 @@ export function courseHostingAssets(backend) {
   const origin = new URL(backend).origin;
   return {
     '_headers': `/*
-  Cache-Control: private, no-store, no-transform
+  Cache-Control: private, no-store
   X-Robots-Tag: noindex, nofollow
   X-Content-Type-Options: nosniff
   X-Frame-Options: DENY

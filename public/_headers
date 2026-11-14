@@ -29,14 +29,14 @@
 
 /auth/course-session
   ! X-Frame-Options
-  Cache-Control: private, no-store
+  Cache-Control: private, no-store, no-transform
   Referrer-Policy: no-referrer
   X-Robots-Tag: noindex, nofollow
   Content-Security-Policy: default-src 'none'; script-src 'self'; connect-src https://uxfhdfagrmaeyuaipaar.supabase.co; frame-ancestors https://courses.armatureailabs.com; base-uri 'none'; form-action 'none'
 
 /auth/course-session.html
   ! X-Frame-Options
-  Cache-Control: private, no-store
+  Cache-Control: private, no-store, no-transform
   Referrer-Policy: no-referrer
   X-Robots-Tag: noindex, nofollow
   Content-Security-Policy: default-src 'none'; script-src 'self'; connect-src https://uxfhdfagrmaeyuaipaar.supabase.co; frame-ancestors https://courses.armatureailabs.com; base-uri 'none'; form-action 'none'
