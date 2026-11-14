@@ -1,3 +1,5 @@
+// @vitest-environment node
+// Edge functions run in Deno, a single-realm runtime; jsdom globals here break undici body parsing on Node 26.
 import { beforeEach, expect, it, vi } from "vitest";
 const mock = vi.hoisted(() => ({ rpc: vi.fn(), dependencies: null as null | {
   lookup: (order: string) => Promise<{ checkout_kind: string } | null>;

@@ -1,3 +1,5 @@
+// @vitest-environment node
+// Edge functions run in Deno, a single-realm runtime; jsdom globals here break undici body parsing on Node 26.
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { createClient } from '@supabase/supabase-js';
 
