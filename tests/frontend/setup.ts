@@ -16,26 +16,29 @@ const localStorageMock: Storage = {
   }
 };
 
-Object.defineProperty(window, "localStorage", {
-  configurable: true,
-  value: localStorageMock
-});
+// Edge-function tests run in the node environment, which has no window.
+if (typeof window !== "undefined") {
+  Object.defineProperty(window, "localStorage", {
+    configurable: true,
+    value: localStorageMock
+  });
 
-Object.defineProperty(window, "matchMedia", {
-  writable: true,
-  value: (query: string) => ({
-    matches: false,
-    media: query,
-    onchange: null,
-    addListener: () => undefined,
-    removeListener: () => undefined,
-    addEventListener: () => undefined,
-    removeEventListener: () => undefined,
-    dispatchEvent: () => false
-  })
-});
+  Object.defineProperty(window, "matchMedia", {
+    writable: true,
+    value: (query: string) => ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addListener: () => undefined,
+      removeListener: () => undefined,
+      addEventListener: () => undefined,
+      removeEventListener: () => undefined,
+      dispatchEvent: () => false
+    })
+  });
 
-Object.defineProperty(window, "scrollTo", {
-  writable: true,
-  value: () => undefined
-});
+  Object.defineProperty(window, "scrollTo", {
+    writable: true,
+    value: () => undefined
+  });
+}
