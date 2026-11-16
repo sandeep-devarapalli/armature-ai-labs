@@ -11,6 +11,7 @@ const editorial: Record<string, { subject: string; title: string; summary: strin
   'robot-actuators': { subject: 'Robotics', title: 'Robot Actuators', summary: 'Understand torque, motors, gearing, mechanical design and joint control.' },
   'computation-structures': { subject: 'Computing', title: 'Computation Structures', summary: 'Follow the computer design hierarchy from logic gates to processors and memory.' },
   'embedded-firmware': { subject: 'Computing', title: 'Embedded Firmware Fundamentals', summary: 'Learn firmware, drivers, debugging, motor control and real-time systems.' },
+  'operating-systems': { subject: 'Computing', title: 'Operating Systems', summary: 'See how one computer shares its processor, memory and disk among many programs.' },
   'maths-ai': { subject: 'Mathematics', title: 'Mathematics Foundations for AI', summary: 'Build foundations in linear algebra, calculus, probability and information theory.' },
   'pic-microcontrollers': { subject: 'Computing', title: 'PIC Microcontrollers', summary: 'Work through PIC pins, registers, instructions, timing and interrupts.' },
   'manual-lathe': { subject: 'Workshop', title: 'Manual Lathe', summary: 'Learn turning principles, workholding, measurement and process planning before supervised use.' },
