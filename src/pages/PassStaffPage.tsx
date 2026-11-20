@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { EmptyState, Field, PageHeader, Status } from "../components/Primitives";
 import { useAccount } from "../context/AccountContext";
 import { formatPassDate, guestPassLabels, passRequest, type GuestPass, type GoldenApplication } from "../lib/pass-requests";
-import "./PassStaffPage.css";
 
 type StaffGuest = GuestPass & { guest_email?: string };
 type StaffApplication = GoldenApplication & { applicant_email?: string };

@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { Field, PageHeader } from "../components/Primitives";
 import { useAccount } from "../context/AccountContext";
 import { formatPassDate, guestPassLabels, passRequest, type GoldenApplication, type GuestPass } from "../lib/pass-requests";
-import "./PassPages.css";
 
 const guestPath = "/bookings/?item=guest#steps";
 const goldenPath = "/golden-pass";

@@ -1,3 +1,6 @@
+@import "./pages/PassPages.css";
+@import "./pages/PassStaffPage.css";
+
 @font-face {
   font-family: "Armature Space Grotesk";
   src: url("/fonts/space-grotesk/SpaceGrotesk-Medium.woff2") format("woff2");

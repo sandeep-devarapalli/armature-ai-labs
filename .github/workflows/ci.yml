@@ -62,6 +62,7 @@ jobs:
           VITE_SUPABASE_PUBLISHABLE_KEY: public-test-key
         run: |
           npx vite build
+          npm run materialize:route-shells
           PLAYWRIGHT_PREBUILT=true npx playwright test --config playwright.basic-registration.config.ts
           npm run test:e2e:production
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
