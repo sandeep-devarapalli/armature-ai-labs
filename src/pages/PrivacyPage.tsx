@@ -99,7 +99,7 @@ export function PrivacyPage() {
       </section>
       <section aria-labelledby="privacy-passes">
         <h2 id="privacy-passes">Guest and Golden Pass requests</h2>
-        <p>We use your confirmed account email and the details you submit to review your request. For a Guest Pass, authorised staff can see your visit date, reason, decision and check-in record. For a Golden Pass application, staff use your application details to discuss membership, payment and activation with you. We keep these records for administration and to respond to enquiries. Contact {legalEntity.privacyEmail} to request review or deletion. Please leave government ID numbers and payment details out of both forms.</p>
+        <p>We use your confirmed account email and the details you submit to review your request. For a Guest Pass, authorised staff can see your visit date, reason, decision and check-in record. For a Golden Pass application, staff use your application details to discuss membership with you. If you buy a Golden Pass, we record the Razorpay order, payment and refund references, your access term and any refund request. We keep these records for administration and to respond to enquiries. Contact {legalEntity.privacyEmail} to request review or deletion. Please leave government ID numbers and payment details out of both forms.</p>
       </section>
     </div>
   </div>;

@@ -1,5 +1,6 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
+import { GoldenPassCheckout } from "../components/GoldenPassCheckout";
 import { Field, PageHeader } from "../components/Primitives";
 import { useAccount } from "../context/AccountContext";
 import { formatPassDate, guestPassLabels, passRequest, type GoldenApplication, type GuestPass } from "../lib/pass-requests";
@@ -91,6 +92,7 @@ function GuestRequests() {
 
 export function GoldenPassPage() {
   const { loading, signedIn, account } = useAccount();
+  const checkoutEnabled = import.meta.env.VITE_GOLDEN_PASS_CHECKOUT_ENABLED === "true";
   return <>
     <PageHeader meta="Annual membership" title="Armature AI Labs Golden Pass." description="₹1,00,000 per year for daytime access every day and priority booking for lab resources." />
     <section className="section"><div className="wrap pass-layout">
@@ -109,12 +111,18 @@ export function GoldenPassPage() {
         <Link to="/bookings/?item=desk#steps">See daily, weekly and ₹13,000 monthly desk passes</Link>
       </div>
     </div></section>
+    {checkoutEnabled && <section className="section"><div className="wrap">
+      <h2>Golden Pass payment and refunds</h2>
+      <p>₹1,00,000 for 12 months starting on the date of Razorpay-confirmed payment. You can request a refund within 30 days of payment. Staff reviews refund requests. Approved refunds go back to the original payment method.</p>
+      <Link to="/refund-policy">Read the refund policy</Link>
+    </div></section>}
     <section className="section" id="apply"><div className="wrap">
-      <h2>Apply for the Golden Pass</h2>
-      <p>Staff reviews your application and contacts you about payment and activation.</p>
+      <h2>{checkoutEnabled ? "Apply or buy the Golden Pass" : "Apply for the Golden Pass"}</h2>
+      <p>{checkoutEnabled ? "Already approved after identity review? Sign in to pay directly. Otherwise, you can apply after signing in." : "Staff reviews your application and contacts you about payment and activation."}</p>
       {loading ? <p role="status">Loading your account…</p>
         : !signedIn ? <PassSignIn next={goldenPath + "#apply"}>Sign in by email to start your application.</PassSignIn>
-        : account ? <GoldenApplicationForm key={account.user_id} /> : <p role="alert">Your account could not be loaded. Please refresh and try again.</p>}
+        : account ? checkoutEnabled ? <GoldenPassCheckout key={account.user_id} memberId={account.user_id} application={<GoldenApplicationForm />} />
+          : <GoldenApplicationForm key={account.user_id} /> : <p role="alert">Your account could not be loaded. Please refresh and try again.</p>}
     </div></section>
   </>;
 }
