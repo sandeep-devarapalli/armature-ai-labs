@@ -319,6 +319,29 @@ export function JoinPage() {
   const membershipActive = currentMember?.membershipState === "active";
   const basicOnly = basicOnboardingAvailable && !memberPlatformAvailable;
 
+  const communityLinks = (
+    <>
+      <a
+        className="button button-quiet"
+        href="https://discord.gg/qGNXGmF8z"
+        target="_blank"
+        rel="noreferrer"
+      >
+        Join Discord
+        <ExternalLink aria-hidden="true" />
+      </a>
+      <a
+        className="button button-quiet"
+        href="https://www.linkedin.com/company/armature-ai-labs/"
+        target="_blank"
+        rel="noreferrer"
+      >
+        Follow on LinkedIn
+        <ExternalLink aria-hidden="true" />
+      </a>
+    </>
+  );
+
   if (basicOnly && import.meta.env.VITE_GOLDEN_PASS_CHECKOUT_ENABLED === "true") return <>
     <section className="wrap join-access-hero" aria-labelledby="join-access-title">
       <div>
@@ -358,7 +381,7 @@ export function JoinPage() {
         <h2 className="join-access-heading">Book time at the lab</h2>
         <p className="lede">Compare shared desk passes, team cabin quotes and free Guest Passes for events or meetings. Current prices and availability are on the bookings page.</p>
       </div>
-      <Link className="button button-quiet" to="/bookings/">See live bookings</Link>
+      <div className="section-actions"><Link className="button button-quiet" to="/bookings/">See live bookings</Link>{communityLinks}</div>
     </div></section>
   </>;
 
@@ -376,29 +399,7 @@ export function JoinPage() {
     <Link className="button button-primary" to="/auth" state={{ from: "/join" }}>Create member account <ArrowRight aria-hidden="true" /></Link>
   );
 
-  const actions = (
-    <>
-      {membershipAction}
-      <a
-        className="button button-quiet"
-        href="https://discord.gg/qGNXGmF8z"
-        target="_blank"
-        rel="noreferrer"
-      >
-        Join Discord
-        <ExternalLink aria-hidden="true" />
-      </a>
-      <a
-        className="button button-quiet"
-        href="https://www.linkedin.com/company/armature-ai-labs/"
-        target="_blank"
-        rel="noreferrer"
-      >
-        Follow on LinkedIn
-        <ExternalLink aria-hidden="true" />
-      </a>
-    </>
-  );
+  const actions = <>{membershipAction}{communityLinks}</>;
 
   return (
     <>
