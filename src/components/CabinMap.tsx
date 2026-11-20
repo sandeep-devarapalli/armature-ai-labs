@@ -62,6 +62,7 @@ export function CabinMap({ list = defaultCabins, chosen }: { list?: Cabin[]; cho
         <div><dt>Where</dt><dd>{floorName(cabin)}, room {cabin.room}</dd></div>
         <div><dt>Seats</dt><dd>{cabin.billable} billable, plus {cabin.extra} extra seats free (room for {cabin.billable + cabin.extra})</dd></div>
         <div><dt>Rent</dt><dd>{formatPaise(cabinRent(cabin))} per month for the whole cabin{cabin.status === "quote" && " · Open to negotiation"}</dd></div>
+        {cabin.floor === "first" && cabin.status === "quote" && <div><dt>Advance rent</dt><dd>Six months’ rent payable in advance at the agreed monthly rate.</dd></div>}
         <div><dt>Deposit</dt><dd>{cabin.status === "quote" ? "Confirmed in your quote" : cabin.depositPaise ? `${formatPaise(cabin.depositPaise)}, refundable` : "To be confirmed"}</dd></div>
       </dl>
       {cabin.photos.length ? <figure className="cabin-photos">

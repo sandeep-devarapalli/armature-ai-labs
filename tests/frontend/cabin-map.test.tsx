@@ -30,6 +30,11 @@ it("shows the whole-cabin quote and labels their images as illustrations", () =>
   expect(screen.getByRole("link", { name: "Request a quote for Cabin 202" })).toBeInTheDocument();
   expect(screen.getByText("Cabin 202, illustration based on Cabin 101")).toBeTruthy();
   expect(screen.getByText("Confirmed in your quote")).toBeTruthy();
+  expect(screen.getByText("Six months’ rent payable in advance at the agreed monthly rate.")).toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: /Cabin 201/ }));
+  expect(screen.getByText("Six months’ rent payable in advance at the agreed monthly rate.")).toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: /Cabin 101/ }));
+  expect(screen.queryByText("Advance rent")).not.toBeInTheDocument();
 });
 
 it("passes only the two offered first-floor cabins to the 3D view", async () => {
