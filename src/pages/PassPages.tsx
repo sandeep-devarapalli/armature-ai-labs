@@ -4,6 +4,8 @@ import { Field, PageHeader } from "../components/Primitives";
 import { useAccount } from "../context/AccountContext";
 import { formatPassDate, guestPassLabels, passRequest, type GoldenApplication, type GuestPass } from "../lib/pass-requests";
 
+export { default as PassStaffPage } from "./PassStaffPage";
+
 const guestPath = "/bookings/?item=guest#steps";
 const goldenPath = "/golden-pass";
 const readField = (data: FormData, field: string) => String(data.get(field) ?? "").trim();

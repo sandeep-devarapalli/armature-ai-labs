@@ -20,7 +20,7 @@ const ResourceFeedbackPage = lazy(() => import("../pages/ResourceFeedbackPage").
 const ResourceFeedbackAdminPage = lazy(() => import("../pages/ResourceFeedbackPage").then(module => ({ default: module.ResourceFeedbackAdminPage })));
 
 const GoldenPassPage = lazy(() => import("../pages/PassPages").then(module => ({ default: module.GoldenPassPage })));
-const PassStaffPage = lazy(() => import("../pages/PassStaffPage"));
+const PassStaffPage = lazy(() => import("../pages/PassPages").then(module => ({ default: module.PassStaffPage })));
 const BookLabPage = lazy(() => import("../pages/BookLabPage"));
 const EquipmentRentalPage = lazy(() => import("../pages/EquipmentRentalPage"));
 const BookingBetaPage = lazy(() => import("../pages/BookingBetaPage").then((module) => ({ default: module.BookingBetaPage })));
