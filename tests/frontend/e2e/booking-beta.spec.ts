@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 test.use({ serviceWorkers: "block" });
 
-test("booking beta explores chairs and whole cabins without operational writes", async ({ page }, testInfo) => {
+test("booking beta explores chairs and links to cabin quotes without operational writes", async ({ page }, testInfo) => {
   const writes: string[] = [];
   const errors: string[] = [];
   page.on("pageerror", error => errors.push(error.message));
@@ -36,15 +36,8 @@ test("booking beta explores chairs and whole cabins without operational writes",
   await product.selectOption("month");
   await expect(summary).toContainText("31 Dec 2026");
   await expect(summary.locator(".booking-beta-price")).toContainText("₹7,000");
-  await product.selectOption("cabin");
-  await expect(page.locator(".booking-place-list button")).toHaveCount(4);
-  await expect(student).toHaveCount(0);
-  await page.getByRole("button", { name: /^C02 · FF-03 Whole cabin · 6 seats · Explore$/ }).click();
-  await expect(summary).toContainText("C02 · FF-03");
-  await expect(page.locator(".viewer-cabin[data-cabin=C02]")).toHaveAttribute("aria-pressed", "true", { timeout: 15_000 });
-  await expect(page.locator(".viewer-seat")).toHaveCount(0);
-  await expect(summary.locator(".booking-beta-price")).toContainText("₹52,500");
-  await page.locator(".booking-floor-canvas").screenshot({ path: testInfo.outputPath("booking-beta-cabin.png") });
+  await expect(product.locator('option[value="cabin"]')).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "See team cabins and request a quote" })).toHaveAttribute("href", "/bookings/?item=cabin#steps");
   await product.selectOption("week");
   await page.getByLabel("Week start date", { exact: true }).fill("2026-12-29");
   await expect(summary).toContainText(/review/i);

@@ -17,6 +17,7 @@ const product = (fields: object) => ({ floor: null, billableSeats: null, extraSe
 const products = [
   product({ product: "cabin101", kind: "cabin", name: "Cabin 101", room: "GF-01", status: "occupied" }),
   product({ product: "cabin201", kind: "cabin", name: "Cabin 201", room: "FF-06", status: "available" }),
+  product({ product: "cabin203", kind: "cabin", name: "Cabin 203", room: "FF-04" }),
   product({ product: "so101", kind: "equipment", name: "SO-101 arm", weekRentPaise: 80000, monthRentPaise: 250000 }),
   product({ product: "camera", kind: "equipment", name: "USB camera", dayRentPaise: 20000, weekRentPaise: 80000 })
 ];
@@ -30,9 +31,9 @@ it("compares desk, cabins, equipment and events, with live equipment prices", as
   show();
   expect(screen.getByRole("heading", { name: "Book the lab." })).toBeInTheDocument();
   expect(screen.getAllByRole("row").map(r => r.querySelector("strong")?.textContent).filter(Boolean)).toEqual(["Desk pass", "Team cabins", "Equipment", "Event space"]);
-  expect(screen.getByText("₹20,000 / seat a month")).toBeInTheDocument();
+  expect(screen.getByText("Cabin 202 · ₹1,20,000 / month")).toBeInTheDocument();
   expect(await screen.findByText("From ₹200 / day")).toBeInTheDocument();
-  expect(screen.getByText("101 occupied · 201 available · 202 coming soon · 203 coming soon")).toBeInTheDocument();
+  expect(screen.getByText("101 occupied · 201 quote · 202 quote")).toBeInTheDocument();
 });
 
 it("shows only the rows whose checkout is enabled", () => {
@@ -54,14 +55,13 @@ it("keeps the chosen row in the address and opens its checkout below", () => {
   expect(screen.queryByText("Desk checkout")).not.toBeInTheDocument();
 });
 
-it("opens the rental checkout on the cabin picked on the map, but never for an occupied cabin", async () => {
+it("offers negotiable cabin quotes and keeps the occupied cabin unavailable", async () => {
   show("/bookings?item=cabin&cabin=C01");
   expect(screen.getByRole("button", { name: "Cabin 101 is occupied" })).toBeDisabled();
   expect(screen.queryByText(/Rental checkout/)).not.toBeInTheDocument();
   fireEvent.click(screen.getByRole("button", { name: /^Cabin 201/ }));
-  fireEvent.click(await screen.findByRole("button", { name: "Book Cabin 201" }));
-  expect(screen.getByLabelText("Location").textContent).toBe("/bookings?item=cabin&cabin=C04");
-  expect(screen.getByText("Rental checkout: cabin201")).toBeInTheDocument();
+  expect(await screen.findByRole("link", { name: "Request a quote for Cabin 201" })).toHaveAttribute("href", "mailto:hello@armatureailabs.com?subject=Quote%20request%20for%20Cabin%20201");
+  expect(screen.queryByText(/Rental checkout|Cabin 203/)).not.toBeInTheDocument();
 });
 
 it("passes the picked equipment item to the rental checkout", async () => {
@@ -78,8 +78,8 @@ it("shows the cabins' published statuses to visitors who are not signed in", () 
   mock.signedIn = false;
   show("/bookings?item=cabin");
   expect(mock.request).not.toHaveBeenCalled();
-  expect(screen.getByText("101 occupied · 201 coming soon · 202 coming soon · 203 coming soon")).toBeInTheDocument();
-  expect(screen.getByText(/No cabin is open for booking yet/)).toBeInTheDocument();
+  expect(screen.getByText("101 occupied · 201 quote · 202 quote")).toBeInTheDocument();
+  expect(screen.getByText(/open to negotiation/)).toBeInTheDocument();
 });
 
 it("opens the event checkout and shows the hourly rate when events are on", () => {
