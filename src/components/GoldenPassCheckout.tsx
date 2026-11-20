@@ -108,11 +108,12 @@ export function GoldenPassCheckout({ memberId, application }: { memberId: string
     {pass && !canPay && !pass.paymentConfirmationPending && ["needs_review", "order_pending", "awaiting_payment"].includes(pass.status) &&
       <p>Check your payment status or contact Armature before attempting another payment.</p>}
     {canPay && <>
-      <h3>Buy the Golden Pass</h3>
-      <p>₹1,00,000 for 12 months from the date Razorpay confirms payment. You can request a refund within 30 days of payment.</p>
+      <h3>Continue to payment</h3>
+      <p>Your account is eligible for direct checkout.</p>
       <label className="pass-consent"><input type="checkbox" checked={terms} onChange={e => setTerms(e.target.checked)} />
         <span>I accept the <Link to="/terms">terms</Link> and <Link to="/refund-policy">refund policy</Link>.</span></label>
-      <button className="button button-primary" type="button" onClick={() => void openPayment()} disabled={!terms || busy}>{pass.status === "order_pending" ? "Resume Razorpay checkout" : "Pay ₹1,00,000"}</button>
+      <button className="button button-primary" type="button" onClick={() => void openPayment()} disabled={!terms || busy}>{pass.status === "order_pending" ? "Resume Razorpay checkout" : "Pay ₹1,00,000 with Razorpay"}</button>
+      <p className="golden-payment-note">Your membership starts after Razorpay confirms payment.</p>
     </>}
     <button className="button button-quiet" type="button" onClick={() => void refresh()} disabled={busy}>Check pass status</button>
   </div>;

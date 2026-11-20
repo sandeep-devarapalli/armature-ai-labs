@@ -5,13 +5,86 @@
 .pass-request{width:100%;padding-top:12px;border-top:1px solid var(--line, #aaa8a0)}
 .pass-consent{display:flex;gap:8px;align-items:baseline}
 .pass-application{max-width:37rem}
-.golden-pass-card{width:min(100%,29rem);aspect-ratio:1.586;padding:6%;border-radius:14px;display:grid;align-content:space-between;overflow:hidden;
- color:#30230e;border:1px solid #957039;background:repeating-linear-gradient(0deg,#fff2 0 1px,transparent 1px 4px),linear-gradient(125deg,#b0894e,#ecd4a2 35%,#aa8248);
- box-shadow:inset 0 1px #f8e1b3;text-shadow:0 1px #f6dfaf}
-.golden-pass-card div{display:flex;align-items:center;gap:8px;font-weight:750}
-.golden-pass-card img{width:24px;height:24px}
-.golden-pass-card strong{font:italic clamp(30px,6vw,68px)/1 "Instrument Serif",Georgia,serif}
-.golden-pass-card span{font-size:13px}
 @media(max-width:680px){.pass-layout{grid-template-columns:1fr}}
-.golden-pass-card>span{display:flex;justify-content:space-between;gap:8px;align-items:center}
-.golden-pass-card small{font:10px/1.2 ui-monospace,monospace;text-transform:uppercase}
+
+.golden-pass {
+  --golden-ink: #fbf4e4;
+  --golden-muted: #d0c3af;
+  --golden-line: #53493a;
+  --golden-accent: #efd39b;
+  background: #181714;
+  color: var(--golden-ink);
+  font-family: "Armature Space Grotesk", system-ui, sans-serif;
+}
+.golden-pass .wrap { width: min(100%, 1216px); }
+.golden-pass #apply { scroll-margin-top: 76px; }
+.golden-pass :where(p,dd,figcaption) { color: var(--golden-muted); }
+.golden-pass a[href]:not(.button) { color: var(--golden-accent); text-decoration: underline; text-underline-offset: 4px; }
+.golden-pass :focus-visible { outline: 2px solid var(--golden-accent); outline-offset: 4px; }
+.golden-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: clamp(28px,7vw,96px); align-items: start; }
+.golden-pass .golden-hero { align-items: center; padding-block: clamp(44px,7vw,96px); }
+.golden-pass .golden-hero h1, .golden-pass .golden-section h2 {
+  color: inherit;
+  font: italic 400 clamp(56px,8vw,96px)/.95 "Instrument Serif", Georgia, serif;
+  letter-spacing: -.025em;
+  margin: 0 0 20px;
+}
+.golden-pass .golden-section h2 { font-size: clamp(42px,5vw,66px); }
+.golden-hero p { max-width: 44ch; margin: 0 0 24px; }
+.golden-price { display: flex; align-items: baseline; gap: 12px; margin-bottom: 20px; }
+.golden-price strong { font-size: 29px; line-height: 1.1; letter-spacing: -.035em; }
+.golden-price span { color: var(--golden-muted); }
+.golden-hero figure { margin: 0; }
+.golden-pass-card {
+  aspect-ratio: 1.586;
+  padding: 7%;
+  border-radius: 15px;
+  display: grid;
+  align-content: space-between;
+  color: #332611;
+  background: repeating-linear-gradient(0deg,#59421812 0 1px,#ffedb520 1px 3px),
+    linear-gradient(132deg,#9c7941,#e9cf94 42%,#bf9a5d 67%,#e9ce91);
+  box-shadow: 0 20px 44px #08060375;
+}
+.golden-pass-card div { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: clamp(11px,1.4vw,15px); }
+.golden-pass-card img { width: 9%; }
+.golden-pass-card svg { width: 12%; min-width: 30px; height: auto; }
+.golden-pass-card strong { font: italic 400 clamp(38px,6vw,82px)/1 "Instrument Serif", Georgia, serif; text-shadow: 0 1px #fff1c3; }
+.golden-hero figcaption { margin-top: 15px; font-size: 13px; }
+.golden-section { border-top: 1px solid var(--golden-line); padding-block: clamp(44px,7vw,92px); }
+.golden-benefits { grid-template-columns: 1fr 1.5fr; }
+.golden-benefits dl { margin: 0 0 18px; }
+.golden-benefits dl div { padding-block: 14px; border-bottom: 1px solid var(--golden-line); }
+.golden-benefits dl div:first-child { padding-top: 0; }
+.golden-benefits dt { font-size: 18px; font-weight: bold; }
+.golden-benefits dd { margin: 4px 0 0; }
+.golden-summary dl { margin: 24px 0 12px; }
+.golden-summary dl div { display: grid; grid-template-columns: 1fr 1.3fr; gap: 12px; border-top: 1px solid var(--golden-line); padding-block: 12px; }
+.golden-summary dd { margin: 0; text-align: right; }
+.golden-summary p { font-size: 14px; }
+.golden-enrollment { background: #25211b; border-radius: 12px; padding: clamp(20px,4vw,38px); min-width: 0; }
+.golden-enrollment .pass-panel { padding: 0; border: 0; max-width: none; }
+.golden-enrollment h3 { color: inherit; font: bold 23px/1.2 "Armature Space Grotesk", system-ui, sans-serif; }
+.golden-enrollment .button-primary { width: 100%; }
+.golden-pass .button-primary {
+  min-height: 48px;
+  border: 1px solid var(--golden-accent);
+  border-radius: 4px;
+  background: var(--golden-accent);
+  color: #292015;
+  text-align: center;
+}
+.golden-pass .button-primary:hover:not(:disabled) { background: #f9e5bd; color: #292015; }
+.golden-pass .button-primary:disabled { opacity: .55; }
+.golden-pass .button-quiet { color: var(--golden-ink); border: 0; padding-inline: 0; text-decoration: underline; text-underline-offset: 4px; }
+.golden-pass .button-quiet:hover { background: transparent; color: var(--golden-accent); }
+.golden-pass .pass-consent { align-items: flex-start; margin-block: 4px; }
+.golden-pass .pass-consent input { flex: 0 0 auto; width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--golden-accent); }
+.golden-pass textarea { color: var(--golden-ink); background: #181714; border-color: var(--golden-line); }
+.golden-payment-note { font-size: 13px; }
+
+@media(max-width:760px) {
+  .golden-grid, .golden-benefits { grid-template-columns: 1fr; }
+  .golden-hero figure { width: min(100%,30rem); }
+  .golden-pass-card strong { font-size: clamp(38px,11vw,70px); }
+}

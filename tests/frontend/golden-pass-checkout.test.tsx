@@ -17,7 +17,7 @@ it("requires consent and opens a server-created ₹1 lakh Razorpay order", async
   });
   loadCheckout.mockResolvedValue(class { open = open; on() {} close() {} });
   display();
-  const pay = await screen.findByRole("button", { name: "Pay ₹1,00,000" });
+  const pay = await screen.findByRole("button", { name: "Pay ₹1,00,000 with Razorpay" });
   expect(pay).toBeDisabled();
   fireEvent.click(screen.getByRole("checkbox"));
   fireEvent.click(pay);
@@ -29,10 +29,10 @@ it("keeps applications available to ineligible users and blocks duplicate paymen
   invoke.mockResolvedValueOnce(state("ineligible", { eligible: false }));
   const { unmount } = display();
   expect(await screen.findByText("Apply for review")).toBeInTheDocument();
-  expect(screen.queryByRole("button", { name: "Pay ₹1,00,000" })).not.toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: "Pay ₹1,00,000 with Razorpay" })).not.toBeInTheDocument();
   unmount();
   invoke.mockResolvedValueOnce(state("awaiting_payment", { paymentConfirmationPending: true }));
   display();
   expect(await screen.findByText(/wait for confirmation/i)).toBeInTheDocument();
-  expect(screen.queryByRole("button", { name: "Pay ₹1,00,000" })).not.toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: "Pay ₹1,00,000 with Razorpay" })).not.toBeInTheDocument();
 });
