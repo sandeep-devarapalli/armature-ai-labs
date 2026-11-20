@@ -16,10 +16,10 @@
   color: var(--golden-ink);
   font-family: "Armature Space Grotesk", system-ui, sans-serif;
 }
-.golden-pass .wrap { max-width: 1288px; }
+.golden-pass .wrap { width: min(100%, 1216px); }
 .golden-pass #apply { scroll-margin-top: 76px; }
 .golden-pass :where(p,dd,figcaption) { color: var(--golden-muted); }
-.golden-pass :where(a:not(.button)) { color: var(--golden-accent); text-decoration: underline; text-underline-offset: 4px; }
+.golden-pass a:not(.button) { color: var(--golden-accent); text-decoration: underline; text-underline-offset: 4px; }
 .golden-pass :focus-visible { outline: 2px solid var(--golden-accent); outline-offset: 4px; }
 .golden-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: clamp(28px,7vw,96px); align-items: start; }
 .golden-pass .golden-hero { align-items: center; padding-block: clamp(44px,7vw,96px); }
@@ -48,7 +48,7 @@
 }
 .golden-pass-card div { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: clamp(11px,1.4vw,15px); }
 .golden-pass-card img { width: 9%; }
-.golden-pass-card svg { width: 12%; min-width: 30px; }
+.golden-pass-card svg { width: 12%; min-width: 30px; height: auto; }
 .golden-pass-card strong { font: italic 400 clamp(38px,6vw,82px)/1 "Instrument Serif", Georgia, serif; text-shadow: 0 1px #fff1c3; }
 .golden-hero figcaption { margin-top: 15px; font-size: 13px; }
 .golden-section { border-top: 1px solid var(--golden-line); padding-block: clamp(44px,7vw,92px); }
@@ -77,6 +77,7 @@
 .golden-pass .button-primary:hover:not(:disabled) { background: #f9e5bd; color: #292015; }
 .golden-pass .button-primary:disabled { opacity: .55; }
 .golden-pass .button-quiet { color: var(--golden-ink); border: 0; padding-inline: 0; text-decoration: underline; text-underline-offset: 4px; }
+.golden-pass .button-quiet:hover { background: transparent; color: var(--golden-accent); }
 .golden-pass .pass-consent { align-items: flex-start; margin-block: 4px; }
 .golden-pass .pass-consent input { flex: 0 0 auto; width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--golden-accent); }
 .golden-pass textarea { color: var(--golden-ink); background: #181714; border-color: var(--golden-line); }
