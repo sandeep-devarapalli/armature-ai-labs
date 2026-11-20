@@ -94,6 +94,8 @@ it("offers the free Guest Pass beside the live desk choices", () => {
   mock.basic = true;
   mock.signedIn = false;
   show("/bookings?item=guest");
+  expect(screen.getAllByRole("row")[1]).toHaveTextContent("Golden Pass");
+  expect(screen.getByRole("link", { name: "Explore Golden Pass" })).toHaveAttribute("href", "/golden-pass");
   expect(screen.getByRole("rowheader", { name: /guest pass/i })).toBeInTheDocument();
   expect(screen.getByText("Free")).toBeInTheDocument();
   expect(screen.getByRole("link", { name: /sign in by email/i })).toHaveAttribute("href", "/auth?next=%2Fbookings%2F%3Fitem%3Dguest%23steps");
