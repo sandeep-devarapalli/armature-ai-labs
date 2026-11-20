@@ -1,4 +1,3 @@
-import { GoldenPassCard } from "../components/GoldenPassCard";
 import { DiscountOffers } from "../components/DiscountOffers";
 import { useRegistrationLabel } from "../context/AccountContext";
 import { useEffect, useState, type FormEvent } from "react";
@@ -337,7 +336,11 @@ export function JoinPage() {
           <p>Daytime lab access every day, priority equipment booking and members-only gatherings.</p>
           <Link className="button button-primary" to="/golden-pass">Explore Golden Pass</Link>
         </div>
-        <GoldenPassCard />
+        <div className="golden-pass-card" aria-hidden="true">
+          <div><span>Armature AI Labs</span><img src="/brand/editorial-2026-09/source/approved-circular-mark.svg" alt="" /></div>
+          <strong>Golden Pass</strong>
+          <div>Annual membership</div>
+        </div>
       </aside>
     </section>
     <DiscountOffers categories={["coworking", "cabin"]} />
