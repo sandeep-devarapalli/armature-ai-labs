@@ -34,7 +34,7 @@ test("landing and membership pages publish verified community links", async ({ p
   await expect(homeLinkedIn).toHaveAttribute("rel", "noreferrer");
 
   await page.goto("/join");
-  const joinHero = page.locator(".page-hero");
+  const joinHero = page.locator("main");
   const joinDiscord = joinHero.getByRole("link", { name: "Join Discord" });
   const joinLinkedIn = joinHero.getByRole("link", { name: "Follow on LinkedIn" });
 
