@@ -1,3 +1,4 @@
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { supabase } from "./supabase";
 
 export type GuestPass = {
@@ -25,11 +26,15 @@ export const formatPassDate = (date: string) => new Intl.DateTimeFormat("en-IN",
   dateStyle: "medium", timeZone: "Asia/Kolkata",
 }).format(new Date(date.length === 10 ? date + "T12:00:00+05:30" : date));
 
-export async function passRequest<T>(rpc: string, args?: Record<string, string | null>): Promise<T> {
-  if (!supabase) throw new Error("Pass requests are unavailable.");
-  const { data, error } = await supabase.rpc(rpc, args);
+type PassRpc = "get_my_guest_passes" | "request_guest_pass" | "accept_guest_pass_date" | "staff_list_guest_passes"
+  | "staff_update_guest_pass" | "get_my_golden_pass_application" | "submit_golden_pass_application" | "staff_list_golden_pass_applications";
+
+export async function passRequest<T>(rpc: PassRpc, args?: Record<string, string | null>): Promise<T> {
+  const client: SupabaseClient | null = supabase;
+  if (!client) throw new Error("Pass requests are unavailable.");
+  const { data, error } = await client.rpc(rpc, args);
   if (error) {
-    if (error.code === "22023" || error.code === "42501" || error.code === "23505") throw new Error(error.message);
+    if (error.code === "22023" || error.code === "42501" || error.code === "23505" || error.code === "P0002") throw new Error(error.message);
     throw new Error("We couldn’t load or save this request. Please try again.");
   }
   return data as T;

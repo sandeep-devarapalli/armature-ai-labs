@@ -36,7 +36,7 @@ function GuestRequests() {
     return () => { active = false; };
   }, [revision]);
 
-  async function update(rpc: string, args: Record<string, string>, message: string, form?: HTMLFormElement) {
+  async function update(rpc: "request_guest_pass" | "accept_guest_pass_date", args: Record<string, string>, message: string, form?: HTMLFormElement) {
     if (busy) return;
     setBusy(true); setError(""); setNotice("");
     try {

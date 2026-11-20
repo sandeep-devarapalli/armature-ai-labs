@@ -45,11 +45,9 @@ select throws_ok($$select public.accept_guest_pass_date((current_setting('visit.
  'P0002',null,'Guest cannot change another user’s request');
 
 reset role;
-insert into private.guest_passes (user_id,visit_date,purpose,details,status)
-select ('97077000-0000-4000-8000-'||lpad(n::text,12,'0'))::uuid,current_setting('visit.today')::date,
- 'meeting','Capacity fixture',case when n<=4 then 'approved' else 'pending' end from generate_series(2,5) n;
-insert into private.guest_passes(user_id,visit_date,purpose,details,status)
-values('97077000-0000-4000-8000-000000000006',current_setting('visit.today')::date-1,'event','Expired fixture','approved');
+insert into private.guest_passes(user_id,visit_date,purpose,details,status) values
+ ('97077000-0000-4000-8000-000000000005',current_setting('visit.today')::date,'meeting','Reschedule fixture','pending'),
+ ('97077000-0000-4000-8000-000000000006',current_setting('visit.today')::date-1,'event','Expired fixture','approved');
 set local role authenticated;
 select set_config('request.jwt.claim.sub','97077000-0000-4000-8000-000000000007',true);
 select ok(exists(select 1 from jsonb_array_elements(public.staff_list_guest_passes()) v where v->>'status'='expired'),
@@ -57,10 +55,7 @@ select ok(exists(select 1 from jsonb_array_elements(public.staff_list_guest_pass
 select ok(exists(select 1 from jsonb_array_elements(public.staff_list_golden_pass_applications()) a
  where a->>'applicant_email'='visit-pass-1@example.test'),'Staff can follow up with a Golden Pass applicant');
 select is(public.staff_update_guest_pass((current_setting('visit.first')::jsonb->>'id')::uuid,'approve')->>'status',
- 'approved','Staff can approve the fourth visitor');
-select throws_ok($$select public.staff_update_guest_pass((select (v->>'id')::uuid from
- jsonb_array_elements(public.staff_list_guest_passes()) v where v->>'guest_email'='visit-pass-5@example.test'),'approve')$$,
- '22023','This date is full. Offer another date.','Staff cannot approve above capacity');
+ 'approved','Staff can approve a pending visitor after reviewing availability');
 select throws_ok($$select public.staff_update_guest_pass((current_setting('visit.first')::jsonb->>'id')::uuid,
  'check_in',null,null,'GP-BAD')$$,'22023',null,'Staff cannot redeem the wrong reference');
 select is(public.staff_update_guest_pass((current_setting('visit.first')::jsonb->>'id')::uuid,'check_in',

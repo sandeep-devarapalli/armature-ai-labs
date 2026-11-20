@@ -30,6 +30,7 @@ function renderCallback(next: string, suffix = "") {
     <MemoryRouter initialEntries={[`/auth/callback?${query}${suffix}`]}>
       <Routes>
         <Route path="/auth/callback" element={<AuthCallbackPage />} />
+        <Route path="/golden-pass" element={<div>Golden Pass destination</div>} />
         <Route path="/join" element={<div>Join destination</div>} />
         <Route path="/bookings" element={<div>Bookings destination</div>} />
         <Route path="/onboarding" element={<div>Onboarding destination</div>} />
@@ -70,6 +71,21 @@ describe("auth callback return path", () => {
     vi.stubEnv("VITE_DESK_CHECKOUT_ENABLED", enabled);
     try {
       renderCallback("/bookings/");
+      expect(await screen.findByText(destination)).toBeInTheDocument();
+    } finally {
+      vi.unstubAllEnvs();
+    }
+  });
+
+  it.each([
+    ["/bookings/?item=guest#steps", "Bookings destination"],
+    ["/golden-pass#apply", "Golden Pass destination"],
+  ])("returns an email sign-in to %s without paid desk checkout", async (next, destination) => {
+    gate.basic = true;
+    vi.stubEnv("VITE_BASIC_ONBOARDING_ENABLED", "true");
+    vi.stubEnv("VITE_DESK_CHECKOUT_ENABLED", "false");
+    try {
+      renderCallback(next);
       expect(await screen.findByText(destination)).toBeInTheDocument();
     } finally {
       vi.unstubAllEnvs();

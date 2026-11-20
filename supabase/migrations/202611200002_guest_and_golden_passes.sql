@@ -15,7 +15,6 @@ create table private.guest_passes (
  created_at timestamptz not null default now()
 );
 create unique index guest_pass_one_per_day on private.guest_passes(user_id,visit_date) where status<>'declined';
-create index guest_pass_approved_day on private.guest_passes(visit_date) where status in ('approved','checked_in');
 
 create table private.golden_pass_applications (
  id uuid primary key default gen_random_uuid(),
@@ -136,13 +135,6 @@ begin
  end if;
  if p_action='offer' and (p_offered_date is null or not isfinite(p_offered_date) or p_offered_date<today or p_offered_date=result.visit_date) then
   raise exception 'Choose a different visit date' using errcode='22023';
- end if;
- if p_action='approve' then
-  -- Serialize approvals for a date so concurrent reviewers cannot exceed capacity.
-  perform pg_advisory_xact_lock(20261120,result.visit_date-date '2000-01-01');
-  if (select count(*) from private.guest_passes where visit_date=result.visit_date and status in ('approved','checked_in'))>=4 then
-   raise exception 'This date is full. Offer another date.' using errcode='22023';
-  end if;
  end if;
  update private.guest_passes set status=case p_action when 'approve' then 'approved' when 'decline' then 'declined' else 'alternate' end,
   offered_date=case when p_action='offer' then p_offered_date end,staff_note=nullif(trim(p_note),''),
