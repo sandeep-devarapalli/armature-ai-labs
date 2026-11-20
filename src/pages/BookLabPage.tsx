@@ -85,7 +85,7 @@ export default function BookLabPage() {
         {item.id === "desk" && <DeskBooking />}
         {item.id === "guest" && <GuestPassBooking />}
         {item.id === "cabin" && <>
-          <p className="book-note">Monthly prices are for the whole cabin and open to negotiation.</p>
+          <p className="book-note">Monthly prices are for the whole cabin and open to negotiation. First-floor cabins require six months’ rent in advance.</p>
           <CabinMap list={cabinList} chosen={cabin?.code} />
         </>}
         {item.id === "kit" && <>
