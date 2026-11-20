@@ -124,6 +124,7 @@
 .join-access-levels { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 24px; }
 .join-access-levels article { border-top: 1px solid var(--hair-strong); padding-top: 16px; }
 .join-access-levels h3 { margin: 0 0 8px; }
+.book-table.book-access-table { min-width: 0; }
 .book-table.book-access-table .book-golden-row { background: #eee0bf; color: #302213; }
 .book-table.book-access-table .book-golden-row th strong,
 .book-table.book-access-table .book-golden-row .book-price { color: #302213; }
