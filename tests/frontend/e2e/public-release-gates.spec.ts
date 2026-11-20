@@ -97,7 +97,7 @@ test("public-first production gates operational routes", async ({ page }) => {
     await expect(page.getByRole("heading", { name: "Guest Pass", exact: true })).toBeVisible();
     await expect(page.getByRole("link", { name: "Sign in by email", exact: true })).toBeVisible();
     await expect(page.getByRole("button", { name: "Submit guest request" })).toHaveCount(0);
-    if (!deskEnabled) await expect(page.getByRole("button", { name: "Choose desk pass", exact: true })).toHaveCount(0);
+    if (!deskEnabled) await expect(page.getByRole("button", { name: "Choose a desk pass", exact: true })).toHaveCount(0);
   }
 
   if (deskEnabled) {

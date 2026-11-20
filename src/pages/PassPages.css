@@ -88,3 +88,58 @@
   .golden-hero figure { width: min(100%,30rem); }
   .golden-pass-card strong { font-size: clamp(38px,11vw,70px); }
 }
+
+.wrap.join-access-hero, .join-access-book {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(24px,5vw,72px);
+  align-items: center;
+}
+.wrap.join-access-hero { padding-block: clamp(40px,6vw,84px); }
+.join-access-hero h1, .join-access-heading, .join-golden h2 {
+  font: italic 400 clamp(44px,7vw,84px)/.96 "Instrument Serif", Georgia, serif;
+  letter-spacing: -.025em;
+  margin: 0 0 18px;
+}
+.join-access-heading, .join-golden h2 { font-size: clamp(38px,5vw,58px); }
+.join-access-book > .button { justify-self: start; }
+.join-golden {
+  display: grid;
+  grid-template-columns: 1fr .85fr;
+  gap: 20px;
+  align-items: center;
+  padding: clamp(22px,3vw,40px);
+  border-radius: 12px;
+  background: #201c16;
+  color: #fbf2df;
+}
+.join-golden h2 { color: inherit; }
+.join-golden p { color: #dfcfb6; margin: 8px 0 18px; }
+.join-golden > div > strong { color: #efd39b; }
+.join-golden .button-primary, .book-table .book-golden-row .button-primary { background: #efd39b; border-color: #b69257; color: #292015; }
+.join-golden .button-primary:hover, .book-table .book-golden-row .button-primary:hover { background: #f9e5bd; color: #292015; }
+.join-golden .golden-pass-card > strong { color: #332611; font-size: clamp(23px,2.4vw,38px); white-space: nowrap; }
+.join-golden .golden-pass-card div { font-size: 10px; }
+.join-golden .golden-pass-card svg { min-width: 17px; }
+.join-access-levels { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 24px; }
+.join-access-levels article { border-top: 1px solid var(--hair-strong); padding-top: 16px; }
+.join-access-levels h3 { margin: 0 0 8px; }
+.book-table.book-access-table { min-width: 0; }
+.book-table.book-access-table .book-golden-row { background: #eee0bf; color: #302213; }
+.book-table.book-access-table .book-golden-row th strong,
+.book-table.book-access-table .book-golden-row .book-price { color: #302213; }
+.book-table.book-access-table .book-golden-row small,
+.book-table.book-access-table .book-golden-row td[data-label]::before { color: #5d492e; }
+.book-table.book-access-table .book-price { white-space: normal; }
+.book-row-terms { margin-top: 8px; }
+.book-row-terms summary { width: fit-content; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+@media(max-width:900px) {
+  .wrap.join-access-hero, .join-access-book { grid-template-columns: 1fr; }
+  .join-golden .golden-pass-card { max-width: 235px; justify-self: end; }
+}
+@media(max-width:600px) {
+  .join-access-levels { grid-template-columns: 1fr; gap: 8px; }
+  .join-golden { grid-template-columns: 1fr; }
+  .join-golden .golden-pass-card { justify-self: start; }
+  .book-table.book-access-table tbody tr { grid-template-columns: 1fr; }
+}

@@ -1,3 +1,4 @@
+import { GoldenPassCard } from "../components/GoldenPassCard";
 import { DiscountOffers } from "../components/DiscountOffers";
 import { useRegistrationLabel } from "../context/AccountContext";
 import { useEffect, useState, type FormEvent } from "react";
@@ -318,6 +319,45 @@ export function JoinPage() {
   );
   const membershipActive = currentMember?.membershipState === "active";
   const basicOnly = basicOnboardingAvailable && !memberPlatformAvailable;
+
+  if (basicOnly && import.meta.env.VITE_GOLDEN_PASS_CHECKOUT_ENABLED === "true") return <>
+    <section className="wrap join-access-hero" aria-labelledby="join-access-title">
+      <div>
+        <h1 id="join-access-title">Membership at the lab</h1>
+        <p className="lede">Create a free account, review your membership status, or choose a way to spend time at the lab in HSR Layout.</p>
+        <div className="section-actions">
+          <Link className="button button-primary" to="/onboarding">{registrationLabel} <ArrowRight aria-hidden="true" /></Link>
+          <Link className="button button-quiet" to="/bookings/">Compare booking options</Link>
+        </div>
+      </div>
+      <aside className="join-golden" aria-labelledby="join-golden-title">
+        <div>
+          <h2 id="join-golden-title">Golden Pass</h2>
+          <strong>₹1,00,000 for 12 months</strong>
+          <p>Daytime lab access every day, priority equipment booking and members-only gatherings.</p>
+          <Link className="button button-primary" to="/golden-pass">Explore Golden Pass</Link>
+        </div>
+        <GoldenPassCard />
+      </aside>
+    </section>
+    <DiscountOffers categories={["coworking", "cabin"]} />
+    <section className="section"><div className="wrap">
+      <h2 className="join-access-heading">Membership levels</h2>
+      <div className="join-access-levels">
+        <article><h3>Basic</h3><p>Free membership starts when you confirm your email. Manage your profile and access published free courses.</p></article>
+        <article><h3>Verified</h3><p>Complete identity review and mobile verification to reach Verified status.</p></article>
+        {levelsEnabled && <article><h3>Premium</h3><p>An active qualifying workspace plan adds Premium to an eligible Verified account.</p></article>}
+      </div>
+      <p className="book-note">Members with approved identity can sign in and pay directly for Golden Pass. Mobile verification is optional for Golden Pass purchase.</p>
+    </div></section>
+    <section className="section" id="premium-plans"><div className="wrap join-access-book">
+      <div>
+        <h2 className="join-access-heading">Book time at the lab</h2>
+        <p className="lede">Compare shared desk passes, team cabin quotes and free Guest Passes for events or meetings. Current prices and availability are on the bookings page.</p>
+      </div>
+      <Link className="button button-quiet" to="/bookings/">See live bookings</Link>
+    </div></section>
+  </>;
 
   const membershipAction = basicOnly ? (
     <><Link className="button button-primary" to="/onboarding">{registrationLabel} <ArrowRight aria-hidden="true" /></Link><Link className="button button-quiet" to="/booking-beta">Explore booking beta <ArrowRight aria-hidden="true" /></Link></>

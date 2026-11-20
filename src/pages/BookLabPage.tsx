@@ -55,27 +55,34 @@ export default function BookLabPage() {
   const kit = equipment.find(p => p.product === params.get("product"));
 
   return <>
-    <PageHeader meta="Workspace bookings" title="Book the lab." description="Compare everything you can book, pick one, and follow the steps below. Nothing is charged until the payment step." />
+    <PageHeader meta="Workspace bookings" title="Book the lab." description="Reserve a desk to work, request a free Guest Pass for an event or meeting, or ask for a team cabin quote. Compare the available options below." />
     <section className="section">
       <div className="wrap">
+        <h2 id="book-access-title" className="join-access-heading">Compare access</h2>
         <div className="book-table-wrap">
-          <table className="book-table">
-            <caption className="mono">What you can book</caption>
-            <thead><tr><th scope="col">Booking</th><th scope="col">Price</th><th scope="col">Deposit</th><th scope="col">Minimum</th><th scope="col">Cancellation</th><th scope="col"><span className="sr-only">Choose</span></th></tr></thead>
+          <table className="book-table book-access-table" aria-labelledby="book-access-title">
+            <thead><tr><th scope="col">Access</th><th scope="col">Price and availability</th><th scope="col">Next step</th></tr></thead>
             <tbody>
+              {basicOnboardingAvailable && <tr className="book-golden-row">
+                <th scope="row"><strong>Golden Pass</strong><small>Daytime access every day and priority booking.</small></th>
+                <td data-label="Price"><span className="book-price">₹1,00,000 for 12 months</span></td>
+                <td><Link className="button button-primary" to="/golden-pass">Explore Golden Pass</Link></td>
+              </tr>}
               {rows.map(row => <tr key={row.id} className={row.id === item?.id ? "is-selected" : ""}>
                 <th scope="row"><strong>{row.name}</strong><small>{row.summary}</small></th>
-                <td data-label="Price">{row.prices.map(p => <span key={p} className="book-price">{p}</span>)}</td>
-                <td data-label="Deposit">{row.deposit}</td>
-                <td data-label="Minimum">{row.minimum}</td>
-                <td data-label="Cancellation"><small>{row.cancellation}</small></td>
-                <td><button type="button" className={row.id === item?.id ? "button button-quiet" : "button button-primary"} aria-pressed={row.id === item?.id}
-                  aria-label={`${row.id === item?.id ? "Selected" : "Choose"} ${row.name.toLowerCase()}`} onClick={() => choose({ item: row.id })}>{row.id === item?.id ? "Selected" : "Choose"}</button></td>
+                <td data-label="Price">{row.prices.map(p => <span key={p} className="book-price">{p}</span>)}
+                  <details className="book-row-terms"><summary>Booking terms</summary>
+                    <small>Deposit: {row.deposit} · Minimum: {row.minimum}</small>
+                    <small>Cancellation: {row.cancellation}</small>
+                  </details>
+                </td>
+                <td><button type="button" className="button button-quiet" aria-pressed={row.id === item?.id}
+                  aria-label={row.id === item?.id ? `Selected ${row.name.toLowerCase()}` : undefined} onClick={() => choose({ item: row.id })}>{row.id === item?.id ? "Selected" : { desk: "Choose a desk pass", guest: "Request a Guest Pass", cabin: "View cabin quotes", kit: "Browse equipment", event: eventCheckoutAvailable ? "Book event space" : "Event enquiries" }[row.id]}</button></td>
               </tr>)}
             </tbody>
           </table>
         </div>
-        {basicOnboardingAvailable && <p className="book-note"><Link to="/golden-pass">See the ₹1,00,000 annual Golden Pass</Link></p>}
+        {basicOnboardingAvailable && deskCheckoutAvailable && <p className="book-note">For a workday, choose a paid desk pass. Guest Passes are for visits and require staff approval.</p>}
         <p className="book-note">Armature is not GST-registered, so no GST is added.</p>
       </div>
     </section>
