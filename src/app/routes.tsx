@@ -19,6 +19,8 @@ const HackathonPage = lazy(() => import("../pages/HackathonPages").then(module =
 const ResourceFeedbackPage = lazy(() => import("../pages/ResourceFeedbackPage").then(module => ({ default: module.ResourceFeedbackPage })));
 const ResourceFeedbackAdminPage = lazy(() => import("../pages/ResourceFeedbackPage").then(module => ({ default: module.ResourceFeedbackAdminPage })));
 
+const GoldenPassPage = lazy(() => import("../pages/PassPages").then(module => ({ default: module.GoldenPassPage })));
+const PassStaffPage = lazy(() => import("../pages/PassStaffPage"));
 const BookLabPage = lazy(() => import("../pages/BookLabPage"));
 const EquipmentRentalPage = lazy(() => import("../pages/EquipmentRentalPage"));
 const BookingBetaPage = lazy(() => import("../pages/BookingBetaPage").then((module) => ({ default: module.BookingBetaPage })));
@@ -167,7 +169,9 @@ export const routes: RouteObject[] = [
       { path: "/book", element: memberFeature(protectedPage(<BookPage />)) },
       { path: "/book/:resource", element: memberFeature(protectedPage(<ResourceBookingPage />)) },
       { path: "/bookings/rentals", element: <Navigate to={rentalCheckoutAvailable ? "/bookings?item=cabin" : "/bookings"} replace /> },
-      { path: "/bookings", element: deskCheckoutAvailable || rentalCheckoutAvailable || eventCheckoutAvailable ? <BookLabPage /> : memberFeature(protectedPage(<BookingsPage />)) },
+      { path: "/golden-pass", element: <ReleaseGate enabled={basicOnboardingAvailable}><GoldenPassPage /></ReleaseGate> },
+      { path: "/admin/passes", element: <ReleaseGate enabled={basicOnboardingAvailable}><PassStaffPage /></ReleaseGate> },
+      { path: "/bookings", element: basicOnboardingAvailable || deskCheckoutAvailable || rentalCheckoutAvailable || eventCheckoutAvailable ? <BookLabPage /> : memberFeature(protectedPage(<BookingsPage />)) },
       ...(rentalCheckoutAvailable ? [{ path: "/bookings/equipment", element: <EquipmentRentalPage /> }, { path: "/bookings/equipment/:code", element: <EquipmentRentalPage /> }] : []),
       { path: "/bookings/:id", element: memberFeature(protectedPage(<BookingDetailPage />)) },
       { path: "/check-in", element: memberFeature(protectedPage(<CheckInPage />)) },

@@ -3,8 +3,8 @@ import { MemoryRouter, Route, Routes, useLocation } from "react-router-dom";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import BookLabPage from "../../src/pages/BookLabPage";
 
-const mock = vi.hoisted(() => ({ desk: true, rental: true, event: false, signedIn: true, request: vi.fn() }));
-vi.mock("../../src/config/release", () => ({ get deskCheckoutAvailable() { return mock.desk; }, get rentalCheckoutAvailable() { return mock.rental; }, get eventCheckoutAvailable() { return mock.event; } }));
+const mock = vi.hoisted(() => ({ basic: false, desk: true, rental: true, event: false, signedIn: true, request: vi.fn() }));
+vi.mock("../../src/config/release", () => ({ get basicOnboardingAvailable() { return mock.basic; }, get deskCheckoutAvailable() { return mock.desk; }, get rentalCheckoutAvailable() { return mock.rental; }, get eventCheckoutAvailable() { return mock.event; } }));
 vi.mock("../../src/components/EventCheckout", () => ({ EventBooking: () => <p>Event checkout</p> }));
 vi.mock("../../src/context/AccountContext", () => ({ useAccount: () => ({ account: mock.signedIn ? { user_id: "buyer" } : null, signedIn: mock.signedIn }) }));
 vi.mock("../../src/lib/rental-checkout", () => ({ rentalRequest: mock.request }));
@@ -24,7 +24,7 @@ const products = [
 
 function Where() { const { pathname, search } = useLocation(); return <output aria-label="Location">{pathname + search}</output>; }
 const show = (path = "/bookings") => render(<MemoryRouter initialEntries={[path]}><Routes><Route path="/bookings" element={<><BookLabPage /><Where /></>} /></Routes></MemoryRouter>);
-beforeEach(() => { mock.desk = true; mock.rental = true; mock.event = false; mock.signedIn = true; mock.request.mockReset().mockResolvedValue({ products }); Element.prototype.scrollIntoView = vi.fn(); });
+beforeEach(() => { mock.basic = false; mock.desk = true; mock.rental = true; mock.event = false; mock.signedIn = true; mock.request.mockReset().mockResolvedValue({ products }); Element.prototype.scrollIntoView = vi.fn(); });
 afterEach(cleanup);
 
 it("compares desk, cabins, equipment and events, with live equipment prices", async () => {
@@ -88,4 +88,13 @@ it("opens the event checkout and shows the hourly rate when events are on", () =
   expect(screen.getByText("₹2,500 / hour")).toBeInTheDocument();
   expect(screen.getByText("Event checkout")).toBeInTheDocument();
   expect(screen.queryByText(/Event bookings open soon/)).not.toBeInTheDocument();
+});
+
+it("offers the free Guest Pass beside the live desk choices", () => {
+  mock.basic = true;
+  mock.signedIn = false;
+  show("/bookings?item=guest");
+  expect(screen.getByRole("rowheader", { name: /guest pass/i })).toBeInTheDocument();
+  expect(screen.getByText("Free")).toBeInTheDocument();
+  expect(screen.getByRole("link", { name: /sign in by email/i })).toHaveAttribute("href", "/auth?next=%2Fbookings%2F%3Fitem%3Dguest%23steps");
 });

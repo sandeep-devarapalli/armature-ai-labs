@@ -58,6 +58,10 @@ export function PrivacyPage() {
         <p>Supabase database backups contain database records and Storage metadata, not the uploaded Storage image files. Deleting an uploaded image does not erase related database history or every provider log or backup. Restored records must be checked against expired or deleted uploads before document access is restored.</p>
         <p>Identity-review notice version: <strong>2026-09-26-release-1</strong>. We record your explicit acceptance with the application revision and server timestamp. Corrections require a new acceptance; previous acceptance records are retained.</p>
       </section>
+      <section aria-labelledby="privacy-passes">
+        <h2 id="privacy-passes">Guest and Golden Pass requests</h2>
+        <p>We use your confirmed account email and the details you submit to review your request. For a Guest Pass, authorised staff can see your visit date, reason, decision and check-in record. For a Golden Pass application, staff use your application details to discuss membership, payment and activation with you. We keep these records for administration and to respond to enquiries. Contact {legalEntity.privacyEmail} to request review or deletion. Please leave government ID numbers and payment details out of both forms.</p>
+      </section>
       <section aria-labelledby="privacy-payments">
         <h2 id="privacy-payments">Payments</h2>
         <p>Online rent, seat, hardware-order and workshop payments are processed by Razorpay Payments Private Limited and its partner banks. New cabin and equipment security deposits are paid separately by bank transfer. You enter your card, UPI or net-banking details on Razorpay's secure checkout. We never see or store your full card number, CVV, UPI PIN or banking password.</p>

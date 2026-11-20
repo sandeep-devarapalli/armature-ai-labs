@@ -5,12 +5,13 @@ import { DeskBooking } from "../components/DeskCheckout";
 import { EventBooking } from "../components/EventCheckout";
 import { PageHeader } from "../components/Primitives";
 import { RentalBooking } from "../components/RentalCheckout";
-import { deskCheckoutAvailable, eventCheckoutAvailable, rentalCheckoutAvailable } from "../config/release";
+import { basicOnboardingAvailable, deskCheckoutAvailable, eventCheckoutAvailable, rentalCheckoutAvailable } from "../config/release";
 import { useAccount } from "../context/AccountContext";
 import { cabinRent, cabins, formatPaise, statusLabel } from "../lib/cabins";
+import { GuestPassBooking } from "./PassPages";
 import { rentalRequest, type RentalProduct } from "../lib/rental-checkout";
 
-type Row = { id: "desk" | "cabin" | "kit" | "event"; name: string; summary: string; prices: string[]; deposit: string; minimum: string; cancellation: string };
+type Row = { id: "desk" | "guest" | "cabin" | "kit" | "event"; name: string; summary: string; prices: string[]; deposit: string; minimum: string; cancellation: string };
 
 const lowestRent = (items: RentalProduct[]) => {
   const rents = items.flatMap(p => [p.dayRentPaise && [p.dayRentPaise, "day"], p.weekRentPaise && [p.weekRentPaise, "7 days"], p.monthRentPaise && [p.monthRentPaise, "30 days"]])
@@ -38,6 +39,8 @@ export default function BookLabPage() {
     ...(deskCheckoutAvailable ? [{ id: "desk", name: "Desk pass", summary: "A chair on the lab floor, by the day, week or month.",
       prices: [`${formatPaise(35000)} / day`, `${formatPaise(175000)} / 7 days`, `${formatPaise(1300000)} / calendar month`], deposit: "None", minimum: "1 day",
       cancellation: "48 hours or more before the start: full refund" } as Row] : []),
+    ...(basicOnboardingAvailable ? [{ id: "guest", name: "Guest Pass", summary: "Attend an event or meet someone. Staff approval required.",
+      prices: ["Free"], deposit: "None", minimum: "1 day", cancellation: "No payment" } as Row] : []),
     ...(rentalCheckoutAvailable ? [{ id: "cabin", name: "Team cabins", summary: cabinList.map(c => `${c.name.replace("Cabin ", "")} ${statusLabel[c.status].toLowerCase()}`).join(" · "),
       prices: cabinList.filter(c => c.status === "quote").map(c => `${c.name} · ${formatPaise(cabinRent(c))} / month`),
       deposit: "Confirmed in quote", minimum: "Confirmed in quote", cancellation: "Confirmed in quote" } as Row, { id: "kit", name: "Equipment", summary: "Robot arms and cameras to use in the lab.",
@@ -72,6 +75,7 @@ export default function BookLabPage() {
             </tbody>
           </table>
         </div>
+        {basicOnboardingAvailable && <p className="book-note"><Link to="/golden-pass">See the ₹1,00,000 annual Golden Pass</Link></p>}
         <p className="book-note">Armature is not GST-registered, so no GST is added.</p>
       </div>
     </section>
@@ -79,6 +83,7 @@ export default function BookLabPage() {
       <div className="wrap">
         <h2 id="steps-title">{item.name}</h2>
         {item.id === "desk" && <DeskBooking />}
+        {item.id === "guest" && <GuestPassBooking />}
         {item.id === "cabin" && <>
           <p className="book-note">Monthly prices are for the whole cabin and open to negotiation.</p>
           <CabinMap list={cabinList} chosen={cabin?.code} />
