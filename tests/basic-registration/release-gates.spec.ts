@@ -4,7 +4,7 @@ import { backendOrigin } from "./backend-fixture";
 test("basic registration opens independently while paid access remains gated", async ({ page }) => {
   await page.route(`${backendOrigin}/**`, route => route.abort());
   await page.goto("/join");
-  await expect(page.getByRole("heading", { name: "Create your basic membership." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: process.env.VITE_GOLDEN_PASS_CHECKOUT_ENABLED === "true" ? "Membership at the lab" : "Create your basic membership." })).toBeVisible();
   await page.getByRole("link", { name: "Register for free" }).first().click();
   await expect(page).toHaveURL(/\/onboarding$/);
   await expect(page.getByRole("heading", { name: "Join Armature AI Labs." })).toBeVisible();
@@ -22,8 +22,8 @@ test("basic registration opens independently while paid access remains gated", a
     await expect(page.getByRole("button", { name: "Pay with Razorpay", exact: true })).toHaveCount(0);
   } else {
     await expect(page.getByRole("heading", { name: "Book the lab.", exact: true })).toBeVisible();
-    await expect(page.getByRole("button", { name: "Choose guest pass", exact: true })).toBeVisible();
-    await expect(page.getByRole("button", { name: "Choose desk pass", exact: true })).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "Request a Guest Pass", exact: true })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Choose a desk pass", exact: true })).toHaveCount(0);
   }
   await page.goto("/bookings/?item=guest#steps");
   await expect(page.getByRole("link", { name: "Sign in by email", exact: true })).toHaveAttribute("href", "/auth?next=%2Fbookings%2F%3Fitem%3Dguest%23steps");

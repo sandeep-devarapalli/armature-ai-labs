@@ -39,18 +39,18 @@ it("compares desk, cabins, equipment and events, with live equipment prices", as
 it("shows only the rows whose checkout is enabled", () => {
   mock.rental = false;
   show();
-  expect(screen.getByRole("button", { name: "Choose desk pass" })).toBeInTheDocument();
-  expect(screen.queryByRole("button", { name: "Choose team cabins" })).not.toBeInTheDocument();
-  expect(screen.queryByRole("button", { name: "Choose equipment" })).not.toBeInTheDocument();
+  expect(screen.getByRole("button", { name: "Choose a desk pass" })).toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: "View cabin quotes" })).not.toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: "Browse equipment" })).not.toBeInTheDocument();
   expect(mock.request).not.toHaveBeenCalled();
 });
 
 it("keeps the chosen row in the address and opens its checkout below", () => {
   show();
-  fireEvent.click(screen.getByRole("button", { name: "Choose desk pass" }));
+  fireEvent.click(screen.getByRole("button", { name: "Choose a desk pass" }));
   expect(screen.getByLabelText("Location").textContent).toBe("/bookings?item=desk");
   expect(screen.getByText("Desk checkout")).toBeInTheDocument();
-  fireEvent.click(screen.getByRole("button", { name: "Choose event space" }));
+  fireEvent.click(screen.getByRole("button", { name: "Event enquiries" }));
   expect(screen.getByText(/Event bookings open soon/)).toBeInTheDocument();
   expect(screen.queryByText("Desk checkout")).not.toBeInTheDocument();
 });

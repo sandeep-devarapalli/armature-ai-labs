@@ -67,7 +67,7 @@ test("server hold retains original registration and avoids OTP calls", async ({ 
   await expect(page.getByRole("heading", { name: "Mobile verification" })).toHaveCount(0);
   expect(calls).not.toContain("member-phone-verification");
   await page.goto("/join");
-  await expect(page.getByRole("heading", { name: "Complete identity review" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: process.env.VITE_GOLDEN_PASS_CHECKOUT_ENABLED === "true" ? "Verified" : "Complete identity review" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Premium", exact: true })).toHaveCount(0);
 });
 
@@ -79,8 +79,8 @@ test("Basic membership cannot request a desk agreement or payment", async ({ pag
     await expect(page.getByRole("link", { name: "View membership", exact: true })).toHaveAttribute("href", "/onboarding");
   } else {
     await expect(page.getByRole("heading", { name: "Book the lab.", exact: true })).toBeVisible();
-    await expect(page.getByRole("button", { name: "Choose guest pass", exact: true })).toBeVisible();
-    await expect(page.getByRole("button", { name: "Choose desk pass", exact: true })).toHaveCount(0);
+    await expect(page.getByRole("button", { name: "Request a Guest Pass", exact: true })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Choose a desk pass", exact: true })).toHaveCount(0);
   }
   await expect(page.getByRole("button", { name: "Request agreement", exact: true })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Pay with Razorpay", exact: true })).toHaveCount(0);
@@ -91,9 +91,16 @@ test("public membership journey explains all three levels without promising rent
   await fixture(page);
   await page.goto("/join");
   for (const label of ["Basic", "Verified", "Premium"]) await expect(page.getByRole("heading", { name: label, exact: true })).toBeVisible();
-  await expect(page.getByText(/Premium membership/)).toContainText("Paid bookings remain closed");
-  await page.getByRole("heading", { name: "One membership journey" }).scrollIntoViewIfNeeded();
-  await page.locator(".process-list").filter({ has: page.getByRole("heading", { name: "Basic", exact: true }) }).screenshot({ path: info.outputPath("membership-levels-join.png"), style: ".topbar, .skip-link { visibility: hidden !important; }" });
+  const goldenPassEnabled = process.env.VITE_GOLDEN_PASS_CHECKOUT_ENABLED === "true";
+  if (goldenPassEnabled) {
+    await expect(page.getByRole("link", { name: "Explore Golden Pass" })).toHaveAttribute("href", "/golden-pass");
+    await expect(page.getByRole("link", { name: "See live bookings" })).toHaveAttribute("href", "/bookings/");
+  } else {
+    await expect(page.getByText(/Premium membership/)).toContainText("Paid bookings remain closed");
+  }
+  const levels = page.locator(goldenPassEnabled ? ".join-access-levels" : ".process-list")
+    .filter({ has: page.getByRole("heading", { name: "Basic", exact: true }) });
+  await levels.screenshot({ path: info.outputPath("membership-levels-join.png"), style: ".topbar, .skip-link { visibility: hidden !important; }" });
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
 });
 

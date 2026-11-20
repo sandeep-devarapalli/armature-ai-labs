@@ -77,7 +77,7 @@ export default function BookLabPage() {
                   </details>
                 </td>
                 <td><button type="button" className="button button-quiet" aria-pressed={row.id === item?.id}
-                  aria-label={`${row.id === item?.id ? "Selected" : "Choose"} ${row.name.toLowerCase()}`} onClick={() => choose({ item: row.id })}>{row.id === item?.id ? "Selected" : { desk: "Choose a desk pass", guest: "Request a Guest Pass", cabin: "View cabin quotes", kit: "Browse equipment", event: eventCheckoutAvailable ? "Book event space" : "Event enquiries" }[row.id]}</button></td>
+                  aria-label={row.id === item?.id ? `Selected ${row.name.toLowerCase()}` : undefined} onClick={() => choose({ item: row.id })}>{row.id === item?.id ? "Selected" : { desk: "Choose a desk pass", guest: "Request a Guest Pass", cabin: "View cabin quotes", kit: "Browse equipment", event: eventCheckoutAvailable ? "Book event space" : "Event enquiries" }[row.id]}</button></td>
               </tr>)}
             </tbody>
           </table>
