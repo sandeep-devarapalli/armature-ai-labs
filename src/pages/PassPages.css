@@ -19,7 +19,7 @@
 .golden-pass .wrap { width: min(100%, 1216px); }
 .golden-pass #apply { scroll-margin-top: 76px; }
 .golden-pass :where(p,dd,figcaption) { color: var(--golden-muted); }
-.golden-pass a:not(.button) { color: var(--golden-accent); text-decoration: underline; text-underline-offset: 4px; }
+.golden-pass a[href]:not(.button) { color: var(--golden-accent); text-decoration: underline; text-underline-offset: 4px; }
 .golden-pass :focus-visible { outline: 2px solid var(--golden-accent); outline-offset: 4px; }
 .golden-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: clamp(28px,7vw,96px); align-items: start; }
 .golden-pass .golden-hero { align-items: center; padding-block: clamp(44px,7vw,96px); }
