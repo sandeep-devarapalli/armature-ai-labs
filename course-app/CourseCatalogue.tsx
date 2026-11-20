@@ -9,6 +9,7 @@ const editorial: Record<string, { subject: string; title: string; summary: strin
   'ai-in-robotics': { subject: 'Robotics', title: 'Artificial Intelligence in Robotics', summary: 'Explore robot geometry, control, learning, perception and planning through worked examples.' },
   'intro-to-robotics': { subject: 'Robotics', title: 'Introduction to Robotics', summary: 'Discover how robot joints, motors, sensors and control work together. Start with everyday observations.' },
   'robot-actuators': { subject: 'Robotics', title: 'Robot Actuators', summary: 'Understand torque, motors, gearing, mechanical design and joint control.' },
+  'ros2-for-robotics': { subject: 'Robotics', title: 'ROS 2 for Robotics', summary: 'Build robot software with ROS 2, from your first node to a robot that maps and navigates by itself.' },
   'computation-structures': { subject: 'Computing', title: 'Computation Structures', summary: 'Follow the computer design hierarchy from logic gates to processors and memory.' },
   'embedded-firmware': { subject: 'Computing', title: 'Embedded Firmware Fundamentals', summary: 'Learn firmware, drivers, debugging, motor control and real-time systems.' },
   'operating-systems': { subject: 'Computing', title: 'Operating Systems', summary: 'See how one computer shares its processor, memory and disk among many programs.' },
