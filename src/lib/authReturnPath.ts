@@ -15,6 +15,11 @@ export function safeAuthReturnPath(value: unknown) {
 
 export function onboardingAuthReturnPath(value: unknown, basicOnly: boolean) {
   const safe = safeAuthReturnPath(value);
-  if (import.meta.env.VITE_DESK_CHECKOUT_ENABLED === "true" && /^\/bookings\/?$/.test(safe.split(/[?#]/)[0])) return safe;
+  const pathname = safe.split(/[?#]/)[0];
+  if (/^\/bookings\/?$/.test(pathname)) {
+    if (import.meta.env.VITE_DESK_CHECKOUT_ENABLED === "true") return safe;
+    if (import.meta.env.VITE_BASIC_ONBOARDING_ENABLED === "true" && new URL(safe, "https://armature.invalid").searchParams.get("item") === "guest") return safe;
+  }
+  if (import.meta.env.VITE_BASIC_ONBOARDING_ENABLED === "true" && /^\/(golden-pass|admin\/passes)\/?$/.test(pathname)) return safe;
   return basicOnly && !new Set(["/components/wishlist", "/talent-network", "/talent-network/", "/directory-profile", "/directory-profile/", "/resources/white-paper/robotic-actuators/feedback", "/resources/white-paper/robotic-actuators/feedback/", "/admin/resource-feedback", "/admin/resource-feedback/"]).has(safe.split(/[?#]/)[0]) ? "/onboarding" : safe;
 }

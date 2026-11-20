@@ -21,8 +21,13 @@ test("basic registration opens independently while paid access remains gated", a
     await expect(page.getByRole("button", { name: "Request agreement", exact: true })).toHaveCount(0);
     await expect(page.getByRole("button", { name: "Pay with Razorpay", exact: true })).toHaveCount(0);
   } else {
-    await expect(page.getByRole("heading", { name: "Operational access is opening soon." })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Book the lab.", exact: true })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Choose guest pass", exact: true })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Choose desk pass", exact: true })).toHaveCount(0);
   }
+  await page.goto("/bookings/?item=guest#steps");
+  await expect(page.getByRole("link", { name: "Sign in by email", exact: true })).toHaveAttribute("href", "/auth?next=%2Fbookings%2F%3Fitem%3Dguest%23steps");
+  await expect(page.getByRole("button", { name: "Submit guest request", exact: true })).toHaveCount(0);
   for (const path of ["/book", "/dashboard", "/check-in", "/inventory", "/financials", "/kiosk", "/components/request"]) {
     await page.goto(path);
     await expect(page.getByRole("heading", { name: "Operational access is opening soon." })).toBeVisible();

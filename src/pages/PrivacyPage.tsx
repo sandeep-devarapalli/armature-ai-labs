@@ -97,6 +97,10 @@ export function PrivacyPage() {
         <h2 id="privacy-updates">Changes to this notice</h2>
         <p>We will update this page when our services or data practices change. The date above shows the latest revision. New membership or booking features will be accompanied by the relevant information before you use them. Payments are covered in the Payments section above, and in our <Link to="/terms">Terms and Conditions</Link> and <Link to="/refund-policy">Cancellation and Refund Policy</Link>.</p>
       </section>
+      <section aria-labelledby="privacy-passes">
+        <h2 id="privacy-passes">Guest and Golden Pass requests</h2>
+        <p>We use your confirmed account email and the details you submit to review your request. For a Guest Pass, authorised staff can see your visit date, reason, decision and check-in record. For a Golden Pass application, staff use your application details to discuss membership, payment and activation with you. We keep these records for administration and to respond to enquiries. Contact {legalEntity.privacyEmail} to request review or deletion. Please leave government ID numbers and payment details out of both forms.</p>
+      </section>
     </div>
   </div>;
 }

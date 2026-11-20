@@ -1,0 +1,18 @@
+.pass-review { display: grid; gap: 18px; }
+.pass-review-bar, .pass-review-detail > header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+.pass-review-grid { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); align-items: start; gap: 18px; padding-bottom: 18px; }
+.pass-review-table { margin-block: 12px; }
+.pass-review-table th, .pass-review-table td { overflow-wrap: anywhere; }
+.pass-review-table .button { text-align: left; white-space: normal; }
+.pass-review-detail { min-width: 0; padding: 18px; border: 1px solid var(--hair-strong); border-radius: 12px; background: var(--panel); }
+.pass-review-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.pass-review-facts dt { color: var(--fg-3); font: 11px var(--mono); }
+.pass-review-facts dd { margin: 2px 0 0; overflow-wrap: anywhere; white-space: pre-wrap; }
+.pass-review-full { grid-column: 1 / -1; }
+.pass-review-detail textarea { resize: vertical; }
+.pass-applications { display: grid; gap: 12px; list-style: none; padding: 0; margin: 0; }
+.pass-applications li { padding-block: 12px; border-top: 1px solid var(--hair); overflow-wrap: anywhere; }
+.pass-applications p { white-space: pre-wrap; }
+@media (max-width: 880px) {
+  .pass-review-grid { grid-template-columns: minmax(0, 1fr); }
+}

@@ -78,7 +78,9 @@ test("Basic membership cannot request a desk agreement or payment", async ({ pag
     await expect(page.getByText("Desk passes require Verified membership.", { exact: true })).toBeVisible();
     await expect(page.getByRole("link", { name: "View membership", exact: true })).toHaveAttribute("href", "/onboarding");
   } else {
-    await expect(page.getByRole("heading", { name: "Operational access is opening soon." })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Book the lab.", exact: true })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Choose guest pass", exact: true })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Choose desk pass", exact: true })).toHaveCount(0);
   }
   await expect(page.getByRole("button", { name: "Request agreement", exact: true })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Pay with Razorpay", exact: true })).toHaveCount(0);
