@@ -92,6 +92,14 @@ test("public-first production gates operational routes", async ({ page }) => {
     await expect(page.getByRole("table")).toHaveCount(0);
   }
 
+  if (basicEnabled) {
+    await page.goto("/bookings/?item=guest#steps");
+    await expect(page.getByRole("heading", { name: "Guest Pass", exact: true })).toBeVisible();
+    await expect(page.getByRole("link", { name: "Sign in by email", exact: true })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Submit guest request" })).toHaveCount(0);
+    if (!deskEnabled) await expect(page.getByRole("button", { name: "Choose desk pass", exact: true })).toHaveCount(0);
+  }
+
   if (deskEnabled) {
     await page.goto("/bookings?item=desk");
     await expect(page.getByRole("heading", { name: "Book the lab.", exact: true })).toBeVisible();
@@ -101,7 +109,7 @@ test("public-first production gates operational routes", async ({ page }) => {
 
   for (const path of [
     "/book",
-    ...(!deskEnabled ? ["/bookings"] : []),
+    ...(!basicEnabled ? ["/bookings", "/golden-pass", "/admin/passes"] : []),
     "/check-in",
     "/inventory",
     "/financials",
