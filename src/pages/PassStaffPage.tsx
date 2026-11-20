@@ -6,6 +6,8 @@ import { formatPassDate, guestPassLabels, passRequest, type GuestPass, type Gold
 
 type StaffGuest = GuestPass & { guest_email?: string };
 type StaffApplication = GoldenApplication & { applicant_email?: string };
+type GoldenRefund = { id: string; applicant_email: string; payment_id: string; refund_requested_at: string };
+const goldenCheckoutEnabled = import.meta.env.VITE_GOLDEN_PASS_CHECKOUT_ENABLED === "true";
 type Decision = "approve" | "decline" | "offer" | "check_in";
 
 function guestStatus(status: GuestPass["status"]) {
@@ -60,6 +62,7 @@ function ReviewGuest({ guest, reserved, working, onDecision }: { guest: StaffGue
 function PassQueues() {
   const [guests, setGuests] = useState<StaffGuest[]>([]);
   const [applications, setApplications] = useState<StaffApplication[]>([]);
+  const [refunds, setRefunds] = useState<GoldenRefund[]>([]);
   const [selectedId, setSelectedId] = useState("");
   const [filter, setFilter] = useState("all");
   const [refresh, setRefresh] = useState(0);
@@ -76,14 +79,17 @@ function PassQueues() {
     void Promise.all([
       passRequest<StaffGuest[]>("staff_list_guest_passes"),
       passRequest<StaffApplication[]>("staff_list_golden_pass_applications"),
-    ]).then(([guestList, applicationList]) => {
+      goldenCheckoutEnabled ? passRequest<GoldenRefund[]>("staff_list_golden_pass_refund_requests") : Promise.resolve([]),
+    ]).then(([guestList, applicationList, refundList]) => {
       if (!live) return;
       setGuests(guestList);
       setApplications(applicationList);
+      setRefunds(refundList);
     }).catch(() => {
       if (!live) return;
       setGuests([]);
       setApplications([]);
+      setRefunds([]);
       setError("The pass queues could not be loaded. Try refreshing.");
     }).finally(() => { if (live) setLoading(false); });
     return () => { live = false; };
@@ -140,13 +146,22 @@ function PassQueues() {
         {selected && <ReviewGuest key={selected.id} guest={selected} reserved={reserved} working={working} onDecision={decide} />}
       </div>
       <h2>Golden Pass applications</h2>
-      <p className="book-note">Contact applicants to arrange payment and activate membership manually.</p>
+      <p className="book-note">Follow up on applications. Members with approved identity can use online checkout when enabled.</p>
       {applications.length ? <ul className="pass-applications">{applications.map(application => <li key={application.id}>
         <h3>{application.applicant_email}</h3>
         <p className="book-note">Received {formatPassDate(application.created_at)}</p>
         <p>{application.details}</p>
         {application.applicant_email && <a href={`mailto:${encodeURIComponent(application.applicant_email).replace(/%40/g, "@")}?subject=Armature%20AI%20Labs%20Golden%20Pass`}>Email applicant</a>}
       </li>)}</ul> : <EmptyState title="No Golden Pass applications">New applications will appear here.</EmptyState>}
+      {goldenCheckoutEnabled && <>
+        <h2>Golden Pass refund requests</h2>
+        <p className="book-note">Review the request and reconcile any approved refund through the original Razorpay payment.</p>
+        {refunds.length ? <ul className="pass-applications">{refunds.map(refund => <li key={refund.id}>
+          <h3>{refund.applicant_email}</h3>
+          <p>Requested {formatPassDate(refund.refund_requested_at)}</p>
+          <p className="mono">{refund.payment_id}</p>
+        </li>)}</ul> : <EmptyState title="No Golden Pass refund requests">Requests will appear here.</EmptyState>}
+      </>}
     </>}
   </div></section>;
 }

@@ -2,11 +2,11 @@ import { bodyBytes, RazorpayRequestError, validHmac } from "./razorpay-signature
 import { type LiveRazorpay, orderIdPattern, type Payment, paymentIdPattern,
   reconcileLivePayment, refundIdPattern } from "./live-desk-payment.ts";
 
-type Quote = { checkout_kind?: "desk" | "rental" | "event" | "sale"; id: string; order_id: string | null; amount_paise: number };
+type Quote = { checkout_kind?: "desk" | "rental" | "event" | "sale" | "golden"; id: string; order_id: string | null; amount_paise: number };
 type WebhookDependencies = {
   config: () => { provider: LiveRazorpay; secret: string; accountId: string } | null;
   lookup: (orderId: string) => Promise<Quote | null>;
-  apply: (action: string, input: object, quote: Quote) => Promise<unknown>;
+  apply: (action: string, input: object, quote: Quote, confirmedAt?: string) => Promise<unknown>;
 };
 
 export function createLiveDeskWebhook({ config, lookup, apply }: WebhookDependencies) {
@@ -47,7 +47,15 @@ export function createLiveDeskWebhook({ config, lookup, apply }: WebhookDependen
       }
       if (!orderIdPattern.test(payment.order_id)) return reply({ received: true });
       quote ??= await lookup(payment.order_id);
-      if (quote) await reconcileLivePayment(settings.provider, payment, quote, (action, input) => apply(action, input, quote!), refund?.id);
+      const createdAt = event.created_at;
+      const confirmedAt = event.event === "payment.captured" && Number.isSafeInteger(createdAt)
+        && createdAt > 0 && createdAt <= Math.floor(Date.now() / 1000)
+        ? new Date(createdAt * 1000).toISOString() : undefined;
+      if (quote?.checkout_kind === "golden" && event.event === "payment.captured" && !confirmedAt) {
+        return reply({ error: "invalid_capture_timestamp" }, 400);
+      }
+      if (quote) await reconcileLivePayment(settings.provider, payment, quote, (action, input) =>
+        apply(action, input, quote!, confirmedAt), refund?.id);
       return reply({ received: true });
     } catch (error) {
       if (error instanceof RazorpayRequestError) return reply({ error: error.code }, error.status);

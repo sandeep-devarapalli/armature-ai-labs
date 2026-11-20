@@ -26,8 +26,8 @@ jobs:
       - uses: denoland/setup-deno@e95548e56dfa95d4e1a28d6f422fafe75c4c26fb # v2.0.3
         with:
           deno-version: v2.9.8
-      - run: deno test --config supabase/functions/deno.json --no-lock supabase/functions/_shared/live-desk-webhook_test.ts
-      - run: deno check --config supabase/functions/deno.json --no-lock supabase/functions/desk-checkout/index.ts supabase/functions/razorpay-booking-webhook/index.ts supabase/functions/event-checkout/index.ts supabase/functions/equipment-sale/index.ts supabase/functions/billing-dispatch/index.ts
+      - run: deno test --allow-env=ALLOWED_ORIGINS,ALLOWED_ORIGIN --config supabase/functions/deno.json --no-lock supabase/functions/_shared/live-desk-webhook_test.ts supabase/functions/_shared/golden-pass-checkout_test.ts
+      - run: deno check --config supabase/functions/deno.json --no-lock supabase/functions/desk-checkout/index.ts supabase/functions/razorpay-booking-webhook/index.ts supabase/functions/event-checkout/index.ts supabase/functions/equipment-sale/index.ts supabase/functions/billing-dispatch/index.ts supabase/functions/golden-pass-checkout/index.ts supabase/functions/test-golden-pass-webhook/index.ts
       - run: node scripts/test-market-message-files.mjs && node scripts/test-market-message-reminders.mjs && node scripts/test-market-wakeup.mjs
       - run: node --test tests/scripts/onboarding-retention.node.mjs
       - run: node --test tests/scripts/production-env.node.mjs
@@ -171,6 +171,7 @@ jobs:
       VITE_BASIC_ONBOARDING_ENABLED: 'true'
       VITE_GOOGLE_AUTH_ENABLED: 'true'
       VITE_MEMBER_PLATFORM_ENABLED: 'false'
+      VITE_GOLDEN_PASS_CHECKOUT_ENABLED: ${{ vars.VITE_GOLDEN_PASS_CHECKOUT_ENABLED || 'false' }}
       VITE_DESK_CHECKOUT_ENABLED: ${{ vars.VITE_DESK_CHECKOUT_ENABLED || 'false' }}
       VITE_RENTAL_CHECKOUT_ENABLED: ${{ vars.VITE_RENTAL_CHECKOUT_ENABLED || 'false' }}
       VITE_EVENT_CHECKOUT_ENABLED: ${{ vars.VITE_EVENT_CHECKOUT_ENABLED || 'false' }}

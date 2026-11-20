@@ -27,7 +27,7 @@ export const formatPassDate = (date: string) => new Intl.DateTimeFormat("en-IN",
 }).format(new Date(date.length === 10 ? date + "T12:00:00+05:30" : date));
 
 type PassRpc = "get_my_guest_passes" | "request_guest_pass" | "accept_guest_pass_date" | "staff_list_guest_passes"
-  | "staff_update_guest_pass" | "get_my_golden_pass_application" | "submit_golden_pass_application" | "staff_list_golden_pass_applications";
+  | "staff_update_guest_pass" | "get_my_golden_pass_application" | "submit_golden_pass_application" | "staff_list_golden_pass_applications" | "staff_list_golden_pass_refund_requests";
 
 export async function passRequest<T>(rpc: PassRpc, args?: Record<string, string | null>): Promise<T> {
   const client: SupabaseClient | null = supabase;
