@@ -93,8 +93,9 @@ function RentalCheckout({ canBook, memberId, initialProduct }: { canBook: boolea
   useEffect(() => {
     invokeRental<{ products: RentalProduct[] }>({ action: "availability" }, memberId).then(result => {
       if (!active.current) return;
-      setProducts(result.products);
-      const available = result.products.filter(entry => entry.status === "available");
+      const bookableProducts = result.products.filter(entry => entry.kind !== "cabin" || entry.product === "cabin101");
+      setProducts(bookableProducts);
+      const available = bookableProducts.filter(entry => entry.status === "available");
       setProduct((available.find(entry => entry.product === initialProduct) ?? available[0])?.product ?? "");
     }).catch(() => { if (active.current) setProducts([]); });
   }, [memberId, initialProduct]);
@@ -147,7 +148,7 @@ function RentalCheckout({ canBook, memberId, initialProduct }: { canBook: boolea
         if (!active.current) return;
         if (available.available !== true) throw new Error("Those dates cannot be booked. Choose another period or ask Armature to confirm availability.");
         const result = await rentalRequest<RentalQuote>({ action: "quote", ...selection }); if (active.current) setQuote(result); }); }}>
-      {products?.length === 0 && <p>Cabin and equipment options could not be loaded. Contact Armature to book.</p>}
+      {products?.length === 0 && <p>Rental options could not be loaded. Contact Armature to book.</p>}
       <label>What would you like?<select value={product} disabled={busy || !products?.length} onChange={event => { setProduct(event.target.value); setWithAddon(false); }}>
         {products?.map(entry => <option key={entry.product} value={entry.product} disabled={entry.status !== "available"}>
           {entry.name}{entry.floor ? " · " + entry.floor : entry.kind === "equipment" ? " · Lab-only" : ""}{entry.status === "occupied" ? " · Occupied" : entry.status !== "available" ? " · Coming soon" : ""}</option>)}</select></label>

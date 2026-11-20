@@ -1,2 +1,4 @@
-export type ViewerCabin = { code: string; label: string; detail: string; seats: number; status: "available" | "occupied" | "coming_soon" };
+import type { CabinStatus } from "../cabins";
+
+export type ViewerCabin = { code: string; label: string; detail: string; seats: number; status: CabinStatus };
 export function mountViewer(host: HTMLElement, options: { kind: string; bookingType: string; unavailableCodes?: string[]; onSeat?: (code: string) => void; onCabin: (code: string) => void; selectedCabin?: string | null; cabins?: ViewerCabin[]; notice?: string }): Promise<{ dispose: () => void; reset: () => void; selectSeat: (code: string | null) => void; selectCabin: (code: string | null) => void; setUnavailable: (codes: string[]) => void; focusSeats: () => void; focusEvent: () => void }>;

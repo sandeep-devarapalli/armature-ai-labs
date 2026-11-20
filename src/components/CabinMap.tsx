@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { cabinRent, cabins as defaultCabins, formatPaise, seatPaise, statusLabel, type Cabin } from "../lib/cabins";
+import { cabinRent, cabins as defaultCabins, formatPaise, statusLabel, type Cabin } from "../lib/cabins";
 
 type Viewer = { dispose: () => void; reset: () => void; selectCabin: (code: string | null) => void };
 
@@ -7,7 +7,7 @@ const seatsLine = (c: Cabin) => `${c.billable} + ${c.extra} seats`;
 const floorName = (c: Cabin) => c.floor === "ground" ? "Ground floor" : "First floor";
 
 // Floor plan of the cabins in 3D, a list that also works without WebGL, and the chosen cabin's facts and photos.
-export function CabinMap({ list = defaultCabins, chosen, onChoose }: { list?: Cabin[]; chosen?: string; onChoose: (code: string) => void }) {
+export function CabinMap({ list = defaultCabins, chosen }: { list?: Cabin[]; chosen?: string }) {
   const [viewing, setViewing] = useState(chosen ?? list.find(c => c.status === "available")?.code ?? "C04");
   const cabin = list.find(c => c.code === viewing) ?? list[0];
   const floor = cabin.floor;
@@ -25,7 +25,7 @@ export function CabinMap({ list = defaultCabins, chosen, onChoose }: { list?: Ca
     if (!element) return;
     setError("");
     const onFloor = list.filter(c => c.floor === floor).map(c => ({ code: c.code, label: c.name, seats: c.billable, status: c.status,
-      detail: c.status === "available" ? `${seatsLine(c)} · ${formatPaise(cabinRent(c))}/mo` : `${seatsLine(c)} · ${statusLabel[c.status]}` }));
+      detail: c.status === "quote" ? `${seatsLine(c)} · ${formatPaise(cabinRent(c))}/month · Quote` : `${seatsLine(c)} · ${statusLabel[c.status]}` }));
     void import("../lib/booking-map/viewer.js").then(async module => {
       if (!active) return;
       const api: Viewer = await module.mountViewer(element, { kind: floor === "ground" ? "ground-seats" : "first-seats", bookingType: "cabin", cabins: onFloor,
@@ -61,8 +61,8 @@ export function CabinMap({ list = defaultCabins, chosen, onChoose }: { list?: Ca
       <dl>
         <div><dt>Where</dt><dd>{floorName(cabin)}, room {cabin.room}</dd></div>
         <div><dt>Seats</dt><dd>{cabin.billable} billable, plus {cabin.extra} extra seats free (room for {cabin.billable + cabin.extra})</dd></div>
-        <div><dt>Rent</dt><dd>{formatPaise(seatPaise)} a seat · {formatPaise(cabinRent(cabin))} a month</dd></div>
-        <div><dt>Deposit</dt><dd>{cabin.depositPaise ? `${formatPaise(cabin.depositPaise)}, refundable` : "To be confirmed"}</dd></div>
+        <div><dt>Rent</dt><dd>{formatPaise(cabinRent(cabin))} per month for the whole cabin{cabin.status === "quote" && " · Open to negotiation"}</dd></div>
+        <div><dt>Deposit</dt><dd>{cabin.status === "quote" ? "Confirmed in your quote" : cabin.depositPaise ? `${formatPaise(cabin.depositPaise)}, refundable` : "To be confirmed"}</dd></div>
       </dl>
       {cabin.photos.length ? <figure className="cabin-photos">
         <img src={cabin.photos[shown].src} alt={cabin.photos[shown].alt} />
@@ -71,8 +71,8 @@ export function CabinMap({ list = defaultCabins, chosen, onChoose }: { list?: Ca
         </div>
         <figcaption className="mono">{cabin.photoCaption ?? `${cabin.name}, November 2026`}</figcaption>
       </figure> : <p className="cabin-map-placeholder">Photos of {cabin.name} are coming. It is fitted out like Cabin 101.</p>}
-      {cabin.status === "available"
-        ? <button type="button" className="button button-primary" aria-pressed={chosen === cabin.code} onClick={() => onChoose(cabin.code)}>{chosen === cabin.code ? `${cabin.name} selected` : `Book ${cabin.name}`}</button>
+      {cabin.status === "quote"
+        ? <a className="button button-primary" href={`mailto:hello@armatureailabs.com?subject=${encodeURIComponent(`Quote request for ${cabin.name}`)}`}>Request a quote for {cabin.name}</a>
         : <button type="button" className="button" disabled>{cabin.status === "occupied" ? `${cabin.name} is occupied` : `${cabin.name} is coming soon`}</button>}
     </section>
   </div>;

@@ -203,9 +203,9 @@ it("issues a separate refund receipt showing only the last four account digits",
   expect(screen.getByText("Ending 4321")).toBeInTheDocument();
   expect(screen.getAllByText(/not rent or income and carries no GST/)).toHaveLength(2);
 });
-it("lists catalogue items with their own prices and keeps unpriced cabins unselectable", async () => {
+it("lists catalogue items with their own prices and keeps quote-only cabins out of checkout", async () => {
   await show();
-  expect(screen.getByRole("option", { name: "Cabin 201 · Top floor · Coming soon" })).toBeDisabled();
+  expect(screen.queryByRole("option", { name: /Cabin 201/ })).not.toBeInTheDocument();
   expect(screen.getByText(/₹40000 monthly rent plus ₹80000 refundable/)).toBeInTheDocument();
   expect(screen.getByLabelText("Start date")).toHaveAttribute("min", "2027-02-01");
 });
