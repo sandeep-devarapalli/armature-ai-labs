@@ -91,7 +91,9 @@ export function bookingMailMessage(input: Notice, delivery: {
   const body = golden ? [greeting, welcome, ...goldenDetails, `Explore Golden Pass: ${goldenUrl}`, `Get directions: ${bookingDirections}`].join("\n\n") :
     dayReceipt ? [greeting, overview, ...dayDetails, ...links.map(([label, url]) => `${label}: ${url}`), calendarFooter].filter(Boolean).join("\n\n") :
       [notice.text, ...calendarLinks].join("\n\n");
-  const alternative = boundary + "-body";
+  const alternative = "armature-body-" + delivery.id;
+  const inlineInvite = dayReceipt && notice.events.length === 1;
+
   const headers = [
     `From: Armature AI Labs Bookings <${bookingMailFrom}>`,
     `Reply-To: ${bookingMailFrom}`,
@@ -110,7 +112,7 @@ export function bookingMailMessage(input: Notice, delivery: {
     base64Lines(body),
   ];
   if (html) headers.push(`--${alternative}`, 'Content-Type: text/html; charset="UTF-8"',
-    "Content-Transfer-Encoding: base64", "", base64Lines(html), `--${alternative}--`);
+    "Content-Transfer-Encoding: base64", "", base64Lines(html));
   for (const [index, event] of notice.events.entries()) {
     const invite = bookingCalendarInvite(event, {
       bookingId: delivery.aggregateId,
@@ -120,14 +122,20 @@ export function bookingMailMessage(input: Notice, delivery: {
       method,
       sentAt: delivery.createdAt,
     });
+    if (inlineInvite) headers.push(
+      `--${alternative}`, `Content-Type: text/calendar; charset="UTF-8"; method=${method}`,
+      "Content-Transfer-Encoding: base64", "", base64Lines(invite),
+    );
+    if (html && index === 0) headers.push(`--${alternative}--`);
     headers.push(
       `--${boundary}`,
-      `Content-Type: text/calendar; charset="UTF-8"; method=${method}; name="booking-${index + 1}.ics"`,
+      `Content-Type: text/calendar; charset="UTF-8"; method=${method}; component=vevent; name="booking-${index + 1}.ics"`,
       `Content-Disposition: attachment; filename="booking-${index + 1}.ics"`,
       "Content-Transfer-Encoding: base64",
       "",
       base64Lines(invite),
     );
   }
+  if (html && notice.events.length === 0) headers.push(`--${alternative}--`);
   return bytesToBase64Url(new TextEncoder().encode(headers.concat(`--${boundary}--`, "").join("\r\n")));
 }

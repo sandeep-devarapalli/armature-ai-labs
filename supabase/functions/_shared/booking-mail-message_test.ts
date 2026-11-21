@@ -60,7 +60,12 @@ Deno.test("Day Pass receipt escapes member names and preserves Maps and calendar
   assert.match(html, /S1 · Ground floor/);
   assert.match(html, /google\.com\/maps/);
   assert.match(html, /20261123T033000Z%2F20261123T113000Z/);
-  assert.match(mail, /text\/calendar/);
+  const boundaries = [...mail.matchAll(/boundary="([^"]+)"/g)].map(match => match[1]);
+  assert.equal(boundaries.length, 2);
+  assert(!boundaries[1].startsWith(boundaries[0]));
+  assert.match(mail, /Content-Type: multipart\/alternative/);
+  assert.match(mail, /Content-Disposition: attachment; filename="booking-1.ics"/);
+  assert.match(mail, /text\/calendar; charset="UTF-8"; method=REQUEST; component=vevent/);
 });
 
 Deno.test("Golden Pass welcome includes the paid term without a calendar attachment", () => {
