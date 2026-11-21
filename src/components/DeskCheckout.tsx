@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useEffectEvent, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { accountMembershipLevelsEnabled, useAccount } from "../context/AccountContext";
+import { legalEntity } from "../data/legalEntity";
 import { useApp } from "../context/AppContext";
 import { memberPlatformAvailable, rentalCheckoutAvailable } from "../config/release";
 import { loadRazorpayCheckout, type CheckoutInstance, type CheckoutResult } from "../lib/razorpay-checkout";
@@ -169,12 +170,17 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
     function verify(callback: CheckoutResult) {
       modal.current = null;
       setModalOpen(false);
+      setQuote(previous => previous && { ...previous, paymentBlocked: true });
       void run(async () => showStatus(await request<Quote>({ action: "verify", quoteId: current.quoteId, ...callback })));
     }
     const checkout = new Razorpay({
       key: order.keyId, order_id: order.orderId, amount: order.amountPaise, currency: "INR",
       name: "Armature AI Labs", description: "Desk pass", handler: verify,
-      modal: { ondismiss: () => { modal.current = null; setModalOpen(false); } },
+      modal: { ondismiss: () => {
+        modal.current = null;
+        setModalOpen(false);
+        void run(() => refreshStatus(current.quoteId));
+      } },
     });
     checkout.on("payment.failed", () => setError("Razorpay reported a failed attempt. Check the payment status before trying again."));
     modal.current = checkout;
@@ -191,6 +197,46 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
     setSigningUrl("");
     await showStatus(result);
   }
+
+  async function refreshStatus(value: string) {
+    const result = await request<Quote>({ action: "status", quoteId: value });
+    if (result.quoteId !== value) throw new Error("The booking reference did not match.");
+    await showStatus(result);
+  }
+
+  const refreshSavedBooking = useEffectEvent(() => {
+    if (reference && !modal.current) void run(() => refreshStatus(reference));
+  });
+  const paymentPending = Boolean(directCheckout && !quote?.status && (quote?.orderPending || quote?.paymentBlocked));
+
+  useEffect(() => {
+    if (reference && !quote) refreshSavedBooking();
+    // Only a new reference needs an initial lookup. Quote changes come from that lookup.
+  }, [reference]);
+
+  useEffect(() => {
+    if (!reference) return;
+    function onReturn() {
+      if (document.visibilityState === "visible") refreshSavedBooking();
+    }
+    document.addEventListener("visibilitychange", onReturn);
+    window.addEventListener("pageshow", onReturn);
+    return () => {
+      document.removeEventListener("visibilitychange", onReturn);
+      window.removeEventListener("pageshow", onReturn);
+    };
+  }, [reference]);
+
+  useEffect(() => {
+    if (!paymentPending || modalOpen) return;
+    let checks = 0;
+    const interval = window.setInterval(() => {
+      if (document.visibilityState !== "visible") return;
+      refreshSavedBooking();
+      if (++checks >= 6) window.clearInterval(interval);
+    }, 5000);
+    return () => window.clearInterval(interval);
+  }, [paymentPending, modalOpen, reference]);
 
   async function createQuote(selectedChair: string, selectedUnit: Term, selectedDate: string) {
     const result = await request<Quote>({ action: "quote", chair: selectedChair, unit: selectedUnit, start: selectedDate });
@@ -217,6 +263,44 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
     stale: ["Policies changed", "attention"], expiredOrder: ["Payment window expired", "attention"], expired: ["Payment window expired", "attention"],
     manual: ["Agreement in preparation", "neutral"], preparing: ["Agreement in preparation", "neutral"], countersign: ["Awaiting countersignature", "neutral"],
     sign: ["Ready to sign", "ready"], pay: ["Ready to pay", "ready"], membership: ["Membership needed", "attention"] } as Record<string, [string, BookingTone]>)[stage] ?? ["Request received", "neutral"];
+  function chooseAnother() {
+    saveReference("");
+    setQuote(null); setStart(""); setConsent(""); setSigningUrl(""); setError("");
+  }
+
+  if (reference && !quote) return <Section number="01" title="Your booking">
+    <div className="booking-flow" aria-live="polite">
+      {error ? <><p role="alert">{error}</p>
+        <button type="button" className="button secondary" disabled={busy}
+          onClick={() => void run(() => refreshStatus(reference))}>Refresh booking</button></>
+        : <p role="status">Checking your booking…</p>}
+    </div>
+  </Section>;
+
+  if (quote?.status === "confirmed") {
+    const chairNumber = quote.chair && /^S(0[1-9]|1[0-3])$/.test(quote.chair) ? Number(quote.chair.slice(1)) : null;
+    return <Section number="01" title="Your booking"><div className="booking-flow desk-booking-receipt">
+      <BookingStatusCard kicker="Desk pass" title="Booking confirmed" status="Confirmed" tone="done" reference={reference}
+        rows={[
+          ...(quote.unit ? [{ label: "Pass", value: ({ day: "Day Pass", week: "Week Pass", month: "Month Pass" })[quote.unit] }] : []),
+          ...(quote.start ? [{ label: "Date and hours", value: <>{bookingDates(quote.start, quote.end)}<br />
+            {quote.unit === "day" ? "9 am–5 pm IST" : "Weekdays, 9 am–5 pm IST"}</> }] : []),
+          ...(quote.chair ? [{ label: "Reserved seat", value: chairNumber ? `S${chairNumber} · Ground floor` : quote.chair }] : []),
+          ...(chairNumber ? [{ label: "Fallback if moved", value: `F${chairNumber} · First floor` }] : []),
+          ...(typeof quote.amountPaise === "number" ? [{ label: quote.reviewReason === "partial_refund" ? "Original amount paid" : "Amount paid", value: money.format(quote.amountPaise / 100), money: true, total: true }] : []),
+        ]}
+        details={<p>Armature AI Labs, {legalEntity.labAddress.formatted}.</p>}
+        actions={<>
+          {memberPlatformAvailable && quote.bookingId && <Link className="button secondary" to={`/bookings/${quote.bookingId}`}>Open reservation</Link>}
+          <button type="button" className="button secondary" disabled={busy} onClick={chooseAnother}>Book another desk pass</button>
+        </>}>
+        <p role="status">Desk booking confirmed. Payment verified. Your seat is reserved. {quote.membership === "premium" && "Membership: Premium."}</p>
+        {error && <p role="alert">{error} <button type="button" className="text-link" disabled={busy}
+          onClick={() => void run(() => refreshStatus(reference))}>Refresh booking</button></p>}
+      </BookingStatusCard>
+    </div></Section>;
+  }
+
   return <Section number="01" title="Your booking"><div className="booking-flow">
     <BookingSteps steps={directCheckout ? ["Choose your pass, chair and dates", "Accept the policies and pay", "Receive your confirmed reservation"] : available || quote ? deskSteps : deskSteps.slice(0, 1)} current={step} />
     <p>{directCheckout ? "Your seat is confirmed after payment. Availability is checked again before checkout." : "A request does not reserve a desk. Availability is checked again before payment."} Do not make a second payment while an earlier attempt is pending.</p>
@@ -281,12 +365,11 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
         <button type="button" className="button button-quiet" onClick={() => retryCalendar(value => value + 1)}>Retry availability</button></>}
       <button className="button button-primary" disabled={busy || !start || !available} type="submit">{directCheckout ? "Review and pay" : "Request agreement"}</button>
     </form> : <BookingStatusCard kicker="Desk pass" title={quote?.unit ? terms[quote.unit] + (quote.chair ? " · Chair " + quote.chair : "") : "Desk pass"}
-      when={quote?.start ? bookingDates(quote.start, quote.end) : undefined} status={label} tone={tone} reference={reference}
+      when={quote?.start ? bookingDates(quote.start, quote.end) : undefined} status={paymentPending ? "Payment pending" : label} tone={tone} reference={reference}
       rows={typeof quote?.amountPaise === "number" ? [{ label: "GST", value: "Not added", money: true }, { label: "Total", value: money.format(quote.amountPaise / 100), money: true, total: true }] : undefined}
-      next={stage === "confirmed" ? <span role="status">Desk booking confirmed. {memberPlatformAvailable && quote?.bookingId && <Link to={`/bookings/${quote.bookingId}`}>Open reservation</Link>} {quote?.membership === "premium" && "Membership: Premium."}</span>
-        : stage === "refunded" ? <span role="status">This payment has been refunded.</span>
+      next={stage === "refunded" ? <span role="status">This payment has been refunded.</span>
         : stage === "cancelled" ? <span role="status">This desk booking was cancelled.</span>
-        : stage === "review" ? <span role="status">Armature needs to reconcile this payment. Contact support before trying again.</span>
+        : stage === "review" ? <span role="status">{paymentPending ? "Payment verification is pending. If you’ve already paid, do not start another payment. You can refresh the booking here." : "Armature needs to reconcile this payment. Contact support before trying again."}</span>
         : stage === "stale" ? <span role="status">The policies for this unpaid request have changed. Choose a fresh desk pass and review the updated agreement before paying.</span>
         : stage === "expiredOrder" ? <span role="status">This payment window has expired. {quote?.canRequestReplacement
           ? "Razorpay reports no successful or pending payment. Close any old checkout tabs. Contact Armature to review the old order before trying again."
@@ -301,11 +384,9 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
       details={<p>Need help with your booking or payment? Email <a href="mailto:hello@armatureailabs.com">hello@armatureailabs.com</a> with your booking reference. Do not send identity copies or payment credentials.</p>}
       actions={<>
         {!terminal && <button className="button secondary" type="button" disabled={busy || modalOpen}
-          onClick={() => void run(async () => showStatus(await request<Quote>({ action: "status", quoteId: reference })))}>{directCheckout ? "Check booking or payment status" : "Check agreement or payment status"}</button>}
+          onClick={() => void run(() => refreshStatus(reference))}>{directCheckout ? "Refresh booking" : "Check agreement or payment status"}</button>}
         {(terminal || approvalExpired || staleUnclaimed || (expiredBoundOrder && !directCheckout && quote?.canRequestReplacement && !quote.status) || (quote && (directCheckout || !quote.hasAgreement) && !quote.hasOrder && !quote.orderPending && !quote.status)) &&
-          <button className="button secondary" type="button" disabled={busy} onClick={() => {
-            saveReference(""); setQuote(null); setStart(""); setConsent(""); setSigningUrl(""); setError("");
-          }}>Choose another desk pass</button>}</>}>
+          <button className="button secondary" type="button" disabled={busy} onClick={chooseAnother}>Choose another desk pass</button>}</>}>
       {stage === "sign" && <div>
         <button className="button" type="button" disabled={busy} onClick={() => void run(async () => {
           const result = await request<{ signingUrl: string }>({ action: "sign", quoteId: reference });
