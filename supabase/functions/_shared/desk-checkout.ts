@@ -115,7 +115,7 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
     if (live && (action === "admin_relocations" || action === "admin_relocate")) {
       const moving = action === "admin_relocate";
       if (moving && !pattern.test(input.bookingId ?? "")) throw new Rejected(400, "invalid_request");
-      if (user.claims.aal !== "aal2") throw new Rejected(403, "staff_mfa_required");
+      if (moving && user.claims.aal !== "aal2") throw new Rejected(403, "staff_mfa_required");
       await requireStaff(user.id, ["admin", "super_admin"]);
       const { data, error } = await client.rpc("desk_relocations", {
         p_admin: user.id, p_booking: moving ? input.bookingId : null,
