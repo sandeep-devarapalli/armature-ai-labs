@@ -4,7 +4,7 @@ import { MfaPanel } from "../pages/MemberPages";
 import { ManualDeskAgreementReview } from "./ManualDeskAgreementReview";
 
 type Request = {
-  quoteId: string; memberId: string; customerEmail: string;
+  quoteId: string;
   chair: string; unit: string; start: string; end?: string; amountPaise: number;
   directCheckout?: boolean; orderPending?: boolean; hasOrder?: boolean;
   agreementSigned?: boolean; status?: string;
@@ -24,6 +24,7 @@ function requestStatus(request: Request) {
 export function DeskAgreementQueue({ client, blocked }: { client: SupabaseClient; blocked?: boolean }) {
   const [requests, setRequests] = useState<Request[]>([]);
   const [selected, setSelected] = useState<Request | null>(null);
+  const [detail, setDetail] = useState<{ memberId: string; customerEmail: string } | null>(null);
   const [nextOffset, setNextOffset] = useState<number | null>(null);
   const [loaded, setLoaded] = useState(false);
   const [directCheckout, setDirectCheckout] = useState(false);
@@ -35,9 +36,9 @@ export function DeskAgreementQueue({ client, blocked }: { client: SupabaseClient
     if (blocked || working.current) return;
     working.current = true; setBusy(true); setError("");
     try {
-      const { data, error: failure } = await client.functions.invoke("desk-checkout", { body: { action: "staff_queue", offset } });
+      const { data, error: failure } = await client.functions.invoke("desk-checkout", { body: { action: "staff_overview", offset } });
       if (failure || data?.mode !== "live" || !Array.isArray(data.quotes)) {
-        throw new Error("Could not load desk requests. Verify your Admin session with MFA, then try again.");
+        throw new Error("Could not load desk requests. Check your Admin session and try again.");
       }
       setRequests(current => offset ? [...current, ...data.quotes] : data.quotes);
       setNextOffset(Number.isInteger(data.nextOffset) ? data.nextOffset : null);
@@ -47,16 +48,28 @@ export function DeskAgreementQueue({ client, blocked }: { client: SupabaseClient
     finally { working.current = false; setBusy(false); }
   }
 
+  async function reveal(quoteId: string) {
+    if (blocked || working.current) return;
+    working.current = true; setBusy(true); setError("");
+    try {
+      const { data, error: failure } = await client.functions.invoke("desk-checkout", { body: { action: "staff_detail", quoteId } });
+      if (failure || data?.mode !== "live" || data.quoteId !== quoteId || !data.memberId || typeof data.customerEmail !== "string") {
+        throw new Error("Could not open protected details. Verify your Admin session with MFA and try again.");
+      }
+      setDetail({ memberId: data.memberId, customerEmail: data.customerEmail });
+    } catch (reason) { setError(reason instanceof Error ? reason.message : "Could not open protected details."); }
+    finally { working.current = false; setBusy(false); }
+  }
+
   return <details className="member-confirm">
     <summary>Desk booking requests</summary>
     <p>{directCheckout ? "Customers accept website policies and pay through Razorpay. Review any existing order before asking a customer to try again." : "Prepare the draft, resolve customer corrections, then send it through PandaDoc. Approve only the completed document with both signatures and its certificate. A request alone does not reserve inventory."}</p>
-    {!selected && <MfaPanel mode="supabase" />}
     <button className="button secondary" disabled={busy || blocked} onClick={() => void load()}>Refresh desk requests</button>
     {loaded && !requests.length && <p>No desk requests found.</p>}
     {requests.length > 0 && <div className="table-wrap" role="region" aria-label="Desk requests table" tabIndex={0}>
       <table aria-label="Desk booking requests">
         <thead><tr>
-          <th scope="col">Customer</th>
+          <th scope="col">Reference</th>
           <th scope="col">Pass and desk</th>
           <th scope="col">Booking dates</th>
           <th scope="col">Amount</th>
@@ -64,23 +77,28 @@ export function DeskAgreementQueue({ client, blocked }: { client: SupabaseClient
           <th scope="col">Request</th>
         </tr></thead>
         <tbody>{requests.map(item => <tr key={item.quoteId}>
-          <th scope="row">{item.customerEmail}</th>
+          <th scope="row" className="mono">{item.quoteId}</th>
           <td>{passLabels[item.unit] ?? item.unit} · {item.chair}</td>
           <td>{item.start}{item.end && item.end !== item.start ? " to " + item.end : ""}</td>
           <td>{money.format(item.amountPaise / 100)}</td>
           <td>{requestStatus(item)}</td>
           <td>
-            <button className="button secondary" aria-label={"Review " + item.quoteId} disabled={busy || blocked} onClick={() => setSelected(item)}>Review</button>
-            <p className="mono">{item.quoteId}</p>
+            <button className="button secondary" aria-label={"Review " + item.quoteId} disabled={busy || blocked} onClick={() => { setDetail(null); setError(""); setSelected(item); }}>Review</button>
           </td>
         </tr>)}</tbody>
       </table>
     </div>}
     {nextOffset !== null && <button className="button secondary" disabled={busy || blocked} onClick={() => void load(nextOffset)}>Load more desk requests</button>}
     {selected && <>
-      <p>Selected customer: <strong>{selected.customerEmail}</strong></p>
-      <ManualDeskAgreementReview key={selected.quoteId} client={client} memberId={selected.memberId} initialQuoteId={selected.quoteId} blocked={blocked || busy} />
-      <button className="button secondary" onClick={() => setSelected(null)}>Close desk review</button>
+      {detail ? <>
+        <p>Selected customer: <strong>{detail.customerEmail}</strong></p>
+        <ManualDeskAgreementReview key={selected.quoteId} client={client} memberId={detail.memberId} initialQuoteId={selected.quoteId} blocked={blocked || busy} />
+      </> : <>
+        <p>Verify with MFA to view customer details and review this booking.</p>
+        <MfaPanel mode="supabase" />
+        <button className="button secondary" disabled={busy || blocked} onClick={() => void reveal(selected.quoteId)}>Open protected details</button>
+      </>}
+      <button className="button secondary" disabled={busy} onClick={() => { setDetail(null); setSelected(null); setError(""); }}>Close desk review</button>
     </>}
     {error && <p role="alert">{error}</p>}
   </details>;

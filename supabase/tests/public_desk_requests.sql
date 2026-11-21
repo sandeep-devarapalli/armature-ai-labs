@@ -244,6 +244,19 @@ begin
     or public.active_desk_order_hold(buyer,quote_id,'order_DirectS01Fixture') then
     raise exception 'Direct checkout did not confirm the pass and consume its hold';
   end if;
+  result := public.desk_request_admin_detail(reviewer,quote_id);
+  if result->>'customerEmail' is distinct from 'manual-s01-buyer@example.invalid'
+    or result->>'memberId' is distinct from buyer::text then
+    raise exception 'Protected desk details did not match the selected request';
+  end if;
+  begin
+    perform public.desk_request_admin_detail(buyer,quote_id);
+    raise exception 'A non-admin retrieved protected desk details';
+  exception when insufficient_privilege then null;
+  end;
+  if has_function_privilege('authenticated','public.desk_request_admin_detail(uuid,uuid)','EXECUTE') then
+    raise exception 'Authenticated clients can bypass the Edge MFA check';
+  end if;
 end;
 $$;
 select 'Public S01 regression passed; outer transaction must roll back' as result;

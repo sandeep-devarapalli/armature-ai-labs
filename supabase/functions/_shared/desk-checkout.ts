@@ -98,12 +98,24 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
     if (!input || typeof input !== "object" || typeof input.action !== "string") throw new Rejected(400, "invalid_request");
     const client = adminClient();
     const action = input.action;
-    if (!enabled && !["status", "verify", "list_own", "staff_queue", "manual_review", "recover_order"].includes(action)) throw new Rejected(503, "checkout_disabled");
-    if (action === "list_own" || action === "staff_queue") {
+    if (!enabled && !["status", "verify", "list_own", "staff_queue", "staff_overview", "staff_detail", "manual_review", "recover_order"].includes(action)) throw new Rejected(503, "checkout_disabled");
+    if (action === "staff_detail") {
+      if (!live || !pattern.test(input.quoteId ?? "")) throw new Rejected(400, "invalid_request");
+      if (user.claims.aal !== "aal2") throw new Rejected(403, "staff_mfa_required");
+      await requireStaff(user.id, ["admin", "super_admin"]);
+      const { data, error } = await client.rpc("desk_request_admin_detail", {
+        p_admin: user.id, p_quote: input.quoteId,
+      }).abortSignal(AbortSignal.timeout(10000));
+      if (error) throw new Rejected(503, "checkout_state_unavailable");
+      if (!data) throw new Rejected(404, "desk_request_not_found");
+      return reply({ mode, quoteId: input.quoteId, memberId: data.memberId, customerEmail: data.customerEmail });
+    }
+    if (action === "list_own" || action === "staff_queue" || action === "staff_overview") {
       if (!live) throw new Rejected(400, "invalid_request");
-      const staff = action === "staff_queue";
+      const overview = action === "staff_overview";
+      const staff = overview || action === "staff_queue";
       if (staff) {
-        if (user.claims.aal !== "aal2") throw new Rejected(403, "staff_mfa_required");
+        if (!overview && user.claims.aal !== "aal2") throw new Rejected(403, "staff_mfa_required");
         await requireStaff(user.id, ["admin", "super_admin"]);
       }
       const offset = input.offset ?? 0;
@@ -112,6 +124,15 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
         p_member: user.id, p_staff: staff, p_offset: offset,
       }).abortSignal(AbortSignal.timeout(10000));
       if (error) throw new Rejected(503, "checkout_state_unavailable");
+      if (overview) return reply({
+        mode, directCheckout, nextOffset: data.nextOffset,
+        quotes: data.quotes.map((q: Quote & { approvedAt?: string }) => ({
+          quoteId: q.id, chair: q.chair, unit: q.unit, start: q.starts_on, end: q.ends_on,
+          amountPaise: q.amount_paise, status: q.status, directCheckout,
+          hasOrder: Boolean(q.order_id), orderPending: Boolean(q.order_claimed_at && !q.order_id),
+          agreementSigned: Boolean(q.approvedAt),
+        })),
+      });
       return reply({ mode, directCheckout, nextOffset: data.nextOffset, quotes: data.quotes.map((q: Quote & {
         approvedAt?: string; memberId?: string; customerEmail?: string;
       }) => ({ ...present(q), approvedAt: q.approvedAt ?? null,
