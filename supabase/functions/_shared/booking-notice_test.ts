@@ -5,7 +5,8 @@ Deno.test("Guest Pass confirms standard lab hours without a reserved seat", () =
   const input = { kind: "guest", reference: "GP-001", guestDate: "2026-11-23" } as const;
   const confirmation = bookingNotice({ ...input, stage: "confirmed" });
   assertMatch(confirmation.text, /does not reserve a desk or seat/);
-  assertMatch(confirmation.text, /9:00 am–5:00 pm IST/i);
+  assertMatch(confirmation.text, /door access system records entry and exit/);
+  assertMatch(confirmation.text, /9:00 am–10:00 pm IST/i);
   assertMatch(confirmation.text, /1490, 11th Cross, 20th Main Rd, 1st Sector, HSR Layout, Bengaluru, Karnataka 560102/);
   assertMatch(confirmation.events[0].description, /www\.google\.com\/maps\/dir/);
   assertEquals(confirmation.events[0].startsAt, "2026-11-23T09:00:00+05:30");
@@ -14,7 +15,7 @@ Deno.test("Guest Pass confirms standard lab hours without a reserved seat", () =
 });
 
 Deno.test("Desk week uses only booked sessions and cancellation preserves their UIDs", () => {
-  const sessions = ["2026-11-23", "2026-11-25"].map((day) => ({ ...guestPassSession(day), id: day }));
+  const sessions = ["2026-11-23", "2026-11-25"].map((day) => ({ id: day, startsAt: day + "T09:00:00+05:30", endsAt: day + "T17:00:00+05:30" }));
   const notice = bookingNotice({ kind: "week", stage: "confirmed", reference: "W-123", sessions, resource: "Desk S13" });
   assertEquals(notice.events.map((event) => event.id), ["2026-11-23", "2026-11-25"]);
   assertMatch(notice.events[0].summary, /Week Pass · Desk S13/);

@@ -20,7 +20,7 @@ Deno.test("email uses the verified send-as alias and embeds a busy Guest Pass in
   assert(sections[2].includes("text/calendar; charset=\"UTF-8\"; method=REQUEST"));
   const invite = body(sections[2]);
   assert(invite.includes("DTSTART:20261201T033000Z"));
-  assert(invite.includes("DTEND:20261201T113000Z"));
+  assert(invite.includes("DTEND:20261201T163000Z"));
   assert(invite.includes("TRANSP:OPAQUE"));
   assert(invite.includes("ATTENDEE"));
 });

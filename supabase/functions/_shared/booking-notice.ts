@@ -36,13 +36,13 @@ export function guestPassSession(day: string): BookingSession {
     !Number.isFinite(Date.parse(day)) || new Date(day).toISOString().slice(0, 10) !== day) {
     throw new Error("Invalid Guest Pass date");
   }
-  return { id: "visit", startsAt: day + "T09:00:00+05:30", endsAt: day + "T17:00:00+05:30" };
+  return { id: "visit", startsAt: day + "T09:00:00+05:30", endsAt: day + "T22:00:00+05:30" };
 }
 
 export function bookingNotice(input: BookingNotice) {
   const title = titles[input.kind];
   const overview = input.kind === "guest" && ["confirmed", "updated"].includes(input.stage)
-    ? "This free Guest Pass is for your meeting or event during standard lab hours. It does not reserve a desk or seat."
+    ? "This free Guest Pass is for your meeting or event. It does not reserve a desk or seat. The door access system records entry and exit."
     : {
       received: "We’ve received your request. Check the booking page for its status.",
       alternate: "Armature has proposed a different visit date. Open Bookings to review the offer.",

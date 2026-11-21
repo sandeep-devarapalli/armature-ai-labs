@@ -98,7 +98,7 @@ the bookings alias in the From field arrived in the internal test inbox.
 The booking notices worker uses a send-only Workspace credential independently of
 the calendar sync credential. Booking emails come from the verified send-as alias
 and include calendar attachments for confirmed desk sessions and approved guest visits.
-Guest visits use 09:00–17:00 IST and carry no reserved seat. Cabin and equipment
+Approved Guest Passes permit visits from 09:00 to 22:00 IST without a reserved seat. The planned door integration records entry and exit. Verify that integration before enabling the related guest email copy. Cabin and equipment
 messages report verified milestones. A rental agreement's signature invitation is
 sent by the signing service. The rental flow has no scheduled handover field.
 
