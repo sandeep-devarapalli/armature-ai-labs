@@ -45,9 +45,18 @@ Deno.serve(async request => {
         if (accountError || !recipient || !account.user.email_confirmed_at ||
           (allowlist && recipient.toLowerCase() !== allowlist.toLowerCase()) ||
           /\.(?:test|invalid|example|localhost)$/i.test(recipient)) throw new Error("Undeliverable recipient");
+        let memberName: string | undefined;
+        if (job.payload.stage === "confirmed" && ["day", "golden"].includes(job.payload.kind)) {
+          const [application, profile] = await Promise.all([
+            client.from("basic_onboarding_applications").select("full_name").eq("user_id", job.recipient_id).maybeSingle(),
+            client.from("profiles").select("display_name").eq("id", job.recipient_id).maybeSingle(),
+          ]);
+          memberName = [application.data?.full_name, profile.data?.display_name, account.user.user_metadata?.full_name,
+            account.user.user_metadata?.name].find(value => typeof value === "string" && value.trim());
+        }
         messages.push({ id: job.id, raw: bookingMailMessage(job.payload, {
           id: job.id, aggregateId: job.aggregate_id, recipient,
-          sequence: job.sequence, createdAt: job.created_at,
+          sequence: job.sequence, createdAt: job.created_at, memberName,
         }) });
       } catch {
         const settled = await client.rpc("settle_booking_notice", {

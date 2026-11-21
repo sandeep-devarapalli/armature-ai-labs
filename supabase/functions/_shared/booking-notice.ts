@@ -2,7 +2,7 @@ import { legalEntity } from "../../../src/data/legalEntity.ts";
 
 const labName = "Armature AI Labs";
 const address = legalEntity.labAddress.formatted;
-const directions = "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(address);
+export const bookingDirections = "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(address);
 export const bookingTimeZone = "Asia/Kolkata";
 
 export type BookingSession = { id: string; startsAt: string; endsAt: string };
@@ -76,12 +76,12 @@ export function bookingNotice(input: BookingNotice) {
   return {
     subject: `${title} · ${stages[input.stage]} · ${labName}`,
     text: [overview, `Reference: ${input.reference}`, input.resource && `Resource: ${input.resource}`, ...schedule,
-      `${labName}, ${address}`, `Google Maps directions: ${directions}`, `Booking page: ${url}`]
+      `${labName}, ${address}`, `Google Maps directions: ${bookingDirections}`, `Booking page: ${url}`]
       .filter(Boolean).join("\n"),
     events: sessions.map(session => ({
       ...session, summary: `${title}${input.resource ? ` · ${input.resource}` : ""} · ${labName}`,
       location: `${labName}, ${address}`,
-      description: [overview, `Reference: ${input.reference}`, `Google Maps directions: ${directions}`, `Booking page: ${url}`].join("\n"),
+      description: [overview, `Reference: ${input.reference}`, `Google Maps directions: ${bookingDirections}`, `Booking page: ${url}`].join("\n"),
     })),
   };
 }

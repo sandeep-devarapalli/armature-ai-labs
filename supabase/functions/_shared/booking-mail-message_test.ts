@@ -42,3 +42,35 @@ Deno.test("pending visit acknowledgment has no invite and rejects injected heade
   assert(!atob(part.trim().split("\r\n\r\n")[1].replaceAll("\r\n", "")).includes("Add to Google Calendar"));
   assert.throws(() => bookingMailMessage(notice, { ...delivery, recipient: "internal@example.test\r\nBcc: customer@example.test" }));
 });
+
+function htmlBody(mail: string) {
+  const encoded = mail.match(/Content-Type: text\/html[^\r]*\r\nContent-Transfer-Encoding: base64\r\n\r\n([A-Za-z0-9+/=\r\n]+)/)?.[1];
+  assert(encoded);
+  return new TextDecoder().decode(Uint8Array.from(atob(encoded), char => char.charCodeAt(0)));
+}
+
+Deno.test("Day Pass receipt escapes member names and preserves Maps and calendar", () => {
+  const mail = decode(bookingMailMessage({
+    kind: "day", stage: "confirmed", reference: "AB12CD34", resource: "Chair S01",
+    sessions: [{ id: "day", startsAt: "2026-11-23T03:30:00Z", endsAt: "2026-11-23T11:30:00Z" }],
+  }, { ...delivery, memberName: "Aditi <Rao>" }));
+  const html = htmlBody(mail);
+  assert.match(html, /Aditi &lt;Rao&gt;/);
+  assert.match(html, /AB12CD34/);
+  assert.match(html, /S1 · Ground floor/);
+  assert.match(html, /google\.com\/maps/);
+  assert.match(html, /20261123T033000Z%2F20261123T113000Z/);
+  assert.match(mail, /text\/calendar/);
+});
+
+Deno.test("Golden Pass welcome includes the paid term without a calendar attachment", () => {
+  const mail = decode(bookingMailMessage({
+    kind: "golden", stage: "confirmed", amountPaise: 10_000_000,
+    startsAt: "2026-11-21T04:00:00Z", endsAt: "2027-11-21T04:00:00Z",
+  }, { ...delivery, memberName: "Aditi Rao" }));
+  const html = htmlBody(mail);
+  assert.match(html, /Aditi Rao/);
+  assert.match(html, /21 November 2027/);
+  assert.match(html, /₹1,00,000/);
+  assert.doesNotMatch(mail, /text\/calendar/);
+});
