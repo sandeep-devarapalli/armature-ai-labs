@@ -46,9 +46,11 @@ const projectMediaCredits: Record<string, readonly [string, string]> = {
   openactuator: ["OpenActuator · LinearVCM project", "https://github.com/OpenActuator/LinearVCM"],
   "quasi-direct-drive-actuator": ["Seo Jin Jeong · QDD actuator prototype", "https://github.com/JeongSeoJin/quasi-direct-drive-actuator/blob/5ca10b6e624df3f6ceb780adf208844b6bc8bd64/assets/image_4.jpg"],
   "electrofluidic-fiber-muscles": ["MIT Media Lab · Ozgun Kilic Afsar", "https://www.media.mit.edu/projects/electrofluidicmuscle/overview/"],
+  "qdd5010-actuator": ["Amin Ghasemzade · MIT", "https://github.com/ImZadeQasemzade/QDD5010-Actuator/tree/11f013c8854be2abb708c73d0847bac29e962818/docs/images"],
   valetudo: ["Valetudo · Sören Beye", "https://valetudo.cloud/"],
   oomwoo: ["OOMWOO · MakersPet", "https://makerspet.com/blog/building-an-open-source-robot-vacuum-meet-oomwoo/"],
   openmower: ["OpenMower · Clemens Elflein", "https://openmower.de/"],
+  "spectral-explorer": ["Spectral-Explorer · project website", "https://spectral-explorer.de/"],
   "diy-weather-station": ["Nikodem Bartnik · DIY Weather Station", "https://github.com/NikodemBartnik/DIY-Weather-Station/blob/main/server/app/static/images/diy_weather_station.jpg"],
   q8bot: ["Q8bot · Yufeng (Eric) Wu", "https://github.com/EricYufengWu/q8bot"],
   "solo12-odri": ["Open Dynamic Robot Initiative · Solo 12", "https://github.com/open-dynamic-robot-initiative/open_robot_actuator_hardware"],
@@ -96,7 +98,7 @@ function getProjectLayer(project: Project) {
   if (["Embedded AI", "Machine Learning"].includes(project.category)) {
     return "ai";
   }
-  if (["Tactile Sensing", "Tactile Interfaces", "Vision AI", "Wearables", "Environmental Sensing"].includes(project.category)) {
+  if (["Tactile Sensing", "Tactile Interfaces", "Vision AI", "Wearables", "Environmental Sensing", "Spectroscopy"].includes(project.category)) {
     return "sensing";
   }
   return "robotics";
@@ -104,16 +106,20 @@ function getProjectLayer(project: Project) {
 
 function ProjectCard({ project }: { project: Project }) {
   const componentCounts = getProjectComponentCounts(project.slug);
+  const hasComponents = Object.values(componentCounts).some((count) => count > 0);
   const mediaCredit = projectMediaCredits[project.slug];
 
   return (
     <article className="project-card" id={project.slug}>
       {project.image && (
-        <figure className="project-visual">
+        <figure className={project.secondaryImage ? "project-visual project-visual-pair" : "project-visual"}>
           <img src={project.image} alt={`${project.title} project`} loading="lazy" />
+          {project.secondaryImage && (
+            <img src={project.secondaryImage.src} alt={project.secondaryImage.alt} loading="lazy" />
+          )}
           <figcaption className="project-credit mono">
             {mediaCredit ? (
-              <a href={mediaCredit[1]} target="_blank" rel="noreferrer">Image: {mediaCredit[0]}</a>
+              <a href={mediaCredit[1]} target="_blank" rel="noreferrer">{project.secondaryImage ? "Images" : "Image"}: {mediaCredit[0]}</a>
             ) : (
               "Armature AI Labs reference illustration"
             )}
@@ -130,11 +136,13 @@ function ProjectCard({ project }: { project: Project }) {
         </div>
         <h3>{project.title}</h3>
         <p>{project.description}</p>
-        <div className="resource-meta mono">
-          <span>{componentCounts.required} required</span>
-          <span>{componentCounts.optional} optional</span>
-          <span>{componentCounts.alternative} alternative</span>
-        </div>
+        {hasComponents && (
+          <div className="resource-meta mono">
+            <span>{componentCounts.required} required</span>
+            <span>{componentCounts.optional} optional</span>
+            <span>{componentCounts.alternative} alternative</span>
+          </div>
+        )}
         <div className="tag-row">{project.tags.map((tag) => <span key={tag}>{tag}</span>)}</div>
         <div className="project-card-links">
           {project.detailPath && (
@@ -142,9 +150,11 @@ function ProjectCard({ project }: { project: Project }) {
               Research brief <ArrowUpRight aria-hidden="true" />
             </Link>
           )}
-          <Link to={`/components?project=${project.slug}`}>
-            Build components <ArrowUpRight aria-hidden="true" />
-          </Link>
+          {hasComponents && (
+            <Link to={`/components?project=${project.slug}`}>
+              Build components <ArrowUpRight aria-hidden="true" />
+            </Link>
+          )}
           <a href={project.sourceUrl} target="_blank" rel="noreferrer">
             Project source <ArrowUpRight aria-hidden="true" />
           </a>

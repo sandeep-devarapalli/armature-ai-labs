@@ -148,6 +148,21 @@ export const projects: Project[] = [
     tags: ["QDD", "cycloidal reducer", "BLDC", "moteus-c1", "motor winding", "prototype"]
   },
   {
+    slug: "qdd5010-actuator",
+    title: "QDD5010 Actuator",
+    category: "Actuator Design",
+    priority: "P2",
+    status: "Reference",
+    description: "Amin Ghasemzade’s budget-friendly quasi-direct-drive joint pairs an MKS 5010 gimbal motor with a 3D-printed 6:1 planetary gearbox. An Arduino Mega and SimpleFOC drive the joint, while a browser console plots telemetry, shows joint motion in 3D, and estimates contact. The MIT-licensed project includes editable FreeCAD models, firmware, a build guide, and a kitchen-scale torque calibration example.",
+    image: "/project-images/qdd5010-actuator.jpg",
+    secondaryImage: {
+      src: "/project-images/qdd5010-gearbox.jpg",
+      alt: "Cutaway of the QDD5010 V2 planetary gearbox"
+    },
+    sourceUrl: "https://github.com/ImZadeQasemzade/QDD5010-Actuator",
+    tags: ["QDD", "planetary gearbox", "FreeCAD", "SimpleFOC", "torque calibration"]
+  },
+  {
     slug: "electrofluidic-fiber-muscles",
     title: "Electrofluidic Fiber Muscles",
     category: "Soft Robotics",
@@ -191,6 +206,21 @@ export const projects: Project[] = [
     image: "/project-images/openmower-official.jpg",
     sourceUrl: "https://openmower.de/",
     tags: ["RTK", "outdoors", "ROS"]
+  },
+  {
+    slug: "spectral-explorer",
+    title: "Spectral-Explorer",
+    category: "Spectroscopy",
+    priority: "P2",
+    status: "Reference",
+    description: "A low-cost USB optical spectrometer for physics, chemistry, and biology lessons. It measures wavelengths from 400 to 650 nm at a reported resolution of up to 1 nm. The 3D-printable design has an adjustable slit and an optional cuvette holder for liquid samples. Desktop software captures, saves, and compares spectra from experiments such as flame emission and indicator absorption.",
+    image: "/project-images/spectral-explorer.jpg",
+    secondaryImage: {
+      src: "/project-images/spectral-explorer-v2.jpg",
+      alt: "Spectral-Explorer version 2 with the optional cuvette holder and a clear sample cuvette"
+    },
+    sourceUrl: "https://github.com/lhoyer/spectral-explorer",
+    tags: ["optical spectrometer", "USB", "FreeCAD", "3D printing", "science education"]
   },
   {
     slug: "diy-weather-station",
