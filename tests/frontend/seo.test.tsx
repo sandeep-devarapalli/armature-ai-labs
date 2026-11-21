@@ -52,10 +52,10 @@ describe("search metadata", () => {
     expect(publicSeoPaths).not.toContain(`${path}/`);
   });
 
-  it("uses existing branding, pre-launch facts and the visible article's organization and dates", () => {
+  it("uses current lab descriptions and the visible article's organization and dates", () => {
     const home = getPageSeo("/");
-    expect(home.description).toContain("planned");
-    expect(getPageSeo("/join/").description).toContain("pre-launch");
+    expect(home.description).toContain("workspace access");
+    expect(getPageSeo("/join/").description).toContain("membership");
     expect(getPageSeo("/about/").image).toBe(`${SITE_URL}/about/who-we-are-social.png`);
     const articleSeo = getPageSeo("/blog/model-hardware-standard/");
     expect(articleSeo.image).toBe(`${SITE_URL}/blog-covers/mhs-common-interface.png`);

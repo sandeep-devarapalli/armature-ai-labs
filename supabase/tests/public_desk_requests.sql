@@ -180,12 +180,69 @@ begin
   -- Model an existing pre-migration order, then advance the current policy.
   update private.live_desk_quotes set quoted_policy_version=null where id=quote_id;
   update public.booking_policy_settings set live_desk_checkout_policy_version=next_version where singleton;
+  result := public.claim_direct_desk_order(buyer,quote_id,next_version,'order_ManualS01Fixture');
+  if result->>'document_id' is distinct from 'SyntheticManualS01'
+    or result->>'policy_version' is distinct from version
+    or result->>'direct_policy_version' is distinct from next_version then
+    raise exception 'Resuming a legacy order rewrote its signed records';
+  end if;
   result := public.live_desk_checkout('capture',null,
     '{"orderId":"order_ManualS01Fixture","paymentId":"pay_ManualS01Fixture","amount":35000,"currency":"INR","refundedAmount":0}');
   if result->>'status' is distinct from 'confirmed' or result->>'membership' is distinct from 'premium'
     or result->>'policy_version' is distinct from version
     or not exists (select 1 from public.resource_reservations where booking_id=(result->>'bookingId')::uuid and released_at is null) then
     raise exception 'Synthetic capture did not reserve the seat and grant Premium';
+  end if;
+  if has_function_privilege('authenticated','public.claim_direct_desk_order(uuid,uuid,text,text)','execute')
+    or has_function_privilege('anon','public.active_desk_order_hold(uuid,uuid,text)','execute') then
+    raise exception 'Browser roles can access direct order internals';
+  end if;
+  -- Carry forward a quote recorded without an agreement under an earlier policy.
+  select booking_date into strict start_date from public.list_bookable_desk_dates('S01','day',
+    (now() at time zone 'Asia/Kolkata')::date+70,(now() at time zone 'Asia/Kolkata')::date+80)
+  where available order by booking_date limit 1;
+  quote := public.live_desk_checkout('quote',buyer,jsonb_build_object('chair','S01','unit','day','start',start_date));
+  quote_id := (quote->>'id')::uuid;
+  update private.live_desk_quotes set quoted_policy_version=version where id=quote_id;
+  begin
+    perform public.claim_direct_desk_order(buyer,quote_id,version);
+    raise exception 'Direct order accepted an old policy';
+  exception when invalid_parameter_value then null;
+  end;
+  result := public.claim_direct_desk_order(buyer,quote_id,next_version);
+  if result->>'direct_policy_version' is distinct from next_version
+    or result->>'direct_accepted_at' is null or result->>'document_id' is not null
+    or result->>'quoted_policy_version' is distinct from version then
+    raise exception 'Direct checkout replaced a legacy quote or failed to record current consent';
+  end if;
+  begin
+    perform public.claim_direct_desk_order(buyer,quote_id,next_version);
+    raise exception 'Duplicate direct order claim succeeded';
+  exception when sqlstate '22024' then null;
+  end;
+  -- A second quote for the same dates must stay blocked even when the original order's hold expired.
+  update private.checkout_inventory_holds set expires_at=clock_timestamp()-interval '1 second' where checkout_inventory_holds.quote_id=(quote->>'id')::uuid;
+  result := public.live_desk_checkout('quote',buyer,jsonb_build_object('chair','S01','unit','day','start',start_date));
+  begin
+    perform public.claim_direct_desk_order(buyer,(result->>'id')::uuid,next_version);
+    raise exception 'Overlapping request bypassed the unresolved prior order';
+  exception when sqlstate '22024' then null;
+  end;
+  update private.checkout_inventory_holds set expires_at=clock_timestamp()+interval '30 minutes' where checkout_inventory_holds.quote_id=(quote->>'id')::uuid;
+  perform public.live_desk_checkout('bind_order',buyer,jsonb_build_object('quoteId',quote_id,'orderId','order_DirectS01Fixture'));
+  if not public.active_desk_order_hold(buyer,quote_id,'order_DirectS01Fixture')
+    or public.active_desk_order_hold(reviewer,quote_id,'order_DirectS01Fixture') then
+    raise exception 'Active hold was not restricted to the order owner';
+  end if;
+  result := public.claim_direct_desk_order(buyer,quote_id,next_version,'order_DirectS01Fixture');
+  if result->>'order_id' is distinct from 'order_DirectS01Fixture' then
+    raise exception 'Direct order resume replaced the bound order';
+  end if;
+  result := public.live_desk_checkout('capture',null,
+    '{"orderId":"order_DirectS01Fixture","paymentId":"pay_DirectS01Fixture","amount":35000,"currency":"INR","refundedAmount":0}');
+  if result->>'status' is distinct from 'confirmed' or result->>'membership' is distinct from 'premium'
+    or public.active_desk_order_hold(buyer,quote_id,'order_DirectS01Fixture') then
+    raise exception 'Direct checkout did not confirm the pass and consume its hold';
   end if;
 end;
 $$;

@@ -24,7 +24,7 @@ test("hydration preserves themes and route changes update search metadata", asyn
   await page.goto("/");
   await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
   await expect(page.getByRole("button", { name: "light theme", exact: true })).toHaveAttribute("aria-pressed", "true");
-  await expect(page.locator("main")).toContainText("not yet available to book");
+  await expect(page.locator("main")).toContainText("a planned 3,500 sq ft lab across two floors");
   await page.locator("footer").getByRole("link", { name: "Blog", exact: true }).click();
   await expect(page).toHaveTitle("The Lab Journal | Armature AI Labs");
   await expect(page.locator('head link[rel="canonical"]')).toHaveAttribute("href", "https://armatureailabs.com/blog/");

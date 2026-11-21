@@ -18,7 +18,7 @@ it("lets an agreement reviewer enroll and verify MFA without visiting the gated 
   mock.challengeAndVerify.mockResolvedValue({ error: null });
   const invoke = vi.fn();
   render(<ManualDeskAgreementReview client={{ functions: { invoke } } as unknown as SupabaseClient} memberId="buyer-fixture" />);
-  fireEvent.click(screen.getByText("Review a desk agreement"));
+  fireEvent.click(screen.getByText("Review a desk agreement or payment"));
   fireEvent.click(await screen.findByRole("button", { name: "Set up authenticator" }));
   fireEvent.change(await screen.findByLabelText("Six-digit authenticator code"), { target: { value: "123456" } });
   fireEvent.click(screen.getByRole("button", { name: "Finish setup" }));
@@ -36,7 +36,7 @@ it("links an existing provider order without resubmitting signature approval", a
   const invoke = vi.fn().mockResolvedValueOnce({ data, error: null })
     .mockResolvedValueOnce({ data: { ...data, orderPending: false, recovered: true }, error: null });
   render(<ManualDeskAgreementReview client={{ functions: { invoke } } as unknown as SupabaseClient} memberId="buyer-fixture" initialQuoteId={quoteId} />);
-  fireEvent.click(screen.getByText("Review a desk agreement"));
+  fireEvent.click(screen.getByText("Review a desk agreement or payment"));
   fireEvent.click(screen.getByRole("button", { name: "Look up agreement" }));
   fireEvent.change(await screen.findByLabelText("Existing Razorpay order ID"), { target: { value: "order_Existing" } });
   fireEvent.click(screen.getByRole("button", { name: "Link existing order" }));

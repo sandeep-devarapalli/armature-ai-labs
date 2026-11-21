@@ -64,7 +64,7 @@ export function TermsPage() {
       <ul>
         <li>Cabins are rented whole, at the cabin's listed price, whatever the number of people using it.</li>
         <li>New cabin bookings start on the first day of a calendar month and are charged in whole calendar months. There is no three-month minimum. The security deposit is 2 months' agreed rent at monthly rents up to INR 100,000, and 3 months' agreed rent above that amount.</li>
-        <li>Individual desk passes cover the dates stated in your booking, with access from 9 am to 5 pm IST every day, including weekends, subject to disclosed closures. The cabin minimum and security deposit do not apply to desk passes.</li>
+        <li>Individual desk passes cover the dates stated in your booking, with desks reserved Monday to Friday, 9 am to 5 pm IST, subject to disclosed closures. Weekend visits are welcome when the lab is open, without a reserved desk. The cabin minimum and security deposit do not apply to desk passes.</li>
         <li>The first full calendar month is paid through Razorpay at booking. The security deposit is paid separately by bank transfer. Later rent is payable monthly in advance by the 5th. Daily proration is not offered. Existing signed agreements retain their terms.</li>
         <li>Either side may end a new cabin arrangement at month-end with at least 30 days' written notice. Rent remains payable for the full calendar months through that end date.</li>
         <li>Use only the power points provided. Any change to the cabin needs our written approval, and you must restore it when you leave.</li>

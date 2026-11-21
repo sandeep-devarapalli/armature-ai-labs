@@ -4,7 +4,7 @@ const key = import.meta.env.VITE_POSTHOG_KEY?.trim();
 const host = import.meta.env.VITE_POSTHOG_HOST?.trim();
 export const analyticsConfigured = import.meta.env.VITE_ANALYTICS_ENABLED === "true"
   && Boolean(key?.startsWith("phc_")) && ["https://z.armatureailabs.com", "https://us.i.posthog.com", "https://eu.i.posthog.com"].includes(host ?? "");
-const publicPaths = new Set(["/", "/about", "/team", "/services", "/projects", "/branding", "/blog", "/blog/model-hardware-standard", "/projects/electrofluidic-fiber-muscles", "/building-vision", "/ecosystem", "/components", "/join", "/booking-beta", "/privacy"]);
+const publicPaths = new Set(["/", "/about", "/team", "/services", "/projects", "/branding", "/blog", "/blog/model-hardware-standard", "/projects/electrofluidic-fiber-muscles", "/building-vision", "/ecosystem", "/components", "/join", "/privacy"]);
 const milestones = ["details_saved", "photo_uploaded", "government_id_uploaded", "application_submitted"] as const;
 const atlasFilters = { type: ["", "startup", "research-ecosystem", "supplier", "vendor", "other"], need: ["", "build", "source", "manufacture", "test", "learn", "fund", "pilot"] };
 export type RegistrationMilestone = typeof milestones[number];

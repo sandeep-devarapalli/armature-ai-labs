@@ -12,9 +12,9 @@ import { Field, PageHeader, Section } from "./Primitives";
 
 const terms = { day: "Day pass", week: "Week pass", month: "Monthly desk" };
 type Term = keyof typeof terms;
-type Availability = { chairs: string[]; dates: { booking_date: string; available: boolean }[] };
+type Availability = { directCheckout?: boolean; chairs: string[]; dates: { booking_date: string; available: boolean }[] };
 type Quote = {
-  policyStale?: boolean; expiredOrder?: boolean; canRequestReplacement?: boolean;
+  directCheckout?: boolean; paymentBlocked?: boolean; policyStale?: boolean; expiredOrder?: boolean; canRequestReplacement?: boolean;
   quoteId: string; amountPaise?: number; policyVersion?: string; hasAgreement?: boolean; manualAgreement?: boolean;
   chair?: string; unit?: Term; start?: string; end?: string;
   approvedAt?: string; customerSigned?: boolean; agreementSigned?: boolean; hasOrder?: boolean; orderPending?: boolean;
@@ -64,7 +64,7 @@ function readReference(key: string) {
 
 export default function DeskCheckoutPage() {
   return <>
-    <PageHeader meta="Workspace bookings" title="Book a desk." description="Choose a desk pass and an available start date. Review the agreement, sign it and pay through Razorpay once Armature has countersigned." />
+    <PageHeader meta="Workspace bookings" title="Book a desk." description="Choose a desk pass and an available start date. Review your booking and continue to payment." />
     {rentalCheckoutAvailable && <p><Link className="button secondary" to="/bookings?item=cabin">Book a cabin or Hiwonder kit</Link></p>}
     <DeskBooking />
   </>;
@@ -109,6 +109,7 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
   const [recentLoaded, setRecentLoaded] = useState(false);
   const modal = useRef<CheckoutInstance | null>(null);
   const choosing = !reference;
+  const directCheckout = (choosing ? available?.directCheckout : quote?.directCheckout) === true;
 
   useEffect(() => {
     if (!choosing || !canBook) return;
@@ -136,7 +137,7 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
   }
 
   async function showStatus(result: Quote) {
-    setQuote(current => ({ ...current, expiredOrder: false, canRequestReplacement: false, ...result }));
+    setQuote(current => ({ ...current, expiredOrder: false, canRequestReplacement: false, paymentBlocked: false, ...result }));
     if (result.status === "confirmed" || result.status === "refunded") {
       await Promise.allSettled([refreshMembership(), ...(memberPlatformAvailable ? [refreshBookings()] : [])]);
     }
@@ -152,7 +153,12 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
 
   async function pay(current: Quote) {
     if (!current.policyVersion || consent !== current.policyVersion) return;
-    const order = await request<Order>({ action: "order", quoteId: current.quoteId, acceptedPolicies: true, policyVersion: consent });
+    const order = await request<Order | Quote>({ action: "order", quoteId: current.quoteId, acceptedPolicies: true, policyVersion: consent });
+    if (!("orderId" in order)) {
+      if (order.quoteId !== current.quoteId) throw new Error("The payment response did not match your booking.");
+      await showStatus(order);
+      return;
+    }
     if (!/^rzp_live_[A-Za-z0-9]+$/.test(order.keyId) || !/^order_[A-Za-z0-9]+$/.test(order.orderId)
       || !Number.isSafeInteger(order.amountPaise) || order.amountPaise < 100 || order.amountPaise !== current.amountPaise || order.currency !== "INR") {
       throw new Error("The payment order did not match your approved quote.");
@@ -185,16 +191,18 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
     await showStatus(result);
   }
 
-  const approvalExpired = Boolean(quote?.approvedAt && !quote.hasOrder && !quote.orderPending
+  const approvalExpired = Boolean(!directCheckout && quote?.approvedAt && !quote.hasOrder && !quote.orderPending
     && Date.parse(quote.approvedAt) + 30 * 60 * 1000 <= Date.now());
-  const staleUnclaimed = Boolean(quote?.policyStale && !quote.hasOrder && !quote.orderPending);
+  const staleUnclaimed = Boolean(!directCheckout && quote?.policyStale && !quote.hasOrder && !quote.orderPending);
   const expiredBoundOrder = Boolean(quote?.hasOrder && (quote.expiredOrder ||
-    (quote.approvedAt && Date.parse(quote.approvedAt) + 30 * 60 * 1000 <= Date.now())));
+    (!directCheckout && quote.approvedAt && Date.parse(quote.approvedAt) + 30 * 60 * 1000 <= Date.now())));
   const terminal = quote?.status === "confirmed" || quote?.status === "refunded" || quote?.status === "cancelled";
-  const step = choosing ? 0 : quote?.status === "confirmed" ? 4 : quote?.agreementSigned ? 3 : quote?.hasAgreement && !quote.manualAgreement ? 2 : 1;
+  const step = choosing ? 0 : directCheckout ? (quote?.status === "confirmed" ? 2 : 1)
+    : quote?.status === "confirmed" ? 4 : quote?.agreementSigned ? 3 : quote?.hasAgreement && !quote.manualAgreement ? 2 : 1;
   // Same order as before: the first matching state decides the label, the next step and which controls show.
   const stage = !quote ? "" : quote.status === "confirmed" || quote.status === "refunded" || quote.status === "cancelled" ? quote.status
-    : quote.status === "needs_review" || quote.orderPending ? "review" : staleUnclaimed ? "stale" : expiredBoundOrder ? "expiredOrder" : approvalExpired ? "expired"
+    : quote.status === "needs_review" || quote.orderPending || quote.paymentBlocked ? "review" : staleUnclaimed ? "stale" : expiredBoundOrder ? "expiredOrder" : approvalExpired ? "expired"
+    : directCheckout ? (canBook ? "pay" : "membership")
     : quote.manualAgreement && !quote.agreementSigned ? "manual" : !quote.hasAgreement && !quote.agreementSigned ? "preparing"
     : !quote.agreementSigned ? (quote.customerSigned ? "countersign" : "sign") : canBook ? "pay" : "membership";
   const [label, tone] = ({ confirmed: ["Confirmed", "done"], refunded: ["Refunded", "neutral"], cancelled: ["Cancelled", "neutral"], review: ["Staff review needed", "attention"],
@@ -202,7 +210,7 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
     manual: ["Agreement in preparation", "neutral"], preparing: ["Agreement in preparation", "neutral"], countersign: ["Awaiting countersignature", "neutral"],
     sign: ["Ready to sign", "ready"], pay: ["Ready to pay", "ready"], membership: ["Membership needed", "attention"] } as Record<string, [string, BookingTone]>)[stage] ?? ["Request received", "neutral"];
   return <Section number="01" title="Your booking"><div className="booking-flow">
-    <BookingSteps steps={deskSteps} current={step} />
+    <BookingSteps steps={directCheckout ? ["Choose your pass, chair and dates", "Accept the policies and pay", "Receive your confirmed reservation"] : deskSteps} current={step} />
     <p>A request does not reserve a desk. Availability is checked again before payment. Do not make a second payment while an earlier attempt is pending.</p>
     {choosing && <details className="member-confirm">
       <summary>Resume an existing booking</summary>
@@ -222,7 +230,7 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
         const value = String(new FormData(event.currentTarget).get("reference")).trim().toLowerCase();
         void run(() => restore(value));
       }}>
-        <Field label="Existing agreement reference"><input name="reference" required pattern="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}" maxLength={36} disabled={busy} /></Field>
+        <Field label="Existing booking reference"><input name="reference" required pattern="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}" maxLength={36} disabled={busy} /></Field>
         <button className="button button-quiet" disabled={busy}>Resume booking</button>
       </form>
     </details>}
@@ -231,7 +239,7 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
       if (!available?.dates.some(row => row.available && row.booking_date === start)) return;
       void run(async () => {
         const result = await request<Quote>({ action: "quote", chair, unit, start });
-        if (!/^[0-9a-f-]{36}$/.test(result.quoteId)) throw new Error("The agreement reference was invalid.");
+        if (!/^[0-9a-f-]{36}$/.test(result.quoteId)) throw new Error("The booking reference was invalid.");
         saveReference(result.quoteId);
         setQuote(result);
       });
@@ -266,7 +274,7 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
       {available && chair && !available.dates.some(row => row.available) && <p role="status">There are no available start dates for this selection.</p>}
       {calendarError && <><p role="alert" className="form-error">{calendarError}</p>
         <button type="button" className="button button-quiet" onClick={() => retryCalendar(value => value + 1)}>Retry availability</button></>}
-      <button className="button button-primary" disabled={busy || !start || !available} type="submit">Request agreement</button>
+      <button className="button button-primary" disabled={busy || !start || !available} type="submit">{directCheckout ? "Review and pay" : "Request agreement"}</button>
     </form> : <BookingStatusCard kicker="Desk pass" title={quote?.unit ? terms[quote.unit] + (quote.chair ? " · Chair " + quote.chair : "") : "Desk pass"}
       when={quote?.start ? bookingDates(quote.start, quote.end) : undefined} status={label} tone={tone} reference={reference}
       rows={typeof quote?.amountPaise === "number" ? [{ label: "GST", value: "Not added", money: true }, { label: "Total", value: money.format(quote.amountPaise / 100), money: true, total: true }] : undefined}
@@ -276,7 +284,7 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
         : stage === "review" ? <span role="status">Armature needs to reconcile this payment. Contact support before trying again.</span>
         : stage === "stale" ? <span role="status">The policies for this unpaid request have changed. Choose a fresh desk pass and review the updated agreement before paying.</span>
         : stage === "expiredOrder" ? <span role="status">This payment window has expired. {quote?.canRequestReplacement
-          ? "Razorpay reports no successful or pending payment. Close any old checkout tabs, then request a fresh agreement. Ask staff to recheck the old payment before approving the replacement."
+          ? "Razorpay reports no successful or pending payment. Close any old checkout tabs. Contact Armature to review the old order before trying again."
           : "Check payment status before doing anything else. If a payment is pending or its outcome is unclear, contact Armature for review. Do not pay again."}</span>
         : stage === "expired" ? <span role="status">This agreement’s payment window expired. Start a fresh request so Armature can check availability and prepare a new agreement.</span>
         : stage === "manual" ? <span role="status">Armature will prepare your PandaDoc agreement and email you when it is ready. Check your details and request corrections before signing. After both signatures, staff will review the completed agreement. Check the status here to continue.</span>
@@ -284,12 +292,12 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
         : stage === "countersign" ? "Waiting for Armature to countersign."
         : stage === "sign" ? "Review and sign your agreement in PandaDoc. Select Finish when you are done."
         : stage === "membership" ? "Verified membership is required before starting a payment. You can still check an existing payment below."
-        : stage === "pay" ? "Both signatures are verified. Payment must start within 30 minutes of staff approval. Confirm the policies before opening Razorpay." : undefined}
-      details={<p>Need a draft correction or help with a payment? Email <a href="mailto:hello@armatureailabs.com">hello@armatureailabs.com</a> with your agreement reference. Do not send identity copies or payment credentials.</p>}
+        : stage === "pay" ? (directCheckout ? "Review and accept the website policies to continue to Razorpay. Your booking is confirmed after payment is verified." : "Both signatures are verified. Payment must start within 30 minutes of staff approval. Confirm the policies before opening Razorpay.") : undefined}
+      details={<p>Need help with your booking or payment? Email <a href="mailto:hello@armatureailabs.com">hello@armatureailabs.com</a> with your booking reference. Do not send identity copies or payment credentials.</p>}
       actions={<>
         {!terminal && <button className="button secondary" type="button" disabled={busy || modalOpen}
-          onClick={() => void run(async () => showStatus(await request<Quote>({ action: "status", quoteId: reference })))}>Check agreement or payment status</button>}
-        {(terminal || approvalExpired || staleUnclaimed || (expiredBoundOrder && quote?.canRequestReplacement && !quote.status) || (quote && !quote.hasAgreement && !quote.hasOrder && !quote.orderPending && !quote.status)) &&
+          onClick={() => void run(async () => showStatus(await request<Quote>({ action: "status", quoteId: reference })))}>{directCheckout ? "Check booking or payment status" : "Check agreement or payment status"}</button>}
+        {(terminal || approvalExpired || staleUnclaimed || (expiredBoundOrder && !directCheckout && quote?.canRequestReplacement && !quote.status) || (quote && (directCheckout || !quote.hasAgreement) && !quote.hasOrder && !quote.orderPending && !quote.status)) &&
           <button className="button secondary" type="button" disabled={busy} onClick={() => {
             saveReference(""); setQuote(null); setStart(""); setConsent(""); setSigningUrl(""); setError("");
           }}>Choose another desk pass</button>}</>}>
@@ -311,7 +319,7 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
           onClick={() => void run(() => pay(quote))}>Pay with Razorpay</button>
       </>}
     </BookingStatusCard>}
-    {choosing && <p>Need a draft correction or help with a payment? Email <a href="mailto:hello@armatureailabs.com">hello@armatureailabs.com</a> with your agreement reference. Do not send identity copies or payment credentials.</p>}
+    {choosing && <p>Need help with your booking or payment? Email <a href="mailto:hello@armatureailabs.com">hello@armatureailabs.com</a> with your booking reference. Do not send identity copies or payment credentials.</p>}
     {error && <p className="form-error" role="alert">{error}</p>}
   </div></Section>;
 }

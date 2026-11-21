@@ -16,10 +16,12 @@ vi.mock("../../src/components/FieldOfTouch", () => ({ FieldOfTouch: () => <div>M
 vi.mock("../../src/context/AppContext", () => ({
   useApp: () => ({ currentMember: null, state: { applications: [] }, submitApplication: vi.fn() })
 }));
-const release = vi.hoisted(() => ({ memberPlatformAvailable: false, basicOnboardingAvailable: false, equipmentPageAvailable: false }));
+const release = vi.hoisted(() => ({ memberPlatformAvailable: false, basicOnboardingAvailable: false, equipmentPageAvailable: false, deskCheckoutAvailable: false, publicBookingsAvailable: false }));
 vi.mock("../../src/config/release", () => release);
 beforeEach(() => {
   release.basicOnboardingAvailable = false;
+  release.publicBookingsAvailable = false;
+  release.deskCheckoutAvailable = false;
   vi.mocked(getEcosystemListings).mockResolvedValue(bengaluruEcosystem.map((data) => ({ slug: data.slug, revision: 1, data: { ...emptyEcosystemListing(data.entityType === "Research & ecosystem" ? "research-ecosystem" : "startup"), ...data } })));
   Element.prototype.scrollIntoView = vi.fn();
 });
@@ -27,8 +29,10 @@ beforeEach(() => {
 afterEach(cleanup);
 
 describe("public source and planning context", () => {
-  it("makes free registration discoverable while keeping paid bookings closed", () => {
+  it("points visitors to the current bookings page alongside free registration", () => {
     release.basicOnboardingAvailable = true;
+    release.publicBookingsAvailable = true;
+    release.deskCheckoutAvailable = true;
     const join = render(<MemoryRouter><JoinPage /></MemoryRouter>);
     expect(screen.getByRole("heading", { name: "Create your basic membership." })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Register for free" })).toHaveAttribute("href", "/onboarding");
@@ -38,10 +42,11 @@ describe("public source and planning context", () => {
     join.unmount();
     render(<MemoryRouter><HomePage /></MemoryRouter>);
     expect(screen.getByRole("link", { name: "Register for free" })).toHaveAttribute("href", "/onboarding");
-    expect(screen.getByText("Free basic registration and the booking preview are open. Paid bookings remain closed.")).toBeInTheDocument();
-    expect(document.body).not.toHaveTextContent(/applications[^.]*not open/i);
-    expect(screen.getByRole("link", { name: "Basic membership" })).toHaveAttribute("href", "/join");
-    expect(getPageSeo("/join/").title).toBe("Basic Membership | Armature AI Labs");
+    expect(screen.getByText("Free membership registration and paid desk passes are available.")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Explore bookings" })).toHaveAttribute("href", "/bookings/");
+    expect(document.body).not.toHaveTextContent(/booking beta|paid bookings remain closed/i);
+    expect(screen.getByRole("link", { name: "Explore membership" })).toHaveAttribute("href", "/join");
+    expect(getPageSeo("/join/").title).toBe("Membership | Armature AI Labs");
   });
 
   it("does not publish a stale static directory in initial HTML", () => {

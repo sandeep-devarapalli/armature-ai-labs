@@ -1,4 +1,4 @@
-import { basicOnboardingAvailable } from "../config/release";
+import { basicOnboardingAvailable, deskCheckoutAvailable } from "../config/release";
 import { components } from "../data/components";
 import { legalEntity } from "../data/legalEntity";
 
@@ -33,7 +33,7 @@ const pages: Record<string, PageDefinition> = {
   "/talent-network/": { name: "Armature Talent Network", description: "Find engineers. Connect with builders. Get things made. Discover engineering talent, view professional profiles and connect through LinkedIn." },
   "/": {
     name: "Physical AI and Robotics Lab in Bengaluru",
-    description: "Armature AI Labs is a planned 3,500 sq ft physical AI and robotics lab in HSR Layout, Bengaluru. Explore the designs, projects and lab journal."
+    description: "Armature AI Labs is a 3,500 sq ft physical AI and robotics lab in HSR Layout, Bengaluru. Explore membership, projects and workspace access."
   },
   "/privacy/": {
     name: "Privacy",
@@ -61,7 +61,7 @@ const pages: Record<string, PageDefinition> = {
   },
   "/services/": {
     name: "Engineering Services and Programs",
-    description: "Explore proposed robotics, prototyping, physical AI and engineering programs at Armature AI Labs. Pre-launch enquiries are welcome."
+    description: "Explore robotics, prototyping, physical AI and engineering programs at Armature AI Labs. Contact the lab about services or see current workspace bookings."
   },
   "/projects/": {
     name: "Robotics and Physical AI Projects",
@@ -108,7 +108,7 @@ const pages: Record<string, PageDefinition> = {
   },
   "/join/": {
     name: "Membership Enquiries",
-    description: "Contact Armature AI Labs about membership, team space and future events in HSR Layout, Bengaluru. The lab is pre-launch; online bookings are not open."
+    description: "Explore membership, workspace passes and team cabin quotes at Armature AI Labs in HSR Layout, Bengaluru."
   }
 };
 
@@ -143,7 +143,7 @@ const organization: JsonLd = {
 };
 
 const operationalNames: Record<string, string> = {
-  "booking-beta": "Booking Beta", onboarding: "Basic Membership", auth: "Sign In", dashboard: "Member Dashboard", profile: "Member Profile",
+  onboarding: "Basic Membership", auth: "Sign In", dashboard: "Member Dashboard", profile: "Member Profile",
   book: "Resource Booking", bookings: "Bookings", "golden-pass": "Golden Pass", "check-in": "Check In",
   "component-requests": "Component Requests", inventory: "Inventory",
   team: "Meet the Team",
@@ -156,7 +156,11 @@ export function getPageSeo(pathname: string): PageSeo {
   const cleanPath = pathname.split(/[?#]/, 1)[0];
   const path = cleanPath === "/" ? "/" : `${cleanPath.replace(/\/+$/, "")}/`;
   const page = path === "/join/" && basicOnboardingAvailable
-    ? { name: "Basic Membership", description: "Register for free with Armature AI Labs in HSR Layout, Bengaluru. Complete private identity review; paid coworking, equipment and event bookings remain closed." }
+    ? { name: "Membership", description: import.meta.env.VITE_GOLDEN_PASS_CHECKOUT_ENABLED === "true"
+        ? "Explore free membership, lab access and the annual Golden Pass at Armature AI Labs in HSR Layout, Bengaluru."
+        : deskCheckoutAvailable
+          ? "Explore free membership and desk passes at Armature AI Labs in HSR Layout, Bengaluru."
+          : "Explore free membership and private identity review at Armature AI Labs in HSR Layout, Bengaluru." }
     : Object.hasOwn(pages, path) ? pages[path] : undefined;
   if (!page) {
     const segment = path.split("/")[1];

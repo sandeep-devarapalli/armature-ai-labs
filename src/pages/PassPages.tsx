@@ -66,7 +66,7 @@ function GuestRequests() {
       <Field label="Preferred visit date"><input type="date" name="date" min={todayInBengaluru()} required /></Field>
       <Field label="Reason for visiting"><select name="purpose" required defaultValue=""><option value="" disabled>Choose one</option><option value="event">Attend an event</option><option value="meeting">Meet someone</option></select></Field>
       <Field label="Event name or meeting details"><textarea name="details" required minLength={3} maxLength={400} rows={3} /></Field>
-      <label className="pass-consent"><input type="checkbox" required /> I’ll wait for approval and check in at reception.</label>
+      <label className="pass-consent"><input type="checkbox" required /><span>I accept the <Link to="/terms">website terms</Link>. I’ll wait for staff approval and check in at reception.</span></label>
       <button className="button button-primary" disabled={busy || passes === null}>Submit guest request</button>
       <Link to="/privacy">Privacy notice</Link>
     </form>

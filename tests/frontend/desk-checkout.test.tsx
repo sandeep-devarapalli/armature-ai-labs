@@ -178,7 +178,7 @@ it("does not adopt a reference when the server rejects another member's quote", 
     : reply({ chairs: [], dates: [] })));
   renderPage();
   fireEvent.click(screen.getByText("Resume an existing booking"));
-  fireEvent.change(screen.getByLabelText("Existing agreement reference"), { target: { value: quoteId } });
+  fireEvent.change(screen.getByLabelText("Existing booking reference"), { target: { value: quoteId } });
   fireEvent.click(screen.getByRole("button", { name: "Resume booking" }));
   expect(await screen.findByRole("alert")).toBeInTheDocument();
   expect(localStorage.getItem("armature-desk-quote-v1:member-fixture")).toBeNull();
@@ -192,7 +192,7 @@ it("lets a signed-in Basic member recover an existing payment without offering n
   renderPage();
   expect(mock.invoke).not.toHaveBeenCalled();
   fireEvent.click(screen.getByText("Resume an existing booking"));
-  fireEvent.change(screen.getByLabelText("Existing agreement reference"), { target: { value: quoteId } });
+  fireEvent.change(screen.getByLabelText("Existing booking reference"), { target: { value: quoteId } });
   fireEvent.click(screen.getByRole("button", { name: "Resume booking" }));
   expect(await screen.findByText("This payment has been refunded.")).toBeInTheDocument();
   expect(screen.queryByRole("button", { name: "Request agreement" })).not.toBeInTheDocument();
@@ -226,4 +226,35 @@ it("restarts an unclaimed stale policy request without offering payment", async 
   expect(await screen.findByText(/policies for this unpaid request have changed/)).toBeInTheDocument();
   expect(screen.getByRole("button", { name: "Choose another desk pass" })).toBeEnabled();
   expect(screen.queryByRole("button", { name: "Pay with Razorpay" })).not.toBeInTheDocument();
+});
+
+it("resumes an unpaid agreement request with current website policies and no signing step", async () => {
+  localStorage.setItem("armature-desk-quote-v1:member-fixture", quoteId);
+  mock.invoke.mockResolvedValueOnce(reply({
+    quoteId, amountPaise: 35000, policyVersion, directCheckout: true, manualAgreement: true,
+  })).mockResolvedValueOnce(reply({ quoteId, directCheckout: true, status: "confirmed" }));
+  renderPage();
+  fireEvent.click(screen.getByRole("button", { name: "Check agreement or payment status" }));
+  const pay = await screen.findByRole("button", { name: "Pay with Razorpay" });
+  expect(pay).toBeDisabled();
+  expect(screen.queryByText(/PandaDoc/)).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole("checkbox"));
+  fireEvent.click(pay);
+  expect(await screen.findByText(/Desk booking confirmed/)).toBeInTheDocument();
+  expect(mock.invoke).toHaveBeenLastCalledWith("desk-checkout", {
+    body: { action: "order", quoteId, acceptedPolicies: true, policyVersion },
+  });
+  expect(mock.load).not.toHaveBeenCalled();
+});
+
+it("blocks direct payment when an existing payment needs reconciliation", async () => {
+  localStorage.setItem("armature-desk-quote-v1:member-fixture", quoteId);
+  mock.invoke.mockResolvedValueOnce(reply({
+    quoteId, amountPaise: 35000, policyVersion, directCheckout: true, hasOrder: true, paymentBlocked: true,
+  }));
+  renderPage();
+  fireEvent.click(screen.getByRole("button", { name: "Check agreement or payment status" }));
+  expect(await screen.findByText(/needs to reconcile this payment/)).toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: "Pay with Razorpay" })).not.toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: "Choose another desk pass" })).not.toBeInTheDocument();
 });
