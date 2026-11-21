@@ -19,7 +19,7 @@ const legalName = legalEntity.name;
 const labAddress = "1490, 11th Cross, 20th Main Rd, 1st Sector, HSR Layout, Bengaluru, Karnataka 560102";
 const policies = [
   { route: "/contact", title: "Contact Us", Page: ContactPage, digest: "81125ab8d08f9448db7215015354e4988c8401018b49fe7bdfb53418f1f7a0ce" },
-  { route: "/terms", title: "Terms and Conditions", Page: TermsPage, digest: "7e885a1b399b97942b34279ba9ee3c1f7c74119f25b4dc49332e1d34cf7871aa" },
+  { route: "/terms", title: "Terms and Conditions", Page: TermsPage, digest: "17c1c8fe4a38fbd28d6163510a87e997b3cd4f61bfd78873840744eac7089592" },
   { route: "/refund-policy", title: "Cancellation and Refund Policy", Page: RefundPolicyPage, digest: "32e42f95b18e69ff1e4f5d84b1a87bab28f848d9c96089abb59a8230b6039503" },
   { route: "/shipping-policy", title: "Shipping and Delivery Policy", Page: ShippingPolicyPage, digest: "67163c16f6dbdaf3e3918a7cdecc7974432ee1b32c752b785df19032628badd3" }
 ];
@@ -142,7 +142,7 @@ describe("approved legal policies", () => {
 it("publishes the approved rental and complaint commitments without adding GST", () => {
   const terms = render(<MemoryRouter><TermsPage /></MemoryRouter>);
   expect(terms.container).toHaveTextContent("not currently GST-registered and do not add GST");
-  expect(terms.container).toHaveTextContent("including weekends");
+  expect(terms.container).toHaveTextContent("Weekend visits are welcome when the lab is open, without a reserved desk.");
   expect(terms.container).toHaveTextContent("3 months' agreed rent above that amount");
   terms.unmount();
   const contact = render(<MemoryRouter><ContactPage /></MemoryRouter>);
