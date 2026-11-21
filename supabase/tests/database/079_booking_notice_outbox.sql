@@ -87,5 +87,17 @@ select is((select array_agg(stage order by sequence) from private.booking_notice
 select ok(not exists(select from private.booking_notice_outbox where kind in ('cabin','equipment') and payload?'sessions'),
   'Rental term dates do not create invented handover appointments');
 
+insert into auth.users(id,aud,role,email)
+values ('97079000-0000-4000-8000-000000000015','authenticated','authenticated','booking-notice-pilot@example.test');
+select private.queue_booking_notice(
+  '97079000-0000-4000-8000-000000000015','97079000-0000-4000-8000-000000000016',
+  'guest','confirmed','pilot','{}'::jsonb);
+update private.booking_notice_settings set enabled=false;
+select is(public.claim_booking_notices(25),'[]'::jsonb,'The disabled gate claims nothing by default');
+update private.booking_notice_settings set test_recipient_id='97079000-0000-4000-8000-000000000015';
+select is(public.claim_booking_notices(25)->0->>'recipient_id',
+  '97079000-0000-4000-8000-000000000015','Controlled delivery claims only the internal recipient');
+select is(public.claim_booking_notices(25),'[]'::jsonb,'Customer notices stay queued during the controlled test');
+
 select * from finish();
 rollback;

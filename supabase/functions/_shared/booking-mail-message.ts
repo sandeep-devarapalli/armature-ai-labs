@@ -27,6 +27,20 @@ export function bookingMailMessage(input: Notice, delivery: {
   const notice = bookingNotice(input);
   const boundary = "armature-booking-" + delivery.id;
   const method = input.stage === "cancelled" ? "CANCEL" : "REQUEST";
+  const calendarLinks = method === "REQUEST" ? notice.events.map(event => {
+    const url = new URL("https://calendar.google.com/calendar/render");
+    const format = (value: string) => new Date(value).toISOString().replace(/[-:]|\.\d{3}/g, "");
+    url.search = new URLSearchParams({
+      action: "TEMPLATE",
+      text: event.summary,
+      dates: format(event.startsAt) + "/" + format(event.endsAt),
+      ctz: "Asia/Kolkata",
+      location: event.location,
+      details: event.description,
+    }).toString();
+    return `Add to Google Calendar: ${url}`;
+  }) : [];
+  const body = [notice.text, ...calendarLinks].join("\n\n");
   const headers = [
     `From: Armature AI Labs Bookings <${bookingMailFrom}>`,
     `Reply-To: ${bookingMailFrom}`,
@@ -41,7 +55,7 @@ export function bookingMailMessage(input: Notice, delivery: {
     'Content-Type: text/plain; charset="UTF-8"',
     "Content-Transfer-Encoding: base64",
     "",
-    base64Lines(notice.text),
+    base64Lines(body),
   ];
   for (const [index, event] of notice.events.entries()) {
     const invite = bookingCalendarInvite(event, {

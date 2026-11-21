@@ -176,4 +176,4 @@ verify_jwt = false
 verify_jwt = false
 
 [functions.booking-notices]
-verify_jwt = false
+verify_jwt = true

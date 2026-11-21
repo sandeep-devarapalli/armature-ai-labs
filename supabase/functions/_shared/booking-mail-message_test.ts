@@ -16,7 +16,15 @@ Deno.test("email uses the verified send-as alias and embeds a busy Guest Pass in
   assert(mail.includes("To: internal@example.test"));
   const sections = mail.split("--armature-booking-" + delivery.id);
   const body = (part: string) => atob(part.trim().split("\r\n\r\n")[1].replaceAll("\r\n", ""));
-  assert(body(sections[1]).includes("does not reserve a desk or seat"));
+  const text = body(sections[1]);
+  assert(text.includes("does not reserve a desk or seat"));
+  const calendarLink = text.match(/Add to Google Calendar: (https:[^\s]+)/)?.[1];
+  assert(calendarLink);
+  const calendar = new URL(calendarLink);
+  assert.equal(calendar.hostname, "calendar.google.com");
+  assert.equal(calendar.searchParams.get("dates"), "20261201T033000Z/20261201T163000Z");
+  assert.equal(calendar.searchParams.get("ctz"), "Asia/Kolkata");
+  assert.match(calendar.searchParams.get("location") ?? "", /1490, 11th Cross/);
   assert(sections[2].includes("text/calendar; charset=\"UTF-8\"; method=REQUEST"));
   const invite = body(sections[2]);
   assert(invite.includes("DTSTART:20261201T033000Z"));
@@ -29,5 +37,8 @@ Deno.test("pending visit acknowledgment has no invite and rejects injected heade
   const notice = { kind: "guest", stage: "received", reference: "TEST", guestDate: "2026-12-01" } as const;
   const mail = decode(bookingMailMessage(notice, delivery));
   assert.equal(mail.includes("text/calendar"), false);
+  const cancelled = decode(bookingMailMessage({ ...notice, stage: "cancelled" }, delivery));
+  const part = cancelled.split("--armature-booking-" + delivery.id)[1];
+  assert(!atob(part.trim().split("\r\n\r\n")[1].replaceAll("\r\n", "")).includes("Add to Google Calendar"));
   assert.throws(() => bookingMailMessage(notice, { ...delivery, recipient: "internal@example.test\r\nBcc: customer@example.test" }));
 });
