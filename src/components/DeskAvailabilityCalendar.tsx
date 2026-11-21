@@ -35,7 +35,10 @@ export function DeskAvailabilityCalendar({ today, busy, request, onQuote }: Prop
   const [retry, setRetry] = useState(0);
   const selection = unit + ":" + date;
   const chairs = availability?.key === selection ? availability.chairs : undefined;
-  const selectedEvents = events?.filter(event => event.date === date) ?? [];
+  const lastPassDay = !date || unit === "day" ? date : unit === "week" ? addDays(date, 6)
+    : dateAt(date).getUTCDate() === 1 ? addDays(addDays(date, 31).slice(0, 7) + "-01", -1) : date;
+  const selectedEvents = events?.filter(event => event.date === date
+    || (event.blocksDesk && event.date > date && !!date && event.date <= lastPassDay)) ?? [];
 
   useEffect(() => {
     let active = true;
@@ -76,6 +79,7 @@ export function DeskAvailabilityCalendar({ today, busy, request, onQuote }: Prop
           {([["day", "Day Pass"], ["week", "Week Pass"], ["month", "Month Pass"]] as const).map(([value, label]) =>
             <button key={value} type="button" aria-pressed={unit === value} disabled={busy} onClick={() => { setUnit(value); setChair(""); }}>{label}</button>)}
         </div>
+        {unit === "month" && <p>Month Passes start on the first day of a calendar month.</p>}
       </fieldset>
       <div className="desk-calendar-month">
         <button type="button" disabled={busy || previousMonth < today.slice(0, 7)} onClick={() => setMonth(previousMonth)}>Previous <span className="sr-only">month</span></button>
@@ -96,9 +100,9 @@ export function DeskAvailabilityCalendar({ today, busy, request, onQuote }: Prop
           </button>;
         })}
       </div>
-      {selectedEvents.map(event => <div className="desk-calendar-event" key={event.startsAt + event.endsAt}>
+      {selectedEvents.map(event => <div className="desk-calendar-event" key={event.date + event.startsAt + event.endsAt}>
         <strong>{event.title}</strong>
-        <p>Ground floor · {eventTime.format(new Date(event.startsAt))}–{eventTime.format(new Date(event.endsAt))} IST · Confirmed</p>
+        <p>{event.date !== date && dayLabel.format(dateAt(event.date)) + " · "}Ground floor · {eventTime.format(new Date(event.startsAt))}–{eventTime.format(new Date(event.endsAt))} IST · Confirmed</p>
         <p>{event.blocksDesk ? "Ground-floor desks are closed for this day." : "This event falls outside desk reservation hours."}</p>
       </div>)}
       {!!date && <fieldset>
@@ -121,6 +125,11 @@ export function DeskAvailabilityCalendar({ today, busy, request, onQuote }: Prop
         <div><dt>Reserved fallback</dt><dd>{chair ? "F" + seatNumber(chair) + " · First floor" : "Shown after selection"}</dd></div>
       </dl>
       <p>Your matching first-floor seat is reserved for relocation. If you need to move, we’ll tell you. Your booking and hours stay the same.</p>
+      <details>
+        <summary>See all 13 seat pairs</summary>
+        <ul className="desk-calendar-pairs">{seatCodes.map(code =>
+          <li key={code}>S{seatNumber(code)} → F{seatNumber(code)}</li>)}</ul>
+      </details>
       <button type="submit" className="button button-primary" disabled={busy || !ready}>Review and pay</button>
     </aside>
   </form>;

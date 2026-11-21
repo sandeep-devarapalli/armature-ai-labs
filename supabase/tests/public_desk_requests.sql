@@ -2,14 +2,18 @@
 reset role;
 insert into public.resources(id,location_id,slug,name,kind,capacity,max_duration_minutes,booking_horizon_days,active,reservable)
 values('e3000000-0000-4000-8000-000000000004','e2000000-0000-4000-8000-000000000001',
-  'desk-s01-rehearsal','Synthetic public S01','workspace',1,480,90,true,true);
+  'desk-s01-rehearsal','Synthetic public S01','workspace',1,480,90,true,true),
+  ('e3000000-0000-4000-8000-000000000005','e2000000-0000-4000-8000-000000000001',
+  'desk-s02-rehearsal','Synthetic public S02','workspace',1,480,90,true,true);
 insert into public.resource_booking_policies(resource_id,kind)
-values('e3000000-0000-4000-8000-000000000004','workspace');
-delete from public.booking_inventory where code='S01';
+values('e3000000-0000-4000-8000-000000000004','workspace'),('e3000000-0000-4000-8000-000000000005','workspace');
+delete from public.booking_inventory where code in ('S01','S02');
 insert into public.booking_inventory(resource_id,code,floor,room)
-values('e3000000-0000-4000-8000-000000000004','S01','GF','GF-10');
+values('e3000000-0000-4000-8000-000000000004','S01','GF','GF-10'),
+  ('e3000000-0000-4000-8000-000000000005','S02','GF','GF-10');
 insert into public.resource_hours(resource_id,day_of_week,opens_at,closes_at)
-select 'e3000000-0000-4000-8000-000000000004',d,time '09:00',time '17:00' from generate_series(0,6) d;
+select i.resource_id,d,time '09:00',time '17:00'
+from public.booking_inventory i cross join generate_series(0,6) d where i.code in ('S01','S02');
 update public.booking_products set enabled=true,price_paise=case unit when 'day' then 35000 when 'week' then 175000 when 'month' then 1300000 end
 where kind='workspace' and code in ('workspace-day','workspace-week','workspace-month');
 do $$
@@ -27,6 +31,8 @@ declare
   result jsonb;
   pass text;
   pass_start date;
+  pass_chair text;
+  today date := (now() at time zone 'Asia/Kolkata')::date;
   pass_request jsonb;
   pass_quote jsonb;
   expected_days integer;
@@ -62,16 +68,12 @@ begin
   exception when insufficient_privilege then null;
   end;
   update public.booking_policy_settings set public_desk_checkout_enabled=true where singleton;
-  -- The complete pass must finish inside the rolling 90-day resource horizon.
-  if not exists (select 1 from public.list_bookable_desk_dates('S01','day',
-      (now() at time zone 'Asia/Kolkata')::date+89,(now() at time zone 'Asia/Kolkata')::date+89) where available)
-    or exists (select 1 from public.list_bookable_desk_dates('S01','day',
-      (now() at time zone 'Asia/Kolkata')::date+91,(now() at time zone 'Asia/Kolkata')::date+91) where available)
-    or not exists (select 1 from public.list_bookable_desk_dates('S01','week',
-      (now() at time zone 'Asia/Kolkata')::date+83,(now() at time zone 'Asia/Kolkata')::date+83) where available)
-    or exists (select 1 from public.list_bookable_desk_dates('S01','week',
-      (now() at time zone 'Asia/Kolkata')::date+85,(now() at time zone 'Asia/Kolkata')::date+85) where available) then
-    raise exception 'Desk horizon did not enforce the full 90-day booking window';
+  -- Customers may select starts up to 30 days ahead, including multi-day passes.
+  if not exists (select 1 from public.list_bookable_desk_dates('S01','day',today+30,today+30) where available)
+    or exists (select 1 from public.list_bookable_desk_dates('S01','day',today+31,today+31) where available)
+    or not exists (select 1 from public.list_bookable_desk_dates('S01','week',today+30,today+30) where available)
+    or exists (select 1 from public.list_bookable_desk_dates('S01','week',today+31,today+31) where available) then
+    raise exception 'Desk checkout did not enforce the 30-day advance booking window';
   end if;
 
   quote := public.live_desk_checkout('quote',buyer,jsonb_build_object('chair','S01','unit','day','start',start_date));
@@ -93,8 +95,16 @@ begin
   exception when insufficient_privilege then null;
   end;
   foreach pass in array array['week','month'] loop
-    pass_start := case when pass='month' then (date_trunc('month',start_date+8)+interval '1 month')::date else start_date+1 end;
-    result := public.live_desk_checkout('quote',buyer,jsonb_build_object('chair','S01','unit',pass,'start',pass_start));
+    pass_chair := case pass when 'month' then 'S02' else 'S01' end;
+    if pass='month' then
+      select booking_date into pass_start from public.list_bookable_desk_dates(pass_chair,pass,today,today+30) where available
+        order by booking_date limit 1;
+      -- After 09:00 on the first of a 31-day month there is no available monthly start in the window.
+      continue when pass_start is null;
+    else
+      pass_start := start_date+1;
+    end if;
+    result := public.live_desk_checkout('quote',buyer,jsonb_build_object('chair',pass_chair,'unit',pass,'start',pass_start));
     if result->>'amount_paise' is distinct from (case pass when 'week' then '175000' else '1300000' end) then
       raise exception 'Incorrect released desk price';
     end if;
@@ -199,7 +209,7 @@ begin
   end if;
   -- Carry forward a quote recorded without an agreement under an earlier policy.
   select booking_date into strict start_date from public.list_bookable_desk_dates('S01','day',
-    (now() at time zone 'Asia/Kolkata')::date+70,(now() at time zone 'Asia/Kolkata')::date+80)
+    today+18,today+30)
   where available order by booking_date limit 1;
   quote := public.live_desk_checkout('quote',buyer,jsonb_build_object('chair','S01','unit','day','start',start_date));
   quote_id := (quote->>'id')::uuid;

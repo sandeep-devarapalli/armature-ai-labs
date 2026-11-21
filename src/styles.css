@@ -5904,4 +5904,5 @@ input[type="checkbox"]:focus-visible, input[type="radio"]:focus-visible { outlin
 .desk-calendar-event p { margin: .35rem 0 0; }
 .desk-calendar-summary dl > div { display: flex; gap: .6rem; justify-content: space-between; padding: .55rem 0; border-bottom: 1px solid; }
 .desk-calendar-summary dd { margin: 0; text-align: right; }
+.desk-calendar-pairs { display: grid; grid-template-columns: repeat(auto-fit, minmax(6rem, 1fr)); gap: .25rem; padding: 0; list-style: none; }
 @media (max-width: 760px) { .desk-calendar-layout { grid-template-columns: minmax(0, 1fr); } }
