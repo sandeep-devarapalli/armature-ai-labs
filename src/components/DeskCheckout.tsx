@@ -6,6 +6,7 @@ import { memberPlatformAvailable, rentalCheckoutAvailable } from "../config/rele
 import { loadRazorpayCheckout, type CheckoutInstance, type CheckoutResult } from "../lib/razorpay-checkout";
 import { supabase } from "../lib/supabase";
 import { BookingSteps } from "./BookingSteps";
+import { DeskAvailabilityCalendar } from "./DeskAvailabilityCalendar";
 import { DeskChairMap } from "./DeskChairMap";
 import { BookingStatusCard, bookingDates, type BookingTone } from "./BookingStatusCard";
 import { Field, PageHeader, Section } from "./Primitives";
@@ -191,6 +192,13 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
     await showStatus(result);
   }
 
+  async function createQuote(selectedChair: string, selectedUnit: Term, selectedDate: string) {
+    const result = await request<Quote>({ action: "quote", chair: selectedChair, unit: selectedUnit, start: selectedDate });
+    if (!/^[0-9a-f-]{36}$/.test(result.quoteId)) throw new Error("The booking reference was invalid.");
+    saveReference(result.quoteId);
+    setQuote(result);
+  }
+
   const approvalExpired = Boolean(!directCheckout && quote?.approvedAt && !quote.hasOrder && !quote.orderPending
     && Date.parse(quote.approvedAt) + 30 * 60 * 1000 <= Date.now());
   const staleUnclaimed = Boolean(!directCheckout && quote?.policyStale && !quote.hasOrder && !quote.orderPending);
@@ -210,8 +218,8 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
     manual: ["Agreement in preparation", "neutral"], preparing: ["Agreement in preparation", "neutral"], countersign: ["Awaiting countersignature", "neutral"],
     sign: ["Ready to sign", "ready"], pay: ["Ready to pay", "ready"], membership: ["Membership needed", "attention"] } as Record<string, [string, BookingTone]>)[stage] ?? ["Request received", "neutral"];
   return <Section number="01" title="Your booking"><div className="booking-flow">
-    <BookingSteps steps={directCheckout ? ["Choose your pass, chair and dates", "Accept the policies and pay", "Receive your confirmed reservation"] : deskSteps} current={step} />
-    <p>A request does not reserve a desk. Availability is checked again before payment. Do not make a second payment while an earlier attempt is pending.</p>
+    <BookingSteps steps={directCheckout ? ["Choose your pass, chair and dates", "Accept the policies and pay", "Receive your confirmed reservation"] : available || quote ? deskSteps : deskSteps.slice(0, 1)} current={step} />
+    <p>{directCheckout ? "Your seat is confirmed after payment. Availability is checked again before checkout." : "A request does not reserve a desk. Availability is checked again before payment."} Do not make a second payment while an earlier attempt is pending.</p>
     {choosing && <details className="member-confirm">
       <summary>Resume an existing booking</summary>
       <button className="button button-quiet" type="button" disabled={busy} onClick={() => void run(async () => {
@@ -234,15 +242,12 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
         <button className="button button-quiet" disabled={busy}>Resume booking</button>
       </form>
     </details>}
-    {choosing && !canBook ? <><p>Desk passes require Verified membership.</p><Link className="button button-primary" to="/onboarding">View membership</Link></> : choosing ? <form className="booking-form" onSubmit={event => {
+    {choosing && !canBook ? <><p>Desk passes require Verified membership.</p><Link className="button button-primary" to="/onboarding">View membership</Link></> : choosing && directCheckout ? <DeskAvailabilityCalendar today={today} busy={busy} request={request}
+      onQuote={(selectedChair, selectedUnit, selectedDate) => void run(() => createQuote(selectedChair, selectedUnit, selectedDate))} />
+      : choosing ? <form className="booking-form" onSubmit={event => {
       event.preventDefault();
       if (!available?.dates.some(row => row.available && row.booking_date === start)) return;
-      void run(async () => {
-        const result = await request<Quote>({ action: "quote", chair, unit, start });
-        if (!/^[0-9a-f-]{36}$/.test(result.quoteId)) throw new Error("The booking reference was invalid.");
-        saveReference(result.quoteId);
-        setQuote(result);
-      });
+      void run(() => createQuote(chair, unit, start));
     }}>
       <Field label="Desk pass" hint="Passes cover Monday to Friday, 9 am to 5 pm. You are welcome at weekends too when the lab is open, as a bonus; weekend seats are not reserved."><select value={unit} disabled={busy} onChange={event => { setUnit(event.target.value as Term); setStart(""); }}>
         {Object.entries(terms).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
@@ -318,6 +323,10 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
         <button className="button" type="button" disabled={busy || modalOpen || !quote.policyVersion || consent !== quote.policyVersion}
           onClick={() => void run(() => pay(quote))}>Pay with Razorpay</button>
       </>}
+      {directCheckout && quote?.chair && /^S(0[1-9]|1[0-3])$/.test(quote.chair) && <p>
+        Reserved fallback seat <strong>F{Number(quote.chair.slice(1))}</strong> on the first floor.
+        We’ll notify you if your reservation needs to move.
+      </p>}
     </BookingStatusCard>}
     {choosing && <p>Need help with your booking or payment? Email <a href="mailto:hello@armatureailabs.com">hello@armatureailabs.com</a> with your booking reference. Do not send identity copies or payment credentials.</p>}
     {error && <p className="form-error" role="alert">{error}</p>}

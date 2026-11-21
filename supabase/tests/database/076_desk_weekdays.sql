@@ -30,5 +30,49 @@ select is(cardinality(public.reserve_workspace_pass('97600000-0000-4000-8000-000
 select is((select count(*)::integer from public.bookings where resource_id='97600000-0000-4000-8000-000000000010' and extract(isodow from starts_at at time zone 'Asia/Kolkata')>5),0,'No weekend bookings are created');
 select is((select period from public.workspace_pass_allocations where resource_id='97600000-0000-4000-8000-000000000010'),
  daterange(current_setting('t.monday')::date,current_setting('t.monday')::date+7,'[)'),'Allocation keeps the full seven-day span');
+insert into public.resources(id,location_id,slug,name,kind)
+select '97600000-0000-4000-8000-000000000011',location_id,'weekday-event','Synthetic event room','workspace'
+from public.resources where id='97600000-0000-4000-8000-000000000010';
+update private.event_checkout_settings set event_resource='97600000-0000-4000-8000-000000000011';
+insert into public.bookings(id,resource_id,member_id,starts_at,ends_at,notes)
+select bid::uuid,'97600000-0000-4000-8000-000000000011','97600000-0000-4000-8000-000000000001',
+  (current_setting('t.monday')::date+day_offset+opens) at time zone 'Asia/Kolkata',
+  (current_setting('t.monday')::date+day_offset+closes) at time zone 'Asia/Kolkata','Private example'
+from (values ('97600000-0000-4000-8000-000000000012',0,time '14:00',time '15:00'),
+             ('97600000-0000-4000-8000-000000000013',1,time '17:00',time '18:00')) v(bid,day_offset,opens,closes);
+select is(public.desk_calendar_events(current_setting('t.monday')::date,current_setting('t.monday')::date+1)
+  ->0->>'blocksDesk','true','A confirmed daytime event blocks desks');
+select is(public.desk_calendar_events(current_setting('t.monday')::date,current_setting('t.monday')::date+1)
+  ->1->>'blocksDesk','false','A confirmed event starting at 17:00 leaves desks open');
+select ok(not (public.desk_calendar_events(current_setting('t.monday')::date,current_setting('t.monday')::date)::text like '%Private example%'),
+  'The calendar does not expose private event notes');
+select is(public.desk_calendar_chairs(current_setting('t.monday')::date,'day'),'{}'::text[],
+  'A blocking event prevents new desk checkout');
+select is(public.desk_calendar_chairs(current_setting('t.monday')::date-7,'week'),array['S07'],
+  'An earlier week can still be reserved');
+select is(public.desk_calendar_chairs((now() at time zone 'Asia/Kolkata')::date+31,'day'),'{}'::text[],
+  'A desk cannot be purchased more than 30 days in advance');
+select ok(not has_function_privilege('authenticated','public.desk_relocations(uuid,uuid)','EXECUTE'),
+  'Relocation is accessible only through the staff-authorized Edge Function');
+
+update private.booking_notice_settings set enabled=true;
+insert into private.live_desk_quotes(id,member_id,resource_id,product_id,chair,unit,starts_on,ends_on,amount_paise,agreement_hash)
+select '97600000-0000-4000-8000-000000000014','97600000-0000-4000-8000-000000000002',
+  '97600000-0000-4000-8000-000000000010',id,'S07','week',current_setting('t.monday')::date,current_setting('t.monday')::date+6,175000,'fixture'
+from public.booking_products where code='workspace-week';
+update private.live_desk_quotes q set payment_id='pay_DeskCalendarFixture',
+  booking_ids=(select array_agg(b.id order by b.starts_at) from public.bookings b where b.resource_id=q.resource_id)
+where q.id='97600000-0000-4000-8000-000000000014';
+select set_config('t.move_booking',(select booking_ids[1]::text from private.live_desk_quotes
+  where id='97600000-0000-4000-8000-000000000014'),true);
+select is(public.desk_relocations('97600000-0000-4000-8000-000000000001',current_setting('t.move_booking')::uuid)->>'fallback',
+ 'F7','The paid S07 reservation maps to F7');
+select is(public.desk_relocations('97600000-0000-4000-8000-000000000001',current_setting('t.move_booking')::uuid)->>'fallback',
+ 'F7','Repeating the move is idempotent');
+select is((select payload#>>'{sessions,0,id}' from private.booking_notice_outbox
+ where aggregate_id='97600000-0000-4000-8000-000000000014' and stage='updated'),
+ current_setting('t.move_booking'),'The move updates the original calendar UID once');
+select is((select resource_id from public.bookings where id=current_setting('t.move_booking')::uuid),
+ '97600000-0000-4000-8000-000000000010'::uuid,'The original paid booking and entitlement are preserved');
 select * from finish();
 rollback;

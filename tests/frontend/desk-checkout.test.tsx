@@ -258,3 +258,52 @@ it("blocks direct payment when an existing payment needs reconciliation", async 
   expect(screen.queryByRole("button", { name: "Pay with Razorpay" })).not.toBeInTheDocument();
   expect(screen.queryByRole("button", { name: "Choose another desk pass" })).not.toBeInTheDocument();
 });
+
+it("uses the direct calendar to show event blocking and the matching reserved fallback", async () => {
+  let eventDay = "";
+  let openDay = "";
+  const actions = vi.fn(async (body) => {
+    switch (body.action) {
+      case "availability": return reply({ directCheckout: true, chairs: ["S01", "S13"], dates: [] });
+      case "desk_calendar": {
+        const start = new Date(body.from + "T00:00:00Z");
+        const limit = new Date(body.to + "T00:00:00Z");
+        expect((+limit - +start) / 86400000).toBe(30);
+        const dates = Array.from({ length: 9 }, (_, i) => new Date(+start + i * 86400000))
+          .filter(day => day.getUTCMonth() === start.getUTCMonth() && ![0, 6].includes(day.getUTCDay()));
+        const nextMonth = new Date(Date.UTC(start.getUTCFullYear(), start.getUTCMonth() + 1, 1));
+        while (dates.length < 2) {
+          if (![0, 6].includes(nextMonth.getUTCDay())) dates.push(new Date(nextMonth));
+          nextMonth.setUTCDate(nextMonth.getUTCDate() + 1);
+        }
+        [eventDay, openDay] = dates.map(date => date.toISOString().slice(0, 10));
+        return reply({ events: [{ date: eventDay, title: "Ground floor event", startsAt: eventDay + "T10:00:00+05:30",
+          endsAt: eventDay + "T13:00:00+05:30", blocksDesk: true }] });
+      }
+      case "desk_calendar_chairs": return reply({ chairs: body.start === eventDay ? [] : ["S13"] });
+      case "quote": return reply({ quoteId, amountPaise: 35000, policyVersion, directCheckout: true, chair: "S13" });
+      default: throw new Error("Unexpected " + body.action);
+    }
+  });
+  mock.invoke.mockImplementation((_, { body }) => actions(body));
+  renderPage();
+  await screen.findByText("Find an available day");
+  await waitFor(() => expect(eventDay).not.toBe(""));
+  const renderDay = (day: string) => new Intl.DateTimeFormat("en-IN", {
+    weekday: "long", day: "numeric", month: "long", timeZone: "UTC",
+  }).format(new Date(day + "T00:00:00Z"));
+  const eventName = renderDay(eventDay) + ", Event";
+  if (!screen.queryByRole("button", { name: eventName })) fireEvent.click(screen.getByRole("button", { name: "Next month" }));
+  fireEvent.click(await screen.findByRole("button", { name: eventName }));
+  expect(await screen.findByText("Ground-floor desks are closed for this day.")).toBeInTheDocument();
+  await waitFor(() => expect(screen.getByRole("button", { name: "S13" })).toBeDisabled());
+  if (!screen.queryByRole("button", { name: renderDay(openDay) })) fireEvent.click(screen.getByRole("button", { name: "Next month" }));
+  fireEvent.click(screen.getByRole("button", { name: renderDay(openDay) }));
+  await waitFor(() => expect(screen.getByRole("button", { name: "S13" })).toBeEnabled());
+  fireEvent.click(screen.getByRole("button", { name: "S13" }));
+  expect(screen.getByText("F13 · First floor")).toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "Review and pay" }));
+  expect(await screen.findByRole("button", { name: "Pay with Razorpay" })).toBeDisabled();
+  expect(actions).toHaveBeenCalledWith({ action: "quote", chair: "S13", unit: "day", start: openDay });
+  expect(screen.queryByText(/PandaDoc/)).not.toBeInTheDocument();
+});

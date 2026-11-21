@@ -33,7 +33,7 @@ export function AccountMenu() {
       {error && <><p role="alert">{error}</p><button type="button" onClick={() => void refresh()}>Retry</button></>}
       <Link to="/onboarding">My registration</Link>
       <Link to="/directory-profile">My public profile</Link>
-      {basicOnboardingAvailable && account && ["admin", "super_admin", "membership_reviewer"].includes(account.role) && <Link to="/admin/passes">Guest and Golden Pass reviews</Link>}
+      {basicOnboardingAvailable && account && ["admin", "super_admin", "membership_reviewer"].includes(account.role) && <Link to="/admin/booking-management">Booking management</Link>}
       <Link to="/bookings/">Explore bookings</Link>
       {account && ["admin", "super_admin", "membership_reviewer"].includes(account.role) && <Link to="/admin/members">{account.role === "membership_reviewer" ? "Membership reviews" : "Admin → Members"}</Link>}
       {account && ["admin", "super_admin"].includes(account.role) && <Link to="/admin/equipment-wishlist">Admin → Equipment wishlist</Link>}
