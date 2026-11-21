@@ -319,7 +319,9 @@ test("eFlesh is discoverable as tactile sensing and links its complete provision
 test("QDD actuator uses source media and separates its experimental control paths", async ({ page }) => {
   await page.goto("/projects?category=Actuator+Design&q=QDD");
   const card = page.locator("#quasi-direct-drive-actuator");
-  await expect(page.locator("#project-grid .project-card")).toHaveCount(1);
+  const qdd5010 = page.locator("#qdd5010-actuator");
+  await expect(qdd5010.getByRole("heading", { name: "QDD5010 Actuator" })).toBeVisible();
+  await expect(qdd5010.getByRole("link", { name: "Project source" })).toHaveAttribute("href", "https://github.com/ImZadeQasemzade/QDD5010-Actuator");
   await expect(card.getByRole("heading", { name: "Quasi-Direct-Drive Actuator" })).toBeVisible();
   await expect(card).toContainText("Research Track");
   await expect(card).toContainText("first prototype");
