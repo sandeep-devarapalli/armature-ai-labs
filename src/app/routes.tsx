@@ -8,7 +8,7 @@ import { HomePage } from "../pages/HomePage";
 import {
   basicOnboardingAvailable,
   componentRequestsAvailable,
-  deskCheckoutAvailable, eventCheckoutAvailable, rentalCheckoutAvailable,
+  publicBookingsAvailable, rentalCheckoutAvailable,
   equipmentPageAvailable,
   memberPlatformAvailable
 } from "../config/release";
@@ -23,7 +23,6 @@ const GoldenPassPage = lazy(() => import("../pages/PassPages").then(module => ({
 const PassStaffPage = lazy(() => import("../pages/PassPages").then(module => ({ default: module.PassStaffPage })));
 const BookLabPage = lazy(() => import("../pages/BookLabPage"));
 const EquipmentRentalPage = lazy(() => import("../pages/EquipmentRentalPage"));
-const BookingBetaPage = lazy(() => import("../pages/BookingBetaPage").then((module) => ({ default: module.BookingBetaPage })));
 const OnboardingPage = lazy(() => import("../pages/OnboardingPage").then((module) => ({ default: module.OnboardingPage })));
 const ProjectsPage = lazy(() => import("../pages/ProjectsPage").then((module) => ({ default: module.ProjectsPage })));
 const BrandingPage = lazy(() => import("../pages/BrandingPage").then((module) => ({ default: module.BrandingPage })));
@@ -157,7 +156,7 @@ export const routes: RouteObject[] = [
       { path: "/components/:slug", element: <ComponentDetailPage /> },
       { path: "/maker-desk", element: <MakerDeskPage /> },
       { path: "/join", element: <JoinPage /> },
-      { path: "/booking-beta", element: <BookingBetaPage />, handle: { module: "src/pages/BookingBetaPage.tsx" } },
+      { path: "/booking-beta", element: <Navigate to="/bookings/" replace /> },
       { path: "/members", element: <MembersPage />, handle: { module: "src/pages/PeopleGalleryPage.tsx" } },
       { path: "/directory-profile", element: <DirectoryProfileSettingsPage /> },
       { path: "/members/:handle", element: <PublicMemberPage /> },
@@ -171,7 +170,7 @@ export const routes: RouteObject[] = [
       { path: "/bookings/rentals", element: <Navigate to={rentalCheckoutAvailable ? "/bookings?item=cabin" : "/bookings"} replace /> },
       { path: "/golden-pass", element: <ReleaseGate enabled={basicOnboardingAvailable}><GoldenPassPage /></ReleaseGate> },
       { path: "/admin/passes", element: <ReleaseGate enabled={basicOnboardingAvailable}><PassStaffPage /></ReleaseGate> },
-      { path: "/bookings", element: basicOnboardingAvailable || deskCheckoutAvailable || rentalCheckoutAvailable || eventCheckoutAvailable ? <BookLabPage /> : memberFeature(protectedPage(<BookingsPage />)) },
+      { path: "/bookings", element: publicBookingsAvailable ? <BookLabPage /> : memberFeature(protectedPage(<BookingsPage />)) },
       ...(rentalCheckoutAvailable ? [{ path: "/bookings/equipment", element: <EquipmentRentalPage /> }, { path: "/bookings/equipment/:code", element: <EquipmentRentalPage /> }] : []),
       { path: "/bookings/:id", element: memberFeature(protectedPage(<BookingDetailPage />)) },
       { path: "/check-in", element: memberFeature(protectedPage(<CheckInPage />)) },

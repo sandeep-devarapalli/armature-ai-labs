@@ -31,6 +31,7 @@ type Quote = {
   sealed_revision: string | null;
   order_id: string | null;
   order_claimed_at: string | null;
+  direct_accepted_at?: string | null;
   policy_version?: string | null;
   quoted_policy_version?: string | null;
   status?: string;
@@ -50,6 +51,7 @@ type Document = {
 };
 type Payment = { id: string; order_id: string; amount: number; currency: string; status: string; amount_refunded: number };
 type Order = { id: string; receipt: string; amount: number; currency: string };
+type OrderState = Order & { amount_paid: number; amount_due: number; attempts: number; status: string };
 
 function view(q: Quote) {
   return { quoteId: q.id, chair: q.chair, unit: q.unit, start: q.starts_on, end: q.ends_on,
@@ -65,6 +67,7 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers });
   if (request.method !== "POST") return reply({ error: "method_not_allowed" }, 405);
   const live = mode === "live";
+  const directCheckout = live && Deno.env.get("LIVE_DESK_DIRECT_CHECKOUT_ENABLED") === "true";
   const razor = live ? liveRazorpay() : null;
   const key = live ? razor?.keyId ?? "" : Deno.env.get("CONNECTED_DESK_RAZORPAY_KEY_ID") ?? "";
   const secret = live ? razor?.keySecret ?? "" : Deno.env.get("CONNECTED_DESK_RAZORPAY_KEY_SECRET") ?? "";
@@ -75,16 +78,16 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
   const policyVersion = live ? Deno.env.get("LIVE_DESK_POLICY_VERSION") ?? "" : "";
   if (Deno.env.get("SUPABASE_URL") !== config.backend || (!live && !enabled)
       || !new RegExp("^rzp_" + mode + "_[A-Za-z0-9]+$").test(key) || !secret
-      || (live && !/^[A-Za-z0-9._-]{4,80}$/.test(policyVersion)) || (!pandaKey && !manualPilot) || !staffSigner) {
+      || (live && !/^[A-Za-z0-9._-]{4,80}$/.test(policyVersion)) || (!directCheckout && ((!pandaKey && !manualPilot) || !staffSigner))) {
     return reply({ error: live ? "checkout_not_configured" : "test_checkout_not_configured" }, 503);
   }
   const releasedChair = (code?: string) => /^S(0[1-9]|1[0-3])$/.test(code ?? "");
   const isManualQuote = (q: Quote) => releasedChair(q.chair) && (({ day: 35000, week: 175000, month: 1300000 } as Record<string, number>)[q.unit] === q.amount_paise)
     && ((manualPilot && !q.document_id) || q.sealed_revision === "manual-pilot-v1");
-  const policyStale = (q: Quote) => live && !q.order_claimed_at && q.quoted_policy_version !== policyVersion;
+  const policyStale = (q: Quote) => live && !directCheckout && !q.order_claimed_at && q.quoted_policy_version !== policyVersion;
   const present = (q: Quote) => ({
-    ...view(q), manualAgreement: isManualQuote(q),
-    ...(live ? { policyVersion: q.quoted_policy_version ?? q.policy_version, policyStale: policyStale(q) } : {}),
+    ...view(q), directCheckout, manualAgreement: (!directCheckout || Boolean(q.document_id)) && isManualQuote(q),
+    ...(live ? { policyVersion: directCheckout ? policyVersion : q.quoted_policy_version ?? q.policy_version, policyStale: policyStale(q) } : {}),
   });
 
   try {
@@ -109,7 +112,7 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
         p_member: user.id, p_staff: staff, p_offset: offset,
       }).abortSignal(AbortSignal.timeout(10000));
       if (error) throw new Rejected(503, "checkout_state_unavailable");
-      return reply({ mode, nextOffset: data.nextOffset, quotes: data.quotes.map((q: Quote & {
+      return reply({ mode, directCheckout, nextOffset: data.nextOffset, quotes: data.quotes.map((q: Quote & {
         approvedAt?: string; memberId?: string; customerEmail?: string;
       }) => ({ ...present(q), approvedAt: q.approvedAt ?? null,
         agreementSigned: Boolean(q.approvedAt),
@@ -119,7 +122,7 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
     let member = user.id;
     let customer = user.email?.toLowerCase() ?? "";
     const manualReview = action === "manual_review" || action === "approve_manual";
-    if (manualReview && !manualPilot) throw new Rejected(403, "manual_agreement_unavailable");
+    if (manualReview && !manualPilot && !directCheckout) throw new Rejected(403, "manual_agreement_unavailable");
     const recovery = action === "recover_order";
     if (recovery && !live) throw new Rejected(403, "order_recovery_unavailable");
     if (action === "seal" || manualReview || recovery) {
@@ -131,7 +134,11 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
       const owner = await client.auth.admin.getUserById(member);
       customer = owner.data.user?.email?.toLowerCase() ?? "";
     }
-    if (!customer || customer === staffSigner) throw new Rejected(409, "separate_signers_required");
+    if ((!directCheckout || ["sign", "seal", "approve_manual"].includes(action))
+      && (!customer || customer === staffSigner)) throw new Rejected(409, "separate_signers_required");
+    if (directCheckout && ["sign", "seal", "approve_manual"].includes(action)) {
+      throw new Rejected(409, "desk_agreement_retired");
+    }
 
     async function operation<T>(name: string, payload: object): Promise<T> {
       const { data, error } = await client.rpc(config.rpc, {
@@ -201,11 +208,11 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
         throw new Rejected(400, "invalid_selection");
       }
       if (manualPilot && chair !== undefined && !releasedChair(chair)) {
-        return reply({ mode, chairs: [], dates: [] });
+        return reply({ mode, directCheckout, chairs: [], dates: [] });
       }
       const availability = await operation<{ chairs: string[] }>("availability", { chair, unit, from, to });
       if (manualPilot) availability.chairs = availability.chairs.filter(code => releasedChair(code));
-      return reply({ mode, ...availability });
+      return reply({ mode, directCheckout, ...availability });
     }
     if (action === "quote") {
       if (!/^S(0[1-9]|1[0-9]|2[0-5])$/.test(input.chair ?? "") || !["day", "week", "month"].includes(input.unit)
@@ -214,7 +221,7 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
       const quote = await operation<Quote>("quote", {
         chair: input.chair, unit: input.unit, start: input.start, ...(live ? { policyVersion } : {}),
       });
-      if (manualPilot && !isManualQuote(quote) && !quote.document_id) throw new Rejected(409, "manual_agreement_unavailable");
+      if (!directCheckout && manualPilot && !isManualQuote(quote) && !quote.document_id) throw new Rejected(409, "manual_agreement_unavailable");
       return reply({ mode, ...present(quote) });
     }
     if (!pattern.test(input.quoteId ?? "")) throw new Rejected(400, "invalid_quote");
@@ -223,10 +230,11 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
       throw new Rejected(409, "policy_version_changed");
     }
     if (recovery) {
-      if (!q.order_claimed_at || !q.document_id || q.status || !/^order_[A-Za-z0-9]{1,80}$/.test(input.orderId ?? "")
+      if (!q.order_claimed_at || (!q.document_id && !q.direct_accepted_at) || q.status || !/^order_[A-Za-z0-9]{1,80}$/.test(input.orderId ?? "")
         || (q.order_id && q.order_id !== input.orderId)) throw new Rejected(409, "order_recovery_unavailable");
-      const signed = isManualQuote(q) ? Number.isFinite(await manualApproval(q)) : (await agreement(q, q.document_id)).completed;
-      if (!signed) throw new Rejected(409, "agreement_required");
+      const authorized = q.direct_accepted_at || (q.document_id && (isManualQuote(q)
+        ? Number.isFinite(await manualApproval(q)) : (await agreement(q, q.document_id)).completed));
+      if (!authorized) throw new Rejected(409, "agreement_required");
       const order = await provider<Order>("razorpay", "/orders/" + input.orderId);
       if (order.id !== input.orderId || order.receipt !== q.id || order.amount !== q.amount_paise || order.currency !== "INR") {
         throw new Rejected(409, "provider_order_mismatch");
@@ -235,6 +243,9 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
       return reply({ mode, ...present(bound), recovered: true });
     }
     if (manualReview) {
+      if (directCheckout && action === "manual_review") {
+        return reply({ mode, ...present(q), customerEmail: customer });
+      }
       if (!isManualQuote(q)) throw new Rejected(409, "manual_agreement_unavailable");
       if (action === "manual_review") return reply({ mode, ...present(q), customerEmail: customer, staffEmail: staffSigner,
         agreementSigned: Boolean(q.document_id && Number.isFinite(await manualApproval(q))) });
@@ -265,6 +276,60 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
         return reply({ mode, ...present(q), ...await reconcileLivePayment(razor, payment, q, operation) });
       }
       return reply({ mode, ...await capture(q, payment) });
+    }
+    if (directCheckout && (action === "status" || action === "order")) {
+      if (q.status) return reply({ mode, ...present(q) });
+      const isOrder = action === "order";
+      if (isOrder && input.acceptedPolicies !== true) throw new Rejected(409, "policy_acceptance_required");
+      if (isOrder && input.policyVersion !== policyVersion) throw new Rejected(409, "policy_version_changed");
+      if (q.order_claimed_at && !q.order_id) {
+        return reply({ mode, ...present(q), paymentBlocked: true });
+      }
+      if (q.order_id) {
+        const providerOrder = await provider<OrderState>("razorpay", "/orders/" + q.order_id);
+        const payments = await provider<{ count: number; items: Payment[] }>("razorpay", "/orders/" + q.order_id + "/payments");
+        if (providerOrder.id !== q.order_id || providerOrder.receipt !== q.id ||
+            providerOrder.amount !== q.amount_paise || providerOrder.currency !== "INR" || !Array.isArray(payments.items)) {
+          throw new Rejected(409, "provider_order_mismatch");
+        }
+        const captured = payments.items.filter(payment => ["captured", "refunded"].includes(payment.status));
+        if (captured.length === 1 && razor) {
+          return reply({ mode, ...present(q), ...await reconcileLivePayment(razor, captured[0], q, operation) });
+        }
+        const safeToResume = providerOrder.amount_paid === 0 && providerOrder.amount_due === q.amount_paise
+          && ["created", "attempted"].includes(providerOrder.status) && providerOrder.attempts === payments.count
+          && payments.count === payments.items.length
+          && payments.items.every(payment => payment.order_id === q.order_id && payment.amount === q.amount_paise
+            && payment.currency === "INR" && payment.status === "failed" && payment.amount_refunded === 0);
+        if (!safeToResume) return reply({ mode, ...present(q), paymentBlocked: true });
+        if (!isOrder) {
+          const { data: held, error } = await client.rpc("active_desk_order_hold", {
+            p_member: member, p_quote: q.id, p_order: q.order_id,
+          }).abortSignal(AbortSignal.timeout(10000));
+          if (error) throw new Rejected(503, "checkout_state_unavailable");
+          return reply({ mode, ...present(q), paymentBlocked: held !== true });
+        }
+      } else if (!isOrder) {
+        return reply({ mode, ...present(q) });
+      }
+      const { error } = await client.rpc("claim_direct_desk_order", {
+        p_member: member, p_quote: q.id, p_policy_version: policyVersion, p_order: q.order_id,
+      }).abortSignal(AbortSignal.timeout(10000));
+      if (error?.code === "22024") return reply({ mode, ...present(q), paymentBlocked: true });
+      if (error?.code === "42501") throw new Rejected(403, "checkout_state_rejected");
+      if (["P0002", "22023"].includes(error?.code ?? "")) throw new Rejected(409, "checkout_state_rejected");
+      if (error) throw new Rejected(503, "checkout_state_unavailable");
+      if (q.order_id) return reply({ mode, orderId: q.order_id, keyId: key, amountPaise: q.amount_paise, currency: "INR" });
+      return reply({ mode, ...await createOrder(q) });
+    }
+    async function createOrder(q: Quote) {
+      const order = await provider<Order>("razorpay", "/orders", { amount: q.amount_paise, currency: "INR", receipt: q.id,
+        notes: { mode: live ? "armature_live_desk" : "armature_connected_test" } });
+      if (!/^order_[A-Za-z0-9]+$/.test(order.id) || order.receipt !== q.id || order.amount !== q.amount_paise || order.currency !== "INR") {
+        throw new Rejected(502, "provider_order_mismatch");
+      }
+      await operation<Quote>("bind_order", { quoteId: q.id, orderId: order.id });
+      return { orderId: order.id, keyId: key, amountPaise: q.amount_paise, currency: "INR" };
     }
     let checkedPayments: { count: number; items: Payment[] } | null = null;
     if (live && action === "status" && q.status) return reply({ mode, ...present(q) });
@@ -312,13 +377,7 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
     if (Date.now() >= state.signedAt + 30 * 60_000) throw new Rejected(409, "signed_payment_window_expired");
     if (q.order_id) return reply({ mode, orderId: q.order_id, keyId: key, amountPaise: q.amount_paise, currency: "INR" });
     await operation<Quote>("claim_order", { quoteId: q.id, signedAt: new Date(state.signedAt).toISOString(), ...(live ? { policyVersion } : {}) });
-    const order = await provider<Order>("razorpay", "/orders", { amount: q.amount_paise, currency: "INR", receipt: q.id,
-      notes: { mode: live ? "armature_live_desk" : "armature_connected_test" } });
-    if (!/^order_[A-Za-z0-9]+$/.test(order.id) || order.receipt !== q.id || order.amount !== q.amount_paise || order.currency !== "INR") {
-      throw new Rejected(502, "provider_order_mismatch");
-    }
-    await operation<Quote>("bind_order", { quoteId: q.id, orderId: order.id });
-    return reply({ mode, orderId: order.id, keyId: key, amountPaise: q.amount_paise, currency: "INR" });
+    return reply({ mode, ...await createOrder(q) });
   } catch (error) {
     if (error instanceof Rejected || error instanceof RazorpayRequestError) return reply({ error: error.code }, error.status);
     const status = (error as { status?: number })?.status;

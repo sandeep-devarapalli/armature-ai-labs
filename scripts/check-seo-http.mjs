@@ -76,7 +76,7 @@ for (const pathname of ["/__seo-check-missing__/", "/procurement/", "/components
   });
 }
 
-for (const [pathname, destination, search] of [["/membership/", "/join/", ""], ["/equipment/", "/", ""], ["/membership?source=a", "/join/", "?source=a"]]) {
+for (const [pathname, destination, search] of [["/booking-beta", "/bookings/", ""], ["/booking-beta/", "/bookings/", ""], ["/membership/", "/join/", ""], ["/equipment/", "/", ""], ["/membership?source=a", "/join/", "?source=a"]]) {
   await probe(pathname, (response) => {
     assert.equal(response.status, 301, "Retired alias needs a permanent server redirect");
     const location = new URL(response.headers.get("location"), base);

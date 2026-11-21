@@ -177,7 +177,7 @@ export function ServicesPage() {
       <PageHeader
         meta="Services · deployments · research"
         title="Build here, or bring the lab to the site."
-        description="Armature AI Labs is developing a robotics floor and engineering services for organizations that need working hardware, private AI infrastructure, or credible physical datasets. We are pre-launch and accepting enquiries."
+        description="Discuss engineering services, working hardware, private AI infrastructure, or physical datasets with the lab. For workspace and event availability, see current bookings."
         actions={(
           <>
             <Link className="button button-primary" to="/join">Become a member <ArrowRight aria-hidden="true" /></Link>
@@ -213,7 +213,7 @@ export function ServicesPage() {
         </div>
         <div className="section-actions">
           <Link className="button button-quiet" to="/maker-desk">Open the maker desk <ArrowRight aria-hidden="true" /></Link>
-          <Link className="button button-quiet" to="/join">See membership and booking <ArrowRight aria-hidden="true" /></Link>
+          <Link className="button button-quiet" to="/bookings/">See current bookings <ArrowRight aria-hidden="true" /></Link>
         </div>
       </Section>
       <Section number="03" title="Design, build, and run a local AI data centre" lede="For organizations that want GPUs on their own premises, Armature AI Labs can take a deployment from workload sizing and bill of materials through burn-in and ongoing operation.">
@@ -386,7 +386,7 @@ export function JoinPage() {
   </>;
 
   const membershipAction = basicOnly ? (
-    <><Link className="button button-primary" to="/onboarding">{registrationLabel} <ArrowRight aria-hidden="true" /></Link><Link className="button button-quiet" to="/booking-beta">Explore booking beta <ArrowRight aria-hidden="true" /></Link></>
+    <><Link className="button button-primary" to="/onboarding">{registrationLabel} <ArrowRight aria-hidden="true" /></Link><Link className="button button-quiet" to="/bookings/">Explore bookings <ArrowRight aria-hidden="true" /></Link></>
   ) : !memberPlatformAvailable ? (
     <a className="button button-primary" href="mailto:hello@armatureailabs.com">Email the lab</a>
   ) : membershipActive ? (
@@ -407,26 +407,26 @@ export function JoinPage() {
         meta="Membership · booking · HSR Layout"
         title={basicOnly ? "Create your basic membership." : memberPlatformAvailable ? "Join the lab. Book what you need." : "Build with us. Enquire about membership."}
         description={levelsEnabled
-          ? "Start with confirmed email for free Basic membership and free courses. Complete identity and mobile verification for Verified membership. Premium follows an active qualifying workspace subscription; paid bookings remain closed."
+          ? "Start with confirmed email for free Basic membership and free courses. Complete identity and mobile verification for Verified membership. Premium follows an active qualifying workspace subscription."
           : basicOnly
-          ? "Register for free, complete your profile and submit your photo and ID for private staff review. Paid bookings remain closed."
+          ? "Register for free. Complete private identity review if you want to qualify for more at the lab."
           : memberPlatformAvailable
           ? "Create one member account, tell us what you are building, and complete staff approval. Approved members can reserve commissioned resources from one workspace."
           : "Armature AI Labs is pre-launch. We are accepting enquiries about the planned lab, membership, and events; applications and bookings are not open yet."}
         actions={actions}
       />
       <DiscountOffers categories={["coworking", "cabin"]} />
-      <Section number="01" title="One membership journey" lede={basicOnly ? "Start with free registration. Paid access will follow separately." : !memberPlatformAvailable ? "The planned process once membership opens." : undefined}>
+      <Section number="01" title="One membership journey" lede={basicOnly ? "Start with free registration and review the current booking options separately." : !memberPlatformAvailable ? "The planned process once membership opens." : undefined}>
         <div className="section-motion membership-motion"><FieldOfTouch scene="birds" /></div>
         <div className="process-list">
           {(levelsEnabled ? [
             ["01", "Basic", "Confirm your email with Google or email sign-in. Access your account and enrol in published free courses."],
             ["02", "Verified", "Complete your profile and private photo/ID review, including guardian permission if aged 16–17, and verify your mobile number. Equipment bookings require this level plus workspace access and any required training."],
-            ["03", "Premium", "An active qualifying day, week or monthly workspace subscription adds Premium membership. Verified active team members share their team's Premium level; cabin seats and equipment remain separately allocated. Paid bookings remain closed."]
+            ["03", "Premium", "An active qualifying day, week or monthly workspace subscription adds Premium membership. Verified active team members share their team's Premium level; cabin seats and equipment remain separately allocated."]
           ] : basicOnly ? [
             ["01", "Create an account", "Sign in with Google or a secure email link. Add your name, phone, date of birth and personal LinkedIn profile."],
             ["02", "Complete identity review", "Upload your photo and one accepted government ID through the protected portal. Staff review your registration; applicants aged 16–17 also need guardian permission by email."],
-            ["03", "Choose paid access later", "Basic approval does not include a desk, cabin or equipment. Paid bookings remain closed and will open separately."]
+            ["03", "Explore lab access", "Basic membership gives you an account. See the bookings page for current passes and resource availability."]
           ] : [
             ["01", "Create an account", "Use a secure email link, add your public name and handle, and tell us what you plan to build."],
             ["02", "Complete approval", "Staff review the application and issue any safety inductions required by the resources you intend to use."],
@@ -436,28 +436,28 @@ export function JoinPage() {
           ))}
         </div>
       </Section>
-      {levelsEnabled && <section className="section" id="premium-plans"><div className="wrap"><h2>Explore Premium plans</h2><p>You can stay Basic or Verified for free. When paid bookings open, choose workspace access that suits your visit. An active qualifying subscription gives Verified members Premium status for its term.</p><div className="process-list">{[
+      {levelsEnabled && <section className="section" id="premium-plans"><div className="wrap"><h2>Explore Premium plans</h2><p>You can stay Basic or Verified for free. An active qualifying subscription gives Verified members Premium status for its term.</p><div className="process-list">{[
         ["Day pass", "A flexi desk for your selected day, 9 am–5 pm."],
         ["Week pass", "Flexi desk access for seven consecutive days, during pass hours."],
         ["Monthly reserved desk", "Your reserved desk from the first to the last day of the calendar month."],
-        ["Monthly team cabin", "An entire six-seat cabin for your team; all six seats are included in the booking."]
-       ].map(([name, detail], index) => <div className="process-row" key={name}><span className="mono">0{index + 1}</span><h3>{name}</h3><p>{detail}</p></div>)}</div><p>Payment collection is not open yet. Equipment is charged separately and requires verification, matching workspace access and any required training. Choosing a plan to explore does not purchase it.</p></div></section>}
-      <Section number="02" title={memberPlatformAvailable ? "What members can reserve" : "Planned member spaces"} lede="Resources will become bookable after commissioning, with confirmed availability, operating rules, and any required safety induction." dark>
+        ["Monthly team cabin", "Request a quote for a whole team cabin; available capacities and prices are on the bookings page."]
+       ].map(([name, detail], index) => <div className="process-row" key={name}><span className="mono">0{index + 1}</span><h3>{name}</h3><p>{detail}</p></div>)}</div><p>Equipment is charged separately and requires verification, matching workspace access and any required training.</p><Link to="/bookings/">See current booking options</Link></div></section>}
+      <Section number="02" title={memberPlatformAvailable ? "What members can reserve" : basicOnly ? "Workspace and equipment" : "Planned member spaces"} lede={basicOnly ? "The bookings page shows current availability, operating rules and any required safety induction." : "Check resource availability, operating rules and any required safety induction."} dark>
         <div className="service-grid">
           <article className="service-card">
             <Users aria-hidden="true" />
             <h3>Cabins and shared desks</h3>
-            <p>The planned layout has a shared pool of 25 desks and four six-seat cabins across the ground and first floors. Teams reserve an entire cabin; individual cabin seats are not sold separately.</p>
+            <p>{basicOnly ? "Current desk passes and cabin quote options are on the bookings page. Team cabin quotes cover the entire cabin." : "The planned layout has a shared pool of 25 desks and four six-seat cabins across the ground and first floors. Teams reserve an entire cabin; individual cabin seats are not sold separately."}</p>
           </article>
           <article className="service-card">
             <Cpu aria-hidden="true" />
             <h3>Equipment and compute</h3>
-            <p>Electronics benches, fabrication equipment, robot cells, GPUs, and edge AI kits are planned. Availability and induction requirements will be confirmed before bookings open.</p>
+            <p>Equipment availability varies by item. Some equipment requires workspace access and a safety induction.</p>
           </article>
           <article className="service-card">
             <Sparkles aria-hidden="true" />
             <h3>Lounge and presentation hall</h3>
-            <p>The proposed hall is intended for events, working sessions, and live prototype demonstrations. Event capacity and operating arrangements have not been confirmed.</p>
+            <p>See the bookings page for current demo-floor availability and event enquiries.</p>
           </article>
         </div>
         <p className="lede">Meeting-room reservations will appear in the same booking screen after a room is commissioned and its capacity and operating hours are approved.</p>
@@ -467,7 +467,7 @@ export function JoinPage() {
         {basicOnly ? (
           <>
             <Status tone="good">Free basic registration open</Status>
-            <p className="lede">{levelsEnabled ? "Confirm your email to start Basic membership. Continue to identity and mobile verification in your registration. Paid bookings remain closed." : "Complete your registration and follow its review status in the protected portal. Paid bookings remain closed."}</p>
+            <p className="lede">{levelsEnabled ? "Confirm your email to start Basic membership. Continue to identity and mobile verification in your registration when ready." : "Complete your registration and follow its review status in the protected portal."}</p>
             <div className="section-actions"><Link className="button button-primary" to="/onboarding">{registrationFooterLabel} <ArrowRight aria-hidden="true" /></Link></div>
           </>
         ) : !memberPlatformAvailable ? (

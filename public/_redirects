@@ -1,4 +1,6 @@
 # Retired aliases resolve permanently to their current public destination.
+/booking-beta /bookings/ 301
+/booking-beta/ /bookings/ 301
 /membership /join/ 301
 /membership/ /join/ 301
 /equipment / 301

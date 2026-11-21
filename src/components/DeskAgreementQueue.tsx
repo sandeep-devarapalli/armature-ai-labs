@@ -6,6 +6,7 @@ import { ManualDeskAgreementReview } from "./ManualDeskAgreementReview";
 type Request = {
   quoteId: string; memberId: string; customerEmail: string;
   chair: string; unit: string; start: string; amountPaise: number;
+  directCheckout?: boolean; orderPending?: boolean;
   agreementSigned?: boolean; status?: string;
 };
 
@@ -14,6 +15,7 @@ export function DeskAgreementQueue({ client, blocked }: { client: SupabaseClient
   const [selected, setSelected] = useState<Request | null>(null);
   const [nextOffset, setNextOffset] = useState<number | null>(null);
   const [loaded, setLoaded] = useState(false);
+  const [directCheckout, setDirectCheckout] = useState(false);
   const [busy, setBusy] = useState(false);
   const working = useRef(false);
   const [error, setError] = useState("");
@@ -28,20 +30,21 @@ export function DeskAgreementQueue({ client, blocked }: { client: SupabaseClient
       }
       setRequests(current => offset ? [...current, ...data.quotes] : data.quotes);
       setNextOffset(Number.isInteger(data.nextOffset) ? data.nextOffset : null);
+      setDirectCheckout(data.directCheckout === true);
       setLoaded(true);
     } catch (reason) { setError(reason instanceof Error ? reason.message : "Could not load requests."); }
     finally { working.current = false; setBusy(false); }
   }
 
   return <details className="member-confirm">
-    <summary>Desk agreement requests</summary>
-    <p>Prepare the draft, resolve customer corrections, then send it through PandaDoc. Approve only the completed document with both signatures and its certificate. A request alone does not reserve inventory.</p>
+    <summary>{directCheckout ? "Desk booking requests" : "Desk agreement requests"}</summary>
+    <p>{directCheckout ? "Customers accept website policies and pay through Razorpay. Review any existing order before asking a customer to try again." : "Prepare the draft, resolve customer corrections, then send it through PandaDoc. Approve only the completed document with both signatures and its certificate. A request alone does not reserve inventory."}</p>
     {!selected && <MfaPanel mode="supabase" />}
     <button className="button secondary" disabled={busy || blocked} onClick={() => void load()}>Refresh desk requests</button>
     {loaded && !requests.length && <p>No desk requests found.</p>}
     <ul>{requests.map(item => <li key={item.quoteId}>
       <p><strong>{item.customerEmail}</strong> · {item.chair} · {item.unit} · {item.start} · {new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(item.amountPaise / 100)}</p>
-      <p>{item.status?.replaceAll("_", " ") || (item.agreementSigned ? "Agreement approved" : "Agreement preparation or signature review needed")}</p>
+      <p>{item.status?.replaceAll("_", " ") || (item.orderPending ? "Existing order needs reconciliation" : item.directCheckout ? "Checkout pending" : item.agreementSigned ? "Agreement approved" : "Agreement preparation or signature review needed")}</p>
       <button className="button secondary" disabled={busy || blocked} onClick={() => setSelected(item)}>Review {item.quoteId}</button>
     </li>)}</ul>
     {nextOffset !== null && <button className="button secondary" disabled={busy || blocked} onClick={() => void load(nextOffset)}>Load more desk requests</button>}

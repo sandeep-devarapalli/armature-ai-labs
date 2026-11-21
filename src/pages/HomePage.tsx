@@ -17,7 +17,7 @@ import { PixelPhoto } from "../components/PixelPhoto";
 import { VitruvianSketch } from "../components/VitruvianSketch";
 import "./HomePagePixel.css";
 import { Metric, Section } from "../components/Primitives";
-import { basicOnboardingAvailable, equipmentPageAvailable, memberPlatformAvailable } from "../config/release";
+import { basicOnboardingAvailable, deskCheckoutAvailable, equipmentPageAvailable, memberPlatformAvailable, publicBookingsAvailable } from "../config/release";
 
 
 const labRoles = [
@@ -53,12 +53,11 @@ export function HomePage() {
           <h1>A place to build<br/><span className="muted">physical intelligence.</span></h1>
           <p className="hero-copy">
             The armature is the core of every motor: the part that moves. Ours is
-            a planned 3,500 sq ft lab across two floors, designed for the full path
-            from idea to working machine: robotics, prototyping, ESD-safe
-            benches, and GPU compute. Equipment and hourly access are planned,
-            not yet available to book.
+            {publicBookingsAvailable
+              ? "a 3,500 sq ft lab across two floors in HSR Layout, Bengaluru, for building physical AI and robotics."
+              : "a planned 3,500 sq ft lab across two floors, designed for the full path from idea to working machine: robotics, prototyping, ESD-safe benches, and GPU compute."}
           </p>
-          {!memberPlatformAvailable && <p className="hero-location mono">{basicOnboardingAvailable ? "Free basic registration and the booking preview are open. Paid bookings remain closed." : "Pre-launch · enquiries only. Membership applications and bookings are not open yet."}</p>}
+          {!memberPlatformAvailable && <p className="hero-location mono">{deskCheckoutAvailable ? "Free membership registration and paid desk passes are available." : basicOnboardingAvailable ? "Free membership registration and Guest Pass requests are available." : "Contact the lab about membership and booking availability."}</p>}
           <p className="hero-location mono">The Physical AI and Robotics Lab · HSR Layout, Bengaluru</p>
           <div className="button-row">
             {memberPlatformAvailable ? (
@@ -77,7 +76,7 @@ export function HomePage() {
                 <ArrowRight aria-hidden="true" />
               </a>
             )}
-            <Link className="button button-quiet" to="/booking-beta">Explore booking beta <ArrowRight aria-hidden="true" /></Link>
+            {(publicBookingsAvailable || memberPlatformAvailable) && <Link className="button button-quiet" to="/bookings/">Explore bookings <ArrowRight aria-hidden="true" /></Link>}
             {equipmentPageAvailable && (
               <Link className="button button-quiet" to="/equipment">
                 See the space
@@ -254,16 +253,21 @@ export function HomePage() {
       <Section
         number="06"
         title="Book, build, and leave a clean trail"
-        lede={basicOnboardingAvailable ? "Free basic registration and identity review are open. Safety inductions, paid reservations and check-in will follow separately; paid bookings remain closed." : "The planned member journey brings accounts, certification gates, reservations, and attendance into one path. Applications and bookings are not open yet."}
+        lede={publicBookingsAvailable ? "See current passes, prices and eligibility on the bookings page. Equipment use may require a safety induction." : "Contact the lab about membership, safety inductions and workspace availability."}
       >
         <div className="process-line">
-          {[
+          {(publicBookingsAvailable ? [
+            ["Choose access", "Review the current passes and resources to choose the right access."],
+            ["Check requirements", "Sign in and follow the eligibility and safety requirements for your selection."],
+            ["Confirm", "Pay at checkout for an eligible paid booking, or wait for staff approval of a free Guest Pass."],
+            ["Visit", "Follow the arrival instructions for your confirmed visit."]
+          ] : [
             ["Apply", "Tell us what you are building."],
             ["Induct", "Complete the lab and equipment safety checks."],
             ["Reserve", "Choose a resource and a live time slot."],
             ["Check in", "Present a one-use QR to the on-site kiosk."],
             ["Build", "Use the floor, log the work, and close the session."]
-          ].map(([title, copy], index) => (
+          ]).map(([title, copy], index) => (
             <div className="process-step" key={title}>
               <span className="mono">0{index + 1}</span>
               <CheckCircle2 aria-hidden="true" />
@@ -281,7 +285,7 @@ export function HomePage() {
             <strong> We are building a place to share access.</strong>
           </p>
           <Link to="/join">
-            {basicOnboardingAvailable ? "Basic membership" : "Membership enquiries"} <ArrowRight aria-hidden="true" />
+            {basicOnboardingAvailable ? "Explore membership" : "Membership enquiries"} <ArrowRight aria-hidden="true" />
           </Link>
         </div>
       </div>

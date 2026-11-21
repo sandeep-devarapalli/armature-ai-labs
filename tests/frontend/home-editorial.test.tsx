@@ -24,7 +24,7 @@ describe("Full editorial landing page", () => {
     expect(screen.getByRole("link", { name: "Join Discord" })).toHaveAttribute("href", "https://discord.gg/qGNXGmF8z");
     expect(screen.getByRole("link", { name: "Membership enquiries" })).toHaveAttribute("href", "/join");
     expect(screen.queryByText(/sixteen builder pods/i)).not.toBeInTheDocument();
-    expect(screen.getByText(/Pre-launch · enquiries only/)).toBeInTheDocument();
+    expect(screen.getByText(/Contact the lab about membership and booking availability/)).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Enquire about membership" })).toHaveAttribute("href", "mailto:hello@armatureailabs.com");
     expect(screen.queryByText(/all bookable by the hour|Here you book them by the hour/)).not.toBeInTheDocument();
   });

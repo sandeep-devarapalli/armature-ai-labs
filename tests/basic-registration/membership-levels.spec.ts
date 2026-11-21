@@ -96,7 +96,7 @@ test("public membership journey explains all three levels without promising rent
     await expect(page.getByRole("link", { name: "Explore Golden Pass" })).toHaveAttribute("href", "/golden-pass");
     await expect(page.getByRole("link", { name: "See live bookings" })).toHaveAttribute("href", "/bookings/");
   } else {
-    await expect(page.getByText(/Premium membership/)).toContainText("Paid bookings remain closed");
+    await expect(page.getByRole("link", { name: "See current booking options" })).toHaveAttribute("href", "/bookings/");
   }
   const levels = page.locator(goldenPassEnabled ? ".join-access-levels" : ".process-list")
     .filter({ has: page.getByRole("heading", { name: "Basic", exact: true }) });

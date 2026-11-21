@@ -48,7 +48,7 @@ function DiscountEditor({ client }: { client: SupabaseClient | null }) {
   }
   const saving = offer.value_kind === 'percent' ? sample * offer.value / 100 : offer.value / 100;
   return <>
-    <PageHeader meta="Admin · pricing" title="Discounts" description="Manage personal offers and scheduled promotions. The start and end define when a purchase qualifies, not the dates of a lab visit. Paid bookings remain closed. Previewing an offer does not reserve or redeem it." />
+    <PageHeader meta="Admin · pricing" title="Discounts" description="Manage personal offers and scheduled promotions. The start and end define when a purchase qualifies, not the dates of a lab visit. Previewing an offer does not reserve or redeem it." />
     <Section number="01" title="Offers"><button className="button" onClick={() => { setOffer(blank()); setSearch(''); setReview(false); setMessage(''); }}>Create discount</button>
       <div className="discount-offer-list">{offers.map(item => <article key={item.id}><h3>{item.name}</h3><p>{offerAmount(item)} off · {item.audience} · {item.state}</p><p>{offerTime(item.starts_at)} – {offerTime(item.ends_at)} IST</p><button className="button button-quiet" onClick={() => { setOffer(item); setReview(false); setSearch(''); editorHeading.current?.scrollIntoView({ block: 'start', behavior: 'instant' }); }}>Edit {item.name}</button></article>)}</div>
       {!offers.length && <p>No offers configured.</p>}
