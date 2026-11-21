@@ -5906,3 +5906,15 @@ input[type="checkbox"]:focus-visible, input[type="radio"]:focus-visible { outlin
 .desk-calendar-summary dd { margin: 0; text-align: right; }
 .desk-calendar-pairs { display: grid; grid-template-columns: repeat(auto-fit, minmax(6rem, 1fr)); gap: .25rem; padding: 0; list-style: none; }
 @media (max-width: 760px) { .desk-calendar-layout { grid-template-columns: minmax(0, 1fr); } }
+
+.desk-booking-receipt .booking-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr));
+  gap: .75rem 1.25rem;
+}
+.desk-booking-receipt .booking-summary > div {
+  display: block;
+  border-top: 1px solid var(--hair-strong);
+  padding-top: .5rem;
+}
+.desk-booking-receipt .booking-summary dd { margin: .25rem 0 0; text-align: start; }

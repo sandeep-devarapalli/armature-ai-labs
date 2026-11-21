@@ -114,7 +114,7 @@ it("quotes an available chair, waits for signatures, submits versioned consent a
   });
   expect(await screen.findByText(/Desk booking confirmed.*Membership: Premium/)).toBeInTheDocument();
   expect(currentStep()).toBeUndefined();
-  expect(screen.getAllByText("(done)")).toHaveLength(4);
+  expect(screen.getByRole("heading", { name: "Booking confirmed" })).toBeInTheDocument();
   expect(mock.refreshMembership).toHaveBeenCalledOnce();
 });
 
@@ -124,7 +124,6 @@ it("never opens Checkout using a Test Mode key in the live route", async () => {
     reply({ keyId: "rzp_test_fixture", orderId: "order_Fixture", amountPaise: 35000, currency: "INR" }),
   );
   renderPage();
-  fireEvent.click(screen.getByRole("button", { name: "Check agreement or payment status" }));
   const pay = await screen.findByRole("button", { name: "Pay with Razorpay" });
   fireEvent.click(screen.getByRole("checkbox"));
   fireEvent.click(pay);
@@ -137,14 +136,12 @@ it("directs a manual pilot customer to email and waits for staff approval before
   mock.invoke.mockResolvedValueOnce(reply({ quoteId, manualAgreement: true, hasAgreement: false }))
     .mockResolvedValueOnce(reply({ ...signed, manualAgreement: true }));
   renderPage();
-  const status = screen.getByRole("button", { name: "Check agreement or payment status" });
-  fireEvent.click(status);
   expect(await screen.findByText(/Armature will prepare your PandaDoc agreement/)).toBeInTheDocument();
   expect(currentStep()).toBe("2Review your draft and request any corrections");
   expect(screen.queryByRole("button", { name: "Get signing link" })).not.toBeInTheDocument();
   expect(screen.queryByRole("button", { name: "Pay with Razorpay" })).not.toBeInTheDocument();
 
-  fireEvent.click(status);
+  fireEvent.click(screen.getByRole("button", { name: "Check agreement or payment status" }));
   expect(await screen.findByRole("button", { name: "Pay with Razorpay" })).toBeDisabled();
 });
 
@@ -152,7 +149,6 @@ it("marks the signing step current once the agreement is ready", async () => {
   localStorage.setItem("armature-desk-quote-v1:member-fixture", quoteId);
   mock.invoke.mockResolvedValueOnce(reply({ quoteId, hasAgreement: true, agreementSigned: false }));
   renderPage();
-  fireEvent.click(screen.getByRole("button", { name: "Check agreement or payment status" }));
   await screen.findByRole("button", { name: "Get signing link" });
   expect(currentStep()).toBe("3Sign in PandaDoc; Armature countersigns and reviews");
   expect(screen.getAllByText("(done)")).toHaveLength(2);
@@ -202,7 +198,6 @@ it("offers a fresh request after approval expires without reopening payment", as
   localStorage.setItem("armature-desk-quote-v1:member-fixture", quoteId);
   mock.invoke.mockResolvedValue(reply({ ...signed, approvedAt: "2000-01-01T00:00:00Z", manualAgreement: true }));
   renderPage();
-  fireEvent.click(screen.getByRole("button", { name: "Check agreement or payment status" }));
   expect(await screen.findByText(/This agreement’s payment window expired/)).toBeInTheDocument();
   expect(screen.getByRole("button", { name: "Choose another desk pass" })).toBeEnabled();
   expect(screen.queryByRole("button", { name: "Pay with Razorpay" })).not.toBeInTheDocument();
@@ -213,7 +208,6 @@ it.each([false, true])("allows an expired bound order replacement only after a c
   mock.invoke.mockResolvedValue(reply({ ...signed, hasOrder: true, approvedAt: "2000-01-01T00:00:00Z",
     expiredOrder: true, canRequestReplacement: safe }));
   renderPage();
-  fireEvent.click(screen.getByRole("button", { name: "Check agreement or payment status" }));
   expect(await screen.findByText(/This payment window has expired/)).toBeInTheDocument();
   expect(Boolean(screen.queryByRole("button", { name: "Choose another desk pass" }))).toBe(safe);
   expect(screen.queryByRole("button", { name: "Pay with Razorpay" })).not.toBeInTheDocument();
@@ -222,7 +216,6 @@ it("restarts an unclaimed stale policy request without offering payment", async 
   localStorage.setItem("armature-desk-quote-v1:member-fixture", quoteId);
   mock.invoke.mockResolvedValue(reply({ ...signed, policyStale: true }));
   renderPage();
-  fireEvent.click(screen.getByRole("button", { name: "Check agreement or payment status" }));
   expect(await screen.findByText(/policies for this unpaid request have changed/)).toBeInTheDocument();
   expect(screen.getByRole("button", { name: "Choose another desk pass" })).toBeEnabled();
   expect(screen.queryByRole("button", { name: "Pay with Razorpay" })).not.toBeInTheDocument();
@@ -234,7 +227,6 @@ it("resumes an unpaid agreement request with current website policies and no sig
     quoteId, amountPaise: 35000, policyVersion, directCheckout: true, manualAgreement: true,
   })).mockResolvedValueOnce(reply({ quoteId, directCheckout: true, status: "confirmed" }));
   renderPage();
-  fireEvent.click(screen.getByRole("button", { name: "Check agreement or payment status" }));
   const pay = await screen.findByRole("button", { name: "Pay with Razorpay" });
   expect(pay).toBeDisabled();
   expect(screen.queryByText(/PandaDoc/)).not.toBeInTheDocument();
@@ -253,8 +245,7 @@ it("blocks direct payment when an existing payment needs reconciliation", async 
     quoteId, amountPaise: 35000, policyVersion, directCheckout: true, hasOrder: true, paymentBlocked: true,
   }));
   renderPage();
-  fireEvent.click(screen.getByRole("button", { name: "Check agreement or payment status" }));
-  expect(await screen.findByText(/needs to reconcile this payment/)).toBeInTheDocument();
+  expect(await screen.findByText("Payment pending")).toBeInTheDocument();
   expect(screen.queryByRole("button", { name: "Pay with Razorpay" })).not.toBeInTheDocument();
   expect(screen.queryByRole("button", { name: "Choose another desk pass" })).not.toBeInTheDocument();
 });
@@ -306,4 +297,22 @@ it("uses the direct calendar to show event blocking and the matching reserved fa
   expect(await screen.findByRole("button", { name: "Pay with Razorpay" })).toBeDisabled();
   expect(actions).toHaveBeenCalledWith({ action: "quote", chair: "S13", unit: "day", start: openDay });
   expect(screen.queryByText(/PandaDoc/)).not.toBeInTheDocument();
+});
+
+
+it("automatically restores a confirmed receipt using only its saved reference", async () => {
+  localStorage.setItem("armature-desk-quote-v1:member-fixture", quoteId);
+  let resolveStatus!: (value: ReturnType<typeof reply>) => void;
+  mock.invoke.mockImplementationOnce(() => new Promise(resolve => { resolveStatus = resolve; }));
+  renderPage();
+  expect(screen.getByText("Checking your booking…")).toBeInTheDocument();
+  expect(screen.queryByText("Request received")).not.toBeInTheDocument();
+  await act(async () => resolveStatus(reply({ quoteId, status: "confirmed", directCheckout: true, unit: "day",
+    chair: "S13", start: "2026-11-23", end: "2026-11-23", amountPaise: 35000 })));
+  expect(await screen.findByRole("heading", { name: "Booking confirmed" })).toBeInTheDocument();
+  expect(screen.getByText("S13 · Ground floor")).toBeInTheDocument();
+  expect(screen.getByText("F13 · First floor")).toBeInTheDocument();
+  expect(screen.getByText("₹350.00")).toBeInTheDocument();
+  expect(mock.invoke.mock.calls.map(([, { body }]) => body)).toEqual([{ action: "status", quoteId }]);
+  expect(mock.load).not.toHaveBeenCalled();
 });
