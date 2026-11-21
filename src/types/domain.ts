@@ -128,6 +128,7 @@ export interface Project {
   status: "Build Now" | "Building Soon" | "Research Track" | "Watching" | "Reference";
   description: string;
   image?: string;
+  secondaryImage?: { src: string; alt: string };
   sourceUrl: string;
   detailPath?: string;
   infrastructure?: boolean;
