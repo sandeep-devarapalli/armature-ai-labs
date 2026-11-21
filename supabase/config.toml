@@ -174,3 +174,6 @@ verify_jwt = false
 
 [functions.test-golden-pass-webhook]
 verify_jwt = false
+
+[functions.booking-notices]
+verify_jwt = false

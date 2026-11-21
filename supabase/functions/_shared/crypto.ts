@@ -71,7 +71,7 @@ export async function verifyKioskSignature(
     return await crypto.subtle.verify(
       { name: "ECDSA", hash: "SHA-256" },
       key,
-      base64UrlToBytes(signature),
+      new Uint8Array(base64UrlToBytes(signature)),
       encoder.encode(canonicalRequest),
     );
   } catch {

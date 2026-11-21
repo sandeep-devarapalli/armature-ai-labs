@@ -89,6 +89,34 @@ Cutover checklist, in order:
    test booking in a controlled preview; only then retire
    `bookings@armaturelab.org` from the legacy configuration.
 
+### Booking confirmations and calendar invitations
+
+On 21 November 2026, a controlled message to `bookings@armatureailabs.com`
+arrived in the `hello@armatureailabs.com` Workspace inbox. A Gmail reply with
+the bookings alias in the From field arrived in the internal test inbox.
+
+The booking notices worker uses a send-only Workspace credential independently of
+the calendar sync credential. Booking emails come from the verified send-as alias
+and include calendar attachments for confirmed desk sessions and approved guest visits.
+Guest visits use 09:00–17:00 IST and carry no reserved seat. Cabin and equipment
+messages report verified milestones. A rental agreement's signature invitation is
+sent by the signing service. The rental flow has no scheduled handover field.
+
+1. Configure a dedicated sender credential for the Gmail `gmail.send` scope
+   in staging. Store it in `BOOKING_MAIL_SERVICE_ACCOUNT_JSON`, with the
+   Workspace user that owns the alias in `BOOKING_MAIL_WORKSPACE_SUBJECT`.
+2. Apply the outbox migration and deploy `booking-notices` in staging. Verify
+   the staging database contains only synthetic bookings for this test. Enable
+   its queue and `BOOKING_NOTICE_DELIVERY_ENABLED` for the controlled run.
+   Use the protected job credential to invoke the worker.
+3. Verify arrival, booking reference, attachment rendering, event times, location,
+   directions, calendar update and cancellation against controlled inboxes.
+   Inspect both successful delivery and an ambiguous send. Claimed or ambiguous
+   deliveries need Gmail investigation before any manual resend.
+4. Once verified, configure the scoped sender in production, apply the migration,
+   deploy the worker, and schedule its protected invocation. Only then enable
+   production enqueueing and delivery. Existing bookings are not backfilled.
+
 - Create one private Google Calendar per reservable resource.
 - Store each calendar identifier in the protected calendar link table.
 - Keep Google service credentials in Supabase function secrets.
