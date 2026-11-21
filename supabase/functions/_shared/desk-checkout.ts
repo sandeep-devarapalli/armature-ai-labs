@@ -99,6 +99,30 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
     const client = adminClient();
     const action = input.action;
     if (!enabled && !["status", "verify", "list_own", "staff_queue", "staff_overview", "staff_detail", "manual_review", "recover_order"].includes(action)) throw new Rejected(503, "checkout_disabled");
+    if (live && (action === "desk_calendar" || action === "desk_calendar_chairs")) {
+      const date = /^\d{4}-\d{2}-\d{2}$/;
+      const events = action === "desk_calendar";
+      if (!directCheckout || (events ? !date.test(input.from ?? "") || !date.test(input.to ?? "")
+        : !date.test(input.start ?? "") || !["day", "week", "month"].includes(input.unit))) {
+        throw new Rejected(400, "invalid_request");
+      }
+      const { data, error } = events
+        ? await client.rpc("desk_calendar_events", { p_from: input.from, p_to: input.to })
+        : await client.rpc("desk_calendar_chairs", { p_day: input.start, p_unit: input.unit });
+      if (error) throw new Rejected(503, "checkout_state_unavailable");
+      return reply(events ? { mode, events: data } : { mode, chairs: data });
+    }
+    if (live && (action === "admin_relocations" || action === "admin_relocate")) {
+      const moving = action === "admin_relocate";
+      if (moving && !pattern.test(input.bookingId ?? "")) throw new Rejected(400, "invalid_request");
+      if (user.claims.aal !== "aal2") throw new Rejected(403, "staff_mfa_required");
+      await requireStaff(user.id, ["admin", "super_admin"]);
+      const { data, error } = await client.rpc("desk_relocations", {
+        p_admin: user.id, p_booking: moving ? input.bookingId : null,
+      });
+      if (error) throw new Rejected(409, "checkout_state_rejected");
+      return reply(moving ? { mode } : { mode, relocations: data });
+    }
     if (action === "staff_detail") {
       if (!live || !pattern.test(input.quoteId ?? "")) throw new Rejected(400, "invalid_request");
       if (user.claims.aal !== "aal2") throw new Rejected(403, "staff_mfa_required");
@@ -126,9 +150,9 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
       if (error) throw new Rejected(503, "checkout_state_unavailable");
       if (overview) return reply({
         mode, directCheckout, nextOffset: data.nextOffset,
-        quotes: data.quotes.map((q: Quote & { approvedAt?: string }) => ({
+        quotes: data.quotes.map((q: Quote & { approvedAt?: string; created_at?: string }) => ({
           quoteId: q.id, chair: q.chair, unit: q.unit, start: q.starts_on, end: q.ends_on,
-          amountPaise: q.amount_paise, status: q.status, directCheckout,
+          amountPaise: q.amount_paise, status: q.status, directCheckout, createdAt: q.created_at,
           hasOrder: Boolean(q.order_id), orderPending: Boolean(q.order_claimed_at && !q.order_id),
           agreementSigned: Boolean(q.approvedAt),
         })),

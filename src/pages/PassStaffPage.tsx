@@ -1,5 +1,9 @@
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
+import { DeskAgreementQueue } from "../components/DeskAgreementQueue";
+import { deskCheckoutAvailable, rentalCheckoutAvailable } from "../config/release";
+import { supabase } from "../lib/supabase";
+import { MfaPanel } from "./MemberPages";
 import { EmptyState, Field, PageHeader, Status } from "../components/Primitives";
 import { useAccount } from "../context/AccountContext";
 import { formatPassDate, guestPassLabels, passRequest, type GuestPass, type GoldenApplication } from "../lib/pass-requests";
@@ -7,6 +11,7 @@ import { formatPassDate, guestPassLabels, passRequest, type GuestPass, type Gold
 type StaffGuest = GuestPass & { guest_email?: string };
 type StaffApplication = GoldenApplication & { applicant_email?: string };
 type GoldenRefund = { id: string; applicant_email: string; payment_id: string; refund_requested_at: string };
+const staffTime = new Intl.DateTimeFormat("en-IN", { dateStyle: "medium", timeStyle: "short", timeZone: "Asia/Kolkata" });
 const goldenCheckoutEnabled = import.meta.env.VITE_GOLDEN_PASS_CHECKOUT_ENABLED === "true";
 type Decision = "approve" | "decline" | "offer" | "check_in";
 
@@ -59,7 +64,7 @@ function ReviewGuest({ guest, reserved, working, onDecision }: { guest: StaffGue
   </section>;
 }
 
-function PassQueues() {
+function PassQueues({ showRentalReviews }: { showRentalReviews?: boolean }) {
   const [guests, setGuests] = useState<StaffGuest[]>([]);
   const [applications, setApplications] = useState<StaffApplication[]>([]);
   const [refunds, setRefunds] = useState<GoldenRefund[]>([]);
@@ -136,15 +141,16 @@ function PassQueues() {
           </select></Field>
           {visible.length ? <div className="book-table-wrap pass-review-table"><table className="book-table">
             <caption className="mono">Visit requests</caption>
-            <thead><tr><th scope="col">Guest</th><th scope="col">Visit date</th><th scope="col">Status</th></tr></thead>
+            <thead><tr><th scope="col">Requested by</th><th scope="col">Raised (IST)</th><th scope="col">Visit date</th><th scope="col">Status</th></tr></thead>
             <tbody>{visible.map(guest => <tr key={guest.id} className={selected?.id === guest.id ? "is-selected" : ""}>
               <th scope="row"><button className="button button-quiet" type="button" aria-pressed={selected?.id === guest.id} disabled={working} onClick={() => setSelectedId(guest.id)}>{guest.guest_email}</button></th>
-              <td data-label="Visit date">{formatPassDate(guest.visit_date)}</td><td data-label="Status">{guestStatus(guest.status)}</td>
+              <td data-label="Raised (IST)">{staffTime.format(new Date(guest.created_at))}</td><td data-label="Visit date">{formatPassDate(guest.visit_date)}</td><td data-label="Status">{guestStatus(guest.status)}</td>
             </tr>)}</tbody>
           </table></div> : <EmptyState title="No matching guest passes">Choose a different status or refresh the queue.</EmptyState>}
         </div>
         {selected && <ReviewGuest key={selected.id} guest={selected} reserved={reserved} working={working} onDecision={decide} />}
       </div>
+      {showRentalReviews && rentalCheckoutAvailable && <p><Link to="/admin/members">Find a member’s cabin and equipment booking reviews</Link></p>}
       <h2>Golden Pass applications</h2>
       <p className="book-note">Follow up on applications. Members with approved identity can use online checkout when enabled.</p>
       {applications.length ? <ul className="pass-applications">{applications.map(application => <li key={application.id}>
@@ -166,16 +172,103 @@ function PassQueues() {
   </div></section>;
 }
 
-export default function PassStaffPage() {
+type Relocation = {
+  bookingId: string;
+  chair: string;
+  fallback: string;
+  startsAt: string;
+  endsAt: string;
+  movedAt?: string | null;
+  eventTitle?: string | null;
+};
+
+function SeatMoves() {
+  const [rows, setRows] = useState<Relocation[] | null>(null);
+  const [selected, select] = useState<Relocation | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  const [notice, setNotice] = useState("");
+  const running = useRef(false);
+
+  const request = useCallback(async (bookingId?: string) => {
+    if (!supabase || running.current) return;
+    running.current = true;
+    setBusy(true);
+    setError("");
+    setNotice("");
+    try {
+      if (bookingId) {
+        const { data, error: failure } = await supabase.functions.invoke("desk-checkout", {
+          body: { action: "admin_relocate", bookingId },
+        });
+        if (failure || data?.mode !== "live") throw new Error("Could not confirm the seat move. Check your MFA session and refresh availability.");
+        select(null);
+        setNotice("Seat move confirmed. The member’s paid booking and hours still apply.");
+      }
+      const { data, error: failure } = await supabase.functions.invoke("desk-checkout", { body: { action: "admin_relocations" } });
+      if (failure || data?.mode !== "live" || !Array.isArray(data.relocations)) throw new Error("Could not load seat moves. Check your Admin session and try again.");
+      setRows(data.relocations);
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : "Could not update seat moves.");
+    } finally {
+      running.current = false;
+      setBusy(false);
+    }
+  }, []);
+
+  useEffect(() => { void request(); }, [request]);
+
+  return <section>
+    <h2>Seat moves</h2>
+    <p>Ground-floor seats S1–S13 each have a matching first-floor fallback, F1–F13.</p>
+    <button className="button secondary" disabled={busy} onClick={() => void request()}>{rows ? "Refresh seat moves" : "Load seat moves"}</button>
+    {error && <p role="alert">{error}</p>}
+    {notice && <p role="status">{notice}</p>}
+    {rows && (rows.length ? <div className="table-wrap" role="region" aria-label="Seat moves" tabIndex={0}><table>
+      <thead><tr><th scope="col">Seat pair</th><th scope="col">Reservation (IST)</th><th scope="col">Event</th><th scope="col">Status</th><th scope="col">Action</th></tr></thead>
+      <tbody>{rows.map(row => <tr key={row.bookingId}>
+        <th scope="row">{row.chair} → {row.fallback}</th>
+        <td>{staffTime.format(new Date(row.startsAt))} to {staffTime.format(new Date(row.endsAt))}</td>
+        <td>{row.eventTitle || "—"}</td>
+        <td>{row.movedAt ? "Moved" : row.eventTitle ? "Review fallback" : "Fallback reserved"}</td>
+        <td>{!row.movedAt && <button className="button secondary" disabled={busy} onClick={() => select(row)}>Review move</button>}</td>
+      </tr>)}</tbody>
+    </table></div> : <EmptyState title="No seat moves">Upcoming desk reservations with mapped fallbacks will appear here.</EmptyState>)}
+    {selected && <section className="member-confirm" aria-label="Confirm seat move">
+      <h3>Move {selected.chair} to {selected.fallback}</h3>
+      <p>The reservation and paid hours stay active. Verify your Admin session with MFA to continue.</p>
+      <MfaPanel mode="supabase" />
+      <button className="button button-primary" disabled={busy} onClick={() => void request(selected.bookingId)}>Confirm move</button>
+      <button className="button secondary" disabled={busy} onClick={() => select(null)}>Cancel</button>
+    </section>}
+  </section>;
+}
+
+export default function PassStaffPage({ bookingManagement = false }: { bookingManagement?: boolean }) {
   const { account, signedIn, loading, error, refresh } = useAccount();
-  const isStaff = account?.role === "membership_reviewer" || account?.role === "admin" || account?.role === "super_admin";
+  const [view, setView] = useState<"approvals" | "desks" | "moves">("approvals");
+  const admin = account?.role === "admin" || account?.role === "super_admin";
+  const isStaff = account?.role === "membership_reviewer" || admin;
+  const showDeskManagement = bookingManagement && deskCheckoutAvailable && admin && supabase;
   return <>
-    <PageHeader title="Pass requests." description="Review Guest Pass requests and follow up on Golden Pass applications." />
-    {isStaff && account ? <PassQueues key={account.user_id} /> : <section className="section"><div className="wrap">
+    <PageHeader title={bookingManagement ? "Booking management." : "Pass requests."} description={bookingManagement
+      ? "Review requests, track desk bookings and manage seat moves."
+      : "Review Guest Pass requests and follow up on Golden Pass applications."} />
+    {isStaff && account ? <>
+      {showDeskManagement && <div className="wrap pass-review-bar" aria-label="Booking management views">
+        <button className="button button-quiet" type="button" aria-pressed={view === "approvals"} onClick={() => setView("approvals")}>Needs approval</button>
+        <button className="button button-quiet" type="button" aria-pressed={view === "desks"} onClick={() => setView("desks")}>Desk bookings</button>
+        <button className="button button-quiet" type="button" aria-pressed={view === "moves"} onClick={() => setView("moves")}>Seat moves</button>
+      </div>}
+      {!showDeskManagement || view === "approvals" ? <PassQueues key={account.user_id} showRentalReviews={bookingManagement && admin} />
+        : <div className="section"><div className="wrap">
+          {view === "desks" ? <DeskAgreementQueue client={showDeskManagement} standalone /> : <SeatMoves />}
+        </div></div>}
+    </> : <section className="section"><div className="wrap">
       {loading ? <p role="status">Checking staff access…</p> : error ? <>
         <p role="alert">{error}</p><button className="button button-quiet" onClick={() => void refresh()}>Retry</button>
       </> : signedIn ? <p>This area is available to Armature staff.</p>
-        : <Link className="button button-primary" to="/auth?next=%2Fadmin%2Fpasses">Sign in</Link>}
+        : <Link className="button button-primary" to={bookingManagement ? "/auth?next=%2Fadmin%2Fbooking-management" : "/auth?next=%2Fadmin%2Fpasses"}>Sign in</Link>}
     </div></section>}
   </>;
 }
