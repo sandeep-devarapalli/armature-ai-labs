@@ -17,9 +17,9 @@ export function bookingDates(start: string, end?: string | null) {
 export const shortReference = (id: string) => id.replace(/-/g, "").slice(0, 8).toUpperCase();
 
 // One booking at a glance: what, when, where it stands, what to do next, what it costs.
-export function BookingStatusCard({ kicker, title, when, status, tone, next, rows, reference, details, actions, children }: {
+export function BookingStatusCard({ kicker, title, when, status, tone, next, rows, reference, details, detailsLabel = "How this works", actions, children }: {
   kicker: string; title?: ReactNode; when?: ReactNode; status: string; tone: BookingTone; next?: ReactNode; rows?: BookingRow[];
-  reference?: string; details?: ReactNode; actions?: ReactNode; children?: ReactNode;
+  reference?: string; details?: ReactNode; detailsLabel?: string; actions?: ReactNode; children?: ReactNode;
 }) {
   const [copied, setCopied] = useState(false);
   return <article className="booking-card">
@@ -36,7 +36,7 @@ export function BookingStatusCard({ kicker, title, when, status, tone, next, row
     {reference && <p className="booking-ref">Reference <code title={reference}>{shortReference(reference)}</code>
       <button type="button" className="text-link" onClick={() => void navigator.clipboard?.writeText(reference).then(() => setCopied(true), () => undefined)}>
         {copied ? "Copied" : "Copy full reference"}</button></p>}
-    {details && <details><summary>How this works</summary>{details}</details>}
+    {details && <details><summary>{detailsLabel}</summary>{details}</details>}
     {actions && <div className="booking-card-actions">{actions}</div>}
   </article>;
 }
