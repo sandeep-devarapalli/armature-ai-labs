@@ -151,12 +151,13 @@ function PassQueues({ showRentalReviews }: { showRentalReviews?: boolean }) {
         {selected && <ReviewGuest key={selected.id} guest={selected} reserved={reserved} working={working} onDecision={decide} />}
       </div>
       {showRentalReviews && rentalCheckoutAvailable && <p><Link to="/admin/members">Find a member’s cabin and equipment booking reviews</Link></p>}
-      <h2>Golden Pass applications</h2>
+      <h2 id="golden-pass-applications">Golden Pass applications</h2>
       <p className="book-note">Follow up on applications. Members with approved identity can use online checkout when enabled.</p>
       {applications.length ? <ul className="pass-applications">{applications.map(application => <li key={application.id}>
         <h3>{application.applicant_email}</h3>
         <p className="book-note">Received {formatPassDate(application.created_at)}</p>
         <p>{application.details}</p>
+        {application.profile_url && /^https?:\/\//i.test(application.profile_url) && <p><a href={application.profile_url} target="_blank" rel="noopener noreferrer">View applicant profile</a></p>}
         {application.applicant_email && <a href={`mailto:${encodeURIComponent(application.applicant_email).replace(/%40/g, "@")}?subject=Armature%20AI%20Labs%20Golden%20Pass`}>Email applicant</a>}
       </li>)}</ul> : <EmptyState title="No Golden Pass applications">New applications will appear here.</EmptyState>}
       {goldenCheckoutEnabled && <>

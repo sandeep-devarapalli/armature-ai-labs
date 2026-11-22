@@ -1,4 +1,5 @@
 import { bookingMailMessage } from "../_shared/booking-mail-message.ts";
+import { goldenApprovalInbox } from "../_shared/booking-notice.ts";
 import { assertJobSecret } from "../_shared/env.ts";
 
 import { errorResponse, json } from "../_shared/http.ts";
@@ -43,6 +44,7 @@ Deno.serve(async request => {
         const { data: account, error: accountError } = await client.auth.admin.getUserById(job.recipient_id);
         const recipient = account?.user?.email;
         if (accountError || !recipient || !account.user.email_confirmed_at ||
+          (job.payload.kind === "golden_application" && recipient.toLowerCase() !== goldenApprovalInbox) ||
           (allowlist && recipient.toLowerCase() !== allowlist.toLowerCase()) ||
           /\.(?:test|invalid|example|localhost)$/i.test(recipient)) throw new Error("Undeliverable recipient");
         let memberName: string | undefined;
