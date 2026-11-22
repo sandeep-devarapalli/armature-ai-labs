@@ -28,6 +28,10 @@
 /book/ /app-shell 200
 /bookings /app-shell 200
 /bookings/ /app-shell 200
+/my-bookings /app-shell 200
+/my-bookings/ /app-shell 200
+/my-bookings/:quoteId /app-shell 200
+/my-bookings/:quoteId/ /app-shell 200
 /golden-pass /app-shell 200
 /golden-pass/ /app-shell 200
 /admin/passes /app-shell 200

@@ -109,3 +109,5 @@ export default function BookLabPage() {
     </section>}
   </>;
 }
+
+export { default as MyBookingsPage } from "./MyBookingsPage";
