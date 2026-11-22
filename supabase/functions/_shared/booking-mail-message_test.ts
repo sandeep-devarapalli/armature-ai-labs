@@ -49,6 +49,18 @@ function htmlBody(mail: string) {
   return new TextDecoder().decode(Uint8Array.from(atob(encoded), char => char.charCodeAt(0)));
 }
 
+Deno.test("Golden Pass application alert directs staff to the private review queue", () => {
+  const mail = decode(bookingMailMessage({
+    kind: "golden_application", stage: "received", reference: delivery.aggregateId,
+  }, { ...delivery, recipient: "hello@armatureailabs.com", memberName: "Applicant Fixture" }));
+  const part = mail.split("--armature-booking-" + delivery.id)[1];
+  const text = atob(part.trim().split("\r\n\r\n")[1].replaceAll("\r\n", ""));
+  assert.match(mail, /To: hello@armatureailabs\.com/);
+  assert.match(text, /https:\/\/armatureailabs\.com\/admin\/passes#golden-pass-applications/);
+  assert.doesNotMatch(text, /Applicant Fixture|example\.test/);
+  assert.doesNotMatch(mail, /text\/calendar/);
+});
+
 Deno.test("Day Pass receipt escapes member names and preserves Maps and calendar", () => {
   const mail = decode(bookingMailMessage({
     kind: "day", stage: "confirmed", reference: "AB12CD34", resource: "Chair S01",

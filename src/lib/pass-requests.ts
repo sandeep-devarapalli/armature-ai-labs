@@ -15,7 +15,7 @@ export type GuestPass = {
   guest_email?: string;
 };
 
-export type GoldenApplication = { id: string; details: string; created_at: string; applicant_email?: string };
+export type GoldenApplication = { id: string; details: string; profile_url?: string | null; created_at: string; applicant_email?: string };
 
 export const guestPassLabels: Record<GuestPass["status"], string> = {
   pending: "Pending approval", approved: "Approved", declined: "Declined",

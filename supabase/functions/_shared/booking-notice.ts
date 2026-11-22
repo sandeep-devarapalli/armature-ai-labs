@@ -4,9 +4,10 @@ const labName = "Armature AI Labs";
 const address = legalEntity.labAddress.formatted;
 export const bookingDirections = "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(address);
 export const bookingTimeZone = "Asia/Kolkata";
+export const goldenApprovalInbox = "hello@armatureailabs.com";
 
 export type BookingSession = { id: string; startsAt: string; endsAt: string };
-type BookingNotice = {
+type CustomerBookingNotice = {
   kind: "day" | "week" | "month" | "guest" | "cabin" | "equipment" | "event";
   reference: string;
   stage: "received" | "alternate" | "signing" | "payment_due" | "deposit_verified" | "confirmed" | "updated" | "cancelled" | "declined";
@@ -14,6 +15,8 @@ type BookingNotice = {
   guestDate?: string;
   resource?: string;
 };
+type GoldenApplicationNotice = { kind: "golden_application"; stage: "received"; reference: string };
+type BookingNotice = CustomerBookingNotice | GoldenApplicationNotice;
 
 const titles = {
   day: "Day Pass", week: "Week Pass", month: "Month Pass", guest: "Guest Pass",
@@ -40,6 +43,14 @@ export function guestPassSession(day: string): BookingSession {
 }
 
 export function bookingNotice(input: BookingNotice) {
+  if (input.kind === "golden_application") {
+    return {
+      subject: "Golden Pass application ready for review · Armature AI Labs",
+      text: "A new Golden Pass application is ready for review. Sign in to Booking management to review it.\n" +
+        "https://armatureailabs.com/admin/passes#golden-pass-applications",
+      events: [],
+    };
+  }
   const title = titles[input.kind];
   const overview = input.kind === "guest" && ["confirmed", "updated"].includes(input.stage)
     ? "This free Guest Pass is for your meeting or event. It does not reserve a desk or seat. The door access system records entry and exit."

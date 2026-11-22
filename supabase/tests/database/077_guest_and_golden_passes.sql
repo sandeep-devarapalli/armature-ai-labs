@@ -5,6 +5,8 @@ insert into auth.users (id,aud,role,email,email_confirmed_at)
 select ('97077000-0000-4000-8000-'||lpad(n::text,12,'0'))::uuid,'authenticated','authenticated',
  'visit-pass-'||n||'@example.test',case when n<>8 then now() end
 from generate_series(1,8) n;
+insert into auth.users (id,aud,role,email,email_confirmed_at)
+values ('97077000-0000-4000-8000-000000000009','authenticated','authenticated','hello@armatureailabs.com',now());
 insert into public.staff_roles (user_id,role) values
  ('97077000-0000-4000-8000-000000000007','membership_reviewer');
 select set_config('visit.today',private.visit_pass_today()::text,true);
@@ -17,7 +19,7 @@ set local role authenticated;
 select set_config('request.jwt.claim.sub','97077000-0000-4000-8000-000000000008',true);
 select throws_ok($$select public.get_my_guest_passes()$$,'42501','Sign in with a confirmed email to continue',
  'Unconfirmed email cannot read pass data');
-select throws_ok($$select public.submit_golden_pass_application('Synthetic request')$$,'42501',null,
+select throws_ok($$select public.submit_golden_pass_application('Synthetic request','https://portfolio.example.org')$$,'42501',null,
  'Unconfirmed email cannot apply for the Golden Pass');
 select set_config('request.jwt.claim.sub','97077000-0000-4000-8000-000000000001',true);
 select throws_ok($$select public.request_guest_pass(current_setting('visit.today')::date,'work','Work sample')$$,'22023',null,
@@ -29,8 +31,12 @@ select is(current_setting('visit.first')::jsonb->>'status','pending','Email-conf
 select throws_ok($$select public.request_guest_pass(current_setting('visit.today')::date,'meeting','Synthetic duplicate')$$,'23505',null,
  'Duplicate date requests do not create additional active passes');
 select is(jsonb_array_length(public.get_my_guest_passes()),1,'Guest can read their own request');
-select set_config('golden.first',public.submit_golden_pass_application('Synthetic robot build')::text,true);
-select is(public.submit_golden_pass_application('Retry fixture')->>'id',current_setting('golden.first')::jsonb->>'id',
+select throws_ok($$select public.submit_golden_pass_application('Synthetic robot build',null)$$,'22023',null,
+ 'Golden Pass application requires a profile URL');
+select throws_ok($$select public.submit_golden_pass_application('Synthetic robot build','https://safe.example.org@other.example.org')$$,
+ '22023',null,'Golden Pass application rejects URLs with user information');
+select set_config('golden.first',public.submit_golden_pass_application('Synthetic robot build','https://portfolio.example.org/robot')::text,true);
+select is(public.submit_golden_pass_application('Retry fixture','https://www.linkedin.com/in/synthetic')->>'id',current_setting('golden.first')::jsonb->>'id',
  'Golden Pass application retries return the original application');
 select is(jsonb_array_length(public.get_my_golden_pass_application()),1,'Applicant can read their own application');
 select throws_ok($$select public.staff_update_guest_pass((current_setting('visit.first')::jsonb->>'id')::uuid,'approve')$$,
@@ -45,6 +51,8 @@ select throws_ok($$select public.accept_guest_pass_date((current_setting('visit.
  'P0002',null,'Guest cannot change another user’s request');
 
 reset role;
+insert into private.golden_pass_applications(user_id,details)
+values ('97077000-0000-4000-8000-000000000003','Legacy fixture');
 insert into private.guest_passes(user_id,visit_date,purpose,details,status) values
  ('97077000-0000-4000-8000-000000000005',current_setting('visit.today')::date,'meeting','Reschedule fixture','pending'),
  ('97077000-0000-4000-8000-000000000006',current_setting('visit.today')::date-1,'event','Expired fixture','approved');
@@ -53,7 +61,11 @@ select set_config('request.jwt.claim.sub','97077000-0000-4000-8000-000000000007'
 select ok(exists(select 1 from jsonb_array_elements(public.staff_list_guest_passes()) v where v->>'status'='expired'),
  'Staff sees past unredeemed approvals as expired');
 select ok(exists(select 1 from jsonb_array_elements(public.staff_list_golden_pass_applications()) a
- where a->>'applicant_email'='visit-pass-1@example.test'),'Staff can follow up with a Golden Pass applicant');
+ where a->>'applicant_email'='visit-pass-1@example.test' and a->>'profile_url'='https://portfolio.example.org/robot'),
+ 'Staff can follow up with a Golden Pass applicant and see the submitted profile');
+select ok(exists(select 1 from jsonb_array_elements(public.staff_list_golden_pass_applications()) a
+ where a->>'applicant_email'='visit-pass-3@example.test' and a->>'profile_url' is null),
+ 'Staff can still review legacy Golden Pass applications');
 select is(public.staff_update_guest_pass((current_setting('visit.first')::jsonb->>'id')::uuid,'approve')->>'status',
  'approved','Staff can approve a pending visitor after reviewing availability');
 select throws_ok($$select public.staff_update_guest_pass((current_setting('visit.first')::jsonb->>'id')::uuid,
@@ -73,6 +85,14 @@ select is(public.get_my_guest_passes()->0->>'visit_date',(current_setting('visit
  'Visitor sees their new requested date');
 reset role;
 
+select is((select count(*) from private.booking_notice_outbox
+ where aggregate_id=(current_setting('golden.first')::jsonb->>'id')::uuid),1::bigint,
+ 'A successful application enqueues exactly one alert despite a retry');
+select ok(exists(select 1 from private.booking_notice_outbox
+ where recipient_id='97077000-0000-4000-8000-000000000009'
+   and payload=jsonb_build_object('kind','golden_application','stage','received',
+     'reference',current_setting('golden.first')::jsonb->>'id')),
+ 'Private staff alert excludes applicant email, profile URL and notes');
 select is((select count(*) from public.paid_access_entitlements
  where user_id='97077000-0000-4000-8000-000000000001'),0::bigint,
  'Golden Pass submission creates no paid access entitlement');

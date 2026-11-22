@@ -1,7 +1,9 @@
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { useEffect, useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { GoldenPassCheckout } from "../components/GoldenPassCheckout";
 import { Field } from "../components/Primitives";
+import { supabase } from "../lib/supabase";
 import { useAccount } from "../context/AccountContext";
 import { formatPassDate, guestPassLabels, passRequest, type GoldenApplication, type GuestPass } from "../lib/pass-requests";
 
@@ -96,6 +98,9 @@ function GuestRequests() {
 export function GoldenPassPage() {
   const { loading, signedIn, account } = useAccount();
   const checkoutEnabled = import.meta.env.VITE_GOLDEN_PASS_CHECKOUT_ENABLED === "true";
+  const application = account?.membership_level
+    ? <GoldenApplicationForm key={account.user_id} memberId={account.user_id} />
+    : <p>To apply, activate free Basic membership by confirming your email. <Link to="/onboarding">View membership status</Link></p>;
   return <div className="golden-pass">
     <section className="wrap golden-grid golden-hero">
       <div>
@@ -147,35 +152,50 @@ export function GoldenPassPage() {
         {loading ? <p role="status">Loading your account…</p>
           : !signedIn ? <PassSignIn next={goldenPath + "#apply"}>{checkoutEnabled
             ? "Sign in to pay directly if your identity is already approved, or to apply for the Golden Pass."
-            : "Sign in by email to start your application."}</PassSignIn>
-          : account ? checkoutEnabled ? <GoldenPassCheckout key={account.user_id} memberId={account.user_id} application={<GoldenApplicationForm />} />
-            : <GoldenApplicationForm key={account.user_id} /> : <p role="alert">Your account could not be loaded. Please refresh and try again.</p>}
+            : "Sign in and confirm your email to activate free Basic membership and apply."}</PassSignIn>
+          : account ? checkoutEnabled ? <GoldenPassCheckout key={account.user_id} memberId={account.user_id} application={application} />
+            : application : <p role="alert">Your account could not be loaded. Please refresh and try again.</p>}
       </div>
     </div></section>
   </div>;
 }
 
-function GoldenApplicationForm() {
+function GoldenApplicationForm({ memberId }: { memberId: string }) {
   const [application, setApplication] = useState<GoldenApplication | null>(null);
+  const [profileUrl, setProfileUrl] = useState("");
   const [loaded, setLoaded] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [revision, setRevision] = useState(0);
   useEffect(() => {
     let active = true;
-    passRequest<GoldenApplication[]>("get_my_golden_pass_application")
-      .then(rows => { if (active) { setApplication(rows[0] ?? null); setLoaded(true); } })
+    const profile = (supabase as SupabaseClient | null)?.from("basic_onboarding_applications").select("linkedin_url")
+      .eq("user_id", memberId).maybeSingle();
+    void Promise.all([passRequest<GoldenApplication[]>("get_my_golden_pass_application"), profile])
+      .then(([rows, savedProfile]) => {
+        if (active) {
+          setApplication(rows[0] ?? null);
+          setProfileUrl(savedProfile?.data?.linkedin_url ?? "");
+          setLoaded(true);
+        }
+      })
       .catch((reason: Error) => { if (active) setError(reason.message); });
     return () => { active = false; };
-  }, [revision]);
+  }, [memberId, revision]);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (busy) return;
     setBusy(true); setError("");
     try {
+      const fields = new FormData(event.currentTarget);
+      const profile = new URL(readField(fields, "profile_url"));
+      if (profile.protocol !== "https:" || profile.username || profile.password) {
+        throw new Error("Enter a public profile or portfolio URL starting with https://.");
+      }
       setApplication(await passRequest<GoldenApplication>("submit_golden_pass_application", {
-        p_details: readField(new FormData(event.currentTarget), "details"),
+        p_details: readField(fields, "details"),
+        p_profile_url: profile.href,
       }));
     } catch (reason) {
       setError(reason instanceof Error ? reason.message : "Your application could not be saved.");
@@ -187,6 +207,13 @@ function GoldenApplicationForm() {
     {!loaded ? error ? <button className="button button-quiet" type="button" onClick={() => { setError(""); setRevision(n => n + 1); }}>Retry</button>
       : <p role="status">Checking for an existing application…</p>
       : <form className="pass-panel pass-application" onSubmit={submit}>
+        <h3>Apply for Golden Pass</h3>
+        <p>Free Basic membership is active. Share one link that helps the lab team understand your work.</p>
+        <Field label="LinkedIn, portfolio, or professional profile URL">
+          <input name="profile_url" type="url" maxLength={500} required defaultValue={profileUrl}
+            placeholder="https://your-portfolio.example" aria-describedby="golden-profile-help" />
+        </Field>
+        <p className="book-note" id="golden-profile-help">Staff can view this link in the private review queue.</p>
         <Field label="What are you building, and how would you use the lab?"><textarea name="details" required minLength={3} maxLength={400} rows={4} /></Field>
         <button className="button button-primary" disabled={busy}>Submit application</button>
         <Link to="/privacy">Privacy notice</Link>
