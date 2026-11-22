@@ -7,7 +7,7 @@ test("event space request from the bookings page", async ({ page }, info) => {
   const slots = { mode: "test", date: "2027-03-13", ratePaise: 250000, opens: "08:00", closes: "23:00", bufferMinutes: 20, maxAttendees: 35, closed: false, busy: [{ start: "14:00", end: "16:00" }] };
   const quote = { mode: "test", quoteId: "e0000000-0000-4000-8000-000000000061", date: "2027-03-13", startTime: "10:00", hours: 2, attendees: 20,
     purpose: "Robotics meetup with demos", rentPaise: 500000, amountPaise: 500000, agreementHash: "a".repeat(64), policyVersion: "event-v1",
-    approvedAt: null, hasAgreement: false, hasOrder: false, orderPending: false, refundDuePaise: null, declineReason: null, status: "awaiting_staff" };
+    directCheckout: true, approvedAt: null, hasAgreement: false, hasOrder: false, orderPending: false, refundDuePaise: null, declineReason: null, status: "awaiting_staff" };
   await page.addInitScript(({ user, key }) => localStorage.setItem(key, JSON.stringify({ access_token: "synthetic-token", refresh_token: "synthetic-refresh",
     expires_at: Math.floor(Date.now() / 1000) + 36000, expires_in: 36000, token_type: "bearer", user })), { user, key: authStorageKey });
   const sent: { action: string }[] = [];
@@ -32,6 +32,7 @@ test("event space request from the bookings page", async ({ page }, info) => {
   await page.screenshot({ path: info.outputPath("event-form.png"), fullPage: true });
   await page.getByRole("button", { name: "Request the event space" }).click();
   await expect(page.getByText("Awaiting Armature review")).toBeVisible();
+  await expect(page.getByText("Armature checks the date and setup before opening payment.")).toBeVisible();
   expect(sent.at(-1)).toMatchObject({ action: "quote", date: "2027-03-13", startTime: "10:00", hours: 2, attendees: 20 });
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width);
   await page.screenshot({ path: info.outputPath("event-request.png"), fullPage: true });

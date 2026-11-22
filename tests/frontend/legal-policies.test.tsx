@@ -19,7 +19,7 @@ const legalName = legalEntity.name;
 const labAddress = "1490, 11th Cross, 20th Main Rd, 1st Sector, HSR Layout, Bengaluru, Karnataka 560102";
 const policies = [
   { route: "/contact", title: "Contact Us", Page: ContactPage, digest: "81125ab8d08f9448db7215015354e4988c8401018b49fe7bdfb53418f1f7a0ce" },
-  { route: "/terms", title: "Terms and Conditions", Page: TermsPage, digest: "17c1c8fe4a38fbd28d6163510a87e997b3cd4f61bfd78873840744eac7089592" },
+  { route: "/terms", title: "Terms and Conditions", Page: TermsPage, digest: "7aed5dadecc26a69c277777eef5253588ad2d7d7a5907e2ba73307c8b0e024d5" },
   { route: "/refund-policy", title: "Cancellation and Refund Policy", Page: RefundPolicyPage, digest: "32e42f95b18e69ff1e4f5d84b1a87bab28f848d9c96089abb59a8230b6039503" },
   { route: "/shipping-policy", title: "Shipping and Delivery Policy", Page: ShippingPolicyPage, digest: "67163c16f6dbdaf3e3918a7cdecc7974432ee1b32c752b785df19032628badd3" }
 ];
@@ -51,7 +51,7 @@ describe("approved legal policies", () => {
     const { container } = render(<MemoryRouter><Page /></MemoryRouter>);
     expect(screen.getByRole("heading", { level: 1, name: title })).toBeInTheDocument();
     const content = container.querySelector(".privacy-content")!.textContent!;
-    // Baseline includes owner-approved booking and complaint rules reconciled on 8 November 2026, and the event space hire rule approved on 9 November 2026.
+    // Baseline includes owner-approved booking and complaint rules reconciled on 8 November 2026, and the event space hire update approved on 22 November 2026.
     const approvedBody = content.replace(/\s+/g, "")
       .replaceAll(legalName.replace(/\s+/g, ""), "[LEGAL_ENTITY_NAME]")
       .replaceAll(legalEntity.labAddress.formatted.replace(/\s+/g, ""), "[LAB_ADDRESS]");

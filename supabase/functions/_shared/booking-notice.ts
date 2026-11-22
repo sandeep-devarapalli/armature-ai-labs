@@ -4,7 +4,7 @@ const labName = "Armature AI Labs";
 const address = legalEntity.labAddress.formatted;
 export const bookingDirections = "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(address);
 export const bookingTimeZone = "Asia/Kolkata";
-export const goldenApprovalInbox = "hello@armatureailabs.com";
+export const bookingReviewInbox = "hello@armatureailabs.com";
 
 export type BookingSession = { id: string; startsAt: string; endsAt: string };
 type CustomerBookingNotice = {
@@ -15,14 +15,18 @@ type CustomerBookingNotice = {
   guestDate?: string;
   resource?: string;
 };
+type EventApprovalNotice = {
+  kind: "event"; stage: "approval_required"; reference: string; sessions: BookingSession[]; attendees: number;
+};
 type GoldenApplicationNotice = { kind: "golden_application"; stage: "received"; reference: string };
-type BookingNotice = CustomerBookingNotice | GoldenApplicationNotice;
+type BookingNotice = CustomerBookingNotice | EventApprovalNotice | GoldenApplicationNotice;
 
 const titles = {
   day: "Day Pass", week: "Week Pass", month: "Month Pass", guest: "Guest Pass",
   cabin: "Cabin Booking", equipment: "Equipment Booking", event: "Event Booking",
 };
 const stages = {
+  approval_required: "Staff approval required",
   received: "Request received", alternate: "Alternate date offered", signing: "Agreement ready", payment_due: "Payment instructions available",
   deposit_verified: "Deposit verified", confirmed: "Confirmed", updated: "Schedule updated", cancelled: "Cancelled", declined: "Request declined",
 };
@@ -55,6 +59,7 @@ export function bookingNotice(input: BookingNotice) {
   const overview = input.kind === "guest" && ["confirmed", "updated"].includes(input.stage)
     ? "This free Guest Pass is for your meeting or event. It does not reserve a desk or seat. The door access system records entry and exit."
     : {
+      approval_required: "Review the requested date and setup before opening payment.",
       received: "We’ve received your request. Check the booking page for its status.",
       alternate: "Armature has proposed a different visit date. Open Bookings to review the offer.",
       signing: "Open the booking page to review your agreement and the next steps.",
@@ -66,7 +71,8 @@ export function bookingNotice(input: BookingNotice) {
       declined: "Your request was declined. Check the booking page for details.",
     }[input.stage];
   const scheduleStage = ["confirmed", "updated", "cancelled"].includes(input.stage);
-  const sessions = scheduleStage
+  const staffApproval = input.stage === "approval_required";
+  const sessions = scheduleStage || staffApproval
     ? input.sessions ?? (input.kind === "guest" && input.guestDate ? [guestPassSession(input.guestDate)] : [])
     : [];
   for (const session of sessions) {
@@ -80,6 +86,16 @@ export function bookingNotice(input: BookingNotice) {
       ? `${startDay}, ${timeFormat.format(start)}–${timeFormat.format(end)} IST`
       : `${startDay}, ${timeFormat.format(start)} IST to ${endDay}, ${timeFormat.format(end)} IST`;
   });
+  if (staffApproval) {
+    return {
+      subject: `${title} · ${stages[input.stage]} · ${labName}`,
+      text: [overview, `Reference: ${input.reference}`, ...schedule,
+        input.attendees && `Attendees: ${input.attendees}`,
+        "Review in the staff dashboard: https://armatureailabs.com/admin/members#event-space-requests"]
+        .filter(Boolean).join("\n"),
+      events: [],
+    };
+  }
   const url = new URL("https://armatureailabs.com/bookings/");
   url.searchParams.set("item", input.kind === "guest" ? "guest" : input.kind === "cabin"
     ? "cabin" : input.kind === "equipment" ? "kit" : input.kind === "event" ? "event" : "desk");

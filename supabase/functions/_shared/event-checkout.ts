@@ -11,6 +11,7 @@ const opensAt = (day: string) => [0, 6].includes(new Date(day + "T00:00:00Z").ge
 type Quote = {
   id: string; member_id?: string; event_date: string; start_time: string; hours: number; attendees: number; purpose: string;
   starts_at: string; ends_at: string; rent_paise: number; amount_paise: number; agreement_hash: string; policy_version: string;
+  direct_checkout?: boolean; policy_accepted_at?: string | null;
   particulars?: object; prepared_at?: string | null; approved_at: string | null; payment_window_at?: string | null; document_id: string | null;
   order_id: string | null; order_claimed_at: string | null; payment_id?: string | null; refunded_amount?: number; refund_due_paise?: number | null;
   cancelled_at?: string | null; declined_at?: string | null; decline_reason?: string | null; review_reason?: string | null; status: string; bookingId?: string | null;
@@ -19,7 +20,7 @@ class Rejected extends Error { constructor(readonly status: number, readonly cod
 function present(q: Quote) {
   return { quoteId: q.id, date: q.event_date, startTime: q.start_time.slice(0, 5), hours: q.hours, attendees: q.attendees, purpose: q.purpose,
     startsAt: q.starts_at, endsAt: q.ends_at, rentPaise: q.rent_paise, amountPaise: q.amount_paise,
-    agreementHash: q.agreement_hash, policyVersion: q.policy_version, preparedAt: q.prepared_at, approvedAt: q.approved_at,
+    directCheckout: q.direct_checkout === true, agreementHash: q.agreement_hash, policyVersion: q.policy_version, preparedAt: q.prepared_at, approvedAt: q.approved_at,
     paymentWindowAt: q.payment_window_at ?? q.approved_at, hasAgreement: Boolean(q.document_id),
     hasOrder: Boolean(q.order_id), orderPending: Boolean(q.order_claimed_at && !q.order_id),
     refundedAmount: q.refunded_amount ?? 0, refundDuePaise: q.refund_due_paise ?? null, cancelledAt: q.cancelled_at ?? null,
@@ -39,7 +40,7 @@ export async function handleEventCheckout(request: Request, mode: "test" | "live
   const provider = rentalProvider(mode);
   const signer = Deno.env.get(prefix + "PANDADOC_SIGNER")?.trim().toLowerCase() ?? "";
   const policyVersion = Deno.env.get(prefix + "POLICY_VERSION") ?? "";
-  if (!provider || !signer || !/^[A-Za-z0-9._-]{4,80}$/.test(policyVersion)
+  if (!provider || !/^[A-Za-z0-9._-]{4,80}$/.test(policyVersion)
     || (mode === "live" && !liveWebhookSettings(provider))) return reply({ error: "event_not_configured" }, 503);
   try {
     const user = await authenticatedUser(request);
@@ -65,7 +66,7 @@ export async function handleEventCheckout(request: Request, mode: "test" | "live
     if (Deno.env.get(prefix + "CHECKOUT_ENABLED") !== "true" && !recoveryActions.includes(action)) throw new Rejected(503, "checkout_disabled");
     const client = adminClient();
     let member = user.id;
-    const staff = ["staff_queue", "manual_review", "prepare", "decline", "approve_manual", "reopen_payment", "recover_order"].includes(action)
+    const staff = ["staff_queue", "manual_review", "prepare", "approve_setup", "decline", "approve_manual", "reopen_payment", "recover_order"].includes(action)
       || (action === "cancel" && input.memberId !== undefined);
     if (staff) {
       if (user.claims.aal !== "aal2") throw new Rejected(403, "staff_mfa_required");
@@ -104,15 +105,21 @@ export async function handleEventCheckout(request: Request, mode: "test" | "live
     }
     if (!uuid.test(input.quoteId ?? "")) throw new Rejected(400, "invalid_quote");
     const q = await operation<Quote>("status", { quoteId: input.quoteId });
-    const customer = staff ? (await client.auth.admin.getUserById(member)).data.user?.email : user.email;
-    if (!customer || customer.toLowerCase() === signer) throw new Rejected(409, "separate_signers_required");
-    if (["prepare", "approve_manual", "order"].includes(action) && q.policy_version !== policyVersion) throw new Rejected(409, "policy_version_changed");
+    if (["prepare", "approve_setup", "approve_manual", "order"].includes(action) && q.policy_version !== policyVersion) {
+      throw new Rejected(409, "policy_version_changed");
+    }
+    let customer: string | undefined;
+    if (["prepare", "approve_manual"].includes(action) && q.direct_checkout) throw new Rejected(409, "event_state_rejected");
+    if (!q.direct_checkout) {
+      customer = staff ? (await client.auth.admin.getUserById(member)).data.user?.email : user.email;
+      if (!signer || !customer || customer.toLowerCase() === signer) throw new Rejected(409, "separate_signers_required");
+    }
     if (action === "manual_review") return reply({ mode, ...present(q), particulars: q.particulars, customerEmail: customer, staffEmail: signer });
-    if (action === "prepare") {
+    if (action === "prepare" || action === "approve_setup") {
       const p = input.particulars;
       if (!p || typeof p !== "object" || Array.isArray(p) || p.availabilityConfirmed !== true || p.eventDetailsReviewed !== true
         || p.termsVersion !== policyVersion || !reasonOk(p.setupNotes)) throw new Rejected(400, "invalid_particulars");
-      const prepared = await operation<Quote>("prepare", { quoteId: q.id, ...reviewer, particulars: {
+      const prepared = await operation<Quote>(action, { quoteId: q.id, ...reviewer, particulars: {
         availabilityConfirmed: true, eventDetailsReviewed: true, termsVersion: policyVersion, setupNotes: p.setupNotes.trim() } });
       return reply({ mode, ...present(prepared), particulars: prepared.particulars, customerEmail: customer, staffEmail: signer });
     }
@@ -135,7 +142,7 @@ export async function handleEventCheckout(request: Request, mode: "test" | "live
         documentId: input.documentId, agreementHash: input.agreementHash, evidenceSha256, evidencePath, confirmedBothSigners: true })) });
     }
     if (action === "recover_order") {
-      if (!q.order_claimed_at || !q.approved_at || !q.document_id || !orderIdPattern.test(input.orderId ?? "")
+      if (!q.order_claimed_at || !q.approved_at || !(q.direct_checkout ? q.policy_accepted_at : q.document_id) || !orderIdPattern.test(input.orderId ?? "")
         || (q.order_id && q.order_id !== input.orderId)) throw new Rejected(409, "order_recovery_unavailable");
       const order = await provider.request<{ id: string; receipt: string; amount: number; currency: string }>("/orders/" + input.orderId);
       if (order.id !== input.orderId || order.receipt !== q.id || order.amount !== q.amount_paise || order.currency !== "INR") throw new Rejected(409, "provider_order_mismatch");
@@ -158,12 +165,14 @@ export async function handleEventCheckout(request: Request, mode: "test" | "live
       }
       return reply({ mode, ...present(q) });
     }
-    if (action !== "order" || input.acceptedPolicies !== true || input.policyVersion !== policyVersion || !q.approved_at || !q.document_id) throw new Rejected(409, "approved_agreement_required");
+    if (action !== "order" || input.acceptedPolicies !== true || input.policyVersion !== policyVersion || !q.approved_at || (!q.direct_checkout && !q.document_id)) {
+      throw new Rejected(409, q.direct_checkout ? "event_setup_approval_required" : "approved_agreement_required");
+    }
     if (q.status !== "approved" && q.status !== "awaiting_payment") throw new Rejected(409, "checkout_already_resolved");
     const opened = Date.parse(q.payment_window_at ?? q.approved_at);
     if (!Number.isFinite(opened) || opened > Date.now() || Date.now() >= opened + 30 * 60_000) throw new Rejected(409, "signed_payment_window_expired");
     if (q.order_id) return reply({ mode, orderId: q.order_id, keyId: provider.keyId, amountPaise: q.amount_paise, currency: "INR" });
-    const claimed = await operation<Quote & { claimed: boolean }>("claim_order", { quoteId: q.id });
+    const claimed = await operation<Quote & { claimed: boolean }>("claim_order", { quoteId: q.id, acceptedPolicies: true, policyVersion });
     if (claimed.claimed !== true) {
       if (claimed.order_id) return reply({ mode, orderId: claimed.order_id, keyId: provider.keyId, amountPaise: claimed.amount_paise, currency: "INR" });
       throw new Rejected(409, "order_pending_staff_recovery");

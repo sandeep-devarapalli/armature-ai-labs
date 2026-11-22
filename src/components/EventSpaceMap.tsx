@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-type Viewer = { dispose: () => void; reset: () => void; focusEvent: () => void };
+type Viewer = { dispose: () => void; focusEvent: () => void };
 
 // The event space in 3D: GF-09 and GF-10 tinted on the ground floor, framed when it opens.
 export function EventSpaceMap() {
@@ -22,8 +22,7 @@ export function EventSpaceMap() {
   }, []);
   return <figure className="cabin-map">
     <div className="cabin-map-bar"><figcaption>Event space · GF-09 lounge and presentation hall + GF-10 commons</figcaption>
-      <button type="button" className="button button-quiet" onClick={() => viewer.current?.focusEvent()}>Event space</button>
-      <button type="button" className="button button-quiet" onClick={() => viewer.current?.reset()}>Whole floor</button></div>
+      <button type="button" className="button button-quiet" onClick={() => viewer.current?.focusEvent()}>Event space</button></div>
     <div ref={host} className="cabin-map-canvas" role="img" aria-label="3D plan of the ground floor with the event space, GF-09 and GF-10, highlighted" />
     {error && <p role="status">{error}</p>}
   </figure>;

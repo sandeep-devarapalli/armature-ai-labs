@@ -1,4 +1,5 @@
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { EventAgreementQueue } from "../../src/components/EventAgreementQueue";
@@ -20,19 +21,19 @@ beforeEach(() => { vi.clearAllMocks();
     ? { mode: "live", quotes: [{ ...base, memberId: "host" }, { ...base, quoteId: "e0000000-0000-4000-8000-000000000003", date: "2027-04-01", memberId: "staff" }] } : base }));
 });
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
-async function open(status = "awaiting_staff") {
-  render(<EventAgreementQueue client={client} actorId="staff" onBusyChange={vi.fn()} />);
+async function open(status = "awaiting_staff", directCheckout = false) {
+  render(<MemoryRouter><EventAgreementQueue client={client} actorId="staff" onBusyChange={vi.fn()} /></MemoryRouter>);
   fireEvent.click(screen.getByText("Event space requests"));
   fireEvent.click(screen.getByRole("button", { name: "Load event requests" }));
   const review = await screen.findByRole("button", { name: "Review event on 2027-03-12 at 10:00" });
-  invoke.mockImplementation(async (_name, { body }) => ({ data: { ...base, status, ...(body.action === "prepare" ? { status: "awaiting_signatures" } : {}) } }));
+  invoke.mockImplementation(async (_name, { body }) => ({ data: { ...base, directCheckout, status, ...(body.action === "prepare" ? { status: "awaiting_signatures" } : body.action === "approve_setup" ? { status: "approved" } : {}) } }));
   fireEvent.click(review);
   await screen.findByRole("region", { name: "Event request review" });
 }
 
 it("needs an MFA session before loading requests", async () => {
   getAssurance.mockResolvedValueOnce({ data: { currentLevel: "aal1" } });
-  render(<EventAgreementQueue client={client} actorId="staff" onBusyChange={vi.fn()} />);
+  render(<MemoryRouter><EventAgreementQueue client={client} actorId="staff" onBusyChange={vi.fn()} /></MemoryRouter>);
   fireEvent.click(screen.getByText("Event space requests"));
   fireEvent.click(screen.getByRole("button", { name: "Load event requests" }));
   expect(await screen.findByRole("alert")).toHaveTextContent("MFA");
@@ -86,4 +87,18 @@ it("declines an open request with a reason", async () => {
   fireEvent.change(screen.getByLabelText("Reason shown to the customer"), { target: { value: "The floor is closed for maintenance" } });
   fireEvent.click(screen.getByRole("button", { name: "Decline request" }));
   await waitFor(() => expect(invoke).toHaveBeenLastCalledWith("event-checkout", { body: { action: "decline", memberId: "host", quoteId, reason: "The floor is closed for maintenance" }, ...auth }));
+});
+
+it("approves the date and setup for direct payment without a document", async () => {
+  await open("awaiting_staff", true);
+  fireEvent.click(screen.getByLabelText(/The slot is free/));
+  fireEvent.click(screen.getByLabelText(/I reviewed the event/));
+  fireEvent.change(screen.getByLabelText("Setup notes"), { target: { value: "Theatre seating, one projector" } });
+  fireEvent.click(screen.getByRole("button", { name: "Approve date and setup" }));
+  await screen.findByText("Approved for payment");
+  expect(invoke).toHaveBeenLastCalledWith("event-checkout", {
+    ...auth, body: { action: "approve_setup", memberId: "host", quoteId,
+      particulars: { availabilityConfirmed: true, eventDetailsReviewed: true, termsVersion: "event-v1", setupNotes: "Theatre seating, one projector" } },
+  });
+  expect(screen.queryByLabelText("PandaDoc document ID")).not.toBeInTheDocument();
 });

@@ -5,6 +5,7 @@ export type EventAvailability = { date: string; ratePaise: number; opens: string
   maxAttendees: number; closed: boolean; busy: { start: string; end: string }[] };
 export type EventQuote = { quoteId: string; date: string; startTime: string; hours: number; attendees: number; purpose: string;
   startsAt: string; endsAt: string; rentPaise: number; amountPaise: number; agreementHash: string; policyVersion: string;
+  directCheckout?: boolean;
   approvedAt: string | null; hasAgreement: boolean; hasOrder: boolean; orderPending: boolean; refundDuePaise: number | null;
   declineReason: string | null; status: string };
 export async function eventRequest<T>(body: object, expectedMember?: string): Promise<T> {

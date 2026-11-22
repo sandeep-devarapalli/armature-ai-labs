@@ -1,3 +1,4 @@
+import { useLocation } from "react-router-dom";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { MfaPanel } from "../pages/MemberPages";
@@ -11,7 +12,7 @@ const statusLabels: Record<string, string> = { awaiting_staff: "Awaiting staff r
   awaiting_payment: "Awaiting payment", confirmed: "Event confirmed", completed: "Event completed", needs_review: "Payment needs staff review",
   declined: "Declined", cancelled: "Cancelled", refunded: "Fully refunded" };
 
-// Staff review for event space requests: prepare, decline, approve the signed agreement, reopen payment and cancel.
+// Staff review for event setup, payment recovery and legacy signed requests.
 export function EventAgreementQueue({ client, actorId, blocked, onBusyChange }: {
   client: SupabaseClient; actorId: string; blocked?: boolean; onBusyChange: (busy: boolean) => void;
 }) {
@@ -48,8 +49,9 @@ export function EventAgreementQueue({ client, actorId, blocked, onBusyChange }: 
   const form = (handler: (fields: FormData) => unknown) => (event: FormEvent<HTMLFormElement>) => { event.preventDefault(); void handler(new FormData(event.currentTarget)); };
   const disabled = busy || blocked;
   const quoteId = review?.quoteId;
-  return <details className="member-confirm"><summary>Event space requests</summary>
-    <p>Check the slot and setup, prepare the agreement in PandaDoc, then approve only the completed document with both signatures and its certificate. Use a separate Admin account with MFA.</p>
+  const { hash } = useLocation();
+  return <details id="event-space-requests" className="member-confirm" open={hash === "#event-space-requests" || undefined}><summary>Event space requests</summary>
+    <p>Review the date, guest count and setup before opening payment. Use a separate Admin account with MFA.</p>
     {!review && <MfaPanel mode="supabase" />}
     <button className="button secondary" disabled={disabled} onClick={() => void call("staff_queue", { offset: 0 })}>Load event requests</button>
     {loaded && !requests.length && <p>No event requests in this batch.</p>}
@@ -65,17 +67,17 @@ export function EventAgreementQueue({ client, actorId, blocked, onBusyChange }: 
     {review && <section aria-label="Event request review">
       <h3>Event space · {review.date} · {review.startTime}, {review.hours} hour{review.hours > 1 ? "s" : ""}</h3>
       <p>{review.attendees} guests · {money(review.amountPaise)}, no GST added.</p><p>Event: {review.purpose}</p>
-      <p>Customer: {review.customerEmail}. Armature signer: {review.staffEmail}.</p>
+      <p>Customer: {review.customerEmail}.{!review.directCheckout && review.staffEmail && ` Armature signer: ${review.staffEmail}.`}</p>
       <p>Status: <strong>{statusLabels[review.status] ?? "Review required"}</strong></p>
-      <p>Quote fingerprint: <code style={{ overflowWrap: "anywhere" }}>{review.agreementHash}</code></p>
+      {!review.directCheckout && <p>Quote fingerprint: <code style={{ overflowWrap: "anywhere" }}>{review.agreementHash}</code></p>}
       {review.status === "awaiting_staff" && <>
         <h4>1. Confirm the slot and setup</h4>
-        <form className="ol-form" onSubmit={form(f => void call("prepare", { quoteId, particulars: { availabilityConfirmed: f.get("available") === "on",
+        <form className="ol-form" onSubmit={form(f => void call(review.directCheckout ? "approve_setup" : "prepare", { quoteId, particulars: { availabilityConfirmed: f.get("available") === "on",
           eventDetailsReviewed: f.get("reviewed") === "on", termsVersion: review.policyVersion, setupNotes: String(f.get("setupNotes") ?? "").trim() } }))}>
           <label><input name="available" type="checkbox" required disabled={disabled} /> The slot is free and the lab is open that day.</label>
           <label><input name="reviewed" type="checkbox" required disabled={disabled} /> I reviewed the event, guest count and purpose with the customer.</label>
-          <label>Setup notes for the agreement<textarea name="setupNotes" required minLength={10} maxLength={1000} disabled={disabled} /></label>
-          <button className="button secondary" disabled={disabled}>Save and prepare agreement</button>
+          <label>{review.directCheckout ? "Setup notes" : "Setup notes for the agreement"}<textarea name="setupNotes" required minLength={10} maxLength={1000} disabled={disabled} /></label>
+          <button className="button secondary" disabled={disabled}>{review.directCheckout ? "Approve date and setup" : "Save and prepare agreement"}</button>
         </form></>}
       {review.status === "awaiting_signatures" && <>
         {review.particulars?.setupNotes && <p>Setup notes: {review.particulars.setupNotes}</p>}

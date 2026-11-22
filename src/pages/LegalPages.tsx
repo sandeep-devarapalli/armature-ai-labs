@@ -90,7 +90,7 @@ export function TermsPage() {
     <section>
       <h2>6. Workshops and events</h2>
       <p>A seat is confirmed once payment is received. We may change the schedule, venue or instructor with reasonable notice. If we cancel a session, you get a full refund.</p>
-      <p>Hiring the event space needs Armature's review, a signed agreement and payment through Razorpay. The hire is confirmed once payment is received.</p>
+      <p>Armature must approve the date and setup before you can hire the event space. Accept the website terms and refund policy at checkout and pay through Razorpay. Your hire is confirmed once payment is verified.</p>
     </section>
     <section>
       <h2>7. Payments</h2>

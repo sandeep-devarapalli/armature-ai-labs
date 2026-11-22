@@ -8,8 +8,9 @@ import { BookingSteps } from "./BookingSteps";
 import { BookingStatusCard, bookingDates, type BookingTone } from "./BookingStatusCard";
 import { EventSpaceMap } from "./EventSpaceMap";
 
-const eventSteps = ["Choose date, time and guests", "Armature reviews your request and prepares the agreement",
+const agreementSteps = ["Choose date, time and guests", "Armature reviews your request and prepares the agreement",
   "You sign, then Armature countersigns", "Pay through Razorpay and receive confirmation"];
+const directSteps = ["Choose date, time and guests", "Armature approves the date and setup", "Accept the website terms and pay through Razorpay"];
 const stepFor: Record<string, number> = { awaiting_staff: 1, awaiting_signatures: 2, approved: 3, awaiting_payment: 3, confirmed: 4, completed: 4 };
 const eventStatus: Record<string, [string, BookingTone]> = { awaiting_staff: ["Awaiting Armature review", "neutral"], awaiting_signatures: ["Ready to sign", "ready"],
   approved: ["Ready to pay", "ready"], awaiting_payment: ["Payment pending", "attention"], confirmed: ["Confirmed", "done"], completed: ["Completed", "done"],
@@ -18,7 +19,7 @@ const statusOf = (q: EventQuote) => eventStatus[q.status] ?? ["Awaiting Armature
 const endTime = (start: string, hours: number) => String(Number(start.slice(0, 2)) + hours).padStart(2, "0") + start.slice(2);
 function nextStep(q: EventQuote) {
   switch (q.status) {
-    case "awaiting_staff": return "Armature checks the date and setup, then sends the agreement through PandaDoc.";
+    case "awaiting_staff": return q.directCheckout ? "Armature checks the date and setup before opening payment." : "Armature checks the date and setup, then sends the agreement through PandaDoc.";
     case "awaiting_signatures": return "Sign the agreement first; Armature countersigns. Payment opens for 30 minutes after staff approve it.";
     case "approved": return "Accept the terms and pay within 30 minutes.";
     case "awaiting_payment": return "A payment was started. Check the payment status before trying again.";
@@ -65,10 +66,14 @@ function EventCheckout({ canBook, memberId }: { canBook: boolean; memberId: stri
     try { await action(); } catch (reason) { if (active.current) setError(reason instanceof Error ? reason.message : "Booking could not be completed."); }
     finally { working.current = false; if (active.current) setBusy(false); }
   }
+  function showQuote(result: EventQuote) {
+    setQuote(result);
+    setRecent(items => items.map(item => item.quoteId === result.quoteId ? result : item));
+  }
   async function status(reference: string) {
     const result = await request<EventQuote>({ action: "status", quoteId: reference });
     if (!active.current) return;
-    setQuote(result); setConsent(false);
+    showQuote(result); setConsent(false);
     if (result.status === "confirmed") await refresh();
   }
   async function pay(q: EventQuote) {
@@ -76,7 +81,7 @@ function EventCheckout({ canBook, memberId }: { canBook: boolean; memberId: stri
       quoteId: q.quoteId, acceptedPolicies: true, policyVersion: q.policyVersion });
     if (!active.current) return;
     if (!new RegExp("^rzp_" + eventMode + "_[A-Za-z0-9]+$").test(order.keyId) || !/^order_[A-Za-z0-9]+$/.test(order.orderId)
-      || order.currency !== "INR" || order.amountPaise !== q.amountPaise) throw new Error("Payment order does not match the approved agreement.");
+      || order.currency !== "INR" || order.amountPaise !== q.amountPaise) throw new Error("Payment order does not match the approved booking.");
     const Razorpay = await loadRazorpayCheckout();
     if (!active.current) return;
     const modal = new Razorpay({ key: order.keyId, order_id: order.orderId, amount: order.amountPaise, currency: "INR",
@@ -85,15 +90,17 @@ function EventCheckout({ canBook, memberId }: { canBook: boolean; memberId: stri
         if (!active.current) return;
         setCheckoutOpen(false); checkout.current = null;
         void run(async () => { const result = await request<EventQuote>({ action: "verify", quoteId: q.quoteId, ...callback });
-          if (active.current) { setQuote(result); await refresh(); } });
+          if (active.current) { showQuote(result); await refresh(); } });
       }, modal: { ondismiss: () => { checkout.current = null; if (active.current) setCheckoutOpen(false); } } });
     modal.on("payment.failed", () => { if (active.current) setError("Payment attempt failed. Check status before trying again."); });
     checkout.current = modal; setCheckoutOpen(true); modal.open();
   }
+  const direct = quote?.directCheckout ?? !quote;
+  const step = quote ? stepFor[quote.status] ?? 1 : 0;
   const latest = slots ? 23 - Number(start.slice(0, 2)) : 1;
   const locked = busy || checkoutOpen;
   return <div className="event-checkout booking-flow">
-    <BookingSteps label="Event booking steps" steps={eventSteps} current={quote ? stepFor[quote.status] ?? 1 : 0} />
+    <BookingSteps label="Event booking steps" steps={direct ? directSteps : agreementSteps} current={direct && step >= 3 ? step - 1 : step} />
     {eventMode === "test" && <p className="booking-notice" role="status">Test bookings · no real event or charge.</p>}
     <EventSpaceMap />
     {!canBook && <p>Verified membership is required. <Link to="/onboarding">Complete verification</Link>.</p>}
@@ -105,7 +112,7 @@ function EventCheckout({ canBook, memberId }: { canBook: boolean; memberId: stri
     {!quote ? <form className="ol-form" onSubmit={event => { event.preventDefault(); const fields = new FormData(event.currentTarget);
       void run(async () => { const result = await request<EventQuote>({ action: "quote", date: day, startTime: start,
         hours: Number(fields.get("hours")), attendees: Number(fields.get("attendees")), purpose: String(fields.get("purpose") ?? "").trim() });
-        if (active.current) setQuote(result); }); }}>
+        if (active.current) showQuote(result); }); }}>
       <label>Event date<input type="date" min={tomorrow()} value={day} required disabled={busy} onChange={event => setDay(event.target.value)} /></label>
       {slots && (slots.closed ? <p>The lab is closed on this date. Choose another day.</p>
         : <><p>Open {slots.opens} to {slots.closes}. {money(slots.ratePaise)} an hour, no deposit, no GST added.</p>
@@ -119,19 +126,19 @@ function EventCheckout({ canBook, memberId }: { canBook: boolean; memberId: stri
       <label>Guests<input name="attendees" type="number" min={1} max={slots?.maxAttendees ?? 35} defaultValue={10} required disabled={busy || !slots || slots.closed} /></label>
       <label>What is the event?<textarea name="purpose" minLength={10} maxLength={1000} required disabled={busy || !slots || slots.closed}
         placeholder="For example: a robotics meetup with two short talks and live arm demos" /></label>
-      <p>A request does not hold the time. Armature reviews it and prepares the agreement before anything is charged.</p>
+      <p>Armature reviews your date and setup before opening payment. The time is reserved once payment is confirmed.</p>
       <button className="button" disabled={busy || !canBook || !slots || slots.closed}>Request the event space</button>
     </form> : <div aria-live="polite"><BookingStatusCard kicker="Event space" title={quote.purpose.length > 60 ? quote.purpose.slice(0, 57) + "…" : quote.purpose}
       when={`${bookingDates(quote.date)}, ${quote.startTime}–${endTime(quote.startTime, quote.hours)} (${quote.hours} hour${quote.hours > 1 ? "s" : ""})`}
       status={statusOf(quote)[0]} tone={statusOf(quote)[1]} next={nextStep(quote)} reference={quote.quoteId}
       rows={[{ label: "Guests", value: quote.attendees }, ...(quote.purpose.length > 60 ? [{ label: "Event", value: quote.purpose }] : []), { label: "GST", value: "Not added", money: true },
         { label: "Hire charge", value: money(quote.amountPaise), money: true, total: true }]}
-      details={["awaiting_staff", "awaiting_signatures"].includes(quote.status) ? <p>Armature checks the date and setup, then sends the agreement through PandaDoc. You sign first and Armature countersigns. Payment opens for 30 minutes after staff approve the signed agreement. <a href="mailto:hello@armatureailabs.com">Contact Armature about this request</a>.</p> : undefined}
-      actions={<>{quote.status === "confirmed" && <Link className="button button-primary" to="/my-bookings">My Bookings</Link>}<button className="button secondary" disabled={locked} onClick={() => void run(() => status(quote.quoteId))}>Check agreement or payment status</button>
+      details={!direct && ["awaiting_staff", "awaiting_signatures"].includes(quote.status) ? <p>Armature checks the date and setup, then sends the agreement through PandaDoc. You sign first and Armature countersigns. Payment opens for 30 minutes after staff approve the signed agreement. <a href="mailto:hello@armatureailabs.com">Contact Armature about this request</a>.</p> : undefined}
+      actions={<>{quote.status === "confirmed" && <Link className="button button-primary" to="/my-bookings">My Bookings</Link>}<button className="button secondary" disabled={locked} onClick={() => void run(() => status(quote.quoteId))}>{direct ? "Refresh booking status" : "Check agreement or payment status"}</button>
         {!quote.hasOrder && !quote.orderPending && <button className="button secondary" disabled={locked} onClick={() => { setQuote(null); setConsent(false); }}>Request another event</button>}</>}>
       {(quote.status === "approved" || quote.status === "awaiting_payment") && <>
         <h4>Payment</h4>
-        <p>Both signatures were reviewed. Payment is available for 30 minutes after staff approval.</p>
+        <p>{direct ? "Armature approved your date and setup." : "Both signatures were reviewed."} Payment is available for 30 minutes after staff approval.</p>
         <label className="checkbox-field"><input type="checkbox" checked={consent} disabled={locked} onChange={event => setConsent(event.target.checked)} /> <span>I accept the <Link to="/terms">terms</Link> and <Link to="/refund-policy">refund policy</Link> for this event.</span></label>
         <button className="button" disabled={locked || !consent || !canBook} onClick={() => void run(() => pay(quote))}>Pay with Razorpay{eventMode === "test" ? " Test Mode" : ""}</button></>}
       </BookingStatusCard>
@@ -140,7 +147,7 @@ function EventCheckout({ canBook, memberId }: { canBook: boolean; memberId: stri
         <p>{quote.status === "confirmed" ? "Cancelling 48 hours or more before the event refunds 50%. Later cancellations are not refunded." : "Nothing has been charged yet."}</p>
         <form className="ol-form" onSubmit={event => { event.preventDefault(); const fields = new FormData(event.currentTarget);
           void run(async () => { const result = await request<EventQuote>({ action: "cancel", quoteId: quote.quoteId, confirmed: true, reason: String(fields.get("reason") ?? "").trim() });
-            if (active.current) setQuote(result); }); }}>
+            if (active.current) showQuote(result); }); }}>
           <label>Reason<textarea name="reason" minLength={10} maxLength={1000} required disabled={locked} /></label>
           <button className="button secondary" disabled={locked}>Cancel event</button>
         </form>
