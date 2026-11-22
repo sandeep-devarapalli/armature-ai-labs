@@ -115,6 +115,12 @@ it("quotes an available chair, waits for signatures, submits versioned consent a
   expect(await screen.findByText(/Desk booking confirmed.*Membership: Premium/)).toBeInTheDocument();
   expect(currentStep()).toBeUndefined();
   expect(screen.getByRole("heading", { name: "Booking confirmed" })).toBeInTheDocument();
+  expect(screen.getByRole("link", { name: "My Bookings" })).toHaveAttribute("href", "/my-bookings");
+  expect(screen.getByRole("button", { name: "Book another desk pass" })).toBeInTheDocument();
+  const arrival = screen.getByText("Arrival and door access", { selector: "summary" });
+  fireEvent.click(arrival);
+  expect(screen.getByText(/door access system is being set up/)).toBeInTheDocument();
+  expect(screen.getByText("Get directions")).toHaveAttribute("href", expect.stringContaining("google.com/maps/dir/"));
   expect(mock.refreshMembership).toHaveBeenCalledOnce();
 });
 

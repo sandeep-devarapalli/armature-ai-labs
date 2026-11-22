@@ -289,8 +289,17 @@ function DeskCheckout({ memberId, canBook }: { memberId: string; canBook: boolea
           ...(chairNumber ? [{ label: "Fallback if moved", value: `F${chairNumber} · First floor` }] : []),
           ...(typeof quote.amountPaise === "number" ? [{ label: quote.reviewReason === "partial_refund" ? "Original amount paid" : "Amount paid", value: money.format(quote.amountPaise / 100), money: true, total: true }] : []),
         ]}
-        details={<p>Armature AI Labs, {legalEntity.labAddress.formatted}.</p>}
+        detailsLabel="Arrival and door access"
+        details={<div>
+          <p><strong>When you arrive.</strong> Come during the hours shown above and keep your booking reference handy.</p>
+          <p><strong>Getting in.</strong> The lab’s door access system is being set up. If you need help entering or leaving, ask lab staff or email <a href="mailto:bookings@armatureailabs.com">bookings@armatureailabs.com</a> with your booking reference.</p>
+          <p><strong>Where to sit.</strong> Use the reserved seat above. If staff move your booking, they’ll direct you to your fallback seat.</p>
+          <p>Armature AI Labs, {legalEntity.labAddress.formatted}.{" "}
+            <a href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(legalEntity.labAddress.formatted)}`}>Get directions</a>
+          </p>
+        </div>}
         actions={<>
+          <Link className="button button-primary" to="/my-bookings">My Bookings</Link>
           {memberPlatformAvailable && quote.bookingId && <Link className="button secondary" to={`/bookings/${quote.bookingId}`}>Open reservation</Link>}
           <button type="button" className="button secondary" disabled={busy} onClick={chooseAnother}>Book another desk pass</button>
         </>}>
