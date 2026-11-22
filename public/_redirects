@@ -60,10 +60,6 @@
 /admin/resources/ /app-shell 200
 /admin/bookings /app-shell 200
 /admin/bookings/ /app-shell 200
-/my-bookings /app-shell 200
-/my-bookings/ /app-shell 200
-/my-bookings/:quoteId /app-shell 200
-/my-bookings/:quoteId/ /app-shell 200
 /admin/attendance /app-shell 200
 /admin/attendance/ /app-shell 200
 /admin/integrations /app-shell 200
