@@ -41,3 +41,19 @@ Deno.test("Rental milestones create an invite only once a real appointment exist
   assertEquals(bookingNotice({ ...cabin, stage: "confirmed", sessions: [session] }).events.length, 1);
   assertEquals(bookingNotice({ kind: "equipment", stage: "confirmed", reference: "EQ-001", sessions: [session] }).events.length, 1);
 });
+
+Deno.test("Event confirmations show reserved lab hours, directions and a calendar invite", () => {
+  const notice = bookingNotice({
+    kind: "event", stage: "confirmed", reference: "EVENT-001", resource: "Event space",
+    sessions: [{ id: "event-session", startsAt: "2027-03-13T10:00:00+05:30", endsAt: "2027-03-13T13:00:00+05:30" }],
+  });
+  assertMatch(notice.subject, /Event Booking · Confirmed/);
+  assertMatch(notice.text, /10:00 am–1:00 pm IST/i);
+  assertMatch(notice.text, /www\.google\.com\/maps\/dir/);
+  assertMatch(notice.text, /bookings\/\?item=event#steps/);
+  assertMatch(notice.events[0].description, /www\.google\.com\/maps\/dir/);
+  assertMatch(bookingCalendarInvite(notice.events[0], {
+    bookingId: "event-001", organizer: "bookings@armatureailabs.com", attendee: "visit@example.test",
+    sentAt: "2026-11-22T00:00:00Z", method: "REQUEST", sequence: 0,
+  }), /DTSTART:20270313T043000Z\r\nDTEND:20270313T073000Z/);
+});

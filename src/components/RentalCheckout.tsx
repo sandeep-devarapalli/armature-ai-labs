@@ -169,7 +169,7 @@ function RentalCheckout({ canBook, memberId, initialProduct }: { canBook: boolea
       when={bookingDates(quote.start, quote.end)} status={statusOf(quote)[0]} tone={statusOf(quote)[1]} next={nextStep(quote)} rows={rentalRows(quote)} reference={quote.quoteId}
       details={!quote.agreementSigned ? <><p>Armature prepares your draft in PandaDoc. Confirm your legal name, PAN, address and any company authority privately. Request corrections before signing. Armature then countersigns and an independent staff reviewer checks the completed document.</p>
         <a href="mailto:hello@armatureailabs.com">Contact Armature about this agreement</a></> : undefined}
-      actions={<><button className="button secondary" disabled={busy || checkoutOpen} onClick={() => void run(() => status(quote.quoteId))}>Check agreement or payment status</button>
+      actions={<>{quote.status === "confirmed" && <Link className="button button-primary" to="/my-bookings">My Bookings</Link>}<button className="button secondary" disabled={busy || checkoutOpen} onClick={() => void run(() => status(quote.quoteId))}>Check agreement or payment status</button>
         {!quote.hasOrder && !quote.orderPending && <button className="button secondary" disabled={busy || checkoutOpen} onClick={() => { setQuote(null); setConsent(false); setEditingRefundAccount(false); }}>Choose another booking</button>}</>}>
       {quote.testFixture && <p className="booking-notice" role="status">TEST SPECIMEN: ₹50 simulated rent payment and ₹100 simulated bank deposit. No real rental, bank transfer or charge.</p>}
       {quote.depositMethod === "bank_transfer" && quote.depositPaise > 0 && !quote.agreementSigned && <div>
