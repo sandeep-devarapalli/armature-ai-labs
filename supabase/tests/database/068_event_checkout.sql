@@ -38,21 +38,21 @@ select set_config('event.q',public.event_checkout('quote','94000000-0000-4000-80
 select is((current_setting('event.q')::jsonb->>'amount_paise')::bigint,750000::bigint,'Three hours cost 7500');
 select is(current_setting('event.q')::jsonb->>'status','awaiting_staff','New request waits for staff');
 select is((current_setting('event.q')::jsonb->>'starts_at')::timestamptz,'2027-03-13 10:00+05:30'::timestamptz,'Start is stored in lab time');
-select throws_ok(format('select public.event_checkout(''claim_order'',''%s'',''%s'')','94000000-0000-4000-8000-000000000001',jsonb_build_object('quoteId',current_setting('event.q')::jsonb->>'id')),'22023','Fresh approved agreement required','Unapproved request cannot pay');
+select throws_ok(format('select public.event_checkout(''claim_order'',''%s'',''%s'')','94000000-0000-4000-8000-000000000001',jsonb_build_object('quoteId',current_setting('event.q')::jsonb->>'id')),'22023','Staff approval and current website policies required','Unapproved request cannot pay');
 select throws_ok(format('select public.event_checkout(''status'',''%s'',''%s'')','94000000-0000-4000-8000-000000000002',jsonb_build_object('quoteId',current_setting('event.q')::jsonb->>'id')),'42501','Event request unavailable','Members cannot read other requests');
 select is(public.event_checkout('lookup_order',null,'{"orderId":"order_unknown"}')->>'status','ignored','Unknown order leaves desk and rental webhook routing intact');
 
 select set_config('event.staff',jsonb_build_object('quoteId',current_setting('event.q')::jsonb->>'id','reviewerId','94000000-0000-4000-8000-000000000003','reviewerAal','aal2')::text,true);
 select set_config('event.particulars',jsonb_build_object('particulars',jsonb_build_object('availabilityConfirmed',true,'eventDetailsReviewed',true,'termsVersion','event-2026-11-09','setupNotes','Synthetic theatre seating for twenty'))::text,true);
-select throws_ok(format('select public.event_checkout(''prepare'',''%s'',''%s'')','94000000-0000-4000-8000-000000000001',current_setting('event.staff')::jsonb||current_setting('event.particulars')::jsonb||'{"reviewerAal":"aal1"}'),'42501','Independent MFA Admin required','AAL1 approval rejected');
-select set_config('event.q',public.event_checkout('prepare','94000000-0000-4000-8000-000000000001',current_setting('event.staff')::jsonb||current_setting('event.particulars')::jsonb)::text,true);
-select is(current_setting('event.q')::jsonb->>'status','awaiting_signatures','Staff approval sends the agreement');
-
-insert into storage.objects(bucket_id,name) select 'event-agreements',current_setting('event.q')::jsonb->>'id'||'/'||repeat('e',64)||'.pdf';
-select set_config('event.q',public.event_checkout('approve_manual','94000000-0000-4000-8000-000000000001',current_setting('event.staff')::jsonb||jsonb_build_object('agreementHash',current_setting('event.q')::jsonb->>'agreement_hash','documentId','synthetic-event-doc','evidenceSha256',repeat('e',64),'evidencePath',current_setting('event.q')::jsonb->>'id'||'/'||repeat('e',64)||'.pdf','confirmedBothSigners',true))::text,true);
-select is(current_setting('event.q')::jsonb->>'status','approved','Signed agreement opens payment');
-select is(public.event_checkout('claim_order','94000000-0000-4000-8000-000000000001',current_setting('event.staff')::jsonb)->>'claimed','true','First claim holds the slot');
-select is(public.event_checkout('claim_order','94000000-0000-4000-8000-000000000001',current_setting('event.staff')::jsonb)->>'claimed','false','Second claim cannot issue another order');
+select throws_ok(format('select public.event_checkout(''approve_setup'',''%s'',''%s'')','94000000-0000-4000-8000-000000000001',current_setting('event.staff')::jsonb||current_setting('event.particulars')::jsonb||'{"reviewerAal":"aal1"}'),'42501','Independent MFA Admin required','AAL1 approval rejected');
+select set_config('event.q',public.event_checkout('approve_setup','94000000-0000-4000-8000-000000000001',current_setting('event.staff')::jsonb||current_setting('event.particulars')::jsonb)::text,true);
+select is(current_setting('event.q')::jsonb->>'status','approved','Date and setup approval opens payment');
+select ok((current_setting('event.q')::jsonb->>'document_id') is null,'Direct event approval has no agreement');
+select throws_ok(format('select public.event_checkout(''claim_order'',''%s'',''%s'')','94000000-0000-4000-8000-000000000001',current_setting('event.staff')::jsonb),'22023','Staff approval and current website policies required','An approved booking still requires customer acceptance');
+select set_config('event.consent',(current_setting('event.staff')::jsonb||'{"acceptedPolicies":true,"policyVersion":"event-2026-11-09"}')::text,true);
+select is(public.event_checkout('claim_order','94000000-0000-4000-8000-000000000001',current_setting('event.consent')::jsonb)->>'claimed','true','First claim holds the slot');
+select is(public.event_checkout('claim_order','94000000-0000-4000-8000-000000000001',current_setting('event.consent')::jsonb)->>'claimed','false','Second claim cannot issue another order');
+select ok((select policy_accepted_at is not null from private.event_quotes where id=(current_setting('event.q')::jsonb->>'id')::uuid),'Terms acceptance is recorded with the order claim');
 select is((select upper(period)-lower(period) from private.checkout_inventory_holds where quote_id=(current_setting('event.q')::jsonb->>'id')::uuid),interval '3 hours 40 minutes','Hold covers the setup buffer');
 select throws_ok($$select public.event_checkout('quote','94000000-0000-4000-8000-000000000002','{"date":"2027-03-13","startTime":"13:00","hours":1,"attendees":5,"purpose":"Synthetic overlapping workshop"}')$$,'23P01','Event slot is no longer available','Held slot blocks a back-to-back request inside the buffer');
 select is(jsonb_array_length(public.event_checkout('availability','94000000-0000-4000-8000-000000000002','{"date":"2027-03-13"}')->'busy'),1,'Availability shows the held period');
@@ -99,6 +99,7 @@ select is((select review_reason from private.event_quotes where payment_id='pay_
 
 -- Late cancellation: tomorrow evening is always under 48 hours away.
 select set_config('event.late',public.event_checkout('quote','94000000-0000-4000-8000-000000000002',jsonb_build_object('date',(now() at time zone 'Asia/Kolkata')::date+1,'startTime','21:00','hours',1,'attendees',10,'purpose','Synthetic late evening session'))::text,true);
+update private.event_quotes set direct_checkout=false where id=(current_setting('event.late')::jsonb->>'id')::uuid;
 select set_config('event.latestaff',(current_setting('event.staff')::jsonb||jsonb_build_object('quoteId',current_setting('event.late')::jsonb->>'id'))::text,true);
 select set_config('event.late',public.event_checkout('prepare','94000000-0000-4000-8000-000000000002',current_setting('event.latestaff')::jsonb||current_setting('event.particulars')::jsonb)::text,true);
 insert into storage.objects(bucket_id,name) select 'event-agreements',current_setting('event.late')::jsonb->>'id'||'/'||repeat('f',64)||'.pdf';
@@ -112,7 +113,7 @@ select is((public.event_checkout('cancel','94000000-0000-4000-8000-000000000002'
 -- Staff can decline an unpaid request.
 select set_config('event.declined',public.event_checkout('quote','94000000-0000-4000-8000-000000000002','{"date":"2027-04-14","startTime":"18:00","hours":2,"attendees":30,"purpose":"Synthetic evening demo night"}')::text,true);
 select is(public.event_checkout('decline','94000000-0000-4000-8000-000000000002',current_setting('event.staff')::jsonb||jsonb_build_object('quoteId',current_setting('event.declined')::jsonb->>'id','reason','Synthetic room already promised'))->>'status','declined','Staff can decline with a reason');
-select throws_ok(format('select public.event_checkout(''prepare'',''%s'',''%s'')','94000000-0000-4000-8000-000000000002',current_setting('event.staff')::jsonb||current_setting('event.particulars')::jsonb||jsonb_build_object('quoteId',current_setting('event.declined')::jsonb->>'id')),'22023','Event request is no longer open for approval','Declined request cannot be approved');
+select throws_ok(format('select public.event_checkout(''approve_setup'',''%s'',''%s'')','94000000-0000-4000-8000-000000000002',current_setting('event.staff')::jsonb||current_setting('event.particulars')::jsonb||jsonb_build_object('quoteId',current_setting('event.declined')::jsonb->>'id')),'22023','Event request is no longer open for approval','Declined request cannot be approved');
 select is(jsonb_array_length(public.event_checkout('staff_queue',null,current_setting('event.staff')::jsonb)->'quotes'),3,'Staff queue lists all event requests');
 select is(jsonb_array_length(public.event_checkout('list_own','94000000-0000-4000-8000-000000000001','{}')->'quotes'),1,'Members list only their own requests');
 select * from finish();

@@ -38,8 +38,10 @@ it("shows the event space in 3D, framed on GF-09 and GF-10", async () => {
   await waitFor(() => expect(mock.viewer.focusEvent).toHaveBeenCalled());
   expect(mock.mount.mock.calls[0][1]).toMatchObject({ kind: "ground-seats", bookingType: "event" });
   expect(screen.getByText("Event space · GF-09 lounge and presentation hall + GF-10 commons")).toBeInTheDocument();
-  fireEvent.click(screen.getByRole("button", { name: "Whole floor" }));
-  expect(mock.viewer.reset).toHaveBeenCalled();
+  expect(screen.queryByRole("button", { name: "Whole floor" })).not.toBeInTheDocument();
+  mock.viewer.focusEvent.mockClear();
+  fireEvent.click(screen.getByRole("button", { name: /^Event space$/ }));
+  expect(mock.viewer.focusEvent).toHaveBeenCalledOnce();
 });
 
 it("asks signed-out visitors to sign in", () => {
@@ -48,6 +50,7 @@ it("asks signed-out visitors to sign in", () => {
 });
 
 it("shows the day's bookings, then requests the chosen slot", async () => {
+  mock.request.mockImplementation(async body => body.action === "availability" ? slots : { ...quote, directCheckout: true });
   show();
   expect(current()).toBe("1Choose date, time and guests");
   expect(screen.getByRole("button", { name: "Request the event space" })).toBeDisabled();
@@ -62,7 +65,7 @@ it("shows the day's bookings, then requests the chosen slot", async () => {
   fireEvent.click(screen.getByRole("button", { name: "Request the event space" }));
   await screen.findByText("Awaiting Armature review");
   expect(mock.request).toHaveBeenLastCalledWith({ action: "quote", date: "2027-03-13", startTime: "10:00", hours: 2, attendees: 20, purpose: "Robotics meetup with demos" }, "host");
-  expect(current()).toBe("2Armature reviews your request and prepares the agreement");
+  expect(current()).toBe("2Armature approves the date and setup");
 });
 
 it("offers weekday starts from 17:00 only", async () => {
@@ -89,7 +92,9 @@ it.each([["awaiting_signatures", "3You sign, then Armature countersigns"], ["app
   });
 
 it("pays only an order that matches the approved amount", async () => {
-  await open({ status: "approved", approvedAt: "2027-03-01T10:00:00Z", hasAgreement: true });
+  await open({ status: "approved", approvedAt: "2027-03-01T10:00:00Z", directCheckout: true, hasAgreement: false });
+  expect(screen.getByText(/Armature approved your date and setup/)).toBeInTheDocument();
+  expect(screen.queryByText(/PandaDoc/)).not.toBeInTheDocument();
   const pay = screen.getByRole("button", { name: "Pay with Razorpay Test Mode" });
   expect(pay).toBeDisabled();
   fireEvent.click(screen.getByRole("checkbox"));
@@ -101,6 +106,17 @@ it("pays only an order that matches the approved amount", async () => {
   fireEvent.click(pay);
   await waitFor(() => expect(mock.open).toHaveBeenCalled());
   expect(mock.checkout).toHaveBeenCalledWith(expect.objectContaining({ amount: 500000, order_id: "order_1" }));
+});
+
+it("updates the request list after recovering a captured payment", async () => {
+  const pending = { ...quote, directCheckout: true, status: "awaiting_payment", hasOrder: true };
+  mock.request.mockImplementation(async body => body.action === "list_own"
+    ? { quotes: [pending] } : { ...pending, status: "confirmed" });
+  show();
+  fireEvent.click(screen.getByRole("button", { name: "Find my event requests" }));
+  fireEvent.click(await screen.findByRole("button", { name: /13 Mar 2027 .* Payment pending/ }));
+  expect(await screen.findByRole("button", { name: /13 Mar 2027 .* Confirmed/ })).toBeInTheDocument();
+  expect(screen.getByRole("link", { name: "My Bookings" })).toHaveAttribute("href", "/my-bookings");
 });
 
 it("explains the refund before cancelling a confirmed event", async () => {

@@ -57,3 +57,15 @@ Deno.test("Event confirmations show reserved lab hours, directions and a calenda
     sentAt: "2026-11-22T00:00:00Z", method: "REQUEST", sequence: 0,
   }), /DTSTART:20270313T043000Z\r\nDTEND:20270313T073000Z/);
 });
+
+Deno.test("Event staff alert shows the requested window and protected queue without an invite", () => {
+  const notice = bookingNotice({
+    kind: "event", stage: "approval_required", reference: "EVENT-STAFF-01", attendees: 20,
+    sessions: [{ id: "event-request", startsAt: "2027-03-13T10:00:00+05:30", endsAt: "2027-03-13T13:00:00+05:30" }],
+  });
+  assertMatch(notice.subject, /Staff approval required/);
+  assertMatch(notice.text, /10:00 am–1:00 pm IST/i);
+  assertMatch(notice.text, /Attendees: 20/);
+  assertMatch(notice.text, /https:\/\/armatureailabs\.com\/admin\/members#event-space-requests/);
+  assertEquals(notice.events, []);
+});
