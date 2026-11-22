@@ -60,9 +60,20 @@ select is(jsonb_array_length(public.event_checkout('availability','94000000-0000
 select public.event_checkout('bind_order','94000000-0000-4000-8000-000000000001',current_setting('event.staff')::jsonb||'{"orderId":"order_eventfixture"}');
 select set_config('event.payment',(current_setting('event.staff')::jsonb||'{"orderId":"order_eventfixture","paymentId":"pay_eventfixture","amount":750000,"currency":"INR","refundedAmount":0}')::text,true);
 select throws_ok(format('select public.event_checkout(''capture'',null,''%s'')',current_setting('event.payment')::jsonb||'{"amount":700000}'),'22023','Captured payment must match the event order','Wrong amount is rejected');
+update private.booking_notice_settings set enabled=true where singleton;
 select set_config('event.q',public.event_checkout('capture',null,current_setting('event.payment')::jsonb)::text,true);
 select is(current_setting('event.q')::jsonb->>'status','confirmed','Paid event is confirmed');
 select public.event_checkout('capture',null,current_setting('event.payment')::jsonb);
+select is((select count(*)::int from private.booking_notice_outbox
+ where aggregate_id=(current_setting('event.q')::jsonb->>'id')::uuid and kind='event' and stage='confirmed'),1,
+ 'Duplicate capture queues one event confirmation');
+select ok((select (payload#>>'{sessions,0,startsAt}')::timestamptz='2027-03-13 10:00+05:30'::timestamptz
+ and (payload#>>'{sessions,0,endsAt}')::timestamptz='2027-03-13 13:00+05:30'::timestamptz
+ and payload#>>'{sessions,0,id}'=current_setting('event.q')::jsonb->>'bookingId'
+ from private.booking_notice_outbox
+ where aggregate_id=(current_setting('event.q')::jsonb->>'id')::uuid and stage='confirmed'),
+ 'Event invite uses booked hours without setup buffer');
+
 select is((select count(*)::int from public.bookings where idempotency_key='event:'||(current_setting('event.q')::jsonb->>'id')),1,'Duplicate capture does not double-book');
 select is((select upper(period)-lower(period) from public.resource_reservations where booking_id=(current_setting('event.q')::jsonb->>'bookingId')::uuid),interval '3 hours 40 minutes','Reservation keeps the setup buffer');
 select ok((select daytime_event_approved and price_paise=750000 from public.paid_access_entitlements where id=(current_setting('event.q')::jsonb->>'entitlement_id')::uuid),'Approved event entitlement allows weekday daytime check-in');
@@ -72,6 +83,11 @@ select throws_ok($$update public.bookings set ends_at=ends_at+interval '1 hour' 
 select throws_ok(format('select public.event_checkout(''cancel'',''%s'',''%s'')','94000000-0000-4000-8000-000000000001',jsonb_build_object('quoteId',current_setting('event.q')::jsonb->>'id','reason','Synthetic change of plans')),'22023',null,'Cancellation needs explicit confirmation');
 select set_config('event.q',public.event_checkout('cancel','94000000-0000-4000-8000-000000000001',jsonb_build_object('quoteId',current_setting('event.q')::jsonb->>'id','reason','Synthetic change of plans','confirmed',true))::text,true);
 select is(current_setting('event.q')::jsonb->>'status','cancelled','Member can cancel a paid event');
+select is((select count(*)::int from private.booking_notice_outbox
+ where aggregate_id=(current_setting('event.q')::jsonb->>'id')::uuid and kind='event' and stage='cancelled'
+ and payload#>>'{sessions,0,id}'=current_setting('event.q')::jsonb->>'bookingId'),1,
+ 'Cancelling a confirmed event sends a calendar cancellation using the same booking ID');
+
 select is((current_setting('event.q')::jsonb->>'refund_due_paise')::bigint,375000::bigint,'Early cancellation records a 50% refund due');
 select is((select status::text from public.bookings where id=(current_setting('event.q')::jsonb->>'bookingId')::uuid),'cancelled','Cancellation cancels the booking');
 select ok((select revoked_at is not null from public.paid_access_entitlements where id=(current_setting('event.q')::jsonb->>'entitlement_id')::uuid),'Cancellation revokes event access');

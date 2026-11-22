@@ -96,6 +96,7 @@ export function GoldenPassCheckout({ memberId, application }: { memberId: string
     {!pass && !error && <p role="status">Checking your Golden Pass status…</p>}
     {pass?.status === "active" && <section>
       <h3>Golden Pass active</h3>
+      <Link className="button button-primary" to="/my-bookings">My Bookings</Link>
       {pass.startsAt && pass.endsAt && <p>{formatPassDate(pass.startsAt)} to {formatPassDate(pass.endsAt)} (end date exclusive)</p>}
     </section>}
     {pass?.refundRequestedAt && <p role="status">Refund requested on {formatPassDate(pass.refundRequestedAt)}. Staff will review it.</p>}

@@ -39,7 +39,7 @@ const kinds: Record<string, string> = {
 const money = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" });
 const ist = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Kolkata", year: "numeric", month: "2-digit", day: "2-digit" });
 const istTime = new Intl.DateTimeFormat("en-IN", { timeZone: "Asia/Kolkata", hour: "numeric", minute: "2-digit", hour12: true });
-const hours = (booking: BookingRecord) => booking.startsAt && booking.endsAt
+const hours = (booking: BookingRecord) => booking.kind !== "cabin" && booking.startsAt && booking.endsAt
   ? `${istTime.format(new Date(booking.startsAt))}–${istTime.format(new Date(booking.endsAt))} IST`
   : null;
 const seat = (chair: string) => /^S0?\d+$/.test(chair) ? chair.replace(/^S0/, "S") + " · Ground floor" : chair;
@@ -110,7 +110,7 @@ export function MyBookingsView({ load }: { load: LoadHistory }) {
       {quoteId && history && (receipt ? <BookingStatusCard kicker={kindLabel(receipt)} title={receipt.title}
         status={labels[receipt.status] ?? "Booking on record"} tone={goodStatus(receipt.status) ? "done" : "neutral"} reference={receipt.quoteId}
         rows={[
-          { label: "Dates", value: <>{dates(receipt)}{hours(receipt) && <><br />{hours(receipt)}</>}</> },
+          { label: receipt.kind === "cabin" ? "Rental dates" : "Dates", value: <>{dates(receipt)}{hours(receipt) && <><br />{hours(receipt)}</>}</> },
           ...(receipt.chair ? [{ label: "Reserved seat", value: seat(receipt.chair) }] : []),
           ...(receipt.fallback ? [{ label: "Relocated seat", value: receipt.fallback + " · First floor" }] : []),
           { label: "Location", value: legalEntity.labAddress.formatted },

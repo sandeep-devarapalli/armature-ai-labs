@@ -127,7 +127,7 @@ function EventCheckout({ canBook, memberId }: { canBook: boolean; memberId: stri
       rows={[{ label: "Guests", value: quote.attendees }, ...(quote.purpose.length > 60 ? [{ label: "Event", value: quote.purpose }] : []), { label: "GST", value: "Not added", money: true },
         { label: "Hire charge", value: money(quote.amountPaise), money: true, total: true }]}
       details={["awaiting_staff", "awaiting_signatures"].includes(quote.status) ? <p>Armature checks the date and setup, then sends the agreement through PandaDoc. You sign first and Armature countersigns. Payment opens for 30 minutes after staff approve the signed agreement. <a href="mailto:hello@armatureailabs.com">Contact Armature about this request</a>.</p> : undefined}
-      actions={<><button className="button secondary" disabled={locked} onClick={() => void run(() => status(quote.quoteId))}>Check agreement or payment status</button>
+      actions={<>{quote.status === "confirmed" && <Link className="button button-primary" to="/my-bookings">My Bookings</Link>}<button className="button secondary" disabled={locked} onClick={() => void run(() => status(quote.quoteId))}>Check agreement or payment status</button>
         {!quote.hasOrder && !quote.orderPending && <button className="button secondary" disabled={locked} onClick={() => { setQuote(null); setConsent(false); }}>Request another event</button>}</>}>
       {(quote.status === "approved" || quote.status === "awaiting_payment") && <>
         <h4>Payment</h4>

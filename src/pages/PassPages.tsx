@@ -79,7 +79,10 @@ function GuestRequests() {
       {passes?.map(pass => <article className="pass-request" key={pass.id}>
         <strong>{formatPassDate(pass.visit_date)} · {guestPassLabels[pass.status]}</strong>
         <p>{pass.details}</p>
-        {pass.status === "approved" && <p>Show <strong className="mono">{pass.reference}</strong> at reception on your approved date.</p>}
+        {pass.status === "approved" && <>
+          <p>Show <strong className="mono">{pass.reference}</strong> at reception on your approved date.</p>
+          <Link className="button button-primary" to="/my-bookings">My Bookings</Link>
+        </>}
         {pass.staff_note && <p>{pass.staff_note}</p>}
         {pass.status === "alternate" && pass.offered_date && <p>
           Offered date {formatPassDate(pass.offered_date)}{" "}

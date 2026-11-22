@@ -7,7 +7,7 @@ export const bookingTimeZone = "Asia/Kolkata";
 
 export type BookingSession = { id: string; startsAt: string; endsAt: string };
 type BookingNotice = {
-  kind: "day" | "week" | "month" | "guest" | "cabin" | "equipment";
+  kind: "day" | "week" | "month" | "guest" | "cabin" | "equipment" | "event";
   reference: string;
   stage: "received" | "alternate" | "signing" | "payment_due" | "deposit_verified" | "confirmed" | "updated" | "cancelled" | "declined";
   sessions?: BookingSession[];
@@ -17,7 +17,7 @@ type BookingNotice = {
 
 const titles = {
   day: "Day Pass", week: "Week Pass", month: "Month Pass", guest: "Guest Pass",
-  cabin: "Cabin Booking", equipment: "Equipment Booking",
+  cabin: "Cabin Booking", equipment: "Equipment Booking", event: "Event Booking",
 };
 const stages = {
   received: "Request received", alternate: "Alternate date offered", signing: "Agreement ready", payment_due: "Payment instructions available",
@@ -71,7 +71,7 @@ export function bookingNotice(input: BookingNotice) {
   });
   const url = new URL("https://armatureailabs.com/bookings/");
   url.searchParams.set("item", input.kind === "guest" ? "guest" : input.kind === "cabin"
-    ? "cabin" : input.kind === "equipment" ? "kit" : "desk");
+    ? "cabin" : input.kind === "equipment" ? "kit" : input.kind === "event" ? "event" : "desk");
   url.hash = "steps";
   return {
     subject: `${title} · ${stages[input.stage]} · ${labName}`,
