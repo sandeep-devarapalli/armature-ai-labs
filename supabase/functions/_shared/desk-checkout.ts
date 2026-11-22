@@ -76,9 +76,7 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
   const manualPilot = live && Deno.env.get(config.prefix + "MANUAL_AGREEMENT_ENABLED") === "true";
   const enabled = Deno.env.get(config.enabled) === "true" && (!live || Boolean(liveWebhookSettings(razor)));
   const policyVersion = live ? Deno.env.get("LIVE_DESK_POLICY_VERSION") ?? "" : "";
-  if (Deno.env.get("SUPABASE_URL") !== config.backend || (!live && !enabled)
-      || !new RegExp("^rzp_" + mode + "_[A-Za-z0-9]+$").test(key) || !secret
-      || (live && !/^[A-Za-z0-9._-]{4,80}$/.test(policyVersion)) || (!directCheckout && ((!pandaKey && !manualPilot) || !staffSigner))) {
+  if (Deno.env.get("SUPABASE_URL") !== config.backend) {
     return reply({ error: live ? "checkout_not_configured" : "test_checkout_not_configured" }, 503);
   }
   const releasedChair = (code?: string) => /^S(0[1-9]|1[0-3])$/.test(code ?? "");
@@ -98,6 +96,24 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
     if (!input || typeof input !== "object" || typeof input.action !== "string") throw new Rejected(400, "invalid_request");
     const client = adminClient();
     const action = input.action;
+    if (action === "booking_history") {
+      const offset = input.offset ?? 0;
+      const quoteId = input.quoteId ?? null;
+      if (!live || !Number.isInteger(offset) || offset < 0 || offset > 2147483597
+        || (quoteId !== null && (typeof quoteId !== "string" || !pattern.test(quoteId) || offset !== 0))) {
+        throw new Rejected(400, "invalid_request");
+      }
+      const { data, error } = await client.rpc("list_booking_history", {
+        p_member: user.id, p_quote: quoteId, p_offset: offset,
+      }).abortSignal(AbortSignal.timeout(10000));
+      if (error || !data) throw new Rejected(503, "checkout_state_unavailable");
+      return reply(data);
+    }
+    if ((!live && !enabled)
+        || !new RegExp("^rzp_" + mode + "_[A-Za-z0-9]+$").test(key) || !secret
+        || (live && !/^[A-Za-z0-9._-]{4,80}$/.test(policyVersion)) || (!directCheckout && ((!pandaKey && !manualPilot) || !staffSigner))) {
+      return reply({ error: live ? "checkout_not_configured" : "test_checkout_not_configured" }, 503);
+    }
     if (!enabled && !["status", "verify", "list_own", "staff_queue", "staff_overview", "staff_detail", "manual_review", "recover_order"].includes(action)) throw new Rejected(503, "checkout_disabled");
     if (live && (action === "desk_calendar" || action === "desk_calendar_chairs")) {
       const date = /^\d{4}-\d{2}-\d{2}$/;
@@ -143,7 +159,7 @@ export async function handleDeskCheckout(request: Request, mode: "test" | "live"
         await requireStaff(user.id, ["admin", "super_admin"]);
       }
       const offset = input.offset ?? 0;
-      if (!Number.isInteger(offset) || offset < 0 || offset > 10000) throw new Rejected(400, "invalid_request");
+      if (!Number.isInteger(offset) || offset < 0 || offset > 2147483597) throw new Rejected(400, "invalid_request");
       const { data, error } = await client.rpc("list_desk_requests", {
         p_member: user.id, p_staff: staff, p_offset: offset,
       }).abortSignal(AbortSignal.timeout(10000));

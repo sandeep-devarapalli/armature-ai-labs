@@ -21,6 +21,7 @@ const ResourceFeedbackAdminPage = lazy(() => import("../pages/ResourceFeedbackPa
 
 const GoldenPassPage = lazy(() => import("../pages/PassPages").then(module => ({ default: module.GoldenPassPage })));
 const PassStaffPage = lazy(() => import("../pages/PassPages").then(module => ({ default: module.PassStaffPage })));
+const MyBookingsPage = lazy(() => import("../pages/MyBookingsPage"));
 const BookLabPage = lazy(() => import("../pages/BookLabPage"));
 const EquipmentRentalPage = lazy(() => import("../pages/EquipmentRentalPage"));
 const OnboardingPage = lazy(() => import("../pages/OnboardingPage").then((module) => ({ default: module.OnboardingPage })));
@@ -171,6 +172,7 @@ export const routes: RouteObject[] = [
       { path: "/golden-pass", element: <ReleaseGate enabled={basicOnboardingAvailable}><GoldenPassPage /></ReleaseGate> },
       { path: "/admin/passes", element: <ReleaseGate enabled={basicOnboardingAvailable}><PassStaffPage /></ReleaseGate> },
       { path: "/admin/booking-management", element: <ReleaseGate enabled={basicOnboardingAvailable}><PassStaffPage bookingManagement /></ReleaseGate> },
+      { path: "/my-bookings/:quoteId?", element: <MyBookingsPage /> },
       { path: "/bookings", element: publicBookingsAvailable ? <BookLabPage /> : memberFeature(protectedPage(<BookingsPage />)) },
       ...(rentalCheckoutAvailable ? [{ path: "/bookings/equipment", element: <EquipmentRentalPage /> }, { path: "/bookings/equipment/:code", element: <EquipmentRentalPage /> }] : []),
       { path: "/bookings/:id", element: memberFeature(protectedPage(<BookingDetailPage />)) },

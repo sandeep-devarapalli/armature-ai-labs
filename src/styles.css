@@ -5931,3 +5931,17 @@ input[type="checkbox"]:focus-visible, input[type="radio"]:focus-visible { outlin
   padding-top: .5rem;
 }
 .desk-booking-receipt .booking-summary dd { margin: .25rem 0 0; text-align: start; }
+
+.my-bookings-content { max-width: 960px; padding-block: 0 4rem; }
+.my-bookings-group { margin-bottom: 2rem; }
+.my-bookings-group h2 { margin-bottom: 0.75rem; }
+.my-bookings-group ul { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--hair); }
+.my-bookings-group li { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 1rem; padding: 0.9rem 0; border-bottom: 1px solid var(--hair); }
+.my-bookings-group li div { display: grid; gap: 0.2rem; }
+.my-bookings-group li div span { font-size: 0.875rem; }
+.my-bookings-group li a { display: inline-flex; align-items: center; min-height: 44px; }
+@media (max-width: 600px) {
+  .my-bookings-group li { grid-template-columns: minmax(0, 1fr) auto; gap: 0.2rem 0.75rem; }
+  .my-bookings-group li a { grid-column: 1 / -1; justify-self: start; }
+}
+.my-bookings-payment { justify-items: start; }
