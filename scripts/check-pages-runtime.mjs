@@ -32,6 +32,14 @@ async function waitForRuntime() {
 }
 
 async function runSmokeCheck() {
+  const reference = "e0000000-0000-4000-8000-000000000001";
+  const callback = await fetch("http://127.0.0.1:8788/api/event-payment-return?booking=" + reference, {
+    method: "POST", redirect: "manual", body: new URLSearchParams({ razorpay_signature: "fixture" })
+  });
+  if (callback.status !== 303 || callback.headers.get("location") !== "/bookings/?item=event&paymentReturn=" + reference + "#steps") {
+    throw new Error("The Event Space payment return did not redirect to the saved booking.");
+  }
+
   for (const script of ["scripts/check-live-release.mjs", "scripts/check-seo-http.mjs"]) {
     const check = spawn(process.execPath, [script, "http://127.0.0.1:8788"], { stdio: "inherit" });
     const [code] = await once(check, "exit");

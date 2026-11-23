@@ -18,6 +18,7 @@ export function onboardingAuthReturnPath(value: unknown, basicOnly: boolean) {
   const pathname = safe.split(/[?#]/)[0];
   if (/^\/bookings\/?$/.test(pathname)) {
     if (import.meta.env.VITE_DESK_CHECKOUT_ENABLED === "true") return safe;
+    if (import.meta.env.VITE_EVENT_CHECKOUT_ENABLED === "true" && new URL(safe, "https://armature.invalid").searchParams.get("item") === "event") return safe;
     if (import.meta.env.VITE_BASIC_ONBOARDING_ENABLED === "true" && new URL(safe, "https://armature.invalid").searchParams.get("item") === "guest") return safe;
   }
   if (import.meta.env.VITE_BASIC_ONBOARDING_ENABLED === "true" && /^\/(golden-pass|admin\/passes)\/?$/.test(pathname)) return safe;

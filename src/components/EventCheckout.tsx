@@ -38,17 +38,22 @@ export function EventBooking() {
   const { account, signedIn } = useAccount();
   const { pathname, search } = useLocation();
   const verified = accountMembershipLevelsEnabled(account) && ["verified", "premium"].includes(account?.membership_level ?? "");
-  return signedIn && account?.user_id ? <EventCheckout key={account.user_id} memberId={account.user_id} canBook={verified} />
+  const reference = new URLSearchParams(search).get("paymentReturn") ?? "";
+  const paymentReturn = /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(reference) ? reference : "";
+  return signedIn && account?.user_id ? <EventCheckout key={account.user_id + paymentReturn} memberId={account.user_id}
+    canBook={verified} paymentReturn={paymentReturn} />
     : <p><Link to={"/auth?next=" + encodeURIComponent(pathname + search)} className="button button-primary">Sign in to book the event space</Link></p>;
 }
 
-function EventCheckout({ canBook, memberId }: { canBook: boolean; memberId: string }) {
+function EventCheckout({ canBook, memberId, paymentReturn }: { canBook: boolean; memberId: string; paymentReturn: string }) {
   const request = <T,>(body: object) => invokeEvent<T>(body, memberId);
   const { refresh } = useAccount();
   const [day, setDay] = useState(""), [slots, setSlots] = useState<EventAvailability | null>(null);
   const [start, setStart] = useState("10:00");
   const [quote, setQuote] = useState<EventQuote | null>(null), [recent, setRecent] = useState<EventQuote[]>([]);
   const [busy, setBusy] = useState(false), [error, setError] = useState("");
+  const [checkingReturn, setCheckingReturn] = useState(Boolean(paymentReturn));
+  const receipt = useRef<HTMLDivElement>(null);
   const [consent, setConsent] = useState(false), [checkoutOpen, setCheckoutOpen] = useState(false);
   const active = useRef(true), working = useRef(false), checkout = useRef<CheckoutInstance | null>(null);
   useEffect(() => { active.current = true; return () => { active.current = false; checkout.current?.close(); }; }, []);
@@ -60,6 +65,28 @@ function EventCheckout({ canBook, memberId }: { canBook: boolean; memberId: stri
       .catch(reason => { if (current && active.current) setError(reason instanceof Error ? reason.message : "Availability could not be loaded."); });
     return () => { current = false; };
   }, [day, memberId]);
+  useEffect(() => {
+    if (!paymentReturn) return;
+    let current = true;
+    async function restorePayment() {
+      for (let attempt = 0; attempt < 5; attempt++) {
+        if (attempt) await new Promise(resolve => window.setTimeout(resolve, 2000));
+        if (!current) return;
+        const result = await invokeEvent<EventQuote>({ action: "status", quoteId: paymentReturn }, memberId);
+        if (!current) return;
+        setQuote(result);
+        if (result.status === "confirmed") await refresh();
+        if (result.status !== "awaiting_payment") return;
+      }
+    }
+    void restorePayment().catch(reason => {
+      if (current) setError(reason instanceof Error ? reason.message : "Could not check payment. Open your event request to check the status.");
+    }).finally(() => { if (current) setCheckingReturn(false); });
+    return () => { current = false; };
+  }, [memberId, paymentReturn, refresh]);
+  useEffect(() => {
+    if (paymentReturn && !checkingReturn) receipt.current?.focus();
+  }, [checkingReturn, paymentReturn]);
   async function run(action: () => Promise<void>) {
     if (!active.current || working.current) return;
     working.current = true; setBusy(true); setError("");
@@ -86,19 +113,17 @@ function EventCheckout({ canBook, memberId }: { canBook: boolean; memberId: stri
     if (!active.current) return;
     const modal = new Razorpay({ key: order.keyId, order_id: order.orderId, amount: order.amountPaise, currency: "INR",
       name: "Armature AI Labs", description: `Event space, ${q.date}, ${q.hours} hour${q.hours > 1 ? "s" : ""}`,
-      handler: callback => {
-        if (!active.current) return;
-        setCheckoutOpen(false); checkout.current = null;
-        void run(async () => { const result = await request<EventQuote>({ action: "verify", quoteId: q.quoteId, ...callback });
-          if (active.current) { showQuote(result); await refresh(); } });
-      }, modal: { ondismiss: () => { checkout.current = null; if (active.current) setCheckoutOpen(false); } } });
+      callback_url: new URL("/api/event-payment-return?booking=" + encodeURIComponent(q.quoteId), window.location.origin).href,
+      redirect: true,
+      modal: { ondismiss: () => { checkout.current = null; if (active.current) setCheckoutOpen(false); } } });
     modal.on("payment.failed", () => { if (active.current) setError("Payment attempt failed. Check status before trying again."); });
-    checkout.current = modal; setCheckoutOpen(true); modal.open();
+    checkout.current = modal; setCheckoutOpen(true);
+    try { modal.open(); } catch (reason) { checkout.current = null; setCheckoutOpen(false); throw reason; }
   }
   const direct = quote?.directCheckout ?? !quote;
   const step = quote ? stepFor[quote.status] ?? 1 : 0;
   const latest = slots ? 23 - Number(start.slice(0, 2)) : 1;
-  const locked = busy || checkoutOpen;
+  const locked = busy || checkoutOpen || checkingReturn;
   return <div className="event-checkout booking-flow">
     <BookingSteps label="Event booking steps" steps={direct ? directSteps : agreementSteps} current={direct && step >= 3 ? step - 1 : step} />
     {eventMode === "test" && <p className="booking-notice" role="status">Test bookings · no real event or charge.</p>}
@@ -109,7 +134,7 @@ function EventCheckout({ canBook, memberId }: { canBook: boolean; memberId: stri
     })}>Find my event requests</button></p>
     {recent.length > 0 && <div className="booking-recent">{recent.map(item => <button key={item.quoteId} className="button secondary" disabled={locked}
       onClick={() => void run(() => status(item.quoteId))}>{bookingDates(item.date)} · {item.startTime} · {statusOf(item)[0]}</button>)}</div>}
-    {!quote ? <form className="ol-form" onSubmit={event => { event.preventDefault(); const fields = new FormData(event.currentTarget);
+    {checkingReturn ? <p role="status">Checking your Event Space payment with Razorpay…</p> : !quote ? <form className="ol-form" onSubmit={event => { event.preventDefault(); const fields = new FormData(event.currentTarget);
       void run(async () => { const result = await request<EventQuote>({ action: "quote", date: day, startTime: start,
         hours: Number(fields.get("hours")), attendees: Number(fields.get("attendees")), purpose: String(fields.get("purpose") ?? "").trim() });
         if (active.current) showQuote(result); }); }}>
@@ -128,7 +153,7 @@ function EventCheckout({ canBook, memberId }: { canBook: boolean; memberId: stri
         placeholder="For example: a robotics meetup with two short talks and live arm demos" /></label>
       <p>Armature reviews your date and setup before opening payment. The time is reserved once payment is confirmed.</p>
       <button className="button" disabled={busy || !canBook || !slots || slots.closed}>Request the event space</button>
-    </form> : <div aria-live="polite"><BookingStatusCard kicker="Event space" title={quote.purpose.length > 60 ? quote.purpose.slice(0, 57) + "…" : quote.purpose}
+    </form> : <div ref={receipt} tabIndex={-1} aria-live="polite"><BookingStatusCard kicker="Event space" title={quote.purpose.length > 60 ? quote.purpose.slice(0, 57) + "…" : quote.purpose}
       when={`${bookingDates(quote.date)}, ${quote.startTime}–${endTime(quote.startTime, quote.hours)} (${quote.hours} hour${quote.hours > 1 ? "s" : ""})`}
       status={statusOf(quote)[0]} tone={statusOf(quote)[1]} next={nextStep(quote)} reference={quote.quoteId}
       rows={[{ label: "Guests", value: quote.attendees }, ...(quote.purpose.length > 60 ? [{ label: "Event", value: quote.purpose }] : []), { label: "GST", value: "Not added", money: true },
