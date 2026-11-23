@@ -20,7 +20,7 @@ async function listAssetFiles(directory, prefix = "") {
 const assetFiles = await listAssetFiles(path.resolve("dist/assets"));
 const functionRoutes = {
   version: 1,
-  include: ["/assets/*"],
+  include: ["/assets/*", "/api/event-payment-return"],
   exclude: assetFiles.map((asset) => `/assets/${asset}`).sort()
 };
 const allRoutes = [...functionRoutes.include, ...functionRoutes.exclude];

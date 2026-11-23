@@ -21,7 +21,7 @@ const quote = { quoteId: "e0000000-0000-4000-8000-000000000001", date: "2027-03-
   purpose: "Robotics meetup with demos", startsAt: "", endsAt: "", rentPaise: 500000, amountPaise: 500000, agreementHash: "a".repeat(64),
   policyVersion: "event-v1", approvedAt: null, hasAgreement: false, hasOrder: false, orderPending: false, refundDuePaise: null, declineReason: null, status: "awaiting_staff" };
 const current = () => screen.queryByRole("listitem", { current: "step" })?.textContent;
-const show = () => render(<StrictMode><MemoryRouter><EventBooking /></MemoryRouter></StrictMode>);
+const show = (path = "/") => render(<StrictMode><MemoryRouter initialEntries={[path]}><EventBooking /></MemoryRouter></StrictMode>);
 async function open(fields: object) {
   mock.request.mockImplementation(async body => body.action === "list_own" ? { quotes: [{ ...quote, ...fields }] } : { ...quote, ...fields });
   show();
@@ -105,7 +105,17 @@ it("pays only an order that matches the approved amount", async () => {
   mock.request.mockResolvedValueOnce({ keyId: "rzp_test_abc", orderId: "order_1", amountPaise: 500000, currency: "INR" });
   fireEvent.click(pay);
   await waitFor(() => expect(mock.open).toHaveBeenCalled());
-  expect(mock.checkout).toHaveBeenCalledWith(expect.objectContaining({ amount: 500000, order_id: "order_1" }));
+  expect(mock.checkout).toHaveBeenCalledWith(expect.objectContaining({ amount: 500000, order_id: "order_1", redirect: true,
+    callback_url: window.location.origin + "/api/event-payment-return?booking=" + quote.quoteId }));
+});
+
+it("automatically restores the confirmed receipt on return from Razorpay", async () => {
+  mock.request.mockResolvedValue({ ...quote, directCheckout: true, status: "confirmed" });
+  show("/bookings/?item=event&paymentReturn=" + quote.quoteId + "#steps");
+  expect(await screen.findByRole("link", { name: "My Bookings" })).toBeVisible();
+  expect(mock.request).toHaveBeenCalledWith({ action: "status", quoteId: quote.quoteId }, "host");
+  expect(mock.request.mock.calls.every(([body]) => body.action === "status")).toBe(true);
+  expect(mock.open).not.toHaveBeenCalled();
 });
 
 it("updates the request list after recovering a captured payment", async () => {

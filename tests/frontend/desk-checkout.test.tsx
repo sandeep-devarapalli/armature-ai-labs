@@ -106,7 +106,9 @@ it("quotes an available chair, waits for signatures, submits versioned consent a
   await waitFor(() => expect(open).toHaveBeenCalledOnce());
   expect(actions).toHaveBeenCalledWith({ action: "order", quoteId, policyVersion, acceptedPolicies: true });
   expect(options).toMatchObject({ key: "rzp_live_fixture", order_id: "order_Fixture", amount: 35000, currency: "INR" });
-  await act(async () => options?.handler({
+  const checkoutHandler = options && "handler" in options ? options.handler : undefined;
+  expect(checkoutHandler).toBeTypeOf("function");
+  await act(async () => checkoutHandler?.({
     razorpay_order_id: "order_Fixture", razorpay_payment_id: "pay_Fixture", razorpay_signature: "callback-signature",
   }));
   expect(actions).toHaveBeenCalledWith({

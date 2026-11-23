@@ -4,16 +4,20 @@ export interface CheckoutResult {
   razorpay_signature: string;
 }
 
-export interface CheckoutOptions {
+type CheckoutBaseOptions = {
   key: string;
   order_id: string;
   amount: number;
   currency: "INR";
   name: string;
   description: string;
-  handler: (result: CheckoutResult) => void;
   modal: { ondismiss: () => void };
-}
+};
+
+export type CheckoutOptions = CheckoutBaseOptions & (
+  { handler: (result: CheckoutResult) => void } |
+  { callback_url: string; redirect: true }
+);
 
 export interface CheckoutInstance {
   open: () => void;

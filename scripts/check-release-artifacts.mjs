@@ -18,8 +18,8 @@ const routes = JSON.parse(await readFile(path.resolve("dist/_routes.json"), "utf
 const expectedExcludes = assetFiles.map((asset) => `/assets/${asset}`);
 const allRoutes = [...routes.include, ...routes.exclude];
 
-if (routes.version !== 1 || JSON.stringify(routes.include) !== JSON.stringify(["/assets/*"])) {
-  throw new Error("dist/_routes.json must route only unknown /assets/* requests through Functions.");
+if (routes.version !== 1 || JSON.stringify(routes.include) !== JSON.stringify(["/assets/*", "/api/event-payment-return"])) {
+  throw new Error("dist/_routes.json must route unknown assets and the Event Space payment return through Functions.");
 }
 if (JSON.stringify(routes.exclude) !== JSON.stringify(expectedExcludes)) {
   throw new Error("dist/_routes.json must exclude every built asset from Functions.");
