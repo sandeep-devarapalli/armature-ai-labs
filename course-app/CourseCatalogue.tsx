@@ -12,6 +12,7 @@ const editorial: Record<string, { subject: string; title: string; summary: strin
   'ros2-for-robotics': { subject: 'Robotics', title: 'ROS 2 for Robotics', summary: 'Build robot software with ROS 2, from your first node to a robot that maps and navigates by itself.' },
   'computer-networking-for-robotics': { subject: 'Robotics', title: 'Computer Networking for Robotics', summary: 'Learn how robots talk, from the cable inside one rover to a whole fleet reporting to the cloud.' },
   'robotic-manipulation': { subject: 'Robotics', title: 'Robotic Manipulation', summary: 'Teach a robot arm to see objects in 3D, grasp them in clutter and learn new skills, with an autograded Python assignment in every module.' },
+  'mobile-robots-reasoning': { subject: 'Robotics', title: 'Mobile Robots That Reason', summary: 'Teach a robot to localise, map and plan under uncertainty, on wheels and in the air, with an autograded Python assignment in every module.' },
   'computation-structures': { subject: 'Computing', title: 'Computation Structures', summary: 'Follow the computer design hierarchy from logic gates to processors and memory.' },
   'embedded-firmware': { subject: 'Computing', title: 'Embedded Firmware Fundamentals', summary: 'Learn firmware, drivers, debugging, motor control and real-time systems.' },
   'operating-systems': { subject: 'Computing', title: 'Operating Systems', summary: 'See how one computer shares its processor, memory and disk among many programs.' },
