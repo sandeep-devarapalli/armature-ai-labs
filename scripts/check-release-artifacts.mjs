@@ -15,14 +15,17 @@ async function listAssetFiles(directory, prefix = "") {
 
 const assetFiles = (await listAssetFiles(path.resolve("dist/assets"))).sort();
 const routes = JSON.parse(await readFile(path.resolve("dist/_routes.json"), "utf8"));
-const expectedExcludes = assetFiles.map((asset) => `/assets/${asset}`);
+const include = ["/assets/*", "/api/event-payment-return"];
+const expectedExcludes = assetFiles.map((asset) => `/assets/${asset}`)
+  .filter((route) => route.length <= 100)
+  .slice(0, 100 - include.length);
 const allRoutes = [...routes.include, ...routes.exclude];
 
-if (routes.version !== 1 || JSON.stringify(routes.include) !== JSON.stringify(["/assets/*", "/api/event-payment-return"])) {
+if (routes.version !== 1 || JSON.stringify(routes.include) !== JSON.stringify(include)) {
   throw new Error("dist/_routes.json must route unknown assets and the Event Space payment return through Functions.");
 }
 if (JSON.stringify(routes.exclude) !== JSON.stringify(expectedExcludes)) {
-  throw new Error("dist/_routes.json must exclude every built asset from Functions.");
+  throw new Error("dist/_routes.json must use the available exclusion rules for exact built asset paths.");
 }
 if (allRoutes.length > 100 || allRoutes.some((route) => route.length > 100)) {
   throw new Error("dist/_routes.json exceeds Cloudflare Pages routing limits.");
@@ -58,4 +61,4 @@ if (blogPosting?.image?.url !== coverUrl || blogPosting.image.width !== 1672 || 
 }
 articleDom.window.close();
 
-console.log(`Release artifacts verified: ${assetFiles.length} static assets bypass Functions.`);
+console.log(`Release artifacts verified: ${routes.exclude.length} static assets bypass Functions and ${assetFiles.length - routes.exclude.length} use the asset Function.`);
