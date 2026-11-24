@@ -14,6 +14,10 @@ export function assertCourseProduction(env) {
   throw new Error('Production requires an Armature publishable key or unexpired anon key.');
 }
 
+// The code-assignment grader runs Python (Pyodide) in a worker served from /grader/. Pyodide needs eval and WebAssembly
+// compilation, so the worker gets its own policy; it may load scripts and data only from this site. The page policy is unchanged.
+export const graderCsp = "default-src 'none'; script-src 'self' 'unsafe-eval' 'wasm-unsafe-eval'; connect-src 'self'; base-uri 'none'";
+
 export function courseHostingAssets(backend) {
   const origin = new URL(backend).origin;
   return {
@@ -26,6 +30,12 @@ export function courseHostingAssets(backend) {
   Strict-Transport-Security: max-age=31536000; includeSubDomains
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
   Content-Security-Policy: default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://media.armatureailabs.com; font-src 'self' data:; connect-src 'self' ${origin} https://cloudflareinsights.com; frame-src https://armatureailabs.com; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'
+/pyodide/*
+  ! Cache-Control
+  Cache-Control: public, max-age=31536000, immutable
+/grader/*
+  ! Content-Security-Policy
+  Content-Security-Policy: ${graderCsp}
 `,
     'robots.txt': 'User-agent: *\nDisallow: /\n',
     '404.html': '<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Page not found · Armature AI Labs</title><main><h1>Page not found</h1><p><a href="/">Return to Armature courses</a></p></main></html>\n',

@@ -36,3 +36,13 @@ rewritten `Diagram` in `course-app/LessonBlocks.tsx`, the `.diagram-art-open` an
 `course-app/styles.css` (they replace the old `.diagram-expanded` rule), and `tests/frontend/course-diagram-viewer.test.tsx`.
 Keep them when building or deploying the courses site. Quick check after a build: the `MemberApp-*.js` chunk contains
 `Enlarged diagram` and the CSS contains `diagram-viewer-stage`. Release folder: output/courses-release-2026-11-14-r16.
+
+## Browser-graded code assignments (24 November 2026)
+
+Robotic Manipulation ends every module with a `code_assignment` lesson block: the learner edits Python in the lesson and runs pytest in their own browser (Pyodide 314.0.8 with NumPy, SciPy and pytest, served from this site under `/pyodide/314.0.8/`). Scores are progress only.
+
+- Frontend: `CodeAssignment.tsx`, `assignment-store.ts`, `grader/` (worker, Python runner, client, zip), the `code_assignment` case in `LessonBlocks.tsx`, the store provider in `MemberLesson.tsx`, the `assignment`, `saveAssignment` and `assignments` calls in `member-api.ts`, and the styles at the end of `styles.css`.
+- Hosting: `scripts/courses/pyodide.mjs` and `pyodide-manifest.json` pin every Pyodide file by SHA-256 (run `node scripts/courses/pyodide.mjs` once to fill `.cache/pyodide/314.0.8/`; the production build refuses to run without them). `release-config.mjs` adds two `_headers` rules after the site rule: `/pyodide/*` is cached as immutable, and `/grader/*` replaces the page CSP with the worker's own (eval and WebAssembly allowed, scripts and fetches from this site only). The page CSP is unchanged. `check-release.mjs` checks all of this.
+- Labs: online-quiz courses whose lab policy is `configured` now show lab checkpoints (`labsOn` in `MemberApp.tsx`, `labsOnly` in `LabReviews.tsx`).
+- Database: `supabase/migrations/202611240101_course_code_assignments.sql` (validator, `private.course_assignment_work`, `get_my_course_assignment`, `save_my_course_assignment`, `get_my_course_assignments`, lab RPCs on the online-quiz route), tested by `supabase/tests/database/077_course_code_assignments.sql`.
+- Upgrading Pyodide changes the Python minor version only if the new release does; course blocks carry compiled reference modules for Python 3.14, so a new minor version needs the course's assignment blocks rebuilt (`build/tools/compile_refs.mjs` and `assignment_blocks.py` in the course folder).

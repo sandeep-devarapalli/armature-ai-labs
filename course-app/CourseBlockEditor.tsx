@@ -12,7 +12,7 @@ interface Props {
 const names: Record<string, string> = {
   heading: 'Heading', text: 'Text', module_intro: 'Module introduction', definition: 'Definition',
   callout: 'Callout', list: 'List', table: 'Table', code: 'Code', math: 'Mathematics',
-  interactive_diagram: 'Interactive diagram', blockquote: 'Quotation', illustration: 'Diagram', micro_exercise: 'Micro-exercise', quiz: 'Practice quiz',
+  interactive_diagram: 'Interactive diagram', blockquote: 'Quotation', illustration: 'Diagram', micro_exercise: 'Micro-exercise', quiz: 'Practice quiz', code_assignment: 'Code assignment',
 };
 
 function BlockFields({ block, onChange }: { block: Block; onChange: (content: Block['content']) => void }) {
@@ -66,6 +66,8 @@ function BlockFields({ block, onChange }: { block: Block; onChange: (content: Bl
       </div>)}
       <label>Question {index + 1} explanation (HTML)<textarea value={question.explanation ?? ''} onChange={e => updateQuestion(index, { explanation: e.target.value })} /></label>
     </fieldset>)}</>;
+    case 'code_assignment': return <>{field('title', 'Assignment title')}{field('briefHtml', 'Assignment brief (HTML)', true)}
+      <p className="meta">Files and tests come from the course package and are kept as they are: {c.files?.length ?? 0} files, {c.tests?.length ?? 0} test files.</p></>;
     default: return <p>This block type is preserved but cannot be edited here.</p>;
   }
 }

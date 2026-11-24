@@ -11,8 +11,10 @@ const errorText = (error: unknown) => {
   return 'That did not go through. Please try again.';
 };
 
-export function AssessmentSummary({ assessment }: { assessment: LabAssessment }) {
+export function AssessmentSummary({ assessment, labsOnly = false }: { assessment: LabAssessment; labsOnly?: boolean }) {
   const a = assessment;
+  // Online-quiz courses with lab checkpoints have no supervised written test or assessed practical here.
+  if (labsOnly) return <ul className="lab-summary"><li><span>Lab checkpoints approved</span><strong>{a.labsApproved} of {a.labsRequired}</strong></li></ul>;
   const written = a.writtenScore === null || a.writtenScore === undefined ? 'not yet recorded'
     : `${a.writtenScore} / ${a.writtenTotal} (${a.writtenPassed ? 'passed' : 'not passed'}; pass mark ${a.writtenPassPercent} %)`;
   const practical = a.practicalPassed === null || a.practicalPassed === undefined ? 'not yet recorded' : a.practicalPassed ? 'passed' : 'not passed';
@@ -25,7 +27,7 @@ export function AssessmentSummary({ assessment }: { assessment: LabAssessment })
 }
 
 // Course overview: checkpoint statuses and the overall result for the signed-in learner.
-export function LabOverview({ api, versionId, refreshKey, onOpenModule }: { api: CourseApi; versionId: string; refreshKey: number; onOpenModule: (moduleId: string) => void }) {
+export function LabOverview({ api, versionId, refreshKey, onOpenModule, labsOnly = false }: { api: CourseApi; versionId: string; refreshKey: number; onOpenModule: (moduleId: string) => void; labsOnly?: boolean }) {
   const [data, setData] = useState<MyCourseLabs | null>(null);
   useEffect(() => {
     const abort = new AbortController();
@@ -36,7 +38,7 @@ export function LabOverview({ api, versionId, refreshKey, onOpenModule }: { api:
   return <div className="lab-overview"><h4>Your lab checkpoints</h4>
     {!data.enrolled ? <p className="meta">Enroll to record and submit your lab values.</p> : null}
     <ol>{data.labs.map((lab: LabCheckpoint) => <li key={lab.moduleId}><button type="button" className="link-button" onClick={() => onOpenModule(lab.moduleId)}>{lab.title}</button> <LabStatusBadge status={lab.submission?.status} /></li>)}</ol>
-    {data.assessment ? <AssessmentSummary assessment={data.assessment} /> : null}
+    {data.assessment ? <AssessmentSummary assessment={data.assessment} labsOnly={labsOnly} /> : null}
   </div>;
 }
 

@@ -1,6 +1,7 @@
 import { assertCourseProduction, courseHostingAssets } from './scripts/courses/release-config.mjs';
 import { defineConfig, loadEnv } from 'vite';
 import { resolveLessonDiagrams, type DiagramMap } from './scripts/courses/resolve-diagrams.mjs';
+import { manifest as pyodideManifest, pyodideDir, pyodidePrefix, readVerifiedPyodide } from './scripts/courses/pyodide.mjs';
 import react from '@vitejs/plugin-react';
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -34,6 +35,8 @@ export default defineConfig(({ command, mode }) => {
       for (const name of ['editable/lockup-light.svg', 'editable/lockup-dark.svg', 'fonts/SpaceMono-Regular.ttf', 'fonts/SpaceMono-Bold.ttf']) {
         this.emitFile({ type: 'asset', fileName: `brand/editorial-2026-09/${name}`, source: await readFile(path.resolve('public/brand/editorial-2026-09', name)) });
       }
+      // Python runtime for browser-graded code assignments (pinned and hash-checked; see scripts/courses/pyodide.mjs).
+      for (const file of await readVerifiedPyodide()) this.emitFile({ type: 'asset', fileName: pyodidePrefix + file.name, source: file.data });
     },
     configureServer(server) {
       server.middlewares.use(async (req, res, next) => {
@@ -65,6 +68,16 @@ export default defineConfig(({ command, mode }) => {
           } catch { res.statusCode = 503; res.end('Prepare the selected course package first.'); }
           return;
         }
+        if (url.pathname.startsWith('/' + pyodidePrefix)) {
+          const name = url.pathname.slice(pyodidePrefix.length + 1);
+          if (!Object.hasOwn(pyodideManifest.files, name)) { res.statusCode = 404; res.end(); return; }
+          try {
+            const data = await readFile(path.join(pyodideDir, name));
+            res.setHeader('Content-Type', name.endsWith('.mjs') ? 'text/javascript' : name.endsWith('.wasm') ? 'application/wasm' : name.endsWith('.json') ? 'application/json' : 'application/octet-stream');
+            res.end(data);
+          } catch { res.statusCode = 503; res.end('Run node scripts/courses/pyodide.mjs first.'); }
+          return;
+        }
         if (url.pathname.startsWith('/brand/editorial-2026-09/')) {
           const relative = url.pathname.slice('/brand/editorial-2026-09/'.length);
           const allowed = ['editable/lockup-light.svg', 'editable/lockup-dark.svg', 'fonts/SpaceMono-Regular.ttf', 'fonts/SpaceMono-Bold.ttf'];
@@ -83,6 +96,8 @@ export default defineConfig(({ command, mode }) => {
     fs: { allow: [process.cwd()], deny: ['**/.env*', '**/.git/**', '**/private-assessments/**', '**/course-content/**', `${path.resolve('output')}/**`, '**/course-generated/courses/**', '**/course-generated/catalog.json', '**/course-generated/diagrams/**', `${generated}/**`] }
   },
   build: { outDir: member ? '../dist-courses-member' : '../dist-courses', emptyOutDir: true },
+  // The grader worker lives under /grader/, where the hosting headers give it its own Content Security Policy.
+  worker: { format: 'es', rollupOptions: { output: { entryFileNames: 'grader/[name]-[hash].js', chunkFileNames: 'grader/[name]-[hash].js', assetFileNames: 'grader/[name]-[hash][extname]' } } },
   define: { __COURSES_LOCAL_PREVIEW__: JSON.stringify(command === 'serve' && !member), __COURSES_MEMBER_APP__: JSON.stringify(member) }
 });
 });

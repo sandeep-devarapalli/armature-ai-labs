@@ -1,6 +1,7 @@
 import { Component, lazy, Suspense, useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 const InteractiveDiagram = lazy(() => import('./interactive/InteractiveDiagram'));
+const CodeAssignment = lazy(() => import('./CodeAssignment'));
 import DOMPurify from 'dompurify';
 import katex from 'katex';
 import 'katex/dist/katex.min.css';
@@ -139,6 +140,7 @@ export function ContentBlock({ block }: { block: Block }) {
     case 'illustration': return <Diagram block={block} />;
     case 'interactive_diagram': return <InteractiveBoundary key={block.id} block={block}><Suspense fallback={<Diagram block={block} />}><InteractiveDiagram key={block.id} block={block} /></Suspense></InteractiveBoundary>;
     case 'micro_exercise': return <Exercise block={block} />;
+    case 'code_assignment': return <Suspense fallback={<p role="status">Loading the assignment…</p>}><CodeAssignment key={block.id} block={block} /></Suspense>;
     case 'quiz': return <section className="quiz"><h3>Check your understanding</h3><p className="meta">Practice only · does not award certification</p>{c.questions?.map((q, i) => <PracticeQuestion key={`${q.id}-${i}`} question={q} index={i} />)}</section>;
     default: return <div className="notice">Unsupported source content: {block.type}.<pre>{JSON.stringify(c, null, 2)}</pre></div>;
   }

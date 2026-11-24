@@ -1337,3 +1337,24 @@ blockquote {
 .lab-decision, .lab-record { border-top: 1px solid var(--line); margin-top: 1rem; padding-top: 1rem; display: grid; gap: .6rem; }
 .lab-history { font-size: .88rem; }
 @media (max-width: 760px) { .lab-review-layout { grid-template-columns: 1fr; } }
+
+/* Browser-graded code assignments (24 November 2026). */
+.code-assignment { margin: 28px 0; padding: 18px; border: 1px solid var(--line); border-radius: 6px; background: var(--panel); }
+.code-assignment header h2 { margin: 4px 0 12px; }
+.assignment-tabs { display: flex; flex-wrap: wrap; gap: .4rem; margin: 16px 0 8px; }
+.assignment-tabs button { display: inline-grid; gap: 1px; text-align: left; font: 12px 'Space Mono', monospace; }
+.assignment-tabs [aria-selected="true"] { border-color: var(--accent); color: var(--ink); background: var(--selection); }
+.assignment-tab-kind { font-size: 9px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+.assignment-editor textarea, .assignment-readonly { display: block; width: 100%; box-sizing: border-box; min-height: 26rem; max-height: 70vh; margin: 0;
+  padding: 14px; border: 1px solid var(--line); border-radius: 5px; background: var(--paper); color: var(--ink);
+  font: 12.5px/1.6 'Space Mono', ui-monospace, monospace; tab-size: 4; white-space: pre; overflow: auto; resize: vertical; }
+.assignment-readonly { background: var(--wash); }
+.assignment-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin: 12px 0 4px; }
+.assignment-scores { list-style: none; padding: 0; margin: 10px 0; display: grid; gap: .25rem; }
+.assignment-scores li { display: flex; justify-content: space-between; gap: 1rem; border-bottom: 1px dashed var(--line); padding: .2rem 0; }
+.assignment-results { margin-top: 14px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 5px; }
+.assignment-results.success { border-color: var(--success); background: var(--wash); }
+.assignment-results h3 { margin: 0 0 8px; font-size: 1rem; }
+.assignment-failures { margin: 6px 0; padding-left: 1.2rem; }
+.assignment-failures pre { overflow: auto; max-height: 22rem; padding: 10px; background: var(--paper); border: 1px solid var(--line); font: 11.5px/1.5 'Space Mono', monospace; white-space: pre; }
+@media (max-width: 700px) { .assignment-editor textarea, .assignment-readonly { min-height: 18rem; font-size: 12px; } }
