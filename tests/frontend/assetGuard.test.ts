@@ -19,10 +19,10 @@ describe("Cloudflare asset guard", () => {
     expect(await response.text()).toBe("Asset not found.");
   });
 
-  it("passes a real static asset response through unchanged", async () => {
+  it("preserves a real asset and applies immutable caching", async () => {
     const asset = new Response("export const ready = true", {
       status: 200,
-      headers: { "Content-Type": "application/javascript" }
+      headers: { "Content-Type": "application/javascript", ETag: '"fixture"' }
     });
 
     const response = await onRequest({
@@ -30,6 +30,10 @@ describe("Cloudflare asset guard", () => {
       env: { ASSETS: { fetch: vi.fn().mockResolvedValue(asset) } }
     });
 
-    expect(response).toBe(asset);
+    expect(response.status).toBe(200);
+    expect(response.headers.get("content-type")).toBe("application/javascript");
+    expect(response.headers.get("etag")).toBe('"fixture"');
+    expect(response.headers.get("cache-control")).toBe("public, max-age=31536000, immutable");
+    expect(await response.text()).toBe("export const ready = true");
   });
 });

@@ -11,7 +11,7 @@ export async function onRequest(context: AssetContext) {
   const response = await context.env.ASSETS.fetch(context.request);
   const contentType = response.headers.get("content-type")?.toLowerCase() ?? "";
 
-  if (contentType.includes("text/html")) {
+  if (response.status === 404 || contentType.includes("text/html")) {
     return new Response("Asset not found.", {
       status: 404,
       headers: {
@@ -22,5 +22,10 @@ export async function onRequest(context: AssetContext) {
     });
   }
 
+  if (response.ok || response.status === 304) {
+    const asset = new Response(response.body, response);
+    asset.headers.set("Cache-Control", "public, max-age=31536000, immutable");
+    return asset;
+  }
   return response;
 }
