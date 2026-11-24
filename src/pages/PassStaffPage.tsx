@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import VenturePassQueue from "../components/VenturePassQueue";
 import { DeskAgreementQueue } from "../components/DeskAgreementQueue";
-import { deskCheckoutAvailable, rentalCheckoutAvailable } from "../config/release";
+import { deskCheckoutAvailable, rentalCheckoutAvailable, venturePassAvailable } from "../config/release";
 import { supabase } from "../lib/supabase";
 import { MfaPanel } from "./MemberPages";
 import { EmptyState, Field, PageHeader, Status } from "../components/Primitives";
@@ -247,6 +248,8 @@ function SeatMoves() {
 
 export default function PassStaffPage({ bookingManagement = false }: { bookingManagement?: boolean }) {
   const { account, signedIn, loading, error, refresh } = useAccount();
+  const { hash } = useLocation();
+  const reviewPath = bookingManagement ? "/admin/booking-management" : "/admin/passes";
   const [view, setView] = useState<"approvals" | "desks" | "moves">("approvals");
   const admin = account?.role === "admin" || account?.role === "super_admin";
   const isStaff = account?.role === "membership_reviewer" || admin;
@@ -261,7 +264,10 @@ export default function PassStaffPage({ bookingManagement = false }: { bookingMa
         <button className="button button-quiet" type="button" aria-pressed={view === "desks"} onClick={() => setView("desks")}>Desk bookings</button>
         <button className="button button-quiet" type="button" aria-pressed={view === "moves"} onClick={() => setView("moves")}>Seat moves</button>
       </div>}
-      {!showDeskManagement || view === "approvals" ? <PassQueues key={account.user_id} showRentalReviews={bookingManagement && admin} />
+      {!showDeskManagement || view === "approvals" ? <>
+        {bookingManagement && admin && venturePassAvailable && <VenturePassQueue key={account.user_id} />}
+        <PassQueues key={account.user_id} showRentalReviews={bookingManagement && admin} />
+      </>
         : <div className="section"><div className="wrap">
           {view === "desks" ? <DeskAgreementQueue client={showDeskManagement} standalone /> : <SeatMoves />}
         </div></div>}
@@ -269,7 +275,7 @@ export default function PassStaffPage({ bookingManagement = false }: { bookingMa
       {loading ? <p role="status">Checking staff access…</p> : error ? <>
         <p role="alert">{error}</p><button className="button button-quiet" onClick={() => void refresh()}>Retry</button>
       </> : signedIn ? <p>This area is available to Armature staff.</p>
-        : <Link className="button button-primary" to={bookingManagement ? "/auth?next=%2Fadmin%2Fbooking-management" : "/auth?next=%2Fadmin%2Fpasses"}>Sign in</Link>}
+        : <Link className="button button-primary" to={"/auth?next=" + encodeURIComponent(reviewPath + hash)}>Sign in</Link>}
     </div></section>}
   </>;
 }

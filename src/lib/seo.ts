@@ -144,7 +144,7 @@ const organization: JsonLd = {
 
 const operationalNames: Record<string, string> = {
   onboarding: "Basic Membership", auth: "Sign In", dashboard: "Member Dashboard", profile: "Member Profile",
-  book: "Resource Booking", bookings: "Bookings", "golden-pass": "Golden Pass", "check-in": "Check In",
+  book: "Resource Booking", bookings: "Bookings", "golden-pass": "Golden Pass", "venture-partner-pass": "Venture Partner Pass", "check-in": "Check In",
   "component-requests": "Component Requests", inventory: "Inventory",
   team: "Meet the Team",
   lockers: "Lockers", consumables: "Small Parts", toolkits: "Toolkits",

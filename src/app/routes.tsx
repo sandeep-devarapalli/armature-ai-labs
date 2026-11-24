@@ -10,7 +10,8 @@ import {
   componentRequestsAvailable,
   publicBookingsAvailable, rentalCheckoutAvailable,
   equipmentPageAvailable,
-  memberPlatformAvailable
+  memberPlatformAvailable,
+  venturePassAvailable,
 } from "../config/release";
 
 const WhitePaperPage = lazy(() => import("../pages/WhitePaperPage").then(module => ({ default: module.WhitePaperPage })));
@@ -19,6 +20,7 @@ const HackathonPage = lazy(() => import("../pages/HackathonPages").then(module =
 const ResourceFeedbackPage = lazy(() => import("../pages/ResourceFeedbackPage").then(module => ({ default: module.ResourceFeedbackPage })));
 const ResourceFeedbackAdminPage = lazy(() => import("../pages/ResourceFeedbackPage").then(module => ({ default: module.ResourceFeedbackAdminPage })));
 
+const VenturePassPage = lazy(() => import("../pages/VenturePassPage"));
 const GoldenPassPage = lazy(() => import("../pages/PassPages").then(module => ({ default: module.GoldenPassPage })));
 const PassStaffPage = lazy(() => import("../pages/PassPages").then(module => ({ default: module.PassStaffPage })));
 const MyBookingsPage = lazy(() => import("../pages/BookLabPage").then(module => ({ default: module.MyBookingsPage })));
@@ -169,6 +171,7 @@ export const routes: RouteObject[] = [
       { path: "/book", element: memberFeature(protectedPage(<BookPage />)) },
       { path: "/book/:resource", element: memberFeature(protectedPage(<ResourceBookingPage />)) },
       { path: "/bookings/rentals", element: <Navigate to={rentalCheckoutAvailable ? "/bookings?item=cabin" : "/bookings"} replace /> },
+      { path: "/venture-partner-pass", element: <ReleaseGate enabled={venturePassAvailable}><VenturePassPage /></ReleaseGate> },
       { path: "/golden-pass", element: <ReleaseGate enabled={basicOnboardingAvailable}><GoldenPassPage /></ReleaseGate> },
       { path: "/admin/passes", element: <ReleaseGate enabled={basicOnboardingAvailable}><PassStaffPage /></ReleaseGate> },
       { path: "/admin/booking-management", element: <ReleaseGate enabled={basicOnboardingAvailable}><PassStaffPage bookingManagement /></ReleaseGate> },

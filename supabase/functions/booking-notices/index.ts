@@ -44,8 +44,10 @@ Deno.serve(async request => {
         const { data: account, error: accountError } = await client.auth.admin.getUserById(job.recipient_id);
         const recipient = account?.user?.email;
         if (accountError || !recipient || !account.user.email_confirmed_at ||
-          ((job.payload.kind === "golden_application" || job.payload.stage === "approval_required") &&
+          ((job.payload.kind === "golden_application" || job.payload.kind === "venture_application" || job.payload.stage === "approval_required") &&
             recipient.toLowerCase() !== bookingReviewInbox) ||
+          (job.payload.kind === "venture" && job.payload.stage === "approved" &&
+            !(Date.parse(job.payload.paymentExpiresAt) > Date.now())) ||
           (allowlist && recipient.toLowerCase() !== allowlist.toLowerCase()) ||
           /\.(?:test|invalid|example|localhost)$/i.test(recipient)) throw new Error("Undeliverable recipient");
         let memberName: string | undefined;

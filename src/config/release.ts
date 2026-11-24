@@ -30,3 +30,5 @@ export const eventCheckoutAvailable = basicOnboardingAvailable && enabled(import
 export const publicBookingsAvailable = basicOnboardingAvailable || deskCheckoutAvailable || rentalCheckoutAvailable || eventCheckoutAvailable;
 
 export const equipmentSaleAvailable = rentalCheckoutAvailable && enabled(import.meta.env.VITE_EQUIPMENT_SALE_ENABLED);
+
+export const venturePassAvailable = enabled(import.meta.env.VITE_VENTURE_PASS_ENABLED);

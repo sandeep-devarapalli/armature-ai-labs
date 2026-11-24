@@ -19,7 +19,12 @@ type EventApprovalNotice = {
   kind: "event"; stage: "approval_required"; reference: string; sessions: BookingSession[]; attendees: number;
 };
 type GoldenApplicationNotice = { kind: "golden_application"; stage: "received"; reference: string };
-type BookingNotice = CustomerBookingNotice | EventApprovalNotice | GoldenApplicationNotice;
+type VentureNotice = { reference: string } & (
+  | { kind: "venture_application"; stage: "received" }
+  | { kind: "venture"; stage: "approved"; paymentExpiresAt: string }
+  | { kind: "venture"; stage: "confirmed"; endsAt: string }
+);
+type BookingNotice = CustomerBookingNotice | EventApprovalNotice | GoldenApplicationNotice | VentureNotice;
 
 const titles = {
   day: "Day Pass", week: "Week Pass", month: "Month Pass", guest: "Guest Pass",
@@ -37,6 +42,9 @@ const dateFormat = new Intl.DateTimeFormat("en-IN", {
 const timeFormat = new Intl.DateTimeFormat("en-IN", {
   timeZone: bookingTimeZone, hour: "numeric", minute: "2-digit", hour12: true,
 });
+const deadlineTimeFormat = new Intl.DateTimeFormat("en-IN", {
+  timeZone: bookingTimeZone, hour: "numeric", minute: "2-digit", second: "2-digit", hour12: true,
+});
 
 export function guestPassSession(day: string): BookingSession {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(day) ||
@@ -52,6 +60,30 @@ export function bookingNotice(input: BookingNotice) {
       subject: "Golden Pass application ready for review · Armature AI Labs",
       text: "A new Golden Pass application is ready for review. Sign in to Booking management to review it.\n" +
         "https://armatureailabs.com/admin/passes#golden-pass-applications",
+      events: [],
+    };
+  }
+  if (input.kind === "venture_application") {
+    return {
+      subject: "Venture Partner Pass application ready for review · Armature AI Labs",
+      text: "A new Venture Partner Pass application is ready for review. Sign in to Booking management to review it.\n" +
+        "https://armatureailabs.com/admin/booking-management#venture-partner-pass-applications",
+      events: [],
+    };
+  }
+  if (input.kind === "venture") {
+    const approved = input.stage === "approved";
+    const date = new Date(approved ? input.paymentExpiresAt : input.endsAt);
+    const time = (approved ? deadlineTimeFormat : timeFormat).format(date);
+    return {
+      subject: approved ? "Your Venture Partner Pass application is approved" : "Your Venture Partner Pass is confirmed",
+      text: [
+        approved ? "Your application is approved. Sign in to pay ₹5,00,000 before the one-hour checkout window closes." :
+          "Armature AI Labs has confirmed your ₹5,00,000 payment and Venture Partner Pass membership.",
+        `${approved ? "Pay by" : "Membership ends"}: ${dateFormat.format(date)}, ${time} IST`,
+        `Application reference: ${input.reference}`,
+        "https://armatureailabs.com/venture-partner-pass#apply",
+      ].join("\n"),
       events: [],
     };
   }

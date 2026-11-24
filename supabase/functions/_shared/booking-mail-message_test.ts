@@ -91,3 +91,33 @@ Deno.test("Golden Pass welcome includes the paid term without a calendar attachm
   assert.match(html, /₹1,00,000/);
   assert.doesNotMatch(mail, /text\/calendar/);
 });
+
+function plainBody(mail: string) {
+  const encoded = mail.match(/Content-Type: text\/plain[^\r]*\r\nContent-Transfer-Encoding: base64\r\n\r\n([A-Za-z0-9+/=\r\n]+)/)?.[1];
+  assert(encoded);
+  return new TextDecoder().decode(Uint8Array.from(atob(encoded), char => char.charCodeAt(0)));
+}
+
+Deno.test("Venture notices link to the right account screen and show the exact IST payment deadline", () => {
+  const review = decode(bookingMailMessage({ kind: "venture_application", stage: "received", reference: delivery.aggregateId }, {
+    ...delivery, recipient: "hello@armatureailabs.com",
+  }));
+  assert.match(plainBody(review), /\/admin\/booking-management#venture-partner-pass-applications/);
+  assert.doesNotMatch(plainBody(review), /\bpay|₹/i);
+
+  const approved = decode(bookingMailMessage({ kind: "venture", stage: "approved", reference: delivery.aggregateId,
+    paymentExpiresAt: "2026-11-24T13:29:37Z",
+  }, delivery));
+  assert.match(plainBody(approved), /₹5,00,000/);
+  assert.match(plainBody(approved), /24 Nov,? 2026, 6:59:37\s*pm IST/i);
+  assert.match(plainBody(approved), /https:\/\/armatureailabs.com\/venture-partner-pass#apply/);
+  assert.doesNotMatch(plainBody(approved), /razorpay\.com|rzp\.io/i);
+
+  const confirmed = decode(bookingMailMessage({ kind: "venture", stage: "confirmed", reference: delivery.aggregateId,
+    endsAt: "2027-11-24T13:12:00Z",
+  }, delivery));
+  assert.match(plainBody(confirmed), /has confirmed your ₹5,00,000 payment/);
+  assert.match(plainBody(confirmed), /Membership ends:.*24 Nov,? 2027/);
+  assert.match(plainBody(confirmed), new RegExp(delivery.aggregateId));
+  assert.doesNotMatch(confirmed, /text\/calendar/);
+});
