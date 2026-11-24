@@ -19,7 +19,7 @@ import {
 import { Link } from "react-router-dom";
 import { Field, PageHeader, Section, Status } from "../components/Primitives";
 import { FieldOfTouch } from "../components/FieldOfTouch";
-import { basicOnboardingAvailable, memberPlatformAvailable } from "../config/release";
+import { basicOnboardingAvailable, memberPlatformAvailable, venturePassAvailable } from "../config/release";
 import { useApp } from "../context/AppContext";
 import { supabase } from "../lib/supabase";
 import type { SupabaseClient } from "@supabase/supabase-js";
@@ -342,6 +342,11 @@ export function JoinPage() {
     </>
   );
 
+  const venturePlan = venturePassAvailable && <section className="section"><div className="wrap join-access-book">
+      <div><h2 className="join-access-heading">Venture Partner Pass</h2><p>Help your portfolio get discovered through Armature’s founder network, demo days and video podcasts.</p></div>
+      <Link className="button button-quiet" to="/venture-partner-pass">Explore the Venture Partner Pass</Link>
+    </div></section>;
+
   if (basicOnly && import.meta.env.VITE_GOLDEN_PASS_CHECKOUT_ENABLED === "true") return <>
     <section className="wrap join-access-hero" aria-labelledby="join-access-title">
       <div>
@@ -366,6 +371,7 @@ export function JoinPage() {
         </div>
       </aside>
     </section>
+    {venturePlan}
     <DiscountOffers categories={["coworking", "cabin"]} />
     <section className="section"><div className="wrap">
       <h2 className="join-access-heading">Membership levels</h2>
@@ -415,6 +421,7 @@ export function JoinPage() {
           : "Armature AI Labs is pre-launch. We are accepting enquiries about the planned lab, membership, and events; applications and bookings are not open yet."}
         actions={actions}
       />
+      {venturePlan}
       <DiscountOffers categories={["coworking", "cabin"]} />
       <Section number="01" title="One membership journey" lede={basicOnly ? "Start with free registration and review the current booking options separately." : !memberPlatformAvailable ? "The planned process once membership opens." : undefined}>
         <div className="section-motion membership-motion"><FieldOfTouch scene="birds" /></div>

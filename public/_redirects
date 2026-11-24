@@ -34,8 +34,12 @@
 /my-bookings/:quoteId/ /app-shell 200
 /golden-pass /app-shell 200
 /golden-pass/ /app-shell 200
+/venture-partner-pass /app-shell 200
+/venture-partner-pass/ /app-shell 200
 /admin/passes /app-shell 200
 /admin/passes/ /app-shell 200
+/admin/booking-management /app-shell 200
+/admin/booking-management/ /app-shell 200
 /check-in /app-shell 200
 /check-in/ /app-shell 200
 /component-requests /app-shell 200

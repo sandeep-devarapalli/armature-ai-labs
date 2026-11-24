@@ -36,6 +36,8 @@ Deno.serve(async request => {
     }
     if (input.action !== "claim") return json(request, { error: "invalid_action" }, 400);
     const allowlist = Deno.env.get("BOOKING_NOTICE_TEST_RECIPIENT");
+    const ventureOrigin = Deno.env.get("SUPABASE_URL") === "https://gwrdmpvczwuypvvzfyty.supabase.co"
+      ? "https://booking-staging.armature-lab.pages.dev" : "https://armatureailabs.com";
     const { data, error } = await client.rpc("claim_booking_notices", { p_limit: 10 });
     if (error || !Array.isArray(data)) return json(request, { error: "claim_failed" }, 503);
     const messages: { id: string; raw: string }[] = [];
@@ -44,8 +46,10 @@ Deno.serve(async request => {
         const { data: account, error: accountError } = await client.auth.admin.getUserById(job.recipient_id);
         const recipient = account?.user?.email;
         if (accountError || !recipient || !account.user.email_confirmed_at ||
-          ((job.payload.kind === "golden_application" || job.payload.stage === "approval_required") &&
+          ((job.payload.kind === "golden_application" || job.payload.kind === "venture_application" || job.payload.stage === "approval_required") &&
             recipient.toLowerCase() !== bookingReviewInbox) ||
+          (job.payload.kind === "venture" && job.payload.stage === "approved" &&
+            !(Date.parse(job.payload.paymentExpiresAt) > Date.now())) ||
           (allowlist && recipient.toLowerCase() !== allowlist.toLowerCase()) ||
           /\.(?:test|invalid|example|localhost)$/i.test(recipient)) throw new Error("Undeliverable recipient");
         let memberName: string | undefined;
@@ -59,7 +63,7 @@ Deno.serve(async request => {
         }
         messages.push({ id: job.id, raw: bookingMailMessage(job.payload, {
           id: job.id, aggregateId: job.aggregate_id, recipient,
-          sequence: job.sequence, createdAt: job.created_at, memberName,
+          sequence: job.sequence, createdAt: job.created_at, memberName, ventureOrigin,
         }) });
       } catch {
         const settled = await client.rpc("settle_booking_notice", {

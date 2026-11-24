@@ -1,0 +1,248 @@
+import { useEffect, useRef, useState, type FormEvent } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Field, Status } from "../components/Primitives";
+import { basicOnboardingAvailable } from "../config/release";
+import { useAccount } from "../context/AccountContext";
+import {
+  ventureFirmTypes, venturePayment, ventureRequest, ventureStatuses, ventureTime, type VentureApplication,
+} from "../lib/venture-pass";
+import "./VenturePassPage.css";
+
+const applicationPath = "/venture-partner-pass#apply";
+const angles = Array.from({ length: 18 }, (_, index) => index * 10);
+const benefits = [
+  { id: "directory", title: "Find founders early.", copy: "Explore founder-approved profiles from Armature and participating HSR Founders Club hardware and physical AI founders. See what they’re building and where they’re looking for help.", label: "Founder directory", facts: ["What they’re building", "Prototype stage", "Founder-approved introductions"] },
+  { id: "fellowship", title: "See prototypes before Demo Day.", copy: "Get first invitations to private Hardware Fellowship previews and explore co-branding a fellowship session.", label: "Hardware Fellowship", facts: ["Fellowship", "Partner preview", "Demo Day"] },
+  { id: "events", title: "Give portfolio founders a stage.", copy: "Use four hosted events to put your founders alongside startups, operators, and ecosystem partners. Armature helps with planning, invitations, rehearsal, setup, and standard AV.", label: "Four events a year", facts: ["Demo day", "Roundtable", "Panel", "Mixer"] },
+  { id: "podcasts", title: "Turn a conversation into an episode.", copy: "Use four video podcast slots to feature portfolio founders or your team. Armature films, fully edits, and publishes each episode on the Armature AI Labs YouTube channel.", label: "Four episodes a year", facts: ["Film", "Edit", "Publish on YouTube"] },
+  { id: "visibility", title: "Reach beyond the room.", copy: "Share founders’ work through Armature’s event coverage, website, LinkedIn, and YouTube. When both sides want to connect, Armature can help make introductions to relevant pilot customers, collaborators, or investors.", label: "Partner visibility", facts: ["Year-round website listing", "LinkedIn banner spotlight around your flagship event", "Credit on event invitations and recaps"] },
+  { id: "lab", title: "Make the lab part of your week.", copy: "Bring your team in for founder meetings and hands-on portfolio sessions. Desk bookings depend on availability.", label: "Team and portfolio access", facts: ["Up to 5 named team members", "5 shared desk-days per month", "Two private lab sessions per year for portfolio startups", "Quarterly showcases shared by all four partner firms"] },
+] as const;
+
+function OrbitFigure() {
+  return <figure className="venture-orbit">
+    <svg viewBox="0 0 620 366" aria-hidden="true">
+      <g transform="translate(310 183) scale(1 .64)" className="venture-mesh">
+        {angles.map(angle => <ellipse key={angle} rx="234" ry="69" transform={`rotate(${angle})`} />)}
+      </g>
+      <path className="venture-guide" d="M28 183H592M310 17V349" />
+      <path className="venture-trajectory" d="M115 237Q206 244 310 183T510 112" />
+      {[[115, 237], [310, 183], [510, 112]].map(([x, y]) => <g key={x}>
+        <circle className="venture-node-halo" cx={x} cy={y} r="14" />
+        <circle className="venture-node" cx={x} cy={y} r="5" />
+      </g>)}
+    </svg>
+    <figcaption>Discover → Preview → Showcase</figcaption>
+  </figure>;
+}
+
+function BenefitFigure({ item }: { item: (typeof benefits)[number] }) {
+  if (item.id === "fellowship") return <figure className="venture-process">
+    <svg viewBox="0 0 560 200" aria-hidden="true">
+      <path className="venture-guide" d="M32 150H528M120 24V176M280 24V176M440 24V176" />
+      <path className="venture-trajectory" d="M120 139C176 139 218 88 280 88S388 48 440 48" />
+      <circle className="venture-node" cx="120" cy="139" r="6" />
+      <circle className="venture-node-halo" cx="280" cy="88" r="16" />
+      <circle className="venture-node" cx="280" cy="88" r="6" />
+      <circle className="venture-node" cx="440" cy="48" r="6" />
+    </svg>
+    <figcaption>{item.facts.map(fact => <span key={fact}>{fact}</span>)}</figcaption>
+  </figure>;
+  if (item.id === "podcasts") return <figure className="venture-process venture-signal">
+    <svg viewBox="0 0 560 145" aria-hidden="true">
+      {Array.from({ length: 91 }, (_, index) => {
+        const x = 10 + index * 6;
+        const envelope = 52 * Math.exp(-((index - 45) ** 2) / 865);
+        const height = 3 + envelope * (0.38 + 0.62 * Math.abs(Math.sin(index * .53) * Math.cos(index * .24)));
+        return <line key={x} x1={x} x2={x} y1={72.5 - height} y2={72.5 + height}
+          className={index % 7 === 0 ? "venture-trajectory" : "venture-signal-stroke"} />;
+      })}
+    </svg>
+    <figcaption>{item.facts.map(fact => <span key={fact}>{fact}</span>)}</figcaption>
+  </figure>;
+  return <figure className="venture-benefit-figure">
+    <figcaption>{item.label}</figcaption>
+    <ul>{item.facts.map(fact => <li key={fact}>{fact}</li>)}</ul>
+  </figure>;
+}
+
+export default function VenturePassPage() {
+  const { account, loading, signedIn } = useAccount();
+  const { search } = useLocation();
+  const returned = new URLSearchParams(search).get("payment") === "return";
+  useEffect(() => {
+    if (returned) document.getElementById("apply")?.scrollIntoView?.();
+  }, [returned]);
+  return <div className="venture-page">
+    <header className="page-hero">
+      <div className="wrap venture-grid">
+        <div>
+          <h1>Venture Partner Pass</h1>
+          <p className="venture-lead">Help your portfolio get discovered.</p>
+          <p className="hero-copy">For independent VCs and corporate venture teams in robotics and physical AI.</p>
+          <div className="button-row">
+            <a className="button button-primary" href="#apply">Apply for the pass</a>
+            <a className="button button-quiet" href="#venture-benefits">Explore the pass</a>
+          </div>
+        </div>
+        <OrbitFigure />
+      </div>
+    </header>
+    <div className="wrap venture-grid venture-journey">
+      <div><h2>Discover</h2><p>Find teams in a founder-approved directory.</p></div>
+      <div><h2>Preview</h2><p>See fellowship prototypes before Demo Day.</p></div>
+      <div><h2>Showcase</h2><p>Put portfolio teams on stage, on camera, and in front of people who can help.</p></div>
+    </div>
+    <div className="wrap" id="venture-benefits">
+      <nav className="venture-chapter-nav" aria-label="Explore the pass">
+        <a href="#directory">Directory</a><a href="#fellowship">Fellowship</a><a href="#events">Events</a>
+        <a href="#podcasts">Podcasts</a><a href="#visibility">Distribution</a><a href="#lab">Lab access</a>
+      </nav>
+      {benefits.map(item => <section className={`venture-grid venture-chapter ${item.id === "events" || item.id === "podcasts" ? "venture-chapter-wide" : ""}`} key={item.id} id={item.id}>
+        <div className="section-heading"><h2>{item.title}</h2><p>{item.copy}</p></div>
+        <BenefitFigure item={item} />
+      </section>)}
+      <dl className="venture-terms" aria-label="Annual terms">
+        <div><dt>Annual membership</dt><dd>₹5,00,000 per firm</dd></div>
+        <div><dt>Annual cohort</dt><dd>Four firms</dd></div>
+        <div><dt>Renewal window</dt><dd>December</dd></div>
+      </dl>
+      <section className="venture-grid venture-chapter" id="apply" aria-labelledby="venture-apply-title">
+        <div className="section-heading">
+          <h2 id="venture-apply-title">Apply for the pass.</h2>
+          <p>Once staff approve your application, you have one hour to pay ₹5,00,000 through Razorpay. Your membership is confirmed after Razorpay verifies the payment.</p>
+          <p>Refund requests can be submitted within 30 days of payment, subject to review. <Link to="/refund-policy#venture-refunds">Read the refund policy</Link>.</p>
+        </div>
+        <div className="venture-form-panel">
+          {!basicOnboardingAvailable ? <p>Applications are currently closed.</p>
+            : loading ? <p role="status">Loading your account…</p>
+            : !signedIn ? <Link className="button button-primary" to={"/auth?next=" + encodeURIComponent(applicationPath)}>Sign in to apply</Link>
+            : !account ? <p role="alert">Your account could not be loaded. Refresh and try again.</p>
+            : <VentureApplicationForm key={account.user_id} returned={returned} />}
+        </div>
+      </section>
+    </div>
+  </div>;
+}
+
+function VentureApplicationForm({ returned }: { returned: boolean }) {
+  const [application, setApplication] = useState<VentureApplication | null | undefined>();
+  const [checking, setChecking] = useState(false);
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [confirmationPending, setConfirmationPending] = useState(false);
+  const [error, setError] = useState("");
+  const [revision, setRevision] = useState(0);
+  const [now, setNow] = useState(Date.now());
+  const inFlight = useRef(false);
+
+  useEffect(() => {
+    let active = true;
+    setError("");
+    const load = returned
+      ? venturePayment("refresh").then(result => {
+        if (active) setConfirmationPending(result.confirmationPending === true);
+        return result.application;
+      })
+      : ventureRequest<VentureApplication | null>("get_my_venture_pass_application");
+    void load.then(row => { if (active) setApplication(row); })
+      .catch((reason: Error) => { if (active) setError(reason.message); });
+    return () => { active = false; };
+  }, [returned, revision]);
+
+  const deadline = Date.parse(application?.payment_expires_at ?? "");
+  useEffect(() => {
+    if (application?.status !== "approved" || !Number.isFinite(deadline)) return;
+    const timer = window.setInterval(() => setNow(Date.now()), 1000);
+    return () => window.clearInterval(timer);
+  }, [application?.status, deadline]);
+
+  async function run(operation: () => Promise<void>) {
+    if (inFlight.current) return;
+    inFlight.current = true;
+    setChecking(true);
+    setError("");
+    try { await operation(); }
+    catch (reason) { setError(reason instanceof Error ? reason.message : "Please try again."); }
+    finally { inFlight.current = false; setChecking(false); }
+  }
+
+  function submit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const fields = new FormData(event.currentTarget);
+    const read = (name: string) => String(fields.get(name) ?? "").trim();
+    void run(async () => setApplication(await ventureRequest<VentureApplication>("submit_venture_pass_application", {
+      p_firm_name: read("firm_name"), p_firm_type: read("firm_type"), p_website: read("website") || null,
+      p_contact_name: read("contact_name"), p_details: read("details"),
+    })));
+  }
+
+  function pay() {
+    if (!acceptedTerms) return;
+    void run(async () => {
+      const result = await venturePayment("checkout");
+      setApplication(result.application);
+      setConfirmationPending(result.confirmationPending === true);
+      if (result.checkoutUrl && /^https:\/\/rzp\.io\//.test(result.checkoutUrl)) {
+        window.location.assign(result.checkoutUrl);
+      } else if (result.application?.status !== "confirmed" && result.application?.status !== "expired" && !result.confirmationPending) {
+        throw new Error("Checkout isn’t available yet. Check your payment status before trying again.");
+      }
+    });
+  }
+
+  if (application === undefined) return error ? <>
+    <p role="alert">{error}</p><button className="button button-quiet" onClick={() => setRevision(value => value + 1)}>Try again</button>
+  </> : <p role="status">Checking your application…</p>;
+
+  if (!application) return <form onSubmit={submit}>
+    <Field label="Firm name"><input name="firm_name" autoComplete="organization" required minLength={2} maxLength={120} /></Field>
+    <Field label="Firm type"><select name="firm_type" required defaultValue="">
+      <option value="" disabled>Choose one</option>
+      {Object.entries(ventureFirmTypes).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
+    </select></Field>
+    <Field label="Firm website (optional)"><input name="website" type="url" placeholder="https://" maxLength={500} /></Field>
+    <Field label="Contact name"><input name="contact_name" autoComplete="name" required minLength={2} maxLength={120} /></Field>
+    <Field label="How would your firm use the pass?"><textarea name="details" minLength={3} maxLength={1000} required rows={4} /></Field>
+    {error && <p role="alert">{error}</p>}
+    <button className="button button-primary" type="submit" disabled={checking}>{checking ? "Submitting…" : "Submit application"}</button>
+  </form>;
+
+  const secondsLeft = Math.max(0, Math.ceil((deadline - now) / 1000));
+  const payOpen = application.status === "approved" && secondsLeft > 0;
+  const refresh = () => void run(async () => {
+    if (application.status === "approved" || application.status === "expired" || returned) {
+      const result = await venturePayment("refresh");
+      setApplication(result.application);
+      setConfirmationPending(result.confirmationPending === true);
+    } else {
+      setApplication(await ventureRequest<VentureApplication | null>("get_my_venture_pass_application"));
+    }
+  });
+  return <>
+    <Status tone={application.status === "confirmed" ? "good" : application.status === "approved" ? "warn" : "neutral"}>
+      {application.status === "approved" && !payOpen ? "Payment window ended" : ventureStatuses[application.status]}
+    </Status>
+    <h3>{application.firm_name}</h3>
+    <p>Application reference {application.id}</p>
+    {application.status === "pending" && <p>We’ve received your application. Staff will review it and email you if it’s approved.</p>}
+    {application.status === "approved" && Number.isFinite(deadline) && <>
+      <p>Payment deadline <strong>{ventureTime.format(deadline)} IST</strong></p>
+      {payOpen ? <p role="timer">{Math.floor(secondsLeft / 60)}:{String(secondsLeft % 60).padStart(2, "0")} remaining</p>
+        : <p>If you already paid, check your payment status. Contact Armature about a new window if needed.</p>}
+    </>}
+    {application.status === "expired" && <p>Contact Armature if you’d like to ask about another payment window.</p>}
+    {application.status === "confirmed" && application.confirmed_at && <p role="status">Payment of ₹5,00,000 verified on {ventureTime.format(new Date(application.confirmed_at))} IST.</p>}
+    {confirmationPending && <p role="status">Razorpay is still verifying this payment. Refresh to check the confirmation.</p>}
+    {error && <p role="alert">{error}</p>}
+    {payOpen && !confirmationPending && <div className="venture-consent">
+      <input type="checkbox" id="venture-terms" checked={acceptedTerms} onChange={event => setAcceptedTerms(event.target.checked)} />
+      <div><label htmlFor="venture-terms">I accept the website terms.</label> <Link to="/terms" target="_blank" rel="noreferrer">Read terms</Link></div>
+    </div>}
+    <div className="button-row">
+      {payOpen && !confirmationPending && <button className="button button-primary" disabled={checking || !acceptedTerms} onClick={pay}>Pay ₹5,00,000 with Razorpay</button>}
+      {application.status !== "confirmed" && application.status !== "declined" && <button className="button button-quiet" disabled={checking} onClick={refresh}>
+        {checking ? "Checking…" : "Refresh status"}
+      </button>}
+    </div>
+  </>;
+}

@@ -32,6 +32,12 @@ async function waitForRuntime() {
 }
 
 async function runSmokeCheck() {
+  for (const path of ["/venture-partner-pass", "/venture-partner-pass/?payment=return", "/admin/booking-management", "/admin/booking-management/"]) {
+    const response = await fetch("http://127.0.0.1:8788" + path);
+    if (response.status !== 200 || !(await response.text()).includes('id="root"')) {
+      throw new Error(`Venture Partner Pass route did not resolve to the app shell: ${path}`);
+    }
+  }
   const reference = "e0000000-0000-4000-8000-000000000001";
   const callback = await fetch("http://127.0.0.1:8788/api/event-payment-return?booking=" + reference, {
     method: "POST", redirect: "manual", body: new URLSearchParams({ razorpay_signature: "fixture" })

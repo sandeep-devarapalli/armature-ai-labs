@@ -40,6 +40,7 @@ export function bookingMailMessage(input: Notice, delivery: {
   createdAt: string;
   sequence: number;
   memberName?: string;
+  ventureOrigin?: Parameters<typeof bookingNotice>[1];
 }): string {
   if (!/^[0-9a-f-]{36}$/i.test(delivery.id) ||
       !/^[a-z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-z0-9.-]+\.[a-z]{2,}$/i.test(delivery.recipient)) {
@@ -56,7 +57,7 @@ export function bookingMailMessage(input: Notice, delivery: {
     `Access ends: ${labDateTime.format(new Date(input.endsAt))} IST`,
     `Payment confirmed: ${new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 2, minimumFractionDigits: 0 }).format(input.amountPaise / 100)}`,
   ].filter((line): line is string => Boolean(line)) : [];
-  const notice = golden ? { subject: "Your Armature AI Labs Golden Pass is active", text: "", events: [] } : bookingNotice(input);
+  const notice = golden ? { subject: "Your Armature AI Labs Golden Pass is active", text: "", events: [] } : bookingNotice(input, delivery.ventureOrigin);
   const boundary = "armature-booking-" + delivery.id;
   const method = input.stage === "cancelled" ? "CANCEL" : "REQUEST";
   const calendarLinks = method === "REQUEST" ? notice.events.map(event => {

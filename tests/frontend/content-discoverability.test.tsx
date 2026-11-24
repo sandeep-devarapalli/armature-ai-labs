@@ -16,7 +16,7 @@ vi.mock("../../src/components/FieldOfTouch", () => ({ FieldOfTouch: () => <div>M
 vi.mock("../../src/context/AppContext", () => ({
   useApp: () => ({ currentMember: null, state: { applications: [] }, submitApplication: vi.fn() })
 }));
-const release = vi.hoisted(() => ({ memberPlatformAvailable: false, basicOnboardingAvailable: false, equipmentPageAvailable: false, deskCheckoutAvailable: false, publicBookingsAvailable: false }));
+const release = vi.hoisted(() => ({ memberPlatformAvailable: false, basicOnboardingAvailable: false, equipmentPageAvailable: false, deskCheckoutAvailable: false, publicBookingsAvailable: false, venturePassAvailable: false }));
 vi.mock("../../src/config/release", () => release);
 beforeEach(() => {
   release.basicOnboardingAvailable = false;

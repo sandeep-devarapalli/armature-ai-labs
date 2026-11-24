@@ -177,3 +177,9 @@ verify_jwt = false
 
 [functions.booking-notices]
 verify_jwt = true
+
+[functions.venture-pass-checkout]
+verify_jwt = false
+
+[functions.venture-pass-webhook]
+verify_jwt = false
