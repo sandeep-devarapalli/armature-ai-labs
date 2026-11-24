@@ -16,6 +16,9 @@ export interface Question {
   explanation: string;
 }
 
+export interface AssignmentFile { name: string; code: string; editable: boolean }
+export interface AssignmentTest { name: string; code: string; hidden: boolean }
+
 export interface Block {
   id: string;
   type: string;
@@ -29,6 +32,8 @@ export interface Block {
     sceneId?: string; parameters?: { value: number }; description?: string;
     courseTitle?: string; moduleObjective?: string;
     promptHtml?: string; placeholder?: string; questions?: Question[];
+    briefHtml?: string; files?: AssignmentFile[]; tests?: AssignmentTest[]; support?: { name: string; base64: string }[];
+    packages?: string[]; timeLimitSeconds?: number; python?: string;
   };
 }
 

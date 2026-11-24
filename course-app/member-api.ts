@@ -68,6 +68,13 @@ export interface LabSubmissionDetail {
   overall: { labs: LabCheckpoint[]; assessment: LabAssessment }; canReview: boolean;
 }
 export const LAB_EVIDENCE_BUCKET = 'course-lab-evidence';
+// Browser-graded code assignments: learners' code and self-reported scores (progress only, never a pass or certificate).
+export interface AssignmentScore { passed: number; total: number; at: string }
+export interface AssignmentWork {
+  lessonId: string; blockId: string; files: Record<string, string>;
+  last: (AssignmentScore & { kind: 'visible' | 'all' }) | null; best: AssignmentScore | null; revision: number; updatedAt: string;
+}
+export interface AssignmentResult { kind: 'visible' | 'all'; passed: number; total: number }
 
 export function createCourseClient() {
   const url = import.meta.env.VITE_COURSES_SUPABASE_URL?.trim();
@@ -115,6 +122,10 @@ export function courseApi(client: SupabaseClient) {
       if (error) throw error;
       return data.signedUrl;
     },
+    assignment: (lesson: string, block: string, signal?: AbortSignal) => rpc<AssignmentWork | null>('get_my_course_assignment', { p_lesson_id: lesson, p_block_id: block }, signal),
+    saveAssignment: (lesson: string, block: string, files: Record<string, string>, result: AssignmentResult | null, revision: number | null) =>
+      rpc<AssignmentWork>('save_my_course_assignment', { p_lesson_id: lesson, p_block_id: block, p_files: files, p_result: result, p_expected_revision: revision }),
+    assignments: (version: string, signal?: AbortSignal) => rpc<Pick<AssignmentWork, 'lessonId' | 'blockId' | 'best' | 'last'>[]>('get_my_course_assignments', { p_version_id: version }, signal),
     save: (lesson: string, block: number, read: boolean, signal?: AbortSignal) => rpc<{ lesson_id: string; last_block: number; read_at: string | null; updated_at: string }>('save_course_lesson_progress', { p_lesson_id: lesson, p_last_block: block, p_read: read }, signal),
   };
 }

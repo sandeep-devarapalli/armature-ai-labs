@@ -1,0 +1,42 @@
+{
+ "version": "314.0.8",
+ "python": "3.14",
+ "packages": [
+  "atomicwrites",
+  "attrs",
+  "exceptiongroup",
+  "iniconfig",
+  "more-itertools",
+  "numpy",
+  "pluggy",
+  "py",
+  "pygments",
+  "pyparsing",
+  "pytest",
+  "scipy",
+  "setuptools",
+  "six"
+ ],
+ "source": "https://cdn.jsdelivr.net/pyodide/v314.0.8/full/",
+ "files": {
+  "pyodide.mjs": "1bb8cc14f9405aaa7cd4e00c12edd0a8539de9cc026618d6ee5a9663f367dc70",
+  "pyodide.asm.mjs": "22514b8be6980e28a02c8b1d6387ce8dfe666fc4edf8d547cff5dce29ff4d972",
+  "pyodide.asm.wasm": "e14d49ceca9b4a0e274ea918f3a898de2d3880b6e5573a6cfe1a2267ecc70329",
+  "python_stdlib.zip": "2bd3394a145bfbbe5bbc9d9d6ab9136abbb986c6fef6c142b3a2962227aa5c28",
+  "pyodide-lock.json": "5dc2fc119108bc148c7457dc86e7675b5c87e1cafd420b9c34c1eaef7b36c010",
+  "atomicwrites-1.4.1-py2.py3-none-any.whl": "18fdd95649db5939bbf2b214302282b6a00aba8b76265db459e95dbb32e22561",
+  "attrs-26.1.0-py3-none-any.whl": "0506ebb8e46c83017941a7239eecb2f74420d332cf1f341bddc43a217ab0bb66",
+  "exceptiongroup-1.3.1-py3-none-any.whl": "15c063c35d433d28df83fa51f897619583ad3d6b43a5c58e44737afb3fe46dfc",
+  "iniconfig-2.3.0-py3-none-any.whl": "7a5425ae2eda9988c8a841e386dd74f4ce6333bbba40e926cb7ad5153396c077",
+  "more_itertools-11.0.1-py3-none-any.whl": "f969b7b2dac6c78a527430279d5a56fc7ef61c2ccd2b4f0e817c3d79e3894ba0",
+  "numpy-2.4.6-cp314-cp314-pyemscripten_2026_0_wasm32.whl": "a292c1f5d7d8a2208cd5e94fc467604c131cabcd2fc14fed6eefde121e7fabdf",
+  "pluggy-1.6.0-py3-none-any.whl": "d9d6b776793b43137ea724291c466154764491db5fe6a4d8197a84b0cf592c7d",
+  "py-1.11.0-py2.py3-none-any.whl": "6b0bb803b77d41978a0fb477125ae0a171c202f37c1cc025d40b4d10b2da488b",
+  "pygments-2.20.0-py3-none-any.whl": "6e0fd0e83d3e725a668aa73110112ffe67e59feb4516eeff3a0b8c12a236462f",
+  "pyparsing-3.3.2-py3-none-any.whl": "f0dd8225b5f8e945980b400bd465b4b90cb0498a2eede0d9dbea98372f6110c5",
+  "pytest-9.0.2-py3-none-any.whl": "88b9f5fbf0e425844c0909772952a8c43d5aacbd33e5b9ef821bc6a4c7e53b82",
+  "scipy-1.18.0-cp314-cp314-pyemscripten_2026_0_wasm32.whl": "17ee329a957863516d1bb6a6aaa0c60576fac027e9cd3d43de27f58b5b599b50",
+  "setuptools-82.0.1-py3-none-any.whl": "f411555185daefde67e99bec050782a5390ea62270ac6cddc2dab7bea70e53b1",
+  "six-1.17.0-py2.py3-none-any.whl": "228c50f73aa7addf2c2ccf2979c256802a59ab69cad8152b31b9443cc8140f42"
+ }
+}

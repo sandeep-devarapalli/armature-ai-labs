@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { ContentBlock, isPracticeBlock, practiceLead, practiceLabel, PracticeJump, scrollToPractice } from './LessonBlocks';
 import type { Block } from './types';
 import type { CourseApi, LessonSummary, Progress } from './member-api';
 import { LabForm } from './LabForm';
+import { AssignmentStoreContext, type AssignmentStore } from './assignment-store';
 
 export function MemberLesson({ api, lesson, blocks, initialProgress, canSave, onSaved, onDenied, onEnroll, enrolling = false, lessonCount, lab, navigation }: {
   api: CourseApi; lesson: LessonSummary; blocks: Block[]; initialProgress?: Progress; canSave: boolean;
@@ -64,9 +65,14 @@ export function MemberLesson({ api, lesson, blocks, initialProgress, canSave, on
     return () => { active = false; clearTimeout(timer); abort.abort(); window.removeEventListener('scroll', onScroll); saveRef.current = () => {}; };
   }, [api, lesson.id, canSave]);
 
+  // Enrolled learners keep their assignment code and scores; samples and previews run without saving.
+  const store = useMemo<AssignmentStore | null>(() => canSave ? {
+    load: blockId => api.assignment(lesson.id, blockId),
+    save: (blockId, files, result, revision) => api.saveAssignment(lesson.id, blockId, files, result, revision),
+  } : null, [api, lesson.id, canSave]);
   const practice = blocks.filter(isPracticeBlock);
   const openPractice = (id: string) => { setPane('practice'); scrollToPractice(id); };
-  return <div className="reader-area">
+  return <AssignmentStoreContext.Provider value={store}><div className="reader-area">
     <div className="mobile-tabs" role="tablist" aria-label="Lesson view">{(['read', 'practice'] as const).map(value => <button role="tab" key={value} aria-selected={pane === value} onClick={() => setPane(value)}>{value === 'read' ? 'Read' : 'Practice'}</button>)}</div>
     <article ref={article} className={`lesson ${pane === 'read' ? 'mobile-active' : ''}`}>
       {lesson.isSample && !canSave ? <p className="notice">Sample lesson</p> : null}
@@ -83,5 +89,5 @@ export function MemberLesson({ api, lesson, blocks, initialProgress, canSave, on
       {lab ? <LabForm api={api} versionId={lab.versionId} moduleId={lab.moduleId} userId={lab.userId} /> : null}
       {practice.length ? practice.map((block, index) => <div id={`practice-${block.id}`} key={`${block.id}-${index}`}><ContentBlock block={block} /></div>) : lab ? null : <p className="empty-state">There is no practice activity in this lesson.</p>}
     </div></aside>
-  </div>;
+  </div></AssignmentStoreContext.Provider>;
 }
