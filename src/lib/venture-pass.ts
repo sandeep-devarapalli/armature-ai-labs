@@ -9,6 +9,7 @@ export type VentureApplication = {
   website: string | null;
   details: string;
   email?: string;
+  preparing?: boolean;
   status: "pending" | "approved" | "declined" | "expired" | "confirmed";
   created_at: string;
   payment_expires_at: string | null;
@@ -56,4 +57,15 @@ export async function venturePayment(action: "checkout" | "refresh") {
   }>("venture-pass-checkout", { body: action === "checkout" ? { action, acceptedTerms: true } : { action } });
   if (error || !data) throw new Error("We couldn’t verify the payment status. Refresh before attempting payment again.");
   return data;
+}
+
+export async function approveVentureApplication(applicationId: string): Promise<VentureApplication> {
+  if (!supabase) throw new Error("Approval is unavailable.");
+  const { data, error } = await supabase.functions.invoke<{ application: VentureApplication }>(
+    "venture-pass-checkout", { body: { action: "staff_approve", applicationId } },
+  );
+  if (error || data?.application?.status !== "approved") {
+    throw new Error("Could not prepare checkout. Check your staff verification, refresh applications, and retry the approval.");
+  }
+  return data.application;
 }

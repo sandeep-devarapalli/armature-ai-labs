@@ -6,6 +6,7 @@ import { rentalStagingBackend } from "./rental-payment.ts";
 const origin = "https://booking-staging.armature-lab.pages.dev";
 const id = "a1111111-2222-3333-4444-555555555555";
 const owner = "a3333333-2222-3333-4444-555555555555";
+const reviewer = "a4444444-2222-3333-4444-555555555555";
 const secret = "synthetic-venture-webhook-secret-32";
 const accountId = "acc_Synthetic";
 const amount = 50000000;
@@ -17,6 +18,8 @@ const paymentId = "pay_Synthetic";
 const orderId = "order_Synthetic";
 const purpose = "armature_venture_partner_pass";
 const iso = (epochSeconds: number) => new Date(epochSeconds * 1000).toISOString();
+const approve = { action: "staff_approve", applicationId: id };
+const open = { action: "checkout", acceptedTerms: true, amount: 1000 };
 
 function equal(actual: unknown, expected: unknown) {
   if (JSON.stringify(actual) !== JSON.stringify(expected)) throw new Error("Unexpected result: " + JSON.stringify(actual));
@@ -24,7 +27,8 @@ function equal(actual: unknown, expected: unknown) {
 
 function fixture() {
   let now = (approveTime + 35) * 1000;
-  let enabled = true, anonymous = false, ambiguous = false, providerCreated = false, crossDeadlineOnClaim = false;
+  let enabled = true, anonymous = false, ambiguous = false, providerCreated = false, reviewerAllowed = true;
+  let advanceOnClaim: number | null = null;
   let application = {
     id, email: "test@example.invalid", firm_name: "Test Ventures", contact_name: "Tester", created_at: iso(approveTime),
     firm_type: "independent_vc", details: "Application", status: "approved", payment_expires_at: iso(deadline),
@@ -40,6 +44,7 @@ function fixture() {
     captured: true, amount_refunded: 0, created_at: approveTime + 4 };
   const calls: { path: string; body?: object }[] = [];
   const operations: { action: string; user: string | null; input: object }[] = [];
+  const reviews: string[] = [];
   const checkout = createVentureCheckout(deps());
   const webhook = createVentureWebhook(deps());
 
@@ -49,7 +54,16 @@ function fixture() {
       settings: () => enabled ? { secret, accountId, provider: {
         keyId: "rzp_test_Synthetic", keySecret: "synthetic-key-secret", request,
       } } : null,
-      authenticate: () => anonymous ? Promise.reject({ status: 401 }) : Promise.resolve({ id: owner }),
+      authenticate: (request: Request) => anonymous ? Promise.reject({ status: 401 }) : Promise.resolve(
+        request.headers.get("X-Test-Actor") === "staff" ? { id: reviewer, claims: { aal: "aal2" } } : { id: owner, claims: { aal: "aal1" } },
+      ),
+      review: (_request: Request, applicationId: string) => {
+        reviews.push(applicationId);
+        if (!reviewerAllowed) return Promise.reject({ status: 403 });
+        if (applicationId !== id) throw new Error("Wrong application");
+        if (application.status === "pending") application = { ...application, status: "approved" };
+        return Promise.resolve(application);
+      },
       now: () => now,
       operate: (_action: string, user: string | null, input: object) => operate(_action, user, input as Record<string, unknown>),
     };
@@ -73,24 +87,28 @@ function fixture() {
     operations.push({ action, user, input });
     await Promise.resolve();
     if (action === "lookup") return application;
-    if (action === "claim") {
-      if (input.acceptedTerms !== true || user !== owner) throw new Error("Missing terms or ownership");
+    if (action === "prepare_link") {
+      if (user !== null || input.id !== id) throw new Error("Unscoped link preparation");
       const claimed = !application.payment_claimed_at;
       application = { ...application, payment_claimed_at: application.payment_claimed_at ?? new Date(now).toISOString() };
-      if (crossDeadlineOnClaim) now = deadline * 1000;
+      if (advanceOnClaim !== null) now = advanceOnClaim * 1000;
       return { ...application, claimed };
     }
+    if (action === "accept_terms" && (input.acceptedTerms !== true || input.id !== id || user !== owner))
+      throw new Error("Missing terms or ownership");
     if (action === "attach") application = { ...application, payment_link_id: linkId, payment_url: shortUrl };
     if (action === "confirm") {
       if (input.id !== id || input.linkId !== application.payment_link_id || input.paymentId !== paymentId) throw new Error("Invalid settlement");
       application = { ...application, status: "confirmed", confirmed_at: String(input.paidAt) };
     }
-    if (action === "expire" || action === "release_unattempted") application = { ...application, status: "expired" };
+    if (action === "expire") application = { ...application, status: "expired" };
+    if (action === "release_unattempted") application = { ...application,
+      status: now >= deadline * 1000 ? "expired" : application.status, payment_claimed_at: null };
     return application;
   }
 
-  function post(input: object, from = origin) {
-    return checkout(new Request("https://edge.example/checkout", { method: "POST", headers: { Origin: from }, body: JSON.stringify(input) }));
+  function post(input: object, from = origin, actor = "buyer") {
+    return checkout(new Request("https://edge.example/checkout", { method: "POST", headers: { Origin: from, "X-Test-Actor": actor }, body: JSON.stringify(input) }));
   }
 
   async function event(action: string, sign = true, account = accountId) {
@@ -102,11 +120,13 @@ function fixture() {
     }));
   }
 
-  return { calls, operations, post, event, link, payment,
+  return { calls, operations, post, event, link, payment, reviews,
+    approve: () => post(approve, origin, "staff"),
     setNow: (time: number) => { now = time * 1000; },
     setStatus: (status: string) => { application = { ...application, status }; },
     setAmbiguous: () => { ambiguous = true; },
-    crossDeadlineOnClaim: () => { crossDeadlineOnClaim = true; },
+    advanceOnClaim: (time: number) => { advanceOnClaim = time; },
+    denyReviewer: () => { reviewerAllowed = false; },
     setAnonymous: () => { anonymous = true; },
     disable: () => { enabled = false; },
     paid: (time: number) => Object.assign(link, { status: "paid", amount_paid: amount, updated_at: time,
@@ -116,7 +136,6 @@ function fixture() {
 
 Deno.test("Venture checkout denies foreign origins, anonymous or unconsented requests and disabled or unapproved sales", async () => {
   const s = fixture();
-  const open = { action: "checkout", acceptedTerms: true };
   equal((await s.post(open, "https://foreign.example")).status, 403);
   equal((await s.post({ action: "checkout" })).status, 400);
   s.setStatus("pending");
@@ -130,13 +149,25 @@ Deno.test("Venture checkout denies foreign origins, anonymous or unconsented req
   equal(s.calls, []);
 });
 
-Deno.test("Venture checkout binds one fixed-expiry link after an ambiguous first create", async () => {
+Deno.test("Venture staff approval requires AAL2 and admin access before it reserves or prepares a link", async () => {
   const s = fixture();
-  const open = { action: "checkout", acceptedTerms: true, amount: 1000 };
+  equal((await s.post(approve)).status, 403);
+  equal(s.reviews, []);
+  s.denyReviewer();
+  equal((await s.approve()).status, 403);
+  equal(s.reviews, [id]);
+  equal(s.operations, []);
+  equal(s.calls, []);
+});
+
+Deno.test("Venture staff approval prepares one fixed-expiry link and retries recover the same link", async () => {
+  const s = fixture();
   s.setAmbiguous();
-  equal((await s.post(open)).status, 503);
-  const second = await (await s.post(open)).json();
-  equal(second.checkoutUrl, shortUrl);
+  equal((await s.approve()).status, 503);
+  const second = await (await s.approve()).json();
+  equal(second.application.status, "approved");
+  equal(second.application.preparing, false);
+  equal(second.checkoutUrl, undefined);
   equal(second.application.payment_url, undefined);
   equal(s.calls.filter(call => call.body).length, 1);
   equal(s.calls[0].body, {
@@ -145,6 +176,9 @@ Deno.test("Venture checkout binds one fixed-expiry link after an ambiguous first
     notes: { purpose }, callback_url: origin + "/venture-partner-pass?payment=return", callback_method: "get",
   });
   equal(s.calls[1].path, "/payment_links?reference_id=" + id + "&count=2");
+  equal((await s.approve()).status, 200);
+  equal(s.calls.length, 2);
+  equal((await (await s.post(open)).json()).checkoutUrl, shortUrl);
   s.setNow(deadline);
   const expired = await (await s.post(open)).json();
   equal(expired.checkoutAvailable, false);
@@ -152,9 +186,28 @@ Deno.test("Venture checkout binds one fixed-expiry link after an ambiguous first
   equal(s.calls.filter(call => call.body).length, 1);
 });
 
+Deno.test("Venture buyer can start in the final 15 minutes with an already-prepared checkout and accepted terms", async () => {
+  const s = fixture();
+  const pending = await (await s.post(open)).json();
+  equal(pending.application.status, "pending");
+  equal(pending.checkoutAvailable, false);
+  equal(pending.checkoutUrl, undefined);
+  equal(s.calls, []);
+  equal((await s.approve()).status, 200);
+  s.setNow(deadline - 10);
+  const ready = await (await s.post(open)).json();
+  equal(ready.checkoutUrl, shortUrl);
+  equal(ready.checkoutAvailable, true);
+  equal(s.operations.find(call => call.action === "accept_terms"), {
+    action: "accept_terms", user: owner, input: { id, acceptedTerms: true },
+  });
+  equal(s.calls.filter(call => call.body).length, 1);
+});
+
 Deno.test("Venture webhook reconciles a captured in-window payment even after delivery delay", async () => {
   const s = fixture();
-  equal((await s.post({ action: "checkout", acceptedTerms: true })).status, 200);
+  equal((await s.approve()).status, 200);
+  equal((await s.post(open)).status, 200);
   s.paid(deadline - 1);
   s.setNow(deadline + 22);
   equal((await s.event("payment_link.paid", false)).status, 401);
@@ -169,7 +222,8 @@ Deno.test("Venture webhook reconciles a captured in-window payment even after de
 
 Deno.test("Venture webhook rejects a mismatched payment and one captured at the deadline", async () => {
   const s = fixture();
-  await s.post({ action: "checkout", acceptedTerms: true });
+  await s.approve();
+  await s.post(open);
   s.paid(deadline - 1);
   s.setNow(deadline + 5);
   s.payment.amount = 123;
@@ -183,10 +237,10 @@ Deno.test("Venture webhook rejects a mismatched payment and one captured at the 
 Deno.test("Venture release requires provider-proven expiry of a recovered unpaid link", async () => {
   const s = fixture();
   s.setAmbiguous();
-  await s.post({ action: "checkout", acceptedTerms: true });
+  equal((await s.approve()).status, 503);
   s.link.status = "expired";
   s.setNow(deadline + 22);
-  const result = await (await s.post({ action: "refresh" })).json();
+  const result = await (await s.approve()).json();
   equal(result.application.status, "expired");
   equal(result.checkoutUrl, undefined);
   equal(s.operations.filter(call => ["attach", "expire"].includes(call.action)).map(call => call.action), ["attach", "expire"]);
@@ -211,7 +265,8 @@ Deno.test("Venture Razorpay mode requires the project pin and its matching test/
 
 Deno.test("Venture return refresh confirms only provider-verified capture, ignoring callback claims", async () => {
   const s = fixture();
-  await s.post({ action: "checkout", acceptedTerms: true });
+  await s.approve();
+  await s.post(open);
   const forged = await (await s.post({ action: "refresh", paid: true, amount, paymentId })).json();
   equal(forged.application.status, "approved");
   equal(s.operations.some(call => call.action === "confirm"), false);
@@ -226,15 +281,14 @@ Deno.test("Venture return refresh confirms only provider-verified capture, ignor
   equal((await (await s.post({ action: "refresh" })).json()).application.status, "confirmed");
 });
 
-Deno.test("Venture checkout frees a claim when the deadline passes before initiating the provider request", async () => {
+Deno.test("Venture staff preparation frees an unattempted claim if the 15-minute threshold passes", async () => {
   const s = fixture();
-  s.crossDeadlineOnClaim();
-  const result = await (await s.post({ action: "checkout", acceptedTerms: true })).json();
-  equal(result.application.status, "expired");
-  equal(result.checkoutAvailable, false);
-  equal(result.checkoutUrl, undefined);
+  s.advanceOnClaim(deadline - 900);
+  const response = await s.approve();
+  equal(response.status, 409);
+  equal(await response.json(), { error: "venture_pass_link_window_too_short" });
   equal(s.calls, []);
   equal(s.operations.find(call => call.action === "release_unattempted"), {
-    action: "release_unattempted", user: owner, input: { id, claimedAt: iso(approveTime + 35) },
+    action: "release_unattempted", user: null, input: { id, claimedAt: iso(approveTime + 35) },
   });
 });

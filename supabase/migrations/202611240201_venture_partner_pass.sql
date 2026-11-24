@@ -21,6 +21,7 @@ create table private.venture_pass_applications (
  reviewed_at timestamptz,
  payment_expires_at timestamptz,
  payment_claimed_at timestamptz,
+ terms_accepted_at timestamptz,
  payment_link_id text unique check (payment_link_id ~ '^plink_[A-Za-z0-9]{1,80}$'),
  payment_url text check (payment_url ~ '^https://rzp[.]io/((i|l|rzp)/)?[A-Za-z0-9_-]{1,120}$'),
  payment_id text unique check (payment_id ~ '^pay_[A-Za-z0-9]{1,80}$'),
@@ -32,9 +33,11 @@ create table private.venture_pass_applications (
  check (payment_claimed_at is null or payment_claimed_at>=reviewed_at and payment_claimed_at<payment_expires_at),
  check ((payment_link_id is null) = (payment_url is null)),
  check (payment_link_id is null or payment_claimed_at is not null),
+ check (terms_accepted_at is null or (payment_link_id is not null and terms_accepted_at>=payment_claimed_at
+  and terms_accepted_at<payment_expires_at)),
  check ((payment_id is not null) = (status='confirmed')),
- check (status<>'confirmed' or (payment_link_id is not null and paid_at is not null and confirmed_at is not null and ends_at is not null
-  and paid_at>=reviewed_at and paid_at<payment_expires_at and confirmed_at>=paid_at and ends_at>paid_at))
+ check (status<>'confirmed' or (terms_accepted_at is not null and paid_at is not null and confirmed_at is not null and ends_at is not null
+  and paid_at>=date_trunc('second',terms_accepted_at) and paid_at<payment_expires_at and confirmed_at>=paid_at and ends_at>paid_at))
 );
 create index venture_pass_capacity on private.venture_pass_applications(status,payment_expires_at,ends_at)
  where status in ('approved','confirmed');
@@ -62,8 +65,12 @@ create function private.venture_pass_payload(p private.venture_pass_applications
 language sql stable set search_path='' as $$
  select to_jsonb(p)-array['reviewed_by','payment_link_id','payment_url'] ||
   jsonb_build_object('email',(select email from auth.users where id=p.user_id),
-   'status',case when p.status='approved' and p.payment_expires_at<=statement_timestamp()
-     and p.payment_claimed_at is null then 'expired' else p.status end);
+   'preparing',p.status='approved' and p.payment_link_id is null
+     and (p.payment_expires_at>statement_timestamp() or p.payment_claimed_at is not null),
+   'status',case
+    when p.status='approved' and p.payment_expires_at<=statement_timestamp() and p.payment_claimed_at is null then 'expired'
+    when p.status='approved' and p.payment_link_id is null then 'pending'
+    else p.status end);
 $$;
 
 create function public.get_my_venture_pass_application() returns jsonb
@@ -116,9 +123,6 @@ language plpgsql security definer set search_path='' as $$
 declare reviewer uuid:=private.venture_pass_reviewer(); result private.venture_pass_applications; decision_at timestamptz;
 begin
  if p_action='approve' then
-  if not private.venture_pass_applications_open() then
-   raise exception 'Venture Partner Pass approvals are closed' using errcode='42501';
-  end if;
   perform pg_advisory_xact_lock(hashtextextended('venture-partner-pass-capacity',0));
  elsif p_action is distinct from 'decline' then
   raise exception 'Choose approve or decline' using errcode='22023';
@@ -130,8 +134,15 @@ begin
  if result.user_id=reviewer then
   raise exception 'A different administrator must review your application' using errcode='42501';
  end if;
+ if p_action='approve' and result.status='approved'
+  and (result.payment_expires_at>clock_timestamp() or result.payment_claimed_at is not null) then
+  return private.venture_pass_payload(result);
+ end if;
  if result.status<>'pending' then
   raise exception 'Only pending applications can be reviewed' using errcode='22023';
+ end if;
+ if p_action='approve' and not private.venture_pass_applications_open() then
+  raise exception 'Venture Partner Pass approvals are closed' using errcode='42501';
  end if;
  decision_at:=date_trunc('second',clock_timestamp());
  if p_action='approve' and (select count(*) from private.venture_pass_applications
@@ -160,14 +171,16 @@ declare
  claimed boolean:=false;
  operation_time timestamptz;
 begin
- if (p_user is null and application_id is null) or (p_user is null and p_action='claim') then
+ if (p_user is null and application_id is null)
+  or (p_action='prepare_link' and p_user is not null)
+  or (p_action='accept_terms' and (p_user is null or application_id is null)) then
   raise exception 'A payment application is required' using errcode='22023';
  end if;
  if p_user is not null and not private.onboarding_update_account_active(p_user) then
   raise exception 'An active email-confirmed account is required' using errcode='42501';
  end if;
  -- A claim and a replacement approval must agree on whether an elapsed slot is held.
- if p_action='claim' then
+ if p_action='prepare_link' then
   perform pg_advisory_xact_lock(hashtextextended('venture-partner-pass-capacity',0));
  end if;
  select * into result from private.venture_pass_applications
@@ -179,12 +192,14 @@ begin
  operation_time:=clock_timestamp();
  case p_action
  when 'lookup' then null;
- when 'claim' then
-  if result.status<>'approved' or result.payment_expires_at<=operation_time
-   or p_input->'acceptedTerms' is distinct from 'true'::jsonb then
-   raise exception 'An open payment window and accepted terms are required' using errcode='22023';
+ when 'prepare_link' then
+  if result.status<>'approved' then
+   raise exception 'An approved application is required to prepare payment' using errcode='22023';
   end if;
   if result.payment_claimed_at is null then
+   if result.payment_expires_at<=operation_time+interval '15 minutes' then
+    raise exception 'Too little time remains to prepare payment' using errcode='22023';
+   end if;
    update private.venture_pass_applications set payment_claimed_at=operation_time where id=result.id returning * into result;
    claimed:=true;
   end if;
@@ -198,9 +213,18 @@ begin
    update private.venture_pass_applications set payment_link_id=link_id,payment_url=link_url
    where id=result.id returning * into result;
   end if;
+ when 'accept_terms' then
+  if result.status<>'approved' or result.payment_link_id is null or result.payment_expires_at<=operation_time
+   or p_input->'acceptedTerms' is distinct from 'true'::jsonb then
+   raise exception 'An open payment link and accepted terms are required' using errcode='22023';
+  end if;
+  if result.terms_accepted_at is null then
+   update private.venture_pass_applications set terms_accepted_at=operation_time
+   where id=result.id returning * into result;
+  end if;
  when 'confirm' then
   if application_id is null or result.status not in ('approved','confirmed') or link_id is null
-   or link_id is distinct from result.payment_link_id or payment_ref is null
+   or link_id is distinct from result.payment_link_id or payment_ref is null or result.terms_accepted_at is null
    or p_input->'amount' is distinct from '50000000'::jsonb or p_input->>'currency' is distinct from 'INR' then
    raise exception 'Verified payment facts do not match this application' using errcode='22023';
   end if;
@@ -210,7 +234,7 @@ begin
    end if;
   else
    payment_time:=(p_input->>'paidAt')::timestamptz;
-   if payment_time is null or not isfinite(payment_time) or payment_time<result.reviewed_at
+   if payment_time is null or not isfinite(payment_time) or payment_time<date_trunc('second',result.terms_accepted_at)
     or payment_time>=result.payment_expires_at or payment_time>operation_time then
     raise exception 'Verified payment time is outside the approved window' using errcode='22023';
    end if;
@@ -219,12 +243,13 @@ begin
    where id=result.id returning * into result;
   end if;
  when 'release_unattempted' then
-  if p_user is null or application_id is null or result.status<>'approved'
-   or result.payment_expires_at>operation_time or result.payment_link_id is not null
+  if application_id is null or result.status<>'approved'
+   or result.payment_link_id is not null
    or result.payment_claimed_at is null or result.payment_claimed_at is distinct from (p_input->>'claimedAt')::timestamptz then
    raise exception 'The unattempted payment claim does not match' using errcode='22023';
   end if;
-  update private.venture_pass_applications set status='expired' where id=result.id returning * into result;
+  update private.venture_pass_applications set status=case when payment_expires_at<=operation_time then 'expired' else status end,
+   payment_claimed_at=null where id=result.id returning * into result;
  when 'expire' then
   if application_id is null or result.status not in ('approved','expired')
    or result.payment_expires_at>operation_time or link_id is null or link_id is distinct from result.payment_link_id then
@@ -236,6 +261,8 @@ begin
  else raise exception 'Unknown payment action' using errcode='22023';
  end case;
  return private.venture_pass_payload(result)||jsonb_build_object('claimed',claimed,
+  'status',case when result.status='approved' and result.payment_expires_at<=operation_time
+    and result.payment_claimed_at is null then 'expired' else result.status end,
   'payment_link_id',result.payment_link_id,'payment_url',result.payment_url);
 end;
 $$;

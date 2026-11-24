@@ -1,4 +1,6 @@
-import { adminClient, authenticatedUser } from "./supabase.ts";
+import { createClient } from "npm:@supabase/supabase-js@2.57.4";
+import { requiredEnv } from "./env.ts";
+import { adminClient, authenticatedUser, bearerToken } from "./supabase.ts";
 import { bodyBytes, RazorpayRequestError, validHmac } from "./razorpay-signature.ts";
 import { orderIdPattern, paymentIdPattern, productionBackend, type LiveRazorpay, type Payment } from "./live-desk-payment.ts";
 import { rentalProvider, rentalStagingBackend } from "./rental-payment.ts";
@@ -7,6 +9,7 @@ const amount = 50000000;
 const currency = "INR";
 const purpose = "armature_venture_partner_pass";
 const route = "/venture-partner-pass";
+const minimumLinkWindowMs = 15 * 60 * 1000;
 const uuid = /^[0-9a-f]{8}(-[0-9a-f]{4}){3}-[0-9a-f]{12}$/;
 const linkIdPattern = /^plink_[A-Za-z0-9]{1,80}$/;
 const urlPattern = /^https:\/\/rzp\.io\/(?:i\/|l\/|rzp\/)?[A-Za-z0-9_-]{1,128}$/;
@@ -50,8 +53,9 @@ type Settings = { provider: LiveRazorpay; secret: string; accountId: string };
 type Dependencies = {
   origin: () => string | null;
   settings: () => Settings | null;
-  authenticate: (request: Request) => Promise<{ id: string }>;
-  operate: (action: "lookup" | "claim" | "attach" | "confirm" | "expire" | "release_unattempted", user: string | null, input: object) => Promise<Application | null>;
+  authenticate: (request: Request) => Promise<{ id: string; claims: { aal?: string } }>;
+  review: (request: Request, id: string) => Promise<Application>;
+  operate: (action: "lookup" | "prepare_link" | "accept_terms" | "attach" | "confirm" | "expire" | "release_unattempted", user: string | null, input: object) => Promise<Application | null>;
   now: () => number;
 };
 
@@ -77,6 +81,19 @@ const defaults: Dependencies = {
   },
   settings: venturePaymentSettings,
   authenticate: authenticatedUser,
+  review: async (request, id) => {
+    const userClient = createClient(requiredEnv("SUPABASE_URL"), requiredEnv("SUPABASE_ANON_KEY"), {
+      auth: { persistSession: false, autoRefreshToken: false },
+      global: { headers: { Authorization: "Bearer " + bearerToken(request) } },
+    });
+    const { data, error } = await userClient.rpc("staff_review_venture_pass_application", {
+      p_id: id, p_action: "approve",
+    }).abortSignal(AbortSignal.timeout(10000));
+    if (error?.code === "42501") throw new RazorpayRequestError(403, "staff_role_required");
+    if (error && ["P0002", "22023", "23505"].includes(error.code)) throw new RazorpayRequestError(409, "venture_pass_state_rejected");
+    if (error) throw new RazorpayRequestError(503, "venture_pass_state_unavailable");
+    return mustHaveApplication(data as Application | null);
+  },
   now: Date.now,
   operate: async (action, user, input) => {
     const { data, error } = await adminClient().rpc("venture_pass_payment", {
@@ -135,6 +152,39 @@ async function bindLink(deps: Dependencies, user: string | null, application: Ap
   return mustHaveApplication(await deps.operate("attach", user, {
     id: application.id, linkId: link.id, paymentUrl: link.short_url,
   }));
+}
+
+async function prepareLink(deps: Dependencies, provider: LiveRazorpay, origin: string, id: string) {
+  let application = mustHaveApplication(await deps.operate("lookup", null, { id }));
+  if (application.payment_link_id) return application;
+
+  let link: PaymentLink | null;
+  if (application.payment_claimed_at) {
+    link = await recoverLink(provider, application);
+  } else {
+    if (expiry(application) * 1000 - deps.now() <= minimumLinkWindowMs) {
+      throw new RazorpayRequestError(409, "venture_pass_link_window_too_short");
+    }
+    application = mustHaveApplication(await deps.operate("prepare_link", null, { id }));
+    if (application.payment_link_id) return application;
+    if (!application.claimed) {
+      link = await recoverLink(provider, application);
+    } else {
+      if (expiry(application) * 1000 - deps.now() <= minimumLinkWindowMs) {
+        await deps.operate("release_unattempted", null, { id, claimedAt: application.payment_claimed_at });
+        throw new RazorpayRequestError(409, "venture_pass_link_window_too_short");
+      }
+      link = await provider.request<PaymentLink>("/payment_links", {
+        amount, currency, accept_partial: false, expire_by: expiry(application),
+        reference_id: application.id, description: "Armature AI Labs Venture Partner Pass",
+        notify: { email: false, sms: false }, reminder_enable: false,
+        notes: { purpose }, callback_url: origin + route + "?payment=return", callback_method: "get",
+      });
+    }
+  }
+  if (!link) throw new RazorpayRequestError(503, "venture_pass_link_recovery_pending");
+  const bound = await bindLink(deps, null, application, link);
+  return (await reconcile(deps, provider, bound, link, null)).application;
 }
 
 async function reconcile(
@@ -210,15 +260,27 @@ export function createVentureCheckout(deps = defaults) {
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers });
     if (request.method !== "POST") return reply({ error: "method_not_allowed" }, 405);
     try {
-      const user = (await deps.authenticate(request)).id;
+      const user = await deps.authenticate(request);
       const input = await parseJson(request, 4096);
-      if (!input || !["checkout", "refresh"].includes(input.action)) return reply({ error: "invalid_request" }, 400);
+      if (!input || !["checkout", "refresh", "staff_approve"].includes(input.action)) return reply({ error: "invalid_request" }, 400);
 
       const settings = deps.settings();
-      let application = await deps.operate("lookup", user, {});
+      if (input.action === "staff_approve") {
+        if (user.claims.aal !== "aal2") return reply({ error: "staff_mfa_required" }, 403);
+        const id = input.applicationId;
+        if (typeof id !== "string" || !uuid.test(id)) return reply({ error: "invalid_request" }, 400);
+        if (!settings) return reply({ error: "venture_pass_checkout_disabled" }, 503);
+        const approved = await deps.review(request, id);
+        if (approved.id !== id) return reply({ error: "venture_pass_state_rejected" }, 409);
+        const prepared = await prepareLink(deps, settings.provider, origin, id);
+        return reply({ application: { ...publicApplication(prepared), preparing: !prepared.payment_link_id } });
+      }
+
+      let application = await deps.operate("lookup", user.id, {});
       const present = (confirmationPending = false, checkoutUrl?: string) => reply({
         application: publicApplication(application),
-        checkoutAvailable: Boolean(settings && !confirmationPending && application?.status === "approved" && deps.now() < expiry(application) * 1000),
+        checkoutAvailable: Boolean(settings && !confirmationPending && application?.status === "approved" &&
+          application.payment_link_id && deps.now() < expiry(application) * 1000),
         confirmationPending,
         ...(checkoutUrl ? { checkoutUrl } : {}),
       });
@@ -228,43 +290,19 @@ export function createVentureCheckout(deps = defaults) {
       if (!settings || !application || application.status !== "approved") return present();
 
       const { provider } = settings;
-      const withinWindow = deps.now() < expiry(application) * 1000;
-      let link: PaymentLink | null = null;
-      if (checkout && withinWindow) {
-        application = mustHaveApplication(await deps.operate("claim", user, { id: application.id, acceptedTerms: true }));
-        if (application.claimed === true) {
-          if (deps.now() >= expiry(application) * 1000) {
-            application = await deps.operate("release_unattempted", user, {
-              id: application.id, claimedAt: application.payment_claimed_at,
-            });
-            return present();
-          }
-          link = await provider.request<PaymentLink>("/payment_links", {
-            amount, currency, accept_partial: false, expire_by: expiry(application),
-            reference_id: application.id, description: "Armature AI Labs Venture Partner Pass",
-            notify: { email: false, sms: false }, reminder_enable: false,
-            notes: { purpose }, callback_url: origin + route + "?payment=return", callback_method: "get",
-          });
-        }
-      }
-
-      if (!link && application.payment_link_id) {
-        if (!linkIdPattern.test(application.payment_link_id)) return reply({ error: "invalid_venture_pass_payment_link" }, 409);
-        link = await provider.request<PaymentLink>("/payment_links/" + application.payment_link_id);
-      } else if (!link && application.payment_claimed_at) {
-        link = await recoverLink(provider, application);
-      }
-      if (!link) {
-        if (checkout && withinWindow && application.payment_claimed_at) return reply({ error: "venture_pass_link_recovery_pending" }, 503);
+      if (!application.payment_link_id) {
+        application = { ...application, status: deps.now() < expiry(application) * 1000 ? "pending" : "expired" };
         return present();
       }
-
-      application = await bindLink(deps, user, application, link);
-      const result = await reconcile(deps, provider, application, link, user);
+      if (!linkIdPattern.test(application.payment_link_id)) return reply({ error: "invalid_venture_pass_payment_link" }, 409);
+      const link = await provider.request<PaymentLink>("/payment_links/" + application.payment_link_id);
+      const result = await reconcile(deps, provider, application, link, user.id);
       application = result.application;
-      const canOpen = checkout && link.status === "created" && application.status === "approved"
-        && deps.now() < expiry(application) * 1000;
-      return present(result.confirmationPending, canOpen ? link.short_url : undefined);
+      if (checkout && link.status === "created" && application.status === "approved" && deps.now() < expiry(application) * 1000) {
+        application = mustHaveApplication(await deps.operate("accept_terms", user.id, { id: application.id, acceptedTerms: true }));
+        return present(false, deps.now() < expiry(application) * 1000 ? link.short_url : undefined);
+      }
+      return present(result.confirmationPending);
     } catch (error) {
       return failure(error, reply, "venture_pass_checkout_unavailable");
     }

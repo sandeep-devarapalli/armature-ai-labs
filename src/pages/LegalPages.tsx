@@ -1,13 +1,14 @@
 import type { PropsWithChildren } from "react";
+import { venturePassAvailable } from "../config/release";
 import { legalEntity } from "../data/legalEntity";
 import "./PrivacyPage.css";
 
-function LegalPage({ title, updated = true, children }: PropsWithChildren<{ title: string; updated?: boolean }>) {
+function LegalPage({ title, updated = true, updatedDate = "10 November 2026", children }: PropsWithChildren<{ title: string; updated?: boolean; updatedDate?: string }>) {
   return <div className="privacy-page legal-page">
     <header className="page-hero">
       <div className="wrap">
         <h1>{title}</h1>
-        {updated && <p className="hero-copy">Last updated: 10 November 2026</p>}
+        {updated && <p className="hero-copy">Last updated: {updatedDate}</p>}
       </div>
     </header>
     <div className="wrap privacy-content">{children}</div>
@@ -43,7 +44,7 @@ export function ContactPage() {
 }
 
 export function TermsPage() {
-  return <LegalPage title="Terms and Conditions">
+  return <LegalPage title="Terms and Conditions" updatedDate={venturePassAvailable ? "24 November 2026" : undefined}>
       <p>These terms apply when you use armatureailabs.com, book or use space at Armature AI Labs, rent equipment, buy hardware, or attend a workshop. Armature AI Labs is operated by {legalEntity.name} (LLPIN {legalEntity.llpin}), referred to here as "we" or "us". By booking, paying or using our services, you agree to these terms.</p>
     <section>
       <h2>1. What we offer</h2>
@@ -52,12 +53,14 @@ export function TermsPage() {
         <li>Equipment rental: the Hiwonder SO-ARM101 Advanced Kit, subject to confirmed availability, for a minimum of 7 days or a fixed 30-day period.</li>
         <li>Hardware sales: robotics hardware and kits, such as educational robotic arms, sensors and components.</li>
         <li>Workshops and events: paid sessions at the lab or online.</li>
+        {venturePassAvailable && <li>Venture Partner Pass: an annual membership for approved venture firms, limited to four partner firms.</li>}
       </ul>
       <p>Current prices are shown on the website or in your quote. Prices are in Indian Rupees. We are not currently GST-registered and do not add GST. Any future applicable tax will be disclosed before you accept a quote or pay.</p>
     </section>
     <section>
       <h2>2. Membership and eligibility</h2>
       <p>You must be at least 16 to register, and 18 to sign a cabin or seat agreement or rent equipment on your own. Applicants aged 16 or 17 need a guardian's written permission. We may ask for identity verification before you use paid services, as described in our Privacy Policy. We may decline or cancel a membership that breaks these terms.</p>
+      {venturePassAvailable && <p>The Venture Partner Pass costs ₹5,00,000 per firm. A firm representative must apply and receive Armature’s approval. The Razorpay payment window closes one hour after approval. Membership begins after verified payment and runs for 12 months. The renewal window opens in December. See the <a href="/refund-policy#venture-refunds">Venture Partner Pass refund rule</a>.</p>}
     </section>
     <section>
       <h2>3. Cabins and seats</h2>
@@ -125,7 +128,7 @@ export function TermsPage() {
 }
 
 export function RefundPolicyPage() {
-  return <LegalPage title="Cancellation and Refund Policy">
+  return <LegalPage title="Cancellation and Refund Policy" updatedDate={venturePassAvailable ? "24 November 2026" : undefined}>
       <p>This policy covers payments made to {legalEntity.name} for Armature AI Labs. Approved refunds for payments collected through Razorpay are initiated to the original payment method within 5 to 7 working days of approval. Your bank may take a few more days to show the credit.</p>
     <p>The cabin rules below apply to new agreements. Existing signed cabin agreements retain their agreed cancellation and termination terms.</p>
     <div className="legal-table-scroll" role="region" aria-label="Cancellation and refund rules" tabIndex={0}>
@@ -153,6 +156,10 @@ export function RefundPolicyPage() {
         </tbody>
       </table>
     </div>
+    {venturePassAvailable && <section id="venture-refunds">
+      <h2>Venture Partner Pass</h2>
+      <p>Firms can request a refund within 30 days of their Razorpay-confirmed payment. Email <a href={`mailto:${legalEntity.email}`}>{legalEntity.email}</a> with your application reference. Armature reviews each request. Approved refunds go back to the original payment method.</p>
+    </section>}
     <section>
       <h2>Bank deposits and equipment early returns</h2>
       <p>New cabin and equipment security deposits are paid and refunded by bank transfer, separately from Razorpay rent payments. Staff review deductions, verify the refund account and record the bank transfer reference. Cabin deposits are returned within 7 working days of move-out, less documented unpaid dues or damage beyond normal wear. Existing signed agreements and historical payment methods are preserved.</p>

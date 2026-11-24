@@ -16,7 +16,7 @@ const benefits = [
   { id: "events", title: "Give portfolio founders a stage.", copy: "Use four hosted events to put your founders alongside startups, operators, and ecosystem partners. Armature helps with planning, invitations, rehearsal, setup, and standard AV.", label: "Four events a year", facts: ["Demo day", "Roundtable", "Panel", "Mixer"] },
   { id: "podcasts", title: "Turn a conversation into an episode.", copy: "Use four video podcast slots to feature portfolio founders or your team. Armature films, fully edits, and publishes each episode on the Armature AI Labs YouTube channel.", label: "Four episodes a year", facts: ["Film", "Edit", "Publish on YouTube"] },
   { id: "visibility", title: "Reach beyond the room.", copy: "Share founders’ work through Armature’s event coverage, website, LinkedIn, and YouTube. When both sides want to connect, Armature can help make introductions to relevant pilot customers, collaborators, or investors.", label: "Partner visibility", facts: ["Year-round website listing", "LinkedIn banner spotlight around your flagship event", "Credit on event invitations and recaps"] },
-  { id: "lab", title: "Make the lab part of your week.", copy: "Bring your team in for founder meetings and hands-on portfolio sessions. Desk bookings depend on availability.", label: "Team and portfolio access", facts: ["Up to 10 named team members", "10 shared desk-days per month", "Two scoped portfolio lab sessions · Quarterly showcases"] },
+  { id: "lab", title: "Make the lab part of your week.", copy: "Bring your team in for founder meetings and hands-on portfolio sessions. Desk bookings depend on availability.", label: "Team and portfolio access", facts: ["Up to 5 named team members", "5 shared desk-days per month", "Two private lab sessions per year for portfolio startups", "Quarterly showcases shared by all four partner firms"] },
 ] as const;
 
 function OrbitFigure() {
@@ -111,6 +111,7 @@ export default function VenturePassPage() {
         <div className="section-heading">
           <h2 id="venture-apply-title">Apply for the pass.</h2>
           <p>Once staff approve your application, you have one hour to pay ₹5,00,000 through Razorpay. Your membership is confirmed after Razorpay verifies the payment.</p>
+          <p>Refund requests can be submitted within 30 days of payment, subject to review. <Link to="/refund-policy#venture-refunds">Read the refund policy</Link>.</p>
         </div>
         <div className="venture-form-panel">
           {!basicOnboardingAvailable ? <p>Applications are currently closed.</p>

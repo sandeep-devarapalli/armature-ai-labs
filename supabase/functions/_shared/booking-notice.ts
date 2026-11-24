@@ -54,7 +54,10 @@ export function guestPassSession(day: string): BookingSession {
   return { id: "visit", startsAt: day + "T09:00:00+05:30", endsAt: day + "T22:00:00+05:30" };
 }
 
-export function bookingNotice(input: BookingNotice) {
+export function bookingNotice(
+  input: BookingNotice,
+  ventureOrigin: "https://armatureailabs.com" | "https://booking-staging.armature-lab.pages.dev" = "https://armatureailabs.com",
+) {
   if (input.kind === "golden_application") {
     return {
       subject: "Golden Pass application ready for review · Armature AI Labs",
@@ -67,7 +70,7 @@ export function bookingNotice(input: BookingNotice) {
     return {
       subject: "Venture Partner Pass application ready for review · Armature AI Labs",
       text: "A new Venture Partner Pass application is ready for review. Sign in to Booking management to review it.\n" +
-        "https://armatureailabs.com/admin/booking-management#venture-partner-pass-applications",
+        ventureOrigin + "/admin/booking-management#venture-partner-pass-applications",
       events: [],
     };
   }
@@ -82,7 +85,7 @@ export function bookingNotice(input: BookingNotice) {
           "Armature AI Labs has confirmed your ₹5,00,000 payment and Venture Partner Pass membership.",
         `${approved ? "Pay by" : "Membership ends"}: ${dateFormat.format(date)}, ${time} IST`,
         `Application reference: ${input.reference}`,
-        "https://armatureailabs.com/venture-partner-pass#apply",
+        ventureOrigin + "/venture-partner-pass#apply",
       ].join("\n"),
       events: [],
     };

@@ -10,13 +10,13 @@ begin
       and exists (select 1 from private.booking_notice_settings where singleton and (enabled or test_recipient_id=staff.id))
     order by staff.id limit 1
     on conflict (dedupe_key) do nothing;
-  elsif new.status is distinct from old.status then
+  elsif new.status is distinct from old.status or new.payment_link_id is distinct from old.payment_link_id then
     if new.status in ('confirmed','expired') then
       update private.booking_notice_outbox set status='rejected',settled_at=clock_timestamp()
       where dedupe_key=new.id::text||':approved:venture' and status='queued';
     end if;
     if exists (select 1 from private.booking_notice_settings where singleton and (enabled or test_recipient_id=new.user_id)) then
-      if new.status='approved' then
+      if new.status='approved' and new.payment_link_id is not null and old.payment_link_id is null then
         perform private.queue_booking_notice(new.user_id,new.id,'venture','approved','venture',
           jsonb_build_object('paymentExpiresAt',new.payment_expires_at));
       elsif new.status='confirmed' then
@@ -30,5 +30,5 @@ end;
 $$;
 revoke all on function private.queue_venture_pass_notice() from public,anon,authenticated,service_role;
 
-create trigger venture_pass_notice after insert or update of status on private.venture_pass_applications
+create trigger venture_pass_notice after insert or update of status, payment_link_id on private.venture_pass_applications
 for each row execute function private.queue_venture_pass_notice();

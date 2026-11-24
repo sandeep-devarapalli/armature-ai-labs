@@ -36,6 +36,8 @@ Deno.serve(async request => {
     }
     if (input.action !== "claim") return json(request, { error: "invalid_action" }, 400);
     const allowlist = Deno.env.get("BOOKING_NOTICE_TEST_RECIPIENT");
+    const ventureOrigin = Deno.env.get("SUPABASE_URL") === "https://gwrdmpvczwuypvvzfyty.supabase.co"
+      ? "https://booking-staging.armature-lab.pages.dev" : "https://armatureailabs.com";
     const { data, error } = await client.rpc("claim_booking_notices", { p_limit: 10 });
     if (error || !Array.isArray(data)) return json(request, { error: "claim_failed" }, 503);
     const messages: { id: string; raw: string }[] = [];
@@ -61,7 +63,7 @@ Deno.serve(async request => {
         }
         messages.push({ id: job.id, raw: bookingMailMessage(job.payload, {
           id: job.id, aggregateId: job.aggregate_id, recipient,
-          sequence: job.sequence, createdAt: job.created_at, memberName,
+          sequence: job.sequence, createdAt: job.created_at, memberName, ventureOrigin,
         }) });
       } catch {
         const settled = await client.rpc("settle_booking_notice", {
