@@ -36,8 +36,12 @@ jobs:
       - run: python3 -m unittest discover -s tools/member-notifications -v
       - run: python3 -m pip install -r tools/onboarding-scanner/requirements.txt
       - run: python3 -m unittest discover -s tools/onboarding-scanner -v
-      - run: npm run build
-      - run: npm run check:pages-runtime
+      - name: Verify the public website build and crawler responses
+        env:
+          VITE_VENTURE_PASS_ENABLED: 'true'
+        run: |
+          npm run build
+          npm run check:pages-runtime
       - run: npx playwright install --only-shell chromium
       - run: npm run test:e2e
       - run: npm run test:e2e:ecosystem
