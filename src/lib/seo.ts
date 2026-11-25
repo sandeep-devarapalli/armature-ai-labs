@@ -1,4 +1,4 @@
-import { basicOnboardingAvailable, deskCheckoutAvailable } from "../config/release";
+import { basicOnboardingAvailable, deskCheckoutAvailable, venturePassAvailable } from "../config/release";
 import { components } from "../data/components";
 import { legalEntity } from "../data/legalEntity";
 
@@ -8,6 +8,8 @@ const SOCIAL_IMAGE = `${SITE_URL}/brand/editorial-2026-09/social/linkedin/link-p
 
 type JsonLd = Record<string, unknown>;
 type PageDefinition = { name: string; description: string; parent?: string };
+
+const venturePassPath = "/venture-partner-pass/";
 
 export type PageSeo = {
   title: string;
@@ -35,6 +37,11 @@ const pages: Record<string, PageDefinition> = {
     name: "Physical AI and Robotics Lab in Bengaluru",
     description: "Armature AI Labs is a 3,500 sq ft physical AI and robotics lab in HSR Layout, Bengaluru. Explore membership, projects and workspace access."
   },
+  ...(venturePassAvailable ? { [venturePassPath]: {
+    name: "Venture Partner Pass",
+    description: "An annual partnership for venture firms backing robotics and physical AI. Meet founders early, host demo days and give your portfolio a stage at Armature AI Labs.",
+    parent: "/join/"
+  } } : {}),
   "/privacy/": {
     name: "Privacy",
     description: "How Armature AI Labs handles website visits, browser storage and enquiries, how to contact us about your information, and how free membership registration and private identity review work."
@@ -144,7 +151,7 @@ const organization: JsonLd = {
 
 const operationalNames: Record<string, string> = {
   onboarding: "Basic Membership", auth: "Sign In", dashboard: "Member Dashboard", profile: "Member Profile",
-  book: "Resource Booking", bookings: "Bookings", "golden-pass": "Golden Pass", "venture-partner-pass": "Venture Partner Pass", "check-in": "Check In",
+  book: "Resource Booking", bookings: "Bookings", "golden-pass": "Golden Pass", "check-in": "Check In",
   "component-requests": "Component Requests", inventory: "Inventory",
   team: "Meet the Team",
   lockers: "Lockers", consumables: "Small Parts", toolkits: "Toolkits",
@@ -179,14 +186,17 @@ export function getPageSeo(pathname: string): PageSeo {
   }
 
   const canonical = `${SITE_URL}${path}`;
+  const venture = path === venturePassPath;
   const article = path === "/blog/model-hardware-standard/";
   const image = article ? `${SITE_URL}/blog-covers/mhs-common-interface.png`
-    : path === "/about/" ? `${SITE_URL}/about/who-we-are-social.png` : SOCIAL_IMAGE;
+    : path === "/about/" ? `${SITE_URL}/about/who-we-are-social.png`
+      : venture ? `${SITE_URL}/brand/editorial-2026-09/social/venture-partner-pass-1200x630.png` : SOCIAL_IMAGE;
   const imageAlt = article ? "Abstract instruments aligned around a shared connector"
     : path === "/about/" ? "Concept illustration of a shared physical AI lab"
-      : "Armature AI Labs — The Physical AI and Robotics Lab, HSR Layout, Bengaluru";
+      : venture ? "Venture Partner Pass from Armature AI Labs, with a diagram linking founder discovery, previews and showcases"
+        : "Armature AI Labs — The Physical AI and Robotics Lab, HSR Layout, Bengaluru";
   const imageWidth = article ? 1672 : 1200;
-  const imageHeight = article ? 941 : path === "/about/" ? 630 : 627;
+  const imageHeight = article ? 941 : path === "/about/" || venture ? 630 : 627;
   const graph: JsonLd[] = [organization, {
     "@type": "WebSite", "@id": `${SITE_URL}/#website`, url: `${SITE_URL}/`,
     name: SITE_NAME, publisher: { "@id": organization["@id"] }, inLanguage: "en"

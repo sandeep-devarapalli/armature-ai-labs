@@ -171,7 +171,7 @@ export const routes: RouteObject[] = [
       { path: "/book", element: memberFeature(protectedPage(<BookPage />)) },
       { path: "/book/:resource", element: memberFeature(protectedPage(<ResourceBookingPage />)) },
       { path: "/bookings/rentals", element: <Navigate to={rentalCheckoutAvailable ? "/bookings?item=cabin" : "/bookings"} replace /> },
-      { path: "/venture-partner-pass", element: <ReleaseGate enabled={venturePassAvailable}><VenturePassPage /></ReleaseGate> },
+      { path: "/venture-partner-pass", element: <ReleaseGate enabled={venturePassAvailable}><VenturePassPage /></ReleaseGate>, handle: { module: "src/pages/PassPages.tsx" } },
       { path: "/golden-pass", element: <ReleaseGate enabled={basicOnboardingAvailable}><GoldenPassPage /></ReleaseGate> },
       { path: "/admin/passes", element: <ReleaseGate enabled={basicOnboardingAvailable}><PassStaffPage /></ReleaseGate> },
       { path: "/admin/booking-management", element: <ReleaseGate enabled={basicOnboardingAvailable}><PassStaffPage bookingManagement /></ReleaseGate> },

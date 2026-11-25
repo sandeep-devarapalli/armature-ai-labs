@@ -68,6 +68,33 @@ for (const pathname of ["/", "/blog/", "/blog/model-hardware-standard/", "/build
   });
 }
 
+if (process.env.VITE_VENTURE_PASS_ENABLED === "true") {
+  const canonical = `${canonicalOrigin}/venture-partner-pass/`;
+  const image = "/brand/editorial-2026-09/social/venture-partner-pass-1200x630.png";
+  await probe("/venture-partner-pass?payment=return", (response) => {
+    assert.equal(response.status, 308);
+    const location = new URL(response.headers.get("location"), base);
+    assert.equal(location.pathname, "/venture-partner-pass/");
+    assert.equal(location.search, "?payment=return");
+  });
+  await probe(image, (response) => {
+    assert.equal(response.status, 200);
+    assert.match(response.headers.get("content-type") ?? "", /image\/png/);
+  });
+  for (const pathname of ["/venture-partner-pass/", "/venture-partner-pass/?payment=return"]) {
+    await probe(pathname, (response, text, document) => {
+      assert.equal(response.status, 200);
+      assert.equal(document.title, "Venture Partner Pass | Armature AI Labs");
+      assert.equal(document.querySelector("main h1")?.textContent.trim(), "Venture Partner Pass");
+      assert.equal(document.querySelector('link[rel="canonical"]')?.getAttribute("href"), canonical);
+      assert.equal(document.querySelector('meta[property="og:url"]')?.getAttribute("content"), canonical);
+      assert.equal(document.querySelector('meta[property="og:image"]')?.getAttribute("content"), `${canonicalOrigin}${image}`);
+      assert.doesNotMatch(`${response.headers.get("x-robots-tag") ?? ""} ${document.querySelector('meta[name="robots"]')?.getAttribute("content") ?? ""}`, /noindex/i);
+      assert.doesNotMatch(document.querySelector('meta[property="og:description"]')?.getAttribute("content") ?? "", /not part of the public search index/i);
+    });
+  }
+}
+
 for (const pathname of ["/__seo-check-missing__/", "/procurement/", "/components/__seo-check-missing__/", "/auth/not-a-route/"]) {
   await probe(pathname, (response, text, document) => {
     assert.equal(response.status, 404, "Unknown/retired path must return a real 404");
@@ -113,6 +140,9 @@ await probe("/sitemap.xml", (response, text) => {
     for (const url of urls) {
       assert.equal(url.origin, canonicalOrigin);
       assert.doesNotMatch(url.pathname, /^\/(?:admin|auth|onboarding|dashboard|profile|book|bookings|check-in|financials|kiosk|inventory|lockers|consumables|toolkits|component-requests|members|membership|equipment|procurement)(?:\/|$)|^\/components\/request\//);
+    }
+    if (process.env.VITE_VENTURE_PASS_ENABLED === "true") {
+      assert.ok(urls.some((url) => url.pathname === "/venture-partner-pass/"), "Sitemap is missing the public Venture Partner Pass");
     }
     for (const pathname of Object.keys(legalPages)) {
       assert.ok(urls.some((url) => url.pathname === pathname), `Sitemap is missing ${pathname}`);

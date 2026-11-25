@@ -1,3 +1,5 @@
+- Venture Partner Pass share preview correction, 25 November 2026: when the offer is enabled, serve its own public prerender with canonical, sitemap and social metadata. Verify the crawler HTML and share image at the actual URL without JavaScript. Keep application and checkout authorization in place.
+
 - Event Space payment-return verification, 23 November 2026: complete a Razorpay Test Mode payment in Chrome and confirm that the confirmed receipt appears automatically after provider success. A success page at Razorpay plus manual booking recovery does not verify automatic return. Verify the original order server-side and keep all test charges out of production.
 
 - Event space checkout correction, 22 November 2026: keep GF-09 and GF-10 as the single Event space option and remove the Whole floor map button. For unsigned requests without a payment order, authorised staff approve the date and setup. Customers accept the website terms and refund policy and pay through Razorpay without PandaDoc. Preserve signed documents and existing orders. Send new approval alerts to hello@armatureailabs.com with a link to the staff review queue.
