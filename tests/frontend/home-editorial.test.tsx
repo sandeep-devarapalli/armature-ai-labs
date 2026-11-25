@@ -21,7 +21,7 @@ describe("Full editorial landing page", () => {
     ]) expect(screen.getByRole("heading", { name, level: 2 })).toBeInTheDocument();
     // The per-room programme was removed from the landing page on 17 October 2026 (owner request).
     expect(screen.queryByText(/sq ft carpet/)).not.toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Join Discord" })).toHaveAttribute("href", "https://discord.gg/qGNXGmF8z");
+    expect(screen.getByRole("link", { name: "Explore on GitHub" })).toHaveAttribute("href", "https://github.com/armature-ai-labs");
     expect(screen.getByRole("link", { name: "Membership enquiries" })).toHaveAttribute("href", "/join");
     expect(screen.queryByText(/sixteen builder pods/i)).not.toBeInTheDocument();
     expect(screen.getByText(/Contact the lab about membership and booking availability/)).toBeInTheDocument();

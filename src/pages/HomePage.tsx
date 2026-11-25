@@ -1,10 +1,10 @@
 import { useRegistrationLabel } from "../context/AccountContext";
 import {
   ArrowRight,
+  ArrowUpRight,
   CalendarDays,
   Cctv,
   CheckCircle2,
-  ExternalLink,
   LockKeyhole,
   PackageOpen,
   ScanLine,
@@ -83,25 +83,20 @@ export function HomePage() {
                 <ArrowRight aria-hidden="true" />
               </Link>
             )}
-            <a
-              className="button button-quiet"
-              href="https://discord.gg/qGNXGmF8z"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Join Discord
-              <ExternalLink aria-hidden="true" />
-            </a>
-            <a
-              className="button button-quiet"
-              href="https://www.linkedin.com/company/armature-ai-labs/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Follow on LinkedIn
-              <ExternalLink aria-hidden="true" />
-            </a>
           </div>
+          <aside className="hero-open-source" aria-labelledby="hero-open-source-title">
+            <div>
+              <h2 id="hero-open-source-title">Open source</h2>
+              <p>Robot designs, software and model references from the lab.</p>
+            </div>
+            <a href="https://github.com/armature-ai-labs" target="_blank" rel="noreferrer">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <path d="M9 19c-4.3 1.3-4.3-2.5-6-3m12 6v-3.3a2.9 2.9 0 0 0-.8-2.2c2.7-.3 5.5-1.3 5.5-6A4.7 4.7 0 0 0 18.5 7a4.4 4.4 0 0 0-.1-3.3S17.4 3.4 15 5a12 12 0 0 0-6 0C6.6 3.4 5.6 3.7 5.6 3.7A4.4 4.4 0 0 0 5.5 7a4.7 4.7 0 0 0-1.2 3.5c0 4.7 2.8 5.7 5.5 6a2.9 2.9 0 0 0-.8 2.2V22" />
+              </svg>
+              Explore on GitHub
+              <ArrowUpRight className="hero-open-source-arrow" aria-hidden="true" />
+            </a>
+          </aside>
           </div><FieldOfTouch scene="scanner" priority look="pixel" /></div>
           <div className="hero-measure">
             <div className="metrics-strip">

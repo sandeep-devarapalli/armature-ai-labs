@@ -201,6 +201,12 @@ footer .footer-links a { color: var(--link); }
 .footer-grid { column-gap: 60px; }
 .footer-grid p, .footer-links { font-size: 12px; }
 .footer-links a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.footer-social { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 20px; border-top: 1px solid var(--hair); margin-block: 22px 10px; padding-top: 15px; }
+.footer-social h2 { margin: 0; font: 700 12px/1.5 var(--mono); letter-spacing: 0; }
+.footer-social div { display: flex; flex-wrap: wrap; align-items: center; gap: 3px 22px; }
+.footer-social a { display: inline-flex; gap: 9px; align-items: center; min-height: 44px; color: var(--link); font: 13px/1.5 var(--mono); }
+.footer-social a:hover { color: var(--link-hover); text-decoration: underline; text-underline-offset: 4px; }
+.footer-social a svg { width: 17px; height: 17px; flex: none; }
 .footer-signature { container-type: inline-size; margin: 28px 3vw 0; }
 footer .footer-wordmark {
   margin: 0;

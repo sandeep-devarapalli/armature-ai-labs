@@ -60,7 +60,7 @@ export function TermsPage() {
     <section>
       <h2>2. Membership and eligibility</h2>
       <p>You must be at least 16 to register, and 18 to sign a cabin or seat agreement or rent equipment on your own. Applicants aged 16 or 17 need a guardian's written permission. We may ask for identity verification before you use paid services, as described in our Privacy Policy. We may decline or cancel a membership that breaks these terms.</p>
-      {venturePassAvailable && <p>The Venture Partner Pass costs ₹5,00,000 per firm. A firm representative must apply and receive Armature’s approval. The Razorpay payment window closes one hour after approval. Membership begins after verified payment and runs for 12 months. The renewal window opens in December. See the <a href="/refund-policy#venture-refunds">Venture Partner Pass refund rule</a>.</p>}
+      {venturePassAvailable && <p>The Venture Partner Pass costs ₹5,00,000 per firm. A firm representative can contact Armature about joining. Armature confirms participation and shares payment instructions. For approvals already issued through the website, the Razorpay payment window closes one hour after approval. Membership begins after verified payment and runs for 12 months. The renewal window opens in December. See the <a href="/refund-policy#venture-refunds">Venture Partner Pass refund rule</a>.</p>}
     </section>
     <section>
       <h2>3. Cabins and seats</h2>
