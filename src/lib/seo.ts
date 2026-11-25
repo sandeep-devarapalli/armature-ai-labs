@@ -1,4 +1,4 @@
-import { basicOnboardingAvailable, deskCheckoutAvailable, venturePassAvailable } from "../config/release";
+import { basicOnboardingAvailable, deskCheckoutAvailable, publicBookingsAvailable, rentalCheckoutAvailable, venturePassAvailable } from "../config/release";
 import { components } from "../data/components";
 import { legalEntity } from "../data/legalEntity";
 
@@ -37,6 +37,21 @@ const pages: Record<string, PageDefinition> = {
     name: "Physical AI and Robotics Lab in Bengaluru",
     description: "Armature AI Labs is a 3,500 sq ft physical AI and robotics lab in HSR Layout, Bengaluru. Explore membership, projects and workspace access."
   },
+  ...(basicOnboardingAvailable ? { "/golden-pass/": {
+    name: "Golden Pass",
+    description: "Spend a year at Armature AI Labs in Bengaluru. Get daytime lab access every day, priority equipment bookings and members-only gatherings for ₹1,00,000.",
+    parent: "/join/"
+  } } : {}),
+  ...(publicBookingsAvailable ? { "/bookings/": {
+    name: "Book the Lab",
+    description: "Explore desk passes, guest visits, team cabins and Event Space at Armature AI Labs in HSR Layout, Bengaluru. Check availability and booking options.",
+    parent: "/join/"
+  } } : {}),
+  ...(rentalCheckoutAvailable ? { "/bookings/equipment/": {
+    name: "Lab Equipment Rentals",
+    description: "Explore robot arms and cameras for use at Armature AI Labs in Bengaluru. See equipment specifications and check current rental options.",
+    parent: "/bookings/"
+  } } : {}),
   ...(venturePassAvailable ? { [venturePassPath]: {
     name: "Venture Partner Pass",
     description: "An annual partnership for venture firms backing robotics and physical AI. Meet founders early, host demo days and give your portfolio a stage at Armature AI Labs.",
@@ -159,6 +174,19 @@ const operationalNames: Record<string, string> = {
   members: "Member Directory", "directory-profile": "My Public Profile"
 };
 
+const unlistedPages: Record<string, PageDefinition> = {
+  "/members/": { name: "Member Directory", description: "Meet the builders, learners and researchers who share their profiles at Armature AI Labs in Bengaluru." },
+  "/team/": { name: "Meet the Team", description: "Meet the people behind Armature AI Labs, the physical AI and robotics lab in HSR Layout, Bengaluru." }
+};
+
+// Product availability stays in the live catalogue. These pages only carry share metadata.
+const equipmentSharePages: Record<string, PageDefinition> = rentalCheckoutAvailable ? {
+  "/bookings/equipment/hiwonder/": { name: "LeRobot SO-101 Advanced Kit", description: "Explore the Hiwonder leader and follower kit for teleoperation and imitation learning at Armature AI Labs." },
+  "/bookings/equipment/thinkrobotics-so101/": { name: "LeRobot SO-101 6-Axis Robotic Arm", description: "Explore the ThinkRobotics SO-101 leader and follower pair for use at Armature AI Labs." },
+  "/bookings/equipment/waveshare-ov5693/": { name: "OV5693 5MP USB Camera (A)", description: "Explore the Waveshare USB camera for recording robotics experiments at Armature AI Labs." }
+} : {};
+export const equipmentSharePaths = Object.keys(equipmentSharePages);
+
 export function getPageSeo(pathname: string): PageSeo {
   const cleanPath = pathname.split(/[?#]/, 1)[0];
   const path = cleanPath === "/" ? "/" : `${cleanPath.replace(/\/+$/, "")}/`;
@@ -171,11 +199,12 @@ export function getPageSeo(pathname: string): PageSeo {
     : Object.hasOwn(pages, path) ? pages[path] : undefined;
   if (!page) {
     const segment = path.split("/")[1];
-    const name = path === "/components/request/" ? "Component Request"
-      : Object.hasOwn(operationalNames, segment) ? operationalNames[segment] : "Page Not Found";
+    const unlisted = unlistedPages[path] ?? equipmentSharePages[path];
+    const name = unlisted?.name ?? (path === "/components/request/" ? "Component Request"
+      : Object.hasOwn(operationalNames, segment) ? operationalNames[segment] : "Page Not Found");
     return {
       title: `${name} | ${SITE_NAME}`,
-      description: "This page is not part of the public search index. Explore the public lab website or contact hello@armatureailabs.com for information.",
+      description: unlisted?.description ?? "This page is not part of the public search index. Explore the public lab website or contact hello@armatureailabs.com for information.",
       indexable: false,
       robots: "noindex, follow",
       type: "website",
@@ -187,16 +216,19 @@ export function getPageSeo(pathname: string): PageSeo {
 
   const canonical = `${SITE_URL}${path}`;
   const venture = path === venturePassPath;
+  const golden = path === "/golden-pass/";
   const article = path === "/blog/model-hardware-standard/";
   const image = article ? `${SITE_URL}/blog-covers/mhs-common-interface.png`
     : path === "/about/" ? `${SITE_URL}/about/who-we-are-social.png`
-      : venture ? `${SITE_URL}/brand/editorial-2026-09/social/venture-partner-pass-1200x630.png` : SOCIAL_IMAGE;
+      : venture ? `${SITE_URL}/brand/editorial-2026-09/social/venture-partner-pass-1200x630.png`
+        : golden ? `${SITE_URL}/brand/editorial-2026-09/social/golden-pass-1200x630.png` : SOCIAL_IMAGE;
   const imageAlt = article ? "Abstract instruments aligned around a shared connector"
     : path === "/about/" ? "Concept illustration of a shared physical AI lab"
       : venture ? "Venture Partner Pass from Armature AI Labs, with a diagram linking founder discovery, previews and showcases"
-        : "Armature AI Labs — The Physical AI and Robotics Lab, HSR Layout, Bengaluru";
+        : golden ? "Brushed metal Golden Pass annual membership card by Armature AI Labs"
+          : "Armature AI Labs — The Physical AI and Robotics Lab, HSR Layout, Bengaluru";
   const imageWidth = article ? 1672 : 1200;
-  const imageHeight = article ? 941 : path === "/about/" || venture ? 630 : 627;
+  const imageHeight = article ? 941 : path === "/about/" || venture || golden ? 630 : 627;
   const graph: JsonLd[] = [organization, {
     "@type": "WebSite", "@id": `${SITE_URL}/#website`, url: `${SITE_URL}/`,
     name: SITE_NAME, publisher: { "@id": organization["@id"] }, inLanguage: "en"
