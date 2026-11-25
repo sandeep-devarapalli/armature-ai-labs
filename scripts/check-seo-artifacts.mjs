@@ -105,7 +105,8 @@ for (const url of urls) {
     assert.equal(parsed.origin, origin, "Wrong canonical origin");
     assert.equal(parsed.search + parsed.hash, "", "Sitemap includes a query or hash");
     assert.match(parsed.pathname, /^\/(?:[a-z0-9-]+\/)*$/, "Public canonical needs a trailing slash and safe path");
-    assert.ok(!excluded.test(parsed.pathname), "Private, retired or alias URL is in sitemap");
+    assert.ok(!excluded.test(parsed.pathname) || ["/bookings/", "/bookings/equipment/"].includes(parsed.pathname),
+      "Private, retired or alias URL is in sitemap");
     const filename = path.join(directory, parsed.pathname, "index.html");
     dom = new JSDOM(await readFile(filename, "utf8"));
     const document = dom.window.document;

@@ -95,6 +95,67 @@ if (process.env.VITE_VENTURE_PASS_ENABLED === "true") {
   }
 }
 
+const offerPages = new Map();
+if (process.env.VITE_BASIC_ONBOARDING_ENABLED === "true") {
+  offerPages.set("/golden-pass/", "Golden Pass");
+  offerPages.set("/bookings/", "Book the Lab");
+  await probe("/bookings?item=event&paymentReturn=fixture", response => {
+    assert.equal(response.status, 308);
+    const location = new URL(response.headers.get("location"), base);
+    assert.equal(location.pathname + location.search, "/bookings/?item=event&paymentReturn=fixture");
+  });
+  await probe("/bookings/?item=guest", (response, text, document) => {
+    assert.equal(response.status, 200);
+    assert.equal(document.querySelector('link[rel="canonical"]')?.href, `${canonicalOrigin}/bookings/`);
+  });
+  const image = "/brand/editorial-2026-09/social/golden-pass-1200x630.png";
+  await probe(image, response => {
+    assert.equal(response.status, 200);
+    assert.match(response.headers.get("content-type") ?? "", /image\/png/);
+  });
+  await probe("/golden-pass/", (response, text, document) => {
+    assert.equal(document.querySelector('meta[property="og:image"]')?.content, `${canonicalOrigin}${image}`);
+  });
+  if (process.env.VITE_RENTAL_CHECKOUT_ENABLED === "true") {
+    offerPages.set("/bookings/equipment/", "Lab Equipment Rentals");
+    await probe("/bookings/rentals", response => {
+      assert.equal(response.status, 302);
+      const location = new URL(response.headers.get("location"), base);
+      assert.equal(location.pathname + location.search, "/bookings/?item=cabin");
+    });
+    for (const [slug, title] of [
+      ["hiwonder", "LeRobot SO-101 Advanced Kit"],
+      ["thinkrobotics-so101", "LeRobot SO-101 6-Axis Robotic Arm"],
+      ["waveshare-ov5693", "OV5693 5MP USB Camera (A)"]
+    ]) {
+      await probe(`/bookings/equipment/${slug}/`, (response, text, document) => {
+        assert.equal(response.status, 200);
+        noindex(response, document);
+        assert.equal(document.title, `${title} | Armature AI Labs`);
+      });
+    }
+  }
+}
+
+for (const [pathname, title] of offerPages) {
+  await probe(pathname, (response, text, document) => {
+    assert.equal(response.status, 200);
+    assert.equal(document.title, `${title} | Armature AI Labs`);
+    assert.ok(document.querySelector("main h1")?.textContent.trim(), "Missing public heading");
+    assert.equal(document.querySelector('link[rel="canonical"]')?.href, `${canonicalOrigin}${pathname}`);
+    assert.equal(document.querySelector('meta[property="og:title"]')?.content, document.title);
+    assert.match(document.querySelector('meta[name="robots"]')?.content ?? "", /^index,/);
+  });
+}
+
+for (const pathname of ["/members/", "/team/"]) {
+  await probe(pathname, (response, text, document) => {
+    assert.equal(response.status, 200);
+    noindex(response, document);
+    assert.match(document.querySelector('meta[property="og:description"]')?.content ?? "", /^Meet the /);
+  });
+}
+
 for (const pathname of ["/__seo-check-missing__/", "/procurement/", "/components/__seo-check-missing__/", "/auth/not-a-route/"]) {
   await probe(pathname, (response, text, document) => {
     assert.equal(response.status, 404, "Unknown/retired path must return a real 404");
@@ -113,7 +174,7 @@ for (const [pathname, destination, search] of [["/booking-beta", "/bookings/", "
   });
 }
 
-for (const pathname of ["/onboarding", "/onboarding/", "/auth/", "/admin/members/", "/admin/equipment", "/admin/equipment/", "/book/sample-resource/", "/components/request/", "/members/", "/members/seo-check-no-profile/"]) {
+for (const pathname of ["/onboarding", "/onboarding/", "/auth/", "/admin/members/", "/admin/equipment", "/admin/equipment/", "/book/sample-resource/", "/components/request/", "/members/", "/members/seo-check-no-profile/", "/my-bookings/", "/bookings/seo-check-no-booking/"]) {
   await probe(pathname, (response, text, document) => {
     assert.equal(response.status, 200, "Known operational/member route should remain reachable");
     noindex(response, document);
@@ -139,12 +200,15 @@ await probe("/sitemap.xml", (response, text) => {
     assert.ok(urls.length >= 13, "Sitemap is missing public content");
     for (const url of urls) {
       assert.equal(url.origin, canonicalOrigin);
-      assert.doesNotMatch(url.pathname, /^\/(?:admin|auth|onboarding|dashboard|profile|book|bookings|check-in|financials|kiosk|inventory|lockers|consumables|toolkits|component-requests|members|membership|equipment|procurement)(?:\/|$)|^\/components\/request\//);
+      assert.doesNotMatch(url.pathname, /^\/(?:admin|auth|onboarding|dashboard|profile|book|check-in|financials|kiosk|inventory|lockers|consumables|toolkits|component-requests|members|membership|equipment|procurement)(?:\/|$)|^\/components\/request\//);
     }
     if (process.env.VITE_VENTURE_PASS_ENABLED === "true") {
       assert.ok(urls.some((url) => url.pathname === "/venture-partner-pass/"), "Sitemap is missing the public Venture Partner Pass");
     }
-    for (const pathname of Object.keys(legalPages)) {
+    for (const url of urls.filter(url => url.pathname.startsWith("/bookings/"))) {
+      assert.ok(["/bookings/", "/bookings/equipment/"].includes(url.pathname), `Unexpected booking page in sitemap: ${url.pathname}`);
+    }
+    for (const pathname of [...Object.keys(legalPages), ...offerPages.keys()]) {
       assert.ok(urls.some((url) => url.pathname === pathname), `Sitemap is missing ${pathname}`);
     }
   } finally {

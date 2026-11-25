@@ -8,8 +8,6 @@
 
 # Only current application routes receive the anonymous client shell.
 # All other missing URLs use 404.html, not the home page.
-/members /app-shell 200
-/members/ /app-shell 200
 /components/request /app-shell 200
 /components/request/ /app-shell 200
 /financials /app-shell 200

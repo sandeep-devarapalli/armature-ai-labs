@@ -39,6 +39,10 @@ jobs:
       - name: Verify the public website build and crawler responses
         env:
           VITE_VENTURE_PASS_ENABLED: 'true'
+          VITE_BASIC_ONBOARDING_ENABLED: 'true'
+          VITE_RENTAL_CHECKOUT_ENABLED: 'true'
+          VITE_SUPABASE_URL: https://production-fixture.invalid
+          VITE_SUPABASE_PUBLISHABLE_KEY: public-test-key
         run: |
           npm run build
           npm run check:pages-runtime

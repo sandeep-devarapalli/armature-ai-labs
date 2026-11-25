@@ -24,7 +24,7 @@ try {
       rollupOptions: { output: { entryFileNames: "entry-server.mjs" } }
     }
   });
-  const { renderPage, publicSeoPaths, getPageSeo, renderSeoHead, SITE_URL } = await import(
+  const { renderPage, publicSeoPaths, equipmentSharePaths, getPageSeo, renderSeoHead, SITE_URL } = await import(
     pathToFileURL(path.join(serverDirectory, "entry-server.mjs")).href
   );
   const template = (await readFile(path.join(outputDirectory, "index.html"), "utf8"))
@@ -66,6 +66,27 @@ try {
     await mkdir(directory, { recursive: true });
     await writeFile(path.join(directory, "index.html"), documentFor(pathname, html, modules));
   }
+  for (const pathname of equipmentSharePaths) {
+    const directory = path.join(outputDirectory, pathname);
+    await mkdir(directory, { recursive: true });
+    await writeFile(path.join(directory, "index.html"), documentFor(pathname));
+  }
+
+  const redirectsPath = path.join(outputDirectory, "_redirects");
+  const staticPaths = new Set(publicSeoPaths);
+  const redirects = (await readFile(redirectsPath, "utf8")).split("\n").filter(line => {
+    const [source, destination] = line.split(" ");
+    return destination !== "/app-shell" || !staticPaths.has(source.endsWith("/") ? source : source + "/");
+  });
+  if (staticPaths.has("/bookings/equipment/")) {
+    redirects.unshift(
+      "/bookings/rentals /bookings/?item=cabin 302",
+      "/bookings/rentals/ /bookings/?item=cabin 302",
+      "/bookings/equipment /bookings/equipment/ 308",
+      "/bookings/equipment/ /bookings/equipment/ 200"
+    );
+  }
+  await writeFile(redirectsPath, redirects.join("\n"));
   const notFound = await renderPage("/not-found/");
   await writeFile(path.join(outputDirectory, "404.html"), documentFor("/not-found/", notFound.html));
   console.log(`Prerendered ${paths.length} anonymous public pages plus a real 404 document.`);

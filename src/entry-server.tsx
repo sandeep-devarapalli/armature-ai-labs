@@ -5,7 +5,7 @@ import { PassThrough } from "node:stream";
 import { Providers } from "./app/Providers";
 import { routes } from "./app/routes";
 
-export { getPageSeo, publicSeoPaths, renderSeoHead, SITE_URL } from "./lib/seo";
+export { equipmentSharePaths, getPageSeo, publicSeoPaths, renderSeoHead, SITE_URL } from "./lib/seo";
 
 const handler = createStaticHandler(routes);
 
