@@ -37,6 +37,15 @@ const moreLinks = [["/members", "Members"], ["/talent-network", "Talent network"
 ] as const;
 const coursesUrl = "https://courses.armatureailabs.com/";
 
+const socialLinks = [
+  ["GitHub", "https://github.com/armature-ai-labs", "M9 19c-4.3 1.3-4.3-2.5-6-3m12 6v-3.3a2.9 2.9 0 0 0-.8-2.2c2.7-.3 5.5-1.3 5.5-6A4.7 4.7 0 0 0 18.5 7a4.4 4.4 0 0 0-.1-3.3S17.4 3.4 15 5a12 12 0 0 0-6 0C6.6 3.4 5.6 3.7 5.6 3.7A4.4 4.4 0 0 0 5.5 7a4.7 4.7 0 0 0-1.2 3.5c0 4.7 2.8 5.7 5.5 6a2.9 2.9 0 0 0-.8 2.2V22"],
+  ["YouTube", "https://www.youtube.com/@armatureailabs", "M5.5 5.5h13a3 3 0 0 1 3 3v7a3 3 0 0 1-3 3h-13a3 3 0 0 1-3-3v-7a3 3 0 0 1 3-3Zm4.5 3.5 5 3-5 3Z"],
+  ["Instagram", "https://www.instagram.com/armatureailabs/", "M8 3h8a5 5 0 0 1 5 5v8a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5V8a5 5 0 0 1 5-5Zm4 5a4 4 0 1 0 0 8 4 4 0 1 0 0-8Zm5.5-1.5h.01"],
+  ["X", "https://x.com/armatureailabs", "M4.5 3.5h4.2L20 20.5h-4.2zM19.5 3.5 4.5 20.5"],
+  ["LinkedIn", "https://www.linkedin.com/company/armature-ai-labs/", "M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm2.5 7.5v6m0-9h.01m4.5 9v-6m0 2a2.2 2.2 0 0 1 4.4 0v4"],
+  ["Discord", "https://discord.gg/qGNXGmF8z", "M8 5 5 6s-2.5 4-2.5 9.7L7 18l1.1-2m7.9-11 3 1s2.5 4 2.5 9.7L17 18l-1.1-2M7 15a11 11 0 0 0 10 0M9 11.5h.01m6 0h.01"]
+] as const;
+
 const memberLinks = [
   ["/dashboard", "Dashboard", ClipboardCheck],
   ["/book", "Book", BookOpen],
@@ -281,8 +290,6 @@ export function Shell({ children }: PropsWithChildren) {
           <div className="footer-links">
             <a href={`mailto:${legalEntity.email}`}>{legalEntity.email}</a>
             <a href={`tel:${legalEntity.phone.replace(/\s/g, "")}`}>{legalEntity.phone}</a>
-            <a href="https://discord.gg/qGNXGmF8z" target="_blank" rel="noreferrer">Discord</a>
-            <a href="https://www.linkedin.com/company/armature-ai-labs/" target="_blank" rel="noreferrer">LinkedIn</a>
             <Link to="/members">Members</Link>
             <Link to="/maker-desk">Maker desk</Link>
             <Link to="/branding">Brand assets</Link>
@@ -308,6 +315,19 @@ export function Shell({ children }: PropsWithChildren) {
             Third-party project media remains subject to its source terms.
           </p>
         </div>
+        <nav className="wrap footer-social" aria-labelledby="footer-social-title">
+          <h2 id="footer-social-title">Follow the lab</h2>
+          <div>
+            {socialLinks.map(([name, href, icon]) => (
+              <a key={name} href={href} target="_blank" rel="noreferrer">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.65" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                  <path d={icon} />
+                </svg>
+                {name}
+              </a>
+            ))}
+          </div>
+        </nav>
         <div className="footer-signature" aria-hidden="true">
           <p className="footer-wordmark">Armature AI Labs</p>
         </div>

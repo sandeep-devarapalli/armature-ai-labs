@@ -4,34 +4,37 @@ import { legalEntity } from "../../../src/data/legalEntity";
 test("footer publishes direct contact links", async ({ page }) => {
   await page.goto("/");
   const footer = page.locator("footer");
-  const discord = footer.getByRole("link", { name: "Discord", exact: true });
-  const linkedIn = footer.getByRole("link", { name: "LinkedIn", exact: true });
+  const social = footer.getByRole("navigation", { name: "Follow the lab" });
 
   await expect(footer.getByText("1490, 11th Cross, 20th Main Rd, 1st Sector, HSR Layout, Bengaluru, Karnataka 560102", { exact: true })).toBeVisible();
   await expect(footer).not.toContainText("560034");
 
   await expect(footer.getByRole("link", { name: "hello@armatureailabs.com" })).toHaveAttribute("href", "mailto:hello@armatureailabs.com");
   await expect(footer.getByRole("link", { name: legalEntity.phone, exact: true })).toHaveAttribute("href", `tel:${legalEntity.phone.replace(/\s/g, "")}`);
-  await expect(discord).toHaveAttribute("href", "https://discord.gg/qGNXGmF8z");
-  await expect(discord).toHaveAttribute("target", "_blank");
-  await expect(discord).toHaveAttribute("rel", "noreferrer");
-  await expect(linkedIn).toHaveAttribute("href", "https://www.linkedin.com/company/armature-ai-labs/");
-  await expect(linkedIn).toHaveAttribute("target", "_blank");
-  await expect(linkedIn).toHaveAttribute("rel", "noreferrer");
+  for (const [name, href] of [
+    ["GitHub", "https://github.com/armature-ai-labs"],
+    ["YouTube", "https://www.youtube.com/@armatureailabs"],
+    ["Instagram", "https://www.instagram.com/armatureailabs/"],
+    ["X", "https://x.com/armatureailabs"],
+    ["LinkedIn", "https://www.linkedin.com/company/armature-ai-labs/"],
+    ["Discord", "https://discord.gg/qGNXGmF8z"]
+  ]) {
+    const link = social.getByRole("link", { name, exact: true });
+    await expect(link).toHaveAttribute("href", href);
+    await expect(link).toHaveAttribute("target", "_blank");
+    await expect(link).toHaveAttribute("rel", "noreferrer");
+  }
+  await expect(footer.getByRole("link", { name: "Docs", exact: true })).toHaveAttribute("href", "https://github.com/sandeep-devarapalli/armature-ai-labs/tree/main/docs");
 });
 
 test("landing and membership pages publish verified community links", async ({ page }) => {
   await page.goto("/");
   const homeHero = page.locator(".home-hero");
-  const homeDiscord = homeHero.getByRole("link", { name: "Join Discord" });
-  const homeLinkedIn = homeHero.getByRole("link", { name: "Follow on LinkedIn" });
-
-  await expect(homeDiscord).toHaveAttribute("href", "https://discord.gg/qGNXGmF8z");
-  await expect(homeDiscord).toHaveAttribute("target", "_blank");
-  await expect(homeDiscord).toHaveAttribute("rel", "noreferrer");
-  await expect(homeLinkedIn).toHaveAttribute("href", "https://www.linkedin.com/company/armature-ai-labs/");
-  await expect(homeLinkedIn).toHaveAttribute("target", "_blank");
-  await expect(homeLinkedIn).toHaveAttribute("rel", "noreferrer");
+  const github = homeHero.getByRole("link", { name: "Explore on GitHub" });
+  await expect(homeHero.getByRole("heading", { name: "Open source" })).toBeVisible();
+  await expect(github).toHaveAttribute("href", "https://github.com/armature-ai-labs");
+  await expect(github).toHaveAttribute("target", "_blank");
+  await expect(github).toHaveAttribute("rel", "noreferrer");
 
   await page.goto("/join");
   const joinHero = page.locator("main");

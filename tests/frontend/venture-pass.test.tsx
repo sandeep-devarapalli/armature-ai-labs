@@ -2,11 +2,10 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import VenturePassPage from "../../src/pages/VenturePassPage";
 
-const { rpc, invoke } = vi.hoisted(() => ({ rpc: vi.fn(), invoke: vi.fn() }));
+const { rpc, invoke, session } = vi.hoisted(() => ({ rpc: vi.fn(), invoke: vi.fn(), session: { signedIn: true } }));
 vi.mock("../../src/lib/supabase", () => ({ supabase: { rpc, functions: { invoke } } }));
-vi.mock("../../src/config/release", () => ({ basicOnboardingAvailable: true }));
 vi.mock("../../src/context/AccountContext", () => ({
-  useAccount: () => ({ account: { user_id: "member" }, loading: false, signedIn: true }),
+  useAccount: () => ({ account: session.signedIn ? { user_id: "member" } : null, loading: false, signedIn: session.signedIn }),
 }));
 
 const now = Date.now();
@@ -26,24 +25,38 @@ const route = "/venture-partner-pass";
 const display = (path = route) => render(<MemoryRouter initialEntries={[path]}><VenturePassPage /></MemoryRouter>);
 
 beforeEach(() => {
+  session.signedIn = true;
   rpc.mockReset();
   invoke.mockReset();
 });
 
-it("submits the actual firm fields and withholds payment while the application is pending", async () => {
-  rpc.mockResolvedValueOnce({ data: null }).mockResolvedValueOnce({ data: application });
+it("offers direct contact without sign-in, a form, or payment instructions", () => {
+  session.signedIn = false;
   display();
-  fireEvent.change(await screen.findByLabelText("Firm name"), { target: { value: application.firm_name } });
-  fireEvent.change(screen.getByLabelText("Firm type"), { target: { value: application.firm_type } });
-  fireEvent.change(screen.getByLabelText("Contact name"), { target: { value: application.contact_name } });
-  fireEvent.change(screen.getByLabelText("How would your firm use the pass?"), { target: { value: application.details } });
-  fireEvent.click(screen.getByRole("button", { name: "Submit application" }));
+  expect(screen.getByRole("link", { name: "Talk to us" })).toHaveAttribute("href", "#apply");
+  const contact = screen.getByRole("region", { name: "Let’s talk partnership." });
+  expect(contact).toHaveTextContent("We’d love to hear from you.");
+  expect(screen.getByRole("link", { name: /Email the lab/ })).toHaveAttribute("href", "mailto:hello@armatureailabs.com?subject=Venture%20Partner%20Pass");
+  expect(screen.getByRole("link", { name: /Call the lab/ })).toHaveAttribute("href", "tel:+919748485583");
+  expect(screen.queryByText(/one hour to pay/)).not.toBeInTheDocument();
+  expect(rpc).not.toHaveBeenCalled();
+});
+
+it("shows existing applications and never asks a signed-in visitor to fill a new form", async () => {
+  rpc.mockResolvedValueOnce({ data: null }).mockResolvedValueOnce({ data: application });
+  const first = display();
+  expect(screen.queryByLabelText("Firm name")).not.toBeInTheDocument();
+  first.unmount();
+  display();
   expect(await screen.findByText("Under review")).toBeVisible();
-  expect(rpc).toHaveBeenLastCalledWith("submit_venture_pass_application", {
-    p_firm_name: application.firm_name, p_firm_type: application.firm_type, p_website: null,
-    p_contact_name: application.contact_name, p_details: application.details,
-  });
-  expect(screen.queryByRole("button", { name: /with Razorpay/ })).toBeNull();
+  expect(screen.queryByRole("button", { name: /with Razorpay/ })).not.toBeInTheDocument();
+});
+
+it("keeps the payment return destination for a signed-out applicant", () => {
+  session.signedIn = false;
+  display(route + "?payment=return");
+  expect(screen.getByRole("link", { name: /sign in to check your payment status/i }))
+    .toHaveAttribute("href", "/auth?next=" + encodeURIComponent("/venture-partner-pass/?payment=return#apply"));
 });
 
 it("requires terms before payment and suppresses pay while capture is being verified", async () => {
