@@ -1,3 +1,5 @@
+- Website contact and social release, 25 November 2026: publish Venture Partner Pass Option A, “Let’s talk partnership,” with direct email and phone. Remove the public application form and payment-window copy and preserve access to existing applications and payment returns. Publish homepage Option B, the Open-source panel with the organization GitHub link and a shared footer band with GitHub, YouTube, Instagram, X, LinkedIn and Discord. Verify both on the live site after checks.
+
 - Public link preview correction, 25 November 2026: audit both the live URL and its first HTML response before publishing a shareable offer or directory link. Use route-specific metadata for Golden Pass, public Bookings, Equipment Rentals, Members and Team. Preserve intentional noindex rules for Members and Team and access controls for account and checkout pages.
 
 - Venture Partner Pass share preview correction, 25 November 2026: when the offer is enabled, serve its own public prerender with canonical, sitemap and social metadata. Verify the crawler HTML and share image at the actual URL without JavaScript. Keep application and checkout authorization in place.

@@ -1,14 +1,14 @@
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Field, Status } from "../components/Primitives";
-import { basicOnboardingAvailable } from "../config/release";
+import { Status } from "../components/Primitives";
+import { legalEntity } from "../data/legalEntity";
 import { useAccount } from "../context/AccountContext";
 import {
-  ventureFirmTypes, venturePayment, ventureRequest, ventureStatuses, ventureTime, type VentureApplication,
+  venturePayment, ventureRequest, ventureStatuses, ventureTime, type VentureApplication,
 } from "../lib/venture-pass";
 import "./VenturePassPage.css";
 
-const applicationPath = "/venture-partner-pass#apply";
+const returnPath = "/venture-partner-pass/?payment=return#apply";
 const angles = Array.from({ length: 18 }, (_, index) => index * 10);
 const benefits = [
   { id: "directory", title: "Find founders early.", copy: "Explore founder-approved profiles from Armature and participating HSR Founders Club hardware and physical AI founders. See what they’re building and where they’re looking for help.", label: "Founder directory", facts: ["What they’re building", "Prototype stage", "Founder-approved introductions"] },
@@ -81,7 +81,7 @@ export default function VenturePassPage() {
           <p className="venture-lead">Help your portfolio get discovered.</p>
           <p className="hero-copy">For independent VCs and corporate venture teams in robotics and physical AI.</p>
           <div className="button-row">
-            <a className="button button-primary" href="#apply">Apply for the pass</a>
+            <a className="button button-primary" href="#apply">Talk to us</a>
             <a className="button button-quiet" href="#venture-benefits">Explore the pass</a>
           </div>
         </div>
@@ -107,25 +107,28 @@ export default function VenturePassPage() {
         <div><dt>Annual cohort</dt><dd>Four firms</dd></div>
         <div><dt>Renewal window</dt><dd>December</dd></div>
       </dl>
-      <section className="venture-grid venture-chapter" id="apply" aria-labelledby="venture-apply-title">
-        <div className="section-heading">
-          <h2 id="venture-apply-title">Apply for the pass.</h2>
-          <p>Once staff approve your application, you have one hour to pay ₹5,00,000 through Razorpay. Your membership is confirmed after Razorpay verifies the payment.</p>
-          <p>Refund requests can be submitted within 30 days of payment, subject to review. <Link to="/refund-policy#venture-refunds">Read the refund policy</Link>.</p>
+      <section className="venture-contact" id="apply" aria-labelledby="venture-contact-title">
+        <div>
+          <h2 id="venture-contact-title">Let’s talk partnership.</h2>
+          <p>Tell us about your firm and what you’d like to do for your founders. We’d love to hear from you.</p>
         </div>
-        <div className="venture-form-panel">
-          {!basicOnboardingAvailable ? <p>Applications are currently closed.</p>
-            : loading ? <p role="status">Loading your account…</p>
-            : !signedIn ? <Link className="button button-primary" to={"/auth?next=" + encodeURIComponent(applicationPath)}>Sign in to apply</Link>
-            : !account ? <p role="alert">Your account could not be loaded. Refresh and try again.</p>
-            : <VentureApplicationForm key={account.user_id} returned={returned} />}
+        <div className="venture-contact-links">
+          <a href={`mailto:${legalEntity.email}?subject=Venture%20Partner%20Pass`}>
+            <span>Email the lab</span><strong>{legalEntity.email}</strong><span aria-hidden="true">↗</span>
+          </a>
+          <a href={`tel:${legalEntity.phone.replace(/\s/g, "")}`}>
+            <span>Call the lab</span><strong>{legalEntity.phone}</strong><span aria-hidden="true">↗</span>
+          </a>
         </div>
+        <Link className="venture-contact-policy" to="/refund-policy#venture-refunds">Refund policy</Link>
       </section>
+      {signedIn && account ? <VentureApplicationStatus key={account.user_id} returned={returned} />
+        : returned && !loading && !signedIn && <Link className="button button-quiet" to={"/auth?next=" + encodeURIComponent(returnPath)}>Sign in to check your payment status</Link>}
     </div>
   </div>;
 }
 
-function VentureApplicationForm({ returned }: { returned: boolean }) {
+function VentureApplicationStatus({ returned }: { returned: boolean }) {
   const [application, setApplication] = useState<VentureApplication | null | undefined>();
   const [checking, setChecking] = useState(false);
   const [acceptedTerms, setAcceptedTerms] = useState(false);
@@ -166,16 +169,6 @@ function VentureApplicationForm({ returned }: { returned: boolean }) {
     finally { inFlight.current = false; setChecking(false); }
   }
 
-  function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const fields = new FormData(event.currentTarget);
-    const read = (name: string) => String(fields.get(name) ?? "").trim();
-    void run(async () => setApplication(await ventureRequest<VentureApplication>("submit_venture_pass_application", {
-      p_firm_name: read("firm_name"), p_firm_type: read("firm_type"), p_website: read("website") || null,
-      p_contact_name: read("contact_name"), p_details: read("details"),
-    })));
-  }
-
   function pay() {
     if (!acceptedTerms) return;
     void run(async () => {
@@ -190,22 +183,11 @@ function VentureApplicationForm({ returned }: { returned: boolean }) {
     });
   }
 
-  if (application === undefined) return error ? <>
+  if (application === undefined) return error ? <div className="venture-status-panel">
     <p role="alert">{error}</p><button className="button button-quiet" onClick={() => setRevision(value => value + 1)}>Try again</button>
-  </> : <p role="status">Checking your application…</p>;
+  </div> : returned ? <p role="status">Checking your payment…</p> : null;
 
-  if (!application) return <form onSubmit={submit}>
-    <Field label="Firm name"><input name="firm_name" autoComplete="organization" required minLength={2} maxLength={120} /></Field>
-    <Field label="Firm type"><select name="firm_type" required defaultValue="">
-      <option value="" disabled>Choose one</option>
-      {Object.entries(ventureFirmTypes).map(([value, label]) => <option key={value} value={value}>{label}</option>)}
-    </select></Field>
-    <Field label="Firm website (optional)"><input name="website" type="url" placeholder="https://" maxLength={500} /></Field>
-    <Field label="Contact name"><input name="contact_name" autoComplete="name" required minLength={2} maxLength={120} /></Field>
-    <Field label="How would your firm use the pass?"><textarea name="details" minLength={3} maxLength={1000} required rows={4} /></Field>
-    {error && <p role="alert">{error}</p>}
-    <button className="button button-primary" type="submit" disabled={checking}>{checking ? "Submitting…" : "Submit application"}</button>
-  </form>;
+  if (!application) return null;
 
   const secondsLeft = Math.max(0, Math.ceil((deadline - now) / 1000));
   const payOpen = application.status === "approved" && secondsLeft > 0;
@@ -218,7 +200,7 @@ function VentureApplicationForm({ returned }: { returned: boolean }) {
       setApplication(await ventureRequest<VentureApplication | null>("get_my_venture_pass_application"));
     }
   });
-  return <>
+  return <section className="venture-status-panel" aria-label="Existing Venture Partner Pass application">
     <Status tone={application.status === "confirmed" ? "good" : application.status === "approved" ? "warn" : "neutral"}>
       {application.status === "approved" && !payOpen ? "Payment window ended" : ventureStatuses[application.status]}
     </Status>
@@ -244,5 +226,5 @@ function VentureApplicationForm({ returned }: { returned: boolean }) {
         {checking ? "Checking…" : "Refresh status"}
       </button>}
     </div>
-  </>;
+  </section>;
 }
