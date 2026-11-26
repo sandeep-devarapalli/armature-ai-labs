@@ -12,12 +12,11 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
 
 describe("Full editorial landing page", () => {
-  it("retains the six operational sections, current rooms and public destinations", () => {
+  it("prioritises bookings and membership while keeping the lab workflow and maker desk", () => {
     render(<MemoryRouter><HomePage /></MemoryRouter>);
     for (const name of [
-      "A working floor, not a club lounge", "Two floors at a glance",
-      "Monitored, end to end", "From idea to working machine",
-      "The maker desk keeps small friction small", "Book, build, and leave a clean trail"
+      "Book the lab.", "Join the lab.", "From idea to working machine",
+      "The maker desk keeps small friction small"
     ]) expect(screen.getByRole("heading", { name, level: 2 })).toBeInTheDocument();
     // The per-room programme was removed from the landing page on 17 October 2026 (owner request).
     expect(screen.queryByText(/sq ft carpet/)).not.toBeInTheDocument();
@@ -29,13 +28,12 @@ describe("Full editorial landing page", () => {
     expect(screen.queryByText(/all bookable by the hour|Here you book them by the hour/)).not.toBeInTheDocument();
   });
 
-  it("shows only the four selected current model renders, lazily loaded", () => {
+  it("removes the fit-out gallery, model showcase and monitoring sections", () => {
     render(<MemoryRouter><HomePage /></MemoryRouter>);
-    const renders = screen.getAllByRole("img", { name: /Blender design render/ });
-    expect(renders).toHaveLength(4);
-    for (const image of renders) expect(image).toHaveAttribute("loading", "lazy");
-    expect(screen.getByRole("link", { name: "Explore First floor models" })).toHaveAttribute("href", "/building-vision/#first-floor-overview");
-    expect(screen.getByText(/not photographs of completed spaces/)).toBeInTheDocument();
+    for (const name of ["A working floor, not a club lounge", "Two floors at a glance", "Monitored, end to end"]) {
+      expect(screen.queryByRole("heading", { name })).not.toBeInTheDocument();
+    }
+    expect(screen.queryByRole("img", { name: /Blender design render|during fit-out/ })).not.toBeInTheDocument();
   });
 
   it("provides a working motion pause and resume control", () => {

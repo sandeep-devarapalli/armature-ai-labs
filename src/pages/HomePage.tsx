@@ -3,45 +3,17 @@ import {
   ArrowRight,
   ArrowUpRight,
   CalendarDays,
-  Cctv,
-  CheckCircle2,
   LockKeyhole,
   PackageOpen,
-  ScanLine,
-  ShieldCheck,
   ShoppingBasket
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { FieldOfTouch } from "../components/FieldOfTouch";
-import { PixelPhoto } from "../components/PixelPhoto";
 import { VitruvianSketch } from "../components/VitruvianSketch";
 import "./HomePagePixel.css";
 import { Metric, Section } from "../components/Primitives";
-import { basicOnboardingAvailable, deskCheckoutAvailable, equipmentPageAvailable, memberPlatformAvailable, publicBookingsAvailable } from "../config/release";
+import { basicOnboardingAvailable, deskCheckoutAvailable, equipmentPageAvailable, eventCheckoutAvailable, memberPlatformAvailable, publicBookingsAvailable, rentalCheckoutAvailable, venturePassAvailable } from "../config/release";
 
-
-const labRoles = [
-  {
-    number: "01",
-    title: "A workshop",
-    copy: "Bench space, tools, and serious equipment to build on. Assemble, break, and iterate without doing it alone in a garage."
-  },
-  {
-    number: "02",
-    title: "A showroom",
-    copy: "A place for resident teams to keep prototypes and demo material on the floor, so visitors can see working physical AI rather than a pitch deck."
-  },
-  {
-    number: "03",
-    title: "A room",
-    copy: "A shared space for founders, engineers, researchers, and backers. Hard questions deserve people who have built the thing."
-  },
-  {
-    number: "04",
-    title: "A training ground",
-    copy: "Hands-on workshops, student research with industry, and build days with the communities advancing Indian robotics."
-  }
-];
 
 export function HomePage() {
   const registrationLabel = useRegistrationLabel();
@@ -110,93 +82,10 @@ export function HomePage() {
         </div>
       </header>
 
+      <HomeAccess />
+
       <Section
         number="01"
-        title="A working floor, not a club lounge"
-        lede="The plan is for every room to hold a real project in progress."
-      >
-        <div className="section-motion"><FieldOfTouch scene="interior" look="pixel" />
-          <p className="motion-note">An illustrative laboratory study, not footage of Armature facilities.</p>
-        </div>
-        <div className="space-plates" aria-label="Photographs of the Armature AI Labs building during fit-out">
-          <PixelPhoto
-            src="/media/space/event-space-fit-out.jpg"
-            width={1600}
-            height={728}
-            alt="The event space during fit-out: tall wooden-framed windows, track spotlights and linear lights, with protective board over the floor."
-            label="Tav. I"
-            caption="The event space during fit-out, October 2026."
-          />
-          <PixelPhoto
-            src="/media/space/hall-fit-out.jpg"
-            width={1600}
-            height={728}
-            alt="A long hall with wooden flooring and a staircase at the far end, with tools and materials from the fit-out on the floor."
-            label="Tav. II"
-            caption="Inside HSR 1490 during fit-out, October 2026."
-          />
-          <p className="space-plates-note mono">Photographs of the building in progress, shown with a pixel treatment. Fit-out is not complete.</p>
-        </div>
-        <div className="role-list">
-          {labRoles.map((role) => (
-            <article className="role-row" key={role.number}>
-              <span className="mono">→ {role.number}</span>
-              <div>
-                <h3>{role.title}</h3>
-                <p>{role.copy}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-        <div className="community-context">
-          <span className="mono">Planned events and build days with</span>
-          <div className="tag-row community-tags">
-            <span>HSR Founders Club</span>
-            <span>Robotics India community</span>
-            <span>Partner communities</span>
-          </div>
-          <p>
-            Armature AI Labs is the first planned facility in a larger vision: the
-            Institute for Physical AI.
-          </p>
-        </div>
-      </Section>
-
-      <Section
-        number="02"
-        title="Two floors at a glance"
-        lede="The proposed layout uses fifteen measured rooms across the ground and first floors: coworking commons, a presentation hall, seven cabins, a workshop terrace, and three balconies."
-        dark
-      >
-        <LabModelShowcase />
-      </Section>
-
-      <Section
-        number="03"
-        title="Monitored, end to end"
-        lede="The planned cameras and access trail are intended to keep a shared floor accountable, not unattended."
-      >
-        <div className="feature-grid">
-          <article>
-            <Cctv aria-hidden="true" />
-            <h3>Whole-floor coverage</h3>
-            <p>The plan connects the commons, presentation hall, cabins, workshop terrace, balconies, kitchen, and entrance to an on-site NVR.</p>
-          </article>
-          <article>
-            <ShieldCheck aria-hidden="true" />
-            <h3>Hazard-zone visibility</h3>
-            <p>Guarded equipment will require induction, booking, interlocks, and staff operating rules before use.</p>
-          </article>
-          <article>
-            <ScanLine aria-hidden="true" />
-            <h3>Tied to attendance</h3>
-            <p>The proposed workflow ties each booking to a responsible member and a check-in trail, with access-controlled recordings.</p>
-          </article>
-        </div>
-      </Section>
-
-      <Section
-        number="04"
         title="From idea to working machine"
         lede="The intended workflow: work enters as a sketch and leaves as a machine someone has watched run."
       >
@@ -219,7 +108,7 @@ export function HomePage() {
       </Section>
 
       <Section
-        number="05"
+        number="02"
         title="The maker desk keeps small friction small"
         lede="The planned maker desk brings secure storage, build-sized consumables, and complete portable toolkits alongside the equipment."
       >
@@ -245,34 +134,6 @@ export function HomePage() {
         </div>
       </Section>
 
-      <Section
-        number="06"
-        title="Book, build, and leave a clean trail"
-        lede={publicBookingsAvailable ? "See current passes, prices and eligibility on the bookings page. Equipment use may require a safety induction." : "Contact the lab about membership, safety inductions and workspace availability."}
-      >
-        <div className="process-line">
-          {(publicBookingsAvailable ? [
-            ["Choose access", "Review the current passes and resources to choose the right access."],
-            ["Check requirements", "Sign in and follow the eligibility and safety requirements for your selection."],
-            ["Confirm", "Pay at checkout for an eligible paid booking, or wait for staff approval of a free Guest Pass."],
-            ["Visit", "Follow the arrival instructions for your confirmed visit."]
-          ] : [
-            ["Apply", "Tell us what you are building."],
-            ["Induct", "Complete the lab and equipment safety checks."],
-            ["Reserve", "Choose a resource and a live time slot."],
-            ["Check in", "Present a one-use QR to the on-site kiosk."],
-            ["Build", "Use the floor, log the work, and close the session."]
-          ]).map(([title, copy], index) => (
-            <div className="process-step" key={title}>
-              <span className="mono">0{index + 1}</span>
-              <CheckCircle2 aria-hidden="true" />
-              <h3>{title}</h3>
-              <p>{copy}</p>
-            </div>
-          ))}
-        </div>
-      </Section>
-
       <div className="quote-band">
         <div className="wrap">
           <p>
@@ -288,25 +149,57 @@ export function HomePage() {
   );
 }
 
-const labModelViews = [
-  { title: "Ground floor", src: "/building-models/r03/ground-floor.png", width: 1250, height: 1100, copy: "Commons, presentation lounge, reception and shared spaces.", target: "ground-floor-overview", release: "R03 · retained in R06" },
-  { title: "First floor", src: "/building-models/r06/first-floor.png", width: 1450, height: 1200, copy: "Cabins, gallery and the proposed glass-enclosed workshop.", target: "first-floor-overview", release: "R06 · current proposal" },
-  { title: "Coworking commons", src: "/building-vision/room-views-r01/GF-10.png", width: 1280, height: 1100, copy: "Joined tables and a wraparound window counter. Modelled seating positions are not certified capacity.", target: "gf-10-room", release: "GF-10 · R06 room view" },
-  { title: "Glass workshop", src: "/building-models/r06/ff02-enclosure.png", width: 1450, height: 1200, copy: "Aluminium-framed glass workshop and roof proposal beside the retained curved balcony. Solar-control film remains provisional.", target: "ff-02-enclosure", release: "FF-02 · R06" }
+const bookingOptions = [
+  { item: "desk", available: deskCheckoutAvailable, name: "Desk passes", detail: "Reserve a seat for a day, week or month.", action: "Choose a desk pass" },
+  { item: "guest", available: basicOnboardingAvailable, name: "Guest Pass", detail: "Free for meetings or events, with staff approval. For a reserved seat, choose a desk pass.", action: "Request a Guest Pass" },
+  { item: "cabin", available: rentalCheckoutAvailable, name: "Team cabins", detail: "Request a quote for a private team workspace.", action: "View cabin quotes" },
+  { item: "kit", available: rentalCheckoutAvailable, name: "Equipment", detail: "Browse equipment to rent and use at the lab.", action: "Browse equipment" },
+  { item: "event", available: eventCheckoutAvailable, name: "Event space", detail: "Request a time and setup for your meetup, launch or demo.", action: "Request event space" }
 ];
 
-function LabModelShowcase() {
-  return <div className="lab-model-showcase">
-    <p className="model-label">Blender design renders—not photographs of completed spaces. Layout and installation details remain subject to verification.</p>
-    <div className="lab-model-grid">
-      {labModelViews.map(view => <figure key={view.target}>
-        <Link to={`/building-vision/#${view.target}`} aria-label={`Explore ${view.title} models`}>
-          <img src={view.src} width={view.width} height={view.height} alt={`${view.title} Blender design render`} loading="lazy" decoding="async" />
-        </Link>
-        <figcaption><span className="mono">{view.release}</span><h3>{view.title}</h3><p>{view.copy}</p>
-          <Link to={`/building-vision/#${view.target}`}>Explore the model <ArrowRight aria-hidden="true" /></Link>
-        </figcaption>
-      </figure>)}
+function HomeAccess() {
+  return (
+    <div className="wrap home-access" id="lab-access">
+      <section className="home-access-section home-access-booking" aria-labelledby="home-booking-title">
+        <div className="home-access-intro">
+          <h2 id="home-booking-title">Book the lab.</h2>
+          <p>{publicBookingsAvailable ? "Find the right space, pass or equipment for your next visit." : "Contact the lab to check workspace and visit availability."}</p>
+        </div>
+        <div className="home-access-content">
+          {publicBookingsAvailable && <ul className="home-access-list">
+            {bookingOptions.filter(option => option.available).map(option => (
+              <li key={option.item}>
+                <div><h3>{option.name}</h3><p>{option.detail}</p></div>
+                <Link aria-label={option.action} to={`/bookings/?item=${option.item}#steps`}>
+                  <ArrowRight aria-hidden="true" />
+                </Link>
+              </li>
+            ))}
+          </ul>}
+          {publicBookingsAvailable
+            ? <Link className="button button-primary" to="/bookings/#book-access-title">Compare all bookings <ArrowRight aria-hidden="true" /></Link>
+            : <a className="button button-quiet" href="mailto:hello@armatureailabs.com">Ask about availability <ArrowRight aria-hidden="true" /></a>}
+        </div>
+      </section>
+      <section className="home-access-section home-access-membership" aria-labelledby="home-membership-title">
+        <div className="home-access-intro">
+          <h2 id="home-membership-title">Join the lab.</h2>
+          <p>See membership options for individual builders and venture teams.</p>
+        </div>
+        <div className="home-access-content">
+          <ul className="home-access-list">
+            {basicOnboardingAvailable && <>
+              <li><div><h3>Basic membership</h3><p>Free with a confirmed email. Create an account and explore free courses.</p></div>
+                <Link aria-label="Create a Basic membership" to="/onboarding"><ArrowRight aria-hidden="true" /></Link></li>
+              <li><div><h3>Golden Pass</h3><p>₹1,00,000 for 12 months of daily daytime access and priority booking.</p></div>
+                <Link aria-label="Explore Golden Pass" to="/golden-pass"><ArrowRight aria-hidden="true" /></Link></li>
+            </>}
+            {venturePassAvailable && <li><div><h3>Venture Partner Pass</h3><p>₹5,00,000 per year for venture teams and their portfolio founders.</p></div>
+              <Link aria-label="Explore Venture Partner Pass" to="/venture-partner-pass/"><ArrowRight aria-hidden="true" /></Link></li>}
+          </ul>
+          <Link className="button button-quiet" to="/join">See membership options <ArrowRight aria-hidden="true" /></Link>
+        </div>
+      </section>
     </div>
-  </div>;
+  );
 }

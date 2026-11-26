@@ -5,7 +5,7 @@ import { DeskBooking } from "../components/DeskCheckout";
 import { EventBooking } from "../components/EventCheckout";
 import { PageHeader } from "../components/Primitives";
 import { RentalBooking } from "../components/RentalCheckout";
-import { basicOnboardingAvailable, deskCheckoutAvailable, eventCheckoutAvailable, rentalCheckoutAvailable } from "../config/release";
+import { basicOnboardingAvailable, deskCheckoutAvailable, eventCheckoutAvailable, rentalCheckoutAvailable, venturePassAvailable } from "../config/release";
 import { useAccount } from "../context/AccountContext";
 import { cabinRent, cabins, formatPaise, statusLabel } from "../lib/cabins";
 import { GuestPassBooking } from "./PassPages";
@@ -67,6 +67,11 @@ export default function BookLabPage() {
                 <th scope="row"><strong>Golden Pass</strong><small>Daytime access every day and priority booking.</small></th>
                 <td data-label="Price"><span className="book-price">₹1,00,000 for 12 months</span></td>
                 <td><Link className="button button-primary" to="/golden-pass">Explore Golden Pass</Link></td>
+              </tr>}
+              {venturePassAvailable && <tr>
+                <th scope="row"><strong>Venture Partner Pass</strong><small>Founder introductions, portfolio showcases and lab access for venture firms.</small></th>
+                <td data-label="Price"><span className="book-price">₹5,00,000 per firm / year</span><small>Limited to four partner firms.</small></td>
+                <td><Link className="button button-quiet" to="/venture-partner-pass">Explore Venture Partner Pass</Link></td>
               </tr>}
               {rows.map(row => <tr key={row.id} className={row.id === item?.id ? "is-selected" : ""}>
                 <th scope="row"><strong>{row.name}</strong><small>{row.summary}</small></th>
