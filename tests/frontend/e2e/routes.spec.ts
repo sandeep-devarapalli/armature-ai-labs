@@ -163,10 +163,10 @@ for (const palette of [
     await expect(quiet).toHaveCSS("background-color", "rgb(34, 34, 32)");
     await page.mouse.move(0, 0);
 
-    const modelLink = page.locator(".ink-surface .lab-model-grid figcaption a").first();
-    await expect(modelLink).toHaveCSS("color", "rgb(217, 154, 80)");
-    await modelLink.hover();
-    await expect(modelLink).toHaveCSS("color", "rgb(234, 183, 121)");
+    const motionCredit = page.getByRole("link", { name: "Dominik Zítka / Pexels" });
+    await expect(motionCredit).toHaveCSS("color", "rgb(217, 154, 80)");
+    await motionCredit.hover();
+    await expect(motionCredit).toHaveCSS("color", "rgb(234, 183, 121)");
     await page.mouse.move(0, 0);
     const email = page.locator('footer a[href="mailto:hello@armatureailabs.com"]');
     const wordmark = page.locator(".footer-wordmark");
