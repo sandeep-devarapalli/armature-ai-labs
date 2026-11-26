@@ -116,8 +116,8 @@
 .join-golden h2 { color: inherit; }
 .join-golden p { color: #dfcfb6; margin: 8px 0 18px; }
 .join-golden > div > strong { color: #efd39b; }
-.join-golden .button-primary, .book-table .book-golden-row .button-primary { background: #efd39b; border-color: #b69257; color: #292015; }
-.join-golden .button-primary:hover, .book-table .book-golden-row .button-primary:hover { background: #f9e5bd; color: #292015; }
+.join-golden .button-primary { background: #efd39b; border-color: #b69257; color: #292015; }
+.join-golden .button-primary:hover { background: #f9e5bd; color: #292015; }
 .join-golden .golden-pass-card > strong { color: #332611; font-size: clamp(23px,2.4vw,38px); white-space: nowrap; }
 .join-golden .golden-pass-card div { font-size: 10px; }
 .join-golden .golden-pass-card svg { min-width: 17px; }
@@ -125,46 +125,102 @@
 .join-access-levels article { border-top: 1px solid var(--hair-strong); padding-top: 16px; }
 .join-access-levels h3 { margin: 0 0 8px; }
 .book-table.book-access-table { min-width: 0; }
-.book-table.book-access-table .book-golden-row { background: #eee0bf; color: #302213; }
-.book-table.book-access-table .book-golden-row th strong,
-.book-table.book-access-table .book-golden-row .book-price { color: #302213; }
-.book-table.book-access-table .book-golden-row small,
-.book-table.book-access-table .book-golden-row td[data-label]::before { color: #5d492e; }
-.book-table.book-access-table .book-venture-mirror {
-  --venture-ink: #121c2b;
-  --venture-copy: #283244;
-  --venture-button: #eef2f8;
-  --venture-button-hover: #fff;
-  --venture-border: #67768a;
+.book-annual--venture {
+  --pass-ink: #121c2b;
+  --pass-copy: #283244;
+  --pass-button: #eef2f8;
+  --pass-button-hover: #fff;
+  --pass-border: #67768a;
   background:
     radial-gradient(ellipse 64% 127% at 89% -77%, #fff 61%, #f5f8fc 71%, transparent 90%),
     radial-gradient(ellipse 61% 132% at 8% 165%, #a3aebf 55%, #eef4fd 68%, #f6f9fc 73%, transparent 85%),
     linear-gradient(123deg, #c2cbd8, #e3e8ee 46%, #abb8cb 70%, #d3dce9);
 }
 
-.book-table.book-access-table .book-venture-mirror {
-  color: var(--venture-ink);
+.book-flexible-title, .book-annual h3 {
+  margin: 0 0 12px;
+  font: 400 italic clamp(32px, 4vw, 46px)/1 var(--serif);
 }
-
-.book-table.book-access-table .book-venture-mirror :is(th strong, .book-price) {
-  color: var(--venture-ink);
+.book-annual {
+  scroll-margin-top: 96px;
+  margin-bottom: clamp(30px, 5vw, 58px);
 }
-
-.book-table.book-access-table .book-venture-mirror small,
-.book-table.book-access-table .book-venture-mirror td[data-label]::before {
-  color: var(--venture-copy);
+.book-annual-options {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
-
-.book-table.book-access-table .book-venture-mirror a.button {
-  --link: var(--venture-ink);
-  --link-on-panel-hover: var(--venture-ink);
-  color: var(--venture-ink);
-  background: var(--venture-button);
-  border-color: var(--venture-border);
+.book-annual--golden {
+  --pass-ink: #302213;
+  --pass-copy: #55432d;
+  --pass-button: #efd39b;
+  --pass-button-hover: #f9e5bd;
+  --pass-border: #9e7742;
+  background:
+    radial-gradient(ellipse 80% 124% at 92% -73%, #fff7df 60%, #faefd3 71%, transparent 90%),
+    radial-gradient(ellipse 63% 150% at 6% 178%, #d9b777 56%, #efdaa9 68%, transparent 85%),
+    linear-gradient(125deg, #e7ca8f, #f1e2bd 49%, #e3c48a);
 }
-
-.book-table.book-access-table .book-venture-mirror a.button:hover {
-  background: var(--venture-button-hover);
+.book-annual-option {
+  display: grid;
+  min-width: 0;
+  align-items: start;
+  justify-items: start;
+  padding: clamp(18px, 3vw, 36px);
+  border: 1px solid var(--pass-border);
+  color: var(--pass-ink);
+  grid-template-rows: 1fr auto auto;
+  gap: 16px;
+}
+.book-annual-option h4 {
+  margin: 0 0 6px;
+  font: 400 italic clamp(33px, 4vw, 52px)/1 var(--serif);
+  color: var(--pass-ink);
+}
+.book-annual-option p {
+  margin: 0;
+}
+.book-annual-audience {
+  font-size: .85rem;
+  font-weight: 700;
+}
+.book-annual-option .book-annual-summary {
+  margin-top: 10px;
+  max-width: 53ch;
+  color: var(--pass-copy);
+}
+.book-annual-option .book-annual-price {
+  display: grid;
+  gap: 2px;
+  font-family: var(--mono);
+}
+.book-annual-price strong {
+  font-size: clamp(20px, 2.5vw, 30px);
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.book-annual-price span {
+  font-size: .82rem;
+  color: var(--pass-copy);
+}
+.book-annual-option a.button {
+  --link: var(--pass-ink);
+  --link-on-panel-hover: var(--pass-ink);
+  background: var(--pass-button);
+  border-color: var(--pass-border);
+  color: var(--pass-ink);
+}
+.book-annual-option a.button:hover {
+  background: var(--pass-button-hover);
+}
+@media (max-width: 600px) {
+  .book-annual-options {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+  .book-annual-option a.button {
+    width: 100%;
+  }
 }
 
 .book-table.book-access-table .book-price { white-space: normal; }

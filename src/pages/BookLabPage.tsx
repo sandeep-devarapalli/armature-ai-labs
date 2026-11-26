@@ -19,6 +19,36 @@ const lowestRent = (items: RentalProduct[]) => {
   return rents.length ? [`From ${formatPaise(rents[0][0])} / ${rents[0][1]}`] : ["Varies by item"];
 };
 
+const annualPasses = [
+  {
+    id: "golden", name: "Golden Pass", audience: "For individual builders",
+    summary: "Daytime lab access every day and priority booking.",
+    price: "₹1,00,000", term: "for 12 months", to: "/golden-pass"
+  },
+  {
+    id: "venture", name: "Venture Partner Pass", audience: "For venture firms",
+    summary: "Founder introductions, portfolio showcases and lab access. Limited to four partner firms.",
+    price: "₹5,00,000", term: "per firm per year", to: "/venture-partner-pass"
+  }
+] as const;
+
+function AnnualPasses({ available }: { available: readonly (typeof annualPasses)[number][] }) {
+  return <section id="annual-passes" className="book-annual" aria-labelledby="annual-passes-title">
+    <h3 id="annual-passes-title">Annual passes</h3>
+    <div className="book-annual-options">
+      {available.map(pass => <article key={pass.id} className={`book-annual-option book-annual--${pass.id}`}>
+        <div className="book-annual-intro">
+          <h4>{pass.name}</h4>
+          <p className="book-annual-audience">{pass.audience}</p>
+          <p className="book-annual-summary">{pass.summary}</p>
+        </div>
+        <p className="book-annual-price"><strong>{pass.price}</strong><span>{pass.term}</span></p>
+        <Link className="button button-quiet" to={pass.to}>Explore {pass.name}</Link>
+      </article>)}
+    </div>
+  </section>;
+}
+
 export default function BookLabPage() {
   const { account } = useAccount();
   const [params] = useSearchParams();
@@ -48,6 +78,7 @@ export default function BookLabPage() {
     { id: "event", name: "Event space", summary: "The demo floor for meetups, launches and live demos.", prices: [eventCheckoutAvailable ? `${formatPaise(250000)} / hour` : "Coming soon"], deposit: "None", minimum: "1 hour",
       cancellation: "48 hours or more before the event: 50% refund" }
   ];
+  const availablePasses = annualPasses.filter(pass => pass.id === "golden" ? basicOnboardingAvailable : venturePassAvailable);
   const item = rows.find(r => r.id === params.get("item"));
   // The #steps hash makes the shell scroll the opened checkout into view.
   const choose = (next: Record<string, string>) => navigate({ search: "?" + new URLSearchParams(next), hash: "steps" });
@@ -59,20 +90,14 @@ export default function BookLabPage() {
     <section className="section">
       <div className="wrap">
         <h2 id="book-access-title" className="join-access-heading">Compare access</h2>
+        {availablePasses.length > 0 && <>
+          <AnnualPasses available={availablePasses} />
+          <h3 id="book-flexible-title" className="book-flexible-title">Book as you go</h3>
+        </>}
         <div className="book-table-wrap">
-          <table className="book-table book-access-table" aria-labelledby="book-access-title">
+          <table className="book-table book-access-table" aria-labelledby={availablePasses.length ? "book-flexible-title" : "book-access-title"}>
             <thead><tr><th scope="col">Access</th><th scope="col">Price and availability</th><th scope="col">Next step</th></tr></thead>
             <tbody>
-              {basicOnboardingAvailable && <tr className="book-golden-row">
-                <th scope="row"><strong>Golden Pass</strong><small>Daytime access every day and priority booking.</small></th>
-                <td data-label="Price"><span className="book-price">₹1,00,000 for 12 months</span></td>
-                <td><Link className="button button-primary" to="/golden-pass">Explore Golden Pass</Link></td>
-              </tr>}
-              {venturePassAvailable && <tr className="book-venture-mirror">
-                <th scope="row"><strong>Venture Partner Pass</strong><small>Founder introductions, portfolio showcases and lab access for venture firms.</small></th>
-                <td data-label="Price"><span className="book-price">₹5,00,000 per firm / year</span><small>Limited to four partner firms.</small></td>
-                <td><Link className="button button-quiet" to="/venture-partner-pass">Explore Venture Partner Pass</Link></td>
-              </tr>}
               {rows.map(row => <tr key={row.id} className={row.id === item?.id ? "is-selected" : ""}>
                 <th scope="row"><strong>{row.name}</strong><small>{row.summary}</small></th>
                 <td data-label="Price">{row.prices.map(p => <span key={p} className="book-price">{p}</span>)}

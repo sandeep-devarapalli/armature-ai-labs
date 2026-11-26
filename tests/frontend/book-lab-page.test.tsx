@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { MemoryRouter, Route, Routes, useLocation } from "react-router-dom";
 import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import BookLabPage from "../../src/pages/BookLabPage";
@@ -42,7 +42,7 @@ it("shows only the available access options", () => {
   expect(screen.getByRole("button", { name: "Choose a desk pass" })).toBeInTheDocument();
   expect(screen.queryByRole("button", { name: "View cabin quotes" })).not.toBeInTheDocument();
   expect(screen.queryByRole("button", { name: "Browse equipment" })).not.toBeInTheDocument();
-  expect(screen.queryByRole("rowheader", { name: /Venture Partner Pass/ })).not.toBeInTheDocument();
+  expect(screen.queryByRole("heading", { name: "Venture Partner Pass" })).not.toBeInTheDocument();
   expect(mock.request).not.toHaveBeenCalled();
 });
 
@@ -96,11 +96,16 @@ it("offers passes and the annual partnership to signed-out visitors", () => {
   mock.venture = true;
   mock.signedIn = false;
   show("/bookings?item=guest");
-  expect(screen.getAllByRole("row")[1]).toHaveTextContent("Golden Pass");
+  const passes = screen.getByRole("region", { name: "Annual passes" });
+  const bookings = screen.getByRole("table", { name: "Book as you go" });
+  expect(passes.compareDocumentPosition(bookings) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  expect(within(passes).getByRole("heading", { name: "Golden Pass" })).toBeInTheDocument();
+  expect(within(passes).getByRole("heading", { name: "Venture Partner Pass" })).toBeInTheDocument();
   expect(screen.getByRole("link", { name: "Explore Golden Pass" })).toHaveAttribute("href", "/golden-pass");
   expect(screen.getByRole("rowheader", { name: /guest pass/i })).toBeInTheDocument();
   expect(screen.getByText("Free")).toBeInTheDocument();
-  expect(screen.getByText("₹5,00,000 per firm / year")).toBeInTheDocument();
+  expect(within(passes).getByText("₹5,00,000")).toBeInTheDocument();
+  expect(within(passes).getByText("per firm per year")).toBeInTheDocument();
   expect(screen.getByRole("link", { name: "Explore Venture Partner Pass" })).toHaveAttribute("href", "/venture-partner-pass");
   expect(screen.getByRole("link", { name: /sign in by email/i })).toHaveAttribute("href", "/auth?next=%2Fbookings%2F%3Fitem%3Dguest%23steps");
 });
