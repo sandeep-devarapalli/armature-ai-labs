@@ -143,7 +143,7 @@ export function LabForm({ api, versionId, moduleId, userId, onChanged }: { api: 
     <p><LabStatusBadge status={sub?.status} />{sub?.submittedAt ? <span className="meta"> · submitted {when(sub.submittedAt)}</span> : null}</p>
     {sub?.status === 'returned' && sub.reviewComment ? <div className="notice lab-comment"><strong>Assessor's comment:</strong> {sub.reviewComment}</div> : null}
     {sub?.status === 'approved' && sub.reviewComment ? <div className="notice lab-comment"><strong>Assessor's note:</strong> {sub.reviewComment}</div> : null}
-    <p className="meta">Record your own measurements. Values marked temporary in the lessons are estimates; yours are what is assessed. Fields marked * are needed to submit.</p>
+    <p className="meta">{lab.mandatory ? 'Record your own measurements. Values marked temporary in the lessons are estimates; yours are what is assessed. Fields marked * are needed to submit.' : 'This checkpoint is optional and does not count toward the course result. Fields marked * are needed to submit.'}</p>
     {editable ? <div className="lab-fields">{lab.fields.map(f => <FieldInput key={f.key} field={f} value={values[f.key]} disabled={busy} onChange={v => setValues(old => ({ ...old, [f.key]: v }))} />)}</div>
       : <LabValuesView fields={lab.fields} values={values} />}
     <LabChecksList values={values} />

@@ -14,7 +14,8 @@ const errorText = (error: unknown) => {
 export function AssessmentSummary({ assessment, labsOnly = false }: { assessment: LabAssessment; labsOnly?: boolean }) {
   const a = assessment;
   // Online-quiz courses with lab checkpoints have no supervised written test or assessed practical here.
-  if (labsOnly) return <ul className="lab-summary"><li><span>Lab checkpoints approved</span><strong>{a.labsApproved} of {a.labsRequired}</strong></li></ul>;
+  // Optional checkpoints only (labsRequired 0): no count to show.
+  if (labsOnly) return a.labsRequired ? <ul className="lab-summary"><li><span>Lab checkpoints approved</span><strong>{a.labsApproved} of {a.labsRequired}</strong></li></ul> : null;
   const written = a.writtenScore === null || a.writtenScore === undefined ? 'not yet recorded'
     : `${a.writtenScore} / ${a.writtenTotal} (${a.writtenPassed ? 'passed' : 'not passed'}; pass mark ${a.writtenPassPercent} %)`;
   const practical = a.practicalPassed === null || a.practicalPassed === undefined ? 'not yet recorded' : a.practicalPassed ? 'passed' : 'not passed';
