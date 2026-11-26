@@ -33,6 +33,11 @@ beforeEach(() => {
 it("offers direct contact without sign-in, a form, or payment instructions", () => {
   session.signedIn = false;
   display();
+  expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Venture Partner Pass");
+  expect(screen.getByText(/institutional investors and venture teams/)).toBeVisible();
+  const distribution = screen.getByRole("region", { name: /Physical AI won't be found in pitch decks/ });
+  expect(distribution).toHaveTextContent(/1,000\+ physical AI and hardware founders/);
+  expect(distribution.compareDocumentPosition(screen.getByRole("heading", { name: "Discover" })) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   expect(screen.getByRole("link", { name: "Talk to us" })).toHaveAttribute("href", "#apply");
   const contact = screen.getByRole("region", { name: "Let’s talk partnership." });
   expect(contact).toHaveTextContent("We’d love to hear from you.");
