@@ -1,7 +1,6 @@
 .venture-page .wrap { width: min(100%, 1248px); }
 .venture-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr); align-items: center; gap: clamp(20px, 5vw, 72px); }
 .venture-page .page-hero { padding-block: clamp(45px, 8vw, 110px) clamp(28px, 5vw, 60px); }
-.venture-page .venture-lead { margin: 17px 0 8px; font: italic 400 clamp(29px, 4vw, 49px)/1.04 var(--serif); }
 .venture-page .hero-copy { max-width: 47ch; margin: 12px 0 0; }
 .venture-orbit { min-width: 0; background: var(--panel-2); border: 1px solid var(--hair); }
 .venture-orbit svg { display: block; width: 100%; height: auto; fill: none; }
@@ -93,3 +92,81 @@
 .venture-contact-policy:hover { color: var(--contact-link); }
 .venture-status-panel { margin-block-end: 40px; }
 @media (max-width: 720px) { .venture-contact { grid-template-columns: 1fr; scroll-margin-top: 132px; } }
+
+.venture-distribution-copy > p {
+  max-width: 72ch;
+  margin: 0;
+  color: var(--fg-2);
+  font-size: clamp(13px, 1.15vw, 15px);
+  line-height: 1.75;
+}
+.venture-distribution-copy > p + p { margin-top: clamp(9px, 1.15vw, 15px); }
+
+.venture-page .venture-distribution {
+  display: grid;
+  grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+  gap: clamp(20px, 3vw, 36px) clamp(24px, 6vw, 76px);
+  padding-block: clamp(28px, 4.5vw, 58px);
+}
+.venture-distribution h2 {
+  max-width: 16ch;
+  margin: 0;
+  font: italic 400 clamp(38px, 4.5vw, 60px)/1 var(--serif);
+  letter-spacing: -.02em;
+}
+.venture-distribution-proof {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  background: var(--panel);
+  border-block: 1px solid var(--hair-strong);
+}
+.venture-distribution-proof ul {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.venture-distribution-scale li {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  text-align: center;
+  gap: 6px;
+  padding: clamp(16px, 2.5vw, 32px);
+}
+.venture-distribution-scale li + li { border-inline-start: 1px solid var(--hair); }
+.venture-distribution-scale strong {
+  color: var(--link);
+  font: italic 400 clamp(42px, 5vw, 67px)/.9 var(--serif);
+  white-space: nowrap;
+}
+.venture-bench-icon {
+  display: block;
+  width: auto;
+  height: clamp(39px, 4.5vw, 60px);
+  color: var(--link);
+}
+.venture-distribution-scale span {
+  max-width: 27ch;
+  color: var(--fg-2);
+  line-height: 1.45;
+}
+.venture-distribution-capabilities {
+  align-self: stretch;
+  padding: clamp(16px, 2.5vw, 32px);
+  border-inline-start: 1px solid var(--hair);
+  background: var(--panel-2);
+}
+.venture-distribution-capabilities h3 {
+  margin: 0 0 9px;
+  font: italic 400 clamp(24px, 2.7vw, 34px)/1 var(--serif);
+}
+.venture-distribution-capabilities ul { gap: 0 20px; font-size: .85rem; line-height: 1.35; }
+.venture-distribution-capabilities li { padding-block: 8px; border-top: 1px solid var(--hair); }
+@media (max-width: 760px) {
+  .venture-page .venture-distribution,
+  .venture-distribution-proof { grid-template-columns: minmax(0, 1fr); }
+  .venture-distribution-capabilities { border-inline-start: 0; border-top: 1px solid var(--hair); }
+}

@@ -66,6 +66,28 @@ function BenefitFigure({ item }: { item: (typeof benefits)[number] }) {
   </figure>;
 }
 
+function VentureDistributionProof() {
+  return <div className="venture-distribution-proof" role="group" aria-label="Venture Partner Pass at a glance">
+    <ul className="venture-distribution-scale" aria-label="Lab and network">
+      <li>
+        <svg className="venture-bench-icon" viewBox="0 0 108 60" fill="none" stroke="currentColor"
+          strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <path d="M9 36h90v5H9z M16 41v15m76-15v15M16 50h76" />
+          <path d="M20 36h18m-9 0V24l11-14m0 0 10 7m-10-7 3-4 10 8-3 7-12-7" />
+          <path d="M58 36V23h23v13m-18-9v5m5-5v5m5-5v5m5-5v5M67 23v-4h8v4" />
+          <path d="M87 36v-9m-4 0h8m-6-4h4" />
+        </svg>
+        <span>Lab in HSR Layout</span>
+      </li>
+      <li><strong>1,000+</strong><span>Founders and builders in the network</span></li>
+    </ul>
+    <div className="venture-distribution-capabilities">
+      <h3>For your portfolio</h3>
+      <ul><li>Rapid prototyping</li><li>Product development</li><li>Research</li><li>Talent</li></ul>
+    </div>
+  </div>;
+}
+
 export default function VenturePassPage() {
   const { account, loading, signedIn } = useAccount();
   const { search } = useLocation();
@@ -78,8 +100,7 @@ export default function VenturePassPage() {
       <div className="wrap venture-grid">
         <div>
           <h1>Venture Partner Pass</h1>
-          <p className="venture-lead">Help your portfolio get discovered.</p>
-          <p className="hero-copy">For independent VCs and corporate venture teams in robotics and physical AI.</p>
+          <p className="hero-copy">For institutional investors and venture teams looking to back physical AI, robotics, and hardware startups.</p>
           <div className="button-row">
             <a className="button button-primary" href="#apply">Talk to us</a>
             <a className="button button-quiet" href="#venture-benefits">Explore the pass</a>
@@ -88,6 +109,15 @@ export default function VenturePassPage() {
         <OrbitFigure />
       </div>
     </header>
+    <section className="wrap venture-distribution" aria-labelledby="venture-distribution-title">
+      <h2 id="venture-distribution-title">Physical AI won't be found in pitch decks. It'll be found on benches.</h2>
+      <div className="venture-distribution-copy">
+        <p>Armature gives your portfolio a lab for rapid prototyping, product development and research, plus a talent network to hire from.</p>
+        <p>It also puts them in front of 1,000+ physical AI and hardware founders, engineers and builders across our community.</p>
+        <p>Four venture firms a year get a first look at what's being built, and a stage for their own companies.</p>
+      </div>
+      <VentureDistributionProof />
+    </section>
     <div className="wrap venture-grid venture-journey">
       <div><h2>Discover</h2><p>Find teams in a founder-approved directory.</p></div>
       <div><h2>Preview</h2><p>See fellowship prototypes before Demo Day.</p></div>
