@@ -68,7 +68,7 @@ export default function BookLabPage() {
                 <td data-label="Price"><span className="book-price">₹1,00,000 for 12 months</span></td>
                 <td><Link className="button button-primary" to="/golden-pass">Explore Golden Pass</Link></td>
               </tr>}
-              {venturePassAvailable && <tr>
+              {venturePassAvailable && <tr className="book-venture-mirror">
                 <th scope="row"><strong>Venture Partner Pass</strong><small>Founder introductions, portfolio showcases and lab access for venture firms.</small></th>
                 <td data-label="Price"><span className="book-price">₹5,00,000 per firm / year</span><small>Limited to four partner firms.</small></td>
                 <td><Link className="button button-quiet" to="/venture-partner-pass">Explore Venture Partner Pass</Link></td>

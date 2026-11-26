@@ -130,6 +130,43 @@
 .book-table.book-access-table .book-golden-row .book-price { color: #302213; }
 .book-table.book-access-table .book-golden-row small,
 .book-table.book-access-table .book-golden-row td[data-label]::before { color: #5d492e; }
+.book-table.book-access-table .book-venture-mirror {
+  --venture-ink: #121c2b;
+  --venture-copy: #283244;
+  --venture-button: #eef2f8;
+  --venture-button-hover: #fff;
+  --venture-border: #67768a;
+  background:
+    radial-gradient(ellipse 64% 127% at 89% -77%, #fff 61%, #f5f8fc 71%, transparent 90%),
+    radial-gradient(ellipse 61% 132% at 8% 165%, #a3aebf 55%, #eef4fd 68%, #f6f9fc 73%, transparent 85%),
+    linear-gradient(123deg, #c2cbd8, #e3e8ee 46%, #abb8cb 70%, #d3dce9);
+}
+
+.book-table.book-access-table .book-venture-mirror {
+  color: var(--venture-ink);
+}
+
+.book-table.book-access-table .book-venture-mirror :is(th strong, .book-price) {
+  color: var(--venture-ink);
+}
+
+.book-table.book-access-table .book-venture-mirror small,
+.book-table.book-access-table .book-venture-mirror td[data-label]::before {
+  color: var(--venture-copy);
+}
+
+.book-table.book-access-table .book-venture-mirror a.button {
+  --link: var(--venture-ink);
+  --link-on-panel-hover: var(--venture-ink);
+  color: var(--venture-ink);
+  background: var(--venture-button);
+  border-color: var(--venture-border);
+}
+
+.book-table.book-access-table .book-venture-mirror a.button:hover {
+  background: var(--venture-button-hover);
+}
+
 .book-table.book-access-table .book-price { white-space: normal; }
 .book-row-terms { margin-top: 8px; }
 .book-row-terms summary { width: fit-content; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
