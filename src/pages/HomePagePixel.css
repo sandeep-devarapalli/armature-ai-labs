@@ -30,21 +30,69 @@
 }
 .landing-pixel .metric strong { font-family: var(--serif); font-style: italic; font-weight: 400; font-size: clamp(34px, 3.2vw, 46px); line-height: 1; letter-spacing: -.01em; }
 .landing-pixel .quote-band p { font-size: clamp(32px, 3.6vw, 52px); line-height: 1.08; }
-.landing-pixel .process-step > .mono,
-.landing-pixel .role-row > .mono { color: var(--kicker); font-weight: 700; }
+.landing-pixel .process-step > .mono { color: var(--kicker); font-weight: 700; }
 
 /* Hero measure row: metrics beside the Vitruvian robot study. */
 .landing-pixel .hero-measure { display: grid; grid-template-columns: minmax(0, 1fr) minmax(200px, 260px); align-items: end; gap: 40px; }
 .landing-pixel .hero-measure .metrics-strip { align-self: end; }
 .landing-pixel .hero-measure .vitruvian-sketch { margin-bottom: 18px; }
 
-/* Photographs of the building during fit-out. */
-.space-plates { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin: 28px 0 36px; }
-.space-plates-note { grid-column: 1 / -1; margin: 0; font-size: 11px; line-height: 1.6; color: var(--fg-3); }
-
 @media (max-width: 760px) {
   .landing-pixel .hero-measure { grid-template-columns: minmax(0, 1fr); gap: 8px; }
   .landing-pixel .hero-measure .vitruvian-sketch { order: -1; width: min(260px, 70%); margin: 8px auto 0; }
   .landing-pixel .metrics-strip .metric strong { font-size: 32px; }
-  .space-plates { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+}
+
+.home-access {
+  display: grid;
+  gap: clamp(28px, 5vw, 60px);
+  padding-block: clamp(48px, 7vw, 104px);
+}
+.home-access-section {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(200px, .8fr) minmax(0, 1.45fr);
+  gap: clamp(24px, 5vw, 78px);
+  padding-block: clamp(24px, 4vw, 56px);
+  border-block: 1px solid var(--hair-strong);
+  scroll-margin-top: 96px;
+}
+.home-access-membership {
+  padding-inline: clamp(24px, 4vw, 56px);
+  border-inline: 1px solid var(--hair-strong);
+  background: var(--panel);
+}
+.home-access-intro h2 {
+  margin: 0;
+  font: italic 400 clamp(46px, 6vw, 82px)/.98 var(--serif);
+  letter-spacing: -.025em;
+}
+.home-access-intro p { max-width: 43ch; margin: 14px 0 26px; color: var(--fg-2); }
+.home-access-list {
+  margin: 0 0 24px;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--hair);
+}
+.home-access-list:empty { display: none; }
+.home-access-list li {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 44px;
+  align-items: center;
+  gap: 10px;
+  padding-block: 13px;
+  border-bottom: 1px solid var(--hair);
+}
+.home-access-list li:hover { background: color-mix(in srgb, var(--ink) 4%, transparent); }
+.home-access-list h3 { margin: 0; font-size: 18px; line-height: 1.25; }
+.home-access-list p { margin: 5px 0 0; color: var(--fg-2); font-size: .85rem; line-height: 1.55; }
+.home-access-list a { display: grid; place-items: center; min-height: 44px; }
+.home-access-list a::after { position: absolute; inset: 0; content: ""; }
+.home-access-list svg { width: 18px; }
+.home-access-booking .home-access-list { border-top: 0; }
+.home-access-booking .home-access-list li:first-child { padding-top: 0; }
+@media (max-width: 760px) {
+  .home-access-section { grid-template-columns: 1fr; gap: 0; }
+  .home-access { gap: 20px; }
 }

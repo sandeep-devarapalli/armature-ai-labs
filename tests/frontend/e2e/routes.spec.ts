@@ -163,10 +163,10 @@ for (const palette of [
     await expect(quiet).toHaveCSS("background-color", "rgb(34, 34, 32)");
     await page.mouse.move(0, 0);
 
-    const modelLink = page.locator(".ink-surface .lab-model-grid figcaption a").first();
-    await expect(modelLink).toHaveCSS("color", "rgb(217, 154, 80)");
-    await modelLink.hover();
-    await expect(modelLink).toHaveCSS("color", "rgb(234, 183, 121)");
+    const motionCredit = page.getByRole("link", { name: "Dominik Zítka / Pexels" });
+    await expect(motionCredit).toHaveCSS("color", "rgb(217, 154, 80)");
+    await motionCredit.hover();
+    await expect(motionCredit).toHaveCSS("color", "rgb(234, 183, 121)");
     await page.mouse.move(0, 0);
     const email = page.locator('footer a[href="mailto:hello@armatureailabs.com"]');
     const wordmark = page.locator(".footer-wordmark");
@@ -875,15 +875,16 @@ test("reduced motion keeps T2 still and defers video until Play", async ({ page 
 
 });
 
-test("public routes preserve the useful legacy lab sections", async ({ page }) => {
+test("public routes lead with lab access and retain supporting content", async ({ page }) => {
   await page.goto("/");
   await expect(page.getByText(/a planned 3,500 sq ft lab across two floors/)).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Two floors at a glance" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Book the lab." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Join the lab." })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Two floors at a glance" })).toHaveCount(0);
   await expect(page.locator("[data-room-tile]")).toHaveCount(0);
   await expect(page.getByText("Builder pods")).toHaveCount(0);
   await expect(page.getByText(/nine cameras/i)).toHaveCount(0);
-  await expect(page.getByRole("link", { name: "Explore First floor models" })).toHaveAttribute("href", "/building-vision/#first-floor-overview");
-  await expect(page.getByRole("heading", { name: "Monitored, end to end" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Monitored, end to end" })).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "From idea to working machine" })).toBeVisible();
   await expectNoHorizontalOverflow(page);
 
