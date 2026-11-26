@@ -18,7 +18,7 @@ vi.mock("../../src/context/ThemeContext", () => ({
 const legalName = legalEntity.name;
 const labAddress = "1490, 11th Cross, 20th Main Rd, 1st Sector, HSR Layout, Bengaluru, Karnataka 560102";
 const policies = [
-  { route: "/contact", title: "Contact Us", Page: ContactPage, digest: "81125ab8d08f9448db7215015354e4988c8401018b49fe7bdfb53418f1f7a0ce" },
+  { route: "/contact", title: "Contact Us", Page: ContactPage, digest: "1bbdce7926e34097d5f2e0727437b8480d49914278c31f959868d7284d9e6bea" },
   { route: "/terms", title: "Terms and Conditions", Page: TermsPage, digest: "7aed5dadecc26a69c277777eef5253588ad2d7d7a5907e2ba73307c8b0e024d5" },
   { route: "/refund-policy", title: "Cancellation and Refund Policy", Page: RefundPolicyPage, digest: "32e42f95b18e69ff1e4f5d84b1a87bab28f848d9c96089abb59a8230b6039503" },
   { route: "/shipping-policy", title: "Shipping and Delivery Policy", Page: ShippingPolicyPage, digest: "67163c16f6dbdaf3e3918a7cdecc7974432ee1b32c752b785df19032628badd3" }
@@ -77,15 +77,17 @@ describe("approved legal policies", () => {
     }
   );
 
-  it("uses the corrected lab address while preserving the registered office", () => {
+  it("shows the new registered office separately from the lab visitors’ address", () => {
     expect(legalEntity.labAddress).toMatchObject({
       street: "1490, 11th Cross, 20th Main Rd, 1st Sector",
       locality: "HSR Layout", city: "Bengaluru", state: "Karnataka", postalCode: "560102", country: "IN"
     });
     expect(legalEntity.labAddress.formatted).toBe(labAddress);
+    expect(legalEntity.name).toBe("Armature Lab Spaces LLP");
+    expect(legalEntity.llpin).toBe("ACB-2865");
     expect(legalEntity.registeredOfficeAddress).toEqual([
-      "Flat No. 301, Siddahakala, Sankul Adarsh Nagar Vasco, Chicalim",
-      "Mormugao, South Goa 403711, Goa, India"
+      "677, 1st Floor, 27th Main Road, 13th Cross Road, Sector 1",
+      "HSR Layout, HSR Layout Police Station, Bangalore South, Bangalore 560102, Karnataka, India"
     ]);
     const { container } = render(<MemoryRouter><ContactPage /></MemoryRouter>);
     expect(container.querySelector(".privacy-content")).toHaveTextContent(labAddress);

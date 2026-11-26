@@ -1,9 +1,9 @@
 export const legalEntity = {
-  name: "Jayasri Nageswara Rao and Partners LLP",
+  name: "Armature Lab Spaces LLP",
   llpin: "ACB-2865",
   registeredOfficeAddress: [
-    "Flat No. 301, Siddahakala, Sankul Adarsh Nagar Vasco, Chicalim",
-    "Mormugao, South Goa 403711, Goa, India"
+    "677, 1st Floor, 27th Main Road, 13th Cross Road, Sector 1",
+    "HSR Layout, HSR Layout Police Station, Bangalore South, Bangalore 560102, Karnataka, India"
   ],
   labAddress: {
     name: "Armature AI Lab, HSR 1490",
