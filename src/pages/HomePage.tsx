@@ -160,27 +160,6 @@ const bookingOptions = [
 function HomeAccess() {
   return (
     <div className="wrap home-access" id="lab-access">
-      <section className="home-access-section home-access-booking" aria-labelledby="home-booking-title">
-        <div className="home-access-intro">
-          <h2 id="home-booking-title">Book the lab.</h2>
-          <p>{publicBookingsAvailable ? "Find the right space, pass or equipment for your next visit." : "Contact the lab to check workspace and visit availability."}</p>
-        </div>
-        <div className="home-access-content">
-          {publicBookingsAvailable && <ul className="home-access-list">
-            {bookingOptions.filter(option => option.available).map(option => (
-              <li key={option.item}>
-                <div><h3>{option.name}</h3><p>{option.detail}</p></div>
-                <Link aria-label={option.action} to={`/bookings/?item=${option.item}#steps`}>
-                  <ArrowRight aria-hidden="true" />
-                </Link>
-              </li>
-            ))}
-          </ul>}
-          {publicBookingsAvailable
-            ? <Link className="button button-primary" to="/bookings/#book-access-title">Compare all bookings <ArrowRight aria-hidden="true" /></Link>
-            : <a className="button button-quiet" href="mailto:hello@armatureailabs.com">Ask about availability <ArrowRight aria-hidden="true" /></a>}
-        </div>
-      </section>
       <section className="home-access-section home-access-membership" aria-labelledby="home-membership-title">
         <div className="home-access-intro">
           <h2 id="home-membership-title">Join the lab.</h2>
@@ -198,6 +177,34 @@ function HomeAccess() {
               <Link aria-label="Explore Venture Partner Pass" to="/venture-partner-pass/"><ArrowRight aria-hidden="true" /></Link></li>}
           </ul>
           <Link className="button button-quiet" to="/join">See membership options <ArrowRight aria-hidden="true" /></Link>
+        </div>
+      </section>
+      <section className="home-access-section home-access-booking" aria-labelledby="home-booking-title">
+        <div className="home-access-intro">
+          <h2 id="home-booking-title">Book the lab.</h2>
+          <p>{publicBookingsAvailable ? "Find the right space, pass or equipment for your next visit." : "Contact the lab to check workspace and visit availability."}</p>
+          {(deskCheckoutAvailable || rentalCheckoutAvailable || eventCheckoutAvailable) && (
+            <div className="home-booking-verification">
+              <h3>Before you book</h3>
+              <p>Verify your ID and phone number before booking a desk pass, renting equipment or requesting event space.</p>
+              <Link to="/onboarding">Go to verification <ArrowRight aria-hidden="true" /></Link>
+            </div>
+          )}
+        </div>
+        <div className="home-access-content">
+          {publicBookingsAvailable && <ul className="home-access-list">
+            {bookingOptions.filter(option => option.available).map(option => (
+              <li key={option.item}>
+                <div><h3>{option.name}</h3><p>{option.detail}</p></div>
+                <Link aria-label={option.action} to={`/bookings/?item=${option.item}#steps`}>
+                  <ArrowRight aria-hidden="true" />
+                </Link>
+              </li>
+            ))}
+          </ul>}
+          {publicBookingsAvailable
+            ? <Link className="button button-primary" to="/bookings/#book-access-title">Compare all bookings <ArrowRight aria-hidden="true" /></Link>
+            : <a className="button button-quiet" href="mailto:hello@armatureailabs.com">Ask about availability <ArrowRight aria-hidden="true" /></a>}
         </div>
       </section>
     </div>

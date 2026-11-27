@@ -7,7 +7,7 @@ import { PageHeader } from "../components/Primitives";
 import { RentalBooking } from "../components/RentalCheckout";
 import { basicOnboardingAvailable, deskCheckoutAvailable, eventCheckoutAvailable, rentalCheckoutAvailable, venturePassAvailable } from "../config/release";
 import { useAccount } from "../context/AccountContext";
-import { cabinRent, cabins, formatPaise, statusLabel } from "../lib/cabins";
+import { cabins, formatPaise, statusLabel } from "../lib/cabins";
 import { GuestPassBooking } from "./PassPages";
 import { rentalRequest, type RentalProduct } from "../lib/rental-checkout";
 
@@ -72,7 +72,7 @@ export default function BookLabPage() {
     ...(basicOnboardingAvailable ? [{ id: "guest", name: "Guest Pass", summary: "Attend an event or meet someone. Staff approval required.",
       prices: ["Free"], deposit: "None", minimum: "1 day", cancellation: "No payment" } as Row] : []),
     ...(rentalCheckoutAvailable ? [{ id: "cabin", name: "Team cabins", summary: cabinList.map(c => `${c.name.replace("Cabin ", "")} ${statusLabel[c.status].toLowerCase()}`).join(" · "),
-      prices: cabinList.filter(c => c.status === "quote").map(c => `${c.name} · ${formatPaise(cabinRent(c))} / month`),
+      prices: cabinList.filter(c => c.status === "quote").map(c => `${c.name} · ${formatPaise(c.monthlyRentPaise)} / month`),
       deposit: "Confirmed in quote", minimum: "Confirmed in quote", cancellation: "Confirmed in quote" } as Row, { id: "kit", name: "Equipment", summary: "Robot arms and cameras to use in the lab.",
       prices: lowestRent(equipment), deposit: "Shown per item", minimum: "1 day (cameras), 7 days (arms)", cancellation: "48 hours or more before the start: full refund" } as Row] : []),
     { id: "event", name: "Event space", summary: "The demo floor for meetups, launches and live demos.", prices: [eventCheckoutAvailable ? `${formatPaise(250000)} / hour` : "Coming soon"], deposit: "None", minimum: "1 hour",
