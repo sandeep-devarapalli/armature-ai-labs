@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { cabinRent, cabins as defaultCabins, formatPaise, statusLabel, type Cabin } from "../lib/cabins";
+import { cabins as defaultCabins, formatPaise, statusLabel, type Cabin } from "../lib/cabins";
 
 type Viewer = { dispose: () => void; reset: () => void; selectCabin: (code: string | null) => void };
 
@@ -25,7 +25,7 @@ export function CabinMap({ list = defaultCabins, chosen }: { list?: Cabin[]; cho
     if (!element) return;
     setError("");
     const onFloor = list.filter(c => c.floor === floor).map(c => ({ code: c.code, label: c.name, seats: c.billable, status: c.status,
-      detail: c.status === "quote" ? `${seatsLine(c)} · ${formatPaise(cabinRent(c))}/month · Quote` : `${seatsLine(c)} · ${statusLabel[c.status]}` }));
+      detail: c.status === "quote" ? `${seatsLine(c)} · ${formatPaise(c.monthlyRentPaise)}/month · Quote` : `${seatsLine(c)} · ${statusLabel[c.status]}` }));
     void import("../lib/booking-map/viewer.js").then(async module => {
       if (!active) return;
       const api: Viewer = await module.mountViewer(element, { kind: floor === "ground" ? "ground-seats" : "first-seats", bookingType: "cabin", cabins: onFloor,
@@ -61,7 +61,7 @@ export function CabinMap({ list = defaultCabins, chosen }: { list?: Cabin[]; cho
       <dl>
         <div><dt>Where</dt><dd>{floorName(cabin)}, room {cabin.room}</dd></div>
         <div><dt>Seats</dt><dd>{cabin.billable} billable, plus {cabin.extra} extra seats free (room for {cabin.billable + cabin.extra})</dd></div>
-        <div><dt>Rent</dt><dd>{formatPaise(cabinRent(cabin))} per month for the whole cabin{cabin.status === "quote" && " · Open to negotiation"}</dd></div>
+        <div><dt>Rent</dt><dd>{formatPaise(cabin.monthlyRentPaise)} per month for the whole cabin{cabin.status === "quote" && " · Open to negotiation"}</dd></div>
         {cabin.floor === "first" && cabin.status === "quote" && <div><dt>Advance rent</dt><dd>Six months’ rent payable in advance at the agreed monthly rate.</dd></div>}
         <div><dt>Deposit</dt><dd>{cabin.status === "quote" ? "Confirmed in your quote" : cabin.depositPaise ? `${formatPaise(cabin.depositPaise)}, refundable` : "To be confirmed"}</dd></div>
       </dl>

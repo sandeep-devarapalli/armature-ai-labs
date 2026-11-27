@@ -31,7 +31,8 @@ it("compares desk, cabins, equipment and events, with live equipment prices", as
   show();
   expect(screen.getByRole("heading", { name: "Book the lab." })).toBeInTheDocument();
   expect(screen.getAllByRole("row").map(r => r.querySelector("strong")?.textContent).filter(Boolean)).toEqual(["Desk pass", "Team cabins", "Equipment", "Event space"]);
-  expect(screen.getByText("Cabin 202 · ₹1,20,000 / month")).toBeInTheDocument();
+  expect(screen.getByText("Cabin 201 · ₹1,20,000 / month")).toBeInTheDocument();
+  expect(screen.getByText("Cabin 202 · ₹80,000 / month")).toBeInTheDocument();
   expect(await screen.findByText("From ₹200 / day")).toBeInTheDocument();
   expect(screen.getByText("101 occupied · 201 quote · 202 quote")).toBeInTheDocument();
 });

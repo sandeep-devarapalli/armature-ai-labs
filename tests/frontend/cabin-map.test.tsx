@@ -42,5 +42,8 @@ it("passes only the two offered first-floor cabins to the 3D view", async () => 
   await vi.waitFor(() => expect(mount).toHaveBeenCalled());
   const options = (mount.mock.calls.at(-1) as unknown as [HTMLElement, { cabins: { code: string; detail: string }[] }])[1];
   expect(options.cabins.map(c => c.code)).toEqual(["C04", "C02"]);
-  expect(options.cabins[0].detail).toBe("10 + 2 seats · ₹2,00,000/month · Quote");
+  expect(options.cabins.map(c => c.detail)).toEqual([
+    "10 + 2 seats · ₹1,20,000/month · Quote",
+    "6 + 2 seats · ₹80,000/month · Quote",
+  ]);
 });

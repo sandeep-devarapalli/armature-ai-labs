@@ -59,6 +59,14 @@ test("public-first production gates operational routes", async ({ page }) => {
   );
 
   await page.goto("/");
+  await expect(page.locator("#lab-access > section h2")).toHaveText(["Join the lab.", "Book the lab."]);
+  const verification = page.getByRole("link", { name: "Go to verification" });
+  if (basicEnabled && (deskEnabled || process.env.VITE_RENTAL_CHECKOUT_ENABLED === "true" || process.env.VITE_EVENT_CHECKOUT_ENABLED === "true")) {
+    await expect(page.getByText(/Verify your ID and phone number before booking/)).toBeVisible();
+    await expect(verification).toHaveAttribute("href", "/onboarding");
+  } else {
+    await expect(verification).toHaveCount(0);
+  }
   if (!basicEnabled) await expect(page.getByTitle("Sign in")).toHaveCount(0);
   await expect(page.getByRole("navigation", { name: "Primary navigation" }).locator('a[href="/financials"]')).toHaveCount(0);
   await expect(page.locator('a[href="/procurement"]')).toHaveCount(0);
